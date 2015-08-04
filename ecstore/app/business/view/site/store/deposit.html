@@ -1,0 +1,77 @@
+<!-- right-->
+  <div class="member-main">
+  <div>
+
+<div class="title"><{t}>支付保证金<{/t}></div>
+
+<form action="<{link app=b2c ctl="site_paycenter" act="dopayment" arg0="earnest" }>" method="post"  id="deposit_form" class="section" extra="subOrder" target="_blank">
+  <input type="hidden" name="payment[member_id]" value="<{$member_id}>" />
+  <input type="hidden" name="payment[return_url]" value="<{$return_url}>" />
+  <div style="display:none"><{input type="checkForm" }></div>
+    <p class="admin-title"><{t}>您当前的预存款余额为：<{/t}><span class="point"><{$total|cur_odr}></span></p>
+    <p class="admin-title"><{t}>您需缴纳的保证金额为：<{/t}><span class="point"><{$issue_money|cur_odr}></span></p>
+    <p class="admin-title"><{t}>您已缴纳的保证金额为：<{/t}><span class="point"><{$earnest|cur_odr}></span></p>
+  <div class="FormWrap bn" >
+    <div class="p10" >
+   <ul>
+   <li><label><{t}>您还需支付保证金额：<{/t}></label><span class="point"><{if ($issue_money-$earnest)>0}><{($issue_money-$earnest)|cur_odr}><{else}><{0|cur_odr}><{/if}></span>  </li>
+  <li>
+    <label><{t}>支付保证金额：<{/t}></label>
+    <{input class="inputstyle" type="unsigned" name="payment[money]" vtype="positive&&required" id='deposit'}>
+ 
+<!--    <tr>
+    <th><{t}>选择支付币别：<{/t}></th>
+    <td><{$currencys.cur_name}></td>
+  </tr>
+-->  <li class="p10 fontbold"><{t}>选择支付方式：<{/t}></li>
+    <li>
+    <div id="paymentlist"><{include file="admin/order/paymethod.html"}></div>
+  </li>
+</ul>
+<{include file="site/order/banks.html" app=business}>
+<div class="pl150 m10">
+<!--<{button class="common-btn" type="submit" isDisabled="true" label=$___b2c="去支付"|t:'b2c'}>-->
+<{button type="submit" class="order-btn lijizhifu btn-has-icon" isDisabled="true" label=$___b2c="立刻支付"|t:'b2c' icon="set-arrow.gif"}>
+<!-- <input class="btnstyle pay-btn" type="submit" value="<{t}>点击立刻付款<{/t}>" /> --></div>
+</div>
+
+</div>
+
+</form>
+
+
+  </div>
+  </div>
+<!-- right-->
+<script>
+       window.addEvent('domready',function(){
+          pay_id = $E('#_normal_payment input[type=radio]:checked').value;
+            if(pay_id == 'ysepay'){
+                $('cart_paymentzf').setStyle('display','');
+            }else{
+                $('cart_paymentzf').setStyle('display','none');
+            }  
+       });
+       $$('#_normal_payment input[type=radio]').addEvent('click',function(e){
+            pay_id = $E('#_normal_payment input[type=radio]:checked').value;
+            if(pay_id == 'ysepay'){
+                $('cart_paymentzf').setStyle('display','');
+            }else{
+                $('cart_paymentzf').setStyle('display','none');
+            }
+        });
+
+        $('deposit_form').getElement('button[type=submit]').addEvent('click',function(e){
+            e.stop();
+            var bank_type = $('bank_type').value;
+            pay_id = $E('#_normal_payment input[type=radio]:checked').value;
+            if(bank_type==''&&pay_id=='ysepay'){
+                 Message.error('<{t}>请选择一个银行<{/t}>');
+                 return e.stop();
+            }
+
+             $('deposit_form').submit();
+            
+        });
+</script>
+

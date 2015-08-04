@@ -1,0 +1,86 @@
+<div id="filter_<{$_finder.domid}>" class='filter_panel'>
+ <div class='filter_box'>
+       <{if $_finder.gtype}>
+          <div class="division">
+            <table width="100%" class='filter_interzone'>
+              <tr>
+                <th><{t}>按类型筛选<{/t}></th>
+                <td>
+                 <select onchange="sel_<{$_finder.domid}>($(this).value);">
+                    <option style="font-weight:bold" value="_ANY_" ><{t}>全部类型<{/t}></option>
+                    <{foreach from=$_finder.gtype item=type}> <option value="<{$type.type_id}>" <{if $type.type_id == $_finder.data.type_id}>selected="selected"<{/if}>><{$type.name}>
+                    </option>
+                    <{/foreach}>
+                  </select>
+                 </td>
+              </tr>
+              <tr>
+                <th><{t}>按价格区间筛选<{/t}></th>
+                <td><{input type="unsigned" name="pricefrom" value=$_finder.data.pricefrom style="width:30px"}> - <{input type="unsigned" name="priceto" style="width:30px" value=$_finder.data.priceto}><{t}> 元<{/t}></td>
+              </tr>
+              <tr>
+                    <th><{t}>按商品关键词筛选<{/t}></th>
+                <td><{input type="text" name="searchname" style="width:100px" value=$_finder.data.searchname}> &nbsp; <{help}><{t}>如果填写商品关键词，则只有符合该关键词搜索条件的商品才会出现在本虚拟分类，具体如下：<{/t}><br /><{t}>1、商品名称中包含该关键词<{/t}><br /><{t}>2、商品中的商品关键词中有任何一个等于该关键词<{/t}><br /><{t}>3、商品中的货号或商品编号等于该关键词<{/t}><{/help}></td>
+              </tr>
+            </table>
+            </div>
+      <{/if}>
+
+             <div id="filter_<{$_finder.domid}>_body">
+                   <{include file=$_finder.view}>
+             </div>
+
+ </div>
+    <input type="hidden" name="<{$_finder.name}>" id="filter_<{$_finder.domid}>_ipt" value="<{$_finder.from}>" filterhidden="true" />
+</div>
+<script>
+    var sel_<{$_finder.domid}>=function(val){
+        var _data='view=<{$_finder.view}>';
+        var interzoneQS=$E('.filter_interzone','filter_<{$_finder.domid}>').toQueryString();
+        if(interzoneQS){
+           _data+='&'+interzoneQS;
+        }
+        W.page('index.php?ctl=goods_editor&act=showfilter&p[0]='+val,{update:$('filter_<{$_finder.domid}>_body'),data:_data,'clearUpdateMap':false,'method':'post'});
+    }
+    void function(){
+
+          /*根据服务器返回QueryString 勾选FilterBody select*/
+
+          var filterHidden=$('filter_<{$_finder.domid}>_ipt');
+          var filterBody=$('filter_<{$_finder.domid}>_body');
+
+          var filterHiddenVHash=new Hash();
+
+
+         filterHidden.value.replace(/([^&]+)\=([^&]+)/ig,function(){
+             var arg=arguments;
+             var arr_v=(filterHiddenVHash.get(arg[1])||[]);
+                 arr_v.push(arg[2]);
+             filterHiddenVHash.set(arg[1],arr_v);
+         });
+
+
+          filterHiddenVHash.each(function(sv,snkey){
+
+                var el_select=filterBody.getElement('select[name^='+snkey.slice(0,-1)+']');
+
+                if(!el_select)return;
+
+                $A(el_select.options).each(function(option){
+
+                     if(sv.contains(option.value)){
+
+                         option.selected=true;
+
+                     }else{
+
+                        option.selected=false;
+
+                     }
+
+                });
+
+          });
+
+    }();
+</script>

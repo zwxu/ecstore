@@ -1,0 +1,117 @@
+<{if $goods_use_score}>
+<!-- 商品用积分 -->
+<input type="hidden" id="score-order-goods-total-point" value="<{$goods_use_score}>" />
+<{/if}>
+<!-- 积分抵扣 -->
+<script type="text/javascript">
+function show_add_coupon(el,id) {
+    if( !$(id) ) return ;
+    var _o = $(id);
+    if( _o.getStyle('display')=='none' ) {
+        _o.setStyle('display', '');
+        $(el).removeClass('coupon-icon');
+        $(el).addClass('coupon-icon-');
+        } else {
+        _o.setStyle('display', 'none');
+        $(el).removeClass('coupon-icon-');
+        $(el).addClass('coupon-icon');
+    }
+}
+</script>
+<div class="point_discount point_disbox" style="overflow:hidden;padding:10px; margin-top:-1px">
+  <!-- <a href="javascript:void(0);" class="siteparttitle-blue coupon-icon" onclick="show_add_coupon(this,'pointprofessional-order-checkout-dis');" ><{t}>积分抵扣<{/t}></a> -->
+  <div style="clear:both; margin:5px 0">
+    <div id="pointprofessional-order-checkout-dis" style="padding:20px;">
+      <div class="discount-body">
+        <input type="checkbox" id="is_use_point">
+        <label><{t}>使用平台积分：<{/t}></label>
+      </div>
+      <div class="discount-area">
+            <input type="text" id="b2c-dis-point" class="jifen_input_cart" maxlength="10" name="payment[dis_point]" value="0" Readonly="true" disabled="disabled"/><p>点</p>
+            <!-- <{t}>花费<{/t}><label class="price1" id="pointprofessional-order-checkout-cost-point">0</label><{t}>积分，抵扣<{/t}><label class="price1" id="pointprofessional-order-checkout-dis-amount">0</label><{t}>元现金<{/t}><br/> -->
+            <ul id="pointprofessional-order-checkout-total-exchange">
+        <li style="display:none"><{t}><strong>1</strong>积分<{/t}>=<strong><{$discount_rate|cur_odr}></strong><input type="hidden" value="<{$discount_rate}>" />&nbsp;&nbsp;&nbsp;<{t}>最多抵扣金额：<{/t}><span id="b2c-order-checkout-total-usage-money"><{$max_discount_value|cur_odr}></span></li>
+        <li><{t}>当前可用积分：<{/t}>&nbsp;<strong><{$real_usage_point}></strong></li>
+        <li><{t}>当前抵扣金额：<{/t}><strong>-<span id="b2c-order-dis-max-point"><{0|cur_odr}></strong></span></li>
+      </ul>
+      </div>
+            <div class="clear"></div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+    // 实时计算积分抵扣
+    if ($('b2c-dis-point')){
+        $('b2c-dis-point').addEvent('change', function(el){
+            if($('is_use_point').checked){
+                var _point = 0;
+                var _target_value = $(el.target).value;
+                if (isNaN(_target_value) || /^\s+$/.test(_target_value)){
+                  Message.error('<{t}>积分要输入数字<{/t}>');
+                  $('b2c-dis-point').set('value',_point);
+                  updateAmount(_point);
+                  return;
+                }
+                if ( /[^\d]/.test(_target_value) ||  _target_value < 0){
+                  Message.error('<{t}>请录入0或正整数<{/t}>');
+                  $('b2c-dis-point').set('value',_point);
+                  updateAmount(_point);
+                  return;
+                }
+                if (_target_value != '')
+                  _point = $(el.target).value.toInt();
+                //if(<{$discount_rate}> > 0){
+                    //if(_point > <{$max_discount_value/$discount_rate}>){
+                        //_point = <{$max_discount_value/$discount_rate}>;
+                        //$('b2c-dis-point').set('value',_point);
+                    //}
+                //}
+                //$('pointprofessional-order-checkout-cost-point').innerHTML = _point;
+                updateAmount(_point);
+                
+                return el;
+            }
+        }).addEvent('keydown',function(e){
+          if (e.code == 13) e.stop();
+        });
+    }
+})();
+
+$('is_use_point').addEvent('change',function(el){
+    var _point = 0;
+    if($('is_use_point').checked){
+        $('b2c-dis-point').removeProperty('Readonly');
+        $('b2c-dis-point').removeProperty('disabled');
+    }else{
+        $('b2c-dis-point').set('Readonly','true');
+        $('b2c-dis-point').set('disabled','disabled');
+        $('b2c-dis-point').set('value','0');
+    }
+    //$('pointprofessional-order-checkout-cost-point').innerHTML = _point;
+      updateAmount(_point);
+      
+      return el;
+
+});
+
+
+function updateAmount(_point){
+    var _data = [$('pointprofessional-order-checkout-total-exchange').getElement('input[type="hidden"]').value.toFloat(),_point];
+            var _hash_data = {};
+      _data.each(function(item,index){
+        _hash_data[index]=item;
+      });
+      _data = JSON.encode(_hash_data);
+      new Request({
+        url:'<{link app=b2c ctl="site_tools" act="count_digist"}>',
+        method:'post',
+        data:"data="+_data+'&_method=number_multiple',
+        onComplete:function(res){
+          //$('pointprofessional-order-checkout-dis-amount').innerHTML = res;
+          Order.updateTotal();
+        }
+      }).send();
+
+}
+</script>

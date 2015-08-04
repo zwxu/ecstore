@@ -1,0 +1,34 @@
+<{if $order_detail.total_discount_consume_score}>
+<tr>
+<th><{t}>抵扣积分：<{/t}></th>
+<td style="color:#f00;"><{$order_detail.total_discount_consume_score}></td>
+</tr>
+<{/if}>
+
+<!-- 最大积分抵扣比例 -->
+<input type="hidden" id="site_point_deductible_value" value="<{$order_detail.site_point_deductible_value}>" />
+<input type="hidden" id="site_point_max_deductible_method" value="<{$order_detail.site_point_max_deductible_method}>" />
+<!-- 专门给积分兑换修改用 -->
+<!-- 用户拥有的可以使用的积分值和对应的抵扣货币的金额 -->
+<input type="hidden" id="b2c-order-total-point" value="<{$order_detail.total_point}>" />
+<input type="hidden" id="b2c-order-total-point-money" value="<{$order_detail.total_real_dis_total_money|cur_odr}>" />
+<!-- end -->
+<!-- 用户对应此订单可以兑换的最大积分和抵扣货币值 -->
+<input type="hidden" id="b2c-order-real-dis-total-money" value="<{$order_detail.total_dis_money|cur_odr}>" />
+<input type="hidden" id="b2c-order-real-dis-total-point" value="<{$order_detail.total_dis_point}>" />
+<!-- end -->
+<input type="hidden" id="b2c-order-total-overpoint" value="<{$order_detail.over_real_point}>" />
+<!-- 用户实际可以兑换的最大积分和抵扣货币值 -->
+<input type="hidden" id="b2c-order-total-realpoint" value="<{$order_detail.total_discount_consume_score}>" />
+<input type="hidden" id="b2c-order-total-cur-realmoney" value="<{$order_detail.total_dis_consume_money|cur_odr}>" />
+<!-- end -->
+<script>
+(function(){
+    var _cur_real_usage_money = $('b2c-order-total-cur-realmoney').value;
+    var _cur_total_usage_money = $('b2c-order-real-dis-total-money').value;
+    if (_cur_real_usage_money){
+      if ($('b2c-order-dis-max-point')) $('b2c-order-dis-max-point').set('html',_cur_real_usage_money);
+      if ($('b2c-order-checkout-total-usage-money')) $('b2c-order-checkout-total-usage-money').set('html',_cur_total_usage_money);
+    }
+})();
+</script>

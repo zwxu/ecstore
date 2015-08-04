@@ -1,0 +1,605 @@
+<services>
+    <service id="desktop.widgets">
+		<class>b2c_desktop_widgets_workcount</class>
+        <class>b2c_desktop_widgets_stats</class>
+        <class>b2c_desktop_widgets_exstatistics</class>
+    </service>
+    
+    <service id="b2c_finder_apps">
+        <class>b2c_finder_goods</class>
+        <class>b2c_finder_orders</class>
+    </service>
+
+
+    <service id="view_compile_helper">
+        <class>b2c_view_compiler</class>
+    </service>
+
+    <service id="view_helper">
+        <class>b2c_view_helper</class>
+    </service>
+
+     <service id="desktop_menu">
+        <class>b2c_service_view_menu</class>
+    </service>
+    
+    <service id="member_logout">
+        <class>b2c_service_logout</class>
+    </service>
+    
+    <service id="cachemgr_global_vary">
+        <class>b2c_service_cachemgr_globalvary</class>
+    </service>
+
+    <service id="site_view_helper">   
+        <class>b2c_site_view_helper</class>
+    </service>
+   
+    <service id="html_input">
+        <class>b2c_view_input</class>
+    </service>
+
+    <service id="desktop_finder.b2c_mdl_orders">
+        <class>b2c_finder_orders</class>
+    </service>
+    
+    <service id="desktop_finder.b2c_mdl_shop">
+        <class>b2c_finder_shop</class>
+    </service>
+
+    <service id="b2c_order.b2c_order_operation" optname="订单处理操作列表">
+        <class>b2c_order_reship</class>
+        <class>b2c_order_cancel</class>
+        <class>b2c_order_finish</class>
+        <class>b2c_order_delivery</class>
+    </service>
+    
+    <service id="order.pay_finish" optname="订单支付完成处理">
+        <class>b2c_order_pay</class>
+    </service>
+    
+    <service id="order.refund_finish" optname="订单退款完成处理">
+        <class>b2c_order_refund</class>
+    </service>
+    
+    <service id="desktop_finder.b2c_mdl_brand">
+        <class>b2c_finder_brand</class>
+    </service>
+
+    <service id="desktop_finder.b2c_mdl_coupons">
+        <class>b2c_finder_coupons</class>
+    </service>
+    <service id="desktop_finder.b2c_mdl_coupons.exchange">
+        <class>b2c_finder_coupons_exchange</class>
+    </service>
+
+    <service id="desktop_finder.b2c_mdl_sales_rule_goods">
+        <class>b2c_finder_sales_rule_goods</class>
+    </service>
+
+    <service id="desktop_finder.b2c_mdl_sales_rule_order">
+        <class>b2c_finder_sales_rule_order</class>
+    </service>
+
+    <service id="desktop_finder.b2c_mdl_dlycorp">
+        <class>b2c_finder_dlycorp</class>
+    </service>
+
+    <service id="desktop_finder.b2c_mdl_dlytype">
+        <class>b2c_finder_dlytype</class>
+    </service>
+
+
+    <service id="desktop_finder.b2c_mdl_goods_type">
+        <class>b2c_finder_gtype</class>
+    </service>
+    
+    <service id="desktop_finder.b2c_mdl_goods_sto">
+        <class>b2c_finder_goods_sto</class>
+    </service>
+    
+    <service id="desktop_finder.b2c_mdl_specification">
+        <class>b2c_finder_specification</class>
+    </service>
+    
+    <service id="desktop_finder.b2c_mdl_delivery">
+        <class>b2c_finder_delivery</class>
+    </service>
+    <service id="desktop_finder.b2c_mdl_reship">
+        <class>b2c_finder_reship</class>
+    </service>
+  
+
+    <service id="desktop_sidepanel.b2c_ctl_admin_goods">
+        <class>b2c_sidepanel_goods</class>
+    </service>
+
+    <service id="desktop_sidepanel.b2c_ctl_admin_order">
+        <class>b2c_sidepanel_order</class>
+    </service>
+
+    <service id="desktop_sidepanel.b2c_ctl_admin_sales_coupon">
+        <class>b2c_sidepanel_sales</class>
+    </service>
+
+    <service id="desktop_sidepanel.b2c_ctl_admin_member">
+        <class>b2c_sidepanel_member</class>
+    </service>
+
+    <service id="desktop_finder.b2c_mdl_members">
+        <class>b2c_finder_members</class>
+    </service>
+    
+    <service id="desktop_finder_detail_modifier.b2c_mdl_members.default">
+            <class>b2c_finder_detail</class>
+    </service>
+    
+    <service id="desktop_finder.b2c_mdl_goods">
+        <class>b2c_finder_goods</class>
+    </service>
+
+    <service id="desktop_finder.b2c_mdl_member_lv">
+        <class>b2c_finder_member_lv</class>
+    </service>
+    
+    <service id="desktop_finder.b2c_mdl_member_attr">
+        <class>b2c_finder_member_attr</class>
+    </service>
+    
+    <service id="desktop_finder.b2c_mdl_member_goods">
+        <class>b2c_finder_member_favgoods</class>
+    </service>
+    
+    <service id="desktop_finder.b2c_mdl_member_comments">
+        <class>b2c_finder_member_gask</class>
+    </service>
+    
+    <service id="desktop_finder.b2c_mdl_member_msg">
+        <class>b2c_finder_member_shopbbs</class>
+    </service>
+    
+    <service id="b2c_order_apps">
+        <class>b2c_order_checkorder</class>
+        <class>b2c_order_checkpay</class>
+    </service>
+
+    <service id="b2c_order_check_products">
+        <class>b2c_order_check_products</class>
+    </service>
+
+    <service id="b2c_order.b2c_finder_orders">
+        <class>b2c_order_actionbutton</class>
+    </service>
+
+    <service id="b2c_goods_list_apps">
+        <class>b2c_goods_list</class>
+    </service>
+
+    <service id="b2c_goods.b2c_goods_filter" optname="商品筛选器引擎" opttype="select">
+        <class>b2c_goods_filter</class>
+    </service>
+
+    <service id="b2c_goods_crontab">
+        <class>b2c_goods_crontab</class>
+    </service>
+
+    <service id="b2c_site_goods_list_viewer_apps">
+        <class>b2c_site_goods_list_viewer</class>
+    </service>
+
+    <service id="b2c_promotion_tpl_order_apps">
+        <class>b2c_promotion_conditions_order_allorderallgoods</class>
+        <class>b2c_promotion_conditions_order_itemsquanityallgoods</class>
+        <class>b2c_promotion_conditions_order_subtotalallgoods</class>
+        <class>b2c_promotion_conditions_order_subtotalselectgoods</class>
+    </service>
+
+    <service id="b2c_promotion_tpl_goods_apps">
+        <class>b2c_promotion_conditions_goods_allgoods</class>
+        <class>b2c_promotion_conditions_goods_brand</class>
+        <class>b2c_promotion_conditions_goods_cat</class>
+        <class>b2c_promotion_conditions_goods_selectgoods</class>
+        <class>b2c_promotion_conditions_goods_type</class>
+        <class>b2c_promotion_conditions_goods_typeandbrand</class>
+    </service>
+
+    <service id="b2c_promotion_solution_tpl_apps">
+        <class>b2c_promotion_solutions_byfixed</class>
+        <class>b2c_promotion_solutions_bypercent</class>
+        <class>b2c_promotion_solutions_tofixed</class>
+        <class>b2c_promotion_solutions_topercent</class>
+        <class>b2c_promotion_solutions_addscore</class>
+        <class>b2c_promotion_solutions_toscore</class>
+        <class>b2c_promotion_solutions_freeshipping</class>
+    </service>
+
+    <service id="b2c_site_goods_detail_block">
+        <class>b2c_site_goods_detail_block_promotion</class>
+    </service>
+    
+    
+    <service id="b2c_cart_object_apps">
+        <class>b2c_cart_object_goods</class>
+        <class>b2c_cart_object_coupon</class>
+    </service>
+
+    <service id="b2c_cart_process_apps">
+        <class>b2c_cart_process_get</class>
+        <class>b2c_cart_process_prefilter</class>
+        <class>b2c_cart_process_postfilter</class>
+    </service>
+
+    <service id="b2c_cart_prefilter_apps">
+        <class>b2c_cart_prefilter_promotion_goods</class>
+    </service>
+
+    <service id="b2c_cart_postfilter_apps">
+        <class>b2c_cart_postfilter_promotion</class>
+    </service>
+
+    <service id="b2c_cart_render_items_apps">
+        <class>b2c_cart_render_item_goods</class>
+        <!--<class>b2c_cart_render_item_coupon</class>-->
+    </service>
+    
+    <service id="b2c_cart_render_items_goods_apps">
+        <class>b2c_cart_render_item_goods_adjunct</class>
+    </service>
+    
+    <service id="b2c_cart_render_solutions_apps">
+        <class>b2c_cart_render_solution_goods</class>
+        <class>b2c_cart_render_solution_order</class>
+    </service>
+
+    <service id="b2c_sales_basic_operator_apps">
+        <class>b2c_sales_basic_operator_equal</class>
+        <class>b2c_sales_basic_operator_equal1</class>
+        <class>b2c_sales_basic_operator_contain</class>
+        <class>b2c_sales_basic_operator_contain1</class>
+        <class>b2c_sales_basic_operator_belong</class>
+        <class>b2c_sales_basic_operator_null</class>
+    </service>
+
+    <service id="b2c_sales_goods_item_apps">
+        <class>b2c_sales_goods_item_goods</class>
+        <class>b2c_sales_goods_item_brand</class>
+        <class>b2c_sales_goods_item_cat</class>
+        <class>b2c_sales_goods_item_type</class>
+    </service>
+
+    <service id="b2c_sales_goods_aggregator_apps">
+        <class>b2c_sales_goods_aggregator_combine</class>
+    </service>
+
+
+    <service id="b2c_sales_order_item_apps">
+        <class>b2c_sales_order_item_goods</class>
+        <class>b2c_sales_order_item_subgoods</class>
+        <class>b2c_sales_order_item_order</class>
+    </service>
+
+    <service id="b2c_sales_order_aggregator_apps">
+        <class>b2c_sales_order_aggregator_combine</class>
+        <class>b2c_sales_order_aggregator_found</class>
+        <class>b2c_sales_order_aggregator_subselect</class>
+    </service>
+
+    <service id="extend_filter_b2c_mdl_orders">
+        <class>b2c_finder_extend_orders</class>
+    </service>
+    
+    <service id="extend_filter_b2c_mdl_members">
+        <class>b2c_finder_extend_members</class>
+    </service>
+
+   
+    
+    <service id="openapi.b2c.callback.shoprelation">
+        <class>b2c_api_callback_shoprelation</class>
+    </service>
+    <service id="openapi.b2c.iframe.order.edit">
+        <class>b2c_order_iframe</class>
+    </service>
+    
+    <service id="stats_rpc_data">
+        <class>b2c_stats_rpc_data</class>
+    </service>
+    
+   
+    
+    <service id="pam_login_listener">
+        <class>b2c_stats_listener_pam_login</class>
+    </service>
+    
+    <service id="site_maps">
+        <class>b2c_site_sitemaps</class>
+    </service>
+    
+    <service id="b2c_messenger">
+        <class>b2c_messenger_email</class>
+        <class>b2c_messenger_msgbox</class>
+         <class>b2c_messenger_sms</class>
+    </service>
+    
+    <service id="tpl_source.messenger">
+        <class>b2c_messenger_tmpl</class>
+    </service>
+    
+    <service id="autocomplete.b2c_autocomplete_member">
+        <class>b2c_service_member_autocomplete</class>
+    </service>
+    
+    <service id="order_goodstype_operation">
+        <class>b2c_order_service_goods</class>
+        <class>b2c_order_service_adjunct</class>
+    </service>
+    
+    <service id="ectools_analyse_day">
+        <class>b2c_analysis_shopsale</class>
+        <class>b2c_analysis_sale</class>
+        <class>b2c_analysis_advance</class>
+    </service>
+     
+     
+     <service id="autotask">
+        <class>b2c_misc_task</class>
+    </service>
+    
+    
+    <service id="b2c_products_index_btn">
+        <class>b2c_site_product_btn_fastbuy</class>
+        <class>b2c_site_product_btn_buy</class>
+        <class>b2c_site_product_btn_notify</class>
+    </service>
+    
+    
+    <service id="b2c_products_index_info">
+        <class>b2c_site_product_info_basic</class>
+    </service>
+    
+    
+    <service id="b2c_products_index_body">
+        <class>b2c_site_product_body_common</class>
+    </service>
+    
+    <service id="site_index_seo">
+        <class>b2c_service_site_indexseo</class>
+    </service>
+    
+    <service id="b2c_member_point_add">
+        <class>b2c_member_point_add</class>
+    </service>
+    
+    <service id="b2c_member_point_reducte">
+        <class>b2c_member_point_reducte</class>
+    </service>
+    
+    <service id="desktop_index_seo">
+        <class>b2c_service_desktop_indexseo</class>
+    </service>
+    
+     <service id="firevent_type">
+        <class>b2c_service_firevent_action</class>
+    </service>
+    
+    
+    <!--清楚初始化数据-->
+    <service id="desktop_debug_clean_data">
+        <class>b2c_data_clean</class>
+    </service>
+    
+    <!-- 各类预充值卡的定义的服务 -->
+    <service id="b2c.other_joinfee.pay_finish">
+        <class>b2c_deposit_pay</class>
+    </service>
+    
+    <service id="b2c.other_joinfee.refund_finish">
+        <class>b2c_deposit_refund</class>
+    </service>
+    <!-- end -->
+
+    <!-- 保证金的定义的服务 -->
+    <service id="b2c.other_earnest.pay_finish">
+        <class>b2c_earnest_pay</class>
+    </service>
+    
+
+    <service id="image_set">
+        <class>b2c_service_image</class>
+    </service>
+
+    <service id="site_display_errorpage.conf">
+        <class>b2c_errorpage_display</class>
+    </service>
+    <!-- OCS使用的相关API-->
+ <service id="api.b2c.update_store">
+        <class>b2c_api_ocs_1_0_update_store</class>
+    </service>
+    
+    <service id="api.b2c.delivery">
+        <class>b2c_api_ocs_1_0_delivery</class>
+    </service>
+
+    <service id="api.b2c.payment">
+        <class>b2c_api_ocs_1_0_payment</class>
+    </service>
+    
+    <service id="api.b2c.refund">
+        <class>b2c_api_ocs_1_0_refund</class>
+    </service>
+    
+    <service id="api.b2c.aftersale">
+        <class>b2c_api_ocs_1_0_aftersale</class>
+    </service>
+   
+    <service id="api.b2c.callback.app">
+        <class>b2c_api_ocs_1_0_callback_app</class>
+    </service>
+     <service id="api.aftersales.request">
+        <class>b2c_api_ocs_1_0_aftersales</class>
+    </service>
+    <!-- 商品相关的api -->
+    <service id="api.b2c.goods">
+        <class>b2c_api_ocs_1_0_goods</class>
+    </service>
+    
+     <service id="api.b2c.sales.promotion">
+        <class>b2c_api_ocs_1_0_sales_promotion</class>
+    </service>
+    
+    <!--<service id="api.b2c.order">
+        <class>b2c_api_ocs_1_0_order</class>
+    </service>-->
+    <service id="api.b2c.order">
+        <class>b2c_apiv_exchanges_order</class>
+    </service>
+    
+    <service id="api.b2c.reship">
+        <class>b2c_api_ocs_1_0_reship</class>
+    </service>
+     
+    <service id="api.b2c.member">
+        <class>b2c_api_ocs_1_0_member</class>
+    </service>
+    <!--END-->   
+    <service id="desktop_finder.base_mdl_rpcpoll">
+        <class>b2c_finder_rpcpolls</class>
+    </service>
+    
+    <service id="b2c_promotion_price">
+        <class>b2c_goods_promotion_price</class>
+    </service>
+    
+    <service id="desktop_keyboard_setting">
+        <class>b2c_keyboard_initdata</class>
+    </service>
+
+    <service id="site_theme_view_helper">
+        <class>b2c_service_site_theme_helper</class>
+    </service>
+
+    <!--外部使用api-->
+    <service id="api.b2c.member.basic">
+        <class>b2c_api_basic_member</class>
+    </service>
+    <service id="api.b2c.reship.basic">
+        <class>b2c_api_basic_reship</class>
+    </service>
+    <service id="api.b2c.order.basic">
+        <class>b2c_api_basic_order</class>
+    </service>
+    <service id="api.b2c.sales.promotion.basic">
+        <class>b2c_api_basic_sales_promotion</class>
+    </service>
+    <service id="api.b2c.goods.basic">
+        <class>b2c_api_basic_goods</class>
+    </service>
+    <service id="api.aftersales.request.basic">
+        <class>b2c_api_basic_aftersales</class>
+    </service>
+    <service id="api.b2c.callback.app.basic">
+        <class>b2c_api_basic_callback_app</class>
+    </service>
+    <service id="api.b2c.aftersale.basic">
+        <class>b2c_api_basic_aftersale</class>
+    </service>
+    <service id="api.b2c.refund.basic">
+        <class>b2c_api_basic_refund</class>
+    </service>
+    <service id="api.b2c.payment.basic">
+        <class>b2c_api_basic_payment</class>
+    </service>
+    <service id="api.b2c.delivery.basic">
+        <class>b2c_api_basic_delivery</class>
+    </service>
+    <service id="api.b2c.update_store.basic">
+        <class>b2c_api_basic_update_store</class>
+    </service>
+    <!-- 判断单据是否需要发送已经通知 -->
+    <service id="b2c.rpc_notify_request">
+        <class>b2c_api_rpc_notify_common</class>
+    </service>
+    <!-- end -->
+    
+    <service id="ectools_payment_ajax_html">
+        <class>b2c_view_ajax</class>
+    </service>
+    <service id="desktop.cert.check">
+        <class>b2c_cert_certcheck</class>
+    </service>
+    
+    <!-- 监听会员预存款变化 -->
+    <service id="member_advance_listener">
+        <class>b2c_stats_listener_advance</class>
+    </service>
+
+    <service id="restore_firevent">
+        <class>b2c_event_restore</class>
+    </service>
+
+
+<!-- 版本控制中的api -->
+<!-- 系统 发起 ( 组成：apiv_本地api版本号_目标平台_动作 )-->
+    <service id="apiv_2.0_ecos.ome_ordercreate">
+      <class>b2c_apiv_apis_20_ome_order</class>
+    </service>
+    <service id="apiv_2.0_ecos.ome_orderupdate">
+      <class>b2c_apiv_apis_20_ome_orderupdate</class>
+    </service>
+    <service id="apiv_2.0_ecos.ome_orderpay">
+      <class>b2c_apiv_apis_20_ome_orderupdate</class>
+    </service>
+    <service id="apiv_2.0_ecos.ome_orderpaymentchange">
+      <class>b2c_apiv_apis_20_ome_orderupdate</class>
+    </service>
+
+ <!--系统 发起推向crm-->
+    <service id="apiv_2.0_ecos.taocrm_iframeedit">
+      <class>b2c_apiv_apis_20_ome_iframeedit</class>
+    </service>
+    <service id="apiv_2.0_ecos.taocrm_ordercreate">
+      <class>b2c_apiv_apis_20_ome_order</class>
+    </service>
+    <service id="apiv_2.0_ecos.taocrm_orderupdate">
+      <class>b2c_apiv_apis_20_ome_orderupdate</class>
+    </service>
+    <service id="apiv_2.0_ecos.taocrm_orderupdatecrm">
+      <class>b2c_apiv_apis_20_ome_orderupdate</class>
+    </service>
+    <service id="apiv_2.0_ecos.taocrm_orderpay">
+      <class>b2c_apiv_apis_20_ome_orderupdate</class>
+    </service>
+    <service id="apiv_2.0_ecos.taocrm_orderpaymentchange">
+      <class>b2c_apiv_apis_20_ome_orderupdate</class>
+    </service>
+    <service id="apiv_2.0_ecos.taocrm_iframeedit">
+      <class>b2c_apiv_apis_20_ome_iframeedit</class>
+    </service>
+
+<!-- 系统 接收 ( 组成：apiv_本地api版本号_接口名称 )-->
+    <service id="apiv_1.0_b2c.order">
+      <class>b2c_api_ocs_1_0_order</class>
+    </service>
+    <service id="apiv_2.0_b2c.order">
+      <class>b2c_apiv_apis_20_order</class>
+    </service>
+
+<!-- 版本映射文件监视 -->
+    <service id="app_content_detector">
+      <class>b2c_application_apiv</class>
+    </service>
+
+    <!-- 订单导出by ql start -->
+    <service id="export_add_title">
+      <class>b2c_order_export_addtitle</class>
+    </service>
+
+    <service id="export_add_data">
+      <class>b2c_order_export_addData</class>
+    </service>
+    <!-- 订单导出by ql end -->
+    
+    <service id="b2c_cart_object_split">
+      <class>b2c_cart_object_split_goods</class>
+    </service> 
+</services>

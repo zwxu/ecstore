@@ -1,0 +1,11 @@
+<desktop>
+    <permissions>
+        <permission id="proregister" display='true' workground='b2c.wrokground.sale'>注册营销</permission>
+    </permissions>
+
+    <workground name="营销" id="b2c.wrokground.sale" controller="admin_sales_coupon" action="index" order="40">
+        <menugroup name="注册营销">
+            <menu controller='admin_setting' action='index' permission='proregister' display='true' order='50'>注册营销配置</menu>
+        </menugroup>
+    </workground>
+</desktop>

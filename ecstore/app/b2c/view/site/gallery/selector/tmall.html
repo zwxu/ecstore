@@ -1,0 +1,458 @@
+<{if $show_filter=='false'}>
+<div class="shopheader" style="border: 2px solid #D1CCC7;margin-bottom:20px;">
+      <a class="shopheader-logo" href="<{link app=business ctl=site_shop act=view arg=$singleStore.store_id}>">
+      <{img src="images/transparent.gif" app="app" lazyload=$singleStore.image|storager:'s' class="img-lazyload"  alt=$singleStore.store_name|escape:html|cut:30}>
+      </a>
+      <div class="shopheader-info">
+        <a href="<{link app=business ctl=site_shop act=view arg=$singleStore.store_id}>" class="shop-header-title"><{$singleStore.store_name|escape:"html"|cut:30}></a>
+        <p>主营品牌：<{$singleStore.b_brand|cut:40}></p>
+        <p>所在地：<{$singleStore.area}></p>
+      </div>
+      <{input type="storepoint" store="{$singleStore.store_id}" show_name='false'}>
+      <div class="shopheader-enter" style="padding-top:30px;">
+        <a href="<{link app=business ctl=site_shop act=view arg=$singleStore.store_id}>" class="she-shop">进入店铺<i>&gt;&gt;</i></a>
+      </div>
+	  <div class="crl"></div>
+  </div>
+  <{/if}>
+<div class='attrs'>
+    <{if $selector_brand}>
+      <{assign var='column' value=$selector_brand}>    
+      <{assign var='column_id' value='brand_id'}>
+      <{if count($column.options)>0 && !$column.value}>
+        
+        <div class='brandAttr'>
+          <input type="hidden" name='brand_id' value="">
+          <div class='j_Brand attr j_TmpTag'>
+            <div class="attrKey">品牌</div>
+            <div class='attrValues'>
+            <div class="j_BrandSearch av-search clearfix" style="display: none;">
+             <input type="text" id='txt_brandSearch' placeholder="搜索&nbsp;品牌名称" value="" style="color: rgb(191, 191, 191);">
+             </div>
+              <ul class="av-collapse" id="J_brandList">
+                <{foreach from=$column.options item="item" key=value}>
+                  <li brand_id="<{$value}>" bname='<{$item}>'>
+                    <a href="<{selector args=$args2 filter=$bfilter key=$column_id value=$value}>"><{$item}></a>
+                  </li>
+                  <{/foreach}>
+              </ul>
+              <div class="av-options">
+                  <a href="javascript:;" class="j_Multiple avo-multiple">多选<i></i></a>
+                  <a  href="javascript:;" class="j_More avo-more ui-more-drop-l" style="visibility: visible; display: inline;">
+                    更多
+                    <i class="ui-more-drop-l-arrow"></i>
+                  </a>
+              </div>
+              <div class="av-btns" style="display: none;">
+               <a  class="j_SubmitBtn ui-btn-s-primary ui-btn-disable" >确定</a>
+               <a  class="j_CancelBtn ui-btn-s">取消</a>
+               </div>
+            </div>
+          </div>
+        </div>
+      <{/if}>
+    <{/if}>
+    <{if $selector_cat}>
+    <{assign var='column' value=$selector_cat}>    
+    <{assign var='column_id' value='cat_id'}> 
+    <{assign var='count_cat' value=0}>
+    <div class='cateAttrs' id="J_cateAttrs">
+      <{foreach from=$column item="ccolumn" key=ccolumn_id name=cat_name}>
+        <{assign var='count_cat' value=$count_cat+count($ccolumn.options)}>
+        <{if count($ccolumn.options)>0 && !$ccolumn.value}>
+          <div class='j_Prop attr <{if $smarty.foreach.cat_name.iteration>10}> cat_more<{/if}>' <{if $smarty.foreach.cat_name.iteration>10}>style="display:none;" drop='true'<{/if}>>
+            <div class="attrKey">
+              <{if $ccolumn.has}>
+              <a title="<{$ccolumn.name}>" href="<{selector args=$args2 filter=$bfilter key=$column_id value=$ccolumn_id}>"><{$ccolumn.name}></a>  
+              <{else}>
+                <{$ccolumn.name}>
+              <{/if}>
+            </div>
+            <div class='attrValues'>
+              <ul class='<{if count($ccolumn.options)>9}>av-collapse<{else}>av-expand<{/if}>'>
+                <{foreach from=$ccolumn.options item="item" key=v name=cat_l}>
+                  <li style="width:auto;" <{if $smarty.foreach.cat_l.iteration>9}> class="nonQPCate"<{/if }>>
+                  <a style='padding-right:0px;margin-right:20px;' href="<{selector args=$args2 filter=$bfilter key=$column_id value=$v}>"><{$item}></a>
+                  </li>
+                <{/foreach}>
+              </ul>
+                <div class="av-options">
+                    <a  href="javascript:;" class="j_More avo-more ui-more-drop-l" style="visibility: visible;<{if count($ccolumn.options)>9}>display:block;<{/if}>">
+                      更多
+                      <i class="ui-more-drop-l-arrow"></i>
+                    </a>
+                </div>
+            </div>
+          </div>
+        <{/if}>
+      <{/foreach}>
+    </div>
+    <{/if}>
+    <{if $count_cat>10 }>
+    <div class="attrExtra" style="border-top:1px solid #D1CCC7">
+    <div class="attrExtra-border"></div>
+    <a id='JP_catmore' class="attrExtra-more j_MoreAttrs"><i></i>更多选项</a>
+    </div>
+    <{/if}>
+    <{if $selector}>
+    
+    <div class='propAttrs' id="J_propAttrs">
+      <input type='hidden' name='props' value="">
+      <{foreach from=$selector item="column" key=column_id name='nprop'}>
+        <{if count($column.options)>0 && !$column.value}>
+          <div class='j_Prop attr' <{if $smarty.foreach.nprop.iteration>5}>style="display:none;" drop='true'<{/if}>>
+            <div class="attrKey"><{$column.name}></div>
+            <div class='attrValues'>
+              
+              <ul class="av-collapse" props_id='<{$column.props_id}>' goods_p='<{$column.goods_p}>'>
+                <{assign var="ocount" value=count($column.options)}>
+                <{foreach from=$column.options item="item" key=value}>
+                  <li option_id='<{$value}>'>
+                  
+                    
+                    <a href="<{selector args=$args2 filter=$bfilter key=$column_id value=$value}>"><{$item}></a>
+                  </li>
+                <{/foreach}>
+              </ul>
+              <div class="av-options">
+                  <{if $column.s_type=='on'}>
+                  <a  class="j_Multiple avo-multiple">多选<i></i>
+                  </a>
+                  <{/if}>
+                  <a href="javascript:;" class="j_More avo-more ui-more-drop-l" style="visibility: visible; display: <{if count($column.options)>9}>block;<{else}>none;<{/if}>">
+                    更多
+                    <i class="ui-more-drop-l-arrow"></i>
+                  </a>
+              </div>
+              <div class="av-btns" style="display: none;">
+               <a  class="j_SubmitBtn ui-btn-s-primary ui-btn-disable" >确定</a>
+               <a  class="j_CancelBtn ui-btn-s">取消</a>
+               </div>
+            </div>
+          </div>
+        <{/if}>
+      <{/foreach}>    
+    </div>
+    <{/if}>
+    <{if $selector && count($selector)>1}>
+    <div class="attrs-border"></div>
+    <div class="attrExtra">
+    <div class="attrExtra-border"></div>
+    <a id='JP_more' class="attrExtra-more j_MoreAttrs"><i></i>更多选项</a>
+    </div>
+    <{/if}>
+</div>
+<script>
+(function(){
+  var isNotSupportHtml5=this.isNotSupportHtml5=!('placeholder' in new Element('input'));
+  //更多选项
+  if($('JP_more')){
+     $('JP_more').addEvent('click',function(e){
+      e.stop();
+      $(this).toggleClass('attrExtra-more-drop');
+      if($(this).hasClass('attrExtra-more-drop')){
+        $(this).set('html','精简选项<i></i>');
+      }else{
+        $(this).set('html','更多选项<i></i>');
+      }
+      $('J_propAttrs').getElements('.j_Prop').each(function(el){
+         if(el.get('drop')){
+         if(el.getStyle('display')=='none'){
+             el.setStyle('display','');
+         }else{
+             el.setStyle('display','none');
+         }
+         }
+      });
+     });
+  }
+  if($('JP_catmore')){
+     $('JP_catmore').addEvent('click',function(e){
+      e.stop();
+      $(this).toggleClass('attrExtra-more-drop');
+      if($(this).hasClass('attrExtra-more-drop')){
+        $(this).set('html','精简选项<i></i>');
+      }else{
+        $(this).set('html','更多选项<i></i>');
+      }
+      $('J_cateAttrs').getElements('.cat_more').each(function(el){
+         if(el.getStyle('display')=='none'){
+             el.setStyle('display','');
+         }else{
+             el.setStyle('display','none');
+         }
+      });
+     });
+  }
+  
+  var cateAttrs=document.getElements('.cateAttrs .j_More');
+  cateAttrs.each(function(j_more,index,obj){
+    j_more.addEvent('click',function(e){
+       e.stop();
+       $(this).toggleClass('ui-more-expand-l');
+       $(this).toggleClass('ui-more-drop-l');
+        if($(this).hasClass('ui-more-expand-l')){
+            $(this).set('html','收起<i class="ui-more-expand-l-arrow"></i>');
+        }else{
+            $(this).set('html','更多<i class="ui-more-drop-l-arrow"></i>');
+        }            
+        $(this).getParent('div .attrValues').getElement('ul').toggleClass('av-expand');
+        $(this).getParent('div .attrValues').getElement('ul').toggleClass('av-collapse');
+    });
+  });
+  var prop=document.getElements('.propAttrs .j_Prop');
+  prop.each(function (j_prop,index,obj){
+      var j_Multiple=j_prop.getElement('.j_Multiple');
+      var j_CancelBtn=j_prop.getElement('.j_CancelBtn');
+      var j_SubmitBtn=j_prop.getElement('.j_SubmitBtn');
+      var j_More=j_prop.getElement('.j_More');
+      if(j_Multiple && j_Multiple.getStyle('display')!='none'){
+        var pula=j_prop.getElements('ul a');
+          pula.each(function(li){
+            li.addEvent('click',function(e){ 
+               var ul=$(this).getParent('ul');
+               if(ul.getParent('.j_Prop').hasClass('forMultiple')){
+                 e.stop();
+                 $(this).getParent('li').toggleClass('av-selected');
+                 if(!!!$(this).getElement('i')){
+                    $(this).set('html',$(this).get('html')+"<i></i>");
+                 }
+                 var j_s=ul.getParent('.j_Prop').getElement('.j_SubmitBtn');
+                 if(ul.getElement('.av-selected')){
+                     j_s.removeClass('ui-btn-disable');
+                 }else{
+                     j_s.addClass('ui-btn-disable');
+                 }
+               }
+            });      
+        });
+        /*多选按钮*/
+        j_Multiple.addEvent('click',function(e){
+          e.stop();
+          prop.map(function(j_prop){
+            j_prop.removeClass('forMultiple');
+          });
+          prop.getElements('li').map(function(li){
+            li.removeClass('av-selected');
+          });
+          
+          prop.getElements('.av-options').map(function(li){
+              li.setStyle('display','block');
+          });
+          prop.getElements('.av-btns').map(function(li){
+              li.setStyle('display','none');
+          });
+          prop.getElements('ul').map(function(li){       
+              if(li.hasClass('av-expand')){
+                li.removeClass('av-expand');
+                li.removeClass('av-scroll');                
+                li.addClass('av-collapse');
+              }
+          });
+          prop.getElements('.j_More').map(function(li){       
+              if(li.hasClass('ui-more-expand-l')){
+                li.set('html','更多<i class="ui-more-drop-l-arrow"></i>');
+                li.addClass('ui-more-drop-l');
+                li.removeClass('ui-more-expand-l');
+              }
+          });
+          prop.getElements('.j_SubmitBtn').map(function(li){       
+              li.addClass('ui-btn-disable');
+          });
+          $(this).getPrevious('input[type="hidden"]').value='';
+           $(this).toggleClass('forMultiple');
+          var av_btns=$(this).getElement('.av-btns');
+          if($(this).hasClass('forMultiple')){
+              av_btns.setStyle('display','block');
+          }else{
+              av_btns.setStyle('display','none');
+          }
+          var j_m=$(this).getElement('.av-options');
+          j_m.setStyle('display','none');
+          $(this).getElement('ul').toggleClass('av-expand');
+          $(this).getElement('ul').toggleClass('av-collapse');
+          
+          
+        }.bind(j_prop));
+        j_CancelBtn.addEvent('click',function(e){          
+          var ul=$(this).getElement('ul');
+          ul.toggleClass('av-expand');
+          ul.toggleClass('av-collapse');
+          ul.getElements('li').map(function(li){li.removeClass('av-selected');});
+          $(this).getElement('.av-btns').setStyle('display','none');
+          $(this).getElement('.av-options').setStyle('display','block');
+          $(this).toggleClass('forMultiple');
+          $(this).getElement('.j_SubmitBtn').addClass('ui-btn-disable');
+        }.bind(j_prop));
+        j_SubmitBtn.addEvent('click',function(e){
+          var j_s=$(this).getElement('.j_SubmitBtn');
+          if(j_s.hasClass('ui-btn-disable')){
+             return;
+          }
+          var ul=$(this).getElement('ul');
+          var li=ul.getChildren('.av-selected');
+          var option_id=li.map(function(el){ return el.get('option_id');});
+          var p=$(this).getPrevious('input[type="hidden"]');
+          p.value=ul.get('goods_p')+','+option_id.join(',');
+          $(this).getParent('form').submit();
+
+        }.bind(j_prop));
+      }
+      if(j_More){
+        j_More.addEvent('click',function(e){
+            var j_m=$(this).getElement('.j_More')
+            j_m.toggleClass('ui-more-expand-l');
+            j_m.toggleClass('ui-more-drop-l');
+            if(j_m.hasClass('ui-more-expand-l')){
+                j_m.set('html','收起<i class="ui-more-expand-l-arrow"></i>');
+            }else{
+                j_m.set('html','更多<i class="ui-more-drop-l-arrow"></i>');
+            }
+            
+            $(this).getElement('ul').toggleClass('av-expand');
+            $(this).getElement('ul').toggleClass('av-collapse');
+            // 
+        }.bind(j_prop));
+      }
+  });
+  var j_Brand=document.getElement('.j_Brand');
+  var j_BrandSearch=document.getElement('.j_BrandSearch');
+  
+  var txt_brandSearch=$('txt_brandSearch');
+  
+  if(txt_brandSearch){
+  txt_brandSearch.value='';
+      if(isNotSupportHtml5){
+          if(txt_brandSearch.value==''){
+              txt_brandSearch.value=txt_brandSearch.get('placeholder');
+          }
+      }
+      txt_brandSearch.addEvents({
+          focus:function(e){
+            if($(this).value==$(this).get('placeholder')){
+                  $(this).value='';
+              }
+          },
+          blur:function(e){
+              if($(this).value==''){
+                  $(this).value=$(this).get('placeholder');
+              }
+          },
+          keyup:function(e){  
+            var lis=$('J_brandList').getElements('li');
+            lis.map(function(el,index,obj){
+                  el.removeClass('av-selected');
+                  if(txt_brandSearch.value==''){
+                     el.setStyle('display','block');
+                  }else{
+                     var text=el.get('bname');
+                     if(text.test(txt_brandSearch.value,'i')){
+                         el.setStyle('display','block');
+                     }else{
+                        el.setStyle('display','none');
+                     }
+                  }
+             });
+          }
+        });
+    }
+  if(j_Brand){
+      var j_Multiple=j_Brand.getElement('.j_Multiple');
+      var j_CancelBtn=j_Brand.getElement('.j_CancelBtn');
+      var j_SubmitBtn=j_Brand.getElement('.j_SubmitBtn');
+      
+      var j_More=j_Brand.getElement('.j_More');
+      var pula=j_Brand.getElements('ul a');
+      pula.each(function(li){
+        li.addEvent('click',function(e){ 
+           var ul=$(this).getParent('ul');
+           if(j_Brand.hasClass('forMultiple')){
+             e.stop();
+             $(this).getParent('li').toggleClass('av-selected');
+             if(!!!$(this).getElement('i')){
+                $(this).set('html',$(this).get('html')+"<i></i>");
+             }
+             var j_s=ul.getParent('.j_Brand').getElement('.j_SubmitBtn');
+             if(ul.getElement('.av-selected')){
+                 j_s.removeClass('ui-btn-disable');
+             }else{
+                 j_s.addClass('ui-btn-disable');
+             }
+           }
+        });      
+      });
+      j_Multiple.addEvent('click',function(e){
+          e.stop();
+          $(this).getPrevious('input[type="hidden"]').value='';
+           $(this).toggleClass('forMultiple');
+          var av_btns=$(this).getElement('.av-btns');
+          if($(this).hasClass('forMultiple')){
+              av_btns.setStyle('display','block');
+                $(this).getElement('ul').addClass('av-scroll');
+                $(this).getElement('ul').addClass('av-expand');
+                $(this).getElement('ul').removeClass('av-collapse');
+          }else{
+              av_btns.setStyle('display','none');
+                $(this).getElement('ul').removeClass('av-scroll');
+                $(this).getElement('ul').removeClass('av-expand');
+                $(this).getElement('ul').addClass('av-collapse');
+          }
+          var j_m=$(this).getElement('.av-options');
+          j_m.setStyle('display','none');
+          $(this).getElement('.j_More').set('html','更多<i class="ui-more-drop-l-arrow"></i>');
+          $(this).getElement('.j_More').addClass('ui-more-drop-l');
+          $(this).getElement('.j_More').removeClass('ui-more-expand-l');
+          j_BrandSearch.setStyle('display','block');
+      }.bind(j_Brand));
+
+      j_More.addEvent('click',function(e){
+            //
+            $(this).toggleClass('ui-more-expand-l');
+            $(this).toggleClass('ui-more-drop-l');
+            var ul=j_Brand.getElement('ul');
+            if($(this).hasClass('ui-more-expand-l')){
+                $(this).set('html','收起<i class="ui-more-expand-l-arrow"></i>');
+                ul.addClass('av-scroll');
+                ul.addClass('av-expand');
+                ul.removeClass('av-collapse');
+                j_BrandSearch.setStyle('display','block');
+            }else{
+                $(this).set('html','更多<i class="ui-more-drop-l-arrow"></i>');
+                ul.removeClass('av-scroll');
+                ul.removeClass('av-expand');
+                ul.addClass('av-collapse');
+                j_BrandSearch.setStyle('display','none');
+                j_BrandSearch.getElement('input').value='';
+                ul.getElements('li').map(function(li){li.setStyle('display','block')});
+            }
+            
+        });
+
+      j_CancelBtn.addEvent('click',function(e){          
+          var ul=$(this).getElement('ul');
+          ul.toggleClass('av-expand');
+          ul.toggleClass('av-collapse');
+          ul.removeClass('av-scroll');
+          ul.getElements('li').map(function(li){li.removeClass('av-selected'); li.setStyle('display','block')});
+          $(this).getElement('.av-btns').setStyle('display','none');
+          $(this).getElement('.av-options').setStyle('display','block');
+          $(this).toggleClass('forMultiple');
+          $(this).getElement('.j_SubmitBtn').addClass('ui-btn-disable');
+          j_BrandSearch.setStyle('display','none');
+          j_BrandSearch.getElement('input').value='';
+        }.bind(j_Brand));
+      j_SubmitBtn.addEvent('click',function(e){
+        var j_s=$(this).getElement('.j_SubmitBtn');
+        if(j_s.hasClass('ui-btn-disable')){
+           return;
+        }
+        var li=$(this).getElements('.av-selected');
+        var option_id=li.map(function(el){ return el.get('brand_id');});
+        var p=$(this).getPrevious('input[type="hidden"]');
+        p.value=option_id.join(',');
+        $(this).getParent('form').submit();
+
+      }.bind(j_Brand));
+  }
+})();
+</script>

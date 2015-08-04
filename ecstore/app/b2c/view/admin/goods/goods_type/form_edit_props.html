@@ -1,0 +1,123 @@
+<div class="division" style="padding:0; margin:0; border:1px solid #efefef; border-top:none;">
+<div class="gridlist-action">
+<{button app="desktop" label=$___b2c="添加一个扩展属性"|t:'b2c' icon="btn_add.gif" id="addPropsItem"  }><span class="notice-inline"><{t}>输入项最多能够添加30个，选择项最多能添加20个<{/t}></span>
+</div>
+<div class="gridlist-head textcenter">
+    
+    <div class="p_name span-2"><{t}>属性名<{/t}></div>
+    <div class="p_name span-3"><{t}>属性别名(|分割)<{/t}></div>
+    <div class="p_type span-5">
+        <{t}>前台列表页表现类型<{/t}>
+        <{help}><{t}>选择项需要店主设置好多个可选值，在商品添加时只需从预设值中选择即可；如果选择渐进式筛选，前台使用该类型的商品分类列表页上方会列出店主设置好的多个可选值供顾客点击筛选商品；如果选择下拉筛选，商品分类列表页上的样式表现为下拉菜单筛选<{/t}><br /><br />
+        <{t}>输入项用于属性值差别较大的情况，店主直接为每个商品手工输入属性值，供顾客搜索，如：手机配置（一电一充）<{/t}><{/help}>
+    </div>
+    <div class="p_optionalias span-5">
+        <{t}>选择项可选值<{/t}>
+        <{help}><{t}>多个可选值请用逗号"<{/t}><font color='blue'>,</font><{t}>"分割<{/t}><{t}>，如果某个可选值包含别名，请用竖线"<{/t}><font color='blue'>|</font><{t}>"分隔<{/t}><br /><br /><{t}>例如：手机的制式有GSM、CDMA、双模（别名：G/C双模）。写成格式如：GSM,CDMA,双模|G/C双模<{/t}><{/help}>
+    </div>
+    <div class="p_optionalias span-1"><{t}>显示<{/t}><{help}><{t}>此处控制该属性是否显示在商品详细页<{/t}><{/help}></div>
+    <div class="p_optionalias span-2"><{t}>多选<{/t}><{help}><{t}>此处控制该属性前台列表页单选还是多选<{/t}><{/help}></div>
+    <div class="p_optionalias span-2"><{t}>排序<{/t}><{help}><{t}>此处请填写数字，数字越小排列越靠前，不修改则表示采用默认顺序<{/t}><{/help}></div>
+    <div class="p_optionalias span-1"><{t}>刪除<{/t}></div>
+  </div>
+    
+<div id="props_box" class="gridlist textcenter" style="height:300px; overflow:auto; margin-bottom:10px;">
+<{foreach from=$gtype.props item=prop key=k}>
+<div class="row">
+    <div class="row-line" props_k="<{$k}>">
+        <div class="p_name span-2"><input type='hidden' name='gtype[props][<{$k}>][props_id]' value='<{$prop.props_id}>'/><input size="5" name="gtype[props][<{$k}>][name]"  value="<{$prop.name}>" /></div>
+        <div class="p_name span-3"><input size="10" name="gtype[props][<{$k}>][alias]"   value="<{$prop.alias}>"/></div>
+        <div class="p_type span-5">
+            <select name="gtype[props][<{$k}>][type]"  >
+                <optgroup label="<{t}>选择项<{/t}>">
+                    <option value="2" <{if ($prop.type == 'select' && $prop.search == 'nav')}> selected="selected"<{/if}>><{t}>选择项 - 渐进式筛选<{/t}></option>
+                    <option value="3" <{if ($prop.type == 'select' && $prop.search == 'select')}> selected="selected"<{/if}>><{t}>选择项 - 下拉筛选<{/t}></option>
+                    <option value="4" <{if ($prop.type == 'select' && $prop.search == 'disabled')}> selected="selected"<{/if}>><{t}>选择项 - 不可筛选<{/t}></option>
+                </optgroup>
+                <optgroup label="<{t}>输入项<{/t}>">
+                    <option value="0" <{if ($prop.type == 'input' && $prop.search == 'input')}> selected="selected"<{/if}>><{t}>输入项 - 可搜索<{/t}></option>
+                    <option value="1" <{if ($prop.type == 'input' && $prop.search == 'disabled')}> selected="selected"<{/if}>><{t}>输入项 - 不可搜索<{/t}></option>
+                </optgroup>
+            </select>
+        </div>
+        <div class="p_optionalias span-5">
+        <{if $prop.type == 'input'}>
+		<{button type="button" label=$___b2c="编辑选择项"|t:'b2c' class="editItem" icon="btn_edit.gif" app='desktop' style='visibility: hidden;'}>
+        <{else}>
+		<{button type="button" label=$___b2c="编辑选择项"|t:'b2c' class="editItem" icon="btn_edit.gif" app='desktop' }>
+		<{/if}>
+        <span class="props_data" style="display:none">
+
+         <{assign var=op value=array()}>
+        <{foreach from=$prop.options item=pop key=popk}>
+            <{assign var="op1" value=$pop}>
+            <{if $prop.optionAlias[$popk]}>
+                <{assign var="op1" value="{$op1}|{$prop.optionAlias[$popk]}"}>
+            <{/if}>
+            <{assign var="op1" value=$op1|escape:html}>
+			<input  type="hidden" name="gtype[props][<{$k}>][options][id][]"  value="<{$prop.optionIds[$popk]}>"  />
+			<input  type="hidden" name="gtype[props][<{$k}>][options][value][]" value="<{$op1}>"/>
+            <{assign var="op1" value=$op|array_push:$op1}>
+        <{/foreach}>
+
+		</span>
+		<span class="show_props"><{$op|implode:','}></span>
+		</div>
+        <div class="p_optionalias span-1"><input name="gtype[props][<{$k}>][show]" type="checkbox" <{if $prop.show}>checked<{/if}>/></div>
+        <div class="p_optionalias span-2"><input name="gtype[props][<{$k}>][s_type]" type="checkbox" <{if $prop.s_type}>checked<{/if}>/></div>
+        <div class="p_optionalias span-2"><input  style="width:90%;" name="gtype[props][<{$k}>][ordernum]" value="<{$prop.ordernum}>" vtype='digits'/></div>
+        <div class="p_btn span-1" style="text-align:center;color:red;cursor:pointer" onclick="$(this).getParent('.row').remove()" ><{img src="bundle/delecate.gif" alt=$___b2c="删除"|t:'b2c' app='desktop'}></div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+<{/foreach}>
+</div>
+</div>
+
+<script>
+(function(){
+
+	var btn_delete = '<{img src="bundle/delecate.gif" alt=$___b2c="删除"|t:"b2c" app="desktop"}>';
+	var PROPSTMP = '<div class="row"><div class="row-line"><div class="p_name span-2"><input size="5" name="gtype[props][{key}][name]"  /></div><div class="p_name span-3"><input size="10" name="gtype[props][{key}][alias]"  /></div><div class="p_type span-5"><select name="gtype[props][{key}][type]"  ><optgroup label="<{t}>选择项<{/t}>"><option value="2"><{t}>选择项 - 渐进式筛选<{/t}></option><option value="3"><{t}>选择项 - 下拉筛选<{/t}></option><option value="4"><{t}>选择项 - 不可筛选<{/t}></option></optgroup><optgroup label="<{t}>输入项<{/t}>"><option value="0"><{t}>输入项 - 可搜索<{/t}></option><option value="1"><{t}>输入项 - 不可搜索<{/t}></option></optgroup></select></div><div class="p_optionalias span-5"><{button type="button" label=$___b2c="增加选择项"|t:"b2c" class="editItem" icon="btn_edit.gif" app="desktop"}><span class="props_data"></span><span class="show_props"></span></div><div class="p_optionalias span-1"><input  name="gtype[props][{key}][show]" type="checkbox" checked/></div><div class="p_optionalias span-2"><input  name="gtype[props][{key}][s_type]" type="checkbox"/></div> <div class="p_optionalias span-2"><input  style="width:90%;" name="gtype[props][{key}][ordernum]" value=""  vtype="digits"/></div><div class="p_btn span-1" style="text-align:center;color:red;cursor:pointer" onclick="$(this).getParent(\'.row\').remove()">'+btn_delete+'</div></div></div>';
+	
+	var editProp=function(){	
+		if(!!$ES('#props_box .editItem').length)
+		$ES('#props_box .editItem').removeEvents('click').addEvent('click',function(e){
+
+			var row=this.getParent('.row'),databox=row.getElement('.props_data'),
+				showbox=row.getElement('.show_props');
+			new Dialog('index.php?app=b2c&ctl=admin_goods_type&act=setPropsValue',{
+			 ajaxoptions:{data:row.getElement('div[class=row-line]'), method:'post'},
+             callback:function(re,hs){
+             fdoc = document.createDocumentFragment();
+             hs.each(function(k,v){
+                fdoc.appendChild( new Element('input',{'name':k[0],'value':k[1],'type':'hidden'}) );
+             }); 
+             databox.empty().appendChild(fdoc);
+				showbox.set('text',re);
+			}});
+		});
+		$ES('#props_box select[name^=gtype[props]').addEvent('change',function(){
+			 var inputType = '';
+			if(this.get('value') <= 1 ){
+				inputType = 'hidden';
+			}else{
+				inputType = 'visible';
+			}
+			var inputArea = this.getParent('.p_type').getNext('.p_optionalias').getElements('*');
+			inputArea.set('styles',{'visibility':inputType});
+		});
+	};
+	editProp();
+
+	var propsItem = 0;
+	$('addPropsItem').addEvent('click',function(e){
+		  var e = new Element('div').setHTML( PROPSTMP.substitute({'key':'new_'+propsItem++}) ).getFirst();
+		  $E('select',e).selectedIndex=0;
+		  $('props_box').adopt(e);
+		  editProp();
+	});
+
+})();
+</script>

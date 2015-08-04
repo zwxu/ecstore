@@ -1,0 +1,18 @@
+<app>
+    <name>电商通用组件</name>
+    <description>ectools电子商务通用功能应用</description>
+
+    <author>
+        <name>BBC 开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>0.2</version>
+    <license>BBC license</license>
+    <parent_model_class>dbeav_model</parent_model_class>
+
+	<depends>
+		<app>desktop</app>
+	</depends>
+</app>

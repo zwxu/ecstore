@@ -1,0 +1,30 @@
+<style>
+pre{padding:10px;border:1px solid #ccc;background:#f0f0f0;}
+pre,code{font-family: 'Andale Mono', 'Lucida Console', Monaco, fixed, monospace;font-size:11px}
+code{color:#009}
+</style>
+<{capture name=jumplist}>
+<select onchange="window.location=this.value">
+<{foreach from=$doclib item=app}>
+	<optgroup label="<{$app.app_name}>">
+	<{foreach from=$app.docs item=doc key=bookid}>
+		<option value="<{link tapp=$app.app_id act=doc book=$bookid}>"><{$doc}></option>
+	<{/foreach}>
+	</optgroup>
+<{/foreach}>
+</select>
+<{/capture}>
+
+<div style="float:right;margin-right:10px">
+<{$env.capture.jumplist}>
+</div>
+
+<h1><{$title}></h1>
+<hr />
+<div style="padding:10px">
+<{$CONTENT}>
+</div>
+
+<div style="clear:both;text-align:center;margin:50px 0 20 0">
+	<{$env.capture.jumplist}>
+</div>

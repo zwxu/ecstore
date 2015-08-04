@@ -1,0 +1,378 @@
+<form action="<{link app=b2c ctl='site_cart' act='add' arg0='goods'}>" method="post" <{if $goods.setting.buytarget==2}> target="_blank_cart"<{elseif $goods.setting.buytarget==3}> target="_dialog_minicart"<{/if}>>
+  <table class="goods-adjunct" id="goods_adjunct">
+    <tbody>
+      <tr>
+        <td class="primary-td">
+          <div class="primary">
+            <div product="<{$goods.goods_id}>" class="itemsList items-gallery primary-goods">
+              <div class="goodpic picwidth"><a href="<{link app=b2c ctl=site_product act=index arg0=$goods.goods_id}>" class="picwidth"><img src="<{$goods.image_default_id|default:$defaultImage|storager:'s'}>"></a></div>
+              <div class="goodinfo">
+                <h3><a href="<{link app=b2c ctl=site_product act=index arg0=$goods.goods_id}>" title="<{$goods.name}>"><{$goods.name}></a></h3>
+                <p>现　价：<span class="price"><{$goods.price|cur_odr}></span></p>
+                <div class="mt5 tc">
+                  <input type="hidden" name="goods[goods_id]" value="<{$goods.goods_id}>" />
+                  <input type="hidden" name="goods[pmt_id]" value="<{$goods.pmt_id}>" />
+                  <{if !$goods.spec}>
+                  <input type="hidden" name="goods[product_id]" value="" />
+                  <{/if}>
+                  <input type="hidden" name="goods[num]" value="1" />
+                  <{if !$goods.nostore_sell}>
+                  <input type="hidden" name="goods[store]" value="<{$goods.store}>" />
+                  <{/if}>
+                  <{if $goods.is_spec && ($goods.store != 0 || $goods.nostore_sell) && $goods.marketable=='true'}>
+                  <input type="hidden" value="" name="goods[specs]" />
+                  <input type="hidden" value="" name="goods[speclabel]" />
+                  <a href="javascript:void(0);" buy="<{$goods.goods_id}>" class="btn btn-select hasSpec" title="选择规格" rel="nofollow"><span><span>选择规格</span></span></a>
+                  <div class="btn-selected">
+                    <i></i>
+                    <a href="javascript:void(0);" buy="<{$goods.goods_id}>" class="hasSpec" title="选择规格" rel="nofollow">修改 &gt;</a>
+                  </div>
+                  <{/if}>
+                </div>
+              </div>
+            </div>
+            <div class="plus"></div>
+          </div>
+        </td>
+        <td class="adjunct-area">
+          <table class="Auto_Widget" data-widget-type="Tabs">
+            <tr>
+              <td colspan="3">
+                <ul class="clearfix tab-triggers">
+                  <{foreach from=$goods.adjunct item=adj name=adjs}>
+                  <li class="tab-trigger<{if $smarty.foreach.adjs.first}> first<{elseif $smarty.foreach.adjs.last}> last<{/if}>"><a href="javascript:void(0);" title="<{$adj.name}>"><{$adj.name}></a></li>
+                  <{/foreach}>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td class="content">
+                <{foreach from=$goods.adjunct item=adj key="adj_key" name="adjs"}>
+                <div class="adjunct-items tab-panel Auto_Widget" data-widget-type="Switchable" <{if $smarty.foreach.adjs.iteration!=1}>style="display:none;"<{/if}>>
+                  <div class="page prev over"></div>
+                  <div class="adjunct-group">
+                    <ul class="clearfix switchable-content">
+                      <{foreach from=$adj.items item=items key="key" name=adjitems}>
+                      <li class="item">
+                        <div class="goods-show clearfix">
+                          <div class="check"><input type="checkbox" name="goods[adjunct][<{$adj_key}>][<{$items.product_id}>]" value="<{$adj.min_num|default:1}>" /></div>
+                          <div class="goodpic picwidth"><a href="<{link app=b2c ctl=site_product act=index arg=$items.goods_id}>" class="picwidth"><img src="<{$goods.adjunct_images[$items.goods_id]|default:$defaultImage|storager:'s'}>" alt=""></a></div>
+                        </div>
+                        <div class="goodinfo">
+                          <h3><a href="<{link app=b2c ctl=site_product act=index arg=$items.goods_id}>" title=""><{$items.name}></a><{if $items.spec_info}> <i><{$items.spec_info}></i><{/if}></h3>
+                          <{if $items.price != $items.adjprice}>
+                          <p>单　价：<span class="price goods-price"><{$items.price|cur_odr}></span></p>
+                          <{/if}>
+                          <p>配件价：<span class="f-red adj-price"><{$items.adjprice|default:0|cur_odr}></span></p>
+                          <p>数　量：<span class="adj-num"><{$adj.min_num|default:1}></span></p>
+                        </div>
+                      </li>
+                      <{/foreach}>
+                    </ul>
+                  </div>
+                  <div class="page next"></div>
+                </div>
+                <{/foreach}>
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td class="info-area">
+          <div class="arr"></div>
+          <div class="info">
+            <ul>
+              <li><i>当前选择了</i><em> <b class="adj-num">0</b> 件配件</em></li>
+              <li><i>原　　价：</i><em updatespec="updateprice" class="updateprice"><{$goods.price|cur_odr}></em></li>
+              <li><i>配件优惠：</i><em class="f-red adj-discount"><{0|cur_odr}></em></li>
+              <li><i>套餐价格：</i><em class="price1 adj-amount"><{$goods.price|cur_odr}></em></li>
+            </ul>
+            <div class="button-area">
+              <div class="btnwrap">
+                <{if $goods.store === 0 && !$goods.nostore_sell}>
+                <div class="box-white">主商品缺货<br>套餐无法购买！</div>
+                <{elseif $goods.marketable == 'false'}>
+                <div class="box-white">主商品已下架<br>套餐无法购买！</div>
+                <{else}>
+                <input id="cartBtn" class="actbtn btn-buy updateBtn" value="<{t}>加入购物车<{/t}>" type="submit">
+                <{/if}>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+
+
+<script type="text/javascript">
+(function(){
+  var container = $('goods_adjunct');
+  var primary = container.getElement('.primary-goods');
+  var adjunct = container.getElement('.adjunct-area');
+  var gpid = 'input[name="goods[product_id]"]';
+  //绑定规格对话框
+  specdialog(container, {
+    url: '<{$request_url}>?type=confirm',
+    onShow: function(){
+      var spec = primary.getElement('input[name="goods[specs]"]').value.split(',');
+      if(spec.length) {
+        var specitem = this.content.getElements('.specItem');
+        var len = spec.length;
+        specitem.each(function(item,i){
+          item.getElements('a[specvid]').each(function(a){
+            if(a.get('specvid') == spec[i]) {
+            a.fireEvent('click',{stop:function(){}});
+            }
+          });
+        });
+      }
+    },
+    onSuccess: function(contain, dialog, target){
+      var btn = dialog.content.getElement('.confirm');
+      var primary = contain.getElement('.primary-goods');
+      btn && btn.addEvent('click', function(){
+        var price = dialog.content.getElement('[updatespec]');
+        var goodsp = primary.getElement('.price');
+        var upp = contain.getElement('.updateprice');
+        var amount = contain.getElement('.adj-amount');
+        var discount = contain.getElement('.adj-discount');
+        upp.set('text', priceControl.add(priceControl.diff(upp, goodsp, 1), price));
+        amount.set('text', priceControl.diff(upp, discount));
+        goodsp.set('text', getVal(price));
+        target.getParent().addClass('selected');
+        primary.getElement(gpid).value = dialog.content.getElement(gpid).value;
+        var s=[], t = [];
+        dialog.content.getElements('a[specvid].selected').each(function(a){
+          t.push(a.getElement('img') ? a.getElement('img').alt : getVal(a,'span'));
+          s.push(a.get('specvid'));
+        });
+        primary.getElement('input[name="goods[specs]"]').value = s.join();
+        primary.getElement('.goodinfo .btn-selected i').set('text', t.join('、'));
+        <{if ($goods.store != 0 || $goods.nostore_sell) && $goods.marketable == 'true'}>
+        contain.getElement('.btn-buy').removeClass('disabled');
+        <{/if}>
+        dialog.close.fireEvent('click');
+      });
+    }
+  });
+  //miniCart.init();
+  formToCart(container);
+
+  <{if ($goods.store != 0 || $goods.nostore_sell) && $goods.marketable == 'true'}>
+  //点击加入购物车判断
+  container.getElement('.btn-buy').addEvent('click', function(e){
+      // e.stop();
+      this.blur();
+      var store = getVal($('main-info'), '.goods-buy-area .store');
+      if(store && store == 0) {
+        Ex_Dialog.alert('主商品缺货，套餐无法购买。')
+        return false;
+      }
+      if(primary.getElement('input[name="goods[specs]"]').value == '') {
+        Ex_Dialog.alert('请先为商品 <b>' + getVal(primary, '.goodinfo h3') + '</b> 选择规格后再购买配件套餐。');
+        return false;
+      }
+      if(!adjunct.getElements('input[name^=goods[adjunct]:checked').length) {
+        Ex_Dialog.alert('请至少选择一个配件，再购买配件套餐。');
+        return false;
+      }
+  });
+  <{/if}>
+
+  //计算中间区域宽度及item边距，并用于切换
+  var groupWidth, cols;
+  $$('.adjunct-group').each(function(group){
+    groupWidth = adjunct.getSize().x-adjunct.getPatch('padding','border').x - group.getPatch().x;
+    var item = group.getElement('.item');
+    var itemWidth = item.measure(function(){
+        return this.getSize().x + this.getPatch('margin').x;
+    });
+    cols = (groupWidth / itemWidth).toInt();
+    groupWidth = cols * itemWidth;
+    group.setStyles('margin:0 auto;width:' + groupWidth + 'px;');
+  });
+
+  new Tabs(adjunct, {
+    eventType: 'click',
+    triggersBox:'.tab-triggers',
+    panels:'.tab-panel',
+    onBeforeSwitch: function() {
+        //图片缩放
+        if(Browser.ie6) {
+            container.getElement('.primary .picwidth img').zoomImg(100,100);
+            container.getElements('.adjunct-area .picwidth img').each(function(img){img.zoomImg(50,50);});
+        }
+    },
+    onSwitch: function(){
+        // 修复ie67下图片不显示bug:reflow
+        if(Browser.ie6 || Browser.ie7) adjunct.getElements('li .picwidth,li .goodinfo h3').show('block');
+    }
+  });
+
+  $$('.adjunct-items').each(function(item){
+    new Switchable(item, {
+      haslrbtn:true,
+      autoplay: false,
+      viewSize: [groupWidth],
+      circular: false,
+      steps: cols,
+      hasTriggers:false,
+      effect: 'scrollx',
+      disableCls: 'over',
+      position:'',
+      isFloat:false,
+      onInit:function(){
+          if(this.content[0].getStyle('width').toInt() <= groupWidth) {
+              this.prevbtn.setStyle('visibility', 'hidden');
+              this.nextbtn.setStyle('visibility', 'hidden');
+          }
+      }
+    });
+  });
+
+  //选择变色并价格数量联动
+  $$('.adjunct-items input[type=checkbox]').addEvent('change', function(){
+    var parent = this.getParent('.item');
+    parent[this.checked?'addClass':'removeClass']('active');
+    var info = $$('#goods_adjunct .info-area')[0];
+    var num = getVal(parent, '.adj-num', 1);
+    info.getElement('.adj-num').set('text', getVal(info, '.adj-num', 1) + (this.checked ? 1 : -1) * num);
+    var price = parent.getElement('.goods-price');
+    var adjp = parent.getElement('.adj-price');
+    var upp = info.getElement('.updateprice');
+    var discount = info.getElement('.adj-discount');
+    var amount = info.getElement('.adj-amount');
+    upp.set('text', priceControl[this.checked ? 'add' : 'diff'](upp, [price||adjp, num]));
+    discount.set('text', priceControl[this.checked ? 'add' : 'diff'](discount, price ? num * priceControl.diff(price, adjp, 1) : 0));
+    amount.set('text', priceControl.diff(upp, discount));
+    <{if ($goods.store != 0 || $goods.nostore_sell) && $goods.marketable == 'true'}>
+    $('goods_adjunct').getElement('.btn-buy').removeClass('disabled');
+    <{/if}>
+  });
+
+  function getVal(p,c,i) {
+    if(!c) return p.get('text');
+    p = p.getElement(c).get('text');
+    if(!i) return p;
+    return Number.from(p);
+  }
+
+})();
+</script>
+
+
+
+
+
+<{*<div id='goods-adjunct' class='hightline'>
+    <div class='hightbox'>
+      <{foreach from=$goods.adjunct item=adj key="adj_key"}>
+      <div class="choose">
+        <div class="adjtitle"><{$adj.name}><em><{if $adj.min_num || $adj.max_num}><{t}>可选 <{/t}><{if $adj.min_num == $adj.max_num}><{$adj.min_num}><{else}><{$adj.min_num|default:0}>-<{$adj.max_num}><{/if}><{t}> 件<{/t}><{/if}></em><span adj="<{$adj.name}>"></span></div>
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tbody class="goods-adjunct-row" adjkey="<{$adj_key}>" adjname="<{$adj.name}>" min_num="<{$adj.min_num|default:0}>" max_num="<{$adj.max_num|default:-1}>" >
+            <{foreach from=$adj.items item=items key="key" name=adjitems}>
+            <tr price="<{if $items.adjprice > 0}><{$items.adjprice|cur:null:true}><{else}>0<{/if}>" product="<{$items.goods_id}>" <{if $smarty.foreach.adjitems.last}>class="last"<{/if}>>
+              <td width="5%" valign="top">
+                <input type="checkbox" name='check_<{$items.product_id}>' value="<{if $items.adjprice > 0}><{$items.adjprice|cur:null:true}><{else}>0<{/if}>" product="<{$items.goods_id}>"/>
+              </td>
+              <td width="55%">
+                <h3 class="fontnormal adjpc"><a<{if $items.marketable == 'true' }> href="<{link app=b2c ctl="site_product" act="index" arg0=$items.goods_id}>" target="_blank" title="<{$items.name}>"<{/if}>>
+                    <{$items.name}><{if $items.spec_info}>[<{$items.spec_info}>]<{/if}></a></h3>
+                <{if $items.price != $items.adjprice}>
+                <p><span><{t}>原价格：<{/t}></span><del class="mktprice"><{$items.price|cur_odr}></del></p>
+                <{/if}>
+                <p class="memberprice"><span><{t}>配件价格：<{/t}></span><i class="font-orange fontbold "><{if $items.adjprice > 0}><{$items.adjprice|cur_odr}><{else}>0<{/if}></i></p>
+              </td>
+              <td><em><{t}>数量：<{/t}></em><input size="2" maxlength='10' class="inputstyle textcenter" type="text" min="0" autocomplete='off' value="<{if $adj.min_num == 0}>1<{else}><{$adj.min_num|default:1}><{/if}>" name='count_check_<{$items.product_id}>' /></td>
+
+
+              <td<{if $items.marketable == 'false' || $items.disabled == 'true'}> style="display:none"<{/if}>><a title="<{t}>您可以单把独这个商品加入购物车<{/t}>" buy="<{$items.goods_id}>" product="<{$items.product_id}>" type="g" href="<{link app="b2c" ctl="site_cart" act="add" arg0='goods' arg1=$items.goods_id arg2=$items.product_id arg3=1}>" <{if $goods.setting.buytarget==2}> target="_blank_cart"<{elseif $goods.setting.buytarget==3}> target="_dialog_minicart"<{/if}> class="addtocart orangebtn" rel="nofollow"><!-- <{img src="icons/btn_adj_buy.gif" alt=$___b2c="您可以单把独这个商品加入购物车"|t:'b2c'}> --><span>单独购买</span></a></td>
+
+              <td>
+                <input type='hidden' name='goods[adjunct][<{$adj_key}>][<{$items.product_id}>]' value='' disabled='true'/>
+              </td>
+            </tr>
+            <{/foreach}>
+          </tbody>
+        </table>
+      </div>
+      <{/foreach}>
+      <p class="textright fontbold"><{t}>配件总价:<{/t}><span class='font-orange fontbold ml5 spare-price '>0.00</span></p>
+    </div>
+</div>
+<script>
+  /*配件JS*/
+  void function(){
+
+    var updateAdjunctPrice=function(){
+      var adjunctPrice=0;
+
+      var selected=$$('#goods-adjunct tr').filter(function(tr,index){
+
+        return tr.getElement('input[type=checkbox]').checked;
+
+      });
+      selected.each(function(s,i){
+        adjunctPrice+=s.get('price').toFloat()*s.getElement('input[type=hidden]').value.toFloat();
+      });
+      var price=isNaN(adjunctPrice)?0:adjunctPrice;
+      $('goods-adjunct').getElement('.spare-price').set('text',priceControl.format(price));
+
+
+    };
+
+
+
+    var adjunctCheckbox=$ES('#goods-adjunct input[type=checkbox]');
+    var adjunctText=$ES('#goods-adjunct input[type=text]');
+
+
+    adjunctCheckbox.addEvent('click',function(e){
+      var  prt=this.getParent('tr');
+      var  min_num=prt.getParent('tbody').get('min_num').toInt();
+      if(isNaN(min_num)||min_num<1)min_num=1;
+
+      var _hidden=prt.getElement('input[type=hidden]').set('disabled',!this.checked);
+
+      this.checked?prt.setStyle('background','#e9e9e9'):prt.setStyle('background','#fff');
+
+      var _text=prt.getElement('input[name^=count_check_]');
+
+      if(!_text.value||_text.value<min_num){
+
+        _hidden.value=_text.value=min_num;
+        }else{
+        _hidden.value=_text.value;
+      }
+      updateAdjunctPrice();
+
+    });
+
+    adjunctText.addEvent('keydown',function(e){
+      if($A(keyCodeFix).include(e.code).length><{if $goods.type.floatstore==1}>27<{else}>25<{/if}>)
+      e.stop();
+    });
+    adjunctText.addEvent('keyup',function(e){
+      var  prt=this.getParent('tr');
+      var min_num=prt.getParent('tbody').get('min_num').toInt();
+      var max_num=prt.getParent('tbody').get('max_num').toInt();
+      var _hidden=prt.getElement('input[type=hidden]');
+      if(isNaN(min_num)||min_num<0){
+        min_num=0;
+      };
+      if(isNaN(max_num)||max_num<0){
+        max_num=Number.MAX_VALUE;
+      };
+      if(this.value){
+        _hidden.value=this.value=this.value.toInt().limit(min_num,max_num);
+      }
+      updateAdjunctPrice();
+    });
+
+
+
+  }();
+</script>*}>
+

@@ -1,0 +1,102 @@
+<div class="gridlist-head">
+	<strong>最热门的</strong>
+</div>
+<div class="gridlist">
+	<div class="clearfix row">
+		<div class="span-auto">
+			<h4>
+				APPNAME 01
+			</h4>
+		</div>
+		<div class="span-auto">
+			<p>
+				DESCREAPTION....
+			</p>
+		</div>
+		 <div class="span-auto">
+				<{button label=$___desktop="立即安装"|t:'desktop'}>
+			</div>
+	</div>
+	<div class="clearfix row last">
+		<div class="span-auto">
+			<h4>
+				APPNAME 01
+			</h4>
+		</div>
+		<div class="span-auto">
+			<p>
+				DESCREAPTION....
+			</p>
+		</div>
+		 <div class="span-auto">
+				<{button label=$___desktop="立即安装"|t:'desktop'}>
+			</div>
+	</div>
+
+</div>
+<div class="gridlist-head">
+	<strong><{t}>最新发布的<{/t}></strong>
+</div>
+<div class="gridlist">
+	<div class="clearfix row">
+		<div class="span-auto">
+			<h4>
+				APPNAME 01
+			</h4>
+		</div>
+		<div class="span-auto">
+			<p>
+				DESCREAPTION....
+			</p>
+		</div>
+		 <div class="span-auto">
+				<{button label=$___desktop="立即安装"|t:'desktop'}>
+			</div>
+	</div>
+	<div class="clearfix row last">
+		<div class="span-auto">
+			<h4>
+				APPNAME 02
+			</h4>
+		</div>
+		<div class="span-auto">
+			<p>
+				DESCREAPTION....
+			</p>
+		</div>
+		 <div class="span-auto">
+				<{button label=$___desktop="立即安装"|t:'desktop'}>
+			</div>
+	</div>
+</div>
+
+<div class="gridlist-head">
+	<strong><{t}>有更新的<{/t}></strong>
+</div>
+<div class="gridlist" id="app-update-msg">
+	loading...
+</div>
+<iframe id="appupdateinfo_handle" src="index.php?ctl=appmgr&act=fetchindex" onload="get_appupdateinfo();" style="display:none"></iframe>
+
+<script>
+       var get_appupdateinfo = function(){
+
+			new Request.HTML({
+				url:'index.php?ctl=dashboard&act=appmgr',
+				update:'app-update-msg',
+				onRequest:function(){
+
+				   $('app-update-msg').set('html','loading...');
+				},
+				onComplete:function(p1,p2,re){
+					if(!re){
+					$('app-update-msg').set('html',"<div class='row'><{t}>暂无需要更新的应用。<{/t}><span class=\"lnk\" onclick='$(\"appupdateinfo_handle\").contentWindow.location.reload();'><{t}>再次检查更新<{/t}>&raquo;</span></div>");
+					}else{
+
+
+					}
+
+				}
+         	}).get();
+		} ;
+</script>

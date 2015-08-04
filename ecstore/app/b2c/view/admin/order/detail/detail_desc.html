@@ -1,0 +1,32 @@
+<{if !$memberCheck}>
+<div class="tableform box-form" url='member'>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th><{t}>请输入用户名：<{/t}></th>
+        <td><{input type="object" object="members" name="order[member_id]" }> &nbsp; <{help}><{t}>此处填写订单客户的前台会员用户名，如果该顾客没有注册过会员请留空<{/t}><{/help}></td>
+      </tr>
+      <tr>
+        <th><{t}>请选择产品：<{/t}></th>
+        <td><{input type="object" object="products" name="order[goods_id]" cols="name" multiple="true" select="checkbox" view="b2c:admin/order/new_items.html"}> &nbsp; <{help}><{t}>此处填写订单客户的前台会员用户名，如果该顾客没有注册过会员请留空<{/t}><{/help}></td>
+      </tr>
+      <tr>
+        <th>&nbsp;</th>
+        <td><input type='button' value='<{t}>保存<{/t}>' class='box-submit'/></td>
+      </tr>
+    </table>
+</div>
+<{else}>
+<div class="tableform">
+<{if $order.member}>
+   <{t}>会员<{/t}>fsef
+<{else}>
+    <{t}>未选择会员<{/t}>
+<{/if}>
+</div>
+<{foreach from=array('order_items','consignee','shipping','payinfo') item=oconf}>
+    <div class="tableform box-form" url='<{$oconf}>'>
+        <{include file=$order[$oconf]?"admin/order/detail/{$oconf}_succ.html":"admin/order/detail/{$oconf}.html"}>
+    </div>
+<{/foreach}>
+
+<{/if}>

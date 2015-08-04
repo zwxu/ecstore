@@ -1,0 +1,3 @@
+<desktop>
+	<adminpanel group="desktop_setting" controller="enterprise" action="index" permission="shopsetting" display="true" order='60'>企业帐号</adminpanel>
+</desktop>

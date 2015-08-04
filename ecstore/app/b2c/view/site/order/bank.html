@@ -1,0 +1,100 @@
+<!--zongfang 付款银行卡方式暂时勿动-->
+<div class="cart_paymentzf" id="cart_paymentzf">
+           <ul class="cart_paymentzf_tab">
+                  <li class="current" id="preson"><a href="javascript:void(0);">储蓄卡</a></li>
+                  <li id="credit"><a href="javascript:void(0);">信用卡</a></li>
+                  <li id="business"><a href="javascript:void(0);">快捷支付</a></li>				  
+           </ul>
+           <div class="crl"></div>
+		  <{input type="hidden" name="payment[bankaccounttype]"  id="bank_type" value=""}>
+		  <div class="crl"></div>	
+           <div class="cart_payarea crl_xu" id="preson_bank">
+                   <h5>网银支付，需开通网银</h5>
+                   <ul class="cart_payarealist">
+					<{foreach from=$bankinfo.person_bank item=item key=key}>
+                          <li id="11">
+								<input type="radio" value="<{$key}>" onclick="confirmBank(this)" name="payment[banktype]">
+								<label class="limited-coupon">
+								<span title="中国农业银行" class="icon_bank bank_<{$item.1}>"></span>
+								<span class="bank-name"><{$item.0}></span>
+								</label>
+                          </li>						  
+					<{/foreach}>					
+                    </ul>
+                    <div class="crl"></div>
+					
+					<h5 class=" crl_xu">企业银行</h5>
+					<ul class="cart_payarealist">
+						<{foreach from=$bankinfo.business_bank item=item key=key}>
+                          <li id="21">
+								<input type="radio" value="<{$key}>" onclick="confirmBank(this)" name="payment[banktype]">
+								<label class="limited-coupon">
+								<span title="中国农业银行" class="icon_bank bank_<{$item.1}>"></span>
+								<span class="bank-name"><{$item.0}></span>
+								</label>
+                          </li>
+					<{/foreach}>
+						  <li id="91">
+								<input type="radio" value="9001000" onclick="confirmBank(this)" name="payment[banktype]">
+								<label class="limited-coupon  current">
+								<span title="中国农业银行" class="icon_bank bank_online"></span>
+								<span class="bank-name">银联在线</span>
+								</label>
+                          </li>						  
+					</ul>
+                    <div class="crl"></div>
+            </div>
+			<div class="cart_payarea crl_xu" id="credit_bank" style="display:none;">
+                   <h5>信用卡支付</h5>
+                   <ul class="cart_payarealist">
+					<{foreach from=$bankinfo.credit_bank item=item key=key}>
+                          <li id="12">
+								<input type="radio" value="<{$key}>" onclick="confirmBank(this)" name="payment[banktype]">
+								<label class="limited-coupon">
+								<span title="中国农业银行" class="icon_bank bank_<{$item.1}>"></span>
+								<span class="bank-name"><{$item.0}></span>
+								</label>
+                          </li>						  
+					<{/foreach}>					
+                    </ul>
+                    <div class="crl"></div>
+            </div>
+			<div class="cart_payarea crl_xu" id="business_bank" style="display:none;">
+                   <h5>快捷支付</h5>
+                   <ul class="cart_payarealist">
+						<li id="92">
+								<input type="radio" value="9001000" onclick="confirmBank(this)" name="payment[banktype]">
+								<label class="limited-coupon">
+								<span title="中国农业银行" class="icon_bank bank_online"></span>
+								<span class="bank-name">银联在线</span>
+								</label>
+                          </li>
+                    </ul>
+                    <div class="crl"></div>
+            </div>
+
+</div><!--cart_paymentzf end-->
+
+<script>
+	
+	window.addEvent('domready',function(){
+		var tabLi = $$('.cart_paymentzf_tab').getChildren('li');
+		$$('.cart_paymentzf_tab').getChildren('li').each(function(item){
+			item.addEvent('click',function(el){
+				item.removeClass('current');
+				$(this).addClass('current');	
+				$$('.cart_payarea').each(function(elk){
+					elk.style.display = 'none';
+				});
+				id = $(this).id;
+				$(id+"_bank").setStyle('display','');
+			});
+			
+		});
+	});
+
+	function confirmBank(obj){
+		var objLi = obj.parentNode;
+		$('bank_type').value = objLi.id;
+	}
+</script>

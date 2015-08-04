@@ -1,0 +1,769 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XMLSpy v2008 (http://www.altova.com) by flaboy  -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.shopex.cn" targetNamespace="http://www.shopex.cn" elementFormDefault="qualified">
+	<xs:element name="url" type="xs:anyURI"/>
+	<xs:element name="last_modified" type="t_timestamp"/>
+	<xs:element name="createtime" type="t_timestamp"/>
+	<xs:element name="intro" type="xs:string"/>
+	<xs:element name="name" type="t_string"/>
+	<xs:element name="addr" type="t_string"/>
+	<xs:element name="zipcode" type="t_string"/>
+	<xs:element name="phone">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="t_string">
+					<xs:attribute name="type" use="optional">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="mobile"/>
+								<xs:enumeration value="home"/>
+								<xs:enumeration value="office"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="currency" type="t_currency"/>
+	<xs:element name="mobile" type="t_string"/>
+	<xs:element name="area">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="t_string">
+					<xs:attribute name="id" type="xs:unsignedLong" use="optional"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="email" type="t_email"/>
+	<xs:element name="thumbnail">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:anyURI">
+					<xs:attribute name="width" type="xs:unsignedInt" use="required"/>
+					<xs:attribute name="height" type="xs:unsignedInt" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="media">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="t_string">
+					<xs:attribute name="type" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="image"/>
+								<xs:enumeration value="vedio"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="default" type="xs:boolean" use="optional"/>
+					<xs:attribute name="width" type="xs:int" use="required"/>
+					<xs:attribute name="height" type="xs:int" use="required"/>
+					<xs:attribute name="storager" type="xs:string" use="optional"/>
+					<xs:attribute name="options" type="xs:string" use="optional"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<!-- global types -->
+	<xs:element name="bn" type="xs:string"/>
+	<xs:simpleType name="t_timestamp">
+		<xs:restriction base="xs:unsignedLong">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="9999999999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="meta">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="t_string">
+					<xs:attribute name="key" type="xs:string" use="required"/>
+					<xs:attribute name="value" type="xs:string" use="optional"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="link">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="t_string">
+					<xs:attribute name="url" type="xs:string" use="required"/>
+					<xs:attribute name="type" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="goods"/>
+								<xs:enumeration value="article"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="option" use="optional">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="single"/>
+								<xs:enumeration value="both"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="t_currency">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AFA"/>
+			<xs:enumeration value="AED"/>
+			<xs:enumeration value="ALL"/>
+			<xs:enumeration value="DZD"/>
+			<xs:enumeration value="FRF"/>
+			<xs:enumeration value="AMD"/>
+			<xs:enumeration value="ANG"/>
+			<xs:enumeration value="AON"/>
+			<xs:enumeration value="ARP"/>
+			<xs:enumeration value="ATS"/>
+			<xs:enumeration value="AUD"/>
+			<xs:enumeration value="XCD"/>
+			<xs:enumeration value="AWF"/>
+			<xs:enumeration value="XCD"/>
+			<xs:enumeration value="AZM"/>
+			<xs:enumeration value="BAK"/>
+			<xs:enumeration value="BBD"/>
+			<xs:enumeration value="BEF"/>
+			<xs:enumeration value="BGL"/>
+			<xs:enumeration value="BIF"/>
+			<xs:enumeration value="BSD"/>
+			<xs:enumeration value="BND"/>
+			<xs:enumeration value="BOB"/>
+			<xs:enumeration value="BRL"/>
+			<xs:enumeration value="BTR"/>
+			<xs:enumeration value="BWP"/>
+			<xs:enumeration value="BZD"/>
+			<xs:enumeration value="CAD"/>
+			<xs:enumeration value="XAF"/>
+			<xs:enumeration value="CDF"/>
+			<xs:enumeration value="CHF"/>
+			<xs:enumeration value="CLP"/>
+			<xs:enumeration value="CNY"/>
+			<xs:enumeration value="COP"/>
+			<xs:enumeration value="CRC"/>
+			<xs:enumeration value="CZK"/>
+			<xs:enumeration value="CUP"/>
+			<xs:enumeration value="CVE"/>
+			<xs:enumeration value="CYP"/>
+			<xs:enumeration value="GBP"/>
+			<xs:enumeration value="DEM"/>
+			<xs:enumeration value="DKK"/>
+			<xs:enumeration value="DOP"/>
+			<xs:enumeration value="XAF"/>
+			<xs:enumeration value="ECS"/>
+			<xs:enumeration value="MMK"/>
+			<xs:enumeration value="EEK"/>
+			<xs:enumeration value="EGP"/>
+			<xs:enumeration value="ERN"/>
+			<xs:enumeration value="ESP"/>
+			<xs:enumeration value="KHR"/>
+			<xs:enumeration value="ETB"/>
+			<xs:enumeration value="XAF"/>
+			<xs:enumeration value="EUR"/>
+			<xs:enumeration value="FIM"/>
+			<xs:enumeration value="FJD"/>
+			<xs:enumeration value="FRF"/>
+			<xs:enumeration value="XAF"/>
+			<xs:enumeration value="XAF"/>
+			<xs:enumeration value="GEL"/>
+			<xs:enumeration value="GHC"/>
+			<xs:enumeration value="GIP"/>
+			<xs:enumeration value="GMD"/>
+			<xs:enumeration value="GNF"/>
+			<xs:enumeration value="GRD"/>
+			<xs:enumeration value="GTQ"/>
+			<xs:enumeration value="GYD"/>
+			<xs:enumeration value="HKD"/>
+			<xs:enumeration value="NZD"/>
+			<xs:enumeration value="HRK"/>
+			<xs:enumeration value="HTG"/>
+			<xs:enumeration value="HUF"/>
+			<xs:enumeration value="IDR"/>
+			<xs:enumeration value="IEP"/>
+			<xs:enumeration value="ILS"/>
+			<xs:enumeration value="INR"/>
+			<xs:enumeration value="IQD"/>
+			<xs:enumeration value="IRR"/>
+			<xs:enumeration value="ISK"/>
+			<xs:enumeration value="NLG"/>
+			<xs:enumeration value="ITL"/>
+			<xs:enumeration value="JMD"/>
+			<xs:enumeration value="JOD"/>
+			<xs:enumeration value="JPY"/>
+			<xs:enumeration value="KES"/>
+			<xs:enumeration value="SVC"/>
+			<xs:enumeration value="KPW"/>
+			<xs:enumeration value="XAF"/>
+			<xs:enumeration value="KRW"/>
+			<xs:enumeration value="ETB"/>
+			<xs:enumeration value="KWD"/>
+			<xs:enumeration value="KZT"/>
+			<xs:enumeration value="LAK"/>
+			<xs:enumeration value="LBP"/>
+			<xs:enumeration value="LKR"/>
+			<xs:enumeration value="LRD"/>
+			<xs:enumeration value="LSL"/>
+			<xs:enumeration value="LTL"/>
+			<xs:enumeration value="LUF"/>
+			<xs:enumeration value="LVL"/>
+			<xs:enumeration value="LYD"/>
+			<xs:enumeration value="MAD"/>
+			<xs:enumeration value="MDL"/>
+			<xs:enumeration value="MGF"/>
+			<xs:enumeration value="MKD"/>
+			<xs:enumeration value="XAF"/>
+			<xs:enumeration value="GMD"/>
+			<xs:enumeration value="MNT"/>
+			<xs:enumeration value="MOP"/>
+			<xs:enumeration value="MRO"/>
+			<xs:enumeration value="MTL"/>
+			<xs:enumeration value="MUR"/>
+			<xs:enumeration value="MVR"/>
+			<xs:enumeration value="GRD"/>
+			<xs:enumeration value="MXP"/>
+			<xs:enumeration value="DKK"/>
+			<xs:enumeration value="MYR"/>
+			<xs:enumeration value="MZM"/>
+			<xs:enumeration value="NAD"/>
+			<xs:enumeration value="NGN"/>
+			<xs:enumeration value="NIO"/>
+			<xs:enumeration value="GTQ"/>
+			<xs:enumeration value="NOK"/>
+			<xs:enumeration value="GNF"/>
+			<xs:enumeration value="NPR"/>
+			<xs:enumeration value="NZD"/>
+			<xs:enumeration value="OMR"/>
+			<xs:enumeration value="PAB"/>
+			<xs:enumeration value="PEN"/>
+			<xs:enumeration value="PHP"/>
+			<xs:enumeration value="PKR"/>
+			<xs:enumeration value="PLZ"/>
+			<xs:enumeration value="PYG"/>
+			<xs:enumeration value="QAR"/>
+			<xs:enumeration value="ROL"/>
+			<xs:enumeration value="RUR"/>
+			<xs:enumeration value="RWF"/>
+			<xs:enumeration value="SAR"/>
+			<xs:enumeration value="SDD"/>
+			<xs:enumeration value="SEK"/>
+			<xs:enumeration value="SGD"/>
+			<xs:enumeration value="SIT"/>
+			<xs:enumeration value="SKK"/>
+			<xs:enumeration value="SLL"/>
+			<xs:enumeration value="JOD"/>
+			<xs:enumeration value="SOS"/>
+			<xs:enumeration value="SYP"/>
+			<xs:enumeration value="SZL"/>
+			<xs:enumeration value="THB"/>
+			<xs:enumeration value="TJR"/>
+			<xs:enumeration value="TMM"/>
+			<xs:enumeration value="TND"/>
+			<xs:enumeration value="LVL"/>
+			<xs:enumeration value="TOP"/>
+			<xs:enumeration value="TRL"/>
+			<xs:enumeration value="TWD"/>
+			<xs:enumeration value="TZS"/>
+			<xs:enumeration value="UAH"/>
+			<xs:enumeration value="UGX"/>
+			<xs:enumeration value="UYU"/>
+			<xs:enumeration value="USD"/>
+			<xs:enumeration value="UZS"/>
+			<xs:enumeration value="VEB"/>
+			<xs:enumeration value="VND"/>
+			<xs:enumeration value="VUV"/>
+			<xs:enumeration value="YER"/>
+			<xs:enumeration value="YUN"/>
+			<xs:enumeration value="ZAR"/>
+			<xs:enumeration value="ZMK"/>
+			<xs:enumeration value="ZWD"/>
+			<xs:enumeration value="NIO"/>
+			<xs:enumeration value="NGN"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_money">
+		<xs:restriction base="xs:decimal">
+			<xs:minInclusive value="0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_email">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Za-z0-9!#-'\*\+\-/=\?\^_`\{-~]+(\.[A-Za-z0-9!#-'\*\+\-/=\?\^_`\{-~]+)*@[A-Za-z0-9!#-'\*\+\-/=\?\^_`\{-~]+(\.[A-Za-z0-9!#-'\*\+\-/=\?\^_`\{-~]+)*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="event">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="time" type="t_timestamp" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="adj_filter" type="t_string"/>
+	<xs:element name="adj_include" type="t_string"/>
+	<xs:element name="adj_exclude" type="t_string"/>
+	<xs:element name="adjunct">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="adj_filter" minOccurs="0"/>
+				<xs:element ref="adj_include" minOccurs="0"/>
+				<xs:element ref="adj_exclude" minOccurs="0"/>
+			</xs:choice>
+			<xs:attribute name="title" type="t_string" use="required"/>
+			<xs:attribute name="min" type="xs:int" use="optional" default="0"/>
+			<xs:attribute name="max" type="xs:int" use="optional" default="0"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="money">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="t_money">
+					<xs:attribute name="title" type="t_string"/>
+					<xs:attribute name="currency" type="t_currency"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="t_string">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="255"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_number">
+		<xs:restriction base="xs:unsignedLong">
+			<xs:minInclusive value="0"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- goods define-->
+	<xs:element name="price">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="t_money">
+					<xs:attribute name="title" type="t_string"/>
+					<xs:attribute name="name" type="t_string"/>
+					<xs:attribute name="member_group_id" type="t_string"/>
+					<xs:attribute name="hidden" type="xs:boolean"/>
+					<xs:attribute name="disabled" type="xs:boolean"/>
+					<xs:attribute name="default" type="xs:boolean"/>
+					<xs:attribute name="currency" type="t_currency"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="option" type="t_string"/>
+	<xs:element name="goods_id" type="xs:string"/>
+	<xs:element name="goods">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="goods_id"/>
+				<xs:element ref="title"/>
+				<xs:element ref="url"/>
+				<xs:element ref="createtime"/>
+				<xs:element ref="status" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="meta" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="link" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="last_modified"/>
+				<xs:element ref="brief"/>
+				<xs:element ref="props" minOccurs="0"/>
+				<xs:element ref="orderinfo" minOccurs="0"/>
+				<xs:element ref="adjunct" minOccurs="0"/>
+				<xs:element ref="description"/>
+				<xs:element ref="category" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="brand" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="thumbnail"/>
+				<xs:element ref="spec" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="media" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="product" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="type" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="normal"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="base_currency" type="t_currency" use="required"/>
+			<xs:attribute name="products" type="xs:unsignedShort" use="optional" default="1"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="description" type="xs:string"/>
+	<xs:element name="brief" type="t_string"/>
+	<xs:element name="props">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:any minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="orderinfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:any minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="brand">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="t_string">
+					<xs:attribute name="id" type="xs:unsignedInt" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="title" type="t_string"/>
+	<xs:element name="store">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="t_number">
+					<xs:attribute name="place" type="xs:string" use="optional"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="sku">
+		<xs:simpleType>
+			<xs:restriction base="xs:unsignedLong">
+				<xs:minInclusive value="1"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="status">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="online"/>
+				<xs:enumeration value="offline"/>
+				<xs:enumeration value=""/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="spec_value">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="t_string">
+					<xs:attribute name="key" type="xs:unsignedShort" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="spec_def">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="spec_value" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="spec">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="option" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="title" type="t_string" use="required"/>
+			<xs:attribute name="key" type="xs:unsignedInt" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="props_name">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="sadf"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="product">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="bn"/>
+				<xs:element ref="price" maxOccurs="unbounded"/>
+				<xs:element ref="store" maxOccurs="unbounded"/>
+				<xs:element ref="sku" minOccurs="0"/>
+				<xs:element ref="spec_def"/>
+				<xs:element ref="last_modified" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:unsignedInt" use="required"/>
+			<xs:attribute name="default" type="xs:boolean"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="category">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="t_string">
+					<xs:attribute name="id" type="xs:unsignedInt" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<!-- member define -->
+	<xs:element name="member">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="member_id"/>
+				<xs:element ref="last_modified" minOccurs="0"/>
+				<xs:element ref="member_group_id" maxOccurs="unbounded"/>
+				<xs:element ref="lang"/>
+				<xs:element ref="currency"/>
+				<xs:element ref="member_status"/>
+				<xs:element ref="account"/>
+				<xs:element ref="contact" maxOccurs="unbounded"/>
+				<xs:element ref="profile"/>
+				<xs:element ref="meta" maxOccurs="unbounded"/>
+				<xs:element ref="advance"/>
+				<xs:element ref="score" maxOccurs="unbounded"/>
+				<xs:element ref="memo"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="account">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="uname"/>
+				<xs:element ref="password"/>
+				<xs:element ref="pw_question"/>
+				<xs:element ref="pw_answer"/>
+			</xs:sequence>
+			<xs:attribute name="passport" use="optional" default="local">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="profile">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="birthday"/>
+				<xs:element ref="gender"/>
+				<xs:element ref="wedlock"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="advance">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="event" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="total" type="xs:unsignedLong" use="required"/>
+			<xs:attribute name="freeze" type="xs:unsignedLong" use="optional" default="0"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="score">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="event" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="title" type="t_string" use="required"/>
+			<xs:attribute name="type" type="t_string" use="optional"/>
+			<xs:attribute name="total" type="xs:unsignedLong" use="required"/>
+			<xs:attribute name="freeze" type="xs:unsignedLong" use="optional" default="0"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="contact">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="name"/>
+				<xs:element ref="firstname"/>
+				<xs:element ref="lastname"/>
+				<xs:element ref="zipcode"/>
+				<xs:element ref="addr"/>
+				<xs:element ref="province"/>
+				<xs:element ref="city"/>
+				<xs:element ref="phone" maxOccurs="unbounded"/>
+				<xs:element ref="area"/>
+			</xs:sequence>
+			<xs:attribute name="default" type="xs:boolean" use="optional" default="false"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="member_id" type="t_string"/>
+	<xs:element name="province">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="t_string">
+					<xs:attribute name="id" type="xs:unsignedLong" use="optional"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="city">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="t_string">
+					<xs:attribute name="id" type="xs:unsignedLong" use="optional"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="birthday" type="xs:date"/>
+	<xs:element name="password">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="t_string">
+					<xs:attribute name="algorithm" use="optional" default="md5-32">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="md5-32"/>
+								<xs:enumeration value="md5-16"/>
+								<xs:enumeration value="sha1"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="wedlock" type="t_string"/>
+	<xs:element name="firstname" type="t_string"/>
+	<xs:element name="gender">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="male"/>
+				<xs:enumeration value="female"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="lastname" type="t_string"/>
+	<xs:element name="member_group_id" type="xs:unsignedLong"/>
+	<xs:element name="lang" type="t_string"/>
+	<xs:element name="uname" type="t_string"/>
+	<xs:element name="passport" type="t_string"/>
+	<xs:element name="pw_question" type="t_string"/>
+	<xs:element name="pw_answer" type="t_string"/>
+	<xs:element name="memo" type="xs:string"/>
+	<xs:element name="member_status" type="xs:string"/>
+	<!-- shop define -->
+	<xs:element name="setting" type="t_string"/>
+	<!--- order define -->
+	<xs:element name="order_id">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="50"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="payment_want">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="t_string">
+					<xs:attribute name="cost" type="t_money" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="shipment_want">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="t_string">
+					<xs:attribute name="cost" type="t_money" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="cost">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="t_money">
+					<xs:attribute name="title" type="t_string"/>
+					<xs:attribute name="type" type="t_string"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ship_item">
+		<xs:complexType>
+			<xs:attribute name="product_id" type="xs:unsignedLong" use="required"/>
+			<xs:attribute name="quantity" type="xs:unsignedInt" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="order">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="order_id"/>
+				<xs:element ref="title"/>
+				<xs:element ref="member_id"/>
+				<xs:element ref="createtime"/>
+				<xs:element ref="meta" minOccurs="0"/>
+				<xs:element ref="payment_want" minOccurs="0"/>
+				<xs:element ref="shipment_want"/>
+				<xs:element ref="url"/>
+				<xs:element ref="cost" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="status" minOccurs="0"/>
+				<xs:element ref="event" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="last_modified"/>
+				<xs:element ref="consignee"/>
+				<xs:element ref="order_item" maxOccurs="unbounded"/>
+				<xs:element ref="payment" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="shipment" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:choice>
+			<xs:attribute name="currency" type="t_currency" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="consignee">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="name"/>
+				<xs:element ref="addr"/>
+				<xs:element ref="zipcode"/>
+				<xs:element ref="phone"/>
+				<xs:element ref="email" minOccurs="0"/>
+				<xs:element ref="mobile" minOccurs="0"/>
+				<xs:element ref="area" minOccurs="0"/>
+				<xs:element ref="last_modified"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="payment">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="cost"/>
+				<xs:element ref="money"/>
+				<xs:element ref="event" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="shipment">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="cost"/>
+				<xs:element ref="ship_item"/>
+				<xs:element ref="event" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="shipped" type="xs:unsignedInt"/>
+	<xs:element name="quantity" type="xs:unsignedInt"/>
+	<xs:element name="product_name" type="t_string"/>
+	<xs:element name="product_id" type="xs:unsignedInt"/>
+	<xs:element name="product_status">
+		<xs:simpleType>
+			<xs:restriction base="xs:anyURI">
+				<xs:enumeration value="storage"/>
+				<xs:enumeration value="shipping"/>
+				<xs:enumeration value="return"/>
+				<xs:enumeration value="customer"/>
+				<xs:enumeration value="returned"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="product_price" type="t_money"/>
+	<xs:element name="order_item">
+		<xs:complexType>
+			<xs:all>
+				<xs:element ref="shipped"/>
+				<xs:element ref="quantity"/>
+				<xs:element ref="product_name"/>
+				<xs:element ref="product_id"/>
+				<xs:element ref="goods_id"/>
+				<xs:element ref="url"/>
+				<xs:element ref="bn"/>
+				<xs:element ref="product_status"/>
+				<xs:element ref="thumbnail"/>
+				<xs:element ref="product_price"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

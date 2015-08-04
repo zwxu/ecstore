@@ -1,0 +1,41 @@
+<div class="finder-packet sort">
+    <h5 class="flt"><{t}>商品排行<{/t}></h5>
+    <ul>
+        <li class=" current">
+           <a href="javascript:void(0);"> <span><{t}>销售量<{/t}></span></a>
+        </li>
+        <li class="">
+           <a href="javascript:void(0);"> <span><{t}>销售额<{/t}></span></a>
+        </li>
+    </ul>
+</div>
+<div style="height:300px;overflow:hidden;border:4px #efefef solid;" class="gridlist sale-top">
+	<div class="sort-items" style="height:300px;overflow-y:auto">
+		<textarea class="textarea-lazyload dis_n"><ul>
+			<{foreach from=$numProducts item=product key=key}>
+			<li class="clearfix items" >
+				<div class="flt top-info"  style="width:10%"><a><img src="<{if $product.udfimg == 'true'}><{$product.thumbnail_pic|storager:'s'}><{else}><{$product.image_default_id|default:$defaultImage|storager:'s'}><{/if}>" width="80" height="60"/></a></div>
+				<div class="flt goods-info" style="width:85%">
+					<div><span><{$product.pname}></span></div>
+					<div style="width:<{80-$key*5}>%"><span  class="frt"><{$product.saleTimes}><{t}>件<{/t}> </span></div>
+					<div class="clear graph" style="background-color:#ffff80;;width:<{80-$key*5}>%"><span > </span></div>
+				</div>
+			</li>
+			<{/foreach}>
+		</ul></textarea>
+	</div> 
+	<div class="sort-items" style="height:300px;overflow-y:auto">
+		<textarea class="textarea-lazyload dis_n"><ul >
+			<{foreach from=$priceProducts item=product key=key}>
+			<li class="clearfix items" >
+				<div class="flt top-info" style="width:10%"><a><img src="<{if $product.udfimg == 'true'}><{$product.thumbnail_pic|storager:'s'}><{else}><{$product.image_default_id|default:$defaultImage|storager:'s'}><{/if}>" width="80" height="60"/></a></div>
+				<div class="flt goods-info" style="width:85%" >
+					<div><span><{$product.pname}></span></div>
+					<div style="width:<{80-$key*5}>%"><span  class="frt"><{$product.salePrice|cur}></span></div>
+					<div class="clear graph" style="background-color:#ffff80;width:<{80-$key*5}>%"><span > </span></div>
+				</div>
+			</li>
+			<{/foreach}>
+		</ul></textarea>
+	</div> 
+</div>

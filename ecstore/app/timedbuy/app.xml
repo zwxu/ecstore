@@ -1,0 +1,19 @@
+<app version="1.0">
+  <name>限时抢购</name>
+
+  <description>BBC 限时抢购</description>
+
+  <author>
+      <name>BBC 开发团队</name>
+      <email></email>
+      <url></url>
+  </author>
+
+  <version>0.1</version>
+  <parent_model_class>dbeav_model</parent_model_class>
+  <license>license</license>
+  <depends>
+    <app>b2c</app>
+  </depends>
+
+</app>

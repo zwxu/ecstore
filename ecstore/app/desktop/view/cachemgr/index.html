@@ -1,0 +1,28 @@
+<div class="tableform">
+<h3><{t}>缓存管理<{/t}></h3>  
+<{if $enable == 'true'}> 
+<h4><{t}>缓存状态<{/t}></h4>
+<div class="division">
+	<{if $status}>
+   <ul class="list"> 
+	<{foreach from=$status item=item key=key name="item"}>
+	<li>
+		<label><{$key}>：</label><{$item}>
+	</li>
+   <{/foreach}>
+  </ul>
+<{else}>
+<div class="notice"><{t}>无法查看缓存状态<{/t}></div>
+<{/if}>
+</div>
+<h4><{t}>缓存操作<{/t}></h4>
+<div class="division">
+     <{button type="button" href="index.php?app=desktop&ctl=cachemgr&act=optimize" label=$___desktop="优化缓存"|t:'desktop'}> 
+	<{button type="button" href="index.php?app=desktop&ctl=cachemgr&act=clean" label=$___desktop="清空缓存"|t:'desktop'}>
+</div>
+  <{else}>
+  <div class="division">
+    <p class="notice"> <{t}>系统没有启用缓存<{/t}> </p>
+  </div>
+  <{/if}> 
+</div>  

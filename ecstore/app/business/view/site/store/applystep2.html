@@ -1,0 +1,1252 @@
+<{css src="ecmall.css" app="business"}>
+<{css src="style.css" app="business"}>
+<{script src="dialog.js" app="business" pdir="js"}>
+<{script src="modedialog.js" app="business" pdir="js"}>
+<{script src="load.js" app="business" pdir="js"}>
+<{script src="wpage.js" app="business" pdir="js"}>
+<{script src="easydialog.min.js" app="business" pdir="js"}>
+
+
+<script>
+  var W = new Wpage({});
+  var MODALPANEL = {
+    createModalPanel:function(){
+      var mp = new Element('div',{'id':'MODALPANEL'});
+      var mpStyles = {
+        'position': 'absolute',
+        'background': '#333333',
+        'width': '100%',
+        'display':'none',
+        'height': window.getScrollSize().y,
+        'top': 0,
+        'left': 0,
+        'zIndex': 65500,
+        'opacity': .4
+      };
+      this.element = mp.setStyles(mpStyles).inject(document.body);
+      return this.element;
+    },
+    show:function(){
+      var panel = this.element = this.element||this.createModalPanel();
+      panel.setStyles({
+        'width': '100%',
+        'height': window.getScrollSize().y
+      }).show();
+    },hide:function(){
+      if(this.element)this.element.hide();
+    }
+  };
+</script>
+<script>
+var BREADCRUMBS ='0:0';
+var LAYOUT = {
+  container: $('container'),
+  side: $('side'),
+  workground: $('workground'),
+  content_main: $('main'),
+  content_head: $E('#workground .content-head'),
+  content_foot: $E('#workground .content-foot'),
+  side_r: $('side-r'),
+  side_r_content:$('side-r-content')
+};
+</script>
+<div class="new_reg dis_bl">
+<div class="title">
+            <div class="title_img">
+                <img src="<{$env.base_url}>/app/business/statics/images/reg_stpe02.jpg" alt="" />
+            </div>
+        </div>
+    <div class="module_common mall_settle" style="border:0px;">
+        <h2><b class="set_up_shop" ></b></h2>
+        <div class="wrap">
+            <div class="wrap_child">
+
+                <div class="module_new_shop">
+                    <div class="info_shop">
+                        <form method="post"  id="apply_form"  action="<{link app=business ctl=site_store act=storeapplystep3}>">
+                        <{input type="hidden" name="shopinfo[account_id]"  value=$member_id}>
+						<table width="100%" border="0" cellpadding="0" cellspacing="0">
+						    <tr>
+                                <td class="bod_none padding3" colspan="3"><h4>
+								<span><{t}>申请公司信息: <{/t}></span><div class="crl"></div></h4></td>
+                            </tr>
+							<tr>
+                                <th><em class="red">*</em><{t}>企业名称: <{/t}></th>
+                                <td>
+                                <{input onblur="onBlur(this);" onfocus="onFocus(this);"  type="text" maxlength=30 name="shopinfo[company_name]" id="company_name"  size="30"  value=$shopinfo.company_name}>
+                                </td>
+                               <td class="padding3"><p id='company_name_p' ></p></td>
+                            </tr>
+                            <tr>
+                                <th><em class="red">*</em><{t}>营业执照号: <{/t}></th>
+                                <td>
+                                <{input onblur="onBlur(this);" onfocus="onFocus(this);" type="alphaint"  maxlength=15 name="shopinfo[company_no]" id="company_no"  size="30"  value=$shopinfo.company_no}>
+                                </td>
+                                <td class="padding3"><p id='company_no_p'></p></td>
+                            </tr>
+                             <tr>
+                                <th><em class="red">*</em><{t}>税务登记证号: <{/t}></th>
+                                <td>
+                                <{input onblur="onBlur(this);" onfocus="onFocus(this);" type="alphaint" maxlength=15 name="shopinfo[company_taxno]" id="company_taxno"  size="30"  value=$shopinfo.company_taxno}>
+                                </td>
+                                <td class="padding3"><p id='company_taxno_p'></p></td>
+                            </tr>
+                              <tr>
+                                <th><em class="red">*</em><{t}>企业组织机构代码: <{/t}></th>
+                                <td>
+                                <{input onblur="onBlur(this);" onfocus="onFocus(this);" type="alphaint" maxlength=15 name="shopinfo[company_codename]" id="company_codename"  size="30"  value=$shopinfo.company_codename}>
+                                </td>
+                                <td class="padding3"><p id='company_codename_p'></p></td>
+                            </tr>
+                            <tr>
+                                <th><em class="red">*</em><{t}>法定代表人: <{/t}></th>
+                                <td>
+                                <{input onblur="onBlur(this);" onfocus="onFocus(this);" type="text" maxlength=10 name="shopinfo[company_idname]" id="company_idname"  size="30"  value=$shopinfo.company_idname}>
+                                </td>
+                                <td class="padding3"><p id='company_idname_p'></p></td>
+                            </tr>
+
+                             <tr>
+                                <th><em class="red">*</em><{t}>法人身份证号: <{/t}></th>
+                                <td>
+                                <{input onblur="onBlur(this);" onfocus="onFocus(this);" type="alphaint" maxlength=18 name="shopinfo[company_idcard]" id="company_idcard"  size="40"  value=$shopinfo.company_idcard }>
+                                </td>
+                                <td class="padding3"><p id='company_idcard_p'></p></td>
+                            </tr>
+
+                             <tr>
+                                <th><em class="red">*</em><{t}>公司负责人: <{/t}> </th>
+                                <td>
+                                <{input onblur="onBlur(this);" onfocus="onFocus(this);"  type="text" maxlength=10 name="shopinfo[company_cname]" id="company_cname"  size="30" value=$shopinfo.company_cname}>
+                                </td>
+                                <td class="padding3"><p id='company_cname_p'></p></td>
+                            </tr>
+
+                             <tr>
+                                <th><em class="red">*</em><{t}>负责人身份证号: <{/t}></th>
+                                <td>
+                                <{input onblur="onBlur(this);" onfocus="onFocus(this);"  type="alphaint" maxlength=18 name="shopinfo[company_cidcard]" id="company_cidcard"  size="40" value=$shopinfo.company_cidcard  }><span></span></td>
+                                <td class="padding3"><p id='company_cidcard_p'></p></td>
+                            </tr>
+
+                              <tr>
+                                <th><em class="red">*</em><{t}>负责人职务: <{/t}> </th>
+                                <td>
+                                <{input onblur="onBlur(this);" onfocus="onFocus(this);"  type="text" maxlength=20 name="shopinfo[company_charge]" id="company_charge"  size="30" value=$shopinfo.company_charge}>
+                                </td>
+                                <td class="padding3"><p id='company_charge_p'></p></td>
+                            </tr>
+
+                            <tr>
+                                <th><em class="red">*</em><{t}>企业联系电话: <{/t}> </th>
+                                <td>
+                                <{input onblur="onBlur(this);" onfocus="onFocus(this);"  type="text" maxlength=13 name="shopinfo[company_ctel]" id="company_ctel"  size="30"  value=$shopinfo.company_ctel }>
+                                </td>
+								<td class="padding3"><p id='company_ctel_p'></p></td>
+                            </tr>
+
+                             <tr>
+                                <th><em class="red">*</em><{t}>公司注册地址: <{/t}></th>
+                                   <td><{input app=ectools id="company_area" type="region"  name="shopinfo[company_area]"  value=$shopinfo.company_area}></td>
+                                <td class="padding3"><p id='company_area_p'></p></td>
+                            </tr>
+
+                            <tr>
+                                <th><{t}>&nbsp;&nbsp;&nbsp;&nbsp; <{/t}> </th>
+                                <td><{input onblur="onBlur(this);" onfocus="onFocus(this);" type="text" id=company_addr name="shopinfo[company_addr]" size="60"  value=$shopinfo.company_addr}></td>
+                                <td class="padding3"><p id='company_addr_p'></p></td>
+                            </tr>
+
+                             <tr>
+                                <th><em class="red">*</em><{t}>公司注册资金: <{/t}> </th>
+                                <td>
+                                <{input onblur="onBlur(this);" onfocus="onFocus(this);" style='width:240px;'  type="number" maxlength=10 name="shopinfo[company_earnest]" id="company_earnest"   value=$shopinfo.company_earnest}><{t}>万元<{/t}>
+                                </td>
+                                <td class="padding3"><p id='company_earnest_p'></p></td>
+                            </tr>
+
+                              <tr>
+                                <th><em class="red">*</em><{t}>公司联系地址: <{/t}></th>
+                                <td><{input app=ectools id="area" type="region"  name="shopinfo[area]"  value=$shopinfo.area}></td>
+                                <td class="padding3"><p id='area_p'></p></td>
+                            </tr>
+
+                             <tr>
+                                <th><{t}>&nbsp;&nbsp;&nbsp;&nbsp; <{/t}> </th>
+                                <td><{input onblur="onBlur(this);" onfocus="onFocus(this);" type="text" maxlength=200 id=addr name="shopinfo[addr]" size="60"    value=$shopinfo.addr}></td>
+                                <td class="padding3"><p id='addr_p'></p></td>
+                            </tr>
+
+                             <tr>
+                             
+                                <th><em class="red">*</em><{t}>公司成立时间: <{/t}> </th>
+                                <td>
+                                <{input  onfocus="onFocus(this);" style='width:90px;'  class="cal riqi" type="date" name="shopinfo[company_time]" id="company_time"  size="30"  value=$shopinfo.company_time }>
+                                <script>
+                                  $('company_time').store('afterHide',function(el){onBlur(el);});
+                                </script> 
+                                </td>
+                                <td class="padding3"><p id='company_time_p'></p></td>
+                            </tr>
+
+                             <tr>
+                                <th><{t}>公司官网地址: <{/t}> </th>
+                                <td>
+                                <{input onblur="onBlur(this);" onfocus="onFocus(this);"  type="text" name="shopinfo[company_url]" id="company_url"  size="30"  value=$shopinfo.company_url}>
+                                </td>
+                               <td class="padding3"><p id='company_url_p'></p></td>
+                            </tr>
+                             <tr>
+                                <th><em class="red">*</em><{t}>营业执照有效期: <{/t}> </th>
+                             <td><{input onfocus="onFocus(this);"  style='width:90px;'  class="cal riqi" type="date" id=company_timestart name="shopinfo[company_timestart]"  value=$shopinfo.company_timestart}>
+                                    &nbsp;&nbsp;&nbsp;~&nbsp;&nbsp;&nbsp;
+                                 <{input onfocus="onFocus(this);"  style='width:90px;'  class="cal riqi" type="date" id=company_timeend name="shopinfo[company_timeend]"   value=$shopinfo.company_timeend}>
+                                 <script>
+                                  $('company_timestart').store('afterHide',function(el){onBlur(el);});
+                                  $('company_timeend').store('afterHide',function(el){onBlur(el);});
+                                </script> 
+                             
+                             </td>
+                              <td class="padding3"><p id='company_timestart_p'></p></td>
+                             </tr>
+                              <tr>
+                                <th><em class="red">*</em><{t}>营业执照经营范围: <{/t}> </th>
+                                <td>
+                                <{input onblur="onBlur(this);" onfocus="onFocus(this);"  type="textarea" name="shopinfo[company_remark]" id="company_remark"  cols="60"  class="width_280" value=$shopinfo.company_remark}>
+                                </td>
+                                <td class="padding3"><p id='company_remark_p'></p></td>
+                              </tr>
+							<tr>
+                                <td class="bod_none padding3" colspan="3"><h4><span><{t}>申请店铺信息: <{/t}></span><div class="crl"></div></h4></td>
+                            </tr>
+							<tr>
+                                <th><em class="red">*</em><{t}>店主姓名: <{/t}></th>
+                                <td>
+                                <{input type="hidden" name="shopinfo[store_id]"  value=$shopinfo.store_id}>
+                                <{input onblur="onBlur(this);" onfocus="onFocus(this);" type="text" maxlength=10 name="shopinfo[store_idcardname]" id="store_idcardname"  size="30"  value=$shopinfo.store_idcardname}>
+                                </td>
+                               <td class="padding3"><p id='store_idcardname_p'></p></td>
+                            </tr>
+                            <tr>
+                                <th><em class="red">*</em><{t}>身份证号: <{/t}></th>
+                                <td>
+                                <{input onblur="onBlur(this);" onfocus="onFocus(this);" type="alphaint"  maxlength=18 name="shopinfo[store_idcard]" id="store_idcard"  size="40"  value=$shopinfo.store_idcard }>
+                                </td>
+                                <td class="padding3"><p id='store_idcard_p'></p></td>
+                            </tr>
+                            <tr>
+                                <th><em class="red">*</em><{t}>店铺名称: <{/t}></th>
+                                <td>
+                                  <{input onblur="onBlur(this);" onfocus="onFocus(this);" type="text" maxlength=30 name="shopinfo[store_name]" id="store_name"  size="40"  value=$shopinfo.store_name}>
+                                  <{input type="hidden" name="shopinfo[store_grade]"  value=$shopinfo.store_grade}>
+                                </td>
+                                <td class="padding3"><p id='store_name_p'></p></td>
+                            </tr>
+                            
+                             <tr>
+                                <th><em class="red">*</em><{t}>经营范围: <{/t}></th>
+                                <td>
+                                   <{if $shopinfo.issue_type!=2}>
+                                        <{input  type="vobject" object="goods_cat@b2c" filter="parent_id=0" value=$shopinfo.store_region  name="shopinfo[store_region]"  multiple="true" select="checkbox"}> &nbsp;
+                                   <{else}>
+                                         <{input  type="vobject"  object="goods_cat@b2c" filter="parent_id=0" value=$shopinfo.store_region  name="shopinfo[store_region]" }> &nbsp;
+                                   <{/if}>
+                               </td>
+                               <td class="padding3"><p id='store_region_p'></p></td>
+                              
+                            </tr> 
+                            <{if $shopinfo.issue_type ==1 or $shopinfo.issue_type==3}>
+
+                                    <{if $shopinfo.brand_id || ! $shopinfo.store_newbrand}>
+                                      <tr id='apply_div'>
+                                    <{else}>
+                                      <tr id='apply_div' style="display:none;">
+                                    <{/if}>
+
+                                        <th><em class="red">*</em><{t}>选择品牌: <{/t}></th>
+                                        <td>
+                                          <{input onblur="onBlur(this);" onfocus="onFocus(this);" id='store_brand' type="vobject"   object="brand@b2c" filter=$storebrand value=$shopinfo.brand_id  name="shopinfo[brand_id]" }> &nbsp;
+                                          <span id='addbrand' class="disc add-icon" ><a href="javascript:void(0);" ><{t}>新品牌申请<{/t}></a></span>
+                                       </td>
+                                       <td class="padding3"><p id='store_selectbrand_p'></p></td>
+                                    </tr>
+
+                                     <{if ! $shopinfo.brand_id && $shopinfo.store_newbrand}>
+                                     <tr id='add_div' >
+                                     <{else}>
+                                     <tr id='add_div' style="display:none;">
+                                     <{/if}>
+                                       <th><em class="red">*</em><{t}>申请新品牌: <{/t}></th>
+                                       <td >
+                                        <{t}>中文名: <{/t}><{input onblur="onBlur(this);" onfocus="onFocus(this);"  style='width:200px;' type="text"  id='store_newbrand'   name="shopinfo[store_newbrand]"  value=$shopinfo.store_newbrand}></br>
+                                        <{t}>英文名: <{/t}><{input onblur="onBlur(this);" onfocus="onFocus(this);"  style='width:200px;' type="text"  id='store_newbrand_en'   name="shopinfo[store_newbrand_en]" value=$shopinfo.store_newbrand_en }> 
+                                        <span id='cancelbrand' class="disc add-icon" ><a href="javascript:void(0);" ><{t}>取消<{/t}></a></span>
+                                       </td>
+                                   <td class="padding3"><p id='store_brand_p'></p></td>
+                                </tr>
+                            <{/if}>
+
+
+                            <{if ! $shopinfo.zip}>
+                                <tr>
+                            <{else}>
+                                <tr style='display:none'>
+                            <{/if}>
+                                    <th><em class="red">*</em><{t}>邮箱: <{/t}></th>
+                                     <td>
+                                     <{input onblur="onBlur(this);" onfocus="onFocus(this);" type="text"  maxlength=50 id=zip name="shopinfo[zip]"   value=$shopinfo.zip  }>
+                                     </td>
+                                     <td class="padding3"><p id='zip_p'></p></td>
+                                </tr>
+                            
+                            <{if ! $shopinfo.tel}>
+                                <tr>
+                            <{else}>
+                                <tr style='display:none'>
+                            <{/if}>
+                                    <th><em class="red">*</em><{t}>手机号码: <{/t}></th>
+                                    <td>
+                                       <{input onblur="onBlur(this);" onfocus="onFocus(this);"  maxlength=20 type='text'  id=tel name="shopinfo[tel]" value=$shopinfo.tel}>
+                                    </td>
+                                    <td class="padding3"><p id='tel_p'></p></td>
+                                </tr>
+                           
+                             <{if ! $shopinfo.pw_question}>
+                                    <tr>
+                                        <td class="bod_none padding3" colspan="3"><h4><span><{t}>支付账户信息: <{/t}></span><div class="crl"></div></h4></td>
+                                    </tr>
+									<tr><th><em class="red">*</em><{t}>银行名称: <{/t}></th>
+                                    <td><{input onblur="onBlur(this);" onfocus="onFocus(this);"  type='text' id=bank_name maxlength='50' name="shopinfo[bank_name]" value=$shopinfo.bank_name }></td>
+                                    <td class="padding3"><p id='bank_name_p'></p></td>
+                                    </tr>
+									<tr><th><em class="red">*</em><{t}>银行卡号: <{/t}></th>
+                                    <td><{input onblur="onBlur(this);" onfocus="onFocus(this);"  type='text'  id=bank_cardid maxlength='50' name="shopinfo[bank_cardid]" value=$shopinfo.bank_cardid }></td>
+                                    <td class="padding3"><p id='bank_cardid_p'></p></td>
+                                    </tr>
+                                    <tr><th><em class="red">*</em><{t}>密保问题: <{/t}></th>
+                                    <td><{input onblur="onBlur(this);" onfocus="onFocus(this);"  type='text'  id=pw_question maxlength='50' name="shopinfo[pw_question]" value=$shopinfo.pw_question }></td>
+                                    <td class="padding3"><p id='pw_question_p'></p></td>
+                                    </tr>
+                                    <tr><th><em class="red">*</em><{t}>密保答案: <{/t}></th>
+                                    <td><{input onblur="onBlur(this);" onfocus="onFocus(this);"  type='text'  id=pw_answer maxlength='50' name="shopinfo[pw_answer]" value=$shopinfo.pw_answer}></td>
+                                    <td class="padding3"><p id='pw_answer_p'></p></td>
+                                    </tr>
+                                   
+                             <{/if}>
+                              
+
+                            <tr>
+                                <td colspan="3"><p class="sett_p_agr padding4"><input type="checkbox" id="notice" value="1" id="warning" />
+                              
+                                <label for="warning">我已认真阅读并完全同意
+                                    <a target="_blank" href="<{link app='content' ctl=site_article act=index arg0=36}>">《商户服务协议》</a>与
+									<a target="_blank" href="<{link app='content' ctl=site_article act=index arg0=35}>">《支付协议》</a>
+                                        中的所有条款</label></p></td>
+                               <!-- <td></td> -->
+                            </tr>
+                            <tr>
+                                <td colspan="3"> 
+                                <div class="t_c">
+                <a  id='prestep'  href="<{link app='business' ctl='site_store' act='storeapplystep1' arg0='gradeid' }>" class="reg_step_2_button2">上一步 &gt;</a><a  id='nextstep'  href="javascript:void(0)" class="reg_step_2_button">下一步 &gt;</a><!--
+				<{button  id='nextstep' type="submit" class="reg_step_2_button" label=$___b2c="下一步"|t:'b2c' rel="_request"}>-->
+				</div>
+                <!-- <span class="sett_but_agr float-span" >
+                                  <{button class="btn reg_yes submit-btn" id="btn_new"   type='submit' label=$___b2c="确认"|t:'b2c' rel="_request"}>
+                                </span> -->  
+								
+                                </td>                             
+                            </tr>
+                        </table>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div id="imgBox" style="display:none">
+  <img src="<{$env.base_url}>/app/business/statics/images/loading.gif" alt="" />
+  <div class='easyDialog_content' style='color:white;'><{t}>正在提交，请稍候...<{/t}></div>
+</div>
+<script>
+
+(function(){
+     <{if $shopinfo.issue_type ==1 or $shopinfo.issue_type==3}>
+        $("addbrand").addEvent('click',function(e){      
+                        $('apply_div').setStyle('display','none');
+                        $('add_div').setStyle('display','');
+                        $('store_selectbrand_p').className='';
+                        $('store_selectbrand_p').setHTML('');
+                        if( $$('select[name=shopinfo[brand_id]]')[0] == null){
+                            $$('input[name=shopinfo[brand_id]]')[0].value='';
+                        }else{
+                            $$('select[name=shopinfo[brand_id]]')[0].selectedIndex =-1;
+                        }
+                        //$('store_selectbrand_p').removeClass("tip_more");
+                        //$('store_selectbrand_p').removeClass("tip_right");
+                        //$('store_selectbrand_p').removeClass("tip_erro");
+
+        });
+        $("cancelbrand").addEvent('click',function(e){ 
+                        //$('store_brand_p').removeClass("tip_more");
+                        //$('store_brand_p').removeClass("tip_right");
+                        //$('store_brand_p').removeClass("tip_erro");  
+                        $('store_brand_p').className='';
+                        $('store_brand_p').setHTML('');
+                        $('add_div').setStyle('display','none');
+                        $('apply_div').setStyle('display','');
+                        $$('input[name=shopinfo[store_newbrand]]')[0].value=''; 
+                        $$('input[name=shopinfo[store_newbrand_en]]')[0].value='';
+        });
+    <{/if}>
+
+   $("nextstep").disabled =''; 
+
+    $('nextstep').addEvent('click',function(e){
+        e.stop();
+	
+      var _form=$('apply_form');
+      if (_form){
+       
+        if(!$('notice').checked) {
+            e.stop();
+            Message.error('请认真阅读并完全同意开店协议中的所有条款');
+            return;
+        }
+
+        $("nextstep").disabled ='true'; 
+
+        var arrayinput=new Array('company_name','company_no','company_taxno','company_codename','company_idname','company_idcard',
+                                'company_cname','company_cidcard','company_charge','company_ctel','company_area','company_addr',
+                                'company_earnest','area','addr','company_time','company_url','company_timestart','company_timeend',
+                                'company_remark','store_idcardname','store_idcard','store_name','store_region','brand_id','store_newbrand',
+                                'store_newbrand_en','zip','tel','pw_question','pw_answer');
+         for(var i=0;i<arrayinput.length;i++)
+         {
+
+              switch(arrayinput[i]){
+                   case 'company_area':
+                   case 'area':
+                      
+                       //mainland:北京/北京市/东城区:3
+                       var area = $(arrayinput[i]).value.trim();
+                       if(area ==''){
+                            $(arrayinput[i]+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>请选择省市地区<{/t}></span>");
+                            $(arrayinput[i]+'_p').className="tip_erro";
+                       }else{
+                           //if(  checkarea( $('reg_'+arrayinput[i])))
+                           if(  checkarea($$('#reg_'+arrayinput[i]+' select[data-level-index]')))
+                           {
+                               $(arrayinput[i]+'_p').className="tip_right";
+
+                           }else{
+
+                              $(arrayinput[i]+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>请选择完整的省市地区<{/t}></span>");
+                              $(arrayinput[i]+'_p').className="tip_erro";
+
+                           }
+
+                       }
+                       
+                       break;
+                   
+                    case 'brand_id':
+                    case 'store_newbrand':
+                    case 'store_newbrand_en':
+                             var brandid;
+                             var brandname;
+                             var selbrand;
+                             //品牌旗舰店、专卖店填写 专营店、卖场型旗舰店缺该选项
+                             if('<{$shopinfo.issue_type}>' =='1' ||'<{$shopinfo.issue_type}>'=='3'){
+                                    brandid=$$('select[name^=shopinfo[brand_id]]').getValue();
+                                    brandname=$$('input[name=shopinfo[store_newbrand]]')[0].value.trim();
+                                 
+                                    if( brandid=='' && brandname==''){
+
+                                        $('store_brand_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>请选择店铺使用品牌<{/t}></span>");
+                                        $('store_brand_p').className="tip_erro";
+                                        $('store_selectbrand_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>请选择店铺使用品牌<{/t}></span>");
+                                        $('store_selectbrand_p').className="tip_erro";
+                                        continue;
+                                    } 
+
+
+                                    if(brandname !=''){
+                                        selbrand='issue_type=<{$shopinfo.issue_type}>'+'&&brandname='+encodeURIComponent(brandname);
+                                    }else{
+                                        selbrand='issue_type=<{$shopinfo.issue_type}>'+'&&brandid='+encodeURIComponent(brandid);
+                                    }
+                                   
+                                    //品牌旗舰店唯一性检查
+                                    new Request.JSON({
+                                               url:'<{link app=business ctl=site_store act=checkbrandstore}>',
+                                                method:'post',
+                                                data:selbrand,
+                                                async:false,
+                                                onComplete:function(res){
+                                                   if (res.status =='success' ) 
+                                                   {
+                                                       $('store_brand_p').className="tip_right";
+                                                       $('store_selectbrand_p').className="tip_right";
+
+                                                   } else {
+                                                       if(res.isnew == 'true'){
+                                                           $('store_brand_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'>"+res.message+"</span>");
+                                                           $('store_brand_p').className="tip_erro";
+
+                                                       }else{
+
+                                                           $('store_selectbrand_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'>"+res.message+"</span>");
+                                                           $('store_selectbrand_p').className="tip_erro";
+                                                       }
+                                                       
+                                                      
+                                                   }
+                                                }
+                                     }).send();
+
+                              }
+                           break;
+                    //经营范围
+                    case 'store_region':
+                        var instr;
+
+                        if( '<{$shopinfo.issue_type}>'!=2){
+                            instr= 'input';
+                        }else{
+                            instr= 'select';
+                        }
+
+                        if($$(instr+'[name=shopinfo[store_region]]')[0].value==''){ 
+                           $('store_region_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>请选择店铺经营范围<{/t}></span>");
+                           $('store_region_p').className="tip_erro";
+                        }else {
+                           $('store_region_p').className="tip_right";
+                        }
+
+                        break;
+
+                   default:
+                       onBlur($(arrayinput[i]));
+                       break;
+
+
+              }
+         }
+     
+       //检查是否有错误时停止
+      if($$('.tip_erro').length >0){
+            e.stop();
+            $("nextstep").disabled =''; 
+            //$("btn_new").removeAttribute("disabled"); 
+      }else {
+            $("nextstep").disabled ='true'; 
+
+            e.stop();
+             new Request.JSON({
+                    url:'<{link app=business ctl=site_store act=storeapplystep3}>',
+                    method:'post',
+                    data:_form,
+                    async:true,
+                    onRequest:function(){
+                        $("nextstep").disabled ='true'; 
+
+                       easyDialog.open({
+                          container : 'imgBox',
+                          fixed : false
+                        });
+
+                        
+                    },
+                    onComplete:function(res){
+                        easyDialog.close();
+                        if (res.status =='success' ) 
+                        {
+                            Message.success(res.msg);
+                            window.location=res.url;
+
+                        }else{
+                            
+                             Message.error(res.msg);
+                             $("nextstep").disabled =''; 
+                          
+                        }
+
+                     }
+            }).send();
+
+
+
+      }
+
+     }
+    });
+
+
+    
+})();
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    //验证身份证号方法 
+    var test=function(idcard){ 
+        var Errors=new Array("true","身份证号码位数不对!","身份证号码出生日期超出范围或含有非法字符!","身份证号码校验错误!","身份证地区非法!"); 
+        var area={11:"北京",12:"天津",13:"河北",14:"山西",15:"内蒙古",21:"辽宁",22:"吉林",23:"黑龙江",31:"上海",32:"江苏",33:"浙江",34:"安徽",35:"福建",36:"江西",37:"山东",41:"河南",42:"湖北",43:"湖南",44:"广东",45:"广西",46:"海南",50:"重庆",51:"四川",52:"贵州",53:"云南",54:"西藏",61:"陕西",62:"甘肃",63:"青海",64:"宁夏",65:"xinjiang",71:"台湾",81:"香港",82:"澳门",91:"国外"} 
+        var idcard,Y,JYM; 
+        var S,M; 
+        var idcard_array = new Array(); 
+        idcard_array = idcard.split(""); 
+        if(area[parseInt(idcard.substr(0,2))]==null) return Errors[4]; 
+        switch(idcard.length){ 
+        case 15: 
+        if ((parseInt(idcard.substr(6,2))+1900) % 4 == 0 || ((parseInt(idcard.substr(6,2))+1900) % 100 == 0 && (parseInt(idcard.substr(6,2))+1900) % 4 == 0 )){ 
+        ereg = /^[1-9][0-9]{5}[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}$/;//测试出生日期的合法性 
+        } 
+        else{ 
+        ereg = /^[1-9][0-9]{5}[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|1[0-9]|2[0-8]))[0-9]{3}$/;//测试出生日期的合法性 
+        } 
+        if(ereg.test(idcard)) 
+        return Errors[0]; 
+        else 
+        return Errors[2]; 
+        break; 
+        case 18: 
+        if( parseInt(idcard.substr(6,4)) % 4 == 0 || ( parseInt(idcard.substr(6,4)) % 100 == 0 && parseInt(idcard.substr(6,4))%4 == 0 )){ 
+        ereg = /^[1-9][0-9]{5}19[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}[0-9Xx]$/;//闰年出生日期的合法性正则表达式 
+        } 
+        else{ 
+        ereg = /^[1-9][0-9]{5}19[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|1[0-9]|2[0-8]))[0-9]{3}[0-9Xx]$/;//平年出生日期的合法性正则表达式 
+        } 
+        if(ereg.test(idcard)){ 
+        S = (parseInt(idcard_array[0]) + parseInt(idcard_array[10])) * 7 + (parseInt(idcard_array[1]) + parseInt(idcard_array[11])) * 9 + (parseInt(idcard_array[2]) + parseInt(idcard_array[12])) * 10 + (parseInt(idcard_array[3]) + parseInt(idcard_array[13])) * 5 + (parseInt(idcard_array[4]) + parseInt(idcard_array[14])) * 8 + (parseInt(idcard_array[5]) + parseInt(idcard_array[15])) * 4 + (parseInt(idcard_array[6]) + parseInt(idcard_array[16])) * 2 + parseInt(idcard_array[7]) * 1 + parseInt(idcard_array[8]) * 6 + parseInt(idcard_array[9]) * 3 ; 
+        Y = S % 11; 
+        M = "F"; 
+        JYM = "10X98765432"; 
+        M = JYM.substr(Y,1); 
+        if(M == idcard_array[17]) 
+        return Errors[0]; 
+        else 
+        return Errors[3]; 
+        } 
+        else 
+        return Errors[2]; 
+        break; 
+        default: 
+        return Errors[1]; 
+        break; 
+        } 
+    }
+
+    function  checkarea(element){
+       /*JYQ
+      return element.getElements('select').every(function(sel) {
+                var selValue = sel.getValue();
+                sel.focus();
+                return selValue != '' && selValue != '_NULL_';
+     });
+        */
+        var flag = 0;
+        for(var i=0;i<element.length;i++){
+            var selValue = element[i].value;
+            if(selValue != '' && selValue != '_NULL_'){
+               flag += 1;
+            }
+        }
+
+        return flag >=3;
+
+    }
+
+
+   function onFocus(input){
+
+       switch(input.id){
+           //企业名称
+           case 'company_name':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写企业名称<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               //$(input.id+'_p').addClass("tip_more");
+               break;
+           //营业执照号
+           case 'company_no':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span class="field_notice"><{t}>此处填写营业执照号码<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+           //税务登记证号:
+           case 'company_taxno':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span class="field_notice"><{t}>此处填写税务登记证号码<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+           //企业组织机构代码: 
+           case 'company_codename':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span class="field_notice"><{t}>此处填写企业组织机构代码<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+           //法定代表人:
+            case 'company_idname':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写法人身份证姓名<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+           //法定代表人身份证号:  
+           case 'company_idcard':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写法人身份证号码<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+           //公司负责人:
+            case 'company_cname':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写公司负责人或申请人身份证姓名<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+            //公司负责人身份证号:
+            case 'company_cidcard':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写公司负责人或申请人身份证号码<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+            //公司负责人职务:
+            case 'company_charge':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写公司负责人或申请人职务<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+            //企业联系电话:
+            case 'company_ctel':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写公司联系电话，例：021-87654321<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+            //公司注册资金：
+            case 'company_earnest':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写公司注册资金，单位：万元<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+            //公司成立时间：
+            case 'company_time':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写公司公司成立日期<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+            //公司官网地址:
+             case 'company_url':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写公司官网地址，例：http://www.google.com<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+            //营业执照有效期：
+            case 'company_timestart':
+               $('company_timestart_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写营业执照有效开始日期<{/t}></span>');
+               $('company_timestart_p').className="tip_more";
+               break;
+            case 'company_timeend':
+               $('company_timestart_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写营业执照有效结束日期<{/t}></span>');
+               $('company_timestart_p').className="tip_more";
+               break;
+            //营业执照经营范围: 
+            case 'company_remark':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写营业执照上经营范围<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+            //店主姓名
+            case 'store_idcardname':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写店主真实姓名<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+            //店主身份证号码
+            case 'store_idcard':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写店主身份证号码<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+           //店铺名称:
+            case 'store_name':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写店铺名称<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+           //邮箱: 
+            case 'zip':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写电子邮箱<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+            //手机号码:
+            case 'tel':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写手机号码<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+			  //银行名称:
+            case 'bank_name':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写银行名称<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+			  //银行卡号:
+            case 'bank_cardid':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写银行卡号<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+
+            //密保问题
+            case 'pw_question':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写密保问题<{/t}></span>');
+              $(input.id+'_p').className="tip_more";
+               break;
+            //密保问题答案
+            case 'pw_answer':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写密保问题答案<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+
+            //申请品牌名
+            case 'store_newbrand':
+                $('store_brand_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写申请品牌中文名<{/t}></span>');
+                $('store_brand_p').className="tip_more";
+                break;
+            case 'store_newbrand_en':
+                $('store_brand_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写申请品牌英文名<{/t}></span>');
+                $('store_brand_p').className="tip_more";
+                break;
+
+            case 'addr':
+            case 'company_addr':
+               $(input.id+'_p').setHTML('<span class="fontColor3">*</span> <span  class="field_notice"><{t}>此处填写详细地址<{/t}></span>');
+               $(input.id+'_p').className="tip_more";
+               break;
+               
+       }
+
+    }
+
+
+    function onBlur(input){
+         if(input){
+            input.value=input.value.trim();
+         } else {
+             return;
+         }
+        
+         switch(input.id){
+              //企业名称
+              case 'company_name':
+                  if(input.value==''){
+                      $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写企业名称<{/t}></span>");
+                     
+                      $(input.id+'_p').className="tip_erro";
+                  } else {
+                      
+                      $(input.id+'_p').className="tip_right";
+                  }
+                  break;
+              //营业执照号
+              case 'company_no':
+                  if(input.value==''){
+                      $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写营业执照号码<{/t}></span>");
+                      $(input.id+'_p').className="tip_erro";
+                  } else {
+
+                      //判断是否是数字
+                      //if(/^[0-9]*$/.test(input.value)){
+                      if(/^[A-Za-z0-9]+$/.test(input.value)){
+                        $(input.id+'_p').className="tip_right";
+                      } else {
+                        $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>请填入数字或字母<{/t}></span>");
+                        $(input.id+'_p').className="tip_erro";
+                      }
+                  }
+                  break;
+             //税务登记证号
+              case 'company_taxno':
+                  if(input.value==''){
+                      $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写税务登记证号码<{/t}></span>");
+                      $(input.id+'_p').className="tip_erro";
+                  } else {
+                      //判断是否是数字
+                      //if(/^[0-9]*$/.test(input.value)){
+                      if(/^[A-Za-z0-9]+$/.test(input.value)){
+                        $(input.id+'_p').className="tip_right";
+                      } else {
+                        $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>请填入数字或字母<{/t}></span>");
+                        $(input.id+'_p').className="tip_erro";
+                      }
+                  }
+                  break;
+
+             //企业组织机构代码 
+              case 'company_codename':
+                  if(input.value==''){
+                      $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写企业组织机构代码<{/t}></span>");
+                      $(input.id+'_p').className="tip_erro";
+                  } else {
+                      //判断是否是数字可有一个 -
+                      if( /^(\(\d{1,}\)|\d{1,}-)?[A-Za-z0-9]{1,}$/.test(input.value)){ 
+                        $(input.id+'_p').className="tip_right";
+                      } else {
+                        $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>请填入数字或字母，例：88888888-X <{/t}></span>");
+                        $(input.id+'_p').className="tip_erro";
+                      }
+                  }
+                  break;
+             //法定代表人:
+             case 'company_idname':
+                  if(input.value==''){
+                      $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写法人身份证姓名<{/t}></span>");
+                      $(input.id+'_p').className="tip_erro";
+                  } else {
+                      
+                      $(input.id+'_p').className="tip_right";
+                  }
+                  break;
+           //法定代表人身份证号:
+           case 'company_idcard':
+                if(input.value==''){
+                      $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写法人身份证号码<{/t}></span>");
+                      $(input.id+'_p').className="tip_erro";
+                } else {
+                     var errmsg = test(input.value);
+                     if(errmsg !='true')
+                     {
+                        $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>身份证号有误：<{/t}>"+errmsg+"</span>");
+                        $(input.id+'_p').className="tip_erro";
+                     } else{
+                        $(input.id+'_p').className="tip_right";
+                     }
+                }
+                break;
+             //公司负责人:
+            case 'company_cname':
+                 if(input.value==''){
+                      $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写公司负责人或申请人身份证姓名<{/t}></span>");
+                      $(input.id+'_p').className="tip_erro";
+                  } else {
+                      
+                      $(input.id+'_p').className="tip_right";
+                  }
+                  break;
+            //公司负责人身份证号:
+            case 'company_cidcard':
+                 if(input.value==''){
+                      $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写公司负责人或申请人身份证号码<{/t}></span>");
+                      $(input.id+'_p').className="tip_erro";
+                } else {
+                     var errmsg = test(input.value);
+                     if(errmsg !='true')
+                     {
+                        $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>身份证号有误：<{/t}>"+errmsg+"</span>");
+                        $(input.id+'_p').className="tip_erro";
+                     } else{
+                        $(input.id+'_p').className="tip_right";
+                     }
+                }
+                break;
+            //公司负责人职务:
+            case 'company_charge':
+                 if(input.value==''){
+                      $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写公司负责人或申请人职务<{/t}></span>");
+                      $(input.id+'_p').className="tip_erro";
+                  } else {
+                      
+                      $(input.id+'_p').className="tip_right";
+                  }
+                  break;
+            //企业联系电话:
+            case 'company_ctel':
+                if(input.value==''){
+                      $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写公司联系电话，例：021-87654321<{/t}></span>");
+                      $(input.id+'_p').className="tip_erro";
+                  } else {
+                      //if(/^(0\d{2,3}-?)?[23456789]\d{7}?$/.test(input.value)){
+                      if(/^(0\d{2,3}-)[23456789]\d{6,7}?$/.test(input.value)){
+                        $(input.id+'_p').className="tip_right";
+                      } else {
+                        $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写公司联系电话，例：021-87654321<{/t}></span>");
+                        $(input.id+'_p').className="tip_erro";
+                      }
+                  }
+                  break;
+            //公司注册资金：
+            case 'company_earnest':
+                if(input.value==''){
+                      $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写公司注册资金，单位：万元<{/t}></span>");
+                      $(input.id+'_p').className="tip_erro";
+                  } else {
+                      if(/^\d*\.?\d{1,2}$/.test(input.value)){
+                        $(input.id+'_p').className="tip_right";
+                      } else {
+                        $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>请填入数字，可包含一个小数点及其后两位<{/t}></span>");
+                        $(input.id+'_p').className="tip_erro";
+                      }
+                  }
+                  break;
+           //公司成立时间：
+           case 'company_time':
+                 if(input.value==''){
+                      $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写公司成立日期<{/t}></span>");
+                      $(input.id+'_p').className="tip_erro";
+                  } else {
+                      if(/^\d{4}-\d{1,2}-\d{1,2}$/.test(input.value)){
+
+                           var date2 = new Date();
+                           var date1= new Date(Date.parse(input.value.replace(/-/g,"/")));
+
+                           if(date1 < date2){
+                              $(input.id+'_p').className="tip_right";
+                           } else {
+                              $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>不能填写大于或等于今天的日期<{/t}></span>");
+                              $(input.id+'_p').className="tip_erro";
+                           }
+                       
+                      } else {
+                        $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>请填写或选择正确的日期，例：2013-06-06<{/t}></span>");
+                        $(input.id+'_p').className="tip_erro";
+                      }
+                  }
+                  break;
+          //公司官网地址:
+          case 'company_url':
+                if(input.value==''){
+                      $(input.id+'_p').setHTML("");
+                      //$(input.id+'_p').className="tip_erro";
+                  } else {
+                      var   str=/^((http|https|ftp):\/\/)?(\w(\:\w)?@)?([0-9a-z_-]+\.)*?([a-z0-9-]+\.[a-z]{2,6}(\.[a-z]{2})?(\:[0-9]{2,6})?)((\/[^?#<>\/\\*":]*)+(\?[^#]*)?(#.*)?)?$/i;  
+
+                      //if(/^(http|https|ftp):\/\/([A-Z0-9][A-Z0-9_-]*)(:(\d+))?\/?/i.test(input.value)){
+                       if(str.test(input.value)){
+                        $(input.id+'_p').className="tip_right";
+                      } else {
+                        $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>请填入此处填写公司官网地址，例：http://www.google.com<{/t}></span>");
+                        $(input.id+'_p').className="tip_erro";
+                      }
+                     
+                  }
+                  break;
+          //营业执照有效期：        
+          case 'company_timestart':    
+          case 'company_timeend':
+               if(input.value==''){
+                      $('company_timestart_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写营业执照有效起止日期<{/t}></span>");
+                      $('company_timestart_p').className="tip_erro";
+               } else {
+                      if(/^\d{4}-\d{1,2}-\d{1,2}$/.test(input.value)){
+
+                           var date1= new Date(Date.parse($('company_timestart').value.replace(/-/g,   "/")));
+                           var date2= new Date(Date.parse($('company_timeend').value.replace(/-/g,   "/")));
+
+
+                           if(date1 < date2){
+                              $('company_timestart_p').className="tip_right";
+                           } else {
+                              $('company_timestart_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>起始日期不能大于终止日期<{/t}></span>");
+                              $('company_timestart_p').className="tip_erro";
+                           }
+                       
+                      } else {
+                        $('company_timestart_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>请填写或选择正确的日期，例：2013-06-06<{/t}></span>");
+                        $('company_timestart_p').className="tip_erro";
+                      }
+              }
+              break;
+          //营业执照经营范围: 
+          case 'company_remark':
+              if(input.value==''){
+                      $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写营业执照上经营范围<{/t}></span>");
+                      $(input.id+'_p').className="tip_erro";
+              } else {
+                      $(input.id+'_p').className="tip_right";
+              }
+              break;
+
+         //店主姓名
+         case 'store_idcardname':
+              if(input.value==''){
+                      $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写店主真实姓名<{/t}></span>");
+                      $(input.id+'_p').className="tip_erro";
+              } else {
+                      $(input.id+'_p').className="tip_right";
+              }
+              break;
+         //店主身份证号码
+         case 'store_idcard':
+              if(input.value==''){
+                      $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写店主身份证号码<{/t}></span>");
+                      $(input.id+'_p').className="tip_erro";
+              } else {
+                     var errmsg = test(input.value);
+                     if(errmsg !='true')
+                     {
+                        $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>身份证号有误：<{/t}>"+errmsg+"</span>");
+                        $(input.id+'_p').className="tip_erro";
+                     } else{
+
+                          new Request.JSON({
+                                   url:'<{link app=business ctl=site_store act=idcardcheck}>',
+                                   method:'post',
+                                   data:'idcard='+encodeURIComponent(input.value),
+                                   async:false,
+                                   onComplete:function(res){
+                                       if (res.status =='success' ) 
+                                       {
+                                           $(input.id+'_p').className="tip_right";
+
+                                       } else {
+                                           $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>身份证号有误：<{/t}>"+res.message+"</span>");
+                                           $(input.id+'_p').className="tip_erro";
+
+                                       }
+
+                                    }
+                          }).send();
+                        
+                     }
+              }
+              break;
+           //店铺名称:
+           case 'store_name':
+               if(input.value==''){
+                          $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写店铺名称<{/t}></span>");
+                          $(input.id+'_p').className="tip_erro";
+               } else {
+                          $(input.id+'_p').className="tip_right";
+               }
+               break;
+           //邮箱: 
+           case 'zip':
+                if('<{$shopinfo.zip}>'){
+                    return;
+               }
+
+               if(input.value==''){
+                          $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写电子邮箱<{/t}></span>");
+                          $(input.id+'_p').className="tip_erro";
+               } else {
+
+                      if(/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(input.value)){
+
+                         new Request.JSON({
+                                   url:'<{link app=b2c ctl=site_passport act=applyemailcheck}>',
+                                   method:'post',
+                                   data:'email='+encodeURIComponent(input.value),
+                                   async:false,
+                                   onComplete:function(res){
+                                       if (res.status =='success' ) 
+                                       {
+                                           $(input.id+'_p').className="tip_right";
+
+                                       } else {
+                                           $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'>"+res.message+"<{t}>请更换<{/t}></span>");
+                                           $(input.id+'_p').className="tip_erro";
+
+                                       }
+
+                                    }
+                         }).send();
+
+
+                      } else {
+                        $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>请填写有效的邮箱地址<{/t}></span>");
+                        $(input.id+'_p').className="tip_erro";
+                      }
+               }
+               break;
+           //手机号码:
+           case 'tel':
+               if('<{$shopinfo.tel}>'){
+                    return;
+               }
+
+               if(input.value==''){
+                          $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写手机号码<{/t}></span>");
+                          $(input.id+'_p').className="tip_erro";
+               } else {
+                   if(/^13[0-9]{9}$|15[0-9]{9}$|18[0-9]{9}$|14[0-9]{9}$/.test(input.value)){
+
+                       new Request.JSON({
+                             url:'<{link app=b2c ctl=site_passport act=applymobilecheck}>',
+                             method:'post',
+                             data:'mobile='+encodeURIComponent(input.value),
+                             async:false,
+                             onComplete:function(res){
+                                 if (res.status =='success' ) 
+                                 {
+                                     $(input.id+'_p').className="tip_right";
+
+                                 } else {
+                                     $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'>"+res.message+"<{t}>请更换<{/t}></span>");
+                                     $(input.id+'_p').className="tip_erro";
+
+                                 }
+
+                              }
+                       }).send();
+
+                   } else {
+                        $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>请填写有效的手机号码，以13/14/15/18开头的11位数字<{/t}></span>");
+                        $(input.id+'_p').className="tip_erro";
+                   }
+
+               }
+               break;
+			    //银行名称
+          case 'bank_name':
+               if(input.value==''){
+                          $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写银行名称<{/t}></span>");
+                          $(input.id+'_p').className="tip_erro";
+               } else {
+                          $(input.id+'_p').className="tip_right";
+               }
+               break;
+			    //银行卡号
+          case 'bank_cardid':
+               if(input.value==''){
+                          $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写银行卡号<{/t}></span>");
+                          $(input.id+'_p').className="tip_erro";
+               } else {
+                        if(/^[0-9]{19}$/.test(input.value)){
+                        $(input.id+'_p').className="tip_right";
+                      } else {
+                        $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>请输入正确的银行卡号<{/t}></span>");
+                        $(input.id+'_p').className="tip_erro";
+                      }
+               }
+               break;
+         //密保问题
+          case 'pw_question':
+               if(input.value==''){
+                          $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写密保问题<{/t}></span>");
+                          $(input.id+'_p').className="tip_erro";
+               } else {
+                          $(input.id+'_p').className="tip_right";
+               }
+               break;
+              
+          //密保问题答案
+          case 'pw_answer':
+               if(input.value==''){
+                          $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>此处填写密保问题答案<{/t}></span>");
+                          $(input.id+'_p').className="tip_erro";
+               } else {
+                          $(input.id+'_p').className="tip_right";
+               }
+               break;
+          //申请品牌名
+            case 'store_newbrand':
+            case 'store_newbrand_en':
+               if(input.value==''){
+                          $('store_brand_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>请填写申请品牌名<{/t}></span>");
+                          $('store_brand_p').className="tip_erro";
+               } else {
+                          $('store_brand_p').className="tip_right";
+               }
+               break;
+
+            case 'addr':
+            case 'company_addr':
+                if(input.value==''){
+                          $(input.id+'_p').setHTML("<span class='fontColor3'>*</span> <span  class='field_notice'><{t}>请填写详细地址<{/t}></span>");
+                          $(input.id+'_p').className="tip_erro";
+               } else {
+                          $(input.id+'_p').className="tip_right";
+               }
+               break;
+
+         }
+
+    }
+
+
+    
+
+</script>

@@ -1,0 +1,21 @@
+<{capture name="header"}>
+   <!--JAVASCRIPTS SRC-->     
+    <!--JAVASCRIPTS SRC END-->
+
+<{script src="coms/dropmenu.js"  app='desktop'}>
+<{script src="coms/datapicker.js" app='desktop' }>
+
+<{script src="coms/colorpicker.js" app='desktop' }>
+<{script src="coms/editor.js" app='desktop' }>
+<{script src="coms/editor_style_1.js"  app='desktop'}>
+
+<{script src="coms/finder.js" app='desktop'}>
+<{script src="coms/modedialog.js" app='desktop'}>
+
+<{/capture}>
+
+<div class="spage-main-box">
+	<{if $type == 'ORDER_PRINT_DLY'}>
+		<{include file="admin/order/print_dly.html"}>
+	<{/if}>
+</div>

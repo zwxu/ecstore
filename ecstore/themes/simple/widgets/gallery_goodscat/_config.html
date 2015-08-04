@@ -1,0 +1,97 @@
+﻿<style>
+  .ad_ul .add-title,
+  .ad_ul .add-url,
+  .ad_ul .delete{float:left;_display:inline;margin-left:5px;}
+  .ad_ul .delete{height:20px;width:16px;cursor:pointer;}
+  .ad_ul .ad-item{background-color:#E2E8EB;padding:5px 5px 3px;line-height:22px;margin:2px 0;}
+  .ad_ul{cursor:pointer;}
+  .del_merch_g>span,.del_merch_g>input {float:left;}
+.del_merch_g {float:right;cursor:pointer;}
+.del_merch_g i {padding-top:3px;float:left;}
+.del_merch_g>span {display:block; height:20px; line-height:20px;}
+.top-link-item {width:425px}
+</style>
+<div class="tableform widgetconfig">
+<div class="division">
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+ <input type=hidden name="newCatPic" id="newCatPic" value="0">
+    <tr>
+    <th><{t app='b2c'}>分类标题：<{/t}></th>
+    <td>
+        <input type="text" name="title" value="<{$setting.title|default:'请填写标题'}>">
+    </td>
+    <tr>
+    <th><{t app='b2c'}>选择分类展示：<{/t}></th>
+    <td>
+    <label> 
+        <input type="radio"  name="sel_cats" value="0" <{if $setting.sel_cats==0}> checked <{/if}> > <{t app='b2c'}>全部分类<{/t}>
+    </label>
+    <label>
+        <input type="radio" name="sel_cats" value="1" <{if $setting.sel_cats==1}> checked <{/if}> > <{t app='b2c'}>子类<{/t}>
+    </label>
+    </td>
+    </tr>
+ </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <{foreach from=$data.cat item=cat key=k}>
+<{if $cat.hidden == 'false'}>
+    <input type=hidden name="cat[<{$k}>][hidden]" value="<{$cat.hidden}>">
+    <input type=hidden name="cat[<{$k}>][cat_id]" value="<{$cat.cat_id}>">
+    <input type=hidden name="cat[<{$k}>][cat_name]" value="<{$cat.cat_name}>">
+    <input type=hidden name="cat[<{$k}>][cat_logo]" value="<{$cat.cat_logo}>">
+    <tr>
+    <th colspan="4" style="text-align:left;background:#DDE5FC;color:#669">&nbsp;
+      <strong><{$cat.cat_name}></strong>
+    </th>
+    </tr>
+      <tr>
+        <td>
+            <table cellspacing="0" cellpadding="0" border="0" width="100%">
+            <tbody>
+            <tr>
+              <td>
+                <input type="button" id="add_top_link_<{$cat.cat_id}>" value="添加自定义链接" />
+	            <ul id="top_link_area_<{$cat.cat_id}>" >
+                    <{foreach from=$setting.top_link_title item=item key=key}>
+                    <{foreach from=$item item=link key=link_key}>
+                    <{if $key==$cat.cat_id}>
+                    <li class="top-link-item clearfix">
+                   
+                    <span>文字：</span>
+                    <input type="text" name="top_link_title[<{$cat.cat_id}>][<{$link_key}>][title]" value="<{$link.title}>"> 
+                   
+                    <span>链接地址：</span>
+                    <input type="text" name="top_link_title[<{$cat.cat_id}>][<{$link_key}>][url]" value="<{$link.url}>">
+                    <div class="del_merch_g">
+                    <span class="del" title="删除" onclick="DelTopLink($(this))"><i class="has-icon"> <{img app="b2c" src="bundle/delecate.gif" }></i>删除</span></div>
+                    <span style="clear:both; line-height:0px; heigth:0px; font-size:px;"></span>
+                    </li>
+                    <{/if}>
+                    <{/foreach}>
+                    <{/foreach}> 
+                </ul>
+
+              </td>
+            </tr>
+          </tbody></table>
+        </td>
+      </tr>
+      <script>
+    var AddTopLink = $('add_top_link_<{$cat.cat_id}>');
+    AddTopLink.addEvent('click',function(){
+     var li_len=this.getNext('ul').getElements('li').length;
+      var ActiveLi = new Element('li',{'class':'top-link-item clearfix','html':' <span>文字：</span><input type="text" name="top_link_title[<{$cat.cat_id}>]['+li_len+'][title]"/>  <span>链接地址：</span><input type="text" name="top_link_title[<{$cat.cat_id}>]['+li_len+'][url]"/> <div class="del_merch_g"> <span class="del" title="删除"><i class="has-icon"> <{img app="b2c" src="bundle/delecate.gif" }></i>删除</span></div><span style="clear:both; line-height:0px; heigth:0px; font-size:px;"></span>'}).inject('top_link_area_<{$cat.cat_id}>');
+      ActiveLi.getElement('.del').addEvent('click',function(){
+        DelTopLink(this);
+      });
+    });
+    function DelTopLink(item){
+        item.getParent(".top-link-item").destroy();
+    }
+      </script>
+<{/if}>
+      <{/foreach}>
+    </table>
+</div>
+
+</div>

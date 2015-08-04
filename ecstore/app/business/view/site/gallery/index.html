@@ -1,0 +1,345 @@
+<div id="anchor" class="box J_TBox tshop-pbsm tshop-pbsm-ssl10w">
+<div class="shop-hesper" id="J_ShopSearchResult">
+  <div class="bd">
+    <div class="shop-hesper-hd J_TWidget">
+      <div class="hesper-cats" id="J_HesperCats">
+        <ol>
+          <{if $discuss_cat.current}>
+            <{if $discuss_cat.parent}>
+              <{foreach from=$discuss_cat.parent item=item key=key name=name}>
+              <li>
+              <a class="J_SearchAsync" href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1="c,{$item.cat_id}"}>'><{$item.cat_name}></a>
+              </li>
+              <{/foreach}>
+            <{/if}>
+            <li><{$discuss_cat.current.cat_name}></li>
+          <{else}>
+          <li><a class="J_SearchAsync" href="<{link app=business ctl=site_shop act=gallery arg0=$store.store_id}>">所有宝贝</a><i></i></li>
+          <{/if}>
+        </ol>
+        <div class='hesper-content' >
+          <{if $discuss_cat.children}>
+          <ul class="hesper-cats-list">
+          <{foreach from=$discuss_cat.children item=item key=key name=name}>
+          <li>
+          <a class="J_SearchAsync" href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1="c,{$item.cat_id}"}>'><{$item.cat_name}></a>
+          </li>
+          <{/foreach}></ul>
+          <{else}>
+          <div id="J_PropSingle" class="attr-data">
+            <{if $has_filter}>
+            <div class="selected-attr">
+              您已选择：
+            <{foreach from=$has_filter item=item key=key name=name}>
+            <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$item.filter arg2=$viewType arg3=$pager.current arg4=$orderType}>'>
+            <h5><{$item.name}>:</h5><{$item.value}>
+            <span class="close-icon"></span>
+            </a>
+            <{/foreach}>
+            </div>
+            <{/if}>
+            <{assign var=bnum value=0}>
+            <{if $brand || $proparg}>
+            <table id="J_AttrBox">
+              <tbody>
+                <{if count($brand)>0}>
+                <tr>
+                  <th>品牌：</th>
+                  <td>
+                    <ul>
+                      <{foreach from=$brand item=item key=key name=name}>
+                      <li class="J_PV_1627207:28341 <{if $smarty.foreach.name.iteration>6}>hidden<{/if}>">
+                        <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1="{$filter}_b,{$item.brand_id}" arg2=$viewType arg3=$pager.current arg4=$orderType}>'><{$item.brand_name}>(<{$item._count|default:0}>)</a>
+                      </li>
+                      <{/foreach}>
+                    </ul>
+                  </td>
+                  <{if count($brand)>6}>
+                  <td class="handle">
+                    <div class="side"></div>
+                    <div class="x-more">
+                      <i class="part"></i>
+                      <span>更多</span>
+                      <span class="hidden">收起</span>
+                    </div>
+                  </td>
+                  <{/if}>
+                </tr>
+                <{assign var=bnum value=$bnum+1}>
+                <{/if}>
+                <{if count($proparg)>0}>
+                <{foreach from=$proparg item=item key=key name=name}>
+                <tr <{if $bnum>4}>class="hidden"<{/if}>>
+                  <th><{$item.name}>：</th>
+                  <td>
+                    <ul>
+                      <{foreach from=$item.props item=pitem key=pkey name=pname}>
+                      <li class="J_PV_1627207:28341 <{if $smarty.foreach.pname.iteration>6}>hidden<{/if}>">
+                        <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1="{$filter}_{$pitem.goods_p},{$pkey}" arg2=$viewType arg3=$pager.current arg4=$orderType}>'><{$pitem.name}>(<{$pitem._count|default:0}>)</a>
+                      </li>
+                      <{/foreach}>
+                    </ul>
+                  </td>
+                  <{if count($item.props)>6}>
+                  <td class="handle">
+                    <div class="side"></div>
+                    <div class="x-more">
+                      <i class="part"></i>
+                      <span>更多</span>
+                      <span class="hidden">收起</span>
+                    </div>
+                  </td>
+                  <{/if}>
+                </tr>
+                <{assign var=bnum value=$bnum+1}>
+                <{/foreach}>
+                <{/if}>
+              </tbody>
+            </table>
+            <{/if}>
+            <{if $bnum>6}>
+            <div class="handle">
+              <div class="side"></div>
+              <div class="more">
+                <i class="part"></i>
+                <span>更多</span>
+                <span class="hidden">收起</span>
+              </div>
+            </div>
+            <{/if}>
+          </div>
+          <{/if}>
+        </div>
+        <i id="J_HesperCatsTrigger" class="trigger " title="展开或者收缩"></i>
+      </div>
+      <form action='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=$orderType}>' id="shop-search-list" method="get">
+        <div class="shop-search">
+          <div class="search-form">
+            <ul>
+              <li class="type">
+              <label for="whole">搜索整店</label>
+              <input id="whole" class="le_zhi checkbox" type="checkbox" <{if $searchRange}>checked=""<{/if}> value="all" name="searchRange">
+              </li>
+              <li class="keyword">
+                <label for="keyword">关键字：</label>
+                <input id="keyword" name="keyword" maxlength="8" type="text" value="<{$keyword}>"/>
+              </li>
+              <li class="price">
+                <label for="price le_zhi">价格：</label>
+                <input id="price1" name="price1" maxlength="8" type="text" class="le_zhi price J_CheckInput" value="<{$price1}>"/>
+               <span class="stroe_g_to">到</span> 
+                <input id="price2" name="price2" maxlength="8" type="text" class="le_zhi price J_CheckInput" value="<{$price2}>"/>
+				<span class="cl_zhi"></span>
+              </li>
+              <li class="submit">
+                <button type="submit" class="button">搜索</button>
+              </li>
+            </ul>
+          </div>
+          <div class="search-result">
+            共搜索到<span> <{$count}> </span>个符合条件的商品。
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="shop-hesper-bd <{if $viewType=='list'}>row<{else}>grid big<{/if}>">
+      <div class="shop-filter">
+        <div class="mode">
+          <span>显示：</span>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2="list" arg3=$pager.current arg4=$orderType}>' alt="列表方式" title="列表方式" class="J_SearchAsync mode-row">列表模式</a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2="grid" arg3=$pager.current arg4=$orderType}>' alt="图表方式" title="图表方式" class="J_SearchAsync mode-grid">图表模式</a>
+        </div>
+        <div class="taxis">
+          <span>排序：</span>
+          <{if $orderType == 2}>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=3}>' alt="按销量排列" title="按销量排列" class="J_SearchAsync down">销量<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=5}>' alt="按新品排列" title="按新品排列" class="J_SearchAsync def">新品<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=7}>' alt="按价格排列" title="按价格排列" class="J_SearchAsync def">价格<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=8}>' alt="按收藏排列" title="按收藏排列" class="J_SearchAsync fav def">收藏<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=10}>' alt="按人气排列" title="按人气排列" class="J_SearchAsync fav def">人气<i class="icon"></i></a>
+          <{elseif $orderType == 3}>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=2}>' alt="按销量排列" title="按销量排列" class="J_SearchAsync up">销量<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=5}>' alt="按新品排列" title="按新品排列" class="J_SearchAsync def">新品<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=7}>' alt="按价格排列" title="按价格排列" class="J_SearchAsync def">价格<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=8}>' alt="按收藏排列" title="按收藏排列" class="J_SearchAsync fav def">收藏<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=10}>' alt="按人气排列" title="按人气排列" class="J_SearchAsync fav def">人气<i class="icon"></i></a>
+          <{elseif $orderType == 4}>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=3}>' alt="按销量排列" title="按销量排列" class="J_SearchAsync def">销量<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=5}>' alt="按新品排列" title="按新品排列" class="J_SearchAsync down">新品<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=7}>' alt="按价格排列" title="按价格排列" class="J_SearchAsync def">价格<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=8}>' alt="按收藏排列" title="按收藏排列" class="J_SearchAsync fav def">收藏<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=10}>' alt="按人气排列" title="按人气排列" class="J_SearchAsync fav def">人气<i class="icon"></i></a>
+          <{elseif $orderType == 5}>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=3}>' alt="按销量排列" title="按销量排列" class="J_SearchAsync def">销量<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=4}>' alt="按新品排列" title="按新品排列" class="J_SearchAsync up">新品<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=7}>' alt="按价格排列" title="按价格排列" class="J_SearchAsync def">价格<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=8}>' alt="按收藏排列" title="按收藏排列" class="J_SearchAsync fav def">收藏<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=10}>' alt="按人气排列" title="按人气排列" class="J_SearchAsync fav def">人气<i class="icon"></i></a>
+          <{elseif $orderType == 6}>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=3}>' alt="按销量排列" title="按销量排列" class="J_SearchAsync def">销量<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=5}>' alt="按新品排列" title="按新品排列" class="J_SearchAsync def">新品<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=7}>' alt="按价格排列" title="按价格排列" class="J_SearchAsync down">价格<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=8}>' alt="按收藏排列" title="按收藏排列" class="J_SearchAsync fav def">收藏<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=10}>' alt="按人气排列" title="按人气排列" class="J_SearchAsync fav def">人气<i class="icon"></i></a>
+          <{elseif $orderType == 7}>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=3}>' alt="按销量排列" title="按销量排列" class="J_SearchAsync def">销量<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=5}>' alt="按新品排列" title="按新品排列" class="J_SearchAsync def">新品<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=6}>' alt="按价格排列" title="按价格排列" class="J_SearchAsync up">价格<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=8}>' alt="按收藏排列" title="按收藏排列" class="J_SearchAsync fav def">收藏<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=10}>' alt="按人气排列" title="按人气排列" class="J_SearchAsync fav def">人气<i class="icon"></i></a>
+          <{elseif $orderType == 8}>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=3}>' alt="按销量排列" title="按销量排列" class="J_SearchAsync def">销量<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=5}>' alt="按新品排列" title="按新品排列" class="J_SearchAsync def">新品<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=7}>' alt="按价格排列" title="按价格排列" class="J_SearchAsync def">价格<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=9}>' alt="按收藏排列" title="按收藏排列" class="J_SearchAsync down">收藏<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=10}>' alt="按人气排列" title="按人气排列" class="J_SearchAsync fav def">人气<i class="icon"></i></a>
+          <{elseif $orderType == 9}>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=3}>' alt="按销量排列" title="按销量排列" class="J_SearchAsync def">销量<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=5}>' alt="按新品排列" title="按新品排列" class="J_SearchAsync def">新品<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=7}>' alt="按价格排列" title="按价格排列" class="J_SearchAsync def">价格<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=8}>' alt="按收藏排列" title="按收藏排列" class="J_SearchAsync up">收藏<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=10}>' alt="按人气排列" title="按人气排列" class="J_SearchAsync fav def">人气<i class="icon"></i></a>
+          <{elseif $orderType == 10}>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=3}>' alt="按销量排列" title="按销量排列" class="J_SearchAsync def">销量<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=5}>' alt="按新品排列" title="按新品排列" class="J_SearchAsync def">新品<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=7}>' alt="按价格排列" title="按价格排列" class="J_SearchAsync def">价格<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=8}>' alt="按收藏排列" title="按收藏排列" class="J_SearchAsync fav def">收藏<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=11}>' alt="按人气排列" title="按人气排列" class="J_SearchAsync down">人气<i class="icon"></i></a>
+          <{elseif $orderType == 11}>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=3}>' alt="按销量排列" title="按销量排列" class="J_SearchAsync def">销量<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=5}>' alt="按新品排列" title="按新品排列" class="J_SearchAsync def">新品<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=7}>' alt="按价格排列" title="按价格排列" class="J_SearchAsync def">价格<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=8}>' alt="按收藏排列" title="按收藏排列" class="J_SearchAsync fav def">收藏<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=10}>' alt="按人气排列" title="按人气排列" class="J_SearchAsync up">人气<i class="icon"></i></a>
+          <{else}>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=2}>' alt="按销量排列" title="按销量排列" class="J_SearchAsync down">销量<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=5}>' alt="按新品排列" title="按新品排列" class="J_SearchAsync def">新品<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=7}>' alt="按价格排列" title="按价格排列" class="J_SearchAsync def">价格<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=8}>' alt="按收藏排列" title="按收藏排列" class="J_SearchAsync fav def">收藏<i class="icon"></i></a>
+          <a href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current arg4=10}>' alt="按人气排列" title="按人气排列" class="J_SearchAsync fav def">人气<i class="icon"></i></a>
+          <{/if}>
+        </div>
+        <div class="pagination pagination-mini">
+          <span class="page-info"><{$pager.current}>/<{$pager.total}></span>
+          <a <{if $pager.current <= 1}>class="disable"<{else}>class="J_SearchAsync prev" href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current-1 arg4=$orderType}>'<{/if}>>上一页</a>
+          <a <{if $pager.current >= $pager.total}>class="disable"<{else}>class="J_SearchAsync next" href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current+1 arg4=$orderType}>'<{/if}>>下一页</a>
+          <!--下一页-->
+        </div>
+      </div>
+      <{include file=$_PDT_LST_TPL app=business}>
+      <{if $pager.current < 6}><{assign var=hasd value=1}>
+      <{else}><{assign var=hasd value=2}>
+      <{/if}>
+      <div class="pagination">
+        <{if $pager.current <= 1}>
+        <a class="disable">上一页</a>
+        <{else}>
+        <a class="J_SearchAsync prev" href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current-1 arg4=$orderType}>'>上一页</a>
+        <{/if}>
+        <{foreach from=$pager.page item=item name=name}>
+          <{if $smarty.foreach.name.iteration != $pager.current}>
+          <{if !$smarty.foreach.name.first && !$smarty.foreach.name.last && abs($smarty.foreach.name.iteration-$pager.current) > 3}>
+          <{if $hasd==1 && $pager.current < $smarty.foreach.name.iteration}><a class="page-cur">...</a><{assign var=hasd value=2}>
+          <{elseif $hasd==2 && $smarty.foreach.name.iteration < $pager.current}><a class="page-cur">...</a><{assign var=hasd value=3}>
+          <{elseif $hasd==3 && $pager.current < $smarty.foreach.name.iteration}><a class="page-cur">...</a><{assign var=hasd value=0}>
+          <{/if}>
+          <{continue}>
+          <{/if}>
+          <a class="J_SearchAsync" href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$smarty.foreach.name.iteration arg4=$orderType}>'><{$smarty.foreach.name.iteration}></a>
+          <{else}>
+          <a class="page-cur"><{$smarty.foreach.name.iteration}></a>
+          <{/if}>
+        <{/foreach}>
+        <{if $pager.total <= $pager.current}>
+        <a class="disable">下一页</a>
+        <{else}>
+        <a class="J_SearchAsync next" href='<{link app=business ctl=site_shop act=gallery arg0=$store.store_id arg1=$filter|default:"_" arg2=$viewType arg3=$pager.current+1 arg4=$orderType}>'>下一页</a>
+        <{/if}>
+        <form id="J_Pagination" action='<{link app=business ctl=site_shop act=searchPage arg0=$store.store_id arg1=$filter|default:"_"}>'>
+          <input type="hidden" name="orderType" value="<{$orderType}>"/>
+          <input type="hidden" name="viewType" value="<{$viewType}>"/>
+          到第 <input id="J_PaginationInput" type="text" value="<{$pager.current}>" size="3" name="pageNum" onblur="if(isNaN(this.value))this.value=1" class="J_CheckInput"/> 页
+          <button type="submit">确定</button>
+        </form>
+      </div>
+	  <div class="cl_zhi"></div>
+    </div>
+  </div>
+  </div>
+<script type="text/javascript">
+var obj = $('J_HesperCatsTrigger')||'';
+if(obj) obj.removeEvents('click').addEvent('click',function(e){
+  var objDiv = this.getParent('#J_HesperCats').getElement('.hesper-content');
+  if(objDiv.style.display=='none'){
+    objDiv.style.display='';
+    this.removeClass('collapse');
+  }else{
+    objDiv.style.display='none';
+    this.addClass('collapse');
+  }
+});
+var obj = $$('#J_PropSingle .x-more')||[];
+if(obj) obj.removeEvents('click').addEvent('click',function(e){
+  var objI = this.getElement('i');
+  if(objI.hasClass('part')){
+    objI.removeClass('part');
+  }else{
+    objI.addClass('part')
+  }
+  var objLi = this.getParent('tr').getElements('li');
+  for(var i=6;i<objLi.length;i++){
+      if(objI.hasClass('part')){
+        objI.getNext('span').removeClass('hidden').getNext('span').addClass('hidden');
+        objLi[i].addClass('hidden');
+      }else{
+        objI.getNext('span').addClass('hidden').getNext('span').removeClass('hidden');
+        objLi[i].removeClass('hidden');
+      }
+  }
+});
+var obj = $$('#J_PropSingle .more')||[];
+if(obj) obj.removeEvents('click').addEvent('click',function(e){
+  var objI = this.getElement('i');
+  if(objI.hasClass('part')){
+    objI.removeClass('part');
+  }else{
+    objI.addClass('part')
+  }
+  var objTr = this.getParent('#J_PropSingle').getElements('tr');
+  for(var i=6;i<objTr.length;i++){
+      if(objI.hasClass('part')){
+        objI.getNext('span').removeClass('hidden').getNext('span').addClass('hidden');
+        objTr[i].addClass('hidden');
+      }else{
+        objI.getNext('span').addClass('hidden').getNext('span').removeClass('hidden');
+        objTr[i].removeClass('hidden');
+      }
+  }
+});
+var obj = $('J_PaginationInput')||'';
+var max = <{$pager.total}>||1;
+if(obj) obj.addEvent('change',function(e){
+    this.set('value',(this.value.toInt()).limit(1,max.toInt()));
+  });
+new DataLazyLoad({lazyDataType:'img',img:'lazyload'});
+try{
+    /*关键字高亮*/
+    (function(replace_str){
+        var replace=replace_str.split("+");
+        if(replace.length){
+            $$('.entry-title, .productShop-name, .shop-header-title').each(function(r){
+                for(i=0;i<replace.length;i++){
+                    if(replace[i]){
+                        var reg=new RegExp("("+replace[i].escapeRegExp()+")","gi");
+                        r.set('text',r.get('text').replace(reg,function(){
+                            return "{0}"+arguments[1]+"{1}";
+                        }));
+                    }
+                }
+                r.set('html',r.get('text').substitute({0:"<font color=red>",1:"</font>"}));//原来的增加样式有问题
+            });
+        }
+    })('<{$search_array}>');
+}catch(e){}
+</script>
+</div>

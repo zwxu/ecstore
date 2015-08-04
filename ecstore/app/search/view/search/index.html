@@ -1,0 +1,12 @@
+<form action="index.php?app=search&ctl=search&act=save_segment" method="post" id="c_msg_list" >
+<table class="gridlist" cellpadding="0"  cellspacing="0" border="0">
+<h4 style="margin:0 0 5px 0"><{t}>请选择分词器<{/t}></h4>
+<div class="gridlist-action">
+    选择：<{input type="select" value=$search_name name="select" rows=$arr_search valueColumn="content_path" labelColumn="name"}> 
+</div>
+</table>
+
+<div class="table-action" style="margin:10px;">
+	<{button label=$___b2c="保存设置"|t:'b2c' type="submit"}>
+</div>
+</form>

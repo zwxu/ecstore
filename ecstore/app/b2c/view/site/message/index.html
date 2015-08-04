@@ -1,0 +1,103 @@
+<{css src="product.css" app="b2c"}>
+<p class="message-title">有什么意见或者建议，请在这里留言。</p>
+<div class="review-box">
+      <h4 class="review-title"><{t}>客户留言<{/t}></h4>
+<div class="division">
+     <{pagers data=$pager}>
+  <{if $message_open == 'on'}>
+  <form class="addcomment " method="post" action='<{link app=b2c ctl="site_message" act="sendMsgToOpt"}>' onsubmit='checkFormReqs(event);'>
+  <div class="<{if $msg_status}>message-login<{else}>class=loginbox msgfloat "<{/if}>" style="border:none">
+  <ul>
+  <li>
+ <{if $msg_status}>
+             <{assign var="disb" value="true"}>
+        <{else}>
+        <{/if}>
+ <label class="left w100 textright db fl"><em style='color:red'>*</em><{t}>标题：<{/t}></label><{input type="text" vtype="required" disabled=$disb class='inputstyle' style=" width:265px" size=50 name="subject"}></li>
+ <{if $msg_status}>
+             <li  class="message-login">
+             <p style="width:85%;margin-left:100px;*margin-left:0px;padding:23px 5px"><{$msg_message}></p>
+        <{else}>
+             <li>
+        <{/if}>
+<label class="left w100 textright db fl"><em style='color:red'>*</em><{t}>留言内容：<{/t}></label><{input type="textarea"  disabled=$disb placeholder=$placeholder vtype="required" rows="5" name="message" class='inputstyle' style='width:85%'}></li>
+   <{if $login eq 'NO'}>
+  <li><label class=" w100 textright db fl"><{t}>联系方式：<{/t}></label><{input type="text"  size=24 name="contact" maxlength=255 disabled=$disb class='inputstyle'}><span><{t}>(QQ、MSN、Email、电话等，此信息不会被公开)<{/t}></span></li>
+   <{/if}>
+      <{if $msgshow == "on" }>
+  <li><label class="left w100 textright db fl"><em style='color:red'>*</em><{t}>验证码：<{/t}></label><{input type="text" disabled=$disb required="true" size="4" maxlength="4" name="verifyCode" class='inputstyle'}>&nbsp;<img src="<{link app="b2c" ctl="site_message" act="verifyCode"}>" align="absmiddle" id="imgVerifyCode"/><a href="javascript:changeimg()">&nbsp;<{t}>看不清楚?换个图片<{/t}></a></li><{/if}>
+  <li>
+  <label class="left w100 textright db fl">&nbsp;&nbsp;</label>
+  <{if ($msg_status == '1') && ($login =='NO' || $msg_message != '' )}>
+  <{button class="btn" disabled label=$___b2c="提交留言"|t:'b2c'}>
+  <{else}>
+  <{button id="cart-coupon-submitBtn" rel="_request" class="submit-btn" type="submit" label=$___b2c="提交留言"|t:'b2c'}>
+  <{/if}>
+  </li>
+  </ul>
+  </div>
+</form>
+<{/if}>
+      </div>
+      </div>
+
+<{if $msg}>
+<div id="shop-message"> <{foreach from=$msg item=msglist}>
+  <div class="border-all clearfix mainReply" >
+    <div class="commentMain">
+      <div class="clearfix bg-gray p5">
+       <div class="flt">
+        <span class="author visitor"><{$msglist.author}></span>&nbsp;&nbsp;<{t}>说：<{/t}></div><span class="timpstamp replies"><{$msglist.time|cdate:'SDATE_STIME'}></span></div>
+        
+        <h4><{$msglist.title|escape:'html'}></h4>
+        <{*<h4><{$msglist.comment|nl2br}></h4>
+        *}>
+       <p class="commentText"><{$msglist.comment|nl2br}></p>
+    </div>
+  </div>
+  <div class="commentReply"> <{foreach from=$msglist.reply item=items}>
+    <div class="division  item " style=" margin:0px;border-top:none" >
+     <div class="clearfix bg-gray p5">
+      <div class="flt">
+        <span class="author Administrator"><{$items.author}></span>&nbsp;&nbsp;<{t}>回复：<{/t}>
+      </div>
+      <span class="timpstamp replies"><{$items.time|cdate:'SDATE_STIME'}></span>
+      </div>
+      <p class="commentText"><{$items.comment|nl2br}></p>
+    </div>
+    <{/foreach}> </div>
+  <{/foreach}> </div>
+<{/if}>
+<script>
+    var checkFormReqs =function(e){
+           e    = new Event(e);
+       var form= $(e.target);
+
+       var reqs = $$(form.getElements('input[type=text]'),form.getElements('textarea'));
+
+       if(reqs.some(function(req){
+               if(!req.get('required')&&!req.get('vtype').contains('required'))return;
+            if(req.get('value').trim()==''){
+                       req.focus();
+                       Message.error('<{t}>请完善表单必填项.<{/t}>');
+                       return true;
+            }
+
+              return false;
+
+
+       })){
+
+           e.stop();
+
+       }
+
+    };
+
+
+ <{if $msgshow == "on" }>
+   var changeimg = function(){
+        $('imgVerifyCode').set('src','<{link app="b2c" ctl="site_message" act="verifyCode"}>#'+(+new Date()));
+    }
+ <{/if}>
+</script>

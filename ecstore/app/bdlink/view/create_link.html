@@ -1,0 +1,80 @@
+
+<div class="notice m10">
+    <{img app="desktop" src="bundle/notice_small.gif"}><{t}>站外推广链接功能帮助您将商品或者商店的网页地址创建为一个站外推广链接，您可以将站外推广链接以图片或者文字方式投放在其他网站上，这样顾客就可以从其他网站上通过这个链接访问您的商店并且购物下订单，系统也会在订单信息里面记录此订单来源。<{/t}>
+</div>
+
+<form method="post" id="click-form" action="index.php?app=bdlink&ctl=clink&act=create_link" target="{update:'messagebox'}">
+
+
+<div class="tableform">
+<h4><{t}>创建站外推广链接<{/t}></h4>
+<div class="division">
+<div class=" current">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr> 
+        <th><{t}>要推广的网页地址：<{/t}></th><td><{input name="targetURL" id="targetURL" style="width:360px" value=$arr_link_info.targetURL size="50"}> <{help}><{t}>在此处输入您需要推广的页面地址。<{/t}><br><{t}>譬如您想要推广某款畅销商品，就在此处输入此商品的前台页面地址。如果想推广整个商店，则可以输入商店地址。<{/t}><br><br><{t}>注意：网页地址前需要带有http://<{/t}><{/help}></td>
+      </tr>
+      <tr> 
+        <th><{t}>来源ID：<{/t}></th><td><{input name="usercode" id="usercode" value=$arr_link_info.usercode style="width:120px"}> <{help}><{t}>来源就是指您需要将站外推广链接投放的目的地，譬如您需要将站外推广链接放在新浪网进行推广，则可以在来源ID栏输入“sina”，用来标识这个投放目的地<{/t}><br><br><{t}>这样当顾客从新浪点击站外推广链接到您商店进行购物后，所生成的订单里面就会用sina这个ID来标识这些订单，您也就可以很清楚的掌握订单的来源，从而判断哪些投放目的地的效果更好<{/t}><{/help}></td>
+      </tr>
+      <tr> 
+
+        <th>&nbsp;</th><td><b class="submitBtn"><input type="button" value="<{t}>生成站外推广链接<{/t}>" onclick="$('generatecode').value=$('targetURL').value+'<{$ident_op}>'+$('usercode').value;valid()"></b></td>
+
+      </tr>
+
+      <tr>
+        <th>&nbsp;</th>
+        <td>
+        <{input type="textarea" readonly=readonly id="generatecode" name="generatecode" value=$arr_link_info.generatecode  style="width:360px" onclick='$(this).focus();$(this).select()'}>
+          <br /><br /><span class="font-gray"><{t}>复制此站外推广链接到投放位置即可<{/t}></span>
+        </td>
+      </tr>
+    </table>
+</div>
+</div>
+<br>
+<h4><{t}>有效期<{/t}></h4>
+<div class="division">
+<div class="current">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr> 
+        <th><{t}>链接有效期：<{/t}></th><td><{input name="validtime" value=$arr_link_info.validtime style="width:50px" type="positive"}><{t}>天<{/t}> <{help}><{t}>此处设置对来源ID进行统计的有效期，默认为15天，指某顾客通过站外推广链接访问了您的商店，如果他在15天内购买了商品或注册会员，则系统会记录该订单或会员的有效来源为该来源ID<{/t}><br><br><{t}>注意：来源ID的保存是以优先访问为原则。譬如一位顾客先是通过标识码为sina的推广链接进入了您的商店，但是并没有购物。如果这位顾客在15天内又再次通过标识码为msn的推广链接进入了您的商店，并且购物下单了。那么此次顾客的购买行为会算做sina推广链接的效果，系统订单来源里面也会显示为sina<{/t}><{/help}></td></tr>
+
+    </table>
+</div>
+</div>
+<div class="table-action">
+         <{button type="submit" label=$___bdlink="保存设置"|t:'bdlink' }>
+</div>
+</div>
+
+</div>
+<{if $arr_link_info.id }><input type="hidden" value="<{$arr_link_info.id}>" name="id" id="link_id" /><{/if}>
+</form>
+<script language="javascript">
+
+function valid() {
+    new Request({
+                url: 'index.php?app=bdlink&ctl=clink&act=valid',
+                data: 'generatecode=' + $('generatecode').value,
+                onSuccess: function(re) {
+                    var _re = JSON.decode(re);
+                    if( _re.status==false ) {
+                        MessageBox.error(_re.msg);
+                        $('link_id').set('value', _re._id);
+                    } 
+                }
+            }).send();
+}
+
+function copy_code(meintext) {
+  if (window.clipboardData) {
+    window.clipboardData.setData("Text", meintext)
+  } else {
+    $('fcore').boardData(meintext);
+  }
+  alert('<{t}>您已经将投放链接复制到粘贴板！<{/t}>');
+}
+
+</script> 

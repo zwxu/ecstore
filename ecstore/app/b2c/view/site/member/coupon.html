@@ -1,0 +1,136 @@
+<!-- right-->
+<div class="member-main">
+<div>
+<div class="title title2"><span style="float:left"><{t}>我的优惠券<{/t}><span class="disc">|</span> <span id='add' class="disc add-icon" >
+        <a href="javascript:void(0);" >
+        <{t}>激活优惠券<{/t}></a></span></span>
+        <span class="noticebox"><{t}>在此激活您的优惠券以便使用。<{/t}></span></div>
+
+
+             <div id='addr_div' style="display:none">
+            
+                <div class="division " style="border:none; border-bottom:1px dashed #ddd">
+                    <table cellpadding="0" class="forform" cellspacing="0" border="0">
+                        <tr>
+                            <th><{t}>优惠券号码：<{/t}></th>
+                            
+                            <td>
+                            <{input class="inputstyle" name="name" type="text"  id="active_cop" size="30" vtype="required" }></td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="padding-left:142px; "><span class="float-span" >
+                        <{button onclick="to_activate();" id="btn_activate" class="btn submit-btn" type="button" label=$___b2c="激活"|t:'b2c'}></span>
+                    <span class="float-span" style="float:left; margin-left:8px">
+                        <{button id="unset" type="button" label=$___b2c="取消"|t:'b2c'}></span>
+                </div>
+           
+        </div>
+<table width="100%" cellpadding="3" cellspacing="0" class="gridlist border-all gridlist_member">
+    <col class="span-2 "></col>
+    <col></col>
+    <col class="span-6"></col>
+    <col class="span-2"></col>
+     <col class="span-2"></col>
+      
+<thead>
+<tr>
+  <th class="first"><{t}>优惠券号码<{/t}></th>
+  <th><{t}>名称<{/t}></th>
+  <th><{t}>有效期<{/t}></th>
+  <th><{t}>状态<{/t}></th>
+  <th><{t}>操作<{/t}></th>
+<!--  <th><{t}>限用商品<{/t}></th>-->
+</tr>
+</thead>
+<tbody><{if count($coupons)>0}>
+<{foreach from=$coupons item=item}>
+<tr>
+  <td><{$item.memc_code}></td>
+  <td class="textcenter font-black"><{$item.coupons_info.cpns_name}><br />
+</td>
+
+  <td><{$item.time.from_time|cdate:SDATE_STIME}> ~ <{$item.time.to_time|cdate:SDATE_STIME}></td>
+  <td align="center" ><span class="green"><!--不可用状态时候样式应用为"gray"--><{$item.memc_status}></span></td>
+
+   <td align="center">
+         <{if $item.memc_isactive == 'false'}>
+            <a  id='editcoupon' href="###" onclick="activecoupon('<{$item.memc_code}>')"><{t}>激活<{/t}></a>
+         <{/if}>
+   </td>
+
+</tr>
+<!--<tr>
+  <td class=" textleft"><span style="color:#666;"><{$item.pmt_describe}></span></td>
+</tr>-->
+
+<{/foreach}>
+<{else}>
+<tr>
+<td height="60" colspan="6">
+  <{t}>尚无任何优惠券<{/t}></td>
+</tr>
+<{/if}>
+</tbody>
+</table>
+<{pagers data=$pager}>
+
+</div>
+</div>
+<!-- right-->
+<script>
+ $("add").addEvent('click',function(e){
+           $('addr_div').setStyle('display','inline');
+ });
+
+ $("unset").addEvent('click',function(e){
+           $('addr_div').setStyle('display','none');
+ });
+
+function to_activate(){
+        var code=$('active_cop').value.trim();
+        activecoupon(code);
+}
+
+function  activecoupon(code){
+   
+        code=code.trim();
+        var btn = $('btn_activate');
+        var rex=/[^a-zA-Z0-9]/g;
+        if(code==''){
+            return false;
+        }else{
+            if(rex.test(code)){
+                 Message.error('优惠券编号格式不正确');
+                 return false;
+            }else{
+             btn.disabled = true;
+             //top.location.href="<{link app=b2c ctl=site_member act=active_mycoupons arg='"+code+"'}>";
+
+
+              new Request.JSON({
+                    url:'<{link app=b2c ctl=site_member act=active_mycoupons}>',
+                    method:'post',
+                    data:'code='+ code,
+                    onComplete:function(re){
+
+                        if(re ==null)return;
+
+                        if(re.status =='success') {
+                             Message.success(re.msg);
+
+                        } else {
+                             Message.error(re.msg);
+
+                        }
+                        btn.disabled = false
+                        top.location.href="<{link app=b2c ctl=site_member act=coupon}>"
+                    }
+                }).send();
+
+            }
+        }
+}
+
+
+</script>

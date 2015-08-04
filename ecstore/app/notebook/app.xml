@@ -1,0 +1,21 @@
+<app version="0.1">
+    <name>留言本</name>
+
+    <description>在线留言系统</description>
+
+    <author>
+        <name>USTC 开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>0.1</version>
+    <license>USTC license</license>
+   <parent_model_class>dbeav_model</parent_model_class>
+
+	<depends>
+		<app>base</app>
+		<app>desktop</app>
+		<app>site</app>
+	</depends> 
+</app>

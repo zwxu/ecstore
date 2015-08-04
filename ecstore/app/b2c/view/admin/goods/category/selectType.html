@@ -1,0 +1,7 @@
+<select name="cat[type_id]" id="selectType">
+	<option value="1">通用商品类型</option>
+	<{foreach from=$gtypes item=type}> 
+		<option value="<{$type.type_id}>"><{$type.name}></option>
+	<{/foreach}>
+</select>
+       

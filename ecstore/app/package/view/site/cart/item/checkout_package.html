@@ -1,0 +1,69 @@
+<{if $aCart.object.package}>
+<{foreach from=$slip.object.package.obj_ident item=obj key=_obj_key}>
+<{assign var='package' value=$aCart.object.package[$_obj_key]}>
+<tr chlid_id="del-<{$package.obj_ident}>" urlupdate="<{link app=b2c ctl='site_cart' act='update' arg0='package' arg1=$item.link_key}>" urlremove="<{link app=b2c ctl='site_cart' act='remove' arg0='package'}>" number="<{$package.package._store.real}>" g_name="<{$package.package.name}>" floatstore="0" buy_price="<{$package.package.price}>" buy_store="<{$package.quantity}>" buy_store_id="<{$package.store_id}>">
+  <td>
+    <div class='cart-product-img goodpic spmc_l' isrc="<{$package.package.image|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" ghref='<{link app=package ctl=site_package act="index" arg0=$package.package.id}>'>
+      <img src='<{$res_url}>/images/loading.gif'/>
+    </div>
+    <div class="spmc_r">
+      <a target="_blank" class="item_title" href="<{link app=package ctl=site_package act=index arg0=$package.package.id}>"><{$package.package.name}></a>
+      <span></span>
+    </div>
+  </td>
+  <td class="goods_price textcenter" >
+    <p class="now_price"><{$package.package.price|cur_odr}></p> 
+  </td>
+  <td class="textcenter">
+    <{if !$checkout}>
+    <div class="Numinput ma numadjust-arr">
+      <span class="numadjust decrease"></span>
+      <input type="text" min="0" numtype="int" name="modify_quantity[<{$package.obj_ident}>][quantity]" size="3" value="<{$package.quantity}>" onchange="if(Cart)Cart.ItemNumUpdate(this,this.value,event);"/>
+      <span class="numadjust increase"></span>
+    </div>
+    <p class="t" style="display:none">(<{t}>需要备货<{/t}>)</p>
+    <{else}>
+    <{$package.quantity}>
+    <{/if}>
+  </td>
+  <td class="textcenter" >
+    <span class="cx_cart">捆绑促销</span>
+  </td>
+  <td class="goods_price textcenter buy_price xj_p" ><{$package.package.price*$package.quantity|cur_odr}></td>
+  <{if !$checkout}> 
+  <td>
+    <ul class="cart-coll-ul">
+      <li><a class="CartNav_del delItem btn-bj-hover "><i class="has-icon"> <img src='<{$env.app.res_url}>/bundle/delecate.gif' /></i><span class="delItem"><{t}>删除<{/t}></span></a></li></ul>
+  </td>
+  <{else if $package.is_first == 'true'}>
+  <td id="shipping_<{$package.store_id}>" class="textcenter storeShipping"></td>
+  <{else}>
+  <td></td>
+  <{/if}>
+</tr>
+<{foreach from=$package.obj_items item=pgoods}>
+<tr class="del-<{$package.obj_ident}>">
+  <td>
+    <div class="horizontal-m" style="margin-left:50px;">
+      <div class="cart-product-img goodpic" style="width:52px;height:52px;" isrc="<{$pgoods.default_image.thumbnail|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" ghref="<{link app=b2c ctl=site_product arg0=$pgoods.goods_id }>">
+        <img src='<{$res_url}>/loading.gif'/>
+      </div>
+      <div class="cart-giftname goods-main">
+        <div class="goodinfo">
+          <h3>
+            <a target="_blank" class="item_title" href="<{link app=b2c ctl=site_product arg0=$pgoods.goods_id }>"><{$pgoods.name}></a>
+            <br/><span><{$pgoods.spec_info}></span>
+          </h3>
+        </div>
+      </div>
+    </div>
+  </td>
+  <td class="cart-goodsprice point textcenter"><{$pgoods.price.price|cur_odr}></td>
+  <td align="center"><input type="hidden" name="modify_quantity[<{$package.obj_ident}>][package][<{$package.package.id}>][<{$pgoods.goods_id}>][quantity]"></td>
+  <td class="itemTotal font-red" align="center">捆绑商品</td>
+  <td class="itemTotal font-red" align="center"> 0 </td>
+  <td align="center">  </td>
+</tr>
+<{/foreach}>
+<{/foreach}>
+<{/if}>

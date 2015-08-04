@@ -1,0 +1,173 @@
+<{if $def_radio}><div id="def_radio" style="display:none;"><{$def_radio}></div><{/if}>
+<script>
+//存在分单，页面启动后不需要加载配方方式。所以注销掉。
+window.addEvent('domready', function(){
+    var lastSel = document.getElement('input[name^=purchase[def_area]]');
+    lastSel = $('area_id');
+    if( lastSel && lastSel.get('value') != '' && lastSel.get('value') != '_NULL_' ){
+        Order.setShippingFromArea(lastSel);
+    }
+});
+</script>
+<ul id="address-list">
+ <{include file="site/common/addr_list.html" app=b2c}>
+ </ul>
+<div class="mt_20"><input type="button" id="userNewAdd" value="使用新地址" class="cart_anniu1"></div>
+<div class="add_address mt_10" style="display:<{if $default_addr}>none<{else}>''<{/if}>;" id="newAddr">
+	<{include file="site/common/useNewAddr.html" app=b2c}>
+</div>
+<div class="mt_20" style="display:<{if $fastbuy}>none<{else}>''<{/if}>"><input type="button" value="返回购物车修改" class="cart_anniu2"  id="back_cart" /></div>
+<div class="mt_20 management_addr"><a href="<{link app=b2c ctl=site_member act=receiver}>" target="_blank">管理收货地址</a></div>
+<input type="hidden" value='' id="addrArea_id"/>
+<script>
+	$('back_cart').addEvent('click',function(e){
+		window.location = '<{link app=b2c ctl=site_cart act=index}>';
+	});
+    //使用新的配送地址。不在列表中选择。
+	$('userNewAdd').addEvent('click',function(e){
+    if(!confirm('更换地址后，您需要重新确认订单信息')){
+        return;
+    }
+	var addr_id = $('addr_id').value;
+	updateNewAddr(addr_id,'new');
+		
+	});
+	function updateNewAddr(addr_id,type){
+		new Request.HTML({
+          url:"<{link app=b2c ctl=site_cart act=useNewAddr}>",
+          update:'newAddr',
+          method:'post',
+          data:{'addr_id':addr_id},
+          onRequest:function(){
+            $('newAddr').set('html','<div class="font-green">loading...</div>');
+          },          
+          onComplete:function(){
+			if(type=="new"){
+				$('newAddr').setStyle('display','');
+				$('addrMail').set('text','');
+			}
+        }}).send();
+	}
+	
+function setUpShipping(value){
+	$('addrArea_id').value = value;
+	Order.setShippingFromArea($('addrArea_id'));
+}
+function useNewConfirm(){
+	var addrArea = $('addrArea').value;
+	var addrMail = $('addrMail').value;
+	$('ship_addr').value = addrMail;
+	var addrZip = $('addrZip').value;
+	var addrName = $('addrName').value;
+	var addrMobile = $('addrMobile').value;
+	var addrTel = $('addrTel').value;
+	var selected = $('reg_addrArea').getChildren('select');
+	var selectArea = true;
+	if(selected[0].options[selected[0].options.selectedIndex].value=='_NULL_'){
+		Message.error('<{t}>请选择收货地区<{/t}>');
+		return false;
+	}else if(selected[1].getStyle('display')=="none"||selected[1].options[selected[1].options.selectedIndex].value=='_NULL_'){
+		Message.error('<{t}>请选择收货地区<{/t}>');
+		return false;
+	}else if(selected[0].options[selected[0].options.selectedIndex].value!='3242'&&(selected[2].getStyle('display')=="none"||selected[2].options[selected[2].options.selectedIndex].value=='_NULL_')&&selected[2].options.length>1){
+		Message.error('<{t}>请选择收货地区<{/t}>');
+		return false;
+	}
+	var regMobile = /^0?1[3458]\d{9}$/;
+	var regTel = /^(0\d{2,3}-?)?[23456789]\d{5,7}(-\d{1,5})?$/;
+	var regZip = /^\d{6}$/;
+	if(!selectArea){
+		return false;
+	}else if(!addrMail){
+		Message.error('<{t}>请填写收货地址<{/t}>');
+		return false;
+	}else if(!addrZip){	
+		Message.error('<{t}>请填写邮编<{/t}>');
+		return false;
+	}else if(!addrName){
+		Message.error('<{t}>请填写收货人姓名<{/t}>');
+		return false;
+	}else if(!addrMobile){		
+		Message.error('<{t}>请填写手机号码<{/t}>');
+		return false;
+	}else if(!regMobile.test(addrMobile)){
+		Message.error('<{t}>请填写正确的手机号<{/t}>');
+		return false;
+	}else if(addrTel&&!regTel.test(addrTel)){
+		Message.error('<{t}>请填写正确的电话号码<{/t}>');
+		return false;
+	}else if(!regZip.test(addrZip)){
+		Message.error('<{t}>请填写正确的邮编<{/t}>');
+		return false;
+	}else{
+		var areaInfo = addrArea.split(':');
+		$('area_id').value = areaInfo[2];
+		$('addrArea_id').value = areaInfo[2];
+		new Request({
+			url:"<{link app=b2c ctl=site_cart act=save_new_addr}>",
+			method:'post',
+			data:{
+				'addrArea':addrArea,
+				'addrMail':addrMail,
+				'addrZip':addrZip,
+				'addrName':addrName,
+				'addrMobile':addrMobile,
+				'addrTel':addrTel
+			},
+			onSuccess:function(re){
+				re = JSON.decode(re);
+				if(re.status=="nologin"){
+					Message.error('<{t}>请先登录<{/t}>');
+					window.location.reload();
+				}else if(re.status=="succ"){
+					Message.error('<{t}>保存成功<{/t}>');
+					$('newAddr').setStyle('display','none');
+					updateNewAddr(re.addr,'');
+					new Request.HTML({
+						url:"<{link app=b2c ctl=site_cart act=updateAddrList}>",
+						mothod:'post',
+						async:false,
+						update:$('address-list'),
+						data:'addr_id='+re.addr,
+						onSuccess:function(){
+							Order.setShippingFromArea($('addrArea_id'));
+						}
+					}).send();
+				}else if(re.status=="many"){
+					Message.error('<{t}>你的收货地址已过多，请删除后再填写<{/t}>');
+				}else if(re.status=="like"){
+					Message.error('<{t}>存在相同的收货地址<{/t}>');
+				}else{
+					Message.error('<{t}>保存失败<{/t}>');
+				}
+			}
+		}).send();
+	}
+	
+}
+
+function useNewCancle(){
+	$('newAddr').setStyle('display','none');
+	// $('newAddr').setStyle('visibility','hidden');
+	// new Fx.Style('newAddr', 'height', {onComplete: function(){$('newAddr').setStyle('visibility','hidden');$('newAddr').setStyle('display','none');}}).start(219,0);
+}
+</script>
+
+<script>
+window.addEvent('domready',function(){
+    selectArea1 = function(sels) {
+        var selected = [];
+        sels.each(function(s){
+            if(s.getStyle('display') != 'none') {
+               var text = s[s.selectedIndex].text.trim().clean();
+               if(['<{t}>北京<{/t}>','<{t}>天津<{/t}>','<{t}>上海<{/t}>','<{t}>重庆<{/t}>'].indexOf(text)>-1)return;
+               selected.push(text);
+            }
+        });
+        var selectedV = selected.join('');
+        $('selected-area').set('value',selectedV);
+		$('selected-area-show').setText(selectedV);
+    }
+
+});
+</script>

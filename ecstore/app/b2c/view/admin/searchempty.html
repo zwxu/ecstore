@@ -1,0 +1,21 @@
+<FORM METHOD=POST ACTION="index.php?app=b2c&ctl=admin_errorpage&act=saveErrorPage" target="{update:'messagebox'}" class="tableform">
+<h4><{t}>用户访问网店前台进行商品搜索时，如果结果为空 ，则显示以下内容：<{/t}></h4>
+<div class="division">
+<table>
+<tr>
+
+  <td><{input name="errorpage" type="html" value=$errorpage}>
+  <input type='hidden' name="code" value='<{$code}>'>
+  </td>
+</tr>
+
+</table>
+</div>
+   <div class="table-action">
+	<{button type="submit"  label="保存"}>
+</div>
+
+    
+    
+
+</FORM>

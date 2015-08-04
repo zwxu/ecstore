@@ -1,0 +1,42 @@
+
+<div class="cart-wrap clearfix">
+<div class="step stepbj2"><span class="step1"><{t}>购物车<{/t}></span><span class="step2"><{t}>填写订单并确认<{/t}></span><span class="step3"><{t}>成功提交订单<{/t}></span><span class="my-cart"><{t}>我的购物车<{/t}></span></div></div>
+
+<div class="register-wrap clearfix">
+    <div class="leftpart" style="width:47%; margin-right:10px;margin-top:20px;">
+      <{include file="site/passport/index/login.html"}>
+    </div>
+    <div class="righttop" style=" width:47%; height:auto; margin-top:20px;">
+      <{include file="site/passport/index/signup.html"}>
+      </div>
+
+
+
+      <{foreach from=$cart_login_content item=no}><{$no}><{/foreach}>
+
+
+      <{if !$mustMember}>
+        <div class="rightbottom" style="<{if $cart_login_content}>clear:both;<{/if}> float:left; width:47%; height:auto; margin-top:5px;">
+            <div class="register-wrap">
+               <h4><{t}>直接购买<{/t}></h4>
+               <div class="intro"><div class="customMessages"><{t}>无需注册会员，直接下订单购买商品（此为默认内容，具体内容可以在后台“页面管理-提示信息管理”中修改）<{/t}></div></div>
+               <{if $guest_enabled=='true'}>  <!--非会员购买-->
+               <div class="form">
+                <a class="lnk" href="<{link app=b2c ctl=site_cart act=checkout arg0=$isfastbuy}>" id="anonymityBuy"><{t}>直接进入购买<{/t}></a>
+               </div>
+               <{/if}>
+            </div>
+           </div>
+       <{/if}>
+
+
+
+  </div>
+
+
+
+
+
+
+
+<div class="clear"></div>

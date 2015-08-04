@@ -1,0 +1,12 @@
+<!--================================== 购买 按钮 ==============================-->
+<div class="small-specbtn">
+<{if $type=="confirm"}>
+<{button type="button" class="confirm" label="确定"}>
+<{elseif $type=="fastbuy"}>
+<{button type="submit" class="fastbuy" label="立即购买"}>
+<{else}>
+<{button type="button" class="shopbtn updateBtn" icon="contin-shop_icon.gif" label=$_aaa='加入购物车'|t:'b2c'}>
+<{/if}>
+<{button type="button" class="nostore" icon="nogoods.gif" label=$_aaa='缺货通知'|t:'b2c'}>
+</div>
+

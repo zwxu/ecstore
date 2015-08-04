@@ -1,0 +1,15 @@
+<table>
+  <tr>
+    <th><{t}>添加订单商品：<{/t}></th>
+    <td><{input type="object:goods/finderPdt" view="order/new_items.html" name="" multiple="true"}></td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+    <td><input type='button' value='<{t}>保存<{/t}>' class='box-submit'/>
+    <input type='hidden' name='order[product][id][]' value='1'/>
+    <input type='hidden' name='order[product][id][]' value='2'/>
+    <input type='hidden' name='order[product][num][1]' value='3'/>
+    <input type='hidden' name='order[product][num][2]' value='1'/>
+    </td>
+  </tr>
+</table>

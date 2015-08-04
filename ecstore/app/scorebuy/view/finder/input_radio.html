@@ -1,0 +1,49 @@
+<div id="<{$params.domid}>" class="object-select clearfix" style="display:inline-block;*zoom:1;" <{$addons}> >
+  <div class="label" id="<{$id}>" rel="<{$string}>"><{$string}></div>
+  <div class="handle">&nbsp;</div>
+  <input type="hidden" name="<{$params.name}>" id="list_datas_<{$params.domid}>" vtype="<{$params.vtype}>" value="<{if is_array($params.value)}><{$params.value|implode:','}><{else}><{$params.value}><{/if}>" />
+</div>
+<script>
+  $('<{$params.domid}>').getElements('.label,.handle').addEvent('click', function(e){
+	  var explorer = window.navigator.userAgent;
+	  if(explorer.indexOf("Chrome") >= 0){
+			var url = '<{$params.return_url}>';
+		}else{
+			var url = '<{$return_url}>';
+		}
+   var sign = true
+    new Request({
+            url:'<{link app=scorebuy ctl=site_activity act=getMember}>',
+            method:'post',
+            async:false,
+            onComplete:function(rs){
+                rs = JSON.decode(rs);
+                if (rs.status=='true'){
+                    sign = false
+                }else{
+                    sign = true;
+                }
+            }
+        }).send();
+    if(sign){
+        window.location = '<{link app=b2c ctl=site_passport act=login}>';
+    }else{
+        Ex_Loader('modedialog',function(){
+          new finderDialog('<{$url}>', {
+            handle:'handle_<{$params.domid}>',
+            <{if $init}>
+            onInit:<{$init}>,
+            <{/if}>
+            onCallback:function(rs){<{if $callback}><{$callback}>(rs);<{/if}>$('handle_<{$params.domid}>').show();},
+            params:{
+              app:'<{$app}>',
+              url:url,
+              type:'<{$params.type}>',
+              name:'data[]',
+              postdata:'app_id=<{$params.app_id}>&<{$object}>'
+            }
+          });
+        });
+    }
+  });
+</script>

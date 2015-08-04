@@ -1,0 +1,21 @@
+<{if $goods.adjunct}>
+  <{foreach from=$goods.adjunct item=adjunct}>
+     <div class="minicart-single horizontal-m clearfix del-<{$goods.obj_items.products.0.product_id}>" urlremove="<{link app=b2c ctl='site_cart' act='removeMiniCart' arg0='goods'}>"  >
+        <div class="goodpic minicart-img">
+            <img src="<{$adjunct.default_image.thumbnail|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" alt="<{$adjunct.name|escape:html}>" >
+        </div>
+        <div class="goods-main minicart-dec">
+            <div class="goodinfo">
+              <h6><a href="<{link app=b2c ctl=site_product arg0=$adjunct.goods_id }>"><{$adjunct.name}></a></h6>
+                <p class="font-gray">
+                  <{$adjunct.spec_info}>
+                </p>
+            </div>
+            <div class="price-wrap">
+             <p><{t}>销售价：<{/t}><span class="micolor2"><{$adjunct.price.buy_price|cur_odr}></span></p>
+            <p><{t}>数量:<{/t}><span class="micolor2"><{$adjunct.quantity}></span><span style="float:right;"><a class="delcart" href="#" style="color:#367EC1;"><{t}>移除<{/t}></a></span></p>
+           </div>
+        </div>
+    </div>
+  <{/foreach}>
+<{/if}>

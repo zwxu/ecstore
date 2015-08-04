@@ -1,0 +1,70 @@
+<{if $payment.status == 'succ' || $payment.status == 'progress'}>
+<div class="feed-back">
+<div class="success clearfix">
+  <div class="span-1 pic"></div>
+  <div class="span-auto ">
+    <h1><{t}>合并支付成功。<{/t}></h1>
+    <{if $payment.paycost > 0}><p><{t}>支付网关收取<{/t}><{$payment.paycost|cur}><{t}>作为手续费。<{/t}></p><{/if}>
+    <p><div class="customMessages"><{$pay_succ}></div></p>
+  </div>
+</div>
+</div>
+
+<{if $send_immediately=='true'}>
+<script>
+	window.addEvent('domready',function(){
+		//if (Cookie.read('S[PAY][SEND_OUT_INFORMATION]') != 'true')
+			new Request({
+				url:'<{link app=b2c ctl=site_tools act=send_payments}>',
+				method:'post',
+				data:'payment_id=<{$payment_id}>',
+				onComplete:function(rs){
+					rs = JSON.decode(rs);
+					if (rs.success){
+						//Cookie.write('S[PAY][SEND_OUT_INFORMATION]','true',{path:"<{$base_path}>"});
+					}
+				}
+			}).send();
+	});
+</script>
+<{/if}>
+
+<{elseif $payment.status=='failed'}>
+<div class="feed-back">
+<div class="error clearfix">
+  <div class="span-1 pic"></div>
+  <div class="span-auto">
+  <h1><{t}>支付失败<{/t}></h1>
+  <p><{$payment.memo}><{t}>可能由于网络传输原因。<{/t}></p>
+
+<{elseif $payment.status=='cancel'}>
+<h1><{t}>支付被取消失败<{/t}></h1>
+<{$payment.memo}><{t}>用户取消支付过程<{/t}>
+
+<{elseif $payment.status=='error'}>
+<h1><{t}>支付失败<{/t}></h1>
+<{$payment.memo}><{t}>支付过程发生错误<{/t}>
+
+<{elseif $payment.status=='invalid'}>
+<h1><{t}>请稍候<{/t}></h1>
+<{$payment.memo}><{t}>支付反馈信息发生错误，需要联系支付插件作者。<{/t}>
+
+<{elseif $payment.status=='timeout'}>
+<h1><{t}>支付失败<{/t}></h1>
+<{$payment.memo}><{t}>支付过程超时。<{/t}>
+
+<{elseif $payment.status=='ready'}>
+<h1><{t}>请返回继续支付<{/t}></h1>
+<{$payment.memo}><{t}>支付尚未提交。<{/t}>
+  </div>
+</div>
+</div>
+<{/if}>
+<script>
+function jumpurl(){
+  location='<{link app="site" ctl="default" act="index"}>';
+}
+window.addEvent('domready',function(){
+	var SiteSplash = setTimeout('jumpurl()',3000);
+});
+</script>

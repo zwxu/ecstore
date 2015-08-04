@@ -1,0 +1,51 @@
+<div class="member-main">
+<div class="title"><{t}>物流工具<{/t}></div>
+  <div id="tab-dlycorp" class="section switch">
+    <ul class="switchable-triggerBox clearfix">
+      <li><a href="<{link app=business ctl='site_member' act='dlyaddress'}>"><{t}>地址信息<{/t}></a></li>
+      <li class="active"><a href="#"><{t}>默认物流公司<{/t}></a></li>
+      <li><a href="<{link app=business ctl='site_member' act='dlytype'}>"><{t}>运费模板<{/t}></a></li>
+    </ul>
+    <div class="switchable-content" >
+      <div class="switchable-panel">
+        <div class="msg">
+        <p class="tips">每项物流服务最多可设置5个默认物流公司</p>
+        </div>
+        <form action="<{link app=business ctl=site_member act=toAddCorp}>" method="post" name="orderForm">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" class="switchable">
+            <!-- <colgroup>
+              <col width="100">
+              <col>
+            </colgroup> -->
+            <tbody>
+              <tr>
+                <td>
+                  <ul id="J_Select" class="cod-company-list">
+                    <{foreach from=$corp item="item" name="item"}>
+                    <li>
+                    <input id="company-<{$item.corp_id}>" class="cod-check" type="checkbox" value="<{$item.corp_id}>" name="corp[]" <{if $item.default}> checked="checked"<{/if}>>
+                    <label for="company-<{$item.corp_id}>"><{$item.name}></label>
+                    </li>
+                    <{/foreach}>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="padding-left:26px;margin-bottom:20px;"><{button class="submit-btn" type="submit" label=$___b2c="保存设置"|t:'b2c' rel="_request"}></div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  var item = $('J_Select')||'';
+  if(item) items = item.getElements('input[type=checkbox]')||[];
+  if(items.length>0)
+  items.removeEvents('click').addEvent('click',function(e){
+    var target=$(e.target);
+    if(!!target.checked && item.getElements('input[type=checkbox]:checked').length>5){
+      target.set('checked',!target.checked);
+    }
+  });
+</script>

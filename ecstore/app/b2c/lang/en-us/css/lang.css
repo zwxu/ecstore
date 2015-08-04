@@ -1,0 +1,77 @@
+.btn-buy            {background:url(../images/btn-bj.gif) 0 -334px no-repeat;height:34px}			/* 购买按钮  */
+.btn-buy:hover{background:url(../images/btn-bj.gif) 0 -405px no-repeat}
+.btn-fastbuy        {background:url(../images/btn-bj.gif) 0 -344px no-repeat}       /* 立即购买按钮  */
+.btn-register       {background:url(../images/btn-register.gif)}  /* 注册按钮 */
+/* .btn-login          {background:url(../images/btn-login.gif)}*/   /* 登录按钮 */
+.btn-forgetpass     {background:url(../images/btn-forgetpass.gif)}  /* 忘记密码 */
+.btn-newregister    {background:url(../images/btn-newregister.gif)}  /* 注册一个新帐号 */
+.btn-buynow         {background:url(../images/btn-buynow.gif)}  /* 无需注册立即购买 */
+.btn-advancesearch  {background:url(../images/btn-advancesearch.gif)}  /* 高级搜索按钮按钮 */
+.btn-gift           {background:url(../images/btn-gift.gif)}  /* 赠品兑换 */
+.btn-return         {background:url(../images/btn-return.gif) no-repeat;}  /* 购物车继续购物按钮*/
+.btn-next           {background:url(../images/btn-next.gif) no-repeat}  /* 购物下一步*/
+.btn-return-checkout{background:url(../images/btn-return-small.gif) no-repeat}
+.btn-confirm        {background:url(../images/btn-confirm.gif)}
+.btn-order          {background:url(../images/btn-order.gif)}  /* 确认以后下订单*/
+.btn-clearcat       {background:url(../images/btn-clearcat.gif)}  /* 清空购物车*/
+.btn-nogift         {background:url(../images/btn-nogift.gif)}/* 暂无赠品*/
+.btn-notify { background:url(../images/btn-bj.gif) no-repeat 0 -983px; float:left; width:112px}   /* 到货通知*/
+.btn-notify:hover { background:url(../images/btn-bj.gif) no-repeat 0 -1044px}
+.btn-viewcart       {background:url(../images/btn-viewcart.gif)}  /* mini-cart*/
+.btn-continue       {background:url(../images/btn-continue.gif)}
+.btn-pay            {background:url(../images/btn-pay.gif)}
+.btn-ok             {background:url(../images/btn-ok.gif)}
+.btn-pay-ok         {background:url(../images/btn-ok.gif)}
+.btn-save   {background:url(../images/btn-save.gif) no-repeat}/*个人信息保存*/
+.CartWrap .present-btn{background:url(../images/present_btn.gif)}/*购物车*/
+.putorder-btn{ background:url(../images/put-order.gif)}/*提交订单*/
+.order-info .chag-bg{ background:url(../images/changepay_btn.gif)}
+.siteparttitle .title {background:url(../images/siteparttitle.gif)}
+#siderIMchat-main .top{ background:url(../images/siderim_title.gif)}/*IM*/
+#siderIMchat_hiddenbar{background:url(../images/siderim_hiddenbar.gif)}/*IM*/
+
+.pager .prev,
+.pager .onprev,
+.pager .unprev {background:url(../images/pager_pre.gif) no-repeat 0 0}
+.fr { float:right;display::block}
+
+.pager .next,
+.pager .onnext,
+.pager .unnext   {background:url(../images/pager_next.gif) no-repeat 0 0}
+.GoodsSearchWrap .items-list .button .addcart       {background:url(../images/list_btns.gif) no-repeat}
+.GoodsSearchWrap .items-list .button .star-del       {background:url(../images/list_btns.gif) 0 -150px no-repeat;}
+.GoodsSearchWrap .items-list .button .btncmp         {background:url(../images/list_btns.gif) 0 -50px no-repeat;}
+.GoodsSearchWrap .listmode a {background:url(../images/listmode.png) no-repeat;cursor:pointer;width:48px;display:block;float:left;position:relative;
+text-indent:13px;height:25px; line-height:25px;line-height:28px\0; text-align:center; white-space:nowrap;margin-left:-1px}
+.GoodsSearchWrap .listmode a:hover,
+.GoodsSearchWrap .listmode a.current{text-decoration:none;color:#000; z-index:2;}
+.GoodsSearchWrap .listmode a.list-index{background-position:0 0}
+.GoodsSearchWrap .listmode a.list-index:hover, .GoodsSearchWrap .listmode a.list-index.current{background-position:0 -35px;text-decoration:none;}
+.GoodsSearchWrap .listmode a.list-grid{background-position:-47px 0;width:93px}
+.GoodsSearchWrap .listmode a.list-grid:hover, .listmode a.list-grid.current{background-position:-47px -35px;text-decoration:none}
+.GoodsSearchWrap .listmode a.list-text{background-position:-139px 0}
+.GoodsSearchWrap .listmode a.list-text:hover, .GoodsSearchWrap .listmode a.list-text.current{background-position:-139px -35px;text-decoration:none}
+.goodspackagewrap li,
+.goods-detail-tab li {font-size:11px}
+.goodspackagewrap .active,
+.goods-detail-tab .active {font-size:11px}
+.min-btn{width:250px}
+.member-btn-bj{padding-left:9px}
+.stepbj1,.stepbj2,.stepbj3 { background:url(../images/cart-stepbj.gif) #F6F6F6 no-repeat }
+.stepbj2 { background-position:0 -72px }
+.stepbj3 { background-position:0 -138px }
+.step1,.step2,.step3 { padding:0 1px; height:38px; line-height:38px; float:left; display:block; position:relative; font-weight:bold }
+.step1 { left:39px }
+.step2 { left:92px }
+.step3 { left:160px }
+.items-list .goodinfo {width: 38%;*width: 36%;}
+.del-bj{font-size:10px}
+.btn-mod-paymethod,.order-info .pay-bg{width:209px;padding-left:0}
+.order-info .lave-word{padding-left:0;width:209px}
+.order-info .btn-w,.order-info .btn-w:hover{background:url(../images/message-bj.gif) no-repeat;width:200px;}
+.order-info .btn-w:hover{background-position:0 -47px}
+.cart-pricelist{width:270px}
+.cart-pricelist label{width:160px}
+.photo-btn {background: url(../images/photo-scroll-pic.gif) no-repeat scroll 0 -214px transparent;}
+.nogoods .stockout{padding:0 12px 0 5px}
+.goodsDetailContent{font-size:11px}

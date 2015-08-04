@@ -1,0 +1,145 @@
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+  <!--<tr>
+    <td align="right" nowrap width="20%"><{t}>配送地区：<{/t}></td>
+    <td width="80%"><{$area.name}></td>
+  </tr>
+  <tr>
+    <td align="right" nowrap width="20%"><{t}>配送公式：<{/t}></td>
+    <td width="80%"><input type="text" id="dlg_expressions" value="<{$expressions}>" size="50" /></td>
+  </tr> -->
+  <tr>
+    <td colspan=2 nowrap>
+      <FIELDSET><LEGEND align="top"><{t}>公式验算<{/t}></LEGEND>
+
+      <div class='notice'>
+               <{t}> 您可以在这里测试配送公式是否计算正确、有效<{/t}>
+            </div>
+          <table width="98%" border="0" cellspacing="0" cellpadding="2">
+            <tr>
+              <td width="70%" nowrap><{t}>配送公式：<{/t}>
+                <input type="text" id="dlg_expressions" value="<{$expressions}>" size="50" />
+              </td>
+            </tr>
+            <tr>
+              <td width="70%" nowrap><{t}>商品重量：<{/t}>
+                <input type="text" id="weight" name="weight" class="inputstyle" maxlength="20" size="8" value="0">
+               <{t}> 克<{/t}> </td>
+              <td width="30%" nowrap rowspan="3">
+                <p><{button onclick="countexp();" label="计算" type="button"}></p>
+              </td>
+            </tr>
+            <tr>
+              <td width="70%" nowrap><{t}>订单价格：<{/t}>
+                <{input type="money" id="orderprice" name="orderprice" class="inputstyle" maxlength="20" size="8" value="0"}>
+              </td>
+            </tr>
+			<tr>
+              <td width="70%" nowrap><{t}>首重：<{/t}>
+                <{input type="money" name="firstunit" class="inputstyle" maxlength="20" size="8" value="0"}>
+              </td>
+            </tr>
+			<tr>
+              <td width="70%" nowrap><{t}>续重：<{/t}>
+                <{input type="money" name="continueunit" class="inputstyle" maxlength="20" size="8" value="0"}>
+              </td>
+            </tr>
+            <tr>
+              <td width="70%" nowrap>
+                <span id="result"></span>
+              </td>
+            </tr>
+          </table>
+          </FIELDSET></td>
+  </tr>
+</table>
+<div class='mainFoot'>
+  <div class="table-action">
+	<{button type="button" onclick='countexp(this)' label=$___b2c="确定"|t:'b2c'}>
+  </div>
+</div>
+
+
+<script>
+function getval(expval){
+	if (eval(expval) > 0.000001)
+	{
+		return 1;
+	}
+	else if (eval(expval) >-0.000001&&eval(expval)< 0.000001)
+	{
+		return 1/2;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+function getceil(expval){
+	if (eval(expval) > 0)
+	{
+		return Math.ceil(eval(expval)-0.000001);
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+function countexp(qd){
+	var bds = $('dlg_expressions').value;
+	if (!qd)
+	{
+		if (bds == '')
+		{
+			$('dlg_expressions').focus();
+			alert("<{t}>请输入配送公式<{/t}>");
+
+			return;
+		}
+	}
+
+	var re = new RegExp("/^[^\]\[\}\{\)\(0-9WwPp\+\-\/\*]+$/");
+	if (re.test(bds))
+	{
+		alert("<{t}>公式中含有非法字符<{/t}>");
+		$('dlg_expressions').focus();
+
+		return ;
+	}
+
+	var price = $('orderprice').value;
+	var weight = $('weight').value;
+	var fp = $E('input[name^=firstunit]') ? $E('input[name^=firstunit]').value : '';
+	var cp = $E('input[name^=continueunit]') ? $E('input[name^=continueunit]').value : '';
+	var str ;
+	str = bds.replace(/(\[)/g, "getceil(");
+	str = str.replace(/(\])/g, ")");
+	str = str.replace(/(\{)/g, "getval(");
+	str = str.replace(/(\})/g, ")");
+	str = str.replace(/(fp)/g, fp);
+	str = str.replace(/(cp)/g, cp);
+	str = str.replace(/(W)/g, weight);
+	str = str.replace(/(w)/g, weight);
+	str = str.replace(/(P)/g, price);
+	str = str.replace(/(p)/g, price);
+
+	try {
+		eval(str);
+	}
+	catch(e){
+		alert("<{t}>公式格式不正确<{/t}>");
+
+		return;
+	}
+
+	$('result').set('html','<b><{t}>计算结果：<{/t}>'+Math.floor(eval(str)*100+0.01)/100+'</b>');
+
+	if(!qd)return;
+
+	qd = $(qd);
+	var dialog=qd.getParent(".dialog");
+	dialog.retrieve("targetIpt").set("value",$("dlg_expressions").getValue());
+	dialog.getElement('.btn-close').fireEvent('click');
+}
+</script>

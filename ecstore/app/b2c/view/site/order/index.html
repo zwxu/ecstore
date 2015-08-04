@@ -1,0 +1,32 @@
+<div  class="cart-wrap" style="float:none;">
+  <div class="cart-nav stepbj3"><span class="step1"><{t}>购物车<{/t}></span><span class="step2"><{t}>填写订单并确认<{/t}></span><span class="step3"><{t}>成功提交订单<{/t}></span><span class="my-cart"><{t}>我的购物车<{/t}></span></div>
+  <div class="division clearfix order-suces-wrap" >
+  <div class="order-suces-wrap_mid">
+    <p class="order-sucs flt"></p>
+	<p class="mt25 font16px fontbold "><{t}>订单已经成功提交!<{/t}></p>
+    <p class="order-suces-wrap_mid_p">
+
+    <{foreach from=$order item=item key=key}>
+      <{t}>订单编号：<{/t}><em class="font16px point"><{$item.order_id}></em>&nbsp;&nbsp;
+      <{t}>订单金额:<{/t}><em class="point" id="span_amount"><{$item.total_amount|cur:$item.currency}></em>
+      <span class="view_info"><a class="font-blue" href="<{link app=b2c ctl=site_order act=detail arg0=$item.order_id}>" ><{t}>查看订单详细信息>><{/t}></a></span>
+      <br>
+    <{/foreach}>
+    </p>
+    <br>
+    <p class="mt25">
+      <a class="jump_color le_zhi" href="<{link app=b2c ctl=site_member act=orders}>">5秒后系统会自动跳转，也可以点击此处直接跳转</a>
+      <a class="view_m_c ri_zhi" href="<{link app=b2c ctl=site_member act=orders}>">查看订单中心</a>
+	  <span class="cl_zhi"></span>
+    </p>
+   </div>
+  </div>
+</div>
+
+<script>
+function jumpurl(){
+  location='<{link app=b2c ctl=site_member act=orders}>';
+}
+setTimeout('jumpurl()',5000);
+
+</script>

@@ -1,0 +1,22 @@
+<root>
+	<register ctl="admin_delivery_center" act="index">
+		<operate>发货信息管理</operate>
+	</register>
+
+	<register ctl="admin_delivery_center" act="create">
+		<operate>添加发货信息</operate>
+	</register>
+	
+	<register ctl="admin_delivery_center" act="modify">
+		<operate>编辑发货信息</operate>
+	</register>
+	
+	<register ctl="admin_delivery_printer" act="modify_save">
+		<operate>编辑快递单模版</operate>
+	</register>
+	
+	<register ctl="admin_delivery_printer" act="add_save">
+		<operate>添加快递单模版</operate>
+	</register>
+	
+</root>

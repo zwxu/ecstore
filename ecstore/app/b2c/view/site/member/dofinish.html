@@ -1,0 +1,437 @@
+
+<script src="<{$base_url}>/app/site/statics/js/coms/switchable.js" type="text/javascript"></script>
+<div id="member-main" class="member-main">
+<h1 class="title title2"><{t}>确认收货<{/t}></h1>
+<form action="<{link app=b2c ctl=site_member act=gofinish}>" enctype="multipart/form-data" encoding="multipart/form-data" method="post" name="return_save" id='x-return-form'>
+<div style=" border:1px solid #ddd; background:#f9f9f9; text-align:center; padding:10px">
+    <ul class="je_ac_limtime" id="timecount" style=" margin-left:275px;">
+     <li><strong>距离自动确认收货还有：</strong></li>
+     <li><a href="#" class="day">00</a>天</li>
+     <li><a href="#" class="hour">00</a>小时</li>
+     <li><a href="#" class="minute">00</a>分</li>
+     <li><a href="#" class="second">00</a>秒</li>
+     <div class="cl_zhi"></div>
+    </ul>
+    <input type="hidden" name="order_id" value="<{$order_id}>">
+    <{button class="" type="submit" label=$___b2c="确认收货"|t:'b2c'}>
+	</div>
+</form>
+<div class="cart-wrap ">
+      <{if count($order.goods_items) > 0}>
+        <div class="FormWrap gift-bag order-trace" style=" border:1px solid #ddd">
+        <!-- <h4><{t}>商品<{/t}></h4> -->
+        <table width="100%" cellspacing="0" cellpadding="3" class="gridlist gridlist_member">
+          <col class="span-auto">
+          <col class="span-2">
+          <col class="span-2">
+          <col class="span-3">
+          <tr>
+            <th class="bln"><{t}>商品<{/t}></th>
+            <th><{t}>数量<{/t}></th>
+            <th><{t}>金额小计<{/t}></th>
+            <th><{t}>积分<{/t}></th>
+          </tr>
+          <tbody>
+          <{foreach from=$order.goods_items item=goods name="order_items"}>
+          <{if $goods.product}>
+          <tr>
+            <td>
+            <div class="clearfix horizontal-m">
+
+                    <div class='product-list-img goodpic' isrc="<{$goods.product.thumbnail_pic|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" ghref='<{$goods.product.link_url}>' style='width:50px;height:50px; margin:0 5px'> <img src='<{$res_url}>/images/loading.gif'/> </div>
+                <div class="goods-main">
+                <div style="width:50%" class="goodinfo">
+                <{if $goods.product.link_url}>
+                        <h3>
+				<{if $goods.product.goods_id>0}>
+                <a target="_blank" class="font-blue" href="<{$goods.product.link_url}>"><{/if}><{/if}><{$goods.product.name}>&nbsp;&nbsp;
+                  <{foreach from=$goods.product.minfo item=minfo key=name}>
+                  <{$minfo.label}>：<{$minfo.value}>
+                  <{/foreach}><{if $goods.product.link_url}><{if $goods.product.goods_id>0}></a><{/if}>
+                        </h3>
+                  <{/if}>
+                  <{if $goods.product.attr}>
+                  <span class="font-gray"><{$goods.product.attr}></span>
+                  <{/if}>
+                  </div>
+                      <div class="good-wrap order-goodpirce">
+                  <ul>
+                    <li class="price-normal"><{$goods.product.price|cur_odr:$order.currency}></li>
+                  </ul>
+                </div>
+                </div>
+              </div>
+              </td>
+            <td  class="textcenter vm"><{$goods.product.quantity}></td>
+                <td  class="textcenter vm font-orange"><{$goods.product.amount|cur_odr:$order.currency}></td>
+            <td  class="textcenter vm"><{if $goods.product.score == ''}>0<{else}><{$goods.product.score}><{/if}></td>
+          </tr>
+          <{/if}>
+          <{if $goods.adjunct_items}>
+                <{foreach from=$goods.adjunct_items item=ajuncts name="ajunctsItem"}>
+                <tr>
+                  <td style="border:none">
+                  <div style="margin-left:30px;" class="horizontal-m">
+
+                  <div class='product-list-img goodpic'  isrc="<{$ajuncts.thumbnail_pic|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" ghref='<{$ajuncts.link_url}>' style="width:50px;height:50px; margin:0 auto"> <img src='<{$res_url}>/images/loading.gif'/> </div>
+
+                  <div class="goodinfo">
+                  <{if $ajuncts.link_url}>
+                      <h3>
+                  <a target="_blank" href="<{$ajuncts.link_url}>"><{/if}><{$ajuncts.name}>
+                    <{foreach from=$ajuncts.minfo item=minfo key=name}> </br>
+                    <{$minfo.label}>：<{$minfo.value}>
+                    <{/foreach}><{if $ajuncts.link_url}></a>
+                      </h3><{/if}>
+                    <{if $ajuncts.attr}><br/>
+                      <span><{$ajuncts.attr}></span>
+                      <{/if}>
+                    </div>
+                    </div>
+                    </td>
+                    <td class="Colamount" style="border:none;"align="center"><{$ajuncts.quantity}></td>
+                    <td class="Colamount" style="border:none;" align="center"><{$ajuncts.amount|cur_odr:$order.currency}></td>
+                    <td style="border:none;" align="center"><{if $ajuncts.score == ''}>0<{else}><{$ajuncts.score}><{/if}></td>
+                </tr>
+                <{/foreach}>
+          <{/if}>
+          <{if $goods.gift_items}>
+          <{foreach from=$goods.gift_items item=gifts name="giftsItem"}>
+            <tr>
+                <td>
+                      <div style="margin-left:30px" class="horizontal-m">
+
+                      <div class='product-list-img goodpic' isrc="<{$gifts.thumbnail_pic|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" ghref='<{$gifts.link_url}>' style='width:50px;height:50px; margin:0 auto'> <img src='<{$res_url}>/images/loading.gif'/> </div>
+                    <h3>
+                     <a target="_blank" href="<{$gifts.link_url}>"><{$gifts.name}>
+                        <{foreach from=$gifts.minfo item=minfo key=name}> </br>
+                        <{$minfo.label}>：<{$minfo.value}>
+                        <{/foreach}></a><input type="button" class="present-btn" value="赠" id="button" name="button"></h3>
+                        <{if $gifts.attr}><br/>
+                          <span><{$gifts.attr}></span>
+                          <{/if}>
+                    </div>
+                    </div>
+                </td>
+              <td   align="center"><{$gifts.quantity}></td>
+              <td  class="Colamount" align="center"><{*$gifts.price|cur_odr:$order.currency*}><{t}>商品赠送<{/t}></td>
+              <td class="Colamount"  align="center"><{if $gifts.score == ''}>0<{else}><{$gifts.score}><{/if}></td>
+            </tr>
+            <{/foreach}>
+          <{/if}>
+          <{/foreach}>
+          </tbody>
+        </table>
+
+        <{/if}>
+
+        <{if $order.gift_items}>
+         <div style="background:#fff; border: 1px solid #C4D6DA;" class="FormWrap gift-bag">
+            <h4><{t}>赠品<{/t}></h4>
+            <table width="100%" cellpadding="3" cellspacing="0" class="liststyle data gridlist">
+              <col class="span-6">
+              </col>
+
+              <col class="span-2">
+              </col>
+
+              <col  class="span-2">
+              </col>
+
+              <col class="span-2 bg-orange">
+              </col>
+              <thead>
+              <tr>
+                <th style="text-align:center" ><{t}>赠品名称<{/t}></th>
+                <th style="text-align:center" ><{t}>小计<{/t}></th>
+                <th style="text-align:center" ><{t}>数量<{/t}></th>
+                <th style="text-align:center" ><{t}>所需积分<{/t}></th>
+              </tr></thead>
+              <{foreach from=$order.gift_items item="item" key="key"}>
+              <tr>
+                <td><{$item.name}></td>
+                <td style="text-align:center" ><{$item.amount|cur_odr:$order.currency}></td>
+                <td style="text-align:center" ><{$item.nums}></td>
+                <td style="text-align:center" ><{$item.point}></td>
+              </tr>
+              <{/foreach}>
+            </table>
+
+        <{/if}>
+
+        <{if $order.extends_items}>
+        <{if count($order.goods_items) <= 0}>
+            <div style="background:#fff; border: 1px solid #C4D6DA;" class="FormWrap gift-bag clearfix">
+                <!-- <h4><{t}>商品<{/t}></h4> -->
+                <table width="100%" cellspacing="0" cellpadding="3" class="gridlist">
+                    <col class="span-auto">
+                    <col class="span-2">
+                    <col class="span-2">
+                    <col class="span-3">
+                    <tr>
+                        <th class="first"><{t}>商品<{/t}></th>
+                        <th><{t}>数量<{/t}></th>
+                        <th><{t}>金额小计<{/t}></th>
+                        <th><{t}>积分<{/t}></th>
+                    </tr>
+                    <tbody><{/if}>
+                <div style="background:#fff;" class="gift-bag clearfix">
+                            <{foreach from=$order.extends_items item="aExtends"}>
+                                <{$aExtends}>
+                            <{/foreach}>
+                            <{if count($order.goods_items) <= 0}>
+                    </tbody>
+                </table><{/if}>
+        <{/if}>
+
+        <{if count($order.order_pmt)>0}>
+        <h4><{t}>优惠<{/t}></h4>
+        <table cellspacing="0" cellpadding="0" border="0" width="100%" class="favorable">
+        <{foreach from=$order.order_pmt item=item}>
+          <tr>
+            <td class="favorable-th fontbold"><{$item.pmt_memo}></td>
+            <td class="bg-orange favorable-td"><{$item.pmt_describe}></td>
+          </tr>
+        <{/foreach}>
+        </table>
+        <{/if}>
+        <{if $order.isNeedAddress}>
+        <h4><{t}>收货信息<{/t}></h4>
+        <table width="100%" cellspacing="0" cellpadding="0" class="takegoods" >
+          <tbody>
+            <tr>
+              <th><{t}>配送地区：<{/t}></th>
+              <td><{$order.consignee.area}></td>
+            </tr>
+            <tr>
+              <th><{t}>收货地址：<{/t}></th>
+              <td><{$order.consignee.addr}></td>
+            </tr>
+            <tr>
+              <th><{t}>收货人邮编：<{/t}></th>
+              <td><{$order.consignee.zip}></td>
+            </tr>
+            <tr>
+              <th><{t}>收货人姓名：<{/t}></th>
+              <td><{$order.consignee.name}></td>
+            </tr>
+            <tr>
+              <th><{t}>联系电话：<{/t}></th>
+              <td><{if $order.consignee.telephone}><{$order.consignee.telephone}><{if $order.consignee.mobile}> | <{/if}><{/if}><{$order.consignee.mobile}></td>
+            </tr>
+          </tbody>
+        </table>
+        <{/if}>
+        <{if $order.isNeedDelivery}>
+        <h4><{t}>配送方式<{/t}></h4>
+        <table cellspacing="0"  cellpadding="0" border="0" width="100%" class="takegoods">
+          <tr>
+            <th>配送方式：</th><td><{$order.shipping.shipping_name}></td></tr>
+            <tr><th><{t}>配送费用：<{/t}></th><td><span class="point"><{$order.shipping.cost_shipping|cur_odr:$order.currency}></span></td>
+          </tr>
+        </table>
+        <{/if}>
+        <h4><{t}>支付方式<{/t}></h4>
+        <table cellspacing="0"  cellpadding="0" border="0" width="100%" class="takegoods">
+          <tr>
+            <td style="padding-left:40px"><{$order.payinfo.pay_app_id|pay_name}></td>
+          </tr>
+        </table>
+        <h4><{t}>订单备注<{/t}></h4>
+        <table cellspacing="0"  cellpadding="0" border="0" width="100%" class="takegoods">
+          <tr>
+            <td style="padding-left:40px"><{$order.memo}></td>
+          </tr>
+        </table>
+
+        <h4><{t}>结算信息<{/t}></h4>
+        <{include file="site/common/order_total.html" app=b2c}>
+
+
+    <!-- order info end -->
+    <{if $ordermsg}>
+      <h4><{t}>订单留言<{/t}></h4>
+
+      <{foreach from=$ordermsg item=msgitem name="ordermsg"}>
+
+      <ul>
+        <li class="p5 pl20 pr20 clearfix"><p class="flt w500"><span class="fontbold"><{t}>标题：<{/t}></span><{$msgitem.title}></p><span class="frt"><span class="fontbold"><{t}>留言人：<{/t}></span><{$msgitem.author}></span></li>
+      <li class="p5 pl20 pr20 clearfix"><p class="w500 flt"><span class="fontbold"><{t}>内容：<{/t}></span><{$msgitem.comment|nl2br}></p><span class="frt"><{$msgitem.time|cdate:FDATE_STIME}></span></li>
+          </ul>
+       <!-- <table border="0" cellspacing="0" cellpadding="0" class="liststyle data" width="99%"  style="table-layout:fixed;border:none">
+        <col style="width:80%"/>
+        <col />
+            <tr>
+                <td class="border-bottom"><{t}>标题：<{/t}><{$msgitem.title}></td>
+                <td class="border-bottom"><{t}>留言人：<{/t}><{$msgitem.author}></td>
+            </tr>
+            <tr>
+            <td><{t}>内容：<{/t}><{$msgitem.comment|nl2br}></td>
+            <td><{t}>时间：<{/t}><{$msgitem.time|cdate:FDATE_STIME}></td>
+          </tr>
+        </table> -->
+        <{/foreach}>
+
+    <{/if}>
+
+</div></div>
+
+    
+    
+</div>
+
+<script>
+    (function() {
+        var timestamp_statues = (new Date()).valueOf();
+        var timeCount=timestamp_statues;
+        var timeCount = this.timeCount = {
+            init:function(nowtime,endtime,dom){
+                var diff = Math.abs((nowtime.getTime() - endtime.getTime())/1000);
+                var secondDiff = diff % 60;
+                var minuteDiff = ((diff - secondDiff)/60) % 60;
+                var hourDiff = ((diff - secondDiff  - minuteDiff*60)/3600) % 24;
+                var dayDiff = (diff - secondDiff  - minuteDiff*60 - hourDiff*3600) / 86400;
+                var timeDiff = [dayDiff,hourDiff,minuteDiff,secondDiff];
+                this.s = (function(){this.calcTime.periodical(1000,this,{
+                        time:timeDiff,
+                        dom:dom
+                    })}).delay(100,this);
+            },
+            addZero:function(timeDiff){
+                for(var i=0;i<timeDiff.length;i++){
+                    if(timeDiff[i].toString().length<2){
+                        timeDiff[i] = "0" + timeDiff[i].toString();
+                        return timeDiff;
+                    }
+                }
+            },
+            formatToInt : function(timeDiff){
+                for(var i=0;i<timeDiff.length;i++){
+                    parseInt(timeDiff[i]);
+                };
+                return timeDiff;
+            },
+            judgeTime : function(timeDiff){
+                if(timeDiff[3]< 0  && timeDiff[2]>0){
+                    timeDiff[3] = 59;
+                    timeDiff[2]--;
+                    return timeDiff;
+                }else if(timeDiff[3] <0 && timeDiff[2]==0 && timeDiff[1]>0){
+                    timeDiff[3] = 59
+                    timeDiff[2] = 59;
+                    timeDiff[1]--;
+                    return timeDiff;
+                }else if(timeDiff[3] <0 && timeDiff[2]==0 && timeDiff[1]==0 && timeDiff[0]>0){
+                    timeDiff[3] = 59
+                    timeDiff[2] = 59;
+                    timeDiff[1] = 23;
+                    timeDiff[0]--;
+                    return timeDiff;
+                }else if(timeDiff[3]==0 && timeDiff[2]==0 && timeDiff[1]==0 && timeDiff[0]==0){
+                    new Request.HTML({
+							url:'<{link app=b2c ctl=site_member act=js_function_do_finish}>',
+							method:'post',
+							data:'order_id=<{$order_id}>'
+					}).send();
+
+                    $clear(this.s);
+                    $('timecount').innerHTML='<p>自动确认收货！</p>';
+                    $('scarebuyingprice').display='none';
+                    $('scarebuyingsucc').display='';
+                    
+                    return;
+                }
+            },
+            calcTime : function (obj){
+                if(!obj.dom) return;
+                var _timeDiff = obj.time;
+                this.addZero(_timeDiff);
+                this.formatToInt(_timeDiff);
+                _timeDiff[3]--;
+                this.judgeTime(_timeDiff);
+                this.addZero(_timeDiff);
+                var dom = obj.dom;
+                dom.second.innerHTML = _timeDiff[3];
+                dom.minute.innerHTML = _timeDiff[2];
+                dom.hour.innerHTML = _timeDiff[1];
+                dom.day.innerHTML = _timeDiff[0];
+            },
+            calcDesc:function(){
+                $clear(this.s);
+                $('timecount').innerHTML='<p>自动确认收货！</p>';
+                $('scarebuyingprice').display='none';
+                $('scarebuyingsucc').display='';
+                return;
+            }
+        }
+    })();
+    (function(){
+        var timeNow;
+        var timeEnd= new Date(<{$time}>);
+        var dom = {
+            second: $E('.second'),
+            minute:$E('.minute'),
+            hour:$E('.hour'),
+            day:$E('.day')
+        };
+        new Request({
+            url:'<{$scarebuyings_data.js_url}>',
+            onComplete:function(re){
+                timeNow=new Date(<{$now_time}>); 
+                if(timeEnd.getTime() > timeNow.getTime()){
+                    timeCount.init(timeEnd,timeNow,dom);
+                }else{
+                    
+                    
+                }
+            }
+        }).send();
+    })();
+ </script>
+
+<script type="text/javascript">
+/*小图mouseenter效果*/
+window.addEvent('domready',function(){
+
+  var cart_product_img_viewer=new Element('div',{styles:{'position':'absolute','zIndex':500,'opacity':0,'border':'1px #666 solid'}}).inject(document.body);
+
+  var cpiv_show=function(img,event){
+
+      if(!img)return;
+      cart_product_img_viewer.empty().adopt($(img).clone().removeProperties('width','height').setStyle('border','1px #fff solid')).fade(1);
+
+      var size = window.getSize(), scroll = window.getScroll();
+        var tip = {x: cart_product_img_viewer.offsetWidth, y: cart_product_img_viewer.offsetHeight};
+        var props = {x: 'left', y: 'top'};
+        for (var z in props){
+            var pos = event.page[z] + 10;
+            if ((pos + tip[z] - scroll[z]) > size[z]) pos = event.page[z] - 10 - tip[z];
+            cart_product_img_viewer.setStyle(props[z], pos);
+        }
+
+  };
+
+   $$('.FormWrap .product-list-img').each(function(i){
+
+       new Asset.image(i.get('isrc'),{onload:function(img){
+       if(!img)return;
+           var _img=img.zoomImg(50,50);
+             if(!_img)return;
+           _img.setStyle('cursor','pointer').addEvents({
+              'mouseenter':function(e){
+                 cpiv_show(_img,e);
+              },
+              'mouseleave':function(e){
+                cart_product_img_viewer.fade(0);
+              }
+           });
+           i.empty().adopt(new Element('a',{href:i.get('ghref'),target:'_blank',styles:{border:0}}).adopt(_img));
+       },onerror:function(){
+            i.empty();
+
+       }});
+
+   });
+
+});
+</script>

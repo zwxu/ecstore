@@ -1,0 +1,11 @@
+<services>
+	<service id="api.businessapi.searchorder">
+        <class>businessapi_api_1_0_searchorder</class>
+    </service>
+    <service id="api.businessapi.searchstore">
+        <class>businessapi_api_1_0_searchstore</class>
+    </service>
+	<service id="api.businessapi.searchrefund">
+        <class>businessapi_api_1_0_searchrefund</class>
+    </service>
+</services>

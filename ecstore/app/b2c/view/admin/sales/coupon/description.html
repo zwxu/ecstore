@@ -1,0 +1,38 @@
+<div class="division division-skin">
+
+        <div class="division">
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th><{t}>规则描述<{/t}>：</th>
+                    <td><{input type="textarea" class="inputstyle" value=$rule.description name="rule[description]" cols="80" rows="10" }></td>
+                </tr>
+                <tr>
+                    <th><{t}>开始时间<{/t}>：</th>
+                    <td>
+                      <{input type="time" vtype="required" value=$rule.from_time name="from_time"}>
+                    </td>
+                </tr>
+                <tr>
+                    <th><{t}>结束时间<{/t}>：</th>
+                    <td>
+                      <{input type="time" vtype="required" value=$rule.to_time name="to_time"}>
+                    </td>
+                </tr>
+                <tr>
+                    <th><{t}>会员级别<{/t}>：</th>
+                    <td id="mLev">
+                       <{foreach from=$member_level item=ml}>
+                            <lable><input type="checkbox" value="<{$ml.member_lv_id}>" name="rule[member_lv_ids][]" <{if ($rule.member_lv_ids != '') && in_array($ml.member_lv_id,$rule.member_lv_ids)}>checked<{/if}>/><{$ml.name}></label>
+                       <{/foreach}>
+                       <span id="mleverror"></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+</div>
+
+
+
+
+

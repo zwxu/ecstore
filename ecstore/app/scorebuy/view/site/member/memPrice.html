@@ -1,0 +1,14 @@
+<table class="gridlist table-goods-list" style="border-bottom:none" width="100%" border="0" cellspacing="0"  cellpadding="0">
+    <tr>
+        <th><{t}>等级名称<{/t}></th>
+        <th><{t}>积分<{/t}></th>
+        <th><{t}>价格<{/t}></th>
+    </tr>
+    <{foreach from=$memberLvPrice item=item key=key}>
+        <tr style="text-align:center;">
+          <td><{$item.name}></td>
+          <td><{$item.score}></td>
+          <td><{if $item.status == 2}><{$item.last_price|cur}><{else}><{$item.price|cur}><{/if}></td>
+        </tr>
+    <{/foreach}>
+</table>

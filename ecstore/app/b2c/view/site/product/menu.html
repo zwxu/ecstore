@@ -1,0 +1,67 @@
+<{if $product.udfimg == 'true'}>
+<{assign var="gimage" value=$product.thumbnail_pic}>
+<{else}>
+ <{if $product.image_default_id!=''}>
+ <{assign var="gimage" value=$product.image_default_id|default:$defaultImage}>
+ <{else}>
+ <{assign var="gimage" value=$product.imageDefault}>
+ <{/if}>
+<{/if}>
+<li>
+<{if count($product.spec_desc_info)>1}>
+<{assign var='emptystore' value=1 }>
+<{foreach from=$product.spec_desc_info key=key item=item}>
+<{if $item.store === NULL || $item.store > 0}>
+<{assign var='emptystore' value=0 }>
+<{/if}>
+<{assign var='countstore' value=$countstore+($item.store-$item.freez)}>
+<{/foreach}>
+<{$isnull}>
+    <{if !$emptystore || $countstore>0 || $product[nostore_sell] == 1}>
+	<{if $product.show_button eq 'true'}>
+    <a class="addcart-btn timebuy-btn" href="#" style="margin:0 3px 0 0;color:#FF3300;cursor:not-allowed"><span>即将开始</span></a>
+    <{elseif $product.timebuy_over eq 'true'}>
+    <a class="nogoods timebuy-btn" href="#" style="margin:0 3px 0 0;cursor:not-allowed"><span>已卖光</span></a>
+	<{else}>
+    <a href="<{link app=b2c ctl=site_cart act=add arg0=goods arg1=$product.goods_id arg2=$item.product_id arg3='1' }>" type="g" buy="<{$product.goods_id}>" class="btn-bj-hover operate-btn hasSpec" <{if $setting.buytarget == 2}> target="_blank_cart"<{elseif $setting.buytarget == 3}> target="_dialog_minicart"<{/if}> title="<{t}>加入购物车<{/t}>" rel="nofollow" ><span><{t}>加入购物车<{/t}></span></a>
+    <{/if}>
+	<{else}>
+    <a type="g" href="<{link app=b2c ctl=site_product act=gnotify arg0=$product.goods_id arg1=$product_id}>" rel="nofollow" class="nogoods" target="_blank" title="<{t}>缺货登记<{/t}>"><i class="has-icon"> <img src='<{$env.app.res_url}>/bundle/shop_icon_.gif' /></i><span style=" padding:0 20px 0 15px; color:#333" ><{t}>缺&nbsp;&nbsp;货<{/t}></span></a>
+    <{/if}>
+
+<{if $showtextbuy}><a class='lnk'><{t}>加入购物车<{/t}></a> <{/if}>
+<{else}>
+  <{if $addcart_disabled != 1}>
+
+<{foreach from=$product.spec_desc_info key=key item=item}>
+	<{if $product[nostore_sell] || $item.store === null || $item.store - intval($item.freez) > 0}>
+	<{if $product.show_button eq 'true'}>
+   <a class="addcart-btn timebuy-btn" href="#" style="margin:0 3px 0 0;color:#FF3300;cursor:not-allowed"><span>即将开始</span></a>
+  <{elseif $product.timebuy_over eq 'true'}>
+    <a class="nogoods timebuy-btn" href="#" style="margin:0 3px 0 0;cursor:not-allowed"><span>已卖光</span></a>
+	<{else}>
+    <a href="<{link app=b2c ctl=site_cart act=add arg0=goods arg1=$product.goods_id arg2=$item.product_id arg3='1' }>" type="g" buy="<{$product.goods_id}>" class="btn-bj-hover operate-btn" <{if $setting.buytarget == 2}> target="_blank_cart"<{elseif $setting.buytarget == 3}> target="_dialog_minicart"<{/if}> title="<{t}>加入购物车<{/t}>" rel="nofollow" ><span><{t}>加入购物车<{/t}></span></a>
+	<{/if}>
+  <{else}>
+   <a type="g" href="<{link app=b2c ctl=site_product act=gnotify arg0=$product.goods_id arg1=$product_id}>" rel="nofollow" class="nogoods" target="_blank" title="<{t}>缺货登记<{/t}>"><i class="has-icon"> <img src='<{$env.app.res_url}>/bundle/nogoods.gif' /></i><span class="stockout"><{t}>缺　货<{/t}></span></a>
+  <{/if}>
+<{break;}>
+<{/foreach}>
+
+<{/if}>
+<{/if}>
+</li>
+<{if $product.promotions && ($product.promotions >0) }>
+    <li <{if $login!="nologin"}>star="<{$product.goods_id}>"<{/if}>
+         title="<{$product.name|escape:html}>" class="star-off">
+         <a  <{if $login=="nologin"}> href="<{link app=b2c ctl="site_passport" act="login"}>"
+             <{else}>href="#" onclick="return false;"
+             <{/if}>
+         class="listact" title="<{t}>促销优惠<{/t}>" rel="nofollow"><{t}>促销优惠<{/t}></a>
+    </li>
+<{/if}>
+<li <{if $login!="nologin"}>star="<{$product.goods_id}>" data-type="on"<{/if}> title="<{t}>加入收藏<{/t}>" class="star-off">
+<a <{if $login=="nologin"}>href="<{link app="b2c" ctl="site_passport" act="login"}>" <{else}>href="javascript:void(0)" rel="_fav_"<{/if}> class="btn-a">
+<i class="has-icon"></i><span><div class="fav"><{t}>收　藏<{/t}></div><div class="nofav"><{t}>已收藏<{/t}></div></span></a>
+</li>
+<{if !$member}><li class="vdetail zoom" title="查看大图"><a rel="_zoomImg_" href="<{link app=b2c ctl=site_product act=index arg0=$product.goods_id}>" pic="<{$gimage|storager:'l'}>" target="_blank" class="listact" title="<{t}>查看详细<{/t}>"></a></li><{/if}>

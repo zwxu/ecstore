@@ -1,0 +1,19 @@
+<div id="other_menu_header_<{$widgets_id}>">
+    <a href="javascript:void(0);" id='other_menu_a_<{$widgets_id}>'><{$data.title}><i></i></a>
+    <div class="tool_menu_list" id='other_menu_link_<{$widgets_id}>' style="display:none;">
+        <{foreach from=$data.href item=toplink key=top_key}>
+          <a href="<{$toplink.top_link_url}>"><{$toplink.top_link_title}></a>
+          <{/foreach}>
+    </div>
+</div>
+
+<script>
+$('other_menu_header_<{$widgets_id}>').addEvent('mouseenter',function(){
+    $('other_menu_link_<{$widgets_id}>').setStyle('display','');
+    $('other_menu_a_<{$widgets_id}>').set('class','h_expb');
+});
+$('other_menu_header_<{$widgets_id}>').addEvent('mouseleave',function(){
+    $('other_menu_link_<{$widgets_id}>').setStyle('display','none');
+    $('other_menu_a_<{$widgets_id}>').set('class','h_expa');
+});
+</script>

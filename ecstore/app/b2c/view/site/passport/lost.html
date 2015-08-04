@@ -1,0 +1,59 @@
+<div id="pass" class="register-wrap clearfix">
+<h4><{t}>取回密码第一步：验证账号<{/t}></h4>
+    <div class="form password-return">
+  <form method="post" action="<{link app=b2c ctl="site_passport" act="recover"}>" id="lostBar">
+      <div class="loginbox">
+        <!-- <h4><{t}>忘记密码？<{/t}></h4> -->
+        <div class="intro"><div class="customMessages"></div></div>
+        <div>
+          <input name="forward" type="hidden" value="<{$options.url}>">
+          <ul>
+            <li class="clearfix">
+              <label class="login-k">
+                <i>*</i><{t}>用户名：<{/t}>
+              </label>
+              <div class="login-v">
+                <{input class="inputstyle" name="login" vtype="required" id="recover_login" }>
+                <input type="text" style="display:none;">
+                <span id="reg_user_info"></span>
+              </div>
+            </li>
+            <li class="clearfix">
+              <label class="login-k">
+                <i>*</i><{t}>验证码：<{/t}>
+              </label>
+              <div class="login-v">
+                <{input vtype="required&&number" size="4" maxlength="4" name="verifycode" style="width:60px;padding:6px 0px 6px 14px;" id="iptlogin" tabindex="3"}>
+                <span class='verifyCodebox' style="display:none">
+                  <img align="absmiddle" id="membervocde" src="<{link app="b2c" ctl="site_passport" act="gen_vcode"}>" />
+                  <a href="javascript:changeimg('membervocde')">
+                    <{t}>看不清楚?换个图片<{/t}>
+                  </a>
+                </span>
+              </div>
+            </li>
+            <li>
+              <label class="login-k"></label>
+              <div class="login-v">
+                <{button class="submit-btn" rel="_request" data-ajax-config="{update:'pass'}" type="submit" label=$___b2c="下一步"|t:'b2c'}>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+  </form>
+    </div>
+</div>
+
+<script>
+    $$('#lostBar input').addEvent('focus', function(){
+        if($(this.form).retrieve('showvcode',false))return;
+        changeimg('membervocde');
+        $$('.verifyCodebox').setStyle('display','');
+        $(this.form).store('showvcode',true);
+    });
+
+    function changeimg(id){
+        $(id).set('src','<{link app="b2c" ctl="site_passport" act="gen_vcode"}>#'+(+new Date()));
+    }
+</script>

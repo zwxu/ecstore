@@ -1,0 +1,434 @@
+<div class="member-main">
+    <div class="title title2">举报管理</div>
+    <{if $complain.status=='intervene'}>
+    <{assign var=progress_step value='1'}>
+    <{else}>
+    <{assign var=progress_step value='2'}>
+    <{/if}>
+    <{include file='site/common/report_progress.html' app='complain'}>
+    <div class="FormWrap" style="background-color:#FFFFFF;border:0 none;padding:0;">
+        <div class='col-main'>
+            <div class='main-wrap'>
+                <div class="progress-remind">
+                    <s class="icon warn-icon"></s>
+                    <h4>                    
+                    <{if $complain.status=='intervene'}>
+                          客服已介入审核，请耐心等待
+                          <{elseif $complain.status=='success'}>
+                          举报成立
+                          <{elseif $complain.status=='error'}>
+                          举报不成立
+                          <{else}>
+                          举报举报撤销
+                          
+                          <{/if}>
+                    </h4>
+                     <{if $complain.status=='intervene'}>
+                          <{elseif $complain.status=='success'}>                          
+                           处理时间:<{$complain.last_modify|cdate:FDATE_STIME}>
+                          <{elseif $complain.status=='error'}>
+                           处理时间:<{$complain.last_modify|cdate:FDATE_STIME}>
+                          <{else}>
+                          撤销时间:<{$complain.last_modify|cdate:FDATE_STIME}>
+                          <{/if}>
+                </div>
+                <div class='boxbase msg-board J_MsgBoard'>
+                    
+                    <div class="box-bd">
+                        <h4>
+                            <span>留言板 </span>
+                        </h4>
+                        <{if $complain.status=='intervene'}>
+                        <div class="box-act J_BoxAct">
+                            <a href="#" id='J_ToggleMsgAction' class="more close">我要留言<b></b></a>
+                        </div>
+                        <form id='J_MsgActionPanel' action="<{link app='complain' ctl='site_buyer_reports' act='save_comment'}>" class="box-action  hidden" id="J_MsgForm" enctype="multipart/form-data" method="post">
+                        <input type='hidden' name='source' value='buyer'>
+                        <input type='hidden' name='from_member_id' value='<{$complain.member_id}>'>
+                        <input type='hidden' name='to_member_id' value='<{$complain.store_member_id}>'>
+                        <input type='hidden' name='store_id' value='<{$complain.store_id}>'>
+                        <input type='hidden' name='goods_id' value='<{$complain.goods_id}>'>
+                        <input type='hidden' name='reports_id' value='<{$complain.reports_id}>'>
+                        <div class="J_MemoWrap memo-wrap">
+                            <textarea name="comment" placeholder="留言不能为空" class="msg-textarea J_MsgTextarea J_FormVerify" ></textarea>
+                            <div class="text-count">
+                            <strong class="J_TextCount">300</strong>/300字
+                            </div>
+                            <a class="submit-btn J_SubmitBtn">发表留言</a>
+                        </div>
+                        <div id='J_WaitingList' class="waiting-list ">
+                        </div>
+                         <div class="image-upload J_UploadWrap">
+                            <a id='J_SelectFileLabel' class=" select-file-link <{if $isIE}>select-file-label-ie<{/if}>" href="#" style='color: #0579c6;'>上传附件</a>
+                            <div id='J_FileInputBox' maxIndex='1' class="select-file-wrap <{if $isIE}>select-file-wrap-ie<{/if}>">
+                                <input type="file" name="image[]" class="select-file J_SelectFile1" findex='1'  size="1" accept="image/gif,image/jpeg,image/jpg,image/bmp,image/png">
+                            </div>
+                            <span class="msg-helper">每张图片不超过5M,支持GIF，JPG，JPEG，PNG，BMP格式</span>
+                            </div>
+                            <div class="submit-wrap">
+                                <div class="error-msg J_ErrorBox hidden" style="max-width: 535px;float:left;"></div>
+                            </div>
+                        </form>
+                        <{/if}>
+                    </div>
+                    <div class="box-bd J_MsgDetail">
+                    <{foreach from=$complain.reports_comments item=comment name=comm}>
+                        <div class="row-item first-row-item <{if $smarty.foreach.comm.iteration mod 2==1}>odd<{else}>even<{/if}>">
+                            <div class="ctitle avator">
+                            <{if $comment.source =='seller'}>卖家：<{elseif $comment.source=='buyer'}>自己：<{else}>客服：<{/if}>
+                            </div>
+                            <div class="info">
+                                <div class="action">
+                                    <span><{if $comment.source =='seller'}>卖家<{elseif $comment.source=='buyer'}><{$comment.author}><{else}>客服<{/if}>
+                                     </span>
+                                    
+                                    &nbsp;&nbsp;(<span class="time"><{$comment.last_modified|cdate:FDATE_STIME}></span>)
+                                </div>
+                                <div class="action-desc">
+                                    <label></label>
+                                    <div class="desc"><{$comment.comment}></div>
+                                </div>
+                                <div class="pics J_Pics">
+                                    <{if $comment.image_0}>
+                                    <div>
+                                        <img style='width:76px;height:76px;' class="J_IMGDD"  src="<{$comment.image_0|storager:'s'}>" bimage="<{$comment.image_0|storager}>">
+                                    </div>
+                                    <{/if}>
+                                    <{if $comment.image_1}>
+                                    <div>
+                                        <img style='width:76px;height:76px;'  class="J_IMGDD"  src="<{$comment.image_1|storager:'s'}>" bimage="<{$comment.image_1|storager}>">
+                                    </div>
+                                    <{/if}>
+                                    <{if $comment.image_2}>
+                                    <div>
+                                        <img style='width:76px;height:76px;'  class="J_IMGDD"  src="<{$comment.image_2|storager:'s'}>" bimage="<{$comment.image_2|storager}>">
+                                    </div>
+                                    <{/if}>
+                                    <{if $comment.image_3}>
+                                    <div>
+                                        <img style='width:76px;height:76px;'  class="J_IMGDD"  src="<{$comment.image_3|storager:'s'}>" bimage="<{$comment.image_3|storager}>">
+                                    </div>
+                                    <{/if}>
+                                    <{if $comment.image_4}>
+                                    <div>
+                                        <img style='width:76px;height:76px;'  class="J_IMGDD"  src="<{$comment.image_4|storager:'s'}>" bimage="<{$comment.image_4|storager}>">
+                                    </div>
+                                    <{/if}>
+                                </div>
+                                <s class="arrow"></s>
+                            </div>
+                        </div>
+                        <{/foreach}>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='col-sub'> 
+<div class="request-info boxbase J_RequestInfoWrap ">
+		<s class="box-tp"><b></b></s>
+		<div class="box-hd">
+			<i class="hd-icon"></i>
+			<h4>
+				<span>举报内容</span>
+			</h4>
+                <{if $complain.status=='intervene'}>
+				<div class="box-act">
+					<a href="#"class="more J_Revoke">撤销</a>
+				</div>	
+                <{/if}>                
+		</div>
+		<div class="box-bd J_RequestInfo">
+			<div class="row-item ">
+				<div class="ctitle">
+					<label>举报编号：</label>
+				</div>
+				<div class="info nowrap"><{$complain.reports_id}></div>
+			</div>
+			<div class="row-item ">
+				<div class="ctitle">
+					<label>举报类型：</label>
+				</div>
+				<div class="info"><{$complain.cat_name}></div>
+			</div>
+			<div class="row-item ">
+				<div class="ctitle">
+					<label>举报状态：</label>
+				</div>
+				<div class="info">
+                <{if $complain.status=='intervene'}>
+                          平台已经介入
+                          <{elseif $complain.status=='success'}>
+                          举报成立
+                          <{elseif $complain.status=='error'}>
+                          举报不成立
+                          <{else}>
+                          举报撤销
+                          <{/if}>
+                </div>
+			</div>
+            <div class="row-item ">
+				<div class="ctitle">
+					<label>被举报人：</label>
+				</div>
+				<div class="info"><{$store_info.shop_name}></div>
+			</div>
+            <div class="row-item ">
+				<div class="ctitle">
+					<label>申请时间：</label>
+				</div>
+				<div class="info normalwrap"><{$complain.createtime|cdate:FDATE_STIME}></div>
+			</div>
+						<div class="row-item J_TextDesc text-desc">
+				<div class="ctitle">
+					<label>补充留言：</label>
+				</div>
+				<div class="info"><{$complain.memo}></div>
+			</div>
+					</div>
+		<div class="box-bd">
+			<div class="row-item last-row-item">
+				<a href="#" class="more J_MoreDescTrigger" hidefocus="" data-spm-anchor-id="0.0.0.0"><s></s></a>
+			</div>
+		</div>
+	</div>        
+        <{include file='site/member/buyer/reports/order_info.html' app='complain'}>
+        </div>
+    </div>
+</div>
+<div class="img-dd-popup" style="height: 867px; width: 1424px; display: none;">
+    <div class="img-dd-opacity-bg">
+    </div>
+    <div class="img-dd-box">
+        <div class="box-bd">
+            <img title="鼠标滚轮可以放大图片" class="G_K" style="overflow: hidden;" src="">
+        </div>
+        <div class="box-bt">
+        </div>
+    </div>
+</div>
+<div class="box-hd close-rt-wrap J_PopClose" style="display:none;"><a href="#" title="按退出键，也可以关闭哦" class="close-rt J_Close" id="J_CloseImageDD"></a></div>
+<script>
+(function(){
+    if(document.getElement('.J_MsgTextarea')){
+        document.getElement('.J_MsgTextarea').addEvent('keyup',function(e){
+            var length=300-this.value.length;
+            document.getElement('.J_TextCount').set('html',length);
+        });
+    }
+    BigImage=new Object();
+    Object.append(BigImage,{
+       init:function(){
+          $$('.J_IMGDD').each(function(img){
+             img.addEvents({
+             'click':function(e){
+               e.stop();
+               BigImage.popup(this.get('bimage'),e);
+               BigImage.hidden();
+             }
+             
+             });
+            
+          });
+          var pp=document.getElement('.img-dd-popup');
+          var img=pp.getElement('img');
+            img.addEvents({
+                'mousewheel':function(e){
+                    e.stop();
+                    //e.stopPropagation();
+                    //e.preventDefault();
+                    var w=e.wheel*10;
+                    var coord=this.getCoordinates();
+                    
+                    var width= coord.width;
+                    var left=coord.left;
+                    var top=coord.top;
+                    var height=coord.height;
+                    var twidth=width*((100+w)/100);
+                    var dleft=(twidth-width)/2;
+                    left=left-dleft;
+                    if(twidth<100){
+                       return;
+                    }
+                    this.setStyle('width',twidth+'px');
+                    this.setStyle('left',left+'px');
+                    var theight=this.getSize().y;
+                    top=top-(theight-height)/2;
+                    this.setStyle('top',top+'px');
+                }
+            });
+            new Drag(img);
+       },
+       popup:function(src,e){
+           var pp=document.getElement('.img-dd-popup');
+           var img=pp.getElement('img');
+           img.set('src',src);
+           img.setStyle('width','500px');
+           var coor=document.getScrollSize();
+           var sc=document.getScroll();
+           var dtop=(coor.x-500)/2;
+           img.setStyle('top',sc.y+20+'px');
+           img.setStyle('left',dtop+'px');
+           pp.setStyle('width',coor.x+'px');
+           pp.setStyle('height',coor.y+'px');
+           pp.show();
+           var pclose=document.getElement('.J_PopClose');
+           pclose.show();
+       },
+       hidden:function(){
+           var pclose=document.getElement('.J_PopClose');
+           pclose.addEvent('click',function(e){
+             e.stop();
+             this.hide();
+             var pp=document.getElement('.img-dd-popup');
+             pp.hide();
+           });
+       }
+    });
+    BigImage.init();
+    <{if $complain.status=='intervene'}>
+    document.getElement('.J_Revoke').addEvent('click',function(e){
+        e.stop();
+        Ex_Dialog.confirm('<{t}>确认撤销吗？撤消后将不能对该订单进行投诉。<{/t}>', function(e){
+          if(!e)
+          return;
+          var url="<{link app='complain' ctl='site_buyer_complain' act='cancel_comment' arg0=$complain.complain_id}>";
+            new Request({
+               url:url,
+               onSuccess:function(text){
+                  if(text){
+                      Message.success('撤销成功');
+                      location.reload();
+                  }else{
+                      
+                      Message.error('撤销失败');
+                  }
+               }
+            }).send();
+        });        
+    });
+    FileUpload=new Object();
+    Object.append(FileUpload,{
+        init:function(){
+           $('J_ToggleMsgAction').addEvent('click',function(e){
+               e.stop();
+               this.toggleClass('close');
+               $('J_MsgActionPanel').toggleClass('hidden');
+           });
+           
+           <{if $isIE}>
+            var arr_file=this.getFileInput();
+              var last=arr_file.getLast();
+              last.addEvent('change',this.fileChange.bind(this));
+           <{else}>
+           $('J_SelectFileLabel').addEvent('click',function(e){
+              e.stop();
+              var arr_file=this.getFileInput();
+              var last=arr_file.getLast();
+              if(!last.retrieve('add:change')){
+                    last.addEvent('change',this.fileChange.bind(this));
+                    last.store('add:change',true);
+              }
+              last.click();
+           }.bind(this));
+           <{/if}>
+           document.getElement('.J_SubmitBtn').addEvent('click',function(e){
+                e.stop();
+                var form=e.target.getParent('form');
+                var J_FormVerify_Textarea=form.getElement('.J_MsgTextarea');
+                if(J_FormVerify_Textarea.value.trim()==''){
+                    J_FormVerify_Textarea.focus();
+                    Message.error('请输入补充留言！');
+                    return;
+                }else{
+                   if(J_FormVerify_Textarea.value.trim().length>300){
+                       Message.error('留言字数不能大于300个！');
+                       return;
+                   }
+                }
+                
+                var items=$('J_WaitingList').getElements('.J_WaitItem');
+                if(items.length<=0){
+                    Message.error('请最少上传一张凭证！');
+                    return;
+                }
+                var inputFiles=$('J_FileInputBox').getElements('.select-file');
+                inputFiles.each(function(el){
+                  if(el.value.trim()==''){
+                     el.destroy();
+                  }
+                });
+                form.submit();
+           
+           }.bind(this));
+           
+        },
+        getFileInput:function(){
+            return $('J_FileInputBox').getElements('.select-file');
+        },
+        fileChange:function(e){
+            var obj=e.target;
+            var v=obj.value;
+            var $arr=['JPG','JPEG','GIF','PNG','BMP'];
+               if(v){
+                   var ext=v.split('.').getLast();
+                   if($arr.contains(ext.toUpperCase())==false){
+                        obj.value='';
+                        Message.error('只能上传GIF，JPG，JPEG，PNG，BMP格式');
+                        return;
+                   }
+               }
+            $(obj).setStyle('display','none');
+            var item=this.newWaitItem(obj);
+            item.inject($('J_WaitingList'));
+            var hasfile=$('J_WaitingList').getElements('.J_WaitItem');
+            if(hasfile.length>=3){
+               $('J_SelectFileLabel').hide();
+               return;
+            }
+            this.newFileInput();
+        },
+        newFileInput:function(index){
+         var maxIndex=$('J_FileInputBox').get('maxIndex').toInt();
+            maxIndex++;
+            $('J_FileInputBox').set('maxIndex',maxIndex)
+           var inputFile=new Element('input');
+            inputFile.set('type','file').set('findex',maxIndex);
+            inputFile.addClass('select-file');
+            inputFile.addClass('J_SelectFile'+maxIndex);
+            inputFile.set('name','image[]');
+            inputFile.set('size','1');
+            inputFile.set('accept','image/gif,image/jpeg,image/jpg,image/bmp,image/png');
+            inputFile.addEvent('change',this.fileChange.bind(this));
+            inputFile.store('add:change',true);
+            inputFile.inject($('J_FileInputBox'));
+        },
+        newWaitItem:function(obj){
+            var el=new Element('div');
+            el.set('findex',$(obj).get('findex'));
+            el.addClass('J_WaitItem');
+            el.set('html','<span class="file-name">'+$(obj).value+'</span><span> <a class="J_Delete delete" href="#" onclick="FileUpload.deleteWaitItem(new Event(event));"  data-file-idx="1">删除</a></span>');
+            return el;
+        },
+        deleteWaitItem:function(e){
+            e.stop();
+            var obj=e.target;
+            var waitItem=$(obj).getParent('.J_WaitItem');
+            var findex=waitItem.get('findex');
+            var items=$('J_WaitingList').getElements('.J_WaitItem');
+            var ifiles=FileUpload.getFileInput();
+            var inputFile=$('J_FileInputBox').getElement('.J_SelectFile'+findex);
+            inputFile.destroy();
+            waitItem.destroy();
+            if(ifiles.length<=items.length){
+                this.newFileInput();
+            }
+            $('J_SelectFileLabel').show();
+        }
+        
+        
+    });
+    
+    FileUpload.init();
+    <{/if}>
+})();
+</script>

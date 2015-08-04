@@ -1,0 +1,16 @@
+<{foreach from=$selector item="column" key=column_id}>
+  <{if count($column.options)>0}>
+  <dl>
+    <dt><{$column.name}></dt>
+    <dd>
+      <{foreach from=$column.options item="item" key=value}>
+        <{if !isset($column.value[$value]) }>
+        <a href="<{selector key=$column_id value=$value mod="append"}>"><{$item}></a>
+        <{else}>
+        <a href="<{selector key=$column_id value=$value mod="remove"}>" class="remove"><{$item}></a>
+        <{/if}>
+      <{/foreach}>
+    </dd>
+  </dl>
+  <{/if}>
+<{/foreach}>

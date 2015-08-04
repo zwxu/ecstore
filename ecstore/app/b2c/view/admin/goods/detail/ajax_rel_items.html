@@ -1,0 +1,22 @@
+<{if $goods_items}>
+<div class="gridlist rows-body">
+<{foreach from=$goods_items key=subkey item=item}>
+<div class="row">
+	<div class="row-line">
+	<div class="span-auto">
+		<span class="opt">
+          <img app="desktop" src="<{$desktop_res_url}>/bundle/delecate.gif" onclick="$('list_datas').value=$('list_datas').value.split(',').erase($(this).getParent('.row').getElement('input[type=hidden]').value).join();$(this).getParent('.row').destroy();" />
+		</span>
+	</div>
+	<div class="span-auto">
+        <input type="hidden" name="linkid[]" item_id="<{$item.goods_id}>" value="<{$item.goods_id}>" /><{$item.name|cut:120}>
+	</div>
+	<div class="span-5">
+		<input type="radio" name="linktype[<{$item.goods_id}>]" value="left" <{if $item.manual=='left' || $item.manual==''}>checked="checked"<{/if}> /><{t}>单向相关<{/t}>
+		<input type="radio" name="linktype[<{$item.goods_id}>]" value="both" <{if $item.manual=='both'}>checked="checked"<{/if}> /><{t}>双向相关<{/t}>
+	</div>
+	</div>
+</div>
+<{/foreach}>
+</div>
+<{/if}>

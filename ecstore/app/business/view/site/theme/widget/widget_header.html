@@ -1,0 +1,38 @@
+<div class="wgtconfig clearfix">
+<{if $basic_config=='on'||$widget_editor.html}>
+<{if $basic_config=='on'}>
+<div class="tableform"">
+    <div class="division">
+        <table width="100%" cellspacing="0" cellpadding="0">
+            <tr>
+                <th><label for="x-wcinput-01"><{t}>版块标题：<{/t}></label></th><td><input id="x-wcinput-01" name="__wg[title]" value="<{$widgets_title}>" /></td>
+                <th><label><{t}>版块模板：<{/t}></label></th><td> <select name="__wg[tpl]">
+    		        <{html_options options=$widget_editor.tpls selected=$widgets_tpl}>
+    			</select></td>
+            </tr>
+            <tr id="widgets_borders">
+                <th><label><{t}>版块边框：<{/t}></label></th><td colspan="3"><select name="__wg[border]">
+			        <{html_options options=$widget_editor.borders selected=$widgets_border}>
+			      </select><span class="lnk" style="margin-left:10px" onclick="$('border-custom-attr').toggleClass('hide')"><{t}>边框属性<{/t}>&raquo;&raquo;</span>
+			    </td>
+            </tr>
+            <tr id="border-custom-attr" class="hide">
+                <th><label for="x-wcinput-02"><{t}>自定义边框id：<{/t}></label></th><td><input id="x-wcinput-02" name="__wg[domid]" value="<{$widgets_domid}>" size="8"/></td>
+                <th><label for="x-wcinput-03"><{t}>自定义边框class：<{/t}></label></th><td><input id="x-wcinput-03" name="__wg[classname]" value="<{$widgets_classname}>"  size="8"/></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<{/if}>
+<script>
+	if($$('#widgets_borders select option').length==1&&$$('#widgets_borders select option')[0].text=="<{t}>无边框<{/t}>"){
+		$('widgets_borders').hide();
+	}
+</script>
+<{if $widget_editor.html}>
+   <{$widget_editor.html}>
+<{/if}>
+<{else}>
+<{t}>此挂件暂无配置<{/t}>
+<{/if}>
+</div>

@@ -1,0 +1,18 @@
+<div class="cate-container" style="width:977px;height:200px;">
+   <form enctype="multipart/form-data" class="tableform" action="<{link app='business' ctl='site_member' act='goods_import_data'}>" method="post" target="upload" id="import_csv_form">
+    <input type='hidden' value='<{$tpl.tpl_id}>' name='tpl_id' id="tpl_id"/>
+    <input type='hidden' value='<{$tpl.type_id}>' name='type_id' id="type_id"/>
+    <input type='hidden' value='<{$tpl.cat_id}>' name='cat_id' id="cat_id"/>
+    <input type='hidden' value='<{$tpl.cat_name}>' name='cat_name' id="selectCatName"/>
+    <div style='padding:10px 10px 10px 0;'>
+    <input type='file' name='csv' id="file_csv" accept='text/*.csv'>
+        <button rel="_request" type="button" class="btn submit-btn" onclick="if(CatSelect){CatSelect.importfile(this)}">
+    <span><span>导入</span></span>
+    </button>
+    </div>
+</form>
+
+    <div id='import_result' style='text-align:left;overflow-y:scroll;padding:10px 10px 10px 5px;height:130px;background-color:#FFFFFF;border-top: 1px solid #D5E4FA;'>
+         操作信息显示。
+    </div>
+</div>

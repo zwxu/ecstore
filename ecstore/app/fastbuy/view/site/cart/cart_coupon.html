@@ -1,0 +1,218 @@
+<!-- <h4 class="title-bg">结算信息</h4> -->
+<div id="b2c-checkout-coupon" style="padding:6px 10px;"> <a href="javascript:;" class="siteparttitle-blue coupon-icon" onclick="show_add_coupon(this,'id-add-coupon')" ><b><{t}>使用优惠券11<{/t}></b></a>
+    <div style="clear:both; margin:5px 0; ">
+        <table id="id-add-coupon" cellpadding="0" cellspacing="0" style="<{if !$aCart.object.coupon}>display:none; margin:5px 0;<{/if}>" >
+            <tr>
+                <td align="right" class="span-3">
+                    <{t}>优惠券名称：<{/t}>
+                </td>
+                <td style="padding:5px;">
+                    <select class="inputstyle" id="b2c-checkout-member-coupon">
+                        <option value=""><{t}>-- 选择优惠券 --<{/t}></option>
+                        <{if $coupon_lists}>
+                        <{foreach from=$coupon_lists item=list_coupon}>
+                        <option value="<{$list_coupon.memc_code}>"><{$list_coupon.coupons_info.cpns_name}></option>
+                        <{/foreach}>
+                        <{/if}>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="span-3 textright"><{t}>优惠券号码：<{/t}></td>
+                <td style="padding:5px" nowrap>
+                    <div id='cart-coupon-add' class="clearfix">
+                        <{assign var=___df value=$___b2c='请输入优惠券号码'|t:'b2c'}>
+                        <{input type="text" name="coupon" id='cart-coupon-inputtext' size="25" value=$___b2c="请输入优惠券号码"|t:'b2c' }>
+                        <{button type="button" id='cart-coupon-submitBtn' label=$___b2c="使用"|t:'b2c' class="forforma-btn"}>
+                        <script>
+                            $('cart-coupon-submitBtn').addEvent('click',function(e){
+                                e.stop();
+                                new Request({
+                                    url:'<{link app=fastbuy ctl="site_cart" act="add" arg0="coupon"}>',
+                                    method:'post',
+                                    data:'coupon='+$('cart-coupon-inputtext').value+"&response_type=false",
+                                    onComplete:function(res){
+                                        var _response = JSON.decode(res);
+
+                                        if (_response.success){
+
+                                            var _td = $('cart-checkout-couponlist');
+                                            var _div = $('cart-coupon-list');
+                                            if (!_div){
+                                                var _html = '<table width="100%" cellpadding="3" cellspacing="0" id="coupon-list-table" class="liststyle cart-list" ><col class="span-5"></col><col class="span-auto"></col><col class="span-2" ></col><thead><tr><th><{t}>优惠券号码<{/t}></th><th><{t}>优惠券<{/t}></th><th><{t}>是否适用<{/t}></th><th><{t}>删除<{/t}></th></tr></thead><tbody>';
+                                                        var _tr = '';
+                                                        _response.data.each(function(item,index){
+                                                            _tr = '<tr urlremove="<{link app=fastbuy  ctl=site_cart act=remove arg0=coupon}>"><td style="text-align:center;">{coupon}</td><td style="text-align:center;"><input type="hidden" value="{obj_ident}" />{coupon_name} </td><td>' + (item.used ? '<font color="green"><{t}>是<{/t}></font>' : '<font color="red"><{t}>否<{/t}></font>') + '</td><td><span><{img src="icons/icon_delete.gif" app=b2c alt=$___b2c="删除"|t:"b2c" style="cursor:pointer" class="delItem"}></span></td></tr>';
+                                                            _html += _tr.substitute({'coupon':item.coupon,'coupon_name':item.name,'obj_ident':item.obj_ident});
+                                                        });
+                                                        _html += '</tbody></table>';
+                                                _div = new Element('div',{'html':_html,'id':'cart-coupon-list'});
+                                                _div.inject(_td,'top');
+                                                }else{
+                                                var _table = _div.getElement('table.cart-list');
+                                                if (_table) _table.destroy();
+
+                                                var _html = '<table width="100%" cellpadding="3" cellspacing="0" id="coupon-list-table" class="gridlist liststyle cart-list"><col style="width:20%"><col style="width:60%"><col style="width:10%" ><col style="width:10%" ></col><thead><tr><th><{t}>优惠券号码<{/t}></th><th><{t}>优惠券<{/t}></th><th><{t}>是否适用<{/t}></th><th><{t}>删除<{/t}></th></tr></thead><tbody>';
+                                                        var _tr = '';
+                                                        _response.data.each(function(item,index){
+                                                            _tr = '<tr urlremove="<{link app=b2c ctl=site_cart act=remove arg0=coupon}>"><td style="text-align:center;">{coupon}</td><td style="text-align:center;"><input type="hidden" value="{obj_ident}" />{coupon_name} </td><td>' + (item.used ? '<font color="green"><{t}>是<{/t}></font>' : '<font color="red"><{t}>否<{/t}></font>') + '</td><td><span><{img src="icons/icon_delete.gif" app=b2c alt=$___b2c="删除"|t:"b2c" style="cursor:pointer" class="delItem"}></span></td></tr>';
+                                                            _html += _tr.substitute({'coupon':item.coupon,'coupon_name':item.name,'obj_ident':item.obj_ident});
+                                                        });
+                                                        _html += '</tbody></table>';
+                                                _div.innerHTML = _html;
+                                            }
+                                            Order.updateTotal();
+                                            $$("input[name='md5_cart_info']")[0].value = _response.md5_cart_info;
+                                            }else{
+                                            Message.error(_response.msg);
+                                        }
+                                    }
+                                }).send();
+                            });
+                            $('cart-coupon-inputtext').addEvent('keypress',function(e){
+                                if(e.code==13){
+                                    e.stop();
+                                    $('cart-coupon-submitBtn').fireEvent('click',{stop:function(){}});
+
+                                }
+                            });
+                        </script>
+                    </div>
+                </td>
+            </tr>
+            <!--<tr>
+                <td></td>
+                <td><{if $login!='nologin'}><a href="<{link app=b2c ctl=site_member act=coupon}>" target="_blank" ><{t}>查看已有的优惠券<{/t}></a><{/if}></td>
+            </tr>-->
+            <tr>
+                <td colspan="3" id="cart-checkout-couponlist"><{if $aCart.object.coupon}>
+                    <div id="cart-coupon-list">
+                        <table width="100%" cellpadding="3" cellspacing="0" id="coupon-list-table" class="gridlist liststyle cart-list" >
+                            <col style="width:20%">
+                            <col style="width:60%">
+                            <col style="width:10%" >
+                            <col style="width:10%" >
+                            </col>
+
+                            <thead>
+                                <tr>
+                                    <th><{t}>优惠券号码<{/t}></th>
+                                    <th><{t}>优惠券<{/t}></th>
+                                    <!--<th><{t}>描述<{/t}></th>-->
+                                    <th><{t}>是否适用<{/t}></th>
+
+                                    <th><{t}>删除<{/t}></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <{foreach from=$aCart.object.coupon item=coupon}>
+                                <tr urlremove="<{link app=fastbuy ctl='site_cart' act='remove' arg0='coupon'}>">
+                                    <td class="textcenter">
+                                        <{$coupon.coupon}>
+                                    </td>
+                                    <td class="textcenter">
+                                        <input type="hidden" value="<{$coupon.obj_ident}>" />
+
+                                        <{$coupon.name}> </td>
+                                    <!--<td><{$coupon.description}></td>-->
+                                    <td class="textcenter"><{if $coupon.used}><font color='green'><{t}>是<{/t}></font><{else}><font color='red'><{t}>否<{/t}></font><{/if}></td>
+
+                                    <td class="textcenter"><span><{img src='icons/icon_delete.gif' app=b2c alt=$___b2c='删除'|t:'b2c' style='cursor:pointer' class="delItem"}></span></td>
+                                </tr>
+                                <{/foreach}>
+                            </tbody>
+                        </table>
+                    </div>
+                    <{/if}> </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script>
+    function show_add_coupon(el,id) {
+        if( !$(id) ) return ;
+        var _o = $(id);
+        if( _o.getStyle('display')=='none' ) {
+            _o.setStyle('display', '');
+            $(el).removeClass('coupon-icon');
+            $(el).addClass('coupon-icon-');
+            } else {
+            _o.setStyle('display', 'none');
+            $(el).removeClass('coupon-icon-');
+            $(el).addClass('coupon-icon');
+        }
+    }
+
+    Cart=new Object();
+
+    Object.append(Cart,{
+        init:function(){
+            $$('input[name^=coupon]').addEvents({
+                'focus':function(el){
+                    if ($(el.target).value == '<{$___df}>'){
+                        $(el.target).value = '';
+                    }
+                },
+                'blur':function(el){
+                    if ($(el.target).value == ''){
+                        $(el.target).value = '<{$___df}>';
+                    }
+                }
+            });
+
+            $('b2c-checkout-coupon').addEvent('click',function(e){
+                var target=$(e.target);
+                if(target.hasClass('delItem')){
+                    Cart.removeItem(target)
+                }
+            });
+
+            $('b2c-checkout-member-coupon').addEvent('change',function(e){
+                $('cart-coupon-inputtext').value = $(e.target).get('value');
+            });
+        },
+        removeItem:function(handle){
+            Ex_Dialog.confirm('<{t}>确认删除？<{/t}>', function(e){
+                if(!e) return;
+                var item = $(handle).getParent('tr');
+                var remoteURL = item.get('urlremove');
+                item.getElements('input').set('disabled',true);
+                var _item_data = item.getElement('input[type="hidden"]');
+                Cart.updateTotal(item, remoteURL, _item_data.value);
+            });
+        },
+        updateTotal:function(item, remoteURL, indent){
+            new Request({
+                url:remoteURL,
+                method:'post',
+                data:'cpn_ident='+indent+"&response_type=true",
+                onRequest:function(){
+                    if(!Browser.ie6){
+                        item.getFirst().set({'html':'<{t}>正在删除...<{/t}>'});
+                        item.setStyles({'background':'#FBE3E4','opacity':1})
+                    }
+                },
+                onComplete:function(res){
+                    var _response = JSON.decode(res);
+                    if (_response.success){
+                        var _table = item.getParent('table');
+                        var _tr = _table.getElement('tbody').getElements('tr');
+                        if (_tr.length==1)
+                        _table.destroy();
+                        else
+                        item.destroy();
+                        Order.updateTotal();
+                        $$("input[name='md5_cart_info']")[0].value = _response.md5_cart_info;
+                        }else{
+                        Message.error(_response.error);
+                    }
+                }
+            }).send();
+        }
+    });
+
+    (function(){
+        Cart.init();
+    })();
+</script>

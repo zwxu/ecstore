@@ -1,0 +1,59 @@
+<table class="chart-view">
+    <tr>
+        <td width="58%" valign="top">
+            <div class="finder-packet">
+                <h5 class="flt"><{t}>商品排行<{/t}></h5>
+                <ul>
+                    <li class="current">
+                        <a href="javascript:void(0);"><span><{t}>销售量<{/t}></span></a>
+                    </li>
+                    <li class="">
+                        <a href="javascript:void(0);"><span><{t}>销售额<{/t}></span></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="gridlist product-top">
+                <div class="items">
+                    <textarea class="textarea-lazyload dis_n"><ul>
+                        <{foreach from=$numProducts item=product key=key}>
+                        <li class="clearfix flt">
+                            <div class="flt top-info"><em>NO/<{$key+1}></em>
+                            <a><img  src="<{if $product.udfimg == 'true'}><{$product.thumbnail_pic|storager:'s'}><{else}><{$product.image_default_id|default:$defaultImage|storager:'s'}><{/if}>" /></a></div>
+                            <div class="flt goods-info"  >
+                                <strong><{$product.saleTimes}><{t}>件<{/t}></strong>
+                                <p><{$product.pname}></p>
+                            </div>
+                        </li>
+                        <{/foreach}>
+                    </ul></textarea>
+                </div>
+                <div class="items" >
+                     <textarea class="textarea-lazyload dis_n"><ul>
+                        <{foreach from=$priceProducts item=product key=key}>
+                        <li class="clearfix flt" >
+                            <div class="flt top-info"><em>NO/<{$key+1}></em>
+                            <a><img src="<{if $product.udfimg == 'true'}><{$product.thumbnail_pic|storager:'s'}><{else}><{$product.image_default_id|default:$defaultImage|storager:'s'}><{/if}>" /></a></div>
+                            <div class="flt goods-info"  >
+                                <strong><{$product.salePrice|cur}></strong>
+                                <p><{$product.pname}></p>
+                            </div>
+                        </li>
+                        <{/foreach}>
+                     </ul></textarea> 
+                </div>
+            </div>
+        </td>
+     </tr>
+</table>
+
+<script>
+    window.addEvent('domready',function(e){
+        var lazyload = new LazyLoad();
+        new ItemAgg($ES('.chart-view li'),$ES('.chart-view .items'),{
+            activeName:'current',
+            onActive:function(tab,item){
+                lazyload.loadCustomLazyData(item,'textarea');
+            }	
+        });
+    });
+</script>

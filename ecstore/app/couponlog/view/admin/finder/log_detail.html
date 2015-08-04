@@ -1,0 +1,31 @@
+<div class="tableform">
+ <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+  <col class="Colgoodsid"></col>
+  <col class="Colgoodsid"></col>
+  <col class="Colgoodsid"></col>
+  <col class="textleft"></col>     
+    <thead>
+      <th><{t}>订单号<{/t}></th>
+      <th><{t}>优惠券方案ID<{/t}></th>
+      <th><{t}>优惠券方案名称<{/t}></th>
+      <th><{t}>使用时间<{/t}></th>
+      <th><{t}>使用的优惠券号码<{/t}></th>
+      <th><{t}>订单金额<{/t}></th>
+      <th><{t}>使用者<{/t}></th>
+      <th><{t}>同时使用的优惠券<{/t}></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+        <td><{$info.order_id}></td>
+        <td><{$info.cpns_id}></td>
+        <td><{$info.cpns_name}></td>
+        <td><{$info.usetime|date_format:"%Y-%m-%d %H:%M:%S"}></td>
+        <td><{$info.memc_code}></td>
+        <td><{$info.total_amount|cur}></td>
+        <td><{$info.member_name|default:'非会员顾客'}></td>
+        <td><{$info.other_coupon|default:'-'}></td>
+    </tr>
+  </tbody>
+ </table>
+</div>

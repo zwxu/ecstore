@@ -1,0 +1,16 @@
+<form action="index.php?app=b2c&ctl=admin_goods/category&act=saveView&p[0]=<{$catid}>" method="post">
+<div id="cat_view_box" style="width:600px">
+<{foreach from=$views item=item}>
+<div>
+<{include file="product/category/view_row.html"}>
+</div>
+<{/foreach}>
+</div>
+<input type="button" value="<{t}>添加前台视图<{/t}>" onclick="addFilter(<{$catid}>)" />
+<input type="submit" value="<{t}>保存视图<{/t}>" />
+</form>
+<script>
+function addFilter(catid){
+  W.page('index.php?app=b2c&ctl=admin_goods/category&act=addView&p[0]='+catid,{update:(new Element('div').inject('cat_view_box'))});
+}
+</script>

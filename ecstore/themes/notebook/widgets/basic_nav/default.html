@@ -1,0 +1,133 @@
+<ul class="clb js_menu_<{$widgets_id}>">
+    <{foreach from=$data item=item key=key name=wgtmenu}>
+    <{if $setting.max_leng && $key>=$setting.max_leng}>
+        <{if $key==$setting.max_leng}>
+        <li class="js_menu_1" id="index_menu_more_<{$widgets_id}>">
+            <a href="javascript:void(0);"><{$setting.showinfo}></a>
+            <div style="display:none;" id="index_menu_more_view_<{$widgets_id}>" class="inav_more f16">
+              <ul>
+        <{/if}>
+        <{if $key>$setting.max_leng}>
+            <li>
+                <{if $item.custom_url neq ''}>
+                    <a href="<{$item.custom_url}>" <{if $item.target_blank eq 'true'}>target="_blank"<{/if}>><{$item.title}></a>
+                <{else}>
+                    <a href="<{link app=$item.app ctl=$item.ctl act=$item.act args=$item.params full=1 }>"  <{if $item.target_blank eq 'true'}>target="_blank"<{/if}>><{$item.title}></a>
+                <{/if}>
+            </li><!--导航-->
+        <{/if}>
+        <{if $smarty.foreach.wgtmenu.last}>
+            <{if $key>$setting.max_leng}>
+                </ul>
+                </div>
+            <{/if}>
+        </li>
+        <{/if}>
+    <{else}>
+        <li class="js_menu_1">
+            <{if $item.custom_url neq ''}>
+            <a href="<{$item.custom_url}>" <{if $item.target_blank eq 'true'}>target="_blank"<{/if}>><{$item.title}></a>
+            <{else}>
+            <a href="<{link app=$item.app ctl=$item.ctl act=$item.act args=$item.params full=1 }>"  <{if $item.target_blank eq 'true'}>target="_blank"<{/if}>><{$item.title}></a>
+            <{/if}>
+            <!-- <a class="menu_index" href="<{$item.custom_url}>" <{if $item.target_blank eq 'true'}>target="_blank"<{/if}>><{$item.title}></a> --><!--导航-->
+            <{*<{if $item.is_goods_cat == 'true' && $item.goods_cat_tree}>
+                <div class="two_nav js_menu_2" style="display:none;"><!--二级-->
+                    <ul>
+                    <{foreach from=$item.goods_cat_tree item=goods_cats key=cat_key name=goodsCat}>
+                            <li class="<{if $cat_key%2 == 1}>green_nav<{/if}> js_menu_2e">
+                                <a href="<{link app=b2c ctl=site_gallery act=index arg0=$goods_cats.id}>">
+                                    <i><{if $goods_cats.cat_logo}><img src="<{$goods_cats.cat_logo|storager:''}>"/><{/if}></i><!--二级分类logo-->
+                                    <span><{$goods_cats.text}></span><!--二级分类-->
+                                </a>
+
+                                <{if $goods_cats.children}>
+                                    <div class="three_nav js_menu_3" style="display:none;"><!--三级-->
+                                    <{foreach from=$goods_cats.children item=goods_cats_3 key=cat_key_3 name=goodsCat_3}>
+                                        <div class="three_nav_list" >
+                                            <h3><a href="<{link app=b2c ctl=site_gallery act=index arg0=$goods_cats_3.id}>"><{$goods_cats_3.text}></a></h3><!--三级分类-->
+                                            <{if $goods_cats_3.children}>
+                                            <ul>
+                                            <{foreach from=$goods_cats_3.children item=goods_cats_4 key=cat_key_4 name=goodsCat_4}>
+                                            <li>
+                                                <a href="<{link app=b2c ctl=site_gallery act=index arg0=$goods_cats_4.id}>"><{$goods_cats_4.text}></a><!--四级分类-->
+                                            </li>
+                                            <{/foreach}>
+                                            </ul>
+                                            <{/if}>
+                                        </div>
+                                    <{/foreach}>
+                                    </div>
+                                <{/if}>
+                            </li>
+                    <{/foreach}>
+                    </ul>
+                </div>
+            <{/if}>*}>
+        </li>
+    <{/if}>
+    <{/foreach}>
+</ul>
+
+<script>
+$ES('.js_menu_1').each(function(item,index){
+    item.addEvent('mouseenter',function(){
+        if(item.getElement('.js_menu_2')){
+            item.getElement('.js_menu_2').setStyle('display','');
+        }
+    });
+
+    item.addEvent('mouseleave',function(){
+        if(item.getElement('.js_menu_2')){
+            item.getElement('.js_menu_2').setStyle('display','none');
+        }
+    });
+
+});
+
+$ES('.js_menu_2').each(function(item,index){
+    item.getElements('.js_menu_2e').each(function(item2,index2){
+        item2.addEvent('mouseenter',function(){
+            if(item2.getElement('.js_menu_3')){
+                item2.getElement('.js_menu_3').setStyle('display','');
+            }
+        });
+
+        item2.addEvent('mouseleave',function(){
+            if(item2.getElement('.js_menu_3')){
+                item2.getElement('.js_menu_3').setStyle('display','none');
+            }
+        });
+    
+    });
+});
+
+if($('index_menu_more_<{$widgets_id}>')){
+    
+    $('index_menu_more_<{$widgets_id}>').addEvent('mouseenter',function(){
+        $('index_menu_more_view_<{$widgets_id}>').setStyle('display','');
+    });
+    $('index_menu_more_<{$widgets_id}>').addEvent('mouseleave',function(){
+        $('index_menu_more_view_<{$widgets_id}>').setStyle('display','none');
+    });
+}
+
+
+window.addEvent('domready',function(){
+    var hrf=location.href.split('/').getLast(), n=hrf.lastIndexOf('-'),
+        menulist=$$('.js_menu_<{$widgets_id}> li');
+
+    //if(n>-1)hrf=hrf.substring(0,n);
+    if(!hrf.trim().length) hrf='index.html';
+
+    var reg=new RegExp('\/'+hrf,'i');
+    menulist.each(function(el){
+        var link=el.getElement('a');
+        if(link&&link.href.test(reg))
+        el.addClass('<{$setting.className}>');
+
+    });
+
+});
+
+</script>

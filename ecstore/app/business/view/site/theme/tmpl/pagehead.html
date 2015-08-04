@@ -1,0 +1,116 @@
+<{capture name="header"}>
+<style>
+  div.workground{padding:0;}
+</style>
+<script>
+  try{
+    if(window.getSize().x < screen.availWidth && window.getSize().y < screen.availHeight){
+      moveTo(0,0);
+      resizeTo(screen.availWidth,screen.availHeight);
+    }
+  }catch(e){}
+  if(!validatorMap['purl']){
+  Object.append(validatorMap,{
+    'purl':['请输入平台允许的链接地址',function(el,v){ 
+    if(v.trim()=='')return true;
+    var validator=validatorMap['url'][1];
+     if(validator(el,v)){//合法地址
+        <{if $website}>
+        return /^(http|https|ftp):\/\/([A-Z0-9][A-Z0-9_-]*\.?)?(<{$website}>)(:(\d+))?\/?/i.test(v);
+        <{else}>
+        return true;
+        <{/if}>
+     }else{
+        return false;
+     }
+    }]
+  });
+}
+  if(!validatorMap['img_url']){
+  Object.append(validatorMap,{
+    'img_url':['请输入平台允许的图片地址',function(el,v){ 
+    if(v.trim()=='')return true;
+    var validator=validatorMap['url'][1];
+     if(validator(el,v)){//合法地址
+        <{if $img_website}>
+        return /^(http|https|ftp):\/\/([A-Z0-9][A-Z0-9_-]*\.?)?(<{$img_website}>)(:(\d+))?\/?/i.test(v);
+        <{else}>
+        return true;
+        <{/if}>
+     }else{
+        return false;
+     }
+    }]
+  });
+}
+</script>
+<{/capture}>
+
+
+<{$env.capture.header}>
+<div class="widget-edit-head">
+  <div class="tab-head clearfix">
+    <h3><{t}>模板编辑<{/t}></h3>
+    <ul class="clearfix">
+      <li>
+      <a id="editor_dropmenu_handle" href="#"<{if $pagehead_active=='preview'}> class="act"<{/if}>><em><{t}>可视化编辑<{/t}><i class="arr"></i></em></a>
+      </li>
+      <!--<li>
+      <a href="index.php?app=site&ctl=admin_theme_manage&act=detail&id=<{$theme}>"<{if $pagehead_active=='pagem'}> class="act"<{/if}>><em><{t}>页面管理<{/t}></em></a>
+      </li>
+      <li>
+      <a href="index.php?app=site&ctl=admin_explorer_theme&act=directory&theme=<{$theme}>"<{if $pagehead_active=='source'}> class="act"<{/if}>><em><{t}>源文件管理<{/t}></em></a>
+      </li>
+      <li>
+      <a href="index.php?app=site&ctl=admin_theme_manage&act=instance"><em>挂件实例管理</em></a>
+      </li>-->
+    </ul>
+    <div class="exit fr"><{button label="退出" type="button" onclick="window.close();"}></div>
+    <{if $list}>
+    <div class="x-drop-menu" id="editor_drop_menu">
+    <{assign var=index value=0}>
+    <{foreach from=$types item=titem key=basename name="tmpl_type"}>
+    <{if $list.$basename}>
+    <{foreach from=$list.$basename item=item key=key name=_list}>
+      <{if $env.foreach._list.first}>
+        <dl class="clearfix<{if $index%2==1}> odd<{/if}>">
+            <dt><{$titem}></dt>
+        <{/if}>
+        <{if $env.foreach._list.first}><dd><{/if}>
+        <a href="<{link app=business ctl="site_theme" act="widgettheme" arg0=$item.tmpl_path}>"><{$item.tmpl_name}></a>
+        <{if $env.foreach._list.last}></dd><{/if}>
+      <{if $env.foreach._list.last}></dl><{assign var=index value=$index+1}><{/if}>
+      <{/foreach}>
+      <{/if}>
+    <{/foreach}>
+    </div>
+    <{/if}>
+  </div>
+</div>
+<script>
+(function(){
+  var head = $('mainHead');
+  head && $$('.content-head')[0].set({
+    'style':'',
+    'html': head.dispose().get('html')
+  });
+  $$('.tab-head a').addEvent('click',function(e){
+      e.stop();
+      location.href = this.href;
+  });
+  new top.DropMenu($('editor_dropmenu_handle'), {menu:$('editor_drop_menu'),eventType:"mouse",offset:{x:77, y:5},temppos:true,relative:$('editor_dropmenu_handle'),onShow:function(){
+      this.options.menu.setStyle('height',this.options.menu.getSize().y > window.getSize().y - this.options.menu.getPosition().y ? window.getSize().y - this.options.menu.getPosition().y - this.options.menu.getPatch('border').y : '');
+  }});
+
+  var confirmDialog = this.confirmDialog = function(msg,fn){
+      if(!msg) return;
+      new Dialog(new Element('div.dialog-confirm',{html:'<div class="content">' + msg + '</div><div class="action"><{button label="确定" type="button" class="btn-primary" return="true"}> &nbsp;&nbsp; <{button type="button" class="btn-secondary" label="取消" isCloseDialogBtn="true"}></div>'}),{title:'提示',resizeable:false,width:250,height:110,onLoad:function(){
+          this.dialog.getElement('[return=true]').addEvent('click',function(e){
+              fn&&fn.call(this);
+              this.close();
+          }.bind(this));
+      }});
+  }
+})();
+</script>
+

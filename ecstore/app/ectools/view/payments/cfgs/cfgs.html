@@ -1,0 +1,113 @@
+<div class="clearfix" style="padding:0 18px"><span class="lnk frt" onclick="$('payments-info-panel').toggleClass('hide')"><{t}>隐藏\显示 支付方式简介<{/t}></span></div>
+<div style="text-align:right;padding:3px 18px"><{help docid="100" type="link"}><{t}>点击查看帮助<{/t}><{/help}></div>
+	<div class="note"  id="payments-info-panel" style="margin:5px 18px">
+		<{$admin_info}>
+    </div>
+
+<{if $settings}>
+<div class="tableform">
+<form  action="index.php?app=ectools&ctl=payment_cfgs&act=setting&p[0]=<{$classname}>" id="payments-cfgs-settings-form" method="post">
+	<input type="hidden" name="finder_id" value="<{$env.get.finder_id}>">
+	<div class="division">
+		<table width="100%" cellspacing="0" cellpadding="0">
+			<tbody>
+			<{foreach from=$settings item=setting_item key=key}>
+				<tr>
+					<th><{if $setting_item.type != 'hidden'}><label for="dom_el_<{$key}>"><{$setting_item.title}></label><{else}>&nbsp;<{/if}></th>
+					<td>
+						<{if $setting_item.type == 'string' || $setting_item.type == 'float'}>
+						<input type="text" <{if $setting_item.validate_type}>vtype="<{$setting_item.validate_type}>"<{/if}> id="dom_el_<{$key}>" <{if $setting_item.name}>name="<{$setting_item.name}>"<{else}>name="setting[<{$key}>]"<{/if}> value="<{$setting_item.value}>" title="<{$setting_item.title}>" class="x-input " autocomplete="off">
+						<{elseif $setting_item.type == 'pecentage'}>
+						<input type="text" <{if $setting_item.validate_type}>vtype="<{$setting_item.validate_type}>"<{/if}> id="dom_el_<{$key}>" <{if $setting_item.name}>name="<{$setting_item.name}>"<{else}>name="setting[<{$key}>]"<{/if}> value="<{$setting_item.value}>" title="<{$setting_item.title}>" class="x-input " autocomplete="off">%
+
+						<{elseif $setting_item.type == 'file'}>
+							<{if $setting_item.value == "" }>
+										<input type="file" <{if $setting_item.validate_type}>vtype="<{$setting_item.validate_type}>"<{/if}> id="dom_el_<{$key}>" <{if $setting_item.name}>name="<{$setting_item.name}>"<{else}>name="setting[<{$key}>]"<{/if}> title="<{$setting_item.title}>">
+							<{else}>
+								<input type="text" id="dom_el_<{$key}>" name="setting[<{$key}>]" value="<{$setting_item.value}>" title="<{$setting_item.title}>">
+							<{/if}>
+
+						<{elseif $setting_item.type == 'radio'}>
+							<{foreach from=$setting_item.options item=option_item key=option_key}>
+								<input type="radio" id="dom_el_<{$key}>-<{$option_key}>" title="<{$setting_item.title}>" <{if $setting_item.name}>name="<{$setting_item.name}>"<{else}>name="setting[<{$key}>]"<{/if}> includebase="1"<{if $setting_item.value==$option_key}> checked="checked"<{/if}> value="<{$option_key}>"><label for="dom_el_<{$key}>-<{$option_key}>"><{$option_item}></label>&nbsp;
+							<{/foreach}>
+						<{elseif $setting_item.type == 'select'}>
+							<select class=" x-input-select inputstyle" id="dom_el_<{$key}>" <{if $setting_item.name}>name="<{$setting_item.name}>"<{else}>name="setting[<{$key}>]"<{/if}> type="select" title="<{$setting_item.title}>">
+								<{foreach from=$setting_item.options item=option_item key=option_key}>
+								<option value="<{$option_key}>"<{if $setting_item.value == $option_key}> selected="selected"<{/if}>><{$option_item}></option>
+								<{/foreach}>
+							</select>
+						<{elseif $setting_item.type == 'text hidden'}>
+							<{if $setting_item.options}>
+							<{foreach from=$setting_item.options item=option_item key=option_key}>
+							<{if $setting_item.value == $option_key}><{$option_item}><{break;}><{/if}>
+							<{/foreach}>
+							<{/if}>
+							<input type="hidden" id="dom_el_<{$key}>" <{if $setting_item.name}>name="<{$setting_item.name}>"<{else}>name="setting[<{$key}>]"<{/if}> value="<{$setting_item.value}>" class="x-input " autocomplete="off">
+						<{elseif $setting_item.type == 'text hidden cur'}>
+							<{$setting_item.cur_value}>
+							<input type="hidden" id="dom_el_<{$key}>" <{if $setting_item.name}>name="<{$setting_item.name}>"<{else}>name="setting[<{$key}>]"<{/if}> value="<{$setting_item.value}>" class="x-input " autocomplete="off">
+						<{elseif $setting_item.type == 'hidden'}>
+							<input type="hidden" id="dom_el_<{$key}>" <{if $setting_item.name}>name="<{$setting_item.name}>"<{else}>name="setting[<{$key}>]"<{/if}> value="<{$setting_item.value}>" class="x-input " autocomplete="off">
+						<{elseif $setting_item.type == 'html'}>
+							<{input type='html' id="dom_el_{$key}" value=$setting_item.value name="setting[{$key}]" includeBase='true'}>
+						<{/if}>
+					</td>
+				</tr>
+			<{/foreach}>
+			</tbody>
+		</table>
+	</div>
+</form>
+</div>
+<{area inject=".mainFoot"}>
+<div class="table-action">
+	<table width="100%" cellspacing="0" cellpadding="0">
+		<tbody>
+			<tr>
+				<td><{button id="payments-cfgs-settings-form-btn" class="btn-primary" type="submit" label=$___b2c="确定"|t:'b2c'}></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<{/area}>
+
+<script>
+
+(function(){
+var _form = $('payments-cfgs-settings-form');
+var btn =$('payments-cfgs-settings-form-btn');
+var _dialog = btn.getParent('.dialog');
+_form.store('target',{
+		onComplete:function(){
+
+			try{
+
+				var _dialogIns =_dialog.retrieve('instance');
+		     }catch(e){}
+		    if(_dialogIns){
+			    _dialogIns.close();
+			}
+
+		}
+
+	});
+
+	btn.addEvent('click',function(){
+		_form.fireEvent('submit',{stop:$empty});
+
+	});
+
+if(_dialog.getElement('input[type=file]')){
+	_form.set('enctype',"multipart/form-data");
+	paymentsfileUploadSuccess = function(){
+		_form.retrieve('target',{onComplete:$empty}).onComplete();
+        finderGroup['<{$env.get.finder_id}>'].refresh();
+
+    }
+}
+
+})();
+
+</script>
+<{/if}>

@@ -1,0 +1,93 @@
+<style>
+.shop_head_<{$widgets_id}> {background:url(images/shop1_03.gif);height:115px;}
+.shop_head_<{$widgets_id}> .kef .button{background:none;}
+.shop_head_<{$widgets_id}> .kef .button .listact{color:#FFFFFF;background:none repeat scroll 0 0 #A00000;}
+.shop_head_<{$widgets_id}> .kef .button .listact .nofav{color:#FFFFFF;}
+.shop_head_<{$widgets_id}> .kef {margin-top:45px;}
+.shop_head_<{$widgets_id}> .kef a {float:left; display:block; width:60px; height:22px; line-height:22px; font-family:tahoma,"microsoft yahei","微软雅黑"; font-size:12px;text-decoration:none; color:#fff; margin:0 2px;text-align:center; font-weight:bold;}
+.shop_head_<{$widgets_id}> .kef a.kf_1 {background:#fdae2f;}
+.shop_head_<{$widgets_id}> .kef a.kf_2 {background:#f6693b;}
+.shop_head_<{$widgets_id}> .kef a.kf_3 {background:#4ab194;}
+.shop_head_<{$widgets_id}> .kef .kf-online{float:left;height:22px;line-height:22px;background: url(images/kefu.jpg) no-repeat;background-color:#4AB194;background-position:10 0;}
+.shop_head_<{$widgets_id}> .kef .kf-online span{height:22px;line-height:22px;display:block;}
+.shop_head_<{$widgets_id}> .kef .kf-online span img {height:20px;width:60px;visibility:hidden;}
+.shop_head_<{$widgets_id}> .shopone_logo {margin-right:50px;}
+.shop_head_<{$widgets_id}> .shop_broad {width:483px;}
+.shop_head_<{$widgets_id}> .shop_broad span{background:url(images/shop1_23.gif) left center no-repeat; padding-left:20px;color:#7a7a70;font-family:tahoma,"microsoft yahei","微软雅黑"; font-size:10px;display:block; width:220px; margin:50px auto 0px;}
+
+</style>
+<div class="shop_head_<{$widgets_id}>">
+    
+    <div class="shop_broad le_zhi"><{if $data.notice}><span>公告：<{$data.notice}></span><{else}>&nbsp;<{/if}></div>
+    
+    <div class="shopone_logo le_zhi" style="overflow:hidden;">
+    <a target='_blank' title="<{$data.store.store_name}>"  href="<{link app=business ctl=site_shop act=view  arg=$data.store.store_id}>">
+        <img height="100" src="images/transparent.gif" lazyload="<{if $data.ad_pic}><{$data.ad_pic|storager}><{else}><{$data.store.image|storager}><{/if}>" class="img-lazyload"  >
+    </a>
+    </div>
+    <div class="kef_ri le_zhi">
+        <div class="kef">
+           <{if $data.store.approved=='1'}>
+           <a class="kf_1">本店推荐</a>
+           <{/if}>
+           <ul class="button" style='width:70px;float:left;'>
+            <li class="star-off" isspecial="1" <{if $data.isLogin}>star="<{$data.store.store_id}>" data-type="on"<{/if}>>
+            <a <{if $data.isLogin==false}>href="<{link app="b2c" ctl="site_passport" act="login"}>" <{else}>href="javascript:void(0);" rel="_fav_"<{/if}> class=" listact">
+             <span>
+                <div class="fav"><{t}>收藏本店<{/t}></div>
+                <div class="nofav"><{t}>已收藏<{/t}></div>
+            </span>
+            </a>
+            </li>
+          </ul>
+          <{if $data.im_webcall}>
+          <div class='kf-online'>
+           <{input type='fixation' account=$data.im_webcall}>
+          </div>
+         <{/if}>
+         <div class="cl_zhi"></div>
+        </div> 
+         <{if $data.show_jiathis=='true'}>
+         <div class="shop_share">
+           <!-- JiaThis Button BEGIN -->
+          <div id="ckepop">
+          <p style="float:left;" >分享店铺：</p>
+            <a class="jiathis_button_douban"></a>
+            <a class="jiathis_button_renren"></a>
+            <a class="jiathis_button_tqq"></a>
+            <a class="jiathis_button_tsina"></a>
+            <a class="jiathis_button_kaixin001"></a>
+            <a href="http://www.jiathis.com/share" title="更多" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a> 
+          </div>
+          <script type="text/javascript" >
+          var jiathis_config={
+            data_track_clickback:false,
+            url:"",
+            summary:"",
+            title:"<{$data.store.store_name}>",
+            pic:"<{$data.store.image|storager:'s'}>",
+            hideMore:false
+          }
+          </script>
+          <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1626174" charset="utf-8"></script>
+          <!-- JiaThis Button END --> 
+         </div>
+         <{/if}>
+     </div>
+<div class="cl_zhi"></div>	
+</div>
+<script>
+function AddFavorite() {
+  var url = document.location.href;
+  var title = document.title;
+  try {
+      window.external.addFavorite(url, title);
+  }catch (e) {
+     try {
+       window.sidebar.addPanel(title, url, "");
+    }catch (e) {
+         alert("抱歉，您所使用的浏览器无法完成此操作。\n\n加入收藏失败，请使用Ctrl+D进行添加");
+     }
+  }
+}
+</script>

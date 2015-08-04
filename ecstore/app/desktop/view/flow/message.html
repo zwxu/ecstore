@@ -1,0 +1,28 @@
+<{if $flow}>
+<dl id="message">
+<{foreach from=$flow item=item}>
+	<dt m="<{$item.flow_id}>" <{if $item.unread=="false"}> class="read"<{/if}>>
+		<i <{if $item.has_star=="true"}> class="starred"<{/if}>>&nbsp;</i>
+		<b>
+			<{$item.subject}><div><{$item.flow_desc|default:"-"}></div>
+		</b>
+		<dd></dd>
+	</dt>
+<{/foreach}>
+</dl>
+
+
+	<{if $env.get.menu=='unread'}>
+		<form action="index.php?<{$env.server.QUERY_STRING}>" method="POST" style="padding:5px;text-align:center;">
+			<input type="submit" value="<{t}>标记这些为已读<{/t}>" />
+		</form>
+	<{else}>
+		<button><{t}>后20条<{/t}></button> | <button><{t}>前20条<{/t}></button>
+	<{/if}>
+	<script>
+	$ES('dt','message').addEvent('click',flow.message.onClick);
+	</script>
+
+<{else}>
+	<p class="notice"><{t}>暂无事项。<{/t}></p>
+<{/if}>

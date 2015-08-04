@@ -1,0 +1,26 @@
+<div id="filter_<{$params.domid}>" class='filter_panel'>
+ <div class='filter_box'>
+    <div class="division" style="border:1px solid #d8d8d8">
+      <table width="100%" class='filter_interzone'>
+        <tr>
+          <th><{t}>按价格区间筛选<{/t}></th>
+          <td><{input type="unsigned" name="pricefrom" value=$params.data.pricefrom style="width:30px"}> - <{input type="unsigned" name="priceto" style="width:30px" value=$params.data.priceto}><{t}> 元<{/t}></td>
+        </tr>
+        <tr>
+              <th><{t}>按商品关键词筛选<{/t}></th>
+          <td><{input type="text" name="searchname" style="width:100px" value=$params.data.searchname}> &nbsp; <{help}><{t}>如果填写商品关键词，则只有符合该关键词搜索条件的商品才会出现在本虚拟分类，具体如下：<{/t}><br /><{t}>1、商品名称中包含该关键词<{/t}><br /><{t}>2、商品中的商品关键词中有任何一个等于该关键词<{/t}><br /><{t}>3、商品中的货号或商品编号等于该关键词<{/t}><{/help}></td>
+        </tr>
+      </table>
+      </div>
+
+       <div id="filter_<{$params.domid}>_body" class="division" style="border:1px solid #d8d8d8">
+             <{include file="site/store/finder_filter.html" app="business"}>
+       </div>
+
+ </div>
+      
+    <{assign var=filter_ipt_name value="adjunct[items][{$key}]" }>
+    
+    <input type="hidden" name="<{$params.name|default:$filter_ipt_name}>" id="filter_<{$params.domid}>_ipt" value="<{$params.from}>" filterhidden="true" />
+
+</div>

@@ -1,0 +1,14 @@
+<div class="tableform">
+			挂件标题：<input name="title" class="inputstyle" value="<{$setting.title|default:请填写标题}>">
+			<br />
+			商品数量：<{input required=true type='select' name="goodsNum" options=array('5'=>5,'10'=>10,'15'=>15,'20'=>20) value=$setting.goodsNum|default:5}>	
+			<br />
+			选择商品：<{input type="goods_select" object="goods@b2c" filter=$goodslink_filter multiple="true" return_url="{$related_return_url}" rowselect="true"  textcol="name" name="linkid" linkid=$setting.linkid value=$setting.goods view="b2c:admin/goods/detail/rel_items.html"}>			
+
+			<br />
+			图片宽高：160*160（为达到最佳效果图片尺寸固定为160*160,请设置您的图片大小为160*160）
+
+			<br />
+			价格显示：<input name="price_show" class="inputstyle" value="<{$setting.price_show|default:销售价}>">
+
+</div>

@@ -1,0 +1,23 @@
+    <div class="division">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+    <!--<col class="Collongname"></col>-->
+    <col class="Coldetails"></col>
+    <col class="Colamount"></col>
+      <thead>
+        <tr>
+          <th><{t}>优惠方案<{/t}></th>
+          <th><{t}>优惠金额<{/t}></th>
+        </tr>
+      </thead>
+      <tbody>
+      <{foreach from=$pmtlist item=aBill}>
+      <tr>
+        <td><{$aBill.pmt_describe}></td>
+    <!--    <td class="Coldetails"><{$aBill.pmt_memo}></td>-->
+        <td class="Colamount"><{$aBill.pmt_amount}></td>
+      </tr>
+      <{/foreach}>
+      </tbody>
+
+    </table>
+    </div>

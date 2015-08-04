@@ -1,0 +1,45 @@
+<tr class="havechild">
+    <td style="padding:0" class="horizontal-m">
+     <div class='product-list-img goodpic' isrc="<{$giftpackage_order.thumb|default:$default_image|storager:'s'}>" ghref='<{link app=giftpackage ctl=site_giftpackage act="index" arg0=$giftpackage_order.goods_id}>' style='width:50px;height:56px;'>
+            <img src='<{$res_url}>/loading.gif'/>
+        </div>
+        <div style="width:65%" class="goods-main">
+          <div class="goodinfo">
+            <span class="fontbold">[捆绑商品]</span>
+            <a target="_blank" href="<{link app=giftpackage ctl=site_giftpackage arg0=$giftpackage_order.goods_id}>"><{$giftpackage_order.name}></a>
+            </div>
+        </div>
+        <!-- <div style=" padding:0 1px;font-weight:bold ">
+        </div> -->
+    </td>
+    <td align="center" >
+     <{$giftpackage_order.score}>
+    </td>
+    <td align="center" >
+        <{$giftpackage_order.price|cur_odr:$orderdata.currency}>
+    </td>
+    <td align="center"><{$giftpackage_order.quantity}></td>
+    <td><{$giftpackage_order.total_amount|cur_odr:$orderdata.currency}></td>
+</tr>
+
+
+<!-- 捆绑商品信息 -->
+
+<tr>
+    <td style="padding-left:65px" colspan="5">
+      <{if $giftpackage_order.order_items}>
+      <{foreach from=$giftpackage_order.order_items item=goods}>
+       <div  class="horizontal-m giftpackage-wrap">
+        <div class='product-list-img goodpic' isrc="<{$goods.small_pic|default:$default_image|storager:'s'}>" ghref='<{link app=b2c ctl=site_product act="index" arg0=$goods.goods_id}>' style='width:50px;height:50px;'>
+           <img src='<{$res_url}>/loading.gif'/>
+        </div>
+        <div class="goods-main">
+          <div class="goodinfo"><a target="_blank" href="<{link app=b2c ctl=site_product arg0=$goods.goods_id }>"><{$goods.name}></a></div>
+          <p><{$goods.spec_info}></p>
+          </div>
+        </div>
+      <{/foreach}>
+      <{/if}>
+    </td>
+</tr>
+

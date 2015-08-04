@@ -1,0 +1,177 @@
+<div class="memberwrap mall_comment_width">
+  <div class="clearfix">
+    <form class="addcomment" method="post" action='<{link app=business ctl=site_comment act=toComment arg0=discuss arg1=$border_id arg2=0}>'>
+      <div class="review-box">
+        <h4 class="review-title"><{t}>评论宝贝<{/t}></h4>
+        <div class="division clearfix discuss_goods">
+          <{if count($order_info)>0}>
+
+            <{foreach from=$order_info item=order name=order key=order_id}>
+              <input type="hidden" name="order_id[]" value="<{$order_id}>">
+              <{foreach from=$order item=item}>
+              <input type="hidden" name="goods_id[<{$order_id}>][]" value="<{$item.goods_id}>">
+              <div class="mall_com_pro_tit">
+                <{if $item.udfimg == 'true'}>
+                  <{assign var="gimage" value=$item.thumbnail_pic}>
+                <{else}>
+                  <{assign var="gimage" value=$item.image_default_id|default:$defaultImage}>
+                <{/if}>
+
+                <a class="mall_com_pro_tit_a" href="<{link app=b2c ctl=site_product act=index arg=$item.goods_id}>" target="_blank">
+                  <img src="<{$gimage|default:$env.conf.site.default_thumbnail_pic|storager:'m'}>" width='40' height='40'/>
+                </a>
+                <span class="mall_com_pro_tit_text"><{$item.name}></span>
+                <span class="cl_zhi"></span>
+              </div>
+
+              <div class="mall_com_pro_comment_info">
+
+                <{if $point_status == 'on'}>
+                <div class="start-point">
+                  <ul class="comm_point">
+                  <{foreach from=$comment_goods_type item=type}>
+                    <li>
+                      <div class="span-2 textright"><label><{$type.name}>:</label></div>
+                      <div id="rate_<{$type.type_id}>" class="star-point-items span-auto">
+                        <div class="b" style="left:0px;">&nbsp;</div>
+                        <div class="f">&nbsp;</div>
+                      </div>
+                      <div class=" span-auto font11px" style="color:orange;">5</div>
+                      <input type='hidden' name="goods_point[<{$order_id}>][goods][<{$item.goods_id}>][<{$type.type_id}>]"/>
+                    </li>
+                  <{/foreach}>
+                  </ul>
+                </div>
+                <{/if}>
+
+                <div class="mall_com_pro_comment_info_noname">
+                  <label for="publish_<{$item.goods_id}>"><{t}>匿名发表:<{/t}></label>
+                  <input type="checkbox" id="publish_<{$item.goods_id}>" name="hidden_name[<{$order_id}>][<{$item.goods_id}>]" value="YES"/>
+                </div>
+
+                <{assign var="placeholder" value="欢迎发表评论（最多1000字）"}>
+
+                <{input type="textarea" class="x-input inputstyle font12px db mb5" placeholder=$placeholder vtype="sendcomments" rows="5" name="comment[{$order_id}][{$item.goods_id}]" style="width:700px"}>
+
+                <div class="cl_zhi"></div>
+              </div>
+              <{/foreach}>
+
+              <{if $point_status == 'on'}>
+              <ul class="comm_point">
+                <{foreach from=$comment_store_type item=type}>
+                <li>
+                  <div class="span-2 textright"><label><{$type.name}>:</label></div>
+                  <div id="rate_<{$type.type_id}>" class="star-point-items span-auto">
+                    <div class="b" style="left:0px;">&nbsp;</div>
+                    <div class="f">&nbsp;</div>
+                  </div>
+                  <div class="mall_span-auto span-auto font11px" style="color:orange;">5</div>
+                  <div class="span-auto"></div>
+                  <input type='hidden' name="point_type[<{$order_id}>][store][<{$type.type_id}>]"/>
+                </li>
+                <{/foreach}>
+              </ul>
+              <{/if}>
+
+            <{/foreach}>
+
+            <{if $discussshow == "on"}>
+            <div class="verify_code"><{t}>验证码:  <{/t}><{input type="text" vtype=required size="4" maxlength="4" class="showdisaskvcode" name="discussverifyCode"}>&nbsp;<img align="absmiddle" id="discussimgVerifyCode" style="display:none;" codesrc="<{link app="b2c" ctl="site_comment" act="gen_dissvcode"}>"/><a  onclick="javascript:changeimg('discussimgVerifyCode','discuss');" class="no-unl">&nbsp;<{t}>点击更换新图片<{/t}></a><span></span></div>
+            <{/if}>
+
+          <{else}>
+            <div class="noinfo"><{t}>没有可以评论的信息<{/t}></div>
+          <{/if}>
+        </div>
+      </div>
+      <div class="mall_comment_submit_but">
+        <{button class="submit-btn" type="submit" label=$___b2c="评论"|t:'b2c'}>
+        <{button class="btn btn-quit" type="button" label=$___b2c="退出"|t:'b2c' onclick=""}>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+var dataInfo = [<{$order_info}>];
+if(!dataInfo.length)history.back();
+window.addEvent('domready',function(){
+  validatorMap['sendcomments'] = ['<{t}>字数应该在1-1000个字之内<{/t}>', function(element, v) {
+      if ($(element).get('value') == '' || $(element).get('value').length < 1 || $(element).get('value').length > 1000){
+          return false;
+      }
+      else
+          return true;
+  }];
+  var objVcode = $$('.showdisaskvcode')||[];
+  if(objVcode){
+    objVcode.addEvent('focus',function(){
+        if (this.retrieve('showdisaskvcode',false)) return;
+        var vcodeImg = this.getNext('img');
+        vcodeImg.src = vcodeImg.get('codesrc')+'?'+(+new Date());
+        vcodeImg.show();
+        this.store('showdisaskvcode',true);
+    });
+    objVcode.fireEvent('focus');
+  }
+  var comment_des = new Hash(<{$comment_store_des}>);
+  var objPoint = $$('.star-point-items')||[];
+  if(objPoint)
+  objPoint.each(function(i){
+    var _c = i.getNext();
+    var _b = i.getElement('.b');
+    var _f = i.getElement('.f');
+    var _ipt = i.getNext('input');
+    var fenshu = _ipt.value = 5;
+    var type = parseInt(i.get('id').substring(5));
+    var _t = i.getNext().getNext();
+    if(type)_t.set('text',(_ipt.value==0?'':comment_des[type][_ipt.value]));
+    i.addEvents({
+      'mousemove':function(e){
+        var offset = (e.page.x - i.getPosition([document.body]).x);
+        var _left = (offset-i.offsetWidth).limit(0-i.offsetWidth,0);
+        var count  = (5*((i.offsetWidth + _left)/(i.offsetWidth)));
+          if(count<0.3){count  = 0}else{count = Math.ceil(count);}
+        _b.setStyle('left',i.offsetWidth*(count/5) - i.offsetWidth);
+        _c.set('text',count);fenshu=count;
+        if(type)_t.set('text',(fenshu==0?'':comment_des[type][fenshu]));
+      },
+      'mouseenter':function(e){
+        this.fireEvent('mousemove',e);
+      },
+      'mouseout':function(e){
+        fenshu = _ipt.value?_ipt.value:5;
+        _b.setStyle('left',i.offsetWidth*(fenshu/5) - i.offsetWidth);
+        _c.set('text',fenshu);
+        if(type)_t.set('text',(fenshu==0?'':comment_des[type][fenshu]));
+      },
+      'click':function(e){
+        _ipt.value = fenshu;
+        if(type)_t.set('text',(_ipt.value==0?'':comment_des[type][_ipt.value]));
+      }
+    });
+    /*fix png*/
+    if(Browser.ie6){
+      _f.setStyles({
+        'filter':'progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=image, src='+_f.getStyle('background-image').match(/url\(([^\)]*)/)[1]+')',
+        'background':'none'
+      });
+    }
+	});
+  var quit = $E('.btn-quit')||'';
+  if(quit) quit.removeEvents('click').addEvent('click',function(e){
+    Ex_Dialog.confirm('确定退出',function(e){
+      if(!e) return false;
+      window.location='<{link app=b2c ctl=site_member act=comment}>';
+    });
+  });
+});
+function changeimg(id,type){
+    if(type == 'discuss'){
+        $(id).set('src','<{link app="b2c" ctl="site_comment" act="gen_dissvcode"}>#'+(+new Date()));
+    }
+    else{
+        $(id).set('src','<{link app="b2c" ctl="site_comment" act="gen_askvcode"}>#'+(+new Date()));
+    }
+}
+</script>

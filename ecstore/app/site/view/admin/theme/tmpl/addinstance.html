@@ -1,0 +1,87 @@
+<div class="add-instance">
+  <div class="notice">挂件样例是模板开发者或者店铺使用者预先设定好、可供将来在模板里多次使用的挂件demo</div>
+  <table>
+    <tr>
+      <td align="right" style="width:100px;"><span class="red">*</span>实例名称：</td>
+      <td><input type="text" size="30" /></td>
+    </tr>
+    <tr>
+      <td align="right">备注：</td>
+      <td><input type="text" size="30" /></td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <{button label="添加挂件" onclick="_showWidgetsDialog('index.php?app=site&ctl=admin_theme_widget&act=add_widgets_page&theme={$theme}');" type="button" icon="btn_add.gif" app="desktop"}>
+      </td>
+    </tr>
+  </table>
+  <iframe id="themeFrame" frameborder="0" allowtransparent="true" width="100%" height="100%" src="index.php?app=site&amp;ctl=admin_widget_proinstance&amp;act=preview&amp;id=&amp;theme=blue"></iframe>
+  <input type="hidden" value="<{$instance.level|default:$level}>" name="instance_level" >
+  <input type="hidden" value="<{$instance.flag|default:$flag}>" name="instance_flag" >
+  <input type="hidden" value="<{$instance.widgets_id}>" name="instance_id" id="instance_id">
+</div>
+<script>
+//void function(){
+    var shopWidgetsOBJ=themeFrame.shopWidgets;
+    shopWidgetsOBJ.widgetsDialog = null;
+    _addWeigets = function(args){
+        var themeFrame=$('themeFrame').contentWindow;
+
+        shopWidgetsOBJ.widgetsDialog?shopWidgetsOBJ.widgetsDialog.close.call(shopWidgetsOBJ.widgetsDialog):'';
+        shopWidgetsOBJ.widgetsDialog=null;
+        shopWidgetsOBJ.ghostDrop(args[0],args[1]);
+        themeFrame.focus();
+    }
+
+    _showWidgetsDialog  = function (url){
+        var _win =  $('themeFrame').contentWindow;
+        if(widget = $(_win.document.body).getElement('.shopWidgets_box')){
+            if(!confirm("<{t}>每次操作只能对一个挂件进行实例化，是否删除当前挂件区的挂件？<{/t}>"))return;
+            return _win.shopWidgets.fireEvent('onDelete',[widget,_showWidgetsDialog.bind(self,url)]);
+        }
+        shopWidgetsOBJ.widgetsDialog = new Dialog(url,{width:770,height:500,title:'<{t}>选择挂件<{/t}>',modal:true,resizeable:false,onShow:function(e){
+            this.dialog_body.id='dialogContent';
+        }});
+
+    }
+
+//}();
+
+   function _saveWidgets(){
+        new Request({url:'index.php?app=site&ctl=admin_widget_proinstance&act=save_widget', method:'post', data:$('widgets_proinstance_form'),
+            onComplete: function(re) {
+                var data = JSON.decode(re);
+                if(data.success){
+                    var su = data.success.split('@');
+                    MessageBox.success(su[0]);
+                    if(su[1] > 0){
+                        document.getElementById('instance_id').value = su[1];
+                    }
+                }else{
+                    MessageBox.error(data.error);
+                }
+            }
+        }).send();
+   }
+
+    $('main').setStyle('overflow','hidden');
+    var SHOPADMINDIR = '<{$shopadmin}>';
+
+  $$('.delete-widget').addEvent('click',function(e){
+      e.stop();
+      var _this = this;
+      confirmDialog('确定要删除此挂件实例吗？', function(){
+          W.page('index.php?app=site&ctl=admin_theme_manage&act=reset&theme=<{$theme}>&rid=' + _this.href);
+      });
+  });
+
+
+  function confirmDialog(msg,fn){
+      new Dialog(new Element('div.dialog-confirm',{html:'<div class="content">' + msg + '</div><div class="action"><{button label="确定" type="button" class="btn-primary" return="true"}> &nbsp;&nbsp; <{button type="button" class="btn-secondary" label="取消" isCloseDialogBtn="true"}></div>'}),{title:'提示',resizeable:false,width:250,height:110,onLoad:function(){
+          this.dialog.getElement('[return=true]').addEvent('click',function(e){
+              fn&&fn.call(this);
+              this.close();
+          }.bind(this));
+      }});
+  }
+</script>

@@ -1,0 +1,39 @@
+<{if count($data) > 0}>
+<div class="haveshop-title">购买该商品的用户还购买了</div>
+<div class="haveshop-body-vertical">
+<div class="GoodsListWrap GoodsList GoodsShow">
+  <div class="GoodsSearchWrap">
+    <ul clearfix>
+    <{foreach from=$data.goods item=product name=goods key=k}>
+    <{if $product.goods_id > 0}>
+      <li>
+                    <{if $product.udfimg == 'true'}>
+                    <{assign var="gimage" value=$product.thumbnail_pic}>
+                    <{else}>
+                    <{assign var="gimage" value=$product.image_default_id|default:$data.defaultImage}>
+                    <{/if}>
+        <div  id="pdt-<{$product.goods_id}>" product="<{$product.goods_id}>" width="<{math equation=floor(100/x) x=$data.setting.column}>%;">
+          <div class="items-gallery">
+            <div class="goodpic" style='<{if $data.setting.pic_w !=0 && $data.setting.pic_h !=0}>height:<{$data.setting.pic_h}>px; <{/if}>'> <a target="_blank" href="<{link app=b2c ctl='site_product' act='index' arg0=$product.goods_id}>"  style='<{if $data.setting.pic_w !=0 && $data.setting.pic_h !=0}> width:<{$data.setting.pic_w}>px;height:<{$data.setting.pic_h}>px;<{/if}>' title='<{$product.name}>'> <img src="<{$gimage|storager:'s'}>" alt="<{$product.name|escape:html}>" style='width:<{$data.setting.pic_w}>px;height:<{$data.setting.pic_h}>px;'/> </a> </div>
+           <div class="goods-main">
+            <div class="goodinfo entry-content">
+
+                  <h3><a href="<{link app=b2c ctl="site_product" act="index" arg0=$product.goods_id}>" title="<{$product.name|escape:html}>" style="color:<{$data.setting.fontcolor}>;font-size:<{$data.setting.fontsize|default:'12'}>px;<{if $data.setting.fontstyle}><{$data.setting.fontstyle}>;<{/if}>" class="entry-title"><{$product.name|cut:$data.setting.maxlength}></a></h3>
+
+				 <{if $data.setting.price==0}>
+                <div class="price-wrap" >
+                  <{$product.price|cur}>
+                </div>
+                <{/if}>
+            </div>
+            </div>
+          </div>
+        </div>
+        </li>
+      <{/if}>
+      <{/foreach}>
+    </ul>
+  </div>
+</div>
+</div>
+<{/if}>

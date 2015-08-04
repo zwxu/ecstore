@@ -1,0 +1,16 @@
+<h4><{t}>单独页内容<{/t}></h4>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th><em><font color="red">*</font></em><{t}>站点栏目单独页模板：<{/t}></th>
+                    <td>
+                    <{template_filter id="aEditor-Nodeid-input" type='page' name='node[tmpl_path]' selected=$node.tmpl_path class='x-input' }>
+					<span class="notice-inline" style="white-space:normal"><{t}>可在“模板编辑”中的自定义添加“站点栏目单独页”以个性化您的模板<{/t}></span>
+                    </td>
+                </tr>
+                <tr>
+               	<th>
+					<{t}>单独页内容：<{/t}>
+				</th>
+                <td><{input type="html" name="node[content]" value=$node.content}></td>
+                </tr>
+            </table>

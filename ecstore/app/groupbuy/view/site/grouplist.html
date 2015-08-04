@@ -1,0 +1,323 @@
+
+<div class="group_top">
+	<div class="group_lallkind">
+    	<div class="group_lallkind_main" id='all'>
+        <h2 class="active">
+		<a href="<{link app=groupbuy ctl=site_grouplist act=index }>">全部分类</a>
+		</h2>
+         <ul id='catList'>
+              <{foreach from=$cat item=item key=key}>
+                <li>
+				<a href="<{link app=groupbuy ctl=site_grouplist act=index args=$args arg0=$key args2=1}>" title="<{$item.name}>">
+				<{$item.name|cut:18}></a>
+				</li>
+              <{/foreach}>
+        </ul>
+        <span id="group" ></span>
+		
+		<input type='hidden' name='limit' value="<{$catNum}>"/>
+        </div>
+    </div>
+   <!-- <div class="group_radv fr"></div>-->
+</div>
+<div class="group_mall">
+        <div class="group_mall_cat">            
+            <ul id="group_price">
+            	<li>价格：</li>
+                <li <{if $price=='all'}> class="active"<{/if}>><a href="<{link app=groupbuy ctl=site_grouplist act=index args=$args arg1='all' args2=1}>">全部</a></li>
+                <li <{if $price =='1'}> class="active"<{/if}>><a href="<{link app=groupbuy ctl=site_grouplist act=index args=$args
+				arg1='1' args2=1}>">0-99元</a></li>
+				<li <{if $price =='2'}> class="active"<{/if}>><a href="<{link app=groupbuy ctl=site_grouplist act=index args=$args
+				arg1='2' args2=1}>">100-199元</a></li>
+				<li <{if $price =='3'}> class="active"<{/if}>><a href="<{link app=groupbuy ctl=site_grouplist act=index args=$args arg1='3' args2=1}>">200-499元</a></li>
+				<li <{if $price =='4'}> class="active"<{/if}>><a href="<{link app=groupbuy ctl=site_grouplist act=index args=$args arg1='4' args2=1}>">500-999元</a></li>
+				<li <{if $price =='5'}> class="active"<{/if}>><a href="<{link app=groupbuy ctl=site_grouplist act=index args=$args 
+				arg1='5' args2=1}>">1000元以上</a></li>
+            </ul>
+        </div>
+        <div class="group_list">
+            <ul id="group_products">
+			<{if $activity}>
+                <{foreach from=$activity item=item key=key}>
+                <li class="last" category="<{$item.cat_id}>">
+                  <a href="<{link app=groupbuy ctl=site_product act=index args=$item.args}>" class="group_a_img" target="_blank">
+                      <img class="img-lazyload" src="images/transparent.gif" lazyload="<{$item.image|default:$defaultImage|storager:'l'}>" alt="<{$item.g_name}>" style="width=275px;height=185px" />
+                  </a>
+                  <a href="<{link app=groupbuy ctl=site_product act=index args=$item.args}>" class="group_a_name" target="_blank"><{$item.g_name}></a>
+                  <div class="group_pro_price_all">
+                      <div class="group_pro_price">
+                          <div class="group_namor fl">市场价：<{$item.g_price|cur}></div>
+                          <div class="group_sall fr">节省：<{$item.g_price-$item.last_price|cur}></div>
+                          <div class="crl"></div>
+                      </div>
+                      <div class="fr groupBtn 
+                      <{if $now >= $item.start_time && $now <= $item.end_time}>
+                          <{if $item.remainnums != '' && $item.remainnums <= 0}>
+                          group_pro_buy_01
+                          <{else}>
+                          group_pro_buy
+                          <{/if}>
+                      <{else}>
+                        group_pro_buy_01
+                      <{/if}>">
+                          <div class="group_price fl">
+                              <b>￥</b>
+                              <script>
+                                  var price = parseFloat("<{$item.last_price}>");
+                                  price = price.toFixed(2);
+                                  document.write(price);
+                              </script>
+                          </div>
+                          <div class="pro_buy_wz fr">
+                              <{if $now >= $item.start_time && $now <= $item.end_time}>
+                                  <{if $item.remainnums != '' && $item.remainnums <= 0}>
+                                      <a>已售完</a>
+                                  <{else}>
+                                      <a href="<{link app=groupbuy ctl=site_product act=index args=$item.args}>" target="_blank">我要团</a>
+                                  <{/if}>
+                              <{elseif $data.nowtime < $item.start_time}>
+                                  <a>未开始</a>
+                              <{elseif $data.nowtime > $item.end_time}>
+                                  <a>已结束</a>
+                              <{/if}>
+                          </div>
+                      </div>
+                      <div class="crl"></div>
+                  </div>
+                  <div class="group_time_people">
+                      <div class="fl group_time" starttime="<{$item.start_time}>" endtime="<{$item.end_time}>" gid="<{$item.gid}>">
+                          <span class="day">0</span><span>天</span>
+                          <span class="hour">0</span><span>小时</span>
+                          <span class="minute">0</span><span>分</span>
+                          <span class="second">0</span><span>秒</span>
+                      </div>
+                      <div class="fr group_people"><{$item.nums - $item.remainnums}>人已购买</div>
+                      <div class="crl"></div>
+                  </div>
+                </li>
+                <{/foreach}>
+				<{else}><div class="group_error">非常抱歉，没有找到相关商品</div><{/if}>
+            </ul>
+            <div class="crl"></div>
+        </div>
+        <div class="fr"><{pagers data=$pager}></div>
+</div>
+<script>
+
+window.addEvent('domready',function(){
+  var num= $('all').getElements('input[name=limit]')[0].value;
+  if(num>16) {
+  $('group').addClass('now');
+  $('group').addEvent('mouseover',function(){
+  $('catList').getElements('li').each(function(item,index){
+  if(index>16){
+  item.show();
+  }else if(index<16){
+  item.hide();
+  } 
+  });
+});
+  $('group').addEvent('mouseout',function(){
+  $('catList').getElements('li').each(function(item,index){
+  if(index>16){
+  item.hide();
+  }else if(index<16){
+  item.show();
+  } 
+  });
+});
+   }else{
+   $('group').hide();
+   }
+});
+$('group_products').getElements('li').each(function(item,index){
+    item.addEvent('mouseenter',function(){
+        $('group_products').getElements('li').each(function(v,k){
+            if(k == index){
+                v.addClass('active');
+            }else{
+                v.removeClass('active');
+            }
+        });
+    });
+});
+
+/*$('groupCat').getElements('li').each(function(item,index){
+    item.addEvent('click',function(){
+        $('groupCat').getElements('li').each(function(i,x){
+            if(index == x){
+                i.addClass('active');
+            }else{
+                i.removeClass('active');
+            }
+        });
+        var category = item.get('category');
+        $('group_products').getElements('li').each(function(v,k){
+          if(category == 'all'){
+              v.setStyle('display','');
+          }else{
+              if(v.get('category') == category){
+                  v.setStyle('display','');
+              }else{
+                  v.setStyle('display','none');
+              }
+          }
+        });
+    });
+  
+});*/
+(function() {
+    var timestamp_statues = (new Date()).valueOf();
+    var timeCount=timestamp_statues;
+    var timeCount = this.timeCount = {
+        init:function(nowtime,endtime,dom,item){
+            var diff = Math.abs((nowtime - endtime)/1000);
+            var secondDiff = diff % 60;
+            var minuteDiff = ((diff - secondDiff)/60) % 60;
+            var hourDiff = ((diff - secondDiff  - minuteDiff*60)/3600) % 24;
+            var dayDiff = (diff - secondDiff  - minuteDiff*60 - hourDiff*3600) / 86400;
+            var timeDiff = [dayDiff,hourDiff,minuteDiff,secondDiff];
+            this.s = (function(){this.calcTime.periodical(1000,this,{
+                    time:timeDiff,
+                    dom:dom,
+                    item:item
+                })}).delay(100,this);
+        },
+        addZero:function(timeDiff){
+            for(var i=0;i<timeDiff.length;i++){
+                if(timeDiff[i].toString().length<2){
+                    timeDiff[i] = "0" + timeDiff[i].toString();
+                    return timeDiff;
+                }
+            }
+        },
+        formatToInt : function(timeDiff){
+            for(var i=0;i<timeDiff.length;i++){
+                parseInt(timeDiff[i]);
+            };
+            return timeDiff;
+        },
+        judgeTime : function(timeDiff,item){
+            if(timeDiff[3]< 0  && timeDiff[2]>0){
+                timeDiff[3] = 59;
+                timeDiff[2]--;
+                return timeDiff;
+            }else if(timeDiff[3] <0 && timeDiff[2]==0 && timeDiff[1]>0){
+                timeDiff[3] = 59
+                timeDiff[2] = 59;
+                timeDiff[1]--;
+                return timeDiff;
+            }else if(timeDiff[3] <0 && timeDiff[2]==0 && timeDiff[1]==0 && timeDiff[0]>0){
+                timeDiff[3] = 59
+                timeDiff[2] = 59;
+                timeDiff[1] = 23;
+                timeDiff[0]--;
+                return timeDiff;
+            }else if(timeDiff[3]==0 && timeDiff[2]==0 && timeDiff[1]==0 && timeDiff[0]==0){
+                item.empty();
+                reloadTime(item);
+                return;
+            }
+        },
+        calcTime : function (obj){
+            if(!obj.dom) return;
+            var _timeDiff = obj.time;
+            //this.addZero(_timeDiff);
+            this.formatToInt(_timeDiff);
+            _timeDiff[3]--;
+            this.judgeTime(_timeDiff,obj.item);
+            //this.addZero(_timeDiff);
+            var dom = obj.dom;
+            dom.second.innerHTML = _timeDiff[3];
+            dom.minute.innerHTML = _timeDiff[2];
+            dom.hour.innerHTML = _timeDiff[1];
+            dom.day.innerHTML = _timeDiff[0];
+        }
+    }
+})();
+
+
+(function(){
+    // var timeNow = "<{$data.nowtime}>"*1000;
+    var random = parseInt(10000000000*Math.random());
+    var timeNow;
+    new Request({
+      url: '<{link app=b2c ctl=site_product act=getCurrentTime}>', 
+      method: 'post',
+      async:false,
+      onSuccess:function(re){
+        timeNow = new Date(re*1000);;
+      }
+    }).send('random='+random);
+    
+    $ES('.group_time').each(function(item){
+        var timeEnd= item.get('endtime') * 1000;
+        var timeStart = item.get('starttime') * 1000;
+        var dom = {
+            second: item.getElement('.second'),
+            minute:item.getElement('.minute'),
+            hour:item.getElement('.hour'),
+            day:item.getElement('.day')
+        };
+        if(timeStart > timeNow){
+            timeCount.init(timeStart,timeNow,dom,item);
+        }else if(timeNow >= timeStart && timeNow <timeEnd){
+            timeCount.init(timeNow,timeEnd,dom,item);
+        }
+    });
+})();
+
+function reloadTime(item){
+    new Element('span',{'html':0,'class':'day'}).inject(item,'bottom');
+    new Element('span',{'html':'天'}).inject(item,'bottom');
+    new Element('span',{'html':0,'class':'hour'}).inject(item,'bottom');
+    new Element('span',{'html':'小时'}).inject(item,'bottom');
+    new Element('span',{'html':0,'class':'minute'}).inject(item,'bottom');
+    new Element('span',{'html':'分'}).inject(item,'bottom');
+    new Element('span',{'html':0,'class':'second'}).inject(item,'bottom');
+    new Element('span',{'html':'秒'}).inject(item,'bottom');
+    // var timeNow = Date.parse(new Date());
+
+    var random = parseInt(10000000000*Math.random());
+    var timeNow;
+    new Request({
+      url: '<{link app=b2c ctl=site_product act=getCurrentTime}>', 
+      method: 'post',
+      async:false,
+      onSuccess:function(re){
+        timeNow = new Date(re*1000);;
+      }
+    }).send('random='+random);
+
+    var timeEnd= item.get('endtime') * 1000;
+    var timeStart = item.get('starttime') * 1000;
+    var dom = {
+        second: item.getElement('.second'),
+        minute:item.getElement('.minute'),
+        hour:item.getElement('.hour'),
+        day:item.getElement('.day')
+    };
+
+    var btn = item.getParent('li').getElement('.groupBtn');
+    var gid = item.get('gid');
+    if(timeStart > timeNow){
+        btn.removeClass('group_pro_buy');
+        btn.addClass('group_pro_buy_01');
+        btn.getElement('a').removeProperty('href');
+        btn.getElement('a').innerHTML = '未开始';
+        timeCount.init(timeStart,timeNow,dom,item);
+    }else if(timeNow >= timeStart && timeNow <timeEnd){
+        btn.removeClass('group_pro_buy_01');
+        btn.addClass('group_pro_buy');
+        btn.getElement('a').set('href',"<{link app=groupbuy ctl=site_product act=index arg0='"+gid+"'}>");
+        btn.getElement('a').innerHTML = '我要团';
+        timeCount.init(timeNow,timeEnd,dom,item);
+    }else if(timeNow >= timeEnd) {
+        btn.removeClass('group_pro_buy');
+        btn.addClass('group_pro_buy_01');
+        btn.getElement('a').removeProperty('href');
+        btn.getElement('a').innerHTML = '已结束';
+
+    }
+}
+</script>

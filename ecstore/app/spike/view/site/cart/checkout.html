@@ -1,0 +1,13 @@
+<{css src="shopping_cart.css" app="b2c" pdir="css_mini"}>
+<script type="text/javascript">
+window.addEvent('domready',function(){
+  Shop = <{$fastbuyShopDefine}>;
+});
+</script>
+<{include file="site/cart/checkout_spike.html" app=spike}>
+<script type="text/javascript">
+window.addEvent('domready',function(){
+  var form = $('order-create');
+  form.action = '<{link app=spike ctl=site_order act=create}>';
+});
+</script>

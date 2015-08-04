@@ -1,0 +1,109 @@
+<div id="mainHead" style="display:none;">
+  <{include file="admin/theme/tmpl/pagehead.html"}>
+  <div class="box-gray clearfix">
+    <{if $last_path}>
+    <{button label=$___a="返回上级目录"|t:'site' icon="arr-l.gif" id="btn_goback"}>
+    <{else}>
+    <{button label=$___a="返回上级目录"|t:'site' icon="arr-l.gif" id="btn_goback" style="visibility:hidden;"}>
+    <{/if}>
+  </div>
+</div>
+
+<div class="page-edit-list">
+  <table class="gridlist" width="100%" cellpadding="0" cellspacing="0">
+    <thead>
+      <tr>
+        <th style="width:40%;"><{t}>文件名称<{/t}></th>
+        <th style="width:20%;"><{t}>后缀名<{/t}></th>
+        <th style="width:20%;"><{t}>文件类型<{/t}></th>
+        <th style="width:auto;"><{t}>操作<{/t}></th>
+      </tr>
+    </thead>
+    <tbody id="theme_directory_body">
+      <{include file="admin/explorer/theme/theme_directory_body.html"}>
+    </tbody>
+  </table>
+</div>
+<script>
+(function(){
+  var oddtr=function(even){
+      var p = $('theme_directory_body');
+      p.getElements('tr:nth-child(odd)').addClass('odd');
+      even&&p.getElements('tr:nth-child(even)').removeClass('odd');
+  }
+  oddtr();
+  $('btn_goback').addEvent('click',function(e){
+    var parent_path = document.getElement('#theme_directory_body tr[data-parent]').get('data-parent');
+    //if(!parent_path.trim()) this.hide();
+
+    var _url = '<{$url}>';
+    if (parent_path.trim()) _url += '&open_path=' + parent_path;
+    _url += '&part=1';
+
+    requestPage(_url,{update:$('theme_directory_body'),onComplete:function(){
+        if(!parent_path.trim()) this.setStyle('visibility','hidden');
+        oddtr();
+    }.bind(this)});
+  });
+
+  $('main').addEvent('click',function(e){
+      e = $(e.target);
+      var ptr = e.getParent('tr');
+      if(!ptr || !ptr.getElement('.name')) return;
+      var name=ptr.getElement('.name').get('text');
+      var open_path=ptr.get('data-open_path');
+      var url='';
+      var parent_path = '';
+      if(e.hasClass('btn-delete')) {
+          _url = 'index.php?app=site&ctl=admin_explorer_theme&act=delete_file&theme=<{$theme}>';
+          if (open_path) _url += '&open_path='+open_path;
+          _url += '&file_name='+encodeURIComponent(name.trim());
+          confirmDialog('<{t}>您确定要删除该文件(删除后将不可恢复)吗？<{/t}>',function(){
+              new Request({url:_url,onRequest:function(){
+                  new MessageBox('<{t}>正在加载...<{/t}>',{type:'notice',autohide:false});
+              },onComplete: function(rs){
+                  rs = JSON.decode(rs);
+                  new MessageBox(rs.success||'<{t}>加载成功...<{/t}>',{autohide:1000});
+                  ptr.destroy();
+                  oddtr(true);
+              }}).send();
+          });
+      }
+
+      if(e.hasClass('btn-edit')) {
+          _url = 'index.php?app=site&ctl=admin_explorer_theme&act=detail&theme=<{$theme}>';
+          if (open_path) _url += '&open_path='+open_path;
+          _url += '&file_name='+encodeURIComponent(name.trim());
+          new Dialog(_url,{'title':'<{t}>编辑<{/t}>'+name,width:0.7,height:0.8});
+      }
+
+      if(e.hasClass('btn-enter')) {
+          _url = '<{$url}>';
+          _url += '&open_path='+(open_path?open_path:'')+'-'+name.trim();
+          if (open_path) parent_path = open_path.lastIndexOf('-')?open_path.substr(0,open_path.lastIndexOf('-')-1):(open_path?' ':'');
+
+          requestPage(_url,{update:$('theme_directory_body'), onComplete:function(){
+              $('btn_goback').set('data-path',parent_path).setStyle('visibility','visible');
+              oddtr();
+          }});
+      }
+  });
+})();
+
+function requestPage(url,options){
+  if(!url) return MessageBox.error('<{t}>请求错误<{/t}>');
+  options = Object.append({
+      url:url,
+      method:'get',
+      update: $('main'),
+      onRequest: function() {
+          new MessageBox('<{t}>正在加载...<{/t}>',{type:'notice',autohide:false});
+      },
+      onSuccess: function(rs) {
+          new MessageBox('<{t}>加载完成...<{/t}>',{autohide:1000});
+      }
+  },options || {});
+
+  new Request.HTML(options).send();
+}
+</script>

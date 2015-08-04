@@ -1,0 +1,22 @@
+<app version="1.0">
+  <name>促销-指定商品满数量</name>
+
+  <description>BBC 促销-指定商品满数量</description>
+
+  <author>
+      <name>BBC 开发团队</name>
+      <email></email>
+      <url></url>
+  </author>
+
+  <version>0.1</version>
+
+  <license>license</license>
+  <depends>
+    <app>desktop</app>
+    <app>content</app>
+    <app>ectools</app>
+    <app>b2c</app>
+  </depends>
+
+</app>

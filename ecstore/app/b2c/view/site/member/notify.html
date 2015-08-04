@@ -1,0 +1,70 @@
+<!-- right-->
+<div>
+
+<!--<div class="title title2"><{t}>到货通知<{/t}></div>-->
+
+<!--//todo 页面信息判断（是否到货，是否被删除）-->
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist gridlist_member border-all">
+    <col class="span-7 "></col>
+    <col class="span-3"></col>
+    <col class="span-2"></col>
+    <col style="width:75px"></col>
+    <tr>
+    <th class="first"><{t}>商品名称<{/t}></th><th><{t}>金额<{/t}></th><th><{t}>到货状态<{/t}></th><th><{t}>操作<{/t}></th>
+    </tr>
+  <tr>
+<{foreach from=$notify item=good}>
+    <td class="textcenter horizontal-m">
+    	  <{if $good.udfimg == 'true'}>
+  <{assign var="gimage" value=$good.thumbnail_pic}>
+  <{else}>
+  <{assign var="gimage" value=$good.image_default_id|default:$defaultImage}>
+  <{/if}>
+	<div class="goodpic">
+  <a target="_blank" style='<{if $env.conf.site.thumbnail_pic_width !=0 && $env.conf.site.thumbnail_pic_height !=0}> width:<{$env.conf.site.thumbnail_pic_width}>px;height:<{$env.conf.site.thumbnail_pic_height}>px;<{/if}>' href="<{link app=b2c ctl=site_product act=index arg=$good.goods_id}>">
+    <img  style="width:50px; height:58px;" src="<{$gimage|storager:'s'}>"  alt="<{$good.name|escape:html}>"/></div>
+		<div class="goods-main" >
+        <div class="goodinfo">
+    <{*<span class='zoom-handle' pic='<{$good.big_pic|default:$env.conf.site.default_big_pic|storager}>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>*}>
+  </a>
+  <h3><a href="<{link app="b2c" ctl="site_product" act="index" arg0=$good.goods_id}>" class="font-blue" title="<{$good.name}>"><{$good.name}></a></h3>
+          <p><{$good.spec_info}></p>
+          </div>
+
+		</div>
+
+    	  <!--<{if $good.udfimg == 'true'}>
+  <{assign var="gimage" value=$good.thumbnail_pic}>
+  <{else}>
+  <{assign var="gimage" value=$good.image_default_id|default:$defaultImage}>
+  <{/if}>
+      <{if $good.store >= 0 || $good.store ==''}><a href="<{link app=b2c ctl="site_product" act="index" arg0=$good.goods_id}>" title="<{$good.name}>"><{/if}><{if $good.spec_info}> (<{$good.spec_info}>)<{/if}>
+        <img src="<{$gimage|storager:'s'}>" width="<{$env.conf.site.thumbnail_pic_width}>" height="<{$env.conf.site.thumbnail_pic_height}>" alt="<{$good.name}>"/></a>--></td>
+    <td align="center"><ul>
+    <li><{t}>现价：<{/t}><span class="mlvprice font-red "><{$good.price.price.price}></span></li>
+        <li><{t}>原价：<{/t}><span class="mktprice1"><{$good.price.mktprice.price}></span></li>
+  </ul></td>
+  <{if $good.price.price.timebuy_over == 'true'}>
+  <td align="center"><{t}>已卖完<{/t}></td>
+  <{else}>
+    <td align="center"><{if $good.store > 0}><{t}>已到货<{/t}><{else}><{t}>缺货<{/t}><{/if}></td>
+    <{/if}>
+   <td align="left">
+   <ul>
+   <li class="addcart clearfix" style="margin-bottom:5px">
+   <a class="<{if $good.store == 0}>btn-bj-hover operate-btn<{elseif $good.price.price.timebuy_over == 'true'}>btn-bj-hover timebuy-btn<{else}>btn-bj-hover operate-btn<{/if}>" type="g" <{if $good.store == 0}>href="###" <{else}> buy="<{$good.goods_id}>" product="<{$good.product_id}>"<{if $setting.buytarget == 2}> target="_blank_cart"<{elseif $setting.buytarget == 3}> target="_dialog_minicart"<{/if}> href="<{link app=b2c ctl="site_cart" act="add" arg0=goods arg1=$good.goods_id arg2=$good.product_id arg3=1}>"<{/if}> class="btn-bj-hover operate-btn"><span><{if $good.store == 0}><{t}>&nbsp;缺&nbsp;货&nbsp;中<{/t}><{elseif $good.price.price.timebuy_over == 'true'}><{t}>已卖完<{/t}><{else}><{t}>加入购物车<{/t}><{/if}></span></a>
+   </li>
+
+   <li class="icon2"><a href="<{link app=b2c ctl="site_member" act="del_notify" arg0=$good.product_id arg1=$member_id}>" class="btn-bj-hover operate-btn" rel="_request"><span><{t}>移除<{/t}></span></a></li>
+   </ul>
+</td>
+  </tr>
+<{/foreach}>
+</table>
+
+<{pagers data=$pager}>
+<{if !$notify}>
+<div class="noinfo"><{t}>尚无登记缺货的商品<{/t}></div>
+<{/if}>
+</div>
+<!-- right-->

@@ -1,0 +1,13 @@
+RewriteEngine on 
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} \.(html|xml|json|htm|php|php2|php3|php4|php5|phtml|pwml|inc|asp|aspx|ascx|jsp|cfm|cfc|pl|cgi|shtml|shtm|phtm|xml)$
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [L] 
+
+<FilesMatch "\.(txt|sdf|xml|bak|sql|log)$">
+    Deny from all
+</FilesMatch>
+<FilesMatch "sphinx\.php$">
+    Deny from all
+</FilesMatch>

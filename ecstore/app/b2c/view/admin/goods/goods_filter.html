@@ -1,0 +1,94 @@
+<div id="filter_<{$params.domid}>" class='filter_panel'>
+ <div class='filter_box'>
+      <{if $params.gtype}>
+          <div class="division" style="border:1px solid #d8d8d8">
+            <table width="100%" class='filter_interzone'>
+              <tr>
+                <th><{t}>按类型筛选<{/t}></th>
+                <td>
+                 <select onchange="sel_<{$params.domid}>($(this).value);">
+                    <option style="font-weight:bold" value="_ANY_" ><{t}>全部类型<{/t}></option>
+                    <{foreach from=$params.gtype item=type}> <option value="<{$type.type_id}>" <{if $type.type_id === $type_id}>selected="selected"<{/if}>><{$type.name}>
+                    </option>
+                    <{/foreach}>
+                  </select>
+                 </td>
+              </tr>
+              <tr>
+                <th><{t}>按价格区间筛选<{/t}></th>
+                <td><{input type="unsigned" name="pricefrom" value=$params.data.pricefrom style="width:30px"}> - <{input type="unsigned" name="priceto" style="width:30px" value=$params.data.priceto}><{t}> 元<{/t}></td>
+              </tr>
+              <tr>
+                    <th><{t}>按商品关键词筛选<{/t}></th>
+                <td><{input type="text" name="searchname" style="width:100px" value=$params.data.searchname}> &nbsp; <{help}><{t}>如果填写商品关键词，则只有符合该关键词搜索条件的商品才会出现在本虚拟分类，具体如下：<{/t}><br /><{t}>1、商品名称中包含该关键词<{/t}><br /><{t}>2、商品中的商品关键词中有任何一个等于该关键词<{/t}><br /><{t}>3、商品中的货号或商品编号等于该关键词<{/t}><{/help}></td>
+              </tr>
+            </table>
+            </div>
+      <{/if}>
+
+             <div id="filter_<{$params.domid}>_body" class="division" style="border:1px solid #d8d8d8">
+                   <{include file=$params.view}>
+             </div>
+
+ </div>
+      
+    <{assign var=filter_ipt_name value="adjunct[items][{$key}]" }>
+    
+    <input type="hidden" name="<{$params.name|default:$filter_ipt_name}>" id="filter_<{$params.domid}>_ipt" value="<{$params.from}>" filterhidden="true" />
+
+</div>
+<script>
+    var sel_<{$params.domid}>=function(val){
+        var _data='view=<{$params.view}>';
+        var interzoneQS=$E('.filter_interzone','filter_<{$params.domid}>').toQueryString();
+        if(interzoneQS){
+           _data+='&'+interzoneQS;
+        }
+        new Request.HTML({url:'index.php?app=b2c&ctl=admin_goods&act=showfilter&p[0]='+val,update:'filter_<{$params.domid}>_body'}).post(_data);
+    }
+    void function(){
+
+          /*根据服务器返回QueryString 勾选FilterBody select*/
+
+
+          var filterHidden=$('filter_<{$params.domid}>_ipt');
+          var filterBody=$('filter_<{$params.domid}>_body');
+
+          var filterHiddenVHash=new Hash();
+
+
+         filterHidden.value.replace(/([^&]+)\=([^&]+)/ig,function(){
+             var arg=arguments;
+             var arr_v=(filterHiddenVHash.get(arg[1])||[]);
+                 arr_v.push(arg[2]);
+             filterHiddenVHash.set(arg[1],arr_v);
+         });
+
+
+          filterHiddenVHash.each(function(sv,snkey){
+
+                var el_select=filterBody.getElement('select[name^='+snkey.slice(0,-1)+']');
+
+                if(!el_select)return;
+
+                $A(el_select.options).each(function(option){
+
+                     if(sv.contains(option.value)){
+
+                         option.selected=true;
+
+                     }else{
+
+                        option.selected=false;
+
+                     }
+
+                });
+
+          });
+
+
+
+
+    }();
+</script>

@@ -1,0 +1,95 @@
+<table width="100%" border="0" cellpadding="0" cellspacing="0" >
+<tbody>
+  <tr>
+    <th><em class="c-red">*</em><{t}>收货地区：<{/t}></td>
+    <td colspan=2>
+      <span id="checkout-select-area"><{input id="shipping-area" app="ectools" class="inputstyle" name="order[consignee][area]" type="region" required="true" value=$addr.area callback="selectArea"}></span>
+    </td>
+  </tr>
+  <tr>
+    <th><em class="c-red">*</em><{t}>收货地址：<{/t}></td>
+    <td>
+    <input type='hidden' name='order[consignee][ship_addr_area]' value='' id='selected-area-hidden'/>    
+    <span id='selected-area' class='font-gray' title='<{t}>系统将拼接地区选择结果到收获地址<{/t}>'><{t}>[地区]<{/t}></span>
+    <{input class="inputstyle" name="order[consignee][addr]"   id="addr" vtype="required" value=$addr.addr size="50"}>
+    </td>
+  </tr>
+  <tr>
+    <th>
+    <{t}>邮编：<{/t}></th>
+    <td>
+    <{input class="inputstyle" name="order[consignee][zip]" size="15" id="zip"  type="text" value=$addr.zip}>
+    </td>
+  </tr>
+  <tr>
+    <th><em class="c-red">*</em><{t}>收货人姓名：<{/t}></td>
+    <td colspan=2><{input class="inputstyle" name="order[consignee][name]" size="15" id="name" required="true" type="text" value=$addr.name}></td>
+  </tr>
+  <{if !$addr.member_id}>
+  <tr>
+    <th><em class="c-red">*</em><{t}>Email：<{/t}></td>
+    <td colspan=2><{input name="order[consignee][email]" class="inputstyle" id="ship_email"  size="15" required="true" type="text" vtype="email" value=$addr.email}></td>
+  </tr>
+  <{/if}>
+  <tr>
+    <th>
+      <em class="c-red">*</em><{t}>手机：<{/t}>
+    </td>
+    <td colspan=2>
+     <{input class="inputstyle" name="order[consignee][mobile]" size="15" type="text" id="mobile" value=$addr.phone.mobile}>
+    </td>
+  </tr>
+  <tr>
+    <th>
+     <{t}>固定电话：<{/t}>
+    </td>
+    <td colspan=2>
+     <{input class="inputstyle" name="order[consignee][telephone]" size="15" type="text" id="tel" value=$addr.phone.telephone}>
+    </td>
+  </tr>
+  <{if $addr.member_id}>
+  <tr class="recsave">
+    <th></th>
+    <td colspan=2><label><input name="delivery[is_save]" type="checkbox" checked="checked" value=1><{t}>保存此收货地址<{/t}></label></td>
+  </tr>
+  <{/if}>
+  </tbody>
+</table>
+<{$selectArea}>
+<script>
+window.addEvent('domready',function(){
+
+    $E('#checkout-select-area input[name^=delivery[]').store('onselect',function(sel){
+
+        if($E('option[has_c]',sel)){
+            $('shipping').set('html','<div class="valierror clearfix" style=" padding-left:20px"><{t}>请选择收货地区<{/t}></div>');   
+            $('selected-area').set('text','<{t}>[地区]<{/t}>').removeClass('font-black').addClass('font-gray');
+        }
+
+    });
+
+    $E('#checkout-select-area input[name^=delivery[]').store('lastsel',function(lastselect){
+        var areaSels=$ES("#checkout-select-area select");
+        var areaSelPrt=areaSels[0].getParent('*[package]');
+        var selected=[];
+        areaSels.each(function(s){
+           if(s.getStyle('display') != 'none') {
+               var text = s[s.selectedIndex].text.trim().clean();
+               if(['<{t}>北京<{/t}>','<{t}>天津<{/t}>','<{t}>上海<{/t}>','<{t}>重庆<{/t}>'].indexOf(text)>-1)return;
+               selected.push(text);
+            }
+        });
+        var selectedV = selected.join('');
+        $('selected-area').setText(selectedV).removeClass('font-gray').addClass('font-black');
+        $('selected-area-hidden').value =  selectedV;
+        $('addr').set('value',$('addr').value.replace(selectedV,''));
+        Order.setShippingFromArea(lastselect);
+    });
+    var areaSels=$ES("#checkout-select-area select");
+    var lastSel=areaSels[areaSels.length-1];
+    if( lastSel && lastSel.get('value') != '' && lastSel.get('value') != '_NULL_' );
+    
+     lastSel.onchange(lastSel,lastSel.value,(areaSels.lengtd-1));
+    
+});
+</script>

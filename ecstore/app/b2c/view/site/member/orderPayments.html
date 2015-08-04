@@ -1,0 +1,276 @@
+<div class="orderpay">
+<form id="f_order_pay" target="_blank" action="<{$form_action}>" method="post">
+<input type="hidden" name="payment[order_id]" value="<{$order.order_id}>" />
+<input type="hidden" name="payment[money]" value="<{$order.total_amount}>" id="hidden_money"/>
+<input type="hidden" name="payment[currency]" value="<{$order.currency}>" />
+<input type="hidden" name="payment[cur_money]" value="<{$order.cur_amount}>" id="hidden_cur_money"/>
+<input type="hidden" name="payment[cur_rate]" value="<{$order.cur_rate}>" />
+<input type="hidden" name="payment[cur_def]" value="<{$order.cur_def}>" />
+<input type="hidden" name="payment[pay_app_id]" value="<{$order.payinfo.pay_app_id}>" />
+<input type="hidden" name="payment[cost_payment]" value="<{$order.payinfo.cost_payment}>" />
+<input type="hidden" name="payment[cur_amount]" value="<{$order.cur_amount}>" />
+<input type="hidden" name="payment[memo]" value="<{$order.memo}>" />
+<!--<input type="hidden" name="payment[return_url]" value="<{$return_url}>" />-->
+
+<!--<div class="success clearfix pushdown-2">
+   <h3><{t}>恭喜！您的订单已经提交！<{/t}></h3>
+
+</div>-->
+
+<h3 class="payfor_order_title"><{t}>订单信息<{/t}></h3>
+
+  <div class='p15 border-all' >
+      <p class="lh25"><{t}>订单编号：<{/t}><strong class='font14px'><{$order.order_id}></strong>&nbsp;&nbsp;[ <a href="<{link app=b2c ctl=site_member act=orderdetail arg0=$order.order_id}>" ><{t}>查看订单详细信息<{/t}>&raquo;</a> ]</p>
+     <p class="lh25"><{t}>订单金额：<{/t}><strong class="hueorange font-red font16px" id="span_amount"><{$order.cur_amount|cur_odr:$order.currency:false:true}></strong></p>
+  </div>
+
+<h3 class="payfor_order_title"><{t}>订单支付<{/t}></h3>
+
+
+<div class='p15 border-all'>
+<div class=' p5 fontbold'>
+<{if $order.cur_amount > 0}>
+  <{if !$order.selecttype}>
+	<{t}>您选择了：<{/t}><strong class="hueorange font-red font12px"><{$order.payinfo.pay_app_id|pay_name}></strong>
+	 <{if $order.payinfo.pay_app_id != '-1'}><a href='<{link app=b2c ctl="site_member" act="orderPayments" arg0=$order.order_id arg1='true'}>' ><{t}>[ 选择其他支付方式 ]<{/t}></a><{/if}>
+     <{include file="site/order/banks.html" app=b2c}>
+  <{else}>
+	 <{t}>请选择支付方式:<{/t}>
+ <{/if}>
+</div>
+	<{if $order.selecttype}>
+    <div class='select-paymethod' id="_normal_payment">
+        <{if $payments}>
+
+                       <{foreach from=$payments item=item key=key}>
+                <p class="p3">
+                        <label><input type="radio" onclick="Order.paymentChange(this)" formatmoney="<{$order.cur_def}><{$item.cur_money}>" curmoney="<{$item.cur_money}>" moneyamount="<{$order.total_amount}>"<{if $order.payinfo.pay_app_id == $item.app_id}> checked="checked"<{/if}> value="<{$item.app_id}>" paytype="<{$item.app_id}>" name="payment[pay_app_id]" class="x-payMethod" style="cursor: pointer;"><{$item.app_name}></label>
+
+                    <span class="selected"><{$item.app_des}></span>
+                </p>
+            <{/foreach}>
+
+        <{/if}>
+    </div>
+    <{include file="site/order/banks.html" app=b2c}>
+	<{else}>
+		<input type="hidden" name="payment[pay_app_id]" value="<{$order.payinfo.pay_app_id}>" />
+		<{if $extendInfo}>
+		<div class='division paymethodextendInfo'>
+			<{foreach from=$extendInfo item=item key=key}>
+			<{if $item.type=='select'}>
+				<select name=<{$key}>>
+					<{foreach from=$item.value item=vitem key=vkey}>
+						<option value="<{$vitem.value}>" <{if $vitem.checked}>selected<{/if}>><{$vitem.name}></option>
+					<{/foreach}>
+				</select>
+			<{else}>
+				<{foreach  from=$item.value item=vitem key=vkey}>
+					<{if $item.type=='radio'}>
+						<input <{$vitem.checked}> type='radio' name=<{$key}> value=<{$vitem.value}>><{if $vitem.imgname}><{$vitem.imgname}><{else}><{$vitem.name}><{/if}></if>
+					<{else if $item.type=='checkbox'}>
+						<input <{$vitem.checked}> type='checkbox' name="<{$key}>[]" value=<{$vitem.value}>><{if $vitem.imgname}><{$vitem.imgname}><{else}><{$vitem.name}><{/if}></if>
+					<{/if}>
+				<{/foreach}>
+			<{/if}>
+			<{/foreach}>
+		</div>
+		<{/if}>
+	<{/if}>
+<{else}>
+	<{t}>订单不需要再支付,请等待我们处理<{/t}>
+<{/if}>
+
+</div>
+
+<{if $order.payinfo.pay_app_id != '-1' && $order.cur_amount > 0}>
+<div class="textcenter p10">
+  <{if $order.payinfo.pay_app_id!="offline"}>
+  <{button type="submit" class="order-btn lijizhifu btn-has-icon" label=$___b2c="立刻dddddd支付"|t:'b2c' icon="set-arrow.gif"}>
+  <{else}>
+  <{button type="submit" class="order-btn lijizhifu" label=$___b2c="确定"|t:'b2c' rel="_request"}>
+  <{/if}>
+
+</div>
+<{/if}>
+
+
+</form>
+
+</div>
+<div class="clr"></div>
+<script>
+        void function(){
+        var form= $('f_order_pay');
+            Order ={
+
+                paymentChange:function(target){
+                         if(!target)return;
+                         target = $(target);
+                     var money  = target.get('moneyamount');
+                     var fmoney = target.get('formatmoney');
+                     var paytype= target.get('paytype');
+					 var cur_money = target.get('curmoney');
+
+                     $('hidden_money').set('value',money);
+                     $('hidden_cur_money').set('value',cur_money);
+                     $('span_amount').set('text',fmoney);
+
+					 var btn_odr = form.getElement('button[type=submit]');
+
+                     btn_odr.getElement('span span').innerHTML = paytype!='offline'?'<{t}>支&nbsp;付<{/t}><i class="btn-icon"> <img src="<{$res_url}>/bundle/set-arrow.gif" /></i>':'<{t}>确定<{/t}>';
+					  					
+					 if (paytype!='offline'){
+						btn_odr.set('class', 'btn order-btn btn-has-icon lijizhifu');
+					 }else{
+						btn_odr.set('class', 'btn order-btn lijizhifu');
+
+					 }
+                     if(paytype=='ysepay'){
+                        $('cart_paymentzf').setStyle('display','');
+                    }else{
+                        $('cart_paymentzf').setStyle('display','none');
+                    }
+                     //form.getElement('button[type=submit]')[(paytype=='offline'?'addClass':'removeClass')]('btn-pay-ok');
+                     /* $$('#_normal_payment th .ExtendCon input[type=radio]').fireEvent('checkedchange');*/
+                     
+                }
+
+            };
+
+            var selecttype = "<{$order.selecttype}>";
+			if(selecttype==0){
+				if(form&&form.getElement('button[type=submit]')){
+					form.getElement('button[type=submit]').addEvent('click',function(e){
+						var bank_type = $('bank_type').value;
+						var paytypeId = $ES('#_normal_payment input[type=radio]:checked');
+						var pay_app_id_js = "<{$order.payinfo.pay_app_id}>";
+						if(bank_type==''&&pay_app_id_js=='ysepay'){
+							 Message.error('<{t}>请选择一个银行<{/t}>');
+							 return e.stop();
+						}
+						testMessageBox();
+					});
+				} 
+			}
+
+            if($('f_order_pay').getElement('.select-paymethod')){
+                Order.paymentChange($('f_order_pay').getElement('.select-paymethod input[checked]'));
+
+                if(form&&form.getElement('button[type=submit]')){
+                    form.getElement('button[type=submit]').addEvent('click',function(e){
+
+                        if(!$('f_order_pay').getElement('.select-paymethod input[checked]')){
+                        Message.error('<{t}>请选择支付方式<{/t}>');
+                        return e.stop();
+                        }else{
+							var bank_type = $('bank_type').value;
+							var paytypeId = $ES('#_normal_payment input[type=radio]:checked').get('paytype');
+							if(paytypeId=='ysepay'&&bank_type==''){
+								 Message.error('<{t}>请选择一个银行<{/t}>');
+								 return e.stop();
+							}
+						}
+
+                    });
+                }
+            }
+          
+        }();
+<!-- 弹出层效果开始 -->
+window.onload = function(){
+	document.getElementById('preson').onclick = function(){
+		document.getElementById('r9001000').checked = 'true';	
+		document.getElementById('bank_type').value="92"
+	}
+	document.getElementById('credit').onclick = function(){
+		document.getElementById('r9001002').checked = 'true';	
+		document.getElementById('bank_type').value="92"
+	}
+}
+var isIe=(document.all)?true:false;
+function setSelectState(state)
+{
+var objl=document.getElementsByTagName('select');
+for(var i=0;i<objl.length;i++)
+{
+objl[i].style.visibility=state;
+}
+}
+
+ function btnHover(){
+	var bg1 = document.getElementById('paybtn');
+	var bg2 = document.getElementById('payspan');
+	var msOver = function(){
+		bg1.style.backgroundPosition = '0px -50px';
+		bg2.style.backgroundPosition = 'right -134px';
+		
+	}
+	var msOut = function(){
+		bg1.style.backgroundPosition = '0px -81px';
+		bg2.style.backgroundPosition = 'right -165px';
+	}
+	bg1.onmouseover = msOver;
+	bg2.onmouseover = msOver;
+	bg1.onmouseout = msOut;
+	bg2.onmouseout = msOut;
+}
+
+function showMessageBox(wTitle,content,wHeight,wWidth)
+{
+
+var bWidth=parseInt(document.documentElement.scrollWidth);
+var bHeight=parseInt(document.documentElement.scrollHeight);
+if(isIe){
+setSelectState('hidden');}
+var back=document.createElement("div");
+back.id="back";
+var styleStr="top:0px;left:0px;position:absolute;background:#666;width:"+bWidth+"px;height:"+bHeight+"px;";
+
+back.style.cssText=styleStr;
+document.body.appendChild(back);
+
+var mesW=document.createElement("div");
+mesW.id="mesWindow";
+mesW.className="mesWindow";
+mesW.innerHTML="<div class='mesWindowTop'><table width='100%' height='100%'><tr style='height:40px;'><td>"+wTitle+"</td><td style='width:1px;'><input type='button' onclick='closeGo();' title='关闭窗口' class='close' value='' /></td></tr></table></div><div class='mesWindowContent' id='mesWindowContent'>"+content+"</div><div class='mesWindowBottom'></div>";
+
+styleStr="left:50%;top:200px;margin-left:"+(-(wWidth/2))+"px;position:fixed;width:"+wWidth+"px;";
+mesW.style.cssText=styleStr;
+document.body.appendChild(mesW);
+
+
+}
+function closeGo(){
+		window.location.href="<{link app=b2c ctl=site_member act=orderdetail arg0=$order.order_id}>";
+}
+
+//关闭窗口
+function closeWindow()
+{
+if(document.getElementById('back')!=null)
+{
+document.getElementById('back').parentNode.removeChild(document.getElementById('back'));
+}
+if(document.getElementById('mesWindow')!=null)
+{
+document.getElementById('mesWindow').parentNode.removeChild(document.getElementById('mesWindow'));
+}
+if(isIe){setSelectState('');}
+refres_h();
+}
+function refres_h(){
+  window.location.href=window.location.href;  
+  window.location.reload;   	
+}
+function testMessageBox(ev)
+{
+//窗口内容
+messHead = '支付';
+messContent='<div><p class="lightgray">请您在新打开的网上银行页面进行支付，支付完成后选择:</p><ul><li><span class="success">&nbsp;</span><span class="text">付款成功</span><span class="lightgray"> ｜您可以选择：</span><a class="ftbl ml10" href="javascript:;" onclick="closeGo();" >查看订单</a></li><li><span class="error_m">&nbsp;</span><span class="text">付款失败</span><span class="lightgray"> ｜建议您选择：</span><a class="ftbl ml10" href="javascript:;" onclick="closeWindow();" >选择其他支付方式</a></li><p class="p2">如遇到支付问题，请致电<span class="ftred">4000-111-111</span>或联系平台<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=<{$qq}>&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:<{$qq}>:51" alt="点击这里给我发消息" title="点击这里给我发消息"/></a></p></ul></div>';
+showMessageBox(messHead,messContent,250,616);
+btnHover();
+}
+
+<!-- 弹出层效果结束-->
+</script>

@@ -1,0 +1,143 @@
+<div class="action-bar clearfix">
+    <div class="span-auto">
+    <{button type="button" label=$___site="下载模板"|t:'site' onclick="location.href='index.php?app=site&ctl=admin_theme_manage&act=download&theme={$theme}'"}>&nbsp;
+    </div>
+    <div class="flt">
+    <{button type="button" label=$___site="备份模板"|t:'site' id="theme_bak"}>&nbsp;
+    </div>
+    <div class="span-auto">
+        <select id="reset_theme_select">
+            <option><{t}>模板还原<{/t}></option>
+                <optgroup label="<{t}>还原至<{/t}>">
+                    <{$resetoption}>
+                </optgroup>
+        </select>&nbsp;
+        <script>
+            $('theme_bak').addEvent('click',function(e){
+                if(confirm('CREATE_THEME_BAK ?')){
+                    W.page('index.php?app=site&ctl=admin_theme_manage&act=bak&theme=<{$theme}>',{onComplete:function(){
+                        if($ES('#reset_theme_select option').some(function(opt){return opt.value=='theme_bak.xml'}))return
+                        new Element('option',{'value':'theme_bak.xml','text':'最近一次备份'})
+                            .inject($E('#reset_theme_select optgroup'));
+                    }});
+                };
+
+            });
+            $('reset_theme_select').addEvent('change',function(){
+                var selected =  this.getSelected()[0];
+                if(confirm('<{t}>确定还原至<{/t}>'+selected.text)){
+
+                    W.page(
+                        'index.php?app=site&ctl=admin_theme_manage&act=reset&theme=<{$theme}>&rid=' + selected.value
+                    );
+
+                }
+
+                this.selectedIndex = 0;
+
+            });
+        </script>
+    </div>
+    <div class="span-auto">
+    <{button type="button" label=$___site="清除模板缓存"|t:'site' onclick="if(confirm('CLEAN_CACHE ?')){    W.page('index.php?app=site&ctl=admin_theme_manage&act=cache_version&theme={$theme}')};" }>&nbsp;
+    </div>
+</div>
+<div class="tableform clearfix">
+<div class="span-auto">
+<table>
+    <tbody>
+<tr>
+<th><label><{t}>名称:<{/t}></label></th>
+<td><{$row.name}></td>
+</tr>
+
+<tr>
+<th><{t}>作者:<{/t}></th>
+<td><{$row.author}></td>
+</tr>
+
+<tr>
+<th><{t}>站点:<{/t}></th>
+<td><{$row.site}></td>
+</tr>
+
+<tr>
+<th><{t}>版本:<{/t}></th>
+<td><{$row.version}></td>
+</tr>
+
+<tr>
+<th><{t}>介绍:<{/t}></th>
+<td><{$row.info}></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="span-auto">&nbsp;</div>
+    <div class="span-auto" style="border-left:1px #e9e9e9 dotted">
+    <table>
+        <thead>
+            <tr><th class="t-l"><{t}>边框模块配置:<{/t}></th></tr>
+        </thead>
+        <tr>
+        </tr>
+        <tbody>
+        <tr>
+        <td>
+        <table>
+        <{foreach from=$row.config.borders item=item name="item"}>
+        <tr><th>    <{$item[key]}></th><td> <{$item[tpl]}></td></tr>
+        <{/foreach}>
+        </table>
+        </td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+    <{if $row.config.views}>
+    <div class="span-auto">&nbsp;</div>
+    <div class="span-auto" style="border-left:1px #e9e9e9 dotted">
+    <table>
+        <thead>
+            <tr><th class="t-l"><{t}>自定义模版:<{/t}></th></tr>
+        </thead>
+        <tr>
+        </tr>
+        <tbody>
+        <tr>
+        <td>
+        <table>
+        <{foreach from=$row.config.views item=item name="item"}>
+        <tr><th>[<{$item[app]}>]<{$item[view]}></th><td> <{$item[tpl]}></td></tr>
+        <{/foreach}>
+        </table>
+        </td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+    <{/if}>
+    <{if $widgets}>
+    <div class="span-auto">&nbsp;</div>
+    <div class="span-auto" style="border-left:1px #e9e9e9 dotted">
+    <table>
+        <thead>
+            <tr><th class="t-l"><{t}>模板级挂件:<{/t}></th></tr>
+        </thead>
+        <tr>
+        </tr>
+        <tbody>
+        <tr>
+        <td>
+        <table>
+        <{foreach from=$widgets item=item name="item"}>
+        <tr><th>    <{$item[info][name]}> </th><td> <{$item[name]}></td></tr>
+        <{/foreach}>
+        </table>
+        </td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+    <{/if}>
+</div>

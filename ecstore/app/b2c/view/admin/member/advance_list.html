@@ -1,0 +1,27 @@
+
+<div class="tableform">
+	<form action="index.php?<{$env.server.QUERY_STRING}>"  method="post">
+	<div class="division">
+	    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+	      <tbody>		
+	        <tr>
+	          <th><{t}>当前预存款：<{/t}></th>
+	          <td><span class="price0"><{if $member.advance.total>0}><{$member.advance.total|cur}><{else}>0<{/if}></span></td>
+	          </tr>
+	        <tr>
+	          <th ><{t}>充值金额：<{/t}></th>
+	          <td><{input type="number" vtype="required&&number" maxlength="10" name="modify_advance" }><span class="notice-inline"><{t}>此处可输入负值，负值表示减预存款<{/t}></span></td>
+	        </tr>
+			<tr>
+			<th><{t}>备注：<{/t}></th>
+	          <td><input class="inputstyle" type="text" size="30" name="modify_memo"/></td>
+			</tr>
+	      </tbody>
+	    </table>
+	</div>
+	<div class="table-action"><{button type="submit" label=$___b2c="保存"|t:'b2c' }></div>
+	</form>
+</div>
+<div>
+<{include file='admin/member/page_advance_list.html'}>
+</div>

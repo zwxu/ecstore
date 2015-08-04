@@ -1,0 +1,108 @@
+ <{if $comment.list.discuss}>
+  <table>
+    <tbody>
+      <{foreach from=$comment.list.discuss item=comlist name=discusslist}>
+      <tr>
+        <td class="col-master">
+          <div class="rate-content">
+            <div class="rate-fulltxt"><{$comlist.comment|nl2br}></div>
+          </div>
+          <div class="rate-date"><{$comlist.time|cdate:'SDATE_STIME'}></div>
+          <{if $comlist.items}>
+          <div class="rate-append">
+            <div class="rate-content">
+              <{foreach from=$comlist.items item=items key=key}>
+              <div class="rate-fulltxt">
+                <span class="rate-daydiff"><{$items.time|cdate:'SDATE_STIME'}></span>
+                <span><{if $items.comments_type eq '0'}><{if $items.author eq '管理员'}>管理员<{else}>掌柜<{/if}>回复：<{elseif $items.comments_type eq '2'}>
+                  <{$items.author}><{if $items.addon.hidden_name =='YES' && ($items.author_id !=0 || $items.author_id !=1)}>(匿名)<{/if}>
+                    ：<{elseif $items.comments_type eq '3'}>追加：<{/if}></span>
+                <{$items.comment|nl2br}>
+              </div>
+              <{/foreach}>
+            </div>
+            <s></s>
+          </div>
+          <{/if}>
+        </td>
+        <td class="col-meta">
+          <div class="rate-sku">
+            <{if $comlist.spec_info}>
+              <{foreach from=$comlist.spec_info item=spec key=key}>
+                <p title="<{$key}>:<{$spec}>">
+                <span><{$key}>：</span><{$spec}></p>
+              <{/foreach}>
+             <{/if}>
+          </div>
+        </td>
+        <td class="col-author">
+          <div class="rate-user-info">
+            <span class="font-blue"><{$comlist.author}><{if $comlist.addon.hidden_name =='YES' && $comlist.author_id!=0}>(匿名)<{/if}> </span>&nbsp;<span ><{if $base_setting.display_lv == 'on'}><{if $comlist.member_lv_name}>(<{$comlist.member_lv_name}>)<{/if}><{/if}></span>
+          </div>
+        </td>
+      </tr>
+      <{if $base_setting.switch_reply == 'on'}>
+      <tr>
+        <td colspan="3">
+        <div class="relay-wrap"><div class="repaybtn clearfix"><a class="repay-a btn-a"><span id="<{$comlist.comment_id}>" class="repay_span comment-btn">回 复</span></a><!--当点击下来框后此回复按钮变灰,class调用"no-cursor"--></div></div>
+        </td>
+      <{/if}>
+      <{/foreach}>
+    </tbody>
+  </table> 
+  <div class="page-discuss" >
+    <{if $comment.discusstotalpage>1}>
+      <{if $comment.discusscurrent < 6}><{assign var=hasd value=1}>
+      <{else}><{assign var=hasd value=2}>
+      <{/if}>
+  <div class="discusspager">
+   <div class="discuss-pagernum">显示<span><{$comment.page.start}></span>-<span><{$comment.page.end}></span>条 <a href="javascript:;" class="discussfirst discusspage">首页</a> <a href="javascript:;" class="discusspage discussfront">上一页</a><a href="javascript:;" class="discusspage discussfront"><<</a>
+<{foreach from=$comment.discussPage item="discussPage" name="dpagename"}>
+    <{if $comment.discusscurrent != $discussPage+1}>
+      <{if !$smarty.foreach.dpagename.first && !$smarty.foreach.dpagename.last && abs($smarty.foreach.dpagename.iteration-$comment.discusscurrent) > 3}>
+      <{if $hasd==1 && $comment.discusscurrent < $smarty.foreach.dpagename.iteration}><a class="">...</a><{assign var=hasd value=2}>
+      <{elseif $hasd==2 && $smarty.foreach.dpagename.iteration < $comment.discusscurrent}><a class="">...</a><{assign var=hasd value=3}>
+      <{elseif $hasd==3 && $comment.discusscurrent < $smarty.foreach.dpagename.iteration}><a class="">...</a><{assign var=hasd value=0}>
+      <{/if}>
+      <{continue}>
+      <{/if}>
+    <a class="discusspage" href="javascript:;" value='<{$discussPage+1}>' ><{$discussPage+1}></a>
+    <{else}>
+  <a class="current discusspage" href="javascript:;" value='<{$discussPage+1}>' ><{$discussPage+1}></a> 
+    <{/if}>
+<{/foreach}>
+   	 <a href="javascript:;" class="discusspage discussnext">下一页</a><a href="javascript:;" class="discusspage discussnext">>></a> <a href="javascript:;" class="discusspage discusslast">末页</a></div>
+ </div>
+ <{/if}>
+ </div>
+<script>
+
+$$('#discuss_content .discusspage').removeEvents('click').addEvent('click',function(){
+	if(this.hasClass('current')) return ;
+	var nextpage = this.get('text');
+	if(this.hasClass('discussnext')){
+		nextpage = parseInt(<{$comment.discusscurrent}>,10)+1;
+		if(nextpage>parseInt(<{$comment.discusstotalpage}>,10)) return;
+	}
+	if(this.hasClass('discussfront')){
+		nextpage = parseInt('<{$comment.discusscurrent}>',10)-1;
+		if(nextpage<1) return;
+	}
+	if(this.hasClass('discussfirst')){
+		nextpage = 1;
+		if(parseInt('<{$comment.discusscurrent}>',10) == 1) return;
+	}
+	if(this.hasClass('discusslast')){
+		nextpage = parseInt('<{$comment.discusstotalpage}>',10);
+		if(parseInt('<{$comment.discusscurrent}>',10) == nextpage) return;
+	}
+	new Request.HTML({
+		  url:'<{link app="b2c" ctl="site_comment" act="ajax_discuss"}>',
+		  update:$('discuss_content'),method:'post',
+		  data:'goods_id=<{$goods.goods_id}>&page='+nextpage+'&filter=<{$filter}>'
+	  }).send();
+});
+</script>
+<{else}>
+<{$comment.null_notice.discuss}>
+<{/if}>

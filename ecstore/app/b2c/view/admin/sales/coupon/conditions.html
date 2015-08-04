@@ -1,0 +1,10 @@
+<div class="division">
+   <{include file="admin/sales/promotion/template.html" app=b2c}>
+</div>
+
+<{include file="admin/sales/dialog/js.html" app=b2c}>
+<script>
+validatorMap['requiredradio'] = [LANG_Validate['requiredonly'], function(element) {
+    return true;
+}];
+</script>

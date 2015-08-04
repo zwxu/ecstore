@@ -1,0 +1,31 @@
+<table cellspacing="0" cellpadding="0" style="width:100%">
+  <col class="Colauto"></col>
+  <col class="Coloption_1b"></col>
+  <col class="Coloption_1b" ></col>
+  <col class="Coloption_1b"></col>
+  <col class="Coloption_1b"></col>
+  <col></col>
+  <tbody>
+  <{foreach from=$area item=item key=iLoop name="item"}>
+  <tr parentid="<{$item.region_id}>" class="provice-bg">
+    <td style="text-align:left; width:320px;" nowrap>
+      <div style="padding-left:<{$item.step*25}>px">
+        <{if $item.child_count>0}>
+        <span class="imgTree" onclick="clickTree(this);" id="<{$item.region_id}>"> &nbsp;&nbsp; </span>
+        <{else}>
+        <span class="imgTree tree_open" id="<{$item.region_id}>"> &nbsp;&nbsp; </span>
+        <{/if}>
+
+        <a style="font-weight:700; color:#000; text-decoration:none;padding-right:15px;" href='index.php?app=ectools&ctl=regions&act=detailDlArea&p[0]=<{$item.region_id}>' target="dialog::{title:'<{t}>编辑地区<{/t}>',height:260}"><{$item.local_name}></a>
+      </div>
+    </td>
+    <td style="width:80px;"><input size="2" type="number" style="width:40px;" name="p_order[<{$item.region_id}>]" value="<{$item.ordernum|default:0}>" class="_x_ipt" vtype="digits" /></td>
+    <td style="width:100px;"><{assign var="cat_id" value=$item.cat_id}>
+      <a href='index.php?app=ectools&ctl=regions&act=showNewArea&p[0]=<{$item.region_id}>' target="dialog::{title:'<{t}>添加子地区<{/t}>',height:260}"><{img app="desktop" src="bundle/addcate.gif" border="0" alt=$___ectools="添加子地区"|t:'ectools'}></a>
+    </td>
+    <td style="width:60px;"><a class="i" href='index.php?app=ectools&ctl=regions&act=detailDlArea&p[0]=<{$item.region_id}>' target="dialog::{title:'<{t}>编辑地区<{/t}>',height:260}"><{img app="desktop" src="bundle/editcate.gif" border="0" alt=$___ectools="编辑"|t:'ectools'}></a></td>
+    <td style="width:60px;"><span onclick="javascript: if(confirm('<{t}>您确定要删除<{/t}>&nbsp;[<{$item.local_name}>]&nbsp;？')){ W.page('index.php?app=ectools&ctl=regions&act=toRemoveArea&p[0]=<{$item.region_id}>',{method:'get'});}" style="cursor:pointer"><{img app="desktop" src="bundle/delecate.gif" border="0" alt=$___ectools="删除"|t:'ectools'}></span></td>
+    <td></td>
+  </tr>
+  <{/foreach}>
+</table>

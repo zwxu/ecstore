@@ -1,0 +1,48 @@
+<form>
+<div style="margin:10px">
+    <table id="levelPriceEditor" class="gridlist" cellpadding="0" cellspacing="0">
+    <thead>
+    <tr>
+      <th><{t}>会员等级<{/t}></th>
+      <th><{t}>价格<{/t}></th>
+      <th><{t}>折扣<{/t}></th>
+    </tr>
+    </thead>
+    <tbody>
+    <{foreach name=item from=$mPrice item=level key=level_id}>
+    <tr>
+      <td><{$level.name}></td>
+      <td><{input size="4" type="money" value=$level.price  name=$level_id vtype="positive"}></td>
+      <td><{$level.dis_count}></td>
+    </tr>
+    <{/foreach}>
+    </tbody>
+    </table>
+</div>
+<div class="mainFoot">
+	<div class="table-action">
+		<{button label=$___b2c="确定"|t:'b2c'  onclick="member()" }>
+	</div>
+</div>
+</form>
+<script>
+    var valiNum = function (v) {
+		return v == null || v == '' || (!isNaN(v) && ! /^\s+$/.test(v) && v > 0);
+	};
+
+var member=function(e){
+	var inp=$ES('input[vtype=positive]','levelPriceEditor');
+    var flag = true;
+    $$('input[vtype=positive]').each(function(item){
+        if(!valiNum(item.value)){
+            flag = false;
+        }
+    });
+    if(!flag) {
+        MessageBox.error('请输入大于0的整数');
+        return;
+    }
+	window.fbox.onSelect(inp);
+	window.fbox.hide();
+}
+</script>

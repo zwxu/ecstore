@@ -1,0 +1,114 @@
+<form action="index.php?app=b2c&ctl=admin_goods&act=saveBatchEdit" method="post" id="form01">
+<textarea name="filter" style="display:none"><{$filter}></textarea>
+<div class="division">
+<div class="notice"><{t}>正在编辑<{/t}><strong><{$editInfo.count}></strong><{t}>条数据。<{/t}>
+<br/><{t}>小技巧：直接修改：对所选商品的某个价格进行统一修改。<{/t}><br/>
+公式调价：将所选商品的某个价格修改为在另一个价格的基础上加减乘一个数字。
+
+</div>
+<table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <th style="width:20px">
+      <input type="radio" name="updateType" value="uniformPrice" id="ipt_enable_uniformPrice" checked>
+      </th>
+      <th><label for="bated_ipt_uniformPrice"><{t}>直接修改：<{/t}></label>
+      </th>
+      <td><{input name="updateName[uniformPrice]"  id="ipt_enable_uniformPrice_updatename" type="select"  value="price" options=$updateName}> = <{input onfocus=";$('ipt_enable_uniformPrice').checked=true" vtype="unsigned" id="bated_ipt_uniformPrice" type=$item.type value=$item.value inputType=$item.inputType options=$item.options name="set[uniformPrice]" }></td>  
+    </tr>
+    
+    <tr>
+      <th style="width:20px">
+      <input type="radio" name="updateType" value="uniformPriceByOperator" id="ipt_enable_uniformPriceByOperator" >
+      </th>
+      <th><label for="bated_ipt_uniformPriceByOperator"><{t}>公式修改：<{/t}></label>
+      </th>
+      <td>
+      <{input name="updateName[uniformPriceByOperator]" type="select" id="updatePriceName" onchange="changeUpdatePriceName()" value="price" options=$updateName}> = 
+      <{input name="fromName[uniformPriceByOperator]" type="select" id="updateFromName" value="cost" options=$updateName}> 
+      <{input name="operator[uniformPriceByOperator]" type="select" id="updateOperator" value="+" options=$operator}> <{input onfocus=";$('ipt_enable_uniformPriceByOperator').checked=true" vtype="unsigned" id="bated_ipt_uniformPriceByOperator" type=$item.type value=$item.value inputType=$item.inputType options=$item.options name="set[uniformPriceByOperator]" }></td>  
+    </tr>
+
+</table>
+<script>
+var updateFromNameHash = new Hash({
+<{foreach from=$updateName item=hashItem key=hashKey}>
+<{if $hashKey|is_numeric}>
+<{$hashKey}>:'<{$hashItem}>',
+<{/if}>
+<{/foreach}>
+0:0
+});
+//updateFromNameHash.erase('0');
+changeUpdatePriceName = function(){
+    disType = false;
+    lvNum = 3;
+    if(!isNaN($('updatePriceName').value) && $('updateFromName').options.length == lvNum)
+        updateFromNameHash.each(function(v,k){
+            var   oOption   =   document.createElement("option");   
+            oOption.text   =   v;
+            oOption.value   =   k;
+            $('updateFromName').options.add(oOption);
+        });
+    if(isNaN($('updatePriceName').value) && $('updateFromName').options.length == <{$updateName|@count}>)
+        for(i=$('updateFromName').options.length;i>lvNum;i--){
+            $('updateFromName').options[i-1]=null;
+        }
+}
+changeUpdatePriceName();
+
+
+</script>
+<input type="hidden" name="updateAct" value="uniformPrice"/>
+</div>
+<div class="mainFoot">
+<table cellspacing="0" cellpadding="0" border="0" align="center" class="table-action">
+  <tr>
+  <td>
+
+
+    </td>
+  </tr>
+</table></div>   
+</form>
+<{area inject=".mainFoot"}>
+   <div class="table-action">
+        <{button label="保存" type="button" id="btn01" class="btn-primary"}>
+   </div>
+<{/area}>
+
+<script>
+  $('btn01').addEvent('click',function(){
+
+      $('form01').store('target',{onComplete:function(re){
+           re = JSON.decode(re);
+
+           if(re.error)return;
+           $('form01').getParent('.dialog').retrieve('instance').close();
+      }});
+      $('form01').fireEvent('submit',{stop:$empty});
+  
+  });
+</script>
+
+  <script>
+
+   /* function saveEdit(t){
+        confirmStr = '';
+        var operatorStr = [];
+        operatorStr['+'] = "增加";
+        operatorStr['-'] = "减少";
+        operatorStr['*'] = "乘以";
+        if($('ipt_enable_uniformPrice').checked)
+            confirmStr = '系统将<{$editInfo.count}>个商品的'+$('ipt_enable_uniformPrice_updatename').options[$('ipt_enable_uniformPrice_updatename').selectedIndex].text+'统一调整为'+$('bated_ipt_uniformPrice').value+'元，本操作不可逆。';
+
+        if($('ipt_enable_uniformPriceByOperator').checked)
+            confirmStr = '系统将<{$editInfo.count}>个商品的'+$('updatePriceName').options[$('updatePriceName').selectedIndex].text+'修改为：每个商品的'+$('updateFromName').options[$('updateFromName').selectedIndex].text+'基础上'+operatorStr[$('updateOperator').value]+$('bated_ipt_uniformPriceByOperator').value+'，本操作不可逆。';
+
+        if(  confirm(confirmStr) )
+        {
+            batchEdit(<{$finder}>,t);
+            return true;
+        }
+        return false;
+    }*/
+  </script>

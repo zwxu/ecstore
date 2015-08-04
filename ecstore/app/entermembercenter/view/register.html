@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <title><{$conf.installer.title}></title>
+    <{css src="framework.css" app="site"}>
+    <{css src="install.css"}>
+    <script type='text/javascript'>
+      var XHR=(function(){
+          var _xhr=false;
+          try{
+            _xhr=new ActiveXObject('MSXML2.XMLHTTP');
+          }catch(e){
+            _xhr=new XMLHttpRequest();
+          }
+            return _xhr;
+          })();
+
+      var _$,$;
+      _$=$=function(id){
+        return  document.getElementById(id);
+      } ;
+    </script>
+  </head>
+  <body>
+    <div id="main" class="main">
+      <h1 class="png title"></h1>
+      <div class="content">
+        <div class="content-inner">
+          <iframe id="frm1" style="visibility:hidden;"  frameborder="0" allowtransparency='true' scrolling='auto' width='100%' height='100%' src="about:blank"></iframe>
+          <script>
+            (function(){
+              var fm = $('frm1');
+              fm.src = '<{$enterprise_url}>?ctl=iframeent&act=index&url=<{$callback_url}>&t=<{$smarty.now}>';
+              fm.onload = function(){
+                fm.style.visibility = 'visible';
+                fm.onload = function(){};
+              };
+            })();
+          </script>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

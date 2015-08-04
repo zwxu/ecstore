@@ -1,0 +1,29 @@
+<form action="index.php?app=aftersales&ctl=admin_returnproduct&act=settings" method="post" id="x-return_product"  target="{update:'messagebox'}">
+<div class="tableform">  
+  <h4><{t}>售后服务<{/t}></h4>
+
+<div class="division"> 
+<table cellspacing="0" cellpadding="0" border="0">
+  <tr>
+  	<th><{t}>售后服务状态：<{/t}></th>
+    <td>
+	<{if $return_product.is_open}>
+		<label><input type=radio name="return_is_open" value="true" checked /><{t}>开启<{/t}></label> &nbsp; &nbsp; 
+		<label><input type=radio name="return_is_open" value="false" /><{t}>关闭<{/t}></label>
+	<{else}>
+		<label><input type=radio name="return_is_open" value="true" /><{t}>开启<{/t}></label> &nbsp; &nbsp; 
+		<label><input type=radio name="return_is_open" value="false" checked /><{t}>关闭<{/t}></label>
+	<{/if}> &nbsp; &nbsp; <{help}><{t}>服务开启后，商店顾客可以用此功能方便地提交退货信息，商店管理员可以对退货商品进行管理、留言处理<{/t}><{/help}>
+	</td>
+	
+  </tr>
+
+</table>
+</div>  
+
+  <div class="table-action">
+	<{button id="x-submit" type="submit"  label=$___aftersales="保存"|t:'aftersales'}>
+</div>
+  
+
+</form>

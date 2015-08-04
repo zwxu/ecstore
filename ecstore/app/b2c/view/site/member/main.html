@@ -1,0 +1,57 @@
+<div class="memberwrap">
+  <!-- title-->
+     <{foreach from=$get_member_html item=get_member_html}>
+     <{$get_member_html}>
+     <{/foreach}>
+  <!-- title-->
+<div class="clearfix">
+  <!-- left-->
+  <div class="member-sidebar">
+    <div class="member-menu">
+    <!--  <div class="title"></div>-->
+    <h2 class="left_top">会员中心</h2>
+        <ul class="body">
+          <{foreach from=$cpmenu item=menus}>
+          <input type="hidden" value=<{$counti++}>>
+          <li class="member-menu-list">
+          <{if $counti eq '1'}>
+          <div class="list-title-bg noborder">
+          <{else}>
+          <div class="list-title-bg">
+          <{/if}>
+          <h2 class="list-title-icon m-<{$menus.mid}>" ><{$menus.label}></h2></div>
+            <ul>
+              <{foreach from=$menus.items item=items}>
+			  <{if $items}>
+              <li <{if $current == $items.link || $items.link == $controller}> class="current"<{/if}>>
+			  <{if $items.href}>
+			   <a href="<{$items.href}>" target="_balnk"><{$items.label}></a>
+			  <{else}>
+			  <a href="<{if $items.args ne null}><{link app=$items.app ctl=$items.ctl act=$items.link args=$items.args}><{else}><{link app=$items.app ctl=$items.ctl act=$items.link}><{/if}>"><{if $items.label==$___b2c='我的订单'|t:'b2c'}><{/if}><{$items.label}><{if $items.label==$___b2c='我的订单'|t:'b2c'}><{/if}></a>
+			  <{/if}></li>
+			  <{/if}>
+              <{/foreach}>
+            </ul>
+          </li>
+          <{/foreach}>
+        </ul>
+    </div>
+  </div>
+  <!-- left-->
+
+  <{include file=$_PAGE_ app=$app_id}>
+
+  </div>
+</div>
+</div>
+
+
+
+<div style="display:none;">
+<div class="gridlist-tip">
+    <div class="tip">
+        <div class="tip-title"></div>
+        <div class="tip-text"></div>
+    </div>
+</div>
+</div>

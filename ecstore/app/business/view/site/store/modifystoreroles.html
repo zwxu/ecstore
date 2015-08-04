@@ -1,0 +1,73 @@
+<!-- right-->
+<div class="member-main">
+  <div>
+    <form method="post" action="<{link app=business ctl='site_store'   act='save_storeroles'}>" class="section" id="Member_addr">
+      <div class="FormWrap" style="background:none; border:none; padding:0; margin:0;">
+        <div class="title"><{t}>修改角色权限<{/t}></div>
+        <div class="division" style="border:none; border-bottom:1px dashed #ddd;">
+              <table  width="100%" border="0" cellspacing="0" cellpadding="0" class="forform">
+                       <tr>
+                            <th><{t}>角色名：<{/t}></th>
+                            <td>
+                                <{input class="inputstyle" readonly='true' name="role_name" type="text"  id="role_name" size="10" vtype="required&&name_check" value=$role_name|escape:'html' }>
+                                <{input type='hidden' name="store_id" value=$store_id}>
+                                <{input type='hidden' name="role_id" value=$role_id}>
+
+                            </td>
+                            
+                        </tr>
+                         <tr>
+                         <th><{t}>角色权限：<{/t}></th>
+                          <td >
+                          <input class='parent' type="checkbox"><{t}>全选<{/t}>
+                             <div class='division' style='padding-top:5px;margin-top:5px;'>
+                                   <input type='hidden'  vtype='requiredcheckbox'/>
+                                    <ul>
+                                    <{foreach from=$menus3 item=value}>
+                                    <{$value}>
+                                    <{/foreach}>
+                                    </ul>
+                             </div>
+                             </td>
+                          </tr>
+               </table>
+
+        </div> 
+  
+        <div style="padding-left:140px">
+           <{button onclick="subMember_addrForm(event,2);" class="submit-btn" type="button" rel="_request" label=$___b2c="提交"|t:'b2c'}>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  subMember_addrForm = function (event,sign){
+           if ($('Member_addr')){
+                _formActionUrl = $('Member_addr').get('action');
+                    new Request({
+                      url:_formActionUrl,
+                        method:'post',
+                        data:$('Member_addr').toQueryString(),
+                        onComplete:function(response){
+                            var result = JSON.decode(response);
+                            if(result.status == 'success'){
+                                window.opener.location.reload();
+                                window.close();
+                            }
+                            else{
+                                Message.error(result.msg)
+                            }
+
+                        }
+                    }).send();
+               
+           }
+        };
+
+         $$('input.parent').addEvent('click',function(){
+        this.getParent().getElements('ul li input[type=checkbox]').set('checked',this.checked);
+    })
+
+</script>
+<!-- right-->

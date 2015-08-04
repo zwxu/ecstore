@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title><{$env.conf.desktop.background.title}></title>
+<link rel="shortcut icon" href="../favicon.gif" type="image/gif" />
+<link href="<{$env.app.res_url}>/css/framework.css" rel="stylesheet" type="text/css"  />
+<link href="<{$env.app.res_url}>/css/default/login.css" rel="stylesheet" type="text/css"  />
+</head>
+<body>
+	<{$top_shopex_cn_call}>
+<div class="signup-contant clearfix">
+  <div class="signup-middle">
+    <div class="signup-contant-main ">
+      <div class="logo clearfix">
+        <h3>BizMall<span><{$env.conf.desktop.logo_desc}></span></h3>
+      </div>
+      <div class="signup">
+        <div class="signip-main">
+          <div class="ifram">
+            <div class="publicize" id="publicize">
+			  <{assign var=mapp value=$env.conf.base.system.main_app}>
+		        <img style="display:block;padding-top:80px;padding-left:50px" height="44" width="230" name="publicize-iframe" src="<{$env.app.res_url}>/bz.png" /> 
+				
+            </div>
+          </div>
+          <div class="window">
+            <div class="window-tab">
+              <ul>
+                <li class="window-tab-current">
+                  <div class="window-tabcurrent-left"></div>
+                  <div class="window-tabcurrent-mid"><{foreach from=$passports item=item}><{$item.name}><{/foreach}></div>
+                  <div class="window-tabcurrent-right"></div>
+                </li>
+              </ul>
+            </div>
+            <div class="window-main"> <{foreach from=$passports item=item}>
+              <div class="passport-bd"><{$item.html}></div>
+              <{/foreach}> </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="copyright">
+    <div class="copyright-main">
+		<div class="fav">
+			<div class="clearfix" style="text-align:right;">
+			<div class="span-auto act addfav" id="addfav">
+				<a href="javascript:void(addFavorite());"><{t}>加入收藏<{/t}></a>
+			 </div>
+			<div class="span-auto act createshortcut" id="createshortcut"><a href="javascript:void(createShortcut());"><{t}>生成快捷方式<{/t}></a></div>
+			</div>
+		</div>
+
+
+	</div>
+  </div>
+
+</div>
+
+<{if $desktop_login_verify}><{$desktop_login_verify}><{/if}>
+
+<script>
+void function(){
+ var sURL = location.href;
+ var sTitle = document.title;
+ addFavorite = function(){
+        try
+        {
+            window.external.addFavorite(sURL, sTitle);
+        }
+        catch (e)
+        {
+            try
+            {
+                window.sidebar.addPanel(sTitle, sURL, "");
+            }
+            catch (e)
+            {
+				var c = "ctrl";
+				if(navigator.platform.match(/mac/i)){
+					 c = "command"
+				}
+                alert("<{t}>请使用键盘上<{/t}>\n\n"+c+"+D\n\n<{t}>进行收藏操作。<{/t}>");
+            }
+        }
+		return false;
+    }
+   createShortcut = function(){
+
+	   var sname  =  document.title.replace(/\s/ig,'');
+	   var surl   =	 location.href;
+	   document.createshortcuts.furl.value = surl;
+	   document.createshortcuts.fname.value = sname;
+       document.createshortcuts.submit();
+   }
+ }();
+
+
+</script>
+<form action="index.php?app=desktop&ctl=createshortcuts" name="createshortcuts" target="_blank" method="post">
+	<input type="hidden" name="furl" value=""/>
+	<input type="hidden" name="fname" value=""/>
+</form>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<form action="index.php?app=business&ctl=admin_storemanger&act=saveBatchEdit" method="post" id="form01">
+<textarea name="filter" style="display:none"><{$filter}></textarea>
+<div class="division">
+<div class="notice"><{t}>正在编辑<{/t}><strong><{$editInfo.count}></strong><{t}>条数据。<{/t}>
+</div>
+<table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <th style="width:20px">
+      </th>
+      <th><label for="bated_ipt_dorder"><{t}>统一修改审核<{/t}></label>
+      </th>
+      <td>
+        <select id="bated_ipt" name="set[approved]"   value='<{$item.value}>'>
+                <option value="0" <{if $item.value ==0}>selected="selected"<{/if}>><{t}>待审核<{/t}></option>
+                <option value="1" <{if $item.value ==1}>selected="selected"<{/if}>><{t}>审核通过<{/t}></option>
+                <option value="2" <{if $item.value ==2}>selected="selected"<{/if}>><{t}>审核未通过<{/t}></option>
+        </select>
+      </td>
+    </tr>
+
+     <tr>
+      <th style="width:20px">
+      </th>
+      <th><label for="bated_ipt_dorder"><{t}>备注：<{/t}></label>
+      </th>
+      <td>
+        <{input  type='text' id=approvedremark  name="set[approvedremark]" value=$$item.approvedremark vtype='checkremark' size="60"}>
+      </td>
+      
+     
+    </tr>
+    
+</table>
+<input type="hidden" name="updateAct" value="approved"/>
+</div>
+<div class="mainFoot">
+<table cellspacing="0" cellpadding="0" border="0" align="center" class="table-action">
+  <tr>
+  <td>
+    </td>
+  </tr>
+</table></div>
+
+</form>
+<{area inject=".mainFoot"}>
+   <div class="table-action">
+        <{button label="保存" type="button" id="btn01" class="btn-primary"}>
+   </div>
+<{/area}>
+
+<script>
+  $('btn01').addEvent('click',function(){
+      $('form01').store('target',{onComplete:function(re){
+           re = JSON.decode(re);
+
+           if(re.error)return;
+           $('form01').getParent('.dialog').retrieve('instance').close();
+      }});
+      $('form01').fireEvent('submit',{stop:$empty});
+  
+  });
+
+   validatorMap['checkremark']= ['<{t}>请输入审核未通过原因。<{/t}>', function(element, v) {
+        if($('bated_ipt').value ==2 && $('approvedremark').value.trim()==''){
+            return false;
+         }
+
+         return true;
+    }];
+
+</script>

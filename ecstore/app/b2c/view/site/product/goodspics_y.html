@@ -1,0 +1,253 @@
+<div class='goodspic-y sideborder' style='<{if $env.conf.b2c.site.small_pic_width !=0 && $env.conf.b2c.site.small_pic_height !=0}> width:<{$env.conf.b2c.site.small_pic_width}>px;height:<{$env.conf.b2c.site.small_pic_height}>px;<{/if}>'>
+<{if !$noimage}>
+   <p class="zoom-icon"><a href="<{link app=b2c ctl=site_product act=viewpic arg0=$goods.goods_id }>" target="_blank" onclick='_open(this.href);return false;'> <{img src="bundle/zoo_pic1.gif" title="点击查看大图" alt=$___b2c="查看大图"|t:'b2c'}> </a></p>
+   <{/if}>
+  <div class="goods-detail-pic spec-pic" data-pic-type="middle" style=' margin:0 auto;display:table-cell;vertical-align:middle;<{if $env.conf.b2c.site.small_pic_width !=0 && $env.conf.b2c.site.small_pic_height !=0}> width:<{$env.conf.b2c.site.small_pic_width}>px;*font-size:<{math equation="gp_height*0.875" gp_height=$env.conf.b2c.site.small_pic_height}>px;height:<{$env.conf.b2c.site.small_pic_height}>px;<{/if}>' bigpicsrc="<{if $goods.image_default_id}><{$goods.image_default_id|storager:'b'}><{else}><{$env.conf.b2c.site.default_big_pic|storager:'b'}><{/if}>">
+<{if $noimage}>
+<img class="no-images" src="<{$goods.image_default_id|storager:'m'}>"  alt="<{$goods.title}>"  style='vertical-align:middle;'/>
+  <{else}>
+  <a href="<{link app=b2c ctl=site_product act=viewpic arg0=$goods.goods_id }>" target="_blank" style='color:#fff;<{if $env.conf.b2c.site.small_pic_width !=0 && $env.conf.b2c.site.small_pic_height !=0}> width:<{$env.conf.b2c.site.small_pic_width}>px;height:<{$env.conf.b2c.site.small_pic_height}>px;*font-size:<{math equation="gp_height*0.875" gp_height=$env.conf.b2c.site.small_pic_height}>px;<{/if}>;font-family:Arial;display:table-cell; vertical-align:middle; text-align:center;'>
+  <img src="<{$goods.image_default_id|storager:'m'}>"  alt="<{$goods.title}>"  style='vertical-align:middle;'/> </a>
+     <{/if}>
+
+     <{if $env.conf.b2c.site.reading_glass}>
+    <div class='goods-pic-magnifier'  style='left:0;<{if $env.conf.b2c.site.small_pic_width !=0 && $env.conf.b2c.site.small_pic_height !=0}> width:<{math equation="sp_width*(rw/bp_width)" sp_width=$env.conf.b2c.site.small_pic_width bp_width=$env.conf.b2c.site.big_pic_width rw=$env.conf.b2c.site.reading_glass_width format="%.0f"}>px;height:<{math equation="sp_height*(rh/bp_height)" sp_height=$env.conf.b2c.site.small_pic_height bp_height=$env.conf.b2c.site.big_pic_height rh=$env.conf.b2c.b2c.site.reading_glass_height format="%.0f"}>px;<{/if}>'> &nbsp; </div>
+    <{/if}> </div>
+</div>
+<div class='picscroll-y clearfix'>
+  <div  class='scrollarrow totop' title='<{t}>向上<{/t}>'></div>
+  <div class="goods-detail-pic-thumbnail goods-detail-x pics" style="position:relative">
+      <{if $goods.images}>
+          <ul class="goods-detail-pic-thumbnail pics-content" style="position:absolute; left:0">
+             <{if $imgtype != 'spec'}>
+              <{assign var=image_default value=$goods.image_default_id}>
+              <li class='current' img_id='<{$image_default}>'>
+                <a href="<{link app=b2c ctl=site_product act=viewpic arg0=$goods.goods_id }>" target="_blank" imgInfo="{small:'<{$goods.image_default_id|storager:'m'}>',big:'<{$goods.image_default_id|storager:'b'}>'}"> <img src="<{$image_default|default:$env.conf.b2c.site.default_thumbnail_pic|storager:'m'}>" alt='<{$goods.title}>' width='40' height='40'/> </a></li>
+              <{/if}>
+              <{foreach from=$goods.images item=thumb name=gimgs }>
+              <{if $thumb.image_id == $goods.image_default_id && $imgtype != 'spec'}>
+              <{continue}>
+              <{/if}>
+              <li  img_id='<{$thumb.image_id}>'>
+                <a imgInfo="{small:'<{$thumb.image_id|storager:'m'}>',big:'<{$thumb.image_id|storager:'b'}>'}" href="<{link app=b2c ctl=site_product act=viewpic arg0=$goods.goods_id }>" target="_blank">
+                  <img src="<{$thumb.image_id|storager:'s'}>" width="40" height="40" />
+                </a></li>
+              <{/foreach}>
+          </ul>
+          <{/if}>
+          </div>
+
+  <div  class='scrollarrow tobottom' title='<{t}>向下<{/t}>'></div>
+</div>
+
+
+<script>
+      window.addEvent('domready',function(){
+         var picThumbnailItems=$$('#goods-viewer .goods-detail-pic-thumbnail li a');
+		 var picThumbnail=$('goods-viewer').getElement('.goods-detail-pic-thumbnail li');
+         if(!picThumbnailItems.length)return;
+         var goodsPicPanel = $('goods-viewer').getElement('.goods-detail-pic');
+         var goodsDetailPic = $('goods-viewer').getElement('.goods-detail-pic img');
+
+
+         var picscroll=$('goods-viewer').getElement('.picscroll-y');
+         var scrollARROW=picscroll.getElements('.scrollarrow');
+         var picsContainer=picscroll.getElement('.pics-content').scrollTo(0,0);
+             picsContainer.store('selected',picThumbnailItems[0]);
+
+		 var picsMain=picsContainer.getParent('.pics');
+
+
+
+		if(picsContainer.getSize().y<picThumbnail.getSize().y*picThumbnailItems.length)
+		scrollARROW.addClass('visible');
+
+		var carousel = new Switchable(document.getElement('.picscroll-y'), {
+			effect: 'scrolly',
+			autoplay:false,
+			steps: (picsContainer.getSize().y/picThumbnail.getSize().y).toInt(),
+			prev:'.totop',
+			next:'.tobottom',
+			hasTriggers:false,
+			viewSize: [picsMain.getSize().y,60],
+			content:'.pics-content',
+			panels:'li[img_id]',
+			circular: false,
+			haslrbtn:true,
+			disableCls: 'disable',
+			lazyDataType: 'img'
+		});
+
+
+        picThumbnailItems.each(function(item){
+             /*预加载 中图*/
+             var _img = new Image();
+             _img.src = JSON.decode(item.get('imginfo'))['small'];
+        });
+
+        picThumbnailItems.addEvents({
+               'click':function(e){
+                     e.stop();
+                     this.fireEvent('selected');
+               },
+               'mouseenter':function(){
+                    if(this.getParent('li').hasClass('current'))return;
+                    var imgInfo = JSON.decode(this.get('imgInfo'));
+                    goodsDetailPic.src = imgInfo['small'];
+               },
+               'mouseleave':function(){
+                   if(this.getParent('li').hasClass('current'))return;
+                   picsContainer.retrieve('selected').fireEvent('selected','noclick');
+               },
+               'selected':function(noclick){
+
+                    var _td = this.getParent('li');
+                    if(_td.hasClass('current')&&!noclick)return;
+                    picsContainer.retrieve('selected').fireEvent('unselect');
+                     _td.addClass('current');
+                    var imgInfo = JSON.decode(this.get('imgInfo'));
+                    goodsDetailPic.src = imgInfo['small'];
+                    goodsPicPanel.set('bigpicsrc',imgInfo['big']);
+                    picsContainer.store('selected',this);
+
+               },
+               'unselect':function(){
+                     this.getParent('li').removeClass('current');
+
+               },'focus':function(){
+                  this.blur();
+               }
+        });
+
+        picThumbnailItems[0].fireEvent('selected');
+
+        <{if $env.conf.b2c.site.imgzoom.show=='true' }>
+		  var imageZoom={
+			 viewSize:{
+				width:<{$env.conf.b2c.site.imgzoom.width}>,
+				height:<{$env.conf.b2c.site.imgzoom.height}>,
+				margin:20
+			 },
+			 init:function(img,panels){
+				this.image=$(img);
+				this.panels=$(panels);
+				this.bigImageSize = {width:800,height:800};
+				this.imgRegion=this.image.getCoordinates();
+				this.bindUI();
+			 },
+			 setEv:function(ev){this._ev = ev;},
+			 bindUI: function() {
+				this.image.addEvents({
+					'mouseenter':function(e){
+						this.setEv(e);
+						this.bigImageSrc=this.panels.get('bigpicsrc');
+						$(document.body).addEvent('mousemove',this.setEv.bind(this));
+						if(!this.viewer)this.createElem();
+						this.createViewer().show();
+					}.bind(this),
+					'mouseleave':function(){
+						$(document.body).removeEvent('mousemove',this.setEv);
+					}.bind(this)
+				});
+			},
+			createElem:function(){
+				var obj={'viewer':'goods-pic-magnifier-viewer','lens':'goods-pic-magnifier','bigImage':this.bigImageSrc};
+				for(var z in obj){
+					if('bigImage'==z)this[z]=new Element('img',{'src':obj[z]}).inject(this['viewer']);
+					else this[z]=new Element('div',{'class':obj[z]}).inject(document.body);
+				}
+			},
+			createViewer: function() {
+				this.setViewerRegion();
+				new Asset.image(this.bigImageSrc,{onload:function(img){
+					this.bigImageSize = {width:800,height:800};
+					this.bigImage.set('src',this.bigImageSrc).setStyles(this.bigImageSize);
+					this.setViewerRegion();
+					this.onMouseMove();
+				}.bind(this)});
+				return this;
+			},
+			setViewerRegion: function() {
+				var region = this.imgRegion, left = region.left+region.width+this.viewSize.margin;
+				this.lensSize={},viewSize={};
+
+				['width','height'].each(function(v,i){
+					viewSize[v]=this.viewSize[v]||region[v];
+					this.lensSize[v]=Math.min(Math.round(viewSize[v]* region[v]/this.bigImageSize[v]),region[v]);
+				},this);
+				this.lens.setStyles(this.lensSize);
+				this.viewer.setStyles({left: left, top: region.top,'width':viewSize['width'],'height':viewSize['height']});
+		    },
+		    onMouseMove: function() {
+				var lens = this.lens, ev = this._ev, region = this.imgRegion,
+					rl = region.left, rt = region.top, rw = region.width, rh = region.height,
+					bigImageSize = this.bigImageSize, lensOffset, x=ev.page.x, y=ev.page.y;
+
+				if (x > rl && x < rl + rw && y > rt && y < rt + rh) {
+					lensOffset = this.getLensOffset();
+					if (lens) lens.setStyles(lensOffset);
+					this.bigImage.setStyles({'left': - Math.round((lensOffset.left - rl) * bigImageSize.width / rw),
+						'top': - Math.round((lensOffset.top - rt) * bigImageSize.height / rh)
+					});
+				} else {
+					this.hide();
+				}
+			},
+			getLensOffset: function() {
+				var region = this.imgRegion, ev = this._ev,
+					lens={'left' : ev.page.x - this.lensSize.width/ 2,
+						  'top' : ev.page.y - this.lensSize.height/ 2},
+				    obj={'left':'width','top':'height'};
+
+				for(var z in obj){
+					if(lens[z]<=region[z]){
+						lens[z]=region[z];
+					}else if(lens[z]>=region[obj[z]]+region[z]-this.lensSize[obj[z]]){
+						lens[z]=region[obj[z]]+region[z]-this.lensSize[obj[z]];
+					}
+				}
+				return lens;
+			},
+		    show: function() {
+				$$(this.viewer,this.lens).setStyle('visibility','visible');
+				this.onMouseMove();
+				document.body.addEvent('mousemove',this.onMouseMove.bind(this));
+		    },
+		    hide: function() {
+				$$(this.viewer,this.lens).setStyle('visibility','hidden');
+				document.body.removeEvent('mousemove',this.onMouseMove);
+			}
+		  };
+		  imageZoom.init(goodsPicPanel.getElement('img'),goodsPicPanel);
+          window.addEvent('resize',function(){
+            imageZoom.init(goodsPicPanel.getElement('img'),goodsPicPanel);
+          });
+		<{/if}>
+ });
+
+
+</script>
+<!--
+<div class="share">
+  <!-- JiaThis Button BEGIN -->
+ <!-- <div id="ckepop"> <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_douban"></a>
+    <a class="jiathis_button_renren"></a>
+    <a class="jiathis_button_tqq"></a>
+    <a class="jiathis_button_tsina"></a>
+    <a class="jiathis_button_kaixin001"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank">更多</a> <a class="jiathis_counter_style"></a>
+  </div>
+  <script type="text/javascript" >
+  var jiathis_config={
+    data_track_clickback:false,
+    url:"",
+    summary:"",
+    title:"<{$goods.share}>"+"-ORBIS",
+    pic:"<{$goods.image_default_id|storager:''}>",
+    hideMore:false
+  }
+  </script>
+  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1626174" charset="utf-8"></script>
+  <!-- JiaThis Button END --> 
+<!--</div>-->

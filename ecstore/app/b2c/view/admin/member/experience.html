@@ -1,0 +1,16 @@
+<form action="index.php?<{$env.server.QUERY_STRING}>" method="post">
+	<div class="tableform">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>  <th><{t}>当前经验值：<{/t}></th>
+      <td>  <span class="price0"><{$mem.experience}></span>  </td>
+      </tr>
+     
+    <tr>  <th><{t}>调整经验值（增/减）：<{/t}></th>
+      <td> <{input type='number' name='experience' maxlength=8 vtype="required&&number"}> <span class="notice-inline"><{t}>输入负值即可减少经验值<{/t}></span> </td>
+      </tr>
+    </table>
+	<div class="table-action"><{button type="submit" label=$___b2c="保存"|t:'b2c' }></div>
+    </div>
+</form>
+
+ 

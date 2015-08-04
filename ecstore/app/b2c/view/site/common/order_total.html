@@ -1,0 +1,78 @@
+<table border="0" cellspacing="0" cellpadding="0" class="liststyle data" style="border:none"  width="100%" >
+            <col  width="88%"></col>
+            <col  width="12%"></col>
+  <tr>
+    <th><{t}>商品总金额:<{/t}></th>
+    <td class="font14px font-orange"><{$order.cost_item|cur_odr:$order.currency}></td>
+  </tr>
+  <{if $order.isNeedDelivery}>
+  <tr>
+    <th><{t}>配送费用:<{/t}></th>
+    <td class="font14px"><{$order.shipping.cost_shipping|cur_odr:$order.currency}></td>
+  </tr>
+  <{/if}>
+  <{if $order.shipping.is_protect == 'true'}>
+  <tr>
+    <th><{t}>保价费用:<{/t}></th>
+    <td class="font14px"><{$order.shipping.cost_protect|cur_odr:$order.currency}></td>
+  </tr>
+  <{/if}>
+  <{if $order.payinfo.cost_payment > 0}>
+  <tr>
+    <th><{t}>支付费用:<{/t}></th>
+    <td class="font14px"><{$order.payinfo.cost_payment|cur_odr:$order.currency}></td>
+  </tr>
+  <{/if}>
+  <{$discount_html}>
+  <{if $order.score_g > 0}>
+  <tr>
+    <th><{t}>您可获得积分:<{/t}></th>
+    <td class="font14px font-orange"><{$order.score_g+0}></td>
+  </tr>
+  <{/if}>
+  <{if $order.pmt_order > 0}>
+  <tr>
+    <th><{t}>优惠金额:<{/t}></th>
+    <td class="font14px ">-<{$order.pmt_order|cur_odr:$order.currency}></td>
+  </tr>
+  <{/if}>
+  <{if $order.is_tax == 'true'}>
+  <tr>
+    <th><{t}>税金:<{/t}></th>
+    <td class="font14px"><{$order.cost_tax|cur_odr:$order.currency}></td>
+  </tr>
+	  <{if !$invoice_detail}>
+	  <tr>
+	    <th><{t}>发票抬头:<{/t}></th>
+	    <td class="font14px"><{$order.tax_title|escape:'html'}></td>
+	  </tr>
+	  <{/if}>
+  <{/if}>
+  <{$invoice_data}>
+  <{if $order.discount != 0}>
+  <tr>
+    <th><{t}>订单减免:<{/t}></th>
+    <td class="font14px "><{if $order.discount lt 0}>-<{else}>+<{/if}><{$order.discount|abs|cur_odr:$order.currency}></td>
+  </tr>
+  <{/if}>
+  <tr>
+    <th><{t}>订单总金额:<{/t}></th>
+    <td class="font16px font-orange fontbold"><{$order.total_amount|cur_odr:$order.currency}></td>
+  </tr>
+  <{if $order.payed > 0}>
+  <tr>
+    <th><{t}>已付金额:<{/t}></th>
+    <td class="font14px"><{$order.payed|cur_odr:$order.currency:false:true}></td>
+  </tr>
+  <{/if}>
+  <{if $order.cur_rate != 1}>
+  <tr>
+    <th><{t}>货币汇率:<{/t}></th>
+    <td class="font14px"><{$order.cur_rate}></td>
+  </tr>
+  <tr>
+    <th><{t}>货币结算金额:<{/t}></th>
+    <td class="font14px"><{$order.cur_amount|cur_odr:$order.currency:false:true}></td>
+  </tr>
+  <{/if}>
+</table>

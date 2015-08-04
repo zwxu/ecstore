@@ -1,0 +1,27 @@
+<div class="error splash clearfix textcenter" id='failedSplash'>
+  <h4><{$msg}></h4>
+    <p>
+          <{assign var="id" value=$smarty.now}>
+           <{if $allreoad}>  	
+                <a id="splash-<{$id}>" onclick="location.reload()" >
+            <{else}>
+                <a id="splash-<{$id}>" href="<{$jumpto}>" >
+            <{/if}>
+         <{$wait}><{t}>秒后系统会自动跳转，也可点击本处<{/t}></a>
+    </p>
+    <{if count($errinfo)>0}>
+        <ul>
+        <{foreach from=$error_info item=item}>
+          <li>[<{$item[0]}>]<{$item[1]}>
+            <{if $env.const.debug_code}>
+            (<{$item[2]}>:<{$item[3]}>)
+            <{/if}>
+          </li>
+        <{/foreach}>
+        </ul>
+    <{/if}>
+</div>
+
+<script>
+   top.Splash.go("<{$jumpto}>",<{$wait}>*1000,{method:'post',data:'a=b'});
+</script>

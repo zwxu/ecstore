@@ -1,0 +1,27 @@
+<{if true||$use_buildin_selectrow}>
+<div class="finder-tip" id="finder-tip-<{$name}>" count="<{$pinfo.count}>" style='visibility:hidden;'>
+ <div class='selected'><{t}>您当前选定了<{/t}><em></em><{t}>条记录！<{/t}>
+	<span class="lnk" onclick="<{$var_name}>.unselectAll()"><{t}>取消选定<{/t}></span>
+	<span class="lnk" onclick="<{$var_name}>.selectAll()"><{t}>选定全部<{/t}></span>
+ </div>
+ <div class='selectedall'>
+	<{t}>您当前选定了全部记录！<{/t}>共计<span><{$pinfo.count}></span><{t}>条<{/t}>。
+	<span class="lnk" onclick="<{$var_name}>.unselectAll()"><{t}>取消选定<{/t}></span>
+ </div>
+</div>
+<{/if}>
+
+<div id="finder-list-<{$name}>" class="finder-list finder-normal">
+<table width="100%" cellpadding="0" cellspacing="0">
+    <{if $use_buildin_selectrow}><col class="col-select"></col><{/if}>
+    <{$detail_col_html}> 
+    <{$column_col_html}> 
+    <col></col>
+<tbody>
+<{$body}>
+</tbody>
+</table>
+<{if !$body}>
+<div style="margin:20px;border:1px solid #999;background:#f0f0f0;padding:20px;-moz-border-radius:5px;-webkit-border-radius:5px;radius:5px"><{t}>没有符合条件的条目.<{/t}></div>
+<{/if}>
+</div>

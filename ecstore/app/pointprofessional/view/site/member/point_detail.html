@@ -1,0 +1,60 @@
+<!-- right-->
+  <div class="member-main">
+  <div>
+ <div class="title title2"><{t}>我的积分<{/t}></div>
+
+
+  <div class="points">
+<div class="w500 flt">
+ <p class="admin-title textright">
+ <span class="flt"><{t}>您当前的有效积分：<em class="font-orange fontbold font14px"><{/t}><{$member.point}></em>&nbsp;<{t}>分<{/t}><{if $extend_point_html}><{$extend_point_html}><{/if}></span>
+ <a href="<{link app=b2c ctl="site_member" act="couponExchange"}>" class="font-blue"><{t}>兑换优惠券>><{/t}></a><{$exchange_gift_link}>
+ </p>
+ <table class="gridlist border-all gridlist_member" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <th class="first"><{t}>日期<{/t}></th>
+        <th><{t}>获得的积分<{/t}></th>
+		<th><{t}>本次有效积分<{/t}></th>
+		<th><{t}>积分有效期<{/t}></th>
+        <th><{t}>说明<{/t}></th>
+    </tr>
+    <tbody>
+    <{if count($historys)>0}>
+    <{foreach from=$historys item="logs"}>
+    <tr>
+      <td ><{$logs.addtime|cdate:FDATE_STIME}></td>
+       <td align="center" style="color:#F60"><{$logs.change_point}></td>
+	   <td align="center" style="color:#F60"><{$logs.change_point-$logs.consume_point}></td>
+	   <td align="center"><{if $logs.expiretime==0 }><{t}>无过期<{/t}><{else}><{$logs.expiretime|cdate:FDATE_STIME}><{/if}></td>
+       <td align="center"><{$logs.reason|escape:'html'}></td>
+    </tr>
+    <{/foreach}>
+ <{pagers data=$pager}>
+    <{else}>
+    <tr>
+      <td height="60" colspan="3"><{t}>尚无积分历史<{/t}></td>
+    </tr>
+    <{/if}>
+    </tbody>
+</table>
+ </div>
+
+
+  <div class="w250 frt lh20">
+     <h5><{t}>积分规则：<{/t}></h5>
+<p><strong>1.</strong><{t}> 当积分已达到某一兑换积分标准时，顾客可将累计积分依照网站相应积分及兑换标准兑换回馈商品，网站将即时从用户会员积分中扣减相应积分。<{/t}></p>
+
+<p><strong>2. </strong><{t}>各项回馈项目（包含各项商品、服务或抵用券等）及兑换标准及兑换规则均以兑换当时最新回馈活动公告或目录为准。<{/t}></p>
+
+<p><strong>3. </strong><{t}>部分兑换商品有数量限制的，兑完为止。<{/t}></p>
+
+<p><strong>4. </strong><{t}>公告或目录如有有效期限的，逾期即不得兑换。<{/t}></p>
+
+<p><strong>5.</strong><{t}> 积分兑换区的商品为只可用积分兑换的商品（如积分价格：100积分）。<{/t}></p>
+ </div>
+
+</div>
+ </div>
+  </div>
+
+<!-- right-->

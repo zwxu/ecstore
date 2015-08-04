@@ -1,0 +1,16 @@
+<div class="tableform">
+    <div class="division">
+      标签：<input name="tag0" class="inputstyle" value="<{$setting.tag}>">
+      <br />
+      显示商品数：<input type="text" name='num0' value='<{$setting.num0}>'>
+      <br />
+      选择商品：<{input type="goods_select" object="goods@b2c" filter=$data.cat_id cat_filter=$data.cat_id multiple="true" return_url="{$related_return_url}" rowselect="true"  textcol="name" name="list[0][linkid]" linkid=$setting.list.0.linkid obj_name='list[0][goods]' value=$setting.list.0.goods view="b2c:admin/goods/detail/rel_items.html"}>
+    </div>
+    <div class="division">
+      标签：<input name="tag1" class="inputstyle" value="<{$setting.tag1}>">
+      <br />
+      显示商品数：<input type="text" name='num1' value='<{$setting.num1}>'>
+      <br />
+      选择商品：<{input type="goods_select" object="goods@b2c" filter=$data.cat_id cat_filter=$data.cat_id multiple="true" return_url="{$related_return_url}" rowselect="true"  textcol="name" name="list[1][linkid]" linkid=$setting.list.1.linkid obj_name='list[1][goods]' value=$setting.list.1.goods view="b2c:admin/goods/detail/rel_items.html"}>
+    </div>
+</div>

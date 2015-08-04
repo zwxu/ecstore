@@ -1,0 +1,28 @@
+<div class="shop2_floor">
+  <h4><{$setting.title}></h4>
+  <{if $data.setting.ad_pic}>
+  <span>
+   <{if $data.setting.ad_pic_link}><a href="<{$data.setting.ad_pic_link}>" title="<{$data.setting.ad_pic_txt}>" target="_blank"><{/if}>
+  <img src="images/transparent.gif" lazyload="<{$data.setting.ad_pic|storager}>" class="img-lazyload"  alt="<{$data.setting.ad_pic_txt}>"  <{if $data.setting.ad_pic_height}>height='<{$data.setting.ad_pic_height}>'<{/if}>>
+  <{if $data.setting.ad_pic_link}></a><{/if}>
+</span>
+<{/if}>
+</div>
+<ul class="shop2_floor_ul">
+<{foreach from=$data.goods item=good key=key name="_good"}>
+<li <{if !$smarty.foreach._good.last}>class="mr"<{/if}>>
+
+<div class="shop_p_info" >
+<a target="_blank" href="<{link app=b2c ctl="site_product" act="index" arg0=$good.goods_id}>"><{$good.name}></a>
+</div>
+<a target="_blank" href="<{link app=b2c ctl="site_product" act="index" arg0=$good.goods_id}>">
+<img class="img-lazyload" src="images/transparent.gif" lazyload="<{$good.image_default_id|default:$data.defaultImage|storager:'m'}>" alt="<{$good.name|cut:72}>" />
+</a>
+<div class="shop2_price">RMB:<{$good.price}>元</div>
+<a target="_blank" href="<{link app=b2c ctl="site_product" act="index" arg0=$good.goods_id}>">
+<input type="button" class="buy_now" value="立即购买"><!--还需修改-->
+</a>
+</li>
+<{/foreach}>
+<div class="cl_zhi"></div>
+</ul>

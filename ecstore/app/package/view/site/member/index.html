@@ -1,0 +1,319 @@
+<div class="member-main">
+<div class="title">捆绑商品列表</div>
+  <div id="tab-package" class="section switch">
+    <div class="switchable-content" >
+      <div class="switchable-panel">
+        <{if !$goods}>
+        <div class="noinfo"><{t}>暂无商品<{/t}></div>
+        <{/if}>
+        <div class="search-form">
+          <div>
+            <p class="row">
+              <label for="search-keyword"><{t}>捆绑名称：<{/t}></label>
+              <input id="search-keyword" type="text" name="content[name]" maxlength="64" value="">
+            </p>
+            <p class="row">
+              <label><{t}>总价格：<{/t}></label>
+              <input id="search-price-from" type="text" name="content[price_from]" value="" vtype="number">
+              <{t}> 到 <{/t}>
+              <input id="search-price-to" type="text" name="content[price_to]" value="" vtype="number">
+            </p>
+            <p class="submitArea" style="float:left;">
+              <button class="btn submit-btn" onclick="searchItems()" type="button"><{t}>搜索<{/t}></button>
+              <button class="btn submit-btn" onclick="window.location.href='<{link app=package ctl=site_business act=package_add}>';return false;" type="button"><{t}>新增<{/t}></button>
+            </p>
+            <div class="crl"></div>
+          </div>          
+        </div>    
+        <div class="clr"></div>
+        <{include file="site/list.html" app="package"}>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  var item = $$('#J_DataTable input[name^=item[]')||[];
+  var all = $$('#J_DataTable .all-selector')||[];
+  window.addEvent('domready', function(){
+    if(item){
+      item.set('checked', !!$ES('#J_DataTable .all-selector').checked);
+      item.removeEvents('click').addEvent('click',function(e){
+        var target=$(e.target);
+        if(!target.checked && all)
+        all.set('checked', false);
+        $ES('#switchable input[name^=operate]').set('value', false);
+      });
+    }
+    if(all)
+      all.removeEvents('click').addEvent('click',function(e){
+        var target=$(e.target);
+        all.set('checked', !!target.checked);
+        if(item) item.set('checked', !!target.checked);
+        $ES('#switchable input[name^=operate]').set('value', !!target.checked);
+      });
+  });
+  function isSelected(){
+    if(!item) return false;
+    for(i=0;i<item.length;i++){
+      if(item[i].checked){
+        return true;
+      }
+    }
+    if(!all) return false;
+    for(i=0;i<all.length;i++){
+      if(all[i].checked){
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  function deleteItem(){
+    if(!isSelected()){
+      Ex_Dialog.alert('请选中要删除的宝贝！');
+      return false;
+    }
+    Ex_Dialog.confirm('确认删除宝贝？',function(e){
+      if(!e) return false;
+      new Request.JSON({
+        url:'<{link app=business ctl=site_member act=goods_delete arg=instock}>',
+        method:'post',
+        secure:false,
+        data:$('tab-instock'),
+        onComplete:function(res,text){
+          if (res.error){
+            Message.error(res.error);
+          }else{
+            if (!res.data&&res.reload != null){
+              location.href=res.reload;
+            }else{
+              var js='';
+              var html = res.data.stripScripts(function(script){
+                  js = script;
+              });
+
+              $('J_DataTable').innerHTML = html;
+              Browser.exec(js);
+              return;
+            }
+          }
+        }
+      }).send();
+      return false;
+    });
+  }
+  function onShelf(){
+    if(!isSelected()){
+      Ex_Dialog.alert('请选中要上架的宝贝！');
+      return false;
+    }
+    Ex_Dialog.confirm('确认上架宝贝？',function(e){
+      if(!e) return false;
+      new Request.JSON({
+        url:'<{link app=business ctl=site_member act=goods_enabled arg=instock}>',
+        method:'post',
+        secure:false,
+        data:$('tab-instock'),
+        onComplete:function(res,text){
+          if (res.error){
+            Message.error(res.error);
+          }else{
+            if (!res.data&&res.reload != null){
+              location.href=res.reload;
+            }else{
+              var js='';
+              var html = res.data.stripScripts(function(script){
+                  js = script;
+              });
+
+              $('J_DataTable').innerHTML = html;
+              Browser.exec(js);
+              return;
+            }
+          }
+        }
+      }).send();
+      return false;
+    });
+  }
+  
+  function onFree(){
+    if(!isSelected()){
+      Ex_Dialog.alert('请选中包邮的宝贝！');
+      return false;
+    }
+    Ex_Dialog.confirm('是否确认包邮？',function(e){
+      if(!e) return false;
+      new Request.JSON({
+        url:'<{link app=business ctl=site_member act=goods_tofree arg=instock}>',
+        method:'post',
+        secure:false,
+        data:$('tab-instock'),
+        onComplete:function(res,text){
+          if (res.error){
+            Message.error(res.error);
+          }else{
+            if (!res.data&&res.reload != null){
+              location.href=res.reload;
+            }else{
+              var js='';
+              var html = res.data.stripScripts(function(script){
+                  js = script;
+              });
+
+              $('J_DataTable').innerHTML = html;
+              Browser.exec(js);
+              return;
+            }
+          }
+        }
+      }).send();
+      return false;
+    });
+  }
+  
+  function onHave(){
+    if(!isSelected()){
+      Ex_Dialog.alert('请选中不包邮的宝贝！');
+      return false;
+    }
+    Ex_Dialog.confirm('是否确认不包邮？',function(e){
+      if(!e) return false;
+      new Request.JSON({
+        url:'<{link app=business ctl=site_member act=goods_tohave arg=instock}>',
+        method:'post',
+        secure:false,
+        data:$('tab-instock'),
+        onComplete:function(res,text){
+          if (res.error){
+            Message.error(res.error);
+          }else{
+            if (!res.data&&res.reload != null){
+              location.href=res.reload;
+            }else{
+              var js='';
+              var html = res.data.stripScripts(function(script){
+                  js = script;
+              });
+
+              $('J_DataTable').innerHTML = html;
+              Browser.exec(js);
+              return;
+            }
+          }
+        }
+      }).send();
+      return false;
+    });
+  }
+  
+  function searchItems(){
+    var oBuy = $('sold-amount-label').get('class');
+    var oTime = $('left-time-label').get('class');
+    if(oBuy == 'desc') oBuy = 'desc';
+    else oBuy = 'asc';
+    if(oTime == 'desc') oTime = 'desc';
+    else oTime = 'asc';
+    var orderby = oBuy+','+oTime;
+    new Request.JSON({
+      url:'<{link app=business ctl=site_member act=goods_search arg0=instock}>?orderby='+orderby,
+      method:'post',
+      secure:false,
+      data:$('tab-instock'),
+      onComplete:function(res,text){
+        if (res.error){
+          Message.error(res.error);
+        }else{
+          if (!res.data&&res.reload != null){
+            location.href=res.reload;
+          }else{
+            var js='';
+            var html = res.data.stripScripts(function(script){
+                js = script;
+            });
+
+            $('J_DataTable').innerHTML = html;
+            Browser.exec(js);
+            return;
+          }
+        }
+      }
+    }).send();
+  } 
+  
+  function orderByBidCount(){
+    var oBuy = $('sold-amount-label').get('class');
+    var oTime = $('left-time-label').get('class');
+    if(oTime == 'desc') oTime = 'desc';
+    else oTime = 'asc';
+    if(oBuy == 'desc'){
+      orderby = 'asc,'+oTime;
+      $('sold-amount-label').removeClass('desc').addClass('asc');
+    }else{
+      orderby = 'desc,'+oTime;
+      $('sold-amount-label').removeClass('asc').addClass('desc');
+    }
+    new Request.JSON({
+    url:'<{link app=business ctl=site_member act=goods_search arg0=instock}>?orderby='+orderby,
+      method:'post',
+      secure:false,
+      data:$('tab-instock'),
+      onComplete:function(res,text){
+        if (res.error){
+          Message.error(res.error);
+        }else{
+          if (!res.data&&res.reload != null){
+            location.href=res.reload;
+          }else{
+            var js='';
+            var html = res.data.stripScripts(function(script){
+                js = script;
+            });
+
+            $('J_DataTable').innerHTML = html;
+            Browser.exec(js);
+            return;
+          }
+        }
+      }
+    }).send();
+  }
+  
+  function orderByStartsTime(){
+    var oBuy = $('sold-amount-label').get('class');
+    var oTime = $('left-time-label').get('class');
+    if(oBuy == 'desc') oBuy = 'desc';
+    else oBuy = 'asc';
+    if(oTime == 'desc'){
+      orderby = oBuy+',asc';
+      $('left-time-label').removeClass('desc').addClass('asc');
+    }else{
+      orderby = oBuy+',desc';
+      $('left-time-label').removeClass('asc').addClass('desc');
+    }
+    new Request.JSON({
+    url:'<{link app=business ctl=site_member act=goods_search arg0=instock}>?orderby='+orderby,
+      method:'post',
+      secure:false,
+      data:$('tab-instock'),
+      onComplete:function(res,text){
+        if (res.error){
+          Message.error(res.error);
+        }else{
+          if (!res.data&&res.reload != null){
+            location.href=res.reload;
+          }else{
+            var js='';
+            var html = res.data.stripScripts(function(script){
+                js = script;
+            });
+
+            $('J_DataTable').innerHTML = html;
+            Browser.exec(js);
+            return;
+          }
+        }
+      }
+    }).send();
+  }
+</script>

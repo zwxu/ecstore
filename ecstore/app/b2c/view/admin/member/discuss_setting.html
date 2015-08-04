@@ -1,0 +1,59 @@
+<form method="post" action="index.php?app=b2c&ctl=admin_member_discuss&act=to_setting&" method="post">
+  <div class="tableform">
+    <h4 ><{t}>基本设置：<{/t}></h4>
+    <div class="division">
+      <table width="100%" cellspacing="0" cellpadding="2" border="0">
+        <tr>
+          <th><{t}>是否开启评论功能：<{/t}></th>
+          <td><{input type='radio' name="switch[discuss]" options=$setting.aSwitch.discuss value=$setting.switch.discuss separator=""}></td>
+        </tr>
+        <tr>
+          <th><{t}>发表评论权限：<{/t}></th>
+          <td><{input type='radio' name="power[discuss]" options=$setting.aPower.discuss value=$setting.power.discuss separator=""}></td>
+        </tr>
+      </table>
+    </div>
+       <h4 ><{t}>提示文字设置：<{/t}></h4>
+    <div class="division">        
+       <table width="100%" cellspacing="0" cellpadding="2" border="0">
+       	 <tr>
+          <th><{t}>无评论时缺省文字：<{/t}></th>
+          <td><{input type="input" name="null_notice[discuss]" style="width:360px" size=30 value=$setting.null_notice.discuss}></td>
+        </tr>        
+        <tr>
+          <th><{t}>等待审核提示:<{/t}></th>
+          <td><{input type="input" style="width:360px" name="submit_hidden_notice[discuss]" size=30 value=$setting.submit_hidden_notice.discuss}></td>
+        </tr>
+        <tr>
+          <th><{t}>发表成功提示文字<{/t}></th>
+          <td><{input type="input" style="width:360px" name="submit_display_notice[discuss]" size=30 value=$setting.submit_display_notice.discuss}></td>
+        </tr>
+         <tr>
+         <th><{t}>用户填写评论时所见提示：<{/t}></th>
+      <td> <{input type="input" name="submit_comment_notice[discuss]" size=30  style="width:360px" value=$setting.submit_comment_notice.discuss}>
+      </td>
+    </tr>
+     <tr>
+         <th><{t}>商品评价说明：<{/t}></th>
+      <td> <{input type="input" name="goods_discuss_notice" size=30  style="width:360px" value=$setting.goods_discuss_notice}>
+      </td>
+    </tr>
+      </table>
+      </td>
+      </tr>
+      </tbody>
+      </table>
+    </div>
+    <{if is_array($html)}>
+    <{foreach from=$html item=commenthtml}>
+    <{$commenthtml}>
+    <{/foreach}>
+    <{/if}>
+        <div class="table-action">
+	<{button type="submit"  label=$___b2c="保存"|t:'b2c'}>
+</div>
+
+  </div>
+  
+
+</form>

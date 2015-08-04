@@ -1,0 +1,15 @@
+<div class="tableform widgetconfig">
+<div class="division">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th><{t app='business'}>标题：<{/t}></th>
+    <td><{input type="text" name="title" value=$setting.title|default:'商家信息'}></td>
+  </tr>
+  <tr>
+    <th><{t app='business'}>是否显示店铺名称：<{/t}></th>
+    <td><input type="radio" name="showname" value="1" <{if $setting.showname == '1'}>checked<{/if}>> 是  
+      <input type="radio" name="showname" value="0" <{if $setting.showname != '1'}>checked<{/if}>> 否</td>
+  </tr>
+</table>
+</div>
+</div>

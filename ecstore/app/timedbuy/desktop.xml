@@ -1,0 +1,15 @@
+<desktop>
+    <permissions>
+        <permission id="timedbuy" display='true'>限时抢购列表</permission>
+        <permission id="timedbuy_activity" display='true'>限时抢购申请列表</permission>
+    </permissions>
+
+    <workground name="营销" id="b2c.wrokground.sale" controller="admin_sales_coupon" action="index" order="40">
+        <menugroup name="活动列表">
+            <menu controller='admin_activity' action='index' permission='timedbuy' display='true' order='10'>限时抢购列表</menu>
+        </menugroup>
+        <menugroup name="活动申请列表">
+            <menu controller='admin_businessactivity' action='index' permission='timedbuy_activity' display='true' order='20' >限时抢购申请列表</menu>
+        </menugroup>
+    </workground>    
+</desktop>

@@ -1,0 +1,1 @@
+<div class="optBtn">	<span class="opt-handle" dropmenu="x-drop-menu"><{t}>处理售后单<{/t}><b></b></span>	<ul class="x-drop-menu" >		<{foreach from=$arr_links item=link}>		<li><a href="javascript:void(0);" url="<{$link.href}>"<{if $link.submit}> submit="<{$link.submit}>"<{/if}> target="<{$link.target}>" title="<{$link.id}>"><{$link.label}></a></li>		<{/foreach}>	</ul></div>

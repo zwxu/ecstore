@@ -1,0 +1,8 @@
+<{input type="textarea" value=$value name=$name ishtml="true" style="display:none;" id="{$id}_textarea"}>
+<iframe id="<{$id}>_frame" name="<{$id}>_fram"  width="<{$width}>" scrolling="auto" height="<{$height}>" frameborder="0" src="<{$res_url}>/codemirror.html?<{$env.now}>#<{$id}><{if $mode}>:<{$mode}><{/if}>" allowtransparency="true"></iframe>
+<script>
+
+	$("<{$id}>_textarea").getValue = function(){
+		this.value = $('<{$id}>_frame').contentWindow.getSouceCode();
+	};
+</script>

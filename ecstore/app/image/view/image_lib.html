@@ -1,0 +1,21 @@
+<{if $images}>
+  <div class="image-lib clearfix">
+	 <{foreach from=$images item=image key=key}>
+		<div class="flt item" style="height:110px;width:110px;overflow:hidden;position:relative;margin:3px">
+			   <div style="height:110px;width:110px;overflow:hidden;display:table-cell;line-height:110px;font-size:94px;text-align:center;vertical-align:middle;font-family: Arail;clear:both;cursor:pointer;">
+				
+         <img lsrc="<{$image.image_id|storager:''}>" src="<{$image.image_id|storager:'s'}>" <{$image.size}> gid='<{$image.image_id}>'>
+				
+			   </div>
+			   <i style="display:block;padding:3px;white-space:nowrap;background:#ff3300;color:#fff;alpha:(opacity=60);opacity:.6;position:absolute;top:50px;left:40px;"><{t}>已选中<{/t}></i>
+		</div>
+	 <{/foreach}>
+  </div>
+<{if $pagers}>
+<div class="table-action">
+<{$pagers}>
+</div>
+<{/if}>
+<{else}>
+	<div class="notice"><{t}>没有发现图片<{/t}></div>
+<{/if}>

@@ -1,0 +1,68 @@
+ <h4><{t}>高级设置：<{/t}></h4>
+    <div class="division">
+      <table width="100%" cellspacing="0" cellpadding="2" border="0">
+		<tr> <th><{t}>咨询项目：<{/t}></th><td></td></tr>
+		<{foreach from=$gask_type item=gask_type}>
+		 <tr>
+		 <th></th>
+          <td><{input type='text' name="gask_type_name[{$gask_type.type_id}][name]" vtype="required" value="{$gask_type.name}"  /}>
+		  <span type_id="<{$gask_type.type_id}>" class='delete_gask_type'><{t}><{img src="bundle/delete.gif" class="del-tag lnk"}><{/t}></span></td>
+        </tr>
+		<{/foreach}>
+		</table>
+		<table>
+		<tr style="display:none">
+          <th></th>
+          <td><{input type='text' name="gask_type_name[][name]" vtype="required"}>
+        <span class='delete_gask_type'><{t}><{img src="bundle/delete.gif" class="del-tag lnk"}><{/t}></span></td>
+      </tr>
+		<tr><th><!-- <input type="button" value="添加"   id='add_gask_type'/> --> </th>
+        <td> <{button label="添加" id='add_gask_type'}></td></tr>
+      </table>
+    </div>
+	<script>
+(function(){
+var delEvent = function(){		
+		var deleteInput = $$('.delete_gask_type');
+		if(deleteInput.length == 2)
+		{
+			alert('至少保留一条咨询项目');
+			return false;
+		}
+		var type_id = this.get('type_id');
+	    var ihtml = this;
+		
+		new Request({
+				url:'index.php?app=commenterprise&ctl=admin_ask&act=checkAskdelete',
+				data:'type_id='+type_id,
+				method:'post',
+				onComplete:function(response)
+				{
+					if(response == 'true')
+					{
+						if(!confirm('<{t}>该项目下有咨询，删除项目不会删除这些咨询，如需删除可先到咨询列表删除。确认要删除项目吗？<{/t}>'))return false;
+						ihtml.getParent('tr').remove();
+					}
+					else
+					{
+						if(!confirm('<{t}>确定删除?<{/t}>'))return false;
+						ihtml.getParent('tr').remove();
+					}
+				}
+			}).send();
+}
+
+$('add_gask_type').addEvent('click',function(item){
+		var addTr = this.getParent('tr').getPrevious('tr').clone();
+		var timestamp = $time();
+		addTr.setStyle('display','');
+		addTr.getElement('input').name="gask_type_name["+timestamp+"][name]";
+		var broTable = this.getParent('table').getPrevious('table').getElements('tr').getLast();
+		addTr.inject(broTable,'after');
+		$$('.delete_gask_type').removeEvent('click',delEvent);
+		$$('.delete_gask_type').addEvent('click',delEvent);
+
+	});
+	$$('.delete_gask_type').addEvent('click',delEvent);
+})();
+	</script>

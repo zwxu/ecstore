@@ -1,0 +1,9 @@
+<site>
+    <explorer id='poster' path='view/site'>网店前台模版</explorer>
+
+    <module id='poster' controller='site_poster' >
+        <name>poster</name>
+        <title>广告</title>
+        <disable>false</disable>
+    </module>
+</site>

@@ -1,0 +1,14 @@
+<form action="index.php?ctl=currency&act=seldefault" method="post">
+<table>
+<{foreach from=$currency item=cur}>
+	<tr onclick="$E('input',this).checked=true" style="cursor: default;">
+		<th><input <{if $cur.cur_code eq $defalt_currency}>checked="checked"<{/if}> type="radio" name="default_cur" value="<{$cur.cur_code}>" /></th>
+		<td><{$cur.cur_name}></td>
+		<td><{$cur.cur_rate}></td>
+	</tr>
+<{/foreach}>
+</table>
+<div style="padding:10px;text-align:center">
+<input type="submit" value="<{t}>提交保存<{/t}>" />
+</div>
+</form>

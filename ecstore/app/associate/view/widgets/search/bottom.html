@@ -1,0 +1,47 @@
+<script>
+(function(scope){
+	if(scope){       
+	$(scope).getElements('input[autocompleter]').each(function(item) {
+                 item.setAttribute('autocomplete','off');
+                 var params = item.get('autocompleter');
+                 var callUrl = '<{link app=associate ctl=site_associate act=index}>?param='+params;
+
+                 var _getVar = params.match(/:([^,]*)/)[1];
+                var _base_options = {
+                     getVar: _getVar,
+                     fxOptions: false,
+					 selectFirst:false,
+					 autoSubmit:true,
+                     markQuery:false,
+					 onSubmit:function(){
+						item.getParent('form').submit();
+					 },
+                     delay: 300,
+                     callJSON: function() {return window.autocompleter_json;},
+                     injectChoice: function(json) {
+                         var token = json[this.options.getVar];
+                         var html="<p >约"+json['goods_id']+"个宝贝</p>"+token;
+                         var choice = new Element('li', {'html': this.markQueryValue(html)});
+                         choice.inputValue = token;
+                         this.addChoiceEvents(choice).inject(this.choices);
+                     },
+                     onShow:function(el,choices){
+                         //var li_default=choices.get('li.default');
+                         //if(!li_default){
+                         //  li_default=new Element('li',{'html':'ddddddddddd'});
+                         //  li_default.addClass('default');
+                         //  li_default.inject(choices);
+                         //}
+                     }
+                };
+                var ac_options = {};
+                try {
+                    ac_options = JSON.decode(item.get('ac_options'));
+                    Object.append(ac_options, item.retrieve('ac_options', {}));
+                }catch (e) {}
+                var _options = Object.merge(_base_options, ac_options);
+                new Autocompleter.script(item, callUrl, _options);
+       });
+}
+})(document.getElement('.searchBar_widgets_id'));
+</script>

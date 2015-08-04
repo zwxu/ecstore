@@ -1,0 +1,29 @@
+<!-- right-->
+<div class="member-main">
+  <div>
+    <form method="post" action="<{link app=business ctl='site_goods_cat'  act='save'}>" class="section" id="Member_addr">
+      <div class="FormWrap" style="background:none; border:none; padding:0; margin:0;">
+        <div class="title"><{t}>修改分类<{/t}></div>
+        <div class="division" style="border:none; border-bottom:1px dashed #ddd">
+                    <table cellpadding="0" class="forform" cellspacing="0" border="0">
+					 <{if $cat.custom_cat_id }><input type="hidden" value="<{$cat.custom_cat_id}>" name="cat[custom_cat_id]" /><{/if}>
+                        <tr>
+                        <th><{t}>分类名称：<{/t}></th><td><input type="text" value="<{$cat.cat_name|escape:'html'}>" name="cat[cat_name]" vtype='required' class='x-input'/>
+						<{$cat_name}></td></tr>
+                        <tr><th><{t}>上级分类：<{/t}></th><td><{input type="select" name="cat[parent_id]" style="font-size:12px;" required='1' value=$cat.parent_id rows=$catList valueColumn="custom_cat_id" labelColumn="cat_name"}>
+						<span class="notice-inline"><{t}>顶级分类请选择“无”<{/t}></span></td></tr>
+                        <tr><th><{t}>排序：<{/t}></th><td><input style="width:50px;" vtype="unsigned" class="inputstyle" value="<{$cat.p_order}>" name="cat[p_order]" class="_x_ipt"/>
+						<span class="notice-inline"><{t}>数字越小越靠前<{/t}></span></td></tr>
+                    </table>
+                </div>
+        <div style="padding-left:140px">
+           <{button class="submit-btn" type="submit" rel="_request" label=$___b2c="提交"|t:'b2c'}>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+ 
+</script>
+<!-- right-->

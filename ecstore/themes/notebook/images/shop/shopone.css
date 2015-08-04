@@ -1,0 +1,101 @@
+﻿*{margin:0px;padding:0px;}
+.cl_zhi {clear:both;line-height:0px;height:0px;font-size:0px;}
+.le_zhi {float:left;}
+.ri_zhi {float:right;}
+p {font-size:12px;}
+a img{border:0px none;}
+.mb5 {margin-bottom:5px;}
+.m10{margin:10px 0px;}
+.img_1160 {width:1160px;overflow:hidden;}
+
+.shop_backgro{background:#fff;overflow:hidden;}
+.shop_main {width:1200px;background:#fff;margin:0 auto;overflow:hidden;}
+.shop_head {background:url(shop1_03.gif) repeat-x;height:81px;padding-top:30px;}
+.shop_broad {width:483px;}
+.shop_broad span{background:url(shop1_23.gif) left center no-repeat;padding-left:20px;color:#7a7a70;font-family:tahoma,"microsoft yahei","微软雅黑";font-size:10px;display:block;width:220px;margin:50px auto 0px;}
+.kef {margin-top:30px;}
+.kef a {float:left;display:block;width:60px;height:22px;line-height:22px;font-family:tahoma,"microsoft yahei","微软雅黑";font-size:12px;text-decoration:none;color:#fff;margin:0 2px;text-align:center;font-weight:bold;}
+.kef a.kf_1 {background:#fdae2f;}
+.kef a.kf_2 {background:#f6693b;}
+.kef a.kf_3 {background:#4ab194;}
+.shopone_logo {wmargin-right:50px;}
+.shop_share {padding-left:3px;height:20px;margin:5px 0px;}
+.shop_share li{float:left;list-style:none;font-family:tahoma,"microsoft yahei","微软雅黑";font-size:12px;color:#b7a48e;font-weight:bold;}
+.shop_share li a { margin:0px 2px;}
+.shop_share li a img {width:16px;height:15px;overflow:hidden;}
+
+.shop_nav{background:#589887;padding-left:165px;height:24px;}
+.shop_nav li {float:left;list-style:none;}
+.shop_nav li a{text-decoration:none;font-family:tahoma,"microsoft yahei","微软雅黑";font-size:12px;color:#fff;margin:0 20px;height:24px;line-height:24px;}
+.shop_scroll {position:relative;}
+.shop_scroll img {width:1160px;overflow:hidden;}
+.scro_num {position:absolute;right:115px;bottom:10px;}
+.scro_num li{float:left;list-style:none;}
+.scro_num li a{display:block;background:#fff;text-align:center;border:1px solid #a8a699;width:25px;height:25px;line-height:25px;color:#235047;text-decoration:none;margin:0 2px;}
+.scro_num li a:hover {background:#f26a33;color:#fff;}
+.scro_num li a.hover {background:#f26a33;color:#fff;}
+
+.shop_classiess_1_le,.shop_classiess_1_le a,.shop_classiess_1_le img{width:255px;height:250px;margin-right:2px;margin-bottom:2px;}
+.shop_classiess_1_ri,.shop_classiess_1_ri a,.shop_classiess_1_ri img {width:274px;height:250px;margin-bottom:2px;}
+.shop_classiess_1_cen {width:627px;}
+.shop_classiess_1_cen li{float:left;list-style:none;}
+.shop_classiess_1_cen li a{display:block;margin-bottom:2px;}
+.shop_classiess_1_cen li a.tu_1 img,.shop_classiess_1_cen li a.tu_1  {width:323px;height:126px;}
+.shop_classiess_1_cen li a.tu_2 img,.shop_classiess_1_cen li a.tu_2 {width:302px;height:126px;}
+.shop_classiess_1_cen li a.tu_3 img,.shop_classiess_1_cen li a.tu_3 {width:323px;height:122px;}
+.shop_classiess_1_cen li a.tu_4 img,.shop_classiess_1_cen li a.tu_4 {width:302px;height:122px;}
+.shop_classiess_1_cen li a.tu_1,.shop_classiess_1_cen li a.tu_3 {margin-right:2px;}
+
+.shop_classiess_2 li {float:left;list-style:none;}
+.shop_classiess_2 li a{display:block;width:198px;height:64px;margin-right:2px;}
+.shop_classiess_2 li a img {width:198px;height:64px;}
+.shop_classiess_2 li a.none {margin-right:0px;}
+.shop_classiess_3 {margin:10px 0px;}
+.shop_classiess_3 li {float:left;list-style:none;}
+.shop_classiess_3 li a,.shop_classiess_3 li a img{display:block;height:120px;}
+
+.shop_classiess_3 li a.tu_5,.shop_classiess_3 li a.tu_5 img{width:383px;margin-right:4px;}
+.shop_classiess_3 li a.tu_6,.shop_classiess_3 li a.tu_6 img{width:387px;margin-right:4px;}
+.shop_classiess_3 li a.tu_7,.shop_classiess_3 li a.tu_7 img {width:381px;}
+
+.allkind_le{ width:657px;overflow:hidden;}
+.allkind_le h4 {background:#5d1350;height:26px;line-height:26px;color:#fff;width:607px;padding-left:50px;font-family:tahoma,"microsoft yahei","微软雅黑";font-size:12px;}
+.kind_ul {padding:10px 0px 0px 15px;height:190px;}
+.kind_ul li {float:left;list-style:none;width:80px;margin:0 13px;}
+.kind_ul li  a{font-size:12px;text-decoration:none;display:block;width:80px;color:#000;height:22px;line-height:22px;}
+.kind_ul li  a.fwb{font-weight:bold;}
+.kind_ul li  a.clo_r {color:red;}
+.kind_ul li  a.clo_r_b{color:red;font-weight:bold;}
+
+.allkind_cen{ width:192px;overflow:hidden;}
+.allkind_cen h4{width:172px;background:#1f2a3c;height:26px;line-height:26px;color:#fff;padding-left:20px;font-family:tahoma,"microsoft yahei","微软雅黑";font-size:12px;}
+.kind_ul_bg {background:#fafafa;height:190px;}
+
+.allkind_ri {position:relative;}
+.allkind_num {position:absolute;left:137px;bottom:15px;}
+.allkind_num  li {float:left;list-style:none;}
+.allkind_num  li a{display:block;width:10px;height:10px;background:#949492;margin:0px 3px;}
+.allkind_num  li a:hover{display:block;width:10px;height:10px;background:#fff;}
+.allkind_num  li a.hover{display:block;width:10px;height:10px;background:#fff;}
+
+.allkind_tab {margin-bottom:12px;}
+.shop_show_pro {margin-top:12px;}
+.shop_show_pro>a {float:left;display:block;width:521px;height:459px;}
+.shop_show_pro_ul{width:626px;}
+.shop_show_pro_ul li{float:left;list-style:none;}
+.shop_show_pro_ul li a {display:block;width:307px;height:224px;margin-bottom:12px;position:relative;}
+.shop_show_pro_ul li a img {width:307px;height:224px;}
+.shop_show_pro_ul li a.tu_8{margin-right:12px;}
+.shop_show_pro_ul li a strong {position:absolute;bottom:0px;left:0px;height:37px;line-height:37px;background:#5a1856;width:287px;padding:0 10px;}
+.shop_show_pro_ul li a strong span {font-family:tahoma,"microsoft yahei","微软雅黑";font-size:14px;}
+.info_span {color:#fff;width:220px;}
+.price_span {color:#fbb114;}
+.floor_tu {width:1160px;height:90px;overflow:hidden;margin:10px 0px;}
+.shop_show_pro_flo li{float:left;list-style:none;}
+.shop_show_pro_flo li a{width:294px;height:223px;display:block;margin-right:8px;}
+.shop_show_pro_flo li a img {width:294px;height:223px;}
+.shop_show_pro_flo li a.none {margin-right:0px;}
+.flo_scro {position:relative;margin-top:10px;}
+.pre,.nex {position:absolute;width:25px;height:47px;}
+.pre {background:url(shop1_101.png) no-repeat;left:50px;top:135px;margin:0;}
+.nex {background:url(shop1_102.png) no-repeat;right:50px;top:135px;margin:0;}

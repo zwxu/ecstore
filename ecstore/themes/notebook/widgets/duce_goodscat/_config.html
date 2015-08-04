@@ -1,0 +1,146 @@
+﻿<style>
+  .ad_ul .add-title,
+  .ad_ul .add-url,
+  .ad_ul .delete{float:left;_display:inline;margin-left:5px;}
+  .ad_ul .delete{height:20px;width:16px;cursor:pointer;}
+  .ad_ul .ad-item{background-color:#E2E8EB;padding:5px 5px 3px;line-height:22px;margin:2px 0;}
+  .ad_ul{cursor:pointer;}
+</style>
+<div class="tableform widgetconfig">
+<div class="division">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <input type=hidden name="newCatPic" id="newCatPic" value="0">
+    <{foreach from=$data.cat item=cat key=k}>
+    <input type=hidden name="cat[<{$k}>][cat_id]" value="<{$cat.cat_id}>">
+    <input type=hidden name="cat[<{$k}>][cat_name]" value="<{$cat.cat_name}>">
+    <tr>
+    <th colspan="4" style="text-align:left;background:#DDE5FC;color:#669">&nbsp;
+      <strong>
+        <{$cat.cat_name}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <{t app='b2c'}>自定义标题：<{/t}><input type="text" name="cat[<{$k}>][title]" value="<{$setting.cat.$k.title}>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <{t app='b2c'}>自定义链接：<{/t}><input type="text" name="cat[<{$k}>][link]" value="<{$setting.cat.$k.link}>">
+      </strong>
+
+    </th>
+    </tr>
+      <tr>
+        <th><{t app='b2c'}>促销广告图片：<{/t}></th>
+        <td>
+        <div class="tableform">
+        <input type="button" onclick="add_ad('ad_ul_<{$k}>',<{$k}>)" value="添加促销广告" />
+        <ul id="ad_ul_<{$k}>" class="ad_ul">
+            <{if $setting.cat.$k.ad}>
+            <{foreach from=$setting.cat.$k.ad item=item key=key}>
+              <li class="ad-item clearfix">
+                <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                  <tbody>
+                  <tr>
+                    <th><{t app='b2c'}>广告尺寸：<{/t}></th>
+                    <td>
+                      <{t app='b2c'}>宽<{/t}>
+                      <input type="text" name="cat[<{$k}>][ad][<{$key}>][width]" value="<{$item.width}>" style="width:40px">px 
+                      <{t app='b2c'}>高<{/t}>
+                      <input type="text" name="cat[<{$k}>][ad][<{$key}>][height]" style="width:40px" value="<{$item.height}>">px
+                    </td>
+                    </tr>
+                    <tr>
+                      <th><{t app='b2c'}>图片：<{/t}></th>
+                      <td>
+                    <input type=hidden name="cat[<{$k}>][ad][<{$key}>][pic]" value="<{$item.pic}>">
+                    <input name='cat[<{$k}>][ad][<{$key}>][pic]' class="imgsrc" id="ad_pic_<{$k}>_<{$key}>" value="<{$item.pic}>"><input type=button value="<{t app='b2c'}>上传图片<{/t}>" class="uploadbtn" onclick="addPic('ad_pic_<{$k}>_<{$key}>')">
+                    </td>
+                  </tr>
+                   <tr>
+                    <th><{t app='b2c'}>图片描述：<{/t}></th>
+                    <td><input type="text" name="cat[<{$k}>][ad][<{$key}>][txt]" value="<{$item.txt}>"></td>
+                  </tr>
+                  <tr>
+                    <th><{t app='b2c'}>图片链接：<{/t}></th>
+                    <td><input type="text" name="cat[<{$k}>][ad][<{$key}>][link]" value="<{$item.link}>"></td>
+                  </tr>
+                </tbody></table>
+                <a class="delete" title="删除" href="javascript:void(0);" onclick="DelTopMenu(this);"></a>
+              </li>
+            <{/foreach}>
+            <{/if}>
+        </ul>
+        </div>
+          
+        </td>
+      </tr>
+      <tr>
+        <th><{t app='b2c'}>二级导航第一行：<{/t}></th>
+        <td>
+            <select style="width:120px" size="7" multiple="multiple" id="f_cat" title="<{t}>按住Ctrl同时点击可以多选<{/t}>"  name="cat[<{$k}>][virtualcat1][]">
+                <{foreach from=$data.virtualcat item=vcat name=_s}>
+                <option value="<{$vcat.cat_id}>" <{if in_array($vcat.cat_id, $setting.cat.$k.virtualcat1)}>selected<{/if}>><{$vcat.cat_name|paddingleft:$vcat.len*4-4:'&nbsp;'}></option>
+                <{/foreach}>
+            </select>
+        </td>
+      </tr>
+      <!-- <tr>
+        <th><{t app='b2c'}>二级导航第二行：<{/t}></th>
+        <td>
+            <select style="width:120px" size="7" multiple="multiple" id="f_cat" title="<{t}>按住Ctrl同时点击可以多选<{/t}>"  name="cat[<{$k}>][virtualcat2][]">
+                <{foreach from=$data.virtualcat item=vcat name=_s}>
+                <option value="<{$vcat.cat_id}>" <{if in_array($vcat.cat_id, $setting.cat.$k.virtualcat2)}>selected<{/if}>><{$vcat.cat_name|paddingleft:$vcat.len*4-4:'&nbsp;'}></option>
+                <{/foreach}>
+            </select>
+        </td>
+      </tr> -->
+      <{/foreach}>
+    </table>
+</div>
+
+<div class="division">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <th colspan="4" style="text-align:left;background:#DDE5FC;color:#669">&nbsp;
+      <strong>弹出菜单</strong></th></tr>
+    <tr>
+      <th>三级分类最多显示数：</th>
+      <td colspan="3"><{input name="gshowmax" value=$setting.gshowmax|default:'0'}>“0”为全显示，如果商品分类超出设置数，超出部分隐藏并显示更多</td>
+    </tr>
+
+    <tr>
+      <th>品牌数量：</th>
+      <td colspan="3"><{input name="cat_brand_num" value=$setting.cat_brand_num|default:'10' required="true" type="digits"}>“0”为全显示</td>
+    </tr>
+    
+
+    <!-- <tr>
+        <th><{t app='b2c'}>一级菜单图片：<{/t}></th>
+        <td>
+            <input type=hidden name="cat_pic" value="<{$setting.cat_pic}>"><input name='cat_pic' class="imgsrc" id="cat_pic" value="<{$setting.cat_pic}>"><input type=button value="<{t app='b2c'}>上传图片<{/t}>" class="uploadbtn" onclick="addPic('cat_pic')">
+        </td>
+      </tr> -->
+  </table>
+</div>
+</div>
+<script>
+
+function addPic(id){
+    var url='index.php?app=desktop&act=alertpages&goto='+encodeURIComponent("index.php?app=image&ctl=admin_manage&act=image_broswer&type=big");
+    Ex_Loader('modedialog',function(){
+    return new imgDialog(url,{onCallback:function(image_id,image_src){
+         $(id).value=image_src;
+         if(id == 'cat_pic'){
+            $('newCatPic').set('value','1');
+         }
+    }});
+    });
+  }
+
+
+function add_ad(id,k){
+      var li_len = $('ad_ul_'+k).getElements('li').length;
+      var ActiveLi = new Element(
+            'li',{'class':'ad-item clearfix','html':'<table cellspacing="0" cellpadding="0" border="0" width="100%"><tbody><tr><th><{t app="b2c"}>广告尺寸：<{/t}></th><td><{t app="b2c"}>宽<{/t}><input type="text" name="cat['+k+'][ad]['+li_len+'][width]" style="width:40px">px <{t app="b2c"}>高<{/t}><input type="text" name="cat['+k+'][ad]['+li_len+'][height]" style="width:40px">px</td></tr><tr><th><{t app="b2c"}>图片：<{/t}></th><td><input type=hidden name="cat['+k+'][ad]['+li_len+'][pic]"><input name="cat['+k+'][ad]['+li_len+'][pic]" class="imgsrc" id="cat_'+k+'_ad_'+li_len+'"><input type=button value="<{t app="b2c"}>上传图片<{/t}>" class="uploadbtn" onclick="addPic(\'cat_'+k+'_ad_'+li_len+'\')"></td></tr><tr><th><{t app="b2c"}>图片描述：<{/t}></th><td><input type="text" name="cat['+k+'][ad]['+li_len+'][txt]"></td></tr><tr><th><{t app="b2c"}>图片链接：<{/t}></th><td><input type="text" name="cat['+k+'][ad]['+li_len+'][link]"></td></tr></tbody></table> <a class="delete" title="删除"></a>'}).inject(id);
+      ActiveLi.getElement('.delete').addEvent('click',function(){
+        DelTopMenu(this);
+      });
+}
+function DelTopMenu(item){
+        item.getParent(".ad-item").destroy();
+    }
+</script>

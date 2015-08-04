@@ -1,0 +1,22 @@
+<site>
+    <module id='complain'  controller='site_seller_complain'>
+        <name>scomplain</name>
+        <title>投诉管理</title>
+        <disable>false</disable>
+    </module>
+    <module id='complain' controller='site_buyer_complain'>
+        <name>bcomplain</name>
+        <title>投诉管理</title>
+        <disable>false</disable>
+    </module>
+    <module id='complain'  controller='site_seller_reports'>
+        <name>sreports</name>
+        <title>举报管理</title>
+        <disable>false</disable>
+    </module>
+    <module id='complain' controller='site_buyer_reports'>
+        <name>breports</name>
+        <title>举报管理</title>
+        <disable>false</disable>
+    </module>
+</site>

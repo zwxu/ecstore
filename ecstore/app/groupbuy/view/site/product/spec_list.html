@@ -1,0 +1,181 @@
+<div class="goods-spec <{$goodsspec_classname}>">
+  <div class="speci">
+    <{foreach from=$goods.spec key=key item=goodsFlatSpecDesc}>
+    <{if $goodsFlatSpecDesc.spec_show_type != 'flat'}><{assign var=hasSelSpec value='true'}><{continue}><{/if}>
+    <div class="spec-item specItem clearfix">
+      <div class="spec-label"><span><em><{$goodsFlatSpecDesc.spec_name}></em>：</span></div>
+      <div class="spec-values">
+        <ul class="clearfix">
+          <{foreach from=$goodsFlatSpecDesc.option key=skey item="subDesc"}>
+          <{if $goods.used_spec.$skey}>
+          <{if $goodsFlatSpecDesc.display!="block"}>
+          <li><a href="<{link app=b2c ctl=site_product act=index arg0=$goods.goods_id arg1=$subDesc.spec_goods_images}>" specvid="<{$skey}>" specid="<{$key}>" > <{if $goodsFlatSpecDesc.spec_type=='text'}> <span><{$subDesc.spec_value}></span> <{else}> <img src="<{if $subDesc.spec_image}><{$subDesc.spec_image|storager}><{else}><{$spec_default_pic|storager}><{/if}>"  alt="<{$subDesc.spec_value}>" title="<{$subDesc.spec_value}>" width="<{$specimagewidth}>" height="<{$specimageheight}>"> <{/if}> <i title="<{t}>点击取消选择<{/t}>">&nbsp;</i> </a></li>
+          <{/if}>
+          <{/if}>
+          <{/foreach}>
+        </ul>
+      </div>
+    </div>
+    <{/foreach}>
+  </div>
+
+  <!-- 颜色-->
+  <{if $hasSelSpec}>
+  <div class="spec-item">
+    <ul class="clearfix">
+      <{foreach from=$goods.spec key=selKey item=goodsSelSpecDesc}>
+      <{if $goodsSelSpecDesc.spec_show_type != 'select'}><{continue}><{/if}>
+      <{foreach from=$goods.spec[$selKey].value key=sSelKey item="subDesc"}>
+      <{if $subDesc.selected}>
+      <{assign var='selectValue' value=$subDesc.spec_value}>
+      <{/if}>
+      <{/foreach}>
+      <{assign var='__cs' value=$___b2c='请选择'|t:'b2c'}>
+      <li class="clearfix">
+      <div class="handle"><div class="inner"><em><{$goodsSelSpecDesc.spec_name}></em>：<span><{if $selectValue|trim != ''}><{$selectValue}><{else}><{$__cs}><{/if}></span> <{assign var="selectValue" value=' '}></div></div>
+      <div class="content specItem clearfix">
+        <ul class="clearfix">
+          <{foreach from=$goodsSelSpecDesc.option key=sSelKey item="subDesc"}>
+          <{if $goods.used_spec.$sSelKey}>
+          <{if $goodsFlatSpecDesc.display!="block"}>
+          <li> <a href="<{link app=b2c ctl=site_product act=index arg0=$goods.goods_id arg1=$subDesc.spec_goods_images}>" specvid="<{$sSelKey}>" specid="<{$selKey}>"> <{if $goodsSelSpecDesc.spec_type=='text'}> <span><{$subDesc.spec_value}></span> <{else}> <img src="<{if $subDesc.spec_image}><{$subDesc.spec_image|storager}><{else}><{$spec_default_pic|storager}><{/if}>" style="border:1px #ccc solid" alt="<{$subDesc.spec_value}>" title="<{$subDesc.spec_value}>" width="<{$specimagewidth}>" height="<{$specimageheight}>"> <{/if}> <i title="<{t}>点击取消选择<{/t}>">&nbsp;</i> </a> </li>
+          <{/foreach}>
+          <{/if}>
+          <{/if}>
+        </ul>
+      </div>
+      </li>
+      <{/foreach}>
+    </ul>
+  </div>
+  <{/if}>
+  <input type="hidden" data-type-spec="true" value='<{$goods.spec2product}>' />
+  <input type="hidden" data-type-product="true" value='<{$goods.product2spec}>' />
+</div>
+
+<script>
+
+  (function(){
+    var isDebug = '<{if defined("DEBUG_JS") && DEBUG_JS}>js<{else}>js_mini<{/if}>/',
+    path ='<{$env.base_url}>/app/b2c/statics/' + isDebug;
+
+    $LAB.setOptions({BasePath:path}).script('spec.js').wait(function(){
+      Goods_spec._selectUpdate['updatePic'] =function(spec){
+        var pic= this.contains.getElement('.spec-pic'),pic_type;
+        if(!pic)return;
+        pic_type= pic.get('data-pic-type');
+        if(!pic_type) pic_type = "small";
+        var picsId=[],spec2image=<{$goods.spec2image}>;
+        this.selectedBtn.each(function(s){
+          if(this.spec_hash[s.get('specvid')])
+          picsId.combine(this.spec_hash[s.get('specvid')]['images']);
+        },this);
+        if(picsId[0]&&spec2image[picsId[0]][pic_type]) {
+          this.contains.getElement('.spec-pic img').src=spec2image[picsId[0]][pic_type];
+        }
+        var detail_pic = this.contains.getElements('.goods-detail-pic-thumbnail li[img_id]');
+        if(!detail_pic.length)return;
+        if(!picsId.length || !picsId[0].trim().length)
+        return detail_pic.each(function(el){el.show();});
+        var pointer = false;
+        detail_pic.each(function(i){
+          if(picsId.contains(i.get('img_id'))){
+            i.style.display = 'block';
+            if(!pointer){
+              i.getElement('a').fireEvent('click',{stop:function(){}});
+              pointer = true;
+            }
+          }else{i.style.display = 'none';}
+        });
+      };
+
+
+
+      if (!priceControl) {
+        var priceControl={
+          base:"<{$goods.current_price}>",
+          _format:<{$money_format|default:'false'}>,/*"decimals":2,"dec_point":".","thousands_sep":"","fonttend_decimal_type":0,"fonttend_decimal_remain":2,"sign":"\uffe5"*/
+          format:function(num){
+            var part;
+            if(!(num || num === 0)) return;
+            var num = num.toFloat();
+            if(this._format.cur_rate) {
+              num = num * this._format.cur_rate;
+            }
+            num = num.round(this._format.decimals)+'';
+            var p =num.indexOf('.');
+            if(p<0){
+              p = num.length;
+              part = '';
+              }else{
+              part = num.substr(p+1);
+            }
+            while(part.length<this._format.decimals){
+              part+='0';
+            }
+            var c=[];
+            while(p>0){
+              if(p>2){
+                c.unshift(num.substr(p-=3,3));
+                }else{
+                c.unshift(num.substr(0,p));
+                break;
+              }
+            }
+            if(!part){
+              this._format.dec_point='';
+            }
+            return (this._format.sign||"")+c.join(this._format.thousands_sep)+this._format.dec_point+part;
+          }
+        };
+      }
+
+
+      Goods_spec._selectedUpdate['updateprice']=function(el,v,pid,pdata){
+          if(!el.retrieve('default:html')) el.store('default:html',el.get('text'));
+          //el.set('html',priceControl.format(pdata[pid]['price']));
+      };
+      Goods_spec._selectedUpdate['mktprice']=function(el,v,pid,pdata){
+          if(!el.retrieve('default:html')) el.store('default:html',el.get('text'));
+          el.set('html',priceControl.format(pdata[pid]['mktprice']));
+      };
+      Goods_spec._selectedUpdate['mprice']=function(el,v,pid,pdata){
+          var memberList = el.getElements('em');
+          memberList.each(function(item){
+              var mlv = item.get('mlv');
+              var price = pdata[pid]['mprice'][mlv];
+              if(item.hasClass('discountprice')) {
+                  price = Number.from(pdata[pid]['mktprice']) - price;
+              }
+              item.set('html',priceControl.format(price));
+          });
+      };
+      Goods_spec._selectedUpdate['discountprice']=function(el,v,pid,pdata){
+          if(!el.retrieve('default:html')) el.store('default:html',el.get('text'));
+          el.set('html',priceControl.format(pdata[pid]['discountprice']));
+      };
+      Goods_spec._selectedUpdate['notify']=function(el,v,pid,pdata){
+          var store = pdata[pid]['store'].toInt(),
+              notifybtn = this.contains.getElement('.btn-notify');
+          buybtn= this.contains.getElement('.btn-buy');
+          fastbuybtn= this.contains.getElement('.btn-groupbuy');
+          notifybtn && notifybtn[!store ? 'show' :'hide']();
+          buybtn && buybtn[store ? 'show' :'hide']();
+          fastbuybtn && fastbuybtn[store ? 'show' :'hide']();
+      };
+
+      var params = <{$other_params}>;
+      if(!params || !params.spec_node_new || params.spec_node_new == 'true') {
+          var elem =$$(".<{$goodsspec_classname}>")[0],goods_spec_box = elem.getParent('.ec-spec-box'),
+          goodsspec = new Goods_spec(goods_spec_box);
+          elem.store('_goods_spec',goodsspec);
+         
+          if(params.spec_node){
+            var specBtn = elem.getElement('a[specvid^='+params.spec_node+']')||'';
+            if(specBtn) specBtn.fireEvent('click',{stop:function(){}});
+          }
+         
+      }
+    });
+})();
+</script>

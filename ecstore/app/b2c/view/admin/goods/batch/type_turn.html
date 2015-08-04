@@ -1,0 +1,112 @@
+
+<div class="division" id="t">
+<div class="notice">
+<{if $turn_type == 'type'}>
+请选择要转换的目标商品类型
+<{else}>
+请选择要转换的目标商品分类
+<{/if}>
+</div>
+<table>
+<tr>
+    <th>共有<span id="count"><{$editInfo.count}></span>条数据<br/></th>
+    <td><textarea name="_filter" id="_filter" style="display:none"><{$_filter}></textarea><{if $turn_type == 'type'}>
+<select id='turn_data' name="type">
+<{foreach from=$gtype item=gitem}>
+    <option value='<{$gitem.type_id}>'><{$gitem.name}></option>
+<{/foreach}>
+</select>
+
+<{else}>
+
+<select id='turn_data' name="cat">
+<{foreach from=$pcat item=citem}>
+    <option value='<{$citem.cat_id}>'><{if $citem.cls=='true'}><{$citem.cat_name}><{else}>&nbsp;&nbsp;<{$citem.cat_name}><{/if}></option>
+<{/foreach}>
+</select>
+
+<input type="checkbox" name='trans_type' id="trans_type">同时转换商品类型
+<input type="hidden" name='trans_type_comm' id='trans_type_comm' value="">
+<{/if}>
+</td>
+
+    </tr>
+</table>
+
+</div>
+
+<div class="table-action">
+<{button type="button" id="to_turn" label="开始转换"}>
+</div>
+
+
+<div id='tip_msg'></div>
+
+<div id='returnRs' style='display:none'></div>
+
+<script>
+
+(function(){
+var step=1;
+var statuBool=false;
+var echoRs = function(){
+    $('tip_msg').set('text',$('msg').get('html'));
+};
+
+if($('trans_type') && $('trans_type_comm')){
+    $('trans_type').addEvent('click',function(){
+        $('trans_type_comm').set('value',this.checked?'1':'0');
+    }).fireEvent('click');
+}
+
+$('to_turn').addEvent('click',function(){
+    if($('trans_type_comm')){
+         if($('trans_type_comm').get('value')==1 && $('trans_type_comm')){
+            return1 = confirm("请注意转换前后的商品类型要一致，否则容易导致商品属性、规格等商品信息丢失!");
+         }else if($('trans_type_comm').get('value')==0 && $('trans_type_comm')){
+            return1 = true;
+         }
+           type_comm = '&trans_type_comm='+$('trans_type_comm').get('value');
+    }else{
+          return1 = confirm("<{if $turn_type == 'type'}>请在类型转换前，确保类型数据完全匹配，否则会导致类型属性、关联品牌、参数表、货品等相关数据丢失。<{else}>请注意转换前后的商品类型要一致，否则容易导致商品属性、规格等商品信息丢失!<{/if}>");
+          type_comm = '';
+    }
+
+   if(statuBool||return1) {
+    new Request.HTML({
+    method:'post',
+    update:$('returnRs'),
+    url:'index.php?app=b2c&ctl=admin_goods&act=toTurnType',
+    data:'type_value='+$('turn_data').get('value')+'&turn_data='+$('turn_data').get('name')+'&_filter='+$('_filter').get('value')+'&step='+step+'&count='+$('count').get('html')+type_comm,
+    onRequest:function(){
+
+    },
+
+    onComplete:function(nl){
+            if($('status').get('text')=='continue'){
+                statuBool=true;
+
+                echoRs();
+                step++;
+                $('to_turn').fireEvent('click',arguments.callee);
+            }else{
+                 statuBool=false;
+
+                echoRs();
+                $('to_turn').setOpacity(.5).setStyle('color','#666');
+                this.cancel();
+                 $('to_turn').removeEvents('click');
+                step=1;
+            }
+    }
+   }).send();
+   }else{
+         return
+   }
+});
+})();
+
+
+</script>
+
+

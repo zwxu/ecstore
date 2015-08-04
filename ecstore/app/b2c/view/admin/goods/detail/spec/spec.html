@@ -1,0 +1,269 @@
+<div id="spec_body">
+<h2 class="head-title"><{t}>规格<{/t}></h2>
+<div class="goods-spec-detail">
+    <{button label="label" label=$___b2c="编辑"|t:'b2c' app="desktop" class="selectspec"}>
+    <div class="goods-spec-selected">
+        <{if $goods.spec}>
+        <dl>
+            <dt>已经启动的规格项:</dt>
+            <{foreach from=$goods.used_spec item=u_spec}>
+            <dd><{$u_spec.spec_name}>(<{$u_spec.nums}>)</dd>
+            <{/foreach}>
+        </dl>
+        <p class="goods-num">
+              已生成货品(<{$goods.product_num}>)
+        </p>
+        <{/if}>
+    </div>
+    <{button label="label" label=$___b2c="关闭"|t:'b2c' class="closespec"}>
+</div>
+
+<input type='hidden' name='goods[spec]' id='goods_spec' value='<{$goods.spec|serialize}>'/>
+</div>
+<script>
+    window.rendSpec =function(specJson,goodsNum){
+
+        if(!$$('.goods-spec-detail .goods-spec-selected p')[0])return;
+        $$('.goods-spec-detail .goods-spec-selected p')[0].innerHTML = "已生成货品("+goodsNum+")";
+
+
+        $$('.goods-spec-detail .goods-spec-selected dl dd').dispose();
+
+        specJson.each(function(item){
+            new Element('dd',{
+                html:item.spec_name+'('+item.nums+')'
+            }).inject($$('.goods-spec-detail .goods-spec-selected dl dt')[0],'after');
+        });
+
+    }
+
+    $$('.goods-spec-detail .selectspec')[0].addEvent('click',function(e){
+        window.open('index.php?app=b2c&ctl=admin_products&act=set_spec_index&nospec=0&'+$$('.pic-area')[0].toQueryString()+'&goods_id=' + <{$goods.goods_id}>,'edit');
+    });
+    $$('.goods-spec-detail .closespec')[0].removeEvents('click').addEvent('click',function(e){
+       if(e&&!confirm('<{t}>关闭后现有已添加的货品数据将全部丢失，确定要关闭规格吗？<{/t}>'))return;
+       new Request.HTML({
+       url:'index.php?app=b2c&ctl=admin_goods_editor&act=nospec',method:'post',
+       update:'goods-spec',data:'goods_id='+<{$goods.goods_id}>+'&type_id='+$('gEditor-GType-input').getValue()}).send();
+    });
+</script>
+<script>
+Ex_Loader('pager',function(){
+
+var specTmplImageHash = $H();
+var specImageHash = $H();
+<{foreach from=$spec_tmpl item=specImage}>
+<{if $specImage.spec_type == 'image'}>
+<{foreach from=$specImage.spec_value item=aSpecImage}>
+<{if $aSpecImage.spec_image}>
+    specTmplImageHash.set( '<{$aSpecImage.spec_image}>' , '<{$aSpecImage.spec_image|storager}>' );
+<{/if}>
+<{/foreach}>
+<{/if}>
+<{/foreach}>
+
+<{foreach from=$goods.spec item=specImage}>
+<{foreach from=$specImage.option item=aSpecImage}>
+<{if $aSpecImage.spec_image}>
+    specImageHash.set( '<{$aSpecImage.spec_image}>' , '<{$aSpecImage.spec_image|storager}>' );
+<{/if}>
+<{/foreach}>
+<{/foreach}>
+
+    <{assign var=goods_spec value=array('spec'=>$goods.spec)}>
+           var spec_desc = $H(<{$goods_spec|json_encode}>);
+           $('goods_spec').set('value','<{$goods.spec|serialize}>');
+
+
+
+    var newProI = 0;
+    var _li_text = "<li specvid={spec_value_id} specpvid={private_spec_value_id}><span key='spec_value_{spec_value_id}' class='spec_sel' >{spec_value}</span></li>";
+    var _li_img = "<li specvid={spec_value_id} alt='{spec_value}' specpvid={private_spec_value_id}><span key='spec_value_{spec_value_id}' class='spec_sel' ><img src='{spec_image_src}' alt='{spec_value}' width='20' height='20'/></span></li>";
+
+    var PRO_TPL = '<{include file="../view/admin/goods/detail/product_row.html"}>';
+    var data= [];
+    <{foreach from=$goods.product item=aproduct name=pro}>
+        data[<{$smarty.foreach.pro.iteration-1}>] = <{$aproduct|json_encode}>;
+    <{/foreach}>
+/*tag_foreign_js_price_data*/
+var checkProSpec=function(pager,checked,unchecked){
+    var hasPspecid=[];
+    pager.data.each(function(d,i){
+        var state=unchecked.every(function(v,k){return d[k]==v;});
+        if(state)hasPspecid.include(d[checked]);
+    });
+    return hasPspecid;
+};
+
+
+var setValue=function(d,v){
+        d['spec_value_'+v[0]]=v[1];
+        if($H(spec_desc).get('spec')[v[0]]['spec_type'] == 'image' ){
+            if(option=spec_desc['spec'][v[0]]['option'][v[3]] ){
+
+                   if(option['spec_image'] ){
+                        if( specImageHash.get(option['spec_image']) ){
+                            d['spec_value_desc_'+v[0]] = '<img src="'+specImageHash.get(option['spec_image'])+'--" alt="'+ d['spec_value_'+v[0]]+'ggg333" width="20" height="20"/>';
+                        }else{
+                            d['spec_value_desc_'+v[0]] = '<img src="'+specTmplImageHash.get(option['spec_image'])+'--" alt="'+ d['spec_value_'+v[0]]+'ggg333" width="20" height="20"/>';
+                        }
+                    }else{
+                        d['spec_value_desc_'+v[0]] = '<img src="<{$spec_default_pic|storager}>" width="20" height="20"/>';
+                    }
+
+            }
+        }else{
+            d['spec_value_desc_'+v[0]] = v[1];
+        }
+        d['spec_value_id_'+v[0]]=v[2];
+        if( d['spec_desc'] ){
+            d['spec_desc']['spec_value'][v[0]]=v[1];
+            d['spec_desc']['spec_value_id'][v[0]]=v[2];
+            d['spec_desc']['spec_private_value_id'][v[0]]=v[3];
+        }
+        d['spec_private_value_id_'+v[0]]=v[3];
+        d['spec_html']=spec_html.substitute(d);
+}
+
+var selectSpecValue =function(pager){
+            var selValue = this;
+            var selBox=this.getNext();
+            var selDom = selBox.getElement('ul');
+            if($type($('productNode').retrieve('ts'))=='element'&&$('productNode').retrieve('ts')!=selBox){
+                   $('productNode').retrieve('ts').hide().retrieve('sv').removeClass('goods-spec-select');
+            }
+
+            if(this.hasClass('goods-spec-select')){
+                selBox.hide();
+                return this.removeClass('goods-spec-select');
+            }
+            var sI = $('gEditor').retrieve('specInfo',$H(spec_desc.get('spec')));
+            var selSpecHtml='',ssid = this.get('specid');
+            selValue.addClass('goods-spec-select');
+
+            var tSpec = $H(sI.get(ssid));
+            $H(tSpec.get('option')).each(function(tsi,psid){
+                tsi =$H(tsi);
+                tsi['private_spec_value_id'] = psid;
+                if (tSpec.get('spec_type') == 'text'){
+                    selSpecHtml += _li_text.substitute(tsi);
+                }else{
+                    if( tsi['spec_image'] ){
+                        if( specImageHash.get(tsi['spec_image']) ){
+                            tsi['spec_image_src'] = specImageHash.get(tsi['spec_image']);
+                        }else{
+                            tsi['spec_image_src'] = specTmplImageHash.get(tsi['spec_image']);
+                        }
+                    }else{
+                        tsi['spec_image_src'] = '<{$spec_default_pic|storager}>';
+                    }
+                    selSpecHtml += _li_img.substitute(tsi);
+                }
+            });
+            var unChecked=new Hash(),thisPspecid;
+            var unipt=this.getParent('tr').getElements('.select-spec-unselect[specid!='+ssid+']').getNext('input[key^=spec_value_id]');
+            unipt.each(function(el){unChecked.set(el.get('key'),el.value);});
+            thisPspecid=this.getNext('input[key^=spec_private_value_id]').get('key');
+            var filterPspecid=checkProSpec(pager,thisPspecid,unChecked);
+
+            selDom.set('html', selSpecHtml);
+            selDom.getElements('li').each(function(cli){
+                if(filterPspecid.contains(cli.get('specpvid'))){
+                    return cli.addClass('noclick');
+                }
+                cli.addEvent('click',function(e){
+                    selValue.getElement('span').set('html',this.get('html'));
+                    if(selValue.getElement('img')){
+                        selValue.getNext('input[key^=spec]').set('value',this.getElement('img').get('alt'));
+                        var tvalue=this.get('alt');
+                    }else{
+                        selValue.getNext('input[key^=spec]').set('value',this.get('text'));
+                        var tvalue=this.get('text');
+                    }
+                    selValue.getNext('input[key^=spec_private_value_id]').set('value',this.get('specpvid'));
+                    selValue.getNext('input[key^=spec_value_id]').set('value',this.get('specvid'));
+                    selDom.empty();
+                    selBox.hide();
+                    selValue.removeClass('goods-spec-select');
+                    selValue.addClass('goods-spec-selected');
+
+                    var pid=selDom.getParent('tr').get('product_id');
+                    var specpvid=this.get('specpvid');
+                    var specvid=this.get('specvid');
+                    var specid=selValue.get('specid');
+                    pager.data.each(function(d){
+                        if(d[pager.PRIMARY_ID]==pid){
+                         setValue(d,[specid,tvalue,specvid,specpvid]);
+                        }
+                    });
+
+                    var d=pager.selectData(pid);
+                    selValue.getAllNext('input[type=hidden]').each(function(ipt){
+                        d[ipt.get('key')]=ipt.value;
+                    });
+                });
+            });
+
+            var selBoxStyls={'position':'absolute','left':this.getPosition($('main')).x,'zIndex':65535};
+            if(window.webkit){$extend(selBoxStyls,{'top':this.getPosition().y+25});}
+
+            selBox.setStyles(selBoxStyls).show().store('sv',selValue);
+            $('productNode').store('ts',selBox);
+            document.body.addEvent('click',function(e){
+                var target=$(e.target);
+                if(!$('productNode')||!$('productNode').retrieve('ts'))return;
+                if(!target.getParent('.goods-spec-select')&&!target.getParent('.select-spec-value')){
+                        var selBox=$('productNode').retrieve('ts').hide();
+                        selBox.retrieve('sv').removeClass('goods-spec-select');
+                        this.removeEvent('click',arguments.callee);
+                }
+           });
+};
+
+    var spec_html='<{foreach from=$mLevels item=mlv}><input tname="goods[product][_PRIMARY_][price][member_lv_price][<{$mlv.member_lv_id}>]" lv_id="<{$mlv.member_lv_id}>" key="member_lv_price_<{$mlv.member_lv_id}>" value="<{if $mlv.custom=='true'}>{member_lv_price_<{$mlv.member_lv_id}>}<{/if}>" type="hidden"/><{/foreach}>\
+  <!--tag_foreign_spec_inputs-->\
+    <{foreach from=$goods.spec item=spec}><td><div class="select-spec-unselect goods-spec-selected" specid="<{$spec.spec_id}>"><span class="spec_sel" key="spec_value_<{$spec.spec_id}>">{spec_value_desc_<{$spec.spec_id}>}</span></div>\
+    <div class="select-spec-value" style="display:none"><ul class="goods-spec-box" style="width:200px;"></ul></div>\
+    <input type="hidden" key="spec_value_<{$spec.spec_id}>" tname="goods[product][_PRIMARY_][spec_desc][spec_value][<{$spec.spec_id}>]" value="{spec_value_<{$spec.spec_id}>}"/>\
+    <input type="hidden" key="spec_private_value_id_<{$spec.spec_id}>" tname="goods[product][_PRIMARY_][spec_desc][spec_private_value_id][<{$spec.spec_id}>]" value="{spec_private_value_id_<{$spec.spec_id}>}"/>\
+    <input type="hidden" key="spec_value_id_<{$spec.spec_id}>" tname="goods[product][_PRIMARY_][spec_desc][spec_value_id][<{$spec.spec_id}>]" value="{spec_value_id_<{$spec.spec_id}>}"/></td><{/foreach}>'
+
+    data=data.length?data:$('gEditor').retrieve('_data');
+    var sort=['bn'],hsspec=$('goods-spec').retrieve('hsspec',$H());
+
+
+    <{if $needUpValue}>
+        $H(<{$needUpValue}>).each(function(pvid){
+           var pvid = $H(pvid),data= $('gEditor').retrieve('_data',[]);
+           var vid=pvid.get('specpvid'),id = pvid.get('specid');
+            data.each(function(d){
+                  var pd=spec_desc['spec'][id]['option'][vid];
+                  if(d['spec_private_value_id_'+id]==vid){
+                     setValue(d,[id,pd['spec_value'],pd['spec_value_id'],pd['private_spec_value_id']]);
+                 }
+            });
+        });
+        pager.goPage(1);
+        $('gEditor').store('specInfo',$H(spec_desc.get('spec')));
+    <{/if}>
+
+
+      $$('#productNodeTitle th').setStyle('cursor','pointer').addEvent('click',function(e){
+        //    pager.sort(this.get('orderkey'),this);
+      });
+
+      $$('#gEditor .goods-spec-cell .addproduct').removeEvents('click').addEvent('click',function(e){
+            pager.addData();
+      });
+
+        if( $$('#goods-spec-product .selectspec ') ){
+              $$('#goods-spec-product .selectspec ').addEvent('click',function(e){
+                    $('gEditor').store('_data',pager.data);
+              });
+        }
+      //$('productNode').retrieve('specOBJ',pager);
+        /*$('productNode').appendChild(pager.toHideInput($('productNode').getElement('tr')));*/
+
+});
+</script>
+

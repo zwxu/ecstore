@@ -1,0 +1,155 @@
+<div class="member-main">
+    <h1 class="title title2"><{t}>申请退款<{/t}></h1>
+    <form action="<{link app=aftersales ctl=site_member act=return_save_mai}>" enctype="multipart/form-data" encoding="multipart/form-data" method="post" name="return_save" id='x-return-form'>
+        <div class="FormWrap">
+			<div class="division">
+                <h4 class="fontnormal"><{t}>退款金额：<{$gorefund_price}><{/t}></h4>
+                <input type="hidden" name="gorefund_price" value="<{$gorefund_price}>"/>
+				<{foreach from=$order.items item=item key=key}>
+					<input type="hidden" name="product_item_nums[<{$item.products.product_id}>]" value="<{$item.quantity}>">
+					<input type="hidden" name="products[<{$key}>]" value="<{$item.products.product_id}>">
+					<input type="hidden" name="product_bn[<{$item.products.product_id}>]" value="<{$item.bn}>">
+					<input type="hidden" name="product_nums[<{$item.products.product_id}>]" value="<{$item.quantity}>">
+					<input type="hidden" name="product_name[<{$item.products.product_id}>]" value="<{$item.name}>">
+				<{/foreach}>
+            </div>
+			<div class="division">
+                <h4 class="fontnormal"><{t}>退款原因：<{/t}></h4>
+                <select id="J_DelayDays" class="delay-days" name="comment">
+					<option value="">请选择退款原因</option>
+					<option value="协商一致退款">协商一致退款</option>
+					<option value="未按约定时间发货">未按约定时间发货</option>
+					<option value="虚假发货">虚假发货</option>
+					<option value="其他">其他</option>
+				</select>
+            </div>
+			<div class="division">
+                <h4 class="fontnormal"><{t}>退款说明：<{/t}></h4>
+                <{input type="textarea" id="x-return-content" name="content" class='x-inputs x-input' cols="80" rows="5" style="width:98%"}>
+            </div>
+			<div class="division">
+                <h4 class="fontnormal"><{t}>上传凭证：<{/t}></h4>
+                <input type="hidden" name="MAX_FILE_SIZE" value="2097152" />
+                <input type="file" class="x-input x-inputs" name="file" id="fileField" />
+				<input type="file" class="x-input x-inputs" name="file1" id="fileField1" />
+				<input type="file" class="x-input x-inputs" name="file2" id="fileField2" />
+					
+            </div>
+			<div class="textcenter p10 division">
+	<{button class="order-btn" type="submit" label=$___b2c="提交申请"|t:'b2c'}>
+	</div>
+    </div>
+    <input type="hidden" name="order_id" value="<{$order_id}>">
+	<input type="hidden" name="member_id" value="<{$order.member_id}>">
+	<input type="hidden" name="type" value="1">
+
+</form>
+</div>
+<script>
+$('x-return-form').getElement('button[type=submit]').addEvent('click',function(e){
+
+    var reason=$('J_DelayDays').value;
+
+    if(reason == ''){
+        Message.error('请选择退款原因！');
+        return false;
+    }
+
+});
+
+$('fileField').addEvent('change',function(e){
+    var ext=this.value.substring(this.value.lastIndexOf(".")+1).toUpperCase();
+    if(!(/jpg|gif|png/i).test(ext)){
+    Ex_Dialog.alert('只能上传gif,jpg,png格式的文件');
+    this.value='';
+    return false;
+    }
+
+    if(this.files){
+    var file = this.files[0];
+    if(file.fileSize>2*1024*1024){
+    Ex_Dialog.alert('文件上传大小超过限制');
+    this.value='';
+    return false;
+    }
+    }else if(Browser.ie){
+    var src=this.value.replace(/\\/g,"/");
+    src="file:///"+src;
+
+    var img=new Image();
+    img.onload=function(){
+    if(img.fileSize>2*1024*1024){
+    Ex_Dialog.alert('文件上传大小超过限制');
+    this.value='';
+    return false;
+    }
+    };
+    img.src=src;
+    }else{
+    }
+    });
+
+    $('fileField1').addEvent('change',function(e){
+    var ext=this.value.substring(this.value.lastIndexOf(".")+1).toUpperCase();
+    if(!(/jpg|gif|png/i).test(ext)){
+    Ex_Dialog.alert('只能上传gif,jpg,png格式的文件');
+    this.value='';
+    return false;
+    }
+
+    if(this.files){
+    var file = this.files[0];
+    if(file.fileSize>2*1024*1024){
+    Ex_Dialog.alert('文件上传大小超过限制');
+    this.value='';
+    return false;
+    }
+    }else if(Browser.ie){
+    var src=this.value.replace(/\\/g,"/");
+    src="file:///"+src;
+
+    var img=new Image();
+    img.onload=function(){
+    if(img.fileSize>2*1024*1024){
+    Ex_Dialog.alert('文件上传大小超过限制');
+    this.value='';
+    return false;
+    }
+    };
+    img.src=src;
+    }else{
+    }
+    });
+
+    $('fileField2').addEvent('change',function(e){
+    var ext=this.value.substring(this.value.lastIndexOf(".")+1).toUpperCase();
+    if(!(/jpg|gif|png/i).test(ext)){
+    Ex_Dialog.alert('只能上传gif,jpg,png格式的文件');
+    this.value='';
+    return false;
+    }
+
+    if(this.files){
+    var file = this.files[0];
+    if(file.fileSize>2*1024*1024){
+    Ex_Dialog.alert('文件上传大小超过限制');
+    this.value='';
+    return false;
+    }
+    }else if(Browser.ie){
+    var src=this.value.replace(/\\/g,"/");
+    src="file:///"+src;
+
+    var img=new Image();
+    img.onload=function(){
+    if(img.fileSize>2*1024*1024){
+    Ex_Dialog.alert('文件上传大小超过限制');
+    this.value='';
+    return false;
+    }
+    };
+    img.src=src;
+    }else{
+    }
+    });
+</script>

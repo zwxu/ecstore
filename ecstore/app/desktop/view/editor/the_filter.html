@@ -1,0 +1,85 @@
+<div class='gridlist-head'>
+      <span style="padding-left:5px;"> <{t}>添加筛选条件：<{/t}></span>
+<select id="finder-fshow-<{$obj_id}>-select" style="margin-right:5px;">
+<option value="_"></option>
+<{foreach from=$data item=item key=key}><{if $item.filtertype}>
+<option value="<{$key}>"><{$item.label}></option>
+<{/if}><{/foreach}>
+</select>
+<{help}><{t}>您可以选择添加多个筛选条件<{/t}><{/help}>
+<span class="lnk" id="del-finder-<{$obj_id}>"><{t}>删除所有筛选条件<{/t}></span>
+</div>
+
+<div id="finder-fshow-<{$obj_id}>">
+    <div class='gridlist'>
+<{foreach from=$data item=item key=key}>
+<{if $item.filtertype}>
+<div class='row' name="<{$key}>" <{if !$item.filterdefalut}>style="display:none"<{/if}> >
+    <div class='row-line'>
+        <div class="span-3" tp='label'><{$item.label}></div>
+        <div class="span-3" tp='allege'><{if $item.filtertype neq 'yes'&&$item.type neq 'time'}><{input options=$item.searchparams type='select' required=true name=$key search=true}><{else}><{if $item.type eq 'bool' || $item.type eq 'radio'}><{else}><{t}>是<{/t}><{/if}><{/if}>&nbsp;</div>
+        <div class="span-6" tp='input'><{if $item.type eq 'time'}><{input name=$key type='date' concat="_dtup"}>-<{input name=$key type='date' concat="_dtdown"}><{else}><{input name=$key type=$item.type options=$item.options separator=' ' value=$item.default nulloption='1'}><{/if}></div>
+        <div class="span-1"><span class="opt"><{img src="bundle/delecate.gif" title=$___desktop="删除"|t:'desktop' class="_close"}></span></div>
+    </div>
+</div>
+<{/if}>
+<{/foreach}>
+
+    </div>
+</div>
+
+<script>
+(function(){
+
+	Ex_Loader("picker",function(){
+		$ES('.cal','finder-fshow-<{$obj_id}>').each(function(i){i.makeCalable()});
+	});
+
+    var name=[];    
+    $ES('.gridlist .row').each(function(el){
+        if(el.getStyle('display')!='none'){
+            name.include(el.get('name'));
+        }    
+    });
+    $E('.gridlist-head select').getElements('option').each(function(el){
+        name.each(function(arr){
+            if(arr==el.get('value')){
+                el.disabled=true;
+            }        
+        })        
+    });
+
+})()
+
+var select = $('finder-fshow-<{$obj_id}>-select').addEvent('change',function(e){
+
+    $(this.options[this.selectedIndex]).set('disabled',true);
+    
+    var row=$E('div[name='+this.value+']','finder-fshow-<{$obj_id}>');
+    
+    row.inject(row.getParent()).show();
+     if($('finder-fshow-tips-<{$obj_id}>'))
+    $('finder-fshow-tips-<{$obj_id}>').hide();
+    
+    this.selectedIndex=0;
+    
+});
+$ES('img._close','finder-fshow-<{$obj_id}>').addEvent('click',function(e){
+    var parent = this.getParent('.row').hide();
+    
+    $E('option[value='+parent.get('name')+']','finder-fshow-<{$obj_id}>-select').erase('disabled');
+})
+
+$ES('#finder-fshow-<{$obj_id}> input').addEvent('keydown',function(e){
+    if(!$('selector-panel-<{$obj_id}>'))return;
+    if(e.code==13){
+            $('selector-panel-<{$obj_id}>').getElements('.scrollhandle').fireEvent('click');
+    }
+});
+
+$('del-finder-<{$obj_id}>').addEvent('click',function(e){
+	$ES('img._close','finder-fshow-<{$obj_id}>').each(function(el){
+		el.fireEvent('click');
+	});
+});
+</script>

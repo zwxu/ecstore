@@ -1,0 +1,58 @@
+<form method="POST" action="<{$from_submit_url}>" id="groupactivity-from">
+<{input type="hidden" value="{$activity.act_id}" name="act_id"}>
+<div class="goods-detail tableform">
+    <h3><{t}>基本信息<{/t}></h3>
+    <div class="division">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+            <tr>
+                <th><{t}>活动名称：<{/t}></th>
+                <td><{input type="text" value="{$activity.name}" name="name" size="60"}><em><font color="red">*</font></em></td></td>
+            </tr>
+            <tr>
+                <th><{t}>活动描述：<{/t}></th>
+                <td><{input type="textarea" style=" width:60%" rows="10" value="{$activity.description}" name="description"}></td>
+            </tr>
+        </table>
+    </div>
+    <div class="division">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+            <tr>
+                <th><{t}>申请开始时间：<{/t}></th>
+                <td><{input type="time" value="{$activity.apply_start_time}" name="apply_start_time"}></td>
+            </tr>
+            <tr>
+                <th><{t}>申请结束时间：<{/t}></th>
+                <td><{input type="time" value="{$activity.apply_end_time}" name="apply_end_time"}></td>
+            </tr>
+            <tr>
+                <th><{t}>活动开始时间：<{/t}></th>
+                <td><{input type="time" value="{$activity.start_time}" name="start_time"}></td>
+            </tr>
+            <tr>
+                <th><{t}>活动结束时间：<{/t}></th>
+                <td><{input type="time" value="{$activity.end_time}" name="end_time"}></td>
+            </tr>
+            <tr>
+                <th><{t}>活动是否开启：<{/t}></th>
+                <td>
+                    <input type="radio" value="true" <{if $activity.act_open=='true'}>checked<{/if}> name="act_open" >开启
+                    <input type="radio" value="false" <{if $activity.act_open!='true'}>checked<{/if}> name="act_open" >关闭
+                </td>
+            </tr>
+             <tr>
+                <th><{t}>商户经营范围：<{/t}></th>
+                <td><{input type="object" object="goods_cat@b2c" name="business_type" multiple="true" filter=$filter value=$store_region}></td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+<div class="table-action">
+    <{button label="保存" type="button" id="groupactivity-btn" }>
+</div>
+<form>
+<script>
+    $('groupactivity-btn').removeEvent('click').addEvent('click',function(){
+        $('groupactivity-from').fireEvent('submit',new Event(this));  
+    });
+</script>

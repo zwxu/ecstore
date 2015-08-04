@@ -1,0 +1,61 @@
+
+<div class="spage-main-box">
+    <{if $order}>
+        <{if $order.is_has_remote_pdts!=='true'}>
+            <{include file="admin/order/order_edit.html"}>
+        <{elseif $order.is_has_remote_pdts=='true'}>
+        
+            <{include file="admin/order/edit_po.html"}> 
+            
+        <{/if}>   
+	<{else}>   
+        <{include file="admin/order/detail/detail.html"}> 
+    <{/if}>   
+</div>
+
+<script>
+
+subOrderForm = function (event,sign){ 
+	   var target={};
+	   switch (sign){
+			case 1:                    //保存不关闭
+				$extend(target,{
+					onComplete:function(){
+						if(window.opener.finderGroup&&window.opener.finderGroup['<{$env.get.finder_id}>'])
+						window.opener.finderGroup['<{$env.get.finder_id}>'].refresh();
+						window.location.reload();
+					}}
+				);
+			break;
+			case 2:                   //保存关闭
+				$extend(target,{
+					onComplete:function(){
+						if(window.opener.finderGroup&&window.opener.finderGroup['<{$env.get.finder_id}>'])
+						window.opener.finderGroup['<{$env.get.finder_id}>'].refresh();
+						window.close();
+					}}
+				);
+			break;				
+	   }
+	    var _form=$('orderEdit');
+		if(!_form)return;
+		var _formActionURL=_form.get('action'); 
+		
+		_form.store('target',target);
+        _form.set('action',_formActionURL+'&but='+sign).fireEvent('submit',new Event(event));
+    };
+</script>
+ 
+<{capture name='footbar'}>
+<{assign var="message" value=$___b2c='确定退出?'|t:'b2c'}>
+<{assign var="closelabel" value='关  闭'}>
+<table cellspacing="0" cellpadding="0" style="margin:0 auto; width:100%" class="table-action">
+      <tbody><tr valign="middle">
+        <td>
+            <{button label=$___b2c='保存并关闭窗口'|t:'b2c' class="btn-primary" onclick="subOrderForm(event,2)"}>
+            <{button label=$___b2c='保存当前'|t:'b2c' class="btn-primary" onclick="subOrderForm(event,1)"}>
+			<{button label=$___b2c=$closelabel|t:'b2c' class="btn-secondary" onclick="if(confirm('{$message}'))window.close()"}>
+        </td>
+        </tr>
+        </tbody></table>
+<{/capture}>

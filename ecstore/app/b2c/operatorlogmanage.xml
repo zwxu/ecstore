@@ -1,0 +1,309 @@
+<root>
+
+	<register ctl="admin_goods" act="index">
+		<operate>商品列表</operate>
+	</register>
+
+	<register ctl="admin_member" act="index">
+		<operate>会员列表</operate>
+	</register>
+
+	<register ctl="admin_member_lv" act="index">
+		<operate>会员等级</operate>
+	</register>
+
+	<register ctl="admin_order" act="create">
+		<operate>创建订单</operate>
+	</register>
+	
+	<register ctl="admin_order" act="dopay">
+		<operate>支付订单</operate>
+	</register>
+	
+	<register ctl="admin_order" act="dodelivery">
+		<operate>订单发货</operate>
+	</register>
+	
+	<register ctl="admin_order" act="saveMarkText">
+		<operate>添加订单备注</operate>
+	</register>
+	
+	<register ctl="admin_order" act="dorefund">
+		<operate>订单退款</operate>
+	</register>
+	
+	<register ctl="admin_order" act="doreship">
+		<operate>订单退货</operate>
+	</register>
+	
+	<register ctl="admin_order" act="docancel">
+		<operate>订单取消</operate>
+	</register>	
+	<register ctl="admin_order" act="dofinish">
+		<operate>订单完成</operate>
+	</register>
+	
+	<register ctl="admin_order" act="savePrintStyle">
+		<operate>保存订单打印样式</operate>
+	</register>
+	
+	<register ctl="admin_order" act="rebackPrintStyle">
+		<operate>恢复初始样式</operate>
+	</register>
+	
+	<register ctl="admin_order" act="toprint">
+		<operate>打印选定订单</operate>
+	</register>
+	
+	<register ctl="admin_order" act="toEdit">
+		<operate>修改订单</operate>
+	</register>
+	
+	<register ctl="admin_order" act="saveOrderMsgText">
+		<operate>管理员保存订单留言回复</operate>
+	</register>
+	
+	<register ctl="admin_order" act="addItem">
+		<operate>添加货品项目</operate>
+	</register>
+	
+	<register ctl="admin_order" act="save_addr">
+		<operate>保存订单的收货地址</operate>
+	</register>	
+	
+	<register ctl="admin_goods" act="import">
+		<operate>商品导入</operate>
+	</register>
+	
+	<register ctl="admin_goods" act="enable">
+		<operate>商品上架</operate>
+	</register>
+	
+	<register ctl="admin_goods" act="disable">
+		<operate>商品下架</operate>
+	</register>
+	
+	<register ctl="admin_goods" act="saveBatchEdit">
+		<operate>批量更新商品</operate>
+	</register>
+	
+	<register ctl="admin_goods_editor" act="toAdd">
+		<operate>添加/编辑 商品</operate>
+	</register>
+	
+	<register ctl="admin_goods" act="nextImage">
+		<operate>重新生成图片</operate>
+	</register>
+	
+	<register ctl="admin_goods_sto" act="send">
+		<operate>发送到货通知</operate>
+	</register>
+	
+	<register ctl="admin_goods_cat" act="save">
+		<operate>添加分类</operate>
+	</register>
+	
+	<register ctl="admin_goods_cat" act="toRemove">
+		<operate>删除分类</operate>
+	</register>
+	
+	<register ctl="admin_goods_type" act="save">
+		<operate>添加类型</operate>
+	</register>
+	
+	<register ctl="admin_goods_type" act="fetchSave">
+		<operate>类型导入</operate>
+	</register>
+	
+	<register ctl="admin_brand" act="save">
+		<operate>添加品牌</operate>
+	</register>
+	
+	<register ctl="admin_goods_virtualcat" act="doAdd">
+		<operate>添加/编辑 虚拟分类</operate>
+	</register>
+	
+	 <register ctl="admin_goods_virtualcat" act="toRemove">
+		<operate>删除虚拟分类</operate>
+	</register>
+	
+	<register ctl="admin_specification" act="save">
+		<operate>添加商品规格</operate>
+	</register>
+	
+	<register ctl="admin_member" act="add">
+		<operate>添加会员</operate>
+	</register>
+	
+	<register ctl="admin_member" act="sms_queue">
+		<operate>群发信息</operate>
+	</register>
+	
+	<register ctl="admin_member" act="msg_queue">
+		<operate>群发站内信息</operate>
+	</register>
+	
+	<register ctl="admin_member" act="insert_queue">
+		<operate>群发邮件</operate>
+	</register>
+	
+	<register ctl="admin_member" act="chkpassword">
+		<operate>修改密码</operate>
+	</register>
+
+	<register ctl="admin_member_disask" act="basic_setting">
+		<operate>消息设置</operate>
+	</register>
+
+	<register ctl="admin_member_msgbox" act="index">
+		<operate>站内消息</operate>
+	</register>
+
+	<register ctl="admin_member_shopbbs" act="index">
+		<operate>留言列表</operate>
+	</register>
+
+	<register ctl="admin_member_discuss" act="index">
+		<operate>评论列表</operate>
+	</register>
+
+	<register ctl="admin_member_gask" act="index">
+		<operate>咨询列表</operate>
+	</register>
+
+	<register ctl="admin_order" act="index">
+		<operate>订单列表</operate>
+	</register>
+
+	<register ctl="admin_delivery" act="index">
+		<operate>发货单</operate>
+	</register>
+
+	<register ctl="admin_reship" act="index">
+		<operate>退货单</operate>
+	</register>
+
+	<register ctl="admin_sales_order" act="index">
+		<operate>订单促销</operate>
+	</register>
+
+	<register ctl="admin_sales_goods" act="index">
+		<operate>商品促销</operate>
+	</register>
+
+	<register ctl="admin_sales_coupon" act="index">
+		<operate>优惠卷列表</operate>
+	</register>
+
+	<register ctl="admin_sales_coupon_exchange" act="index">
+		<operate>积分兑换优惠卷</operate>
+	</register>
+
+	<register ctl="admin_analysis" act="index">
+		<operate>经营概况</operate>
+	</register>
+
+	<register ctl="admin_analysis" act="sale">
+		<operate>销售收入统计</operate>
+	</register>
+
+	<register ctl="admin_analysis" act="advance">
+		<operate>预存款统计</operate>
+	</register>
+
+	<register ctl="admin_analysis" act="shopsale">
+		<operate>店铺销售情况</operate>
+	</register>
+
+	<register ctl="admin_analysis" act="productsale">
+		<operate>商品销售排行</operate>
+	</register>
+
+	<register ctl="admin_analysis" act="member">
+		<operate>会员排行</operate>
+	</register>
+	
+	<register ctl="admin_member_lv" act="save">
+		<operate>添加/修改 会员等级</operate>
+	</register>
+	
+	<register ctl="admin_member_gask" act="delete_message">
+		<operate>删除咨询</operate>
+	</register>
+	
+	<register ctl="admin_member_gask" act="delete_reply">
+		<operate>删除回复</operate>
+	</register>
+	
+	<register ctl="admin_member_gask" act="to_reply">
+		<operate>回复咨询</operate>
+	</register>
+	
+	<register ctl="admin_member_gask" act="to_display">
+		<operate>设置留言/评论是否显示在商品页</operate>
+	</register>
+	
+	<register ctl="admin_member_gask" act="to_setting">
+		<operate>设置咨询权限</operate>
+	</register>
+	
+	<register ctl="admin_member_discuss" act="to_setting">
+		<operate>设置评论权限</operate>
+	</register>
+	
+	<register ctl="admin_member_discuss" act="to_reply">
+		<operate>回复评论</operate>
+	</register>	
+	
+	<register ctl="admin_member_shopbbs" act="to_reply">
+		<operate>回复顾客留言</operate>
+	</register>
+	
+	<register ctl="admin_member_shopbbs" act="delete_reply">
+		<operate>删除回复</operate>
+	</register>
+	
+	<register ctl="admin_member_shopbbs" act="to_setting">
+		<operate>设置留言内容是否显示在商品页</operate>
+	</register>
+	
+	<register ctl="admin_member_msgbox" act="to_reply">
+		<operate>回复站内信息</operate>
+	</register>
+	
+	<register ctl="admin_member_disask" act="to_setting">
+		<operate>保存消息设置</operate>
+	</register>
+	
+	<register ctl="admin_dlycorp" act="addnew">
+		<operate>添加物流公司</operate>
+	</register>
+	
+	<register ctl="admin_dlycorp" act="save">
+		<operate>修改物流公司</operate>
+	</register>
+	
+	<register ctl="admin_dlytype" act="saveDlType">
+		<operate>保存配送方式</operate>
+	</register>
+	
+	<register ctl="admin_shoprelation" act="addnew">
+		<operate>新建绑定关系</operate>
+	</register>
+	
+	<register ctl="admin_sales_goods" act="toAdd">
+		<operate>添加/修改 商品促销规则</operate>
+	</register>
+	
+	<register ctl="admin_sales_order" act="toAdd">
+		<operate>添加/修改 订单促销规则</operate>
+	</register>
+	
+	<register ctl="admin_sales_coupon" act="toAdd">
+		<operate>添加/修改 优惠券</operate>
+	</register>
+	
+	<register ctl="admin_sales_coupon_exchange" act="save">
+		<operate>添加/修改 积分兑换优惠券规则</operate>
+	</register>
+</root>

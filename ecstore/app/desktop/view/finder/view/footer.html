@@ -1,0 +1,22 @@
+<div class="gridlist-footer finder-footer" id="finder-footer-<{$name}>">
+	<div id="finder-pager-<{$name}>" class="clearfix">
+		<{$pager}>
+	</div>
+</div>
+<{if $env.get.dialog && $env.get.nobuttion!=1}>
+<div class='finder-submit-btn '>
+    <table cellspacing="0" cellpadding="0" class="table-action">
+          <tbody>
+             <tr valign="middle">
+                    <td>
+					<{assign var=___df value="关  闭"}>
+					<{assign var=___dg value="确  定"}>
+					<{assign var=___de value=$___desktop='确定退出?'|t:'desktop'}>
+                        <{button label=$___desktop=$___dg|t:'desktop' class="btn-primary dialogBtn" onclick=""}>
+                        <{button label=$___desktop=$___df|t:'desktop' class="btn-secondary close" onclick="if(confirm('{$___de}'))window.close()"}>
+                    </td>
+                </tr>
+         </tbody>
+     </table>
+ </div>
+<{/if}>

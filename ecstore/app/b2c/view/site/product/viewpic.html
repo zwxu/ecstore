@@ -1,0 +1,425 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type"  content="text/html; charset=utf-8">
+        <title><{$goods_name_show}></title>
+        <link href="<{$env.app.res_url}>/css/photo_css.css" type="text/css" rel="stylesheet">
+        <{lang_css src="lang.css" app="b2c"}>
+        <{script src="mootools.js" app="site"}>
+        <style>
+            body,
+            button, input, select, textarea /* for ie */ {
+                font: 12px/1.5 tahoma, arial, \5b8b\4f53, sans-serif;
+            }
+        </style>
+    </head>
+    <body>
+        <h3 class="photo-title"><{t}>商品相册：<{/t}><{$goods_name_show}>第<span class="currentPage" style="color:#EA0000;font-size:12px;">1</span>张/共<span class="totalPage" style="color:#EA0000"><{$image_file_total}></span>张</h3>
+        <div id="photo-cont" class="clearfix"> 
+            <div class="photo-left">
+                <div class="top-part"><span class="top-part-arrtop"></span></div>
+                <div class="mid-part">
+                    <ul style="top:0">
+                        <{foreach from=$image_file key=key item=item}>
+                        <li><a href="javascript:void(0);" onfocus="this.blur()" class="scrollItem <{if $key eq 0}>currentItem<{/if}>" picId=<{$key+1}>><img src=<{$item.image_id|default:$image_default_id|storager:'s'}>/></a><{if $key eq 0}><div class="current"></div><{/if}></li>
+                        <{/foreach}>
+                    </ul>
+                </div>
+                <div class="bottom-part"><span class="top-part-arrbottom"></span></div>
+            </div>
+            <div class="contwrap">
+                <div class="cont-wide clearfix"><!--宽频下cass="cont-wide" 窄屏下是cass="cont-narrow"-->
+                    <div class="photo-midarr left" style="opacity:none;visibility:hidden;cursor:pointer"><img class="leftarr" src="<{$env.app.res_url}>/bundle/photo-arr-left.gif" /></div>
+                    <div id="imgRange" class="photo-wrap-wide">
+                        <div id="mouseLeft" style="opacity:0;position:absolute;left:0;visibility:visible;cursor:pointer"></div>
+                        <div id="mouseRight" style="opacity:0;position:absolute;right:0;visibility:visible;cursor:pointer"></div>
+                        <img id="currentImg"/>
+                    </div>
+                    <!--宽频下cass="photo-wrap-wide" 窄屏下是cass="photo-wrap-narrow"-->
+                    <div class="photo-midarr right" style="opacity:none;visibility:hidden;cursor:pointer"><img class="rightarr" src="<{$env.app.res_url}>/bundle/photo-arr-right.gif"/></div>
+                   </div>
+            </div>
+            <div class="photo-tool">
+                <div class="leftside"></div>
+                <div class="midwrap">
+                    <div class="photo-tool-icon"> 
+                        <a href="javascript:void(0);" onfocus="this.blur()" title="<{t}>放大<{/t}>" class="maq"><{t}>放大<{/t}></a>
+                        <a href="javascript:void(0);" onfocus="this.blur()" title="<{t}>缩小<{/t}>" class="narrow"><{t}>缩小<{/t}></a>
+                        <a href="javascript:void(0);" onfocus="this.blur()" title="<{t}>旋转<{/t}>" class="spin"><{t}>旋转<{/t}></a>
+                        <a href="javascript:void(0);" onfocus="this.blur()" title="<{t}>还原<{/t}>" class="restore"><{t}>还原<{/t}></a>
+                    </div>
+                </div>
+                <div class="rightside"></div>
+            </div>
+            <div id = "imgClone" style="text-align:center"></div>
+        </div>
+        <div class="photo-btn-wrap">
+          <{button type="button" title=$___b2c="立即购买"|t:'b2c' class="photo-btn" label=$___b2c="立即购买"|t:'b2c'}>
+        </div>
+        <script>
+            window.addEvent('domready', function() {
+                $$('.photo-btn')[0].addEvent('click', function(e){
+                    window.location.href='<{link app=b2c ctl=site_product act=index arg=$goods_id }>';
+                });
+                var imageView = {
+                    images: [<{$json_image}>],
+                    currentIndex: 1,
+                    prevedIndex: 0,
+                    loading:false,
+                    loadedImg:{},
+                    ghost:$('currentImg')?$('currentImg'):null,
+                    init: function() {
+                        var self = this;
+
+                        if(!document.createElement('canvas').getContext || Browser.ie9) $$('.spin')[0].dispose(); 
+
+                        var id = this._getId();
+                        this.currentIndex = id;
+                        this._resetLR();
+                        if(Browser.ie){ 
+                            this.prevedIndex = Math.floor(parseInt($$('.mid-part')[0].getElement('ul').getStyle('top')) / 108) ;
+                        }else{
+                            this.prevedIndex = Math.floor(parseInt($$('.mid-part')[0].getElement('ul').getStyle('top')) / 106); 
+                        }
+                        for (var i = 0; i < this.prevedIndex; i++) {
+                            this._scrollNext('next');
+                        };
+
+                        this._scorllId(id);
+                        this._replaceImg(id);
+                        this._loadImg(id+1);
+                        this._loadImg(id-1);
+                        this._controlMod();
+
+                        this._show = function(el) {
+                            el.setStyle('opacity', 1);
+                            el.setStyle('visibility', 'visible');
+                        };
+
+                        this._hide = function(el) {
+                            el.setStyle('opacity', 0);
+                            el.setStyle('visibility', 'hidden');
+                        };
+
+                        $$('.cont-wide')[0].addEvents({
+                            'mouseover': function(e) {
+                                if (e.target.get('id') === 'mouseLeft' || e.target.get('class') === 'leftarr') {
+                                    self._show($$('.photo-midarr.left')[0]);
+                                    } else if (e.target.get('id') === 'mouseRight' || e.target.get('class') === 'rightarr') {
+                                    self._show($$('.photo-midarr.right')[0]);
+                                }
+                            },
+                            'mouseout': function(e) {
+                                if (e.target.get('id') === 'mouseLeft' || e.target.get('class') === 'leftarr') {
+                                    self._hide($$('.photo-midarr.left')[0]);
+                                    } else if (e.target.get('id') === 'mouseRight' || e.target.get('class') === 'rightarr') {
+                                    self._hide($$('.photo-midarr.right')[0]);
+                                }
+                            }
+                        });
+
+                        $$('#mouseLeft,#mouseRight,.scrollItem,.scrollItem img,.photo-midarr').addEvent('click', function(e) {
+                            if ($('canvasImg')) self.ghost.replaces($('canvasImg'));
+                            var id = self._getId();
+                            if (e.target.get('id') === ('mouseLeft') || e.target.get('class') === 'leftarr') {
+                                self._scorllId(id - 1,'prev');
+                                self._replaceImg(id - 1);
+                                self._loadImg(id-2);
+                                } else if (e.target.get('id') === 'mouseRight' || e.target.get('class') === 'rightarr') {
+                                self._scorllId(id + 1,'next');
+                                self._replaceImg(id + 1);
+                                self._loadImg(id+2);
+                                } else {
+                                if (e.target.getParent().tagName.toLowerCase() === 'a') {
+                                    if ($('cloneImg')) {
+                                        $('cloneImg').dispose();
+                                        $$('#imgRange,.photo-btn-wrap').setStyle('display', 'block');
+                                        $$('.contwrap')[0].setStyle('display', 'block');
+                                    }
+                                    var id = parseInt(e.target.getParent('a').get('picId'));
+                                    self._scorllId(id);
+                                    self._replaceImg(id);
+                                    $$('.mid-part .currentItem')[0].removeClass('currentItem');
+                                    e.target.getParent('a').addClass('currentItem');
+                                    $$('.current')[0].inject(e.target.getParent('li'));
+                                    self.prevedIndex = Math.abs(parseInt($$('.mid-part')[0].getElement('ul').getStyle('top')) / 106);
+
+                                    self.prevedIndex === 0 ? self.currentIndex = id : self.currentIndex = id - self.prevedIndex;
+                                }
+                            }
+                        });
+
+                        $(document).addEvent('keydown', function(e) {
+                            if ($('canvasImg')) self.ghost.replaces($('canvasImg'));
+                            var id = self._getId();
+                            if (e.code === 39) {
+                                self._scorllId(id + 1,'next');
+                                self._replaceImg(self._getId() + 1);
+                                self._loadImg(id+2);
+                            }
+                            if (e.code === 37) {
+                                self._scorllId(id - 1,'prev');
+                                self._replaceImg(self._getId() - 1);
+                                self._loadImg(id-2);
+                            }
+                        });
+
+                        $$('.top-part-arrtop,.top-part-arrbottom').addEvent('click', function(e) {
+                            if (e.target.get('class').test(/arrtop/)) {
+                                self._scrollNext('prev');
+                                self.prevedIndex--;
+                                self.currentIndex++; 
+                                } else if (e.target.get('class').test(/arrbottom/)) {
+                                self._scrollNext('next');
+                                self.prevedIndex++; 
+                                self.currentIndex--; 
+                            }
+                        });
+                        
+                        var initWidth = $$('.contwrap')[0].getSize().x;
+
+                        window.addEvent('resize',function(){
+                            $('photo-cont').getElement('.mid-part').setStyle('height',window.getSize().y-150);
+                            //$$('.cont-wide')[0].setStyle('width',document.body.offsetWidth-400);
+                            $('imgRange').setStyle('width',document.body.offsetWidth-510);
+                            this._resetLR();
+                        }.bind(this));
+                        
+                    },
+                    _resetLR: function() {
+                        $$('#mouseLeft,#mouseRight').setStyle('opacity',1);
+                        if(this.currentIndex === 1 && this.prevedIndex === 0 ){
+                            $('mouseLeft').setStyle('opacity',0);
+                            $$('.photo-midarr.left')[0].setStyle('opacity',0);
+                        } 
+                        if(this.currentIndex + this.prevedIndex === this.images.length ){
+                            $('mouseRight').setStyle('opacity',0);
+                            $$('.photo-midarr.right')[0].setStyle('opacity',0);
+                        }
+                        $$('#mouseLeft,#mouseRight').setStyles({
+                            'height':$('currentImg').getSize().y,
+                            'width':$('imgRange').getSize().x / 2
+                        });
+                        $$('.photo-midarr').setStyle('top', $('currentImg').getSize().y / 2 - 35);
+                        $$('.photo-wrap-wide')[0].setStyle('height', $('mouseLeft').getSize().y);
+                         
+                    },
+                    _loadImg: function(id, cb) {
+                        var url = this.images[id-1];
+                        if (!url || typeof url !== 'string' || ! url.test(/\.(jpg|jpeg|bmp|gif|png)/i)) return;
+                        if(this.loadedImg[id-1])
+                        { 
+                            this.loading = false;
+                            if (cb) cb(this.loadedImg[id-1]);
+                        }else{
+                            this.loading = true;
+                            var img = new Image();
+                            img.setAttribute('id','currentImg');
+                            img.onload = function() {
+                                if (cb) cb(img);
+                            };
+                            img.src = url;
+                            this.loadedImg[id-1] = img;
+                            return img;
+                        }
+                    },
+                    _replaceImg: function(id) {
+                        if (id === 0 || id === this.images.length + 1) return;
+                        var self = this;
+                        var id = parseInt(id);
+                        $('currentImg').set('tween', {
+                            duration: 300
+                        }).tween('opacity', 0);
+                            this._loadImg(id, function(img) {
+                            $('currentImg').dispose();
+                            //$(img).set('width','100%');
+                            $(img).inject($$('.photo-wrap-wide')[0]).setStyle('opacity', 0);
+                            self._resetLR();
+                            self._checkSize($(img));
+                            img.set('tween', {
+                                duration: 300
+                            }).tween('opacity', 1);
+                            self.loading = false;
+                            });
+
+                        $$('.currentPage')[0].set('text', id);
+                        this._redirectId(id);
+                    },
+                    _getId: function() {
+                        var id = location.href.split('#')[1] ? parseInt(location.href.split('#')[1]) : 1;
+                        if (!this.images[id - 1]) id = 1;
+                        return id;
+                    },
+                    _redirectId: function(id) {
+                        if (id === 0) id = 1;
+                        if (id === this.images.length + 1) id = this.images.length;
+                        var str = '#' + id;
+                        if (location.href.indexOf('#') === - 1) {
+                            location.href += str;
+                            } else {
+                            var sub = location.href.substring(0, location.href.indexOf('#'));
+                            location.href = sub + str;
+                        }
+                    },
+                    _scorllId: function(id,isNext) {
+                        if (id === 0 || id === this.images.length + 1) return;
+                        var scrollItems = $$('.mid-part')[0].getElements('li');
+                        $$('.mid-part .currentItem')[0].removeClass('currentItem');
+                        $$('.current')[0].inject(scrollItems[id - 1]);
+                        scrollItems[id - 1].getElement('a').addClass('currentItem');
+                        if(isNext  && isNext === 'next'){ this.currentIndex++;}else if(isNext  && isNext === 'prev'){ this.currentIndex--;};
+                        if(this.currentIndex > 5){this._scrollNext('next');this.prevedIndex ++ ; this.currentIndex = 5;}else if(this.currentIndex<1 && this.prevedIndex > 0){
+                            this._scrollNext('prev'); 
+                            this.prevedIndex--;
+                            this.currentIndex  = 1;
+                        }
+                        $$('.mid-part')[0].getElements('li a:not(.currentItem)').setStyle('opacity', 0.5);
+                        $$('.mid-part')[0].getElements('.currentItem').setStyle('opacity', 1);
+                    },
+                    _controlMod: function() {
+                        var r = 1;
+                        var _ghost;
+                        var mod = $$('.photo-tool')[0],
+                        self = this;
+                        var _getClone = function() {
+                            if ($('canvasImg')) _ghost.replaces($('canvasImg'));
+                            if ($('cloneImg') || self.loading){ return;}
+                            new Element('img#cloneImg', {width:$('currentImg').width, height:$('currentImg').height,src:$('currentImg').src}).inject($('imgClone'));
+                            $('imgRange').setStyle('display', 'none');
+                            $$('.contwrap')[0].setStyle('display', 'none');
+                        };
+                        var reStart = function() {
+                            if(!$('cloneImg') || self.loading) return;
+                            if ($('canvasImg')) _ghost.replaces($('canvasImg'));
+                            $('cloneImg').dispose();
+                            $$('#imgRange,.photo-btn-wrap').setStyle('display', 'block');
+                            $$('.contwrap')[0].setStyle('display', 'block');
+                        };
+                        mod.getElements('a').each(function(item) {
+                            item.addEvent('click', function(e) {
+                                switch (e.target.get('class')) {
+                                    case 'maq':
+                                    _getClone();
+                                    if(!$('cloneImg')||$('cloneImg').getSize().x > 900) return;
+                                    $('cloneImg').set('morph', {
+                                        duration: 250,
+                                        link: 'chain'
+                                    });
+                                    $('cloneImg').morph({
+                                        width: $('cloneImg').getSize().x * 1.2,
+                                        height: $('cloneImg').getSize().y * 1.2
+                                    });
+                                    break;
+                                    case 'narrow':
+                                    _getClone();
+                                    if(!$('cloneImg')||$('cloneImg').getSize().x < 100) return;
+                                    $('cloneImg').set('morph', {
+                                        duration: 250,
+                                        link: 'chain'
+                                    });
+                                    $('cloneImg').morph({
+                                        width: $('cloneImg').getSize().x * 0.8,
+                                        height: $('cloneImg').getSize().y * 0.8
+                                    });
+                                    break;
+                                    case 'spin':
+                                    if(self.loading) return;
+                                    if($('cloneImg')){ 
+                                        $('cloneImg').dispose();
+                                        $$('#imgRange,.photo-btn-wrap').setStyle('display', 'block');            
+                                        $$('.contwrap')[0].setStyle('display', 'block');
+                                    }
+                                    if($('currentImg')){
+                                    _ghost= $('currentImg');
+                                    self.ghost = _ghost;
+                                    r=1;
+                                    }
+                                    var canvas = document.createElement('canvas');
+                                    var ctx = canvas.getContext('2d');
+                                    canvas.setAttribute('width',_ghost.width);
+                                    canvas.setAttribute('height',_ghost.height);
+                                    canvas.setAttribute('id','canvasImg');
+
+                                    switch (r){
+                                    case 1:
+                                        ctx.rotate(90*Math.PI/180);
+                                        ctx.drawImage(_ghost,0,-_ghost.height);
+                                        canvas.replaces(_ghost);
+                                    break;
+                                    case 2:
+                                        ctx.rotate(180*Math.PI/180);
+                                        ctx.drawImage(_ghost,-_ghost.width,-_ghost.height);
+                                        canvas.replaces($('canvasImg'));
+                                    break;
+                                    case 3:
+                                        ctx.rotate(270*Math.PI/180);
+                                        ctx.drawImage(_ghost,-_ghost.width,0);
+                                        canvas.replaces($('canvasImg'));
+                                    break;
+                                    case 4:
+                                        ctx.drawImage(_ghost,0,0);
+                                        _ghost.replaces($('canvasImg'));
+                                        r=0;
+                                    break;
+                                    }
+                                    r++;
+                                    break;
+                                    case 'restore':
+                                    reStart();
+                                    break;
+                                }
+                            });
+                        });
+                    },
+                    _checkSize: function(el) {
+                        var sizeRange = $('imgRange').getSize().x;
+                        if (Browser.ie6) sizeRange = 680;
+                        if (el.getSize().x > sizeRange) this._zoomImg(el, sizeRange);
+                    },
+                    _zoomImg: function(el, maxwidth, maxheight, v) {
+                        if (el.tagName.toLowerCase() != 'img' || ! el.width) return;
+                        var thisSize = {
+                            'width': el.width,
+                            'height': el.height
+                        },
+                        zommC;
+                        if (thisSize.width > maxwidth) {
+                            zommC = (maxwidth / thisSize.width).toFloat();
+                            var zoomSizeH = (thisSize.height * zommC).toInt();
+                            Object.append(thisSize, {
+                                'width': maxwidth,
+                                'height': zoomSizeH
+                            });
+                        }
+                        if (thisSize.height > maxheight) {
+                            zommC = (maxheight / thisSize.height).toFloat();
+                            var zoomSizeW = (thisSize.width * zommC).toInt();
+                            Object.append(thisSize, {
+                                'width': zoomSizeW,
+                                'height': maxheight
+                            });
+                        }
+                        if (!v) return el.set(thisSize);
+                        return thisSize;
+                    },
+                    _scrollNext: function(isNext) {
+                        var error = Browser.ie ? 5: 4;
+                        var el = $$('.mid-part')[0].getElement('ul');
+                        if (isNext === 'next') {
+                            if (($$('.mid-part')[0].getSize().y - el.getSize().y) >= parseInt(el.getStyle('top'))) return;
+                            el.set('tween', {
+                                duration: 100
+                            }).tween('top', parseInt(el.getPosition(el.getParent()).y) - (el.getElement('li').getSize().y + error));
+                            } else if (isNext === 'prev') {
+                            if (parseInt(el.getStyle('top')) >= 0) return;
+                            el.set('tween', {
+                                duration: 100
+                            }).tween('top', parseInt(el.getPosition(el.getParent()).y) + (el.getElement('li').getSize().y + error));
+                        }
+                    }
+                };
+                imageView.init();
+            });
+        </script>
+    </body>
+</html>

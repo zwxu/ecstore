@@ -1,0 +1,20 @@
+<form action="index.php?app=site&ctl=admin_theme_manage&act=save_note" method="post" id="mod_note_name">
+  <input type="hidden" name="theme" value="<{$theme}>" />
+  备注名称：<{input type="text" name="info" value="{$info}" onfocus="this.select();" vtype="required" size="15"}>
+  <div class="table-action">
+    <{button type="button" id="btn_note_name" label="确定"}> &nbsp;&nbsp;
+    <{button type="button" label="取消" class="btn-secondary" isCloseDialogBtn="true"}>
+  </div>
+</form>
+<script>
+  $('mod_note_name').store('target',{
+    onComplete:function(rs){
+      $('mod_note_name').getElement('[isCloseDialogBtn]').fireEvent('click');
+      W.page('index.php?app=site&ctl=admin_theme_manage&act=index');
+    }
+  });
+  $('btn_note_name').addEvent('click',function(e){
+      if(this.getParent('form').getElement('[name=info]').value.length>10) return MessageBox.error('表单验证失败:备注名称不能多于10个字');
+      this.getParent('form').fireEvent('submit',{stop:function(){}});
+  });
+</script>

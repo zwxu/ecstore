@@ -1,0 +1,12 @@
+<desktop>
+    <permissions>
+        <permission id="page" display="true" workground='site.wrokground.theme'>页面管理</permission>
+        <permission id="adposition" display="true" workground='site.wrokground.theme'>广告位置管理</permission>
+    </permissions>
+     <workground name="站点" id="site.wrokground.theme" controller="admin_module" action="index">
+        <menugroup name="页面管理">
+            <menu controller='admin_poster' action='index' permission='page' display='true' order="60">广告管理</menu>
+            <menu controller='admin_position' action='index' permission='adposition' display='true' order="60">广告位置管理</menu>
+        </menugroup>
+    </workground>
+</desktop>

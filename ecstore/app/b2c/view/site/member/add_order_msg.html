@@ -1,0 +1,94 @@
+<!-- right-->
+<div class="member-main">
+    <div class="review-box">
+        <{if $msgType == 1}>
+        <h4 class="review-title"><{t}>我已经付款<{/t}></h4>
+        <{else}>
+        <h4 class="review-title"><{t}>客户留言<{/t}></h4>
+        <{/if}>
+        <div class="loginbox division" style="border:none">
+            <form method="post" id="ordermsgForm" action="<{link app=b2c ctl="site_member" act="toadd_order_msg"}>">
+
+                <script>
+                    var button_valiate = function(element_node){
+                        // el element id.
+                        var _validate_return = element_node.getElements('[vtype]').every(function(el){
+
+                            return validate(el);
+                        });
+
+                        return _validate_return;
+                    };
+
+                    subOrderMsgForm = function (event,sign){
+                        var odr_form = $('ordermsgForm');
+
+                        _formActionUrl = odr_form.get('action');
+                        _return = button_valiate(odr_form);
+
+                        if (_return)
+                        {
+                            new Request(
+                            {
+                                url:_formActionUrl,
+                                method:'post',
+                                data:odr_form.toQueryString(),
+                                onComplete:function(){
+                                    alert('提交成功');
+                                    window.opener.location.reload();
+                                    window.close();
+                                }
+                            }).send();
+                        }
+                    };
+                </script>
+                <ul>
+                    <{if $msgType == 1}>
+                    <li>
+                    <label class="login-k"><em style='color:red'>*</em><{t}>付款金额：<{/t}></label>
+                    <div class="login-v"><{input type="positive" required="true" class='inputstyle' style=" width:465px" size=50 name="msg[paymoney]" maxlength="20"}><{t}>元<{/t}></div>
+                    </li>
+                    <li>
+                    <label class="login-k"><em style='color:red'>*</em><{t}>付款方式：<{/t}></label>
+                    <div class="login-v"><{input type="text" name="msg[payments]" class='inputstyle' style=" width:465px" size=50 vtype='required' maxlength="20"}></div>
+                    </li>
+                    <li>
+                    <label class="login-k"><em style='color:red'>*</em><{t}>付款时间：<{/t}></label>
+                    <div class="login-v"><{input type="date" name="msg[paydate][]" vtype='required' maxlength=20 readonly=true }> &nbsp;
+                        <{input type="select" name="msg[paydate][]" options=$timeHours }>&nbsp;<{t}>时<{/t}> &nbsp;
+                        <{input type="select" name="msg[paydate][]" options=$timeMins }>&nbsp;<{t}>分<{/t}>
+                    </div>
+                    </li>
+                    <li>
+                    <label class="login-k"><{t}>备注：<{/t}></label>
+                    <div class="login-v"><{input type="textarea" name="msg[message]" rows=3 class='inputstyle' style=" width:465px" }></div>
+                    </li>
+                    <li>
+                    <label class="login-k">&nbsp;</label>
+                    <div class="login-v"><{button type="button" class="submit-btn" onclick="subOrderMsgForm(event,2);" label=$__b2c="提交"|t:"b2c"}>&nbsp;<{button type="button" class="submit-btn" onclick="if(confirm('确定退出?'))window.close();" label=$__b2c="取消"|t:"b2c"}></div>
+                    </li>
+                    <{else}>
+                    <li>
+                    <label class="login-k"><em style='color:red'>*</em><{t}>标题：<{/t}></label>
+                    <div class="login-v"><{input type="text" vtype="required" class='inputstyle' style=" width:465px" size=50 name="msg[subject]" maxlength=20}></div>
+                    </li>
+                    <li>
+                    <label class="login-k"><em style='color:red'>*</em><{t}>内容：<{/t}></label>
+                    <div class="login-v"><{input type="textarea" vtype="required" rows="5" name="msg[message]" class='inputstyle' style='width:465px'}></div>
+                    </li>
+                    <li>
+                    <label class="login-k">&nbsp;</label>
+                    <div class="login-v"><{button type="button" class="submit-btn" onclick="subOrderMsgForm(event,2);" label=$___b2c="提交留言"|t:'b2c'}></div>
+                    </li>
+                    <{/if}>
+                </ul>
+                <input type="hidden" name="msg[orderid]" value="<{$orderId}>"/>
+                <input type="hidden" name="msg[msgType]" value="<{$msgType}>"/>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+
+</script>
+<!-- right-->

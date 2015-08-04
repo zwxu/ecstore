@@ -1,0 +1,37 @@
+<h2><{t}>收货地址<{/t}></h2>
+<div class="TableWrap section">
+<table width="100%" cellpadding="3" cellspacing="0" class="liststyle">
+<thead>
+  <tr>
+     <th class="status"><{t}>选择<{/t}></th>
+     <th class="status"><{t}>默认<{/t}></th>        
+    <th class="product"><{t}>收货人<{/t}></th> 
+    <th class="ident"><{t}>电话<{/t}></th>
+    <th class="time"><{t}>手机<{/t}></th> 
+    <th class="price"><{t}>地址<{/t}></th>
+     <th class="status"><{t}>邮编<{/t}></th>
+
+    </tr>
+</thead>
+<tbody id="addrList">
+<{foreach from=$receiver item=items key=key}>
+<tr>
+  <td class="status"><input type="radio" name="receiver_id" value=<{$items.addr_id}> <{if $items.def_addr == 1}>checked="checked"<{/if}> ></td>
+  <td class="status"><{if $items.def_addr == 1}><{t}>是<{/t}><{else}><{t}>否<{/t}><{/if}></td>  
+    <td class="name"><{$items.name}></td> 
+  <td class="tel"><{$items.tel}></td>
+  <td class="mobile"><{$items.mobile}></td>
+  <td class="addr"><{$items.addr}></td>
+  <td class="zip"><{$items.zip}></td>
+
+</tr>
+<{/foreach}>
+</tbody>
+<tr>
+<td colspan="7" class=" liststyle-option"><input class="buttonstyle" type="button" onclick="Cart.checkAddr(event)" value="<{t}>选中收货地址<{/t}>" /></td>
+</tr>
+</table>
+<div >
+
+</div>
+</div>

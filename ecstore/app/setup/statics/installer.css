@@ -1,0 +1,504 @@
+body {
+	margin:0px;
+	padding:0;
+	font-size:12px;
+	text-align:center;
+	font-family:Arial, Helvetica, sans-serif, "宋体";
+	background:#fff;
+}
+textarea, input {
+	font-family:Arial, Helvetica, sans-serif, "宋体";
+}
+.banner {
+	text-align:left;
+	padding:0 0 0 0;
+	color:#4F638Fl;
+	font-size:14px;
+	font-weight:bold;
+}
+.banner h1{
+	color:#4F638F;
+	font-size:16px;
+	font-weight:bold;
+	height:25px;
+	padding:10px 0 0 0;
+}
+.ins-step-tips {
+	line-height:22px;
+}
+.ins-steps .span-auto, .ins-step-tips .span-auto {
+	width:50%;
+	margin-right: 0;
+	background: #e9e9e9;
+}
+.ins-items {
+	width:70%;
+}
+.ins-step-tips {
+	width:20%;
+}
+.ins-items, .ins-step-tips {
+}
+.step-item {
+	padding: 8px;
+	border: 2px solid #efefef;
+}
+.ins-step-tips {
+	background:#e9e9e9;
+	position:relative;
+}
+.ins-step-tips ul, .ins-step-tips li {
+	list-style-type:none;
+	margin:0;
+}
+.ins-step-tips ul {
+	margin-top:30px;
+}
+.ins-step-tips sup {
+	font-size: 14px;
+	font-weight: bold;
+}
+.step-item {
+	zoom:1;
+	cursor:pointer;
+}
+.step-item sub {
+	font-size: 12px;
+	color:#ff3300;
+	visibility: hidden;
+}
+.step-item-cur {
+	border-color:#fff;
+	background:#fff;
+}
+.step-item-cur sub {
+	visibility: visible;
+}
+.ins-step-tip-ready sub {
+	color:green;
+}
+.ins-items .ins-item {
+	display:none;
+	padding-bottom:10px;
+}
+.ins-items h3 {
+}
+.ins-items .span-auto {
+	margin: 0;
+	width: 50%;
+}
+.ins-items .item {
+	margin: 10px 0 0 10px;
+}
+.ins-items label {
+	display: block;
+	text-align: right;
+	line-height: 30px;
+}
+.package {
+	padding:20px 5px 5px 20px;
+	margin:0;
+	background:none;
+	border-bottom:1px solid #BDCAE6;
+}
+.loading {
+	background:#E2F3FC url(loading.gif) no-repeat 656px center !important;
+}
+.complete {
+	color: #264409;
+	background: #E9FFD9 url(complete_bg.gif) no-repeat right center;
+}
+.error2 {
+	background-color: #FBE3E4;
+	color: #8a1f11;
+}
+.console {
+	border:1px #e9e9e9 solid;
+	display:none;
+}
+.console input {
+	width:100%;
+	padding:3px 0 3px 0;
+	border:none;
+	border-top:1px #fff solid;
+	background:#333;
+	color:#fff;
+}
+.console-panel {
+	height:250px;
+	background:#333;
+	color:#fff;
+	font-family:Verdana;
+	margin:0;
+	line-height:22px;
+}
+.license {
+	font-size:12px;
+	height:250px;
+	width:100%;
+	border:none;
+	margin:0;
+	padding:0;
+}
+#console_info_handle a {
+	text-decoration: none;
+	cursor: pointer;
+}
+#console_info_handle a span {
+	display:block;
+	visibility:hidden;
+	color:#fff;
+	font-size:10px;
+}
+#console_info_handle a:hover span {
+	visibility:visible;
+}
+/*---------setup--------*/
+* {
+	margin:0 auto;
+	padding:0;
+}
+ul, p, dd, dl, dt, h1, img, li {
+	margin:0;
+	padding:0;
+	border:0;
+}
+h4 {
+	margin:0 0 10px 0;
+	padding:8px 0 4px 0;
+	border-bottom:1px dashed #D8D8D8;
+	color:#333;
+	text-align:left;
+}
+.span-2 {
+	text-align:right;
+	padding-right:2px;
+	padding-left:60px;
+}
+li {
+	list-style:none;
+	text-align:left;
+}
+.container {
+	margin:10px auto;
+	display:inline-block;
+	width:100%;
+}
+.container-all {
+	width:100%;
+	margin:0 auto;
+	background:url(signup_bg.jpg) no-repeat center bottom;
+}
+.logo {
+	height:35px;
+	padding:0;
+	width:754px;
+	margin:0 auto;
+}
+.installer-main {
+	width:748px;
+	border:2px solid #91A7D5;
+	padding:1px;
+	margin:0 auto;
+}
+.installer-steps {
+	width:700px;
+	height:65px;
+	padding:18px 24px 0 24px;
+	background:url(setup_navbg.gif) repeat-x top left;
+}
+.installer-steps-main {
+	width:700px;
+	height:50px;
+	border-bottom:1px solid #BDCAE6;
+	padding:0 0 14px 0;
+}
+.installer-steps-main ul {
+	width:698px;
+	height:44px;
+	border:1px solid #BDCAE6;
+}
+.installer-steps-main li {
+	float:left;
+}
+.step-installing1 {
+	width:102px;
+	height:38px;
+	padding:6px 28px 0 9px;
+	background:url(setup_nav1.gif) no-repeat 0 0;
+}
+.step-installing1 em {
+	width:34px;
+	height:34px;
+	text-align:center;
+	line-height:170%;
+	color:#FFF;
+	display:inline-block;
+	font-weight:bold;
+	font-size:20px;
+	background:url(setup_num.png) no-repeat;
+}
+.step-installing1 span {
+	color:#3E4D71;
+	font-size:14px;
+	font-weight:bold;
+	padding-left:7px;
+}
+.step-installed1 {
+	width:90px;
+	height:35px;
+	padding:9px 15px 0 14px;
+	background:url(setup_nav1.gif) no-repeat 0 -44px;
+}
+.step-installed {
+	background:url(setup_nav1.gif) no-repeat 0 -88px;
+}
+.step-installed1 em {
+	color:#669900;
+	display:inline-block;
+	font-weight:bold;
+	font-size:18px;
+}
+.step-installed1 span {
+	color:#669900;
+	font-size:14px;
+	font-weight:bold;
+	padding-left:7px;
+}
+.installer-step2 {
+	width:84px;
+	height:34px;
+	padding:10px 20px 0 14px;
+	background:url(setup_nav2.gif) no-repeat 0 0;
+	color:#999;
+	font-weight:bold;
+	font-size:14px;
+}
+.installer-step2 em {
+	display:inline-block;
+	font-size:18px;
+	padding-right:6px;
+}
+.step-installed2 {
+	width:82px;
+	height:34px;
+	padding:10px 20px 0 8px;
+	background:url(setup_nav2.gif) no-repeat 0 -88px;
+	color:#669900;
+	font-weight:bold;
+	font-size:14px;
+}
+.step-installed2 em {
+	display:inline-block;
+	font-size:18px;
+	padding-right:6px;
+}
+.step-installing2 {
+	width:101px;
+	height:38px;
+	padding:6px 28px 0 9px;
+	background:url(setup_nav2.gif) no-repeat 0 -44px;
+}
+.step-installing2 em {
+	width:34px;
+	height:34px;
+	text-align:center;
+	line-height:170%;
+	color:#FFF;
+	display:inline-block;
+	font-weight:bold;
+	font-size:20px;
+	background:url(setup_num.png) no-repeat;
+}
+.step-installing2 span {
+	color:#3E4D71;
+	font-size:14px;
+	font-weight:bold;
+	padding-left:7px;
+}
+.installer-step3 {
+	width:100px;
+	height:34px;
+	padding:10px 20px 0 14px;
+	color:#999;
+	font-weight:bold;
+	font-size:14px;
+}
+.installer-step3 em {
+	display:inline-block;
+	font-size:18px;
+	padding-right:6px;
+}
+.step-installing3 {
+	width:130px;
+	height:38px;
+	padding:6px 0 0 9px;
+}
+.step-installing3 em {
+	width:34px;
+	height:34px;
+	text-align:center;
+	line-height:170%;
+	color:#FFF;
+	display:inline-block;
+	font-weight:bold;
+	font-size:20px;
+	background:url(setup_num.png) no-repeat;
+}
+.step-installing3 span {
+	color:#3E4D71;
+	font-size:14px;
+	font-weight:bold;
+	padding-left:7px;
+}
+.installer-info {
+	width:700px;
+	padding:10px 24px 50px 24px;
+	background:url(setup_bot_bg.gif) repeat-x bottom left;
+	background-color:#FFF;
+}
+.right-main {
+	height:auto;
+	padding:0;
+	background:#fff;
+}
+.right-main-info {
+	padding:0px 4px 12px 4px;
+}
+.right-main-btn {
+	padding:10px 10px 10px 0;
+	text-align:center;
+	height:auto;
+	border-top:1px solid #A8BCD5;
+}
+.copyright {
+	width:754px;
+	height:40px;
+	background:url(signup_inverted.gif) no-repeat center top;
+	margin:0 auto;
+	padding-top:10px;
+}
+.copyright span {
+	color:#3367AC;
+	padding-left:6px;
+}
+.taskstepbutton {
+	cursor: pointer;
+	width:160px;
+	height:36px;
+	font-size:12px;
+	padding:0;
+	margin:0;
+	border:none;
+	text-indent:-2000px;
+}
+.taskstepbutton_out {
+	background:url(setup_btn.gif) no-repeat 0 0;
+}
+.taskstepbutton_move {
+	background:url(setup_btn.gif) no-repeat 0 -44px;
+}
+.step-back {
+	float:left;
+	background:url(step.gif) no-repeat;
+	width:65px;
+	height:27px;
+	text-indent:-999px;
+	margin:4px 0 0 0;
+}
+.taskstepbutton-start {
+	float:left;
+	cursor: pointer;
+	width:126px;
+	height:36px;
+	font-size:12px;
+	padding:0;
+	margin:0;
+	border:none;
+	text-indent:-2000px;
+	background:url(setup_btn.gif) no-repeat 0 -87px;
+}
+.taskstepbutton-startin {
+	position:absolute;
+	right:600px;
+}
+.taskstepbutton-detection {
+	width:130px;
+	background:url(setup_btn.gif) no-repeat 0 -130px;
+	margin:5px 0 14px 0;
+}
+.info-license tr {
+	height:26px;
+}
+.info-license th {
+	text-align:right;
+	width:130px;
+	padding-right:6px;
+}
+.info-license td {
+	text-align:left;
+} 
+.notice-inline { background-color:#fff; border:none; color:#FF0000;}
+.console_handle { text-align:right; padding:60px 4px 4px 0;height:18px;}
+/*.right,.right-main{   
+    -webkit-border-radius-topright: 5px; 
+    -webkit-border-radius-bottomright: 5px;   
+    -moz-border-radius-topright: 5px; 
+    -moz-border-radius-bottomright: 5px;
+}*/
+
+/*----开始安装----*/
+.installer-proimg{ width:251px; height:291px; float:left; background:url(setup_product.jpg) no-repeat; padding:0 60px 0 10px;}
+.installer-proinfo{ width:300px; height:291px; float:left; background:url(setup_product_01.gif) no-repeat left center; padding-left:60px; text-align:left}
+.installer-proinfow{ width:330px; padding-left:40px;}
+.installer-proinfo-title { width:300px; font-size:28px; color:#333; font-family:tahoma,"microsoft yahei","微软雅黑";line-height:260%;}
+.installer-proinfo-title p{ font-size:14px; line-height:250%;}
+.installer-success-title { width:100%; font-size:32px; color:#333; font-family:tahoma,"microsoft yahei","微软雅黑";line-height:140%; text-align:center; padding-top:30px;}
+.installer-success-title p{ font-size:14px; line-height:240%; text-align:left}
+.installer-success-txt {font-family:tahoma,"microsoft yahei","微软雅黑";font-size:22px; padding-bottom:20px;}
+
+.loadpart{width:98%;border:1px solid #BECAE6;height:17px; background:url(loadpart.gif) repeat-x left center; position:relative;margin:20px 0 20px 10px; padding:0 1px 0 1px;}
+.loader{height:100%; float:left; width:0px; text-align:center; background:url(loader.gif) repeat-x left center;}
+.btnbox{height:24px;line-height:24px; padding:0 0 60px 0;}
+.appNum{color:#669900;line-height:28px; font-size:28px; position:absolute; left:50%; top:-50px; font-family:Georgia, "Times New Roman", Times, serif; font-weight:normal;}
+.right-main .hide{display:none;}
+
+/*----重新检测----*/
+.installer-detection {
+	width:704px;
+	padding: 0 22px 0 22px;
+	background:url(setup_navbg.gif) repeat-x top left;
+}
+.installer-detection-title {
+	width:704px;
+	height:58px;
+}
+.installer-detection-title h4{
+	color:#3E4D71;
+	border-bottom:1px solid #BDCAE6;
+	padding:15px 0 10px 0;
+	margin:0;
+}
+.installer-detection th{
+	text-align:left;
+	padding:0 0 0 66px;
+	line-height:220%;
+}
+.installer-detection td{
+	text-align:left;
+	padding:0 0 0 66px;
+	line-height:220%;
+}
+.installer-detection-success{
+	color:#669933;
+	background:url(detection_icon_ok.gif) no-repeat center left;
+	padding:0 0 0 20px;
+}
+.installer-detection-failure{
+	background:url(detection_icon_w.gif) no-repeat center left;
+	color:#ff0000;
+}
+.installer-detection .tableform{
+	padding:0 0 10px 0;
+}
+

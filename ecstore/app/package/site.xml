@@ -1,0 +1,12 @@
+<site>
+    <module controller='site_activity' >
+        <name>package</name>
+        <title>捆绑活动</title>
+        <disable>false</disable>
+    </module>
+    <module controller='site_package' >
+        <name>giftpackage</name>
+        <title>捆绑销售</title>
+        <disable>false</disable>
+    </module>
+</site>

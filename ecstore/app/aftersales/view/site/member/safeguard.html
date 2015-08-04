@@ -1,0 +1,34 @@
+<div id="member-main" class="member-main">
+    <h1 class="title title2"><{t}>售后维权<{/t}></h1>
+    <form action="<{link app=aftersales ctl=site_member act=swith_safeguard}>" enctype="multipart/form-data" encoding="multipart/form-data" method="post" name="return_save" id='x-return-form'>
+    <div style=" border:1px solid #eee; padding:10px; margin:0 auto" class="return_box">
+	<input type="hidden" id="is_need_refund" name="is_need_refund" value="">
+	<input type="hidden" id="order_id" name="order_id" value="<{$order_id}>">
+	<div class="return_boxon" id="require"><input type="radio" name="is_required" value="1" checked onclick="shoudao();" id="ysdh"/>已收到货</div>
+	<div class="return_boxn" id="norequire"><input type="radio" name="is_required" value="0" onclick="weishoudao();"/>未收到货</div>
+</div>
+<div class="table-action" style="margin-top:10px;">
+		<{button id="x-submit" type="submit"  label=$___aftersales="确认"|t:'aftersales'}>
+	</div>
+	</form>
+</div>
+
+<script>
+function shoudao(){
+    if($('require').className  == 'return_boxn'){
+        $('require').removeClass('return_boxn');
+        $('require').addClass('return_boxon');
+        $('norequire').removeClass('return_boxon');
+        $('norequire').addClass('return_boxn');
+    }
+}
+
+function weishoudao(){
+    if($('norequire').className  == 'return_boxn'){
+        $('require').removeClass('return_boxon');
+        $('require').addClass('return_boxn');
+        $('norequire').removeClass('return_boxn');
+        $('norequire').addClass('return_boxon');
+    }
+}
+</script>

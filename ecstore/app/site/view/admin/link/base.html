@@ -1,0 +1,64 @@
+<form id="add_link" action='index.php?app=site&ctl=admin_link&act=save' method="POST" class="tableform">
+<{if $info.link_id}>
+    <{input type='hidden' name="info[link_id]" value=$info.link_id }>
+<{/if}>
+    <div class="division">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" >
+            <tr>
+                <th><em class="red">*</em><{t}>链接名称：<{/t}></th>
+                <td><{input type='text' name='info[link_name]' value=$info.link_name vtype='required' required='true' size=40}></td>
+            </tr>
+            <tr>
+                <th><em class="red">*</em><{t}>链接地址：<{/t}></th>
+                <td><{input type='text' value=$info.href name='info[href]' id="link-href" vtype='required' required='true' size=40}><span class="notice-inline"><{t}>必须以http开头<{/t}></span></td>
+            </tr>
+            <tr>
+                <th><{t}>链接图片：<{/t}></th>
+                <td>
+                    <{input type='image' name='info[image_url]' value=$info.image_url}>
+                </td>
+            </tr>
+            <tr>
+                <th><{t}>链接类型：<{/t}></th>
+                <td>
+                    <select name="info[link_type]">
+                      <option value='0' <{if $info.link_type == '0'}>selected="selected"<{/if}>>友情链接</option>
+                      <option value='1' <{if $info.link_type == '1'}>selected="selected"<{/if}>>合作媒体</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><{t}>排序：<{/t}></th>
+                <td><{input type='text' value=$info.orderlist name='info[orderlist]' vtype='unsigned' required='true' size=3}></td>
+            </tr>
+            <tr>
+                <th><{t}>隐藏：<{/t}></th>
+                <td>
+                    <input type="radio" value="false" name="info[hidden]" <{if $info.hidden!='true'}>checked<{/if}> ><{t}>否<{/t}>
+                    <input type="radio" value="true" name="info[hidden]" <{if $info.hidden=='true'}>checked<{/if}> ><{t}>是<{/t}>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="table-action">
+        <{button type='button' label=$___a='保存'|t:'site' onclick="sub_form(event);" }>
+    </div>
+</form>
+
+<script>
+
+function sub_form(event) {
+    if(!$('link-href').get('value').test('http')) { 
+        MessageBox.error('<{t}>链接地址 请以http开头!<{/t}>');
+        return false;
+    }
+    $('add_link').fireEvent('submit',new Event(event));
+}
+
+$('add_link').store('target',{
+    onComplete:function(){
+        if($('add_link').getParent('.dialog'))
+        $('add_link').getParent('.dialog').retrieve('instance').close();
+    }
+});
+</script>

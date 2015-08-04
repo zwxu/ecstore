@@ -1,0 +1,50 @@
+<style>
+    #ex_slide_<{$widgets_id}>{ 
+        width:<{$data.width}>px;
+        height:<{$data.height}>px;
+        overflow:hidden;
+        position:relative;
+    }
+    #ex_slide_<{$widgets_id}> ol li{
+        height:<{$data.height}>px;
+        width:<{$data.width}>px;
+        list-style:none outside none; 
+        display:block;
+        overflow:hidden;
+        border:0;
+        margin:0 0 0 0 ;
+    }
+    #ex_slide_<{$widgets_id}> .slide-trigger_<{$widgets_id}>{
+        position:absolute; 
+        z-index:555;
+    }    
+	.slide-trigger_<{$widgets_id}>{bottom:10px;right:10px;}
+	.slide-trigger_<{$widgets_id}> li{float:left;width:20px;height:20px;line-height:20px;color:#000;background:#FFFFFF;opacity:1;text-align:center;margin-left:8px;cursor:pointer; }
+	.slide-trigger_<{$widgets_id}> li.active{background:#F26A33;color:#ffffff}
+</style>
+<div class="ex-slide1-box cl_zhi" style="width:<{$data.width}>px;height:<{$data.height}>px;">
+ 
+  <div id="ex_slide_<{$widgets_id}>" class="ex-slide1">
+    <ol class="switchable-content clearfix">
+		  <{foreach from=$data.pic item=parent key=parentId}>
+			  <li class="switchable-panel">
+				  <a href="<{$parent.linktarget}>">
+                    <img src="images/transparent.gif" lazyload="<{$parent.link}>" class="img-lazyload"  width="<{$data.width}>px" height="<{$data.height}>px" title="<{$data.linkinfo}>">
+				  </a>
+		  </li>
+		  <{/foreach}>
+    </ol>
+    <ul class="switchable-triggerBox slide-trigger_<{$widgets_id}>">
+      <{assign var=countnum value="1"}>
+      <{foreach from=$data.pic item=parent key=parentId name=pic_n}>
+            <li><{$smarty.foreach.pic_n.iteration}></li> 
+      <{/foreach}> 
+    </ul>
+  </div>
+</div>
+<script>
+    new Switchable('ex_slide_<{$widgets_id}>',{
+        effect:'<{$setting.switcheffect}>',
+        autoplay:<{$setting.autoplay}>
+    });
+</script>

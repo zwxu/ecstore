@@ -1,0 +1,66 @@
+<h4><{t}>添加广告板块<{/t}></h4>
+<div class="goods-detail">
+  <div class="tableform">
+    <form method="POST" name="gEditor" id="gEditor" action="index.php?app=poster&ctl=admin_position&act=save" class="tableform" >
+        <{if $position.position_id}>
+        <input type="hidden" name="position_id" value="<{$position.position_id}>"/>
+        <{/if}>
+        <table width="100%" cellpadding="0" cellspacing="0" >
+            <tr>
+                <th><em class="red">*</em><{t}>所属板块名称<{/t}></th>
+                <td><{input type="text" name="position_name"  vtype="required"  value=$position.position_name}>
+                <br />
+                备注:如果同一板块添加多条广告,会取结束时间最晚的那条
+                </td>
+            </tr>
+        </table>
+        <{capture name='footbar'}>
+        <table cellspacing="0" cellpadding="0" style="margin:0 auto; width:100%;" class="table-action" >
+            <tbody>
+                <tr valign="middle">
+                    <td>
+                    <{assign var="___da" value=$___b2c='确定退出?'|t:'b2c'}>
+                    <{assign var="___ca" value="关  闭"}>
+                      <{button label=$___b2c="保存并关闭窗口"|t:'b2c' class="btn-primary" id="btn-save-close" onclick="subOrderForm(event,2)"}>
+                      <{button label=$___b2c="保存当前"|t:'b2c' class="btn-primary" id="btn-save-stay" onclick="subOrderForm(event,1)"}>
+                      <{button label=$___b2c="确定退出"|t:'b2c' class="btn-secondary" onclick="if(confirm('{$___da}'))window.close()"}>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <{/capture}> 
+    </form>
+  </div>
+</div>
+<script>
+subOrderForm = function (event,sign){
+    var target={};
+    switch (sign){
+        case 1:                    //保存不关闭
+          $extend(target,{
+            onComplete:function(res){
+
+                if(window.opener.finderGroup&&window.opener.finderGroup['<{$finder_id}>'])
+                  window.opener.finderGroup['<{$finder_id}>'].refresh();
+                window.location.reload();
+            }}
+          );
+        break;
+        case 2:                   //保存关闭
+          $extend(target,{
+            onComplete:function(res){
+                if(window.opener.finderGroup&&window.opener.finderGroup['<{$finder_id}>'])
+                  window.opener.finderGroup['<{$finder_id}>'].refresh();
+                window.close();
+            }}
+          );
+        break;
+    }
+
+    var _form=$('gEditor');
+    if(!_form)return;
+    var _formActionURL=_form.get('action'); 
+    _form.store('target',target);
+    _form.set('action',_formActionURL+'&but='+sign).fireEvent('submit',new Event(event));
+    };
+</script>

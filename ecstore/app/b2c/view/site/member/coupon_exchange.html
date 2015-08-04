@@ -1,0 +1,38 @@
+<!-- right-->
+<div class="member-main">
+<div>
+<div class="title"><{t}>兑换优惠券<{/t}></div>
+
+<table width="100%" cellpadding="0" cellspacing="0" class="gridlist">
+    <col class=" textleft"></col>
+    <col class="span-2 bg-orange"></col>
+    <col class="span-2"></col>
+    <col class="span-2"></col>
+    <col class="span-3"></col>
+<thead>
+  <tr>
+    <th><{t}>优惠券<{/t}></th>
+    <th><{t}>所需积分<{/t}></th>
+    <th><{t}>起始时间<{/t}></th>
+    <th><{t}>截止时间<{/t}></th>
+    <th><{t}>操作<{/t}></th>
+  </tr>
+</thead>
+<tbody>
+  <{foreach from=$couponList item=item key=key}>
+    <tr>
+      <td><{$item.cpns_name}></td>
+      <td><{$item.cpns_point}></td>
+      <td><{$item.pmt_time_begin|cdate}></td>
+      <td><{$item.pmt_time_end|cdate}></td>
+      <td><{if $item.use_status}><a href="<{link app=b2cctl=site_member act=exchange arg0=$item.cpns_id}>" ><{t}>兑换<{/t}><{else}><{t}> 当前等级或积分不够不能兑换<{/t}><{/if}></a></td>
+    </tr>
+  <{/foreach}>
+</tbody>
+</table>
+
+<{pagers data=$pager}>
+
+</div>
+</div>
+<!-- right-->

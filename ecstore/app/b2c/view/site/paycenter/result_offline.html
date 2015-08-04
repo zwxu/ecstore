@@ -1,0 +1,21 @@
+<div class="feed-back">
+<div class="success clearfix">
+  <div class="span-1 pic"></div>
+  <div class="span-auto ">
+    <{if $payment.status == 'ready'}>
+        <h1><{t}>感谢您的提交<{/t}></h1>
+        <p><{t}>订单<{/t}><{$payment.order_id}><{t}>: 线下支付成功，请等待我们处理。<{/t}></p>
+        <p><div class="customMessages"><{$pay_succ}></div></p>
+    <{else}>
+    <h1><{t}>支付已过期<{/t}></h1>
+    <p class="customMessages"><{$pay_failure}></p>
+    <{/if}>
+  </div>
+</div>
+</div>
+<script>
+function jumpurl(){
+  location='<{link app="site" ctl="default" act="index"}>';
+}
+var SiteSplash = setTimeout('jumpurl()',3000);
+</script>

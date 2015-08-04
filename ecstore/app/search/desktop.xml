@@ -1,0 +1,5 @@
+<desktop>
+    
+    <adminpanel group="desktop_setting" controller="search" action="index" permission="setting" display="true" order='100'>索引管理</adminpanel>
+    
+</desktop>

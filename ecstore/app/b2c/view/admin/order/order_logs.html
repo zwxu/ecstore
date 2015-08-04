@@ -1,0 +1,107 @@
+<style>
+.finder-list td {overflow:visible;}
+.finder-detail-content {overflow:visible !important;}
+</style>
+<div class="tableform">
+  <{if count($logs.data) > 0}>
+  <div class="division">
+    <div  class="table-grid">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+        <thead>
+        <tr>
+          <th><{t}>序号<{/t}></th>
+          <th><{t}>时间<{/t}></th>
+          <th><{t}>操作人<{/t}></th>
+          <th><{t}>行为<{/t}></th>
+          <th><{t}>结果<{/t}></th>
+          <th><{t}>备注<{/t}></th>
+        </tr>
+      </thead>
+      <tbody>
+        <{foreach from=$logs.data item=log name="item"}>
+        <tr>
+          <td><{$pagestart+$smarty.foreach.item.iteration }></td>
+          <td ><{$log.alttime|cdate:FDATE_FTIME}></td>
+          <td><{if $log.op_name}><{$log.op_name}><{else}><{t}>顾客<{/t}><{/if}></td>
+          <td ><{$log.behavior}></td>
+          <td ><{$result[$log.result]}></td>
+          <td >
+		     <div style="position:relative;">
+			<{$log.log_text}>
+			<{if $log.log_logi_no && $log.log_logi_no.dly_number}>
+			，物流单号：<a href='<{$log.log_logi_no.desktop_url}>' class='classless-logisticstrack' deliveryid='<{$log.log_logi_no.delivery_id}>'><{$log.log_logi_no.dly_number}></a>
+			<div id="logistic-<{$log.log_logi_no.delivery_id}>" class="logis-logs" style="position:absolute;right:0;"></div>
+			<{/if}>
+			</div>
+		  </td>
+        </tr>
+        <{/foreach}>
+      </tbody>
+      </table>
+    </div>
+ <{$pager}>
+  </div>
+  <{/if}>
+<script>
+
+function show_delivery_item(cur_obj,key,item_info){
+    if($(cur_obj).getParent().getParent().getNext("tr[id="+key+"]")){
+        var obj = $(cur_obj).getParent().getParent().getNext("tr[id="+key+"]");
+        if(obj.style.display == 'none'){
+            obj.style.display = '';
+        }else{
+            obj.style.display = 'none';
+        }
+    }else{
+		var tr_current = $(cur_obj).getParent().getParent();
+		var cols_len = tr_current.getElements('td').length ? tr_current.getElements('td').length : 0;
+		var tr1 = new Element("tr", {
+                'id' : key
+            }).inject($(cur_obj).getParent().getParent(),'after');
+		var td1 = new Element("td",{
+				'colspan' : cols_len
+		}).inject(tr1)
+        var div1 = new Element("div",{
+                'class' : 'note'
+            }).inject(td1);
+        var div2 = new Element('div',{
+                'style' : 'clear:left'
+            }).inject(div1);
+
+        item_info.each(function(item){
+                var _div_p = new Element('div',{'style':'text-align:left'}).set('text','<{t}>购买的商品：<{/t}>'+item['name']).inject(div2);
+                new Element('span',{'style':'padding-left:10px;color:#ff6600;'}).set('text','<{t}>数量：<{/t}>'+item['number']).inject(_div_p);
+            });
+    }
+}
+
+window.addEvent('domready',function(){
+    $$('a[name=show_delv_item]').each(function(item){
+        item.dispose();
+    });
+});
+
+<{if app::get('logisticstrack')->is_actived()}>
+
+$$('.classless-logisticstrack').addEvent('click',function(e){
+	var target=e.target,href = target.get('href'),deliveryid=target.get('deliveryid'), table = target.getParent('table');
+	var logisticdomid = 'logistic-'+deliveryid, logisticdom=$(logisticdomid);
+	e.stop(); // prevent jump
+	if ( !logisticdom ) { //
+		logisticdom = {destroy:function(){}};
+		new Request({
+			url:href,noCache:true,async:false,
+			onSuccess:function(responseText,responseXML){
+				var newdom = new Element('div',{html:responseText,id:logisticdomid});
+			    newdom.getChildren().set('class','gridlist');
+				newdom.inject(table,'after');
+			}
+		}).get();
+	} else {
+		logisticdom.destroy();
+	}
+});
+<{/if}>
+
+</script>
+</div>

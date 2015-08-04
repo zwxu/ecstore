@@ -1,0 +1,52 @@
+<services> 
+    <service id="desktop_finder.scorebuy_mdl_activity">
+        <class>scorebuy_finder_score</class>
+    </service>
+    <service id="desktop_finder.scorebuy_mdl_scoreapply">
+        <class>scorebuy_finder_scoreapply</class>
+    </service>
+    <service id="scorebuy_score_activity">
+      <class>scorebuy_business_activity</class>
+    </service>
+
+    <service id="score_products_index_info">
+        <class>scorebuy_site_product_index_info</class>
+    </service>
+
+    <service id="score_products_index_btn">
+        <class>scorebuy_site_product_btn_fastbuy</class>
+    </service>
+
+    <service id="view_helper">
+        <class>scorebuy_view_helper</class>
+    </service>
+
+    <service id="score_order.create">
+        <class>scorebuy_order_create_after</class>
+    </service>
+
+    <service id="b2c_cart_process_apps">
+        <class>scorebuy_cart_process_goods</class>
+    </service>
+
+      <service id="b2c_cart_objects">
+        <class>scorebuy_cart_object_goods</class>
+    </service>
+
+    <service id="score_cart_object_apps">
+        <class>scorebuy_cart_object_goods</class>
+        <class>scorebuy_cart_object_coupon</class>
+    </service>
+
+    <service id="score_addtocart_check">
+        <class>scorebuy_cart_object_goods</class>
+    </service>
+
+    <service id="site_view_helper">   
+        <class>scorebuy_view_helper</class>
+    </service>
+
+    <service id="scorebuy_cart_render_items_apps">
+        <class>scorebuy_cart_render_item_goods</class>
+    </service>
+</services>

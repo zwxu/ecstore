@@ -1,0 +1,62 @@
+
+<form action="index.php?app=content&ctl=admin_article_detail&act=save" method="post" name="aEditor" id="aEditor">
+  <input type="hidden" name="article_id" value="<{$article.indexs.article_id}>" id="aEditor-Garticleid-input"/>
+  <input type="hidden" name="article[indexs][type]" value="<{$article.indexs.type}>" />
+
+  <div id="aEditor-Body">
+     <{include file="admin/article/detail/page.html"}>
+  </div>
+</form>
+
+<script>
+var articlesEditFrame = (function(){
+
+	/*
+	 *  sign:{
+		   1:保存并关闭,
+		   2:保存当前不关闭，               
+	 *    }       
+	 */
+	var _form=$('aEditor'),_formActionURL=_form.get('action'); 
+	subArticleForm = function (event,sign){  
+	   event=new Event(event);
+	   var specOBJ='';	
+	   var target={extraData:$('finder-tag').toQueryString()+'&'+specOBJ,onComplete:function(){}};
+	 
+	   switch (sign){
+			case 1:
+				$extend(target,{
+					onComplete:function(){
+						window.close();
+					}}
+				);
+			break;
+			case 2:
+				$extend(target,{
+					onRequest: function(){
+						event.target.disabled = true;
+					},
+					onComplete:function(e){
+						if(!JSON.decode(e).id){
+							event.target.removeProperty('disabled');
+							return;
+						}
+						var id = JSON.decode(e).id;
+						if(id > 0){
+							$('aEditor-Garticleid-input').value = JSON.decode(e).id;
+						}
+						event.target.disabled = false;
+					}}
+				);
+			break;
+			default:
+			return;
+	   }
+
+		_form.store('target',target);
+		_form.set('action',_formActionURL+'&but='+sign).fireEvent('submit',new Event(event));
+	};
+});
+
+articlesEditFrame();
+</script>

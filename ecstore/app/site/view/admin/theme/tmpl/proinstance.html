@@ -1,0 +1,51 @@
+<div class="action-bar">
+<a class="btn" style="color:#333" href="index.php?app=site&ctl=admin_widget_proinstance&act=editor&level=theme&flag=<{$theme}>&theme=<{$theme}>" target="open::{width:950,height:700,top:100,left:100}"><span><span>添加模板挂件实例</span></span></a>
+&nbsp;
+</div>
+<table class="gridlist" width="100%" cellpadding="0" cellspacing="0">
+<thead>
+    <tr>
+    <th width="20%"><{t}>名称<{/t}></th>
+    <th width="40%"><{t}>备注<{/t}></td>
+    <th width="10%"><{t}>挂件名<{/t}></td>
+    <th width="10%"><{t}>所属程序<{/t}></td>
+    <th width="10%"><{t}>所属模板<{/t}></td>
+    <th width="10%"><{t}>操作<{/t}></td>
+    </tr>
+</thead>
+<tbody>
+<{if $instances }>
+<{foreach from=$instances item=item key=key name="tmpl_type"}>
+<tr>
+<td width="20%"><{$item.name}></td>
+<td width="40%"><{$item.memo}></td>
+<td width="10%"><{$item.widgets_type}></td>
+<td width="10%"><{$item.app}></td>
+<td width="10%"><{$item.theme}></td>
+<td width="10%"><a href="index.php?app=site&ctl=admin_widget_proinstance&act=editor&level=theme&id=<{$item.widgets_id}>" target="open::{width:950,height:700,top:100,left:100}">编辑</a>&nbsp;
+<a href="javascript:void(0)" class="widget-opt" widgets_id="<{$item.widgets_id}>">删除</a></td>
+</tr>
+<{/foreach}>
+<{else}>
+<tr>
+    <td colspan=6>
+<div class="tableform">
+此模板没有模板级挂件
+</div>
+</td>
+</tr>
+<{/if}>
+</tbody>
+</table>
+<script>
+$ES('.widget-opt').addEvent('click',function(e){
+    if(confirm('<{t}>是否删除此实例？<{/t}>')) {
+        W.page(
+            'index.php?app=site&ctl=admin_widget_proinstance&act=delete&level=theme&id='+this.get('widgets_id'),
+            {onComplete:function(re){
+                this.getParent('tr').destroy();
+            }.bind(this)}
+        );
+    };
+});
+</script>

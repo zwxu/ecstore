@@ -1,0 +1,28 @@
+<div class="tableform">
+<div class="division">
+	<form method='post' action='index.php?app=ectools&ctl=admin_refund&act=edit' target="{update:'refund_info'}">
+		<input type='hidden' name='refund_id' value='<{$refunds.refund_id}>'>
+         <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+        <th><label><{t}>单据号：<{/t}></label></th><td><{$refunds.refund_id}></td>
+        <th><label><{t}>订单号：<{/t}></label></th><td><{$refunds.order_id}></td>
+        <th><label><{t}>支付方式：<{/t}></label></th><td><{$refunds.pay_app_id|pay_name}></td>
+        <th><label><{t}>货币：<{/t}></label></th><td><{$refunds.currency}></td>
+        </tr>
+           <tr>
+        <th><label><{t}>操作员：<{/t}></label></th><td><{$refunds.op_id}></td>
+        <th><label><{t}>生成时间：<{/t}></label></th><td><{$refunds.t_begin|cdate:SDATE_STIME}></td>
+        <th><label><{t}>方式：<{/t}></label></th><td><{if $refunds.pay_type == 'online'}><{t}>在线支付<{/t}><{elseif $refunds.pay_type == 'offline'}><{t}>线下付款<{/t}><{elseif $refunds.pay_type == 'deposit'}><{t}>预存款支付<{/t}><{/if}></td>
+        <th><label><{t}>帐号：<{/t}></label></th><td><{$refunds.account}></td>
+        </tr>
+        <tr>
+        <th><label><{t}>银行：<{/t}></label></th><td><{$refunds.bank}></td>
+        <th><label><{t}>收款人：<{/t}></label></th><td><{if $refunds.pay_account}><{$refunds.pay_account}><{else}><{$refunds.member_id|default:'-'}><{/if}></td>
+        <th><label><{t}>金额：<{/t}></label></th><td><{$refunds.money|cur:$refunds.currency}></td>
+        <th><label><{t}>时间：<{/t}></label></th><td><{$refunds.t_payed|cdate:SDATE_STIME}></td>
+        </tr>
+        <tr><th><{t}>备注：<{/t}></th><td><{$refunds.memo}></td></tr>
+        </table>
+	</form>
+</div>
+</div>

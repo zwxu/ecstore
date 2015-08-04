@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- edited with XMLSpy v2007 (http://www.altova.com) by Administrator (GOOGLE) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.shopex.cn" targetNamespace="http://www.shopex.cn" elementFormDefault="qualified">
+	<xs:element name="shop">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="info"/>
+				<xs:element ref="url"/>
+				<xs:element ref="operator" maxOccurs="unbounded"/>
+				<xs:element ref="setting"/>
+				<xs:element ref="sitemap"/>
+				<xs:element ref="goods_category"/>
+				<xs:element ref="brand" maxOccurs="unbounded"/>
+				<xs:element ref="meta_refs" maxOccurs="unbounded"/>
+				<xs:element ref="spec" maxOccurs="unbounded"/>
+				<xs:element ref="netgroup" maxOccurs="unbounded"/>
+				<xs:element ref="roles" maxOccurs="unbounded"/>
+				<xs:element ref="tag" maxOccurs="unbounded"/>
+				<xs:element ref="member_lv" maxOccurs="unbounded"/>
+				<xs:element ref="dly_type" maxOccurs="unbounded"/>
+				<xs:element ref="dly_corp" maxOccurs="unbounded"/>
+				<xs:element ref="currency" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="info" type="xs:string"/>
+	<xs:element name="brand" type="xs:string"/>
+	<xs:element name="spec" type="xs:string"/>
+	<xs:element name="store" type="xs:string"/>
+	<xs:element name="url" type="xs:string"/>
+	<xs:element name="operator" type="xs:string"/>
+	<xs:element name="setting">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="set" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="sitemap">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="set" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="node" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="netgroup">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="group_name"/>
+				<xs:element ref="group_url"/>
+				<xs:element ref="group_icon" minOccurs="0"/>
+				<xs:element ref="global_group_id" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="node">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="set" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="node" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="id" type="xs:unsignedInt" use="optional"/>
+			<xs:attribute name="type" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="goods"/>
+						<xs:enumeration value="article"/>
+						<xs:enumeration value="page"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="set">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="key" type="xs:string" use="required"/>
+					<xs:attribute name="value" type="xs:string" use="optional"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="goods_category">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="set" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="goods_category" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="roles">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="role_name"/>
+				<xs:element ref="workground" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="role_id" type="xs:int" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="workground" type="xs:string"/>
+	<xs:element name="global_group_id" type="xs:int"/>
+	<xs:element name="group_url" type="xs:string"/>
+	<xs:element name="group_name" type="xs:string"/>
+	<xs:element name="group_icon" type="xs:string"/>
+	<xs:element name="role_name" type="xs:string"/>
+	<xs:element name="meta_refs">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="tbl_name"/>
+				<xs:element ref="pk_name" minOccurs="0"/>
+				<xs:element ref="col_name"/>
+				<xs:element ref="col_type"/>
+				<xs:element ref="col_desc"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="tbl_name" type="xs:string"/>
+	<xs:element name="pk_name" type="xs:string"/>
+	<xs:element name="col_name" type="xs:string"/>
+	<xs:element name="col_type" type="xs:string"/>
+	<xs:element name="type" type="xs:string"/>
+	<xs:element name="required" type="xs:boolean"/>
+	<xs:element name="default" type="xs:string"/>
+	<xs:element name="width" type="xs:int"/>
+	<xs:element name="label" type="xs:string"/>
+	<xs:element name="hidden" type="xs:boolean"/>
+	<xs:element name="editable" type="xs:boolean"/>
+	<xs:element name="is_title" type="xs:boolean"/>
+	<xs:element name="col_desc">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="type"/>
+				<xs:element ref="required" minOccurs="0"/>
+				<xs:element ref="default" minOccurs="0"/>
+				<xs:element ref="width" minOccurs="0"/>
+				<xs:element ref="label" minOccurs="0"/>
+				<xs:element ref="hidden" minOccurs="0"/>
+				<xs:element ref="editable" minOccurs="0"/>
+				<xs:element ref="is_title" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="tag">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="tag_name"/>
+				<xs:element ref="tag_mode"/>
+				<xs:element ref="tag_type"/>
+				<xs:element ref="tag_filter" minOccurs="0"/>
+				<xs:element ref="tag_abbr" minOccurs="0"/>
+				<xs:element ref="tag_bgcolor" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="tag_name">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="30"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="tag_mode">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="normal"/>
+				<xs:enumeration value="filter"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="tag_type" type="xs:string"/>
+	<xs:element name="tag_filter" type="xs:string"/>
+	<xs:element name="tag_bgcolor" type="xs:string"/>
+	<xs:element name="tag_fgcolor" type="xs:string"/>
+	<xs:element name="tag_abbr">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:maxLength value="6"/>
+			</xs:restriction>
+		</xs:simpleType>
+	
+	</xs:element>
+	
+	<xs:element name="member_lv">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="name"/>
+				<xs:element ref="dis_count"/>
+				<xs:element ref="default_lv" minOccurs="0" />
+				<xs:element ref="point" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="name" type="xs:string"/>
+	<xs:element name="dis_count" type="xs:float"/>
+	<xs:element name="default_lv">
+		<xs:simpleType>
+			<xs:restriction base="xs:int">
+				<xs:enumeration value="0" />
+				<xs:enumeration value="1" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="point" type="xs:float"/>
+	
+	
+	<xs:element name="currency">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="cur_id"/>
+				<xs:element ref="cur_code"/>
+				<xs:element ref="cur_name"/>
+				<xs:element ref="cur_sign"/>
+				<xs:element ref="cur_rate"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="cur_id" type="xs:unsignedInt"/>
+	<xs:element name="cur_code" type="xs:string"/>
+	<xs:element name="cur_name" type="xs:string"/>
+	<xs:element name="cur_rate" type="xs:float"/>
+	<xs:element name="cur_sign" type="xs:string"/>
+	
+	<xs:element name="dly_type">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="dt_name"/>
+				<xs:element ref="protect"/>
+				<xs:element ref="firstunit"/>
+				<xs:element ref="continueunit"/>
+				<xs:element ref="firstprice"/>
+				<xs:element ref="continueprice"/>
+				<xs:element ref="protect_rate"/>
+				<xs:element ref="has_cod"/>
+				<xs:element ref="minprice"/>
+				<xs:element ref="disabled"/>
+				<xs:element ref="dt_expressions"/>
+				<xs:element ref="detail"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="dt_name" type="xs:string"/>
+	<xs:element name="protect" type="xs:string"/>
+	<xs:element name="firstunit" type="xs:unsignedInt"/>
+	<xs:element name="continueunit" type="xs:unsignedInt"/>
+	<xs:element name="firstprice" type="xs:float"/>
+	<xs:element name="continueprice" type="xs:float"/>
+	<xs:element name="protect_rate" type="xs:float"/>
+	<xs:element name="has_cod" type="xs:boolean"/>	
+	<xs:element name="minprice" type="xs:float"/>
+	<xs:element name="disabled" type="xs:boolean"/>
+	<xs:element name="dt_expressions" type="xs:string"/>		
+	<xs:element name="detail" type="xs:string"/>			
+
+	<xs:element name="dly_corp">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="name"/>
+				<xs:element ref="website"/>
+				<xs:element minOccurs="0" ref="request_url"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="name" type="xs:string"/>
+	<xs:element name="website" type="xs:url"/>
+	<xs:element name="request_url" type="xs:url"/>
+</xs:schema>

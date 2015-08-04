@@ -1,0 +1,23 @@
+<services>
+
+	<service id="search_segment" optname="默认分词器" opttype="select">
+		<class>search_service_segment_cjk</class>
+	</service>
+
+	<service id="search_pre_filter">
+		<class>search_service_filter_cjk</class>
+	</service>
+
+	<service id="search_token_filter">
+		<class>search_service_filter_lowercase</class>
+	</service>
+
+    <service id="search_server.search_goods">
+        <class>search_goods</class>
+    </service>
+
+	<service id="desktop_finder.search_mdl_search">
+        <class>search_finder_search</class>
+    </service>
+
+</services>

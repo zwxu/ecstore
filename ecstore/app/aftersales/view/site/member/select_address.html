@@ -1,0 +1,29 @@
+<div id="member-main" class="">
+<h1 class="title"><{t}>申请退款<{/t}></h1>
+    <form class="tableform" method='post' action="<{link app=aftersales ctl='site_member' act='do_agree_return'}>" id="order-delivery-form">
+        <table>
+        <input type='hidden' name='return_id' value='<{$return_id}>'>
+        <tr><th><{t}>选择退货地址：<{/t}></th></tr>
+        <{foreach from=$addresses item=ads key=k}>
+            <tr>
+                <td>
+                    <label><input type="radio" name="deladdress" id="deladdress" value="<{$ads.da_id}>" <{if $ads.refund == 'true'}>checked<{/if}>/><{t}><{$ads.region}>,<{$ads.address}>,<{$ads.uname}>,<{$ads.phone}>,<{$ads.mobile}><{/t}></label>
+                </td>
+            </tr>
+        <{/foreach}>
+        <tr><th><{t}>卖家留言：<{/t}></th></tr>
+        <tr><td><{input type="textarea" id="x-return-content" name="seller_comment" class='x-inputs x-input' cols="80" rows="5" style="width:98%"}></td></tr>
+        <tr><td><{button class="" onclick="sub();" type="button" label=$___b2c="确定"|t:'b2c'}></td></tr>
+        </table>
+    </form>
+</div>
+<script>
+    function sub(){
+        var deladdress=$('deladdress');
+        if(deladdress){
+            $('order-delivery-form').submit();
+        }else{
+            Message.error('必须选择退货地址，如果没有退货地址，请去卖家中心维护！');
+        }
+    }
+</script>

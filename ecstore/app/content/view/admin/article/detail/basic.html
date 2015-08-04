@@ -1,0 +1,58 @@
+<script>
+$('aEditor').retrieve('setTabs',function(){
+		 var gtabs=$ES('#menu-desktop .spage-side-nav li.l-handle');
+		 new ItemAgg(gtabs,$ES('#aEditor .spage-main-box'),{
+			activeName:'cur',
+			onActive:function(tab,item){
+				 var anotherItems=$$($A(this.items).remove(item));
+                  if(tab.hasClass('all')){
+                     anotherItems.show();
+                  }else{
+                     anotherItems.hide();
+                  }
+        	}
+		 });
+}());
+
+</script>
+<h3><{t}>基本信息<{/t}></h3>
+<div id="x-g-basic" class="goods-detail">
+    <div class="tableform">
+		<div class="division">
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<th><em><font color="red">*</font></em><{t}>文章标题：<{/t}></th>
+					<td><{input type="text" id="article_title" name="article[indexs][title]" required="true" vtype='required' value=$article.indexs.title }></td>
+				</tr>
+				<tr>
+					<th><em><font color="red">*</font></em><{t}>所属文章类目：<{/t}></th>
+					<td><select name="article[indexs][node_id]" vtype='required' class="x-input">
+							<{if $article.indexs.node_id < 1}>
+							<option value="" ><{t}>请选择所属类目<{/t}></option>
+							<{/if}>
+							<{foreach from=$selectmaps item=maps}>
+							<option class="optionlevels optionlevel_<{math equation='x' x=$maps.step|default:1}>
+							" value="<{$maps.node_id}>"  depth="<{$maps.step}>" parent_id="<{$maps.parent_id}>" <{if $maps.node_id==$article.indexs.node_id}>selected<{/if}>><{$space|paddingleft:$maps.step:'&nbsp;&nbsp;&nbsp;&nbsp;'}><{$maps.node_name}>
+							</option>
+							<{/foreach}>
+						</select></td>
+				</tr>
+                <tr>
+                     <th><{t}>作者：<{/t}></th>
+                     <td><{input type="text" value=$article.indexs.author name="article[indexs][author]" style="width:60px" maxlength="30" }></td>
+                </tr>
+                <tr>
+                     <th><em><font color="red">*</font></em><{t}>发布时间：<{/t}></th>
+                     <td><{input type="time" value=$article.indexs.pubtime vtype='required' name="article[indexs][pubtime]" style="width:60px" maxlength="30" }></td>
+                </tr>
+                <tr>
+                     <th><{t}>发布：<{/t}></th>
+					 <td>
+					 	<input type="radio" value="1" name="article[indexs][ifpub]" <{if $article.indexs.ifpub == 'true'}>checked<{/if}> /><{t}>是<{/t}>
+					 	<input type="radio" value="0" name="article[indexs][ifpub]" <{if $article.indexs.ifpub != 'true'}>checked<{/if}> /><{t}>否<{/t}>
+					 </td>
+                </tr>
+			</table>
+		</div>
+	</div>
+</div>

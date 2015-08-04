@@ -1,0 +1,45 @@
+<div class="conter">
+  <div class="group_buy_search">
+    <div class="m_center">
+    <div class="sequence">
+	<{if $orderBy == 1}>
+      <a href="<{link app=package ctl=site_package act=gallery arg1=1 arg2=$pageNums}>" class="current" title="默认排序">默认</a>
+      <a href="<{link app=package ctl=site_package act=gallery arg1=4 arg2=$pageNums}>" title="按发布时间排序 新到旧"><span>最新</span><span class="up"></span></a>
+      <a href="<{link app=package ctl=site_package act=gallery arg1=2 arg2=$pageNums}>" title="价格从高到低"><span>价格</span><span class="up"></span></a>
+	<{elseif $orderBy == 2}>
+		<a href="<{link app=package ctl=site_package act=gallery arg1=1 arg2=$pageNums}>"  title="默认排序">默认</a>
+        <a href="<{link app=package ctl=site_package act=gallery arg1=4 arg2=$pageNums}>" title="发布时间 新到旧"><span>最新</span><span class="up"></span></a>
+        <a href="<{link app=package ctl=site_package act=gallery arg1=3 arg2=$pageNums}>" title="价格从高到低" class="current"><span>价格</span><span class="up"></span></a>
+	<{elseif $orderBy == 3}>
+		<a href="<{link app=package ctl=site_package act=gallery arg1=1 arg2=$pageNums}>"  title="默认排序">默认</a>
+        <a href="<{link app=package ctl=site_package act=gallery arg1=4 arg2=$pageNums}>" title="发布时间 新到旧"><span>最新</span><span class="up"></span></a>
+        <a href="<{link app=package ctl=site_package act=gallery arg1=2 arg2=$pageNums}>" class="current"  title="价格从低到高"><span>价格</span><span class="up"></span></a>
+	<{elseif $orderBy == 4}>
+        <a href="<{link app=package ctl=site_package act=gallery arg1=1 arg2=$pageNums}>"  title="默认排序">默认</a>
+        <a href="<{link app=package ctl=site_package act=gallery arg1=5 arg2=$pageNums}>" class="current" title="发布时间 新到旧"><span>最新</span><span class="up"></span></a>
+       <a href="<{link app=package ctl=site_package act=gallery arg1=2 arg2=$pageNums}>" title="价格从高到低"><span>价格</span><span class="up"></span></a>
+	<{elseif $orderBy == 5}>
+		<a href="<{link app=package ctl=site_package act=gallery arg1=1 arg2=$pageNums}>"  title="默认排序">默认</a>
+        <a href="<{link app=package ctl=site_package act=gallery arg1=4 arg2=$pageNums}>" class="current" title="发布时间 旧到新"><span>最新</span><span class="up"></span></a>
+        <a href="<{link app=package ctl=site_package act=gallery args=2 arg2=$pageNums}>" title="价格从高到低"><span>价格</span><span class="up"></span></a>
+	<{/if}>
+    </div>
+    </div>
+  </div>
+
+  <div class="group_buy_body m_center">
+    <ul>
+      <{foreach from=$list item=item}>
+        <li>
+			<a href="<{$item.url}>" class="group_buy_img"><img src="<{$item.pic}>" alt="<{$item.name}>" /></a>
+			<a href="<{$item.url}>" class="group_buy_name" title="<{$item.name}>"><{$item.name|escape:"html"|cut:100}></a>
+			<p><span class="left_xu group_buy_price">捆绑价：<{$item.amount|cur_odr}></span>
+            <a href="<{$item.url}>" class="group_buy_link right_xu">去看看<span></span></a>
+            <div class="crl_xu"></div></p>
+        </li>
+      <{/foreach}>
+      <div class="crl_xu"></div>
+    </ul>
+    <{pagers data=$pager}>
+  </div>
+</div>

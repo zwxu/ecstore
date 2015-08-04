@@ -1,0 +1,56 @@
+<services> 
+    <service id="desktop_finder.groupbuy_mdl_activity">
+        <class>groupbuy_finder_group</class>
+    </service>
+    <service id="desktop_finder.groupbuy_mdl_groupapply">
+        <class>groupbuy_finder_groupapply</class>
+    </service>
+    <service id="groupbuy_group_activity">
+      <class>groupbuy_business_activity</class>
+    </service>
+
+    <service id="group_products_index_info">
+        <class>groupbuy_site_product_index_info</class>
+    </service>
+    
+    <service id="gallery_list.goods_promotion">
+        <class>groupbuy_goods_promotion</class>
+    </service>
+
+    <service id="group_products_index_btn">
+        <class>groupbuy_site_product_btn_fastbuy</class>
+    </service>
+
+    <service id="view_helper">
+        <class>groupbuy_view_helper</class>
+    </service>
+
+    <service id="group_order.create">
+        <class>groupbuy_order_create_after</class>
+    </service>
+
+    <service id="b2c_cart_process_apps">
+        <class>groupbuy_cart_process_goods</class>
+    </service>
+
+      <service id="b2c_cart_objects">
+        <class>groupbuy_cart_object_goods</class>
+    </service>
+
+    <service id="group_cart_object_apps">
+        <class>groupbuy_cart_object_goods</class>
+        <class>groupbuy_cart_object_coupon</class>
+    </service>
+
+    <service id="group_addtocart_check">
+        <class>groupbuy_cart_object_goods</class>
+    </service>
+
+    <service id="site_view_helper">   
+        <class>groupbuy_view_helper</class>
+    </service>
+
+    <service id="group_cart_render_items_apps">
+        <class>groupbuy_cart_render_item_goods</class>
+    </service>
+</services>

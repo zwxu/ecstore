@@ -1,0 +1,35 @@
+<{tabber}>
+    <{tab name=$___recommended="时间段设置"|t:'recommended'}>
+        <form action="<{link app=recommended ctl='admin_setting' act='index'}>" method="POST">
+        <div class="division">
+
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <th><{t}>请设置时间段：<{/t}></th>
+            <td><input name="period" vtype="unsignedint" class="inputstyle" value="<{$period}>">
+            &nbsp;(单位：月) 比如要收集最近1个月内购买该商品的用户还购买了的商品数据，请输入“1”
+            </td>
+          </tr>
+
+        </table>
+        </div>
+
+        <div class="table-action">
+              <{button class="btn-primary" type="submit"  label=$___similar="确定"|t:'similar' }>
+          </div>
+        </form>
+    <{/tab}>
+    <{tab name=$___recommended="立即更新数据"|t:'recommended'}>
+    <form action="<{link app=recommended ctl='admin_setting' act='update'}>" method="POST">
+        <div class="division">
+            <p class="notice">
+            <{t}>“购买该商品的用户还购买了”默认每个月收集一次订单表中的商品数据，你可以点击“立即收集”，手动收集最新的数据<{/t}>
+            </p>
+            <div id="updateProgess" align='center'></div>
+            <div class="table-action">
+                <{button id="btn-recommended-update" class="btn-primary" type="submit"  label=$___recommended="立即更新"|t:'recommended' }>
+            </div>
+        </div>
+    </form>
+    <{/tab}>
+<{/tabber}>

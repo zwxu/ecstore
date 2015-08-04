@@ -1,0 +1,199 @@
+<div class="goods-detail-pic" style='<{if $env.conf.site.small_pic_width !=0 && $env.conf.site.small_pic_height !=0}> width:<{$env.conf.site.small_pic_width}>px;height:<{$env.conf.site.small_pic_height}>px;<{/if}>' bigpicsrc="<{if $goods.image_default_id}><{$goods.image_default_id|storager:'b'}><{else}><{$env.conf.site.default_big_pic|storager:'b'}><{/if}>">
+           <a href="<{link app=gift ctl=site_gift act=viewpic arg0=$goods.goods_id arg0=$goods.goods_id arg1=def}>" target="_blank" style='color:#fff;_font-size:263px;<{if $env.conf.site.small_pic_width !=0 && $env.conf.site.small_pic_height !=0}> width:<{$env.conf.site.small_pic_width}>px;height:<{$env.conf.site.small_pic_height}>px;font-size:<{math equation="gp_height*0.875" gp_height=$env.conf.site.small_pic_height}>px;<{/if}>;font-family:Arial;display:table-cell; vertical-align:middle;'>
+                <img src="<{$goods.image_default_id|storager:'m'}>"  alt="<{$goods.title}>"  style='vertical-align:middle;'/>
+           </a>
+            <{if $env.conf.site.reading_glass}>
+           <div class='goods-pic-magnifier'  style='<{if $env.conf.site.small_pic_width !=0 && $env.conf.site.small_pic_height !=0}> width:<{math equation="sp_width*(rw/bp_width)" sp_width=$env.conf.site.small_pic_width bp_width=$env.conf.site.big_pic_width rw=$env.conf.site.reading_glass_width format="%.0f"}>px;height:<{math equation="sp_height*(rh/bp_height)" sp_height=$env.conf.site.small_pic_height bp_height=$env.conf.site.big_pic_height rh=$env.conf.site.reading_glass_height format="%.0f"}>px;<{/if}>'>
+           &nbsp;
+           </div>
+           <{/if}>
+</div>
+
+
+        <table class='picscroll'>
+            <tr>
+               <td width='5%' class='scrollarrow toleft' title='<{t}>向左<{/t}>'>&nbsp;
+               </td>
+                <td width='90%'>
+                  <div class="goods-detail-pic-thumbnail pics">
+                <{if $goods.images}>
+                <table>
+                   <tr>
+                     <{if $imgtype != 'spec'}>
+                          <{assign var=image_default value=$goods.image_default_id}>
+                     <td class='current' img_id='<{$image_default}>'>
+                      <div class='uparrow'></div>
+
+                 <a href="<{link app=gift ctl=site_gift act=viewpic arg0=$goods.goods_id arg0=$goods.goods_id arg1=$goods.image_default_id}>" target="_blank" imgInfo="{small:'<{$goods.image_default_id|storager:'m'}>',big:'<{$goods.image_default_id|storager:'b'}>'}">
+                     <img img-lazyload="<{$image_default|default:$env.conf.site.default_thumbnail_pic|storager}>" alt='<{$goods.title}>' width='55' height='55'/>
+                  </a>mm
+                    </td>
+                    <{/if}>
+                <{foreach from=$goods.images item=thumb name=gimgs }>
+                <{if $thumb.image_id == $goods.image_default_id && $imgtype != 'spec'}>
+                    <{continue}>
+                <{/if}>
+                <td  img_id='<{$thumb.image_id}>'>
+                   <div class='uparrow'></div>
+                  <a imgInfo="{small:'<{$thumb.image_id|storager:'m'}>',big:'<{$thumb.image_id|storager:'b'}>'}" href="<{link app=gift ctl=site_gift act=viewpic arg0=$goods.goods_id arg0=$goods.goods_id arg1=$thumb.image_id}>" target="_blank">
+                     <img img-lazyload="<{$thumb.image_id|storager:'s'}>" width="55" height="55" />
+                  </a>
+                  </td>
+                <{/foreach}>
+                        </tr>
+                    </table>
+                <{/if}>
+                  </div>
+                </td>
+               <td width='5%' class='scrollarrow toright' title='<{t}>向右<{/t}>'>&nbsp;
+
+               </td>
+            </tr>
+        </table>
+        <a href="<{link app=gift ctl=site_gift act=viewpic arg0=$goods.goods_id arg0=$goods.goods_id arg1=$goods.image_default_id}>" target="_blank" onclick='_open(this.href);return false;'>
+            <{img src="icons/btn_goods_gallery.gif" app="b2c" alt=$___gift="查看大图"|t:'gift'}>
+        </a>
+        <script>
+      window.addEvent('domready',function(){
+         var picThumbnailItems=$$('#goods-viewer .goods-detail-pic-thumbnail td a');
+         if(!picThumbnailItems.length)return;
+         var goodsPicPanel = $$('#goods-viewer .goods-detail-pic')[0];
+         var goodsDetailPic = $$('#goods-viewer .goods-detail-pic img')[0];
+
+
+         var picscroll=$$('#goods-viewer .picscroll')[0];
+         var scrollARROW=picscroll.getElements('.scrollarrow');
+         var picsContainer=picscroll.getElement('.pics').scrollTo(0,0);
+             picsContainer.store('selected',picThumbnailItems[0]);
+
+
+         if(picsContainer.getSize().x<picsContainer.getScrollSize().x){
+               scrollARROW.setStyle('visibility','visible').addEvent('click',function(){
+                     var scrollArrow=this;
+                     var to=eval("picsContainer.scrollLeft"+(scrollArrow.hasClass('toleft')?"-":"+")+"picsContainer.offsetWidth");
+                     picsContainer.retrieve('fxscroll',new Fx.Scroll(picsContainer,{'link':'cancel'})).start(to);
+               });
+         };
+
+
+        picThumbnailItems.each(function(item){
+             /*预加载 中图*/
+             var _img = new Image();
+             _img.src = JSON.decode(item.get('imginfo'))['small'];
+        });
+
+        picThumbnailItems.addEvents({
+               'click':function(e){
+                     e.stop();
+                     this.fireEvent('selected');
+               },
+               'mouseenter':function(){
+                    if(this.getParent('td').hasClass('current'))return;
+                    var imgInfo = JSON.decode(this.get('imgInfo'));
+                    goodsDetailPic.src = imgInfo['small'];
+               },
+               'mouseleave':function(){
+                   if(this.getParent('td').hasClass('current'))return;
+                   picsContainer.retrieve('selected').fireEvent('selected','noclick');
+               },
+               'selected':function(noclick){
+
+                    var _td = this.getParent('td');
+                    if(_td.hasClass('current')&&!noclick)return;
+                    picsContainer.retrieve('selected').fireEvent('unselect');
+                     _td.addClass('current');
+                    var imgInfo = JSON.decode(this.get('imgInfo'));
+                    goodsDetailPic.src = imgInfo['small'];
+                    goodsPicPanel.set('bigpicsrc',imgInfo['big']);
+                    picsContainer.store('selected',this);
+
+               },
+               'unselect':function(){
+                     this.getParent('td').removeClass('current');
+
+               },'focus':function(){
+                  this.blur();
+               }
+        });
+
+        picThumbnailItems[0].fireEvent('selected');
+
+     <{if $env.conf.site.reading_glass}>
+     /*放大镜*/
+         var magnifierOptions=magnifierOptions||{
+                 width:<{$env.conf.site.reading_glass_width}>,
+                 height:<{$env.conf.site.reading_glass_height}>
+              };
+
+         var goodsPicMagnifier = $$('#goods-viewer .goods-pic-magnifier')[0];
+         var goodsPicMagnifierSize = goodsPicMagnifier.getSize();
+         var goodsPicPanelSize = goodsPicPanel.getSize();
+
+         picThumbnailItems.addEvent('selected',function(noclick){
+
+              if(noclick)return;
+
+              var _img = new Image();
+              _img.src = JSON.decode(this.get('imginfo'))['big'];
+
+         });
+
+          goodsPicPanel.addEvents({
+                  'mouseenter':function(){
+                    var gpmViewer = this.store('gpmViewer',new Element('div',{'class':'goods-pic-magnifier-viewer',
+                                                                                  styles:Object.append(magnifierOptions,{
+
+                                                                                     'background-Image':'url('+goodsPicPanel.get('bigpicsrc')+')',
+                                                                                     'top':$$('#goods-viewer .goodsname')[0].getPosition().y+30,
+                                                                                     'left':$$('#goods-viewer .goodsname')[0].getPosition().x,
+                                                                                     'visibility':'visible',
+                                                                                     'background-position':'0 0',
+                                                                                     'background-repeat':'no-repeat'
+
+                                                                                  })}).inject(document.body));
+
+                       goodsPicMagnifier.setOpacity(.3);
+                  },
+                  'mouseleave':function(){
+                   if(typeOf(this.retrieve('gpmViewer'))=='element'){
+                       this.retrieve('gpmViewer').destroy();
+                     }
+                     this.store('gpmViewer',false);
+                     goodsPicMagnifier.setStyle('visibility','hidden');
+
+                  },
+                  'mousemove':function(e){
+
+                      var mouseXY=e.page;
+
+                      var relativeXY={
+                          top:(mouseXY.y-goodsPicPanel.getPosition().y),
+                          left:(mouseXY.x-goodsPicPanel.getPosition().x)
+                      };
+
+                      var gpmXY  = {top:0,left:0};
+                      var xymap1 = {top:'y',left:'x'};
+                      var xymap2 = {top:1,left:0};
+
+                      var gpmvXY =['0%','0%'];
+
+                      for(v in relativeXY){
+                         gpmXY[v] = (relativeXY[v]-goodsPicMagnifierSize[xymap1[v]]/2).limit(0,goodsPicPanelSize[xymap1[v]]-goodsPicMagnifierSize[xymap1[v]]);
+                         gpmvXY[xymap2[v]] = ((relativeXY[v]/goodsPicPanelSize[xymap1[v]])*100)+'%';
+
+                      }
+                      goodsPicMagnifier.setStyles(gpmXY);
+                     if(typeOf(this.retrieve('gpmViewer'))=='element'){
+                         this.retrieve('gpmViewer').setStyle('background-position',gpmvXY.join(' '));
+                     }
+
+                  }
+
+          });
+
+         <{/if}>
+
+
+        });
+
+        </script>

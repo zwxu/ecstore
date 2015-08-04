@@ -1,0 +1,45 @@
+<{css src="b2c.css" app="b2c" pdir="themes/simple/images"}>
+<link rel="stylesheet" type="text/css" href="../themes/simple/images/ren.css" />
+<form class="tableform" method='post' action="<{link app=business ctl='site_order' act='change_price'}>" id="order-delivery-form">
+  <input type='hidden' name='order_id' value='<{$order_id}>'>
+
+<div class="division">
+<div style=" height:30px; line-height:30px;">
+<div style=" font-size:14px; color:#333; font-weight:bold; float:left">订单原价（不含运费）:</div>
+<div style=" font-size:12px; color:#bc0000; font-weight:normal; float:left"><{$orders.total_amount-$orders.shipping.cost_shipping|cur}></div>
+<div style="clear:both"></div>
+</div>
+<table cellspacing="1" cellpadding="0" border='0'  bgcolor="#f9f9f9" style=" font-size:12px; color:#333; line-height:30px; text-align:center" width="100%">
+<{if count($items) > 0}>
+	<tr>
+	  <td><{t}>宝贝名称<{/t}></td>
+	  <td><{t}>单价<{/t}></td>
+	  <td><{t}>数量<{/t}></td>
+	  <td><{t}>原价<{/t}></td>
+	  <td><{t}>折扣<{ /t}></td>
+	  <td ><{t}>邮费<{/t}></td>
+	</tr>
+      <{foreach from=$items item=aProduct name="p_id"}>
+      <tr>
+        <td style="background:#fff;width:195px;line-height:18px;text-align:left;"><{$aProduct.name}>
+          <{foreach from=$aProduct.minfo.product_attr item=minfo key=name}>
+          <br><{$minfo.label}>：<{$minfo.value}>
+          <{/foreach}>
+          <!--<{$aProduct.addon.adjname}>--></td>
+        <td style="background:#fff;"><{$aProduct.price|cur}></td>
+        <td style="background:#fff;"><{$aProduct.nums}></td>
+        <td style="background:#fff;"><{$aProduct.price|cur}></td>
+        <td style="background:#fff;"><{$aProduct.price-$aProduct.price|cur}></td>
+        <{if $smarty.foreach.p_id.iteration == 1}>
+		    <td style="background:#fff;" rowspan="<{$count}>"><input type="text" id="ship_cost" name="ship_cost" size="3" value="<{$orders.shipping.cost_shipping}>"></td>
+        <{/if}>
+      </tr>
+      <{/foreach}>
+	  
+<{/if}>
+	 
+</table>
+<div style=" margin-top:10px;padding-left:180px;"><button id="do_change" type="submit">确定</button></div>
+</div>
+
+</form>

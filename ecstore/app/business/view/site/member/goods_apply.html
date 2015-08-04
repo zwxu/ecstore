@@ -1,0 +1,124 @@
+<div class="">
+  <{if $apply_info.apply}>
+  <table class="gridlist bbn" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+      <th><{t}>申请内容<{/t}></th>
+      <th><{t}>申请时间<{/t}></th>
+      <th><{t}>审核内容<{/t}></th>
+      <th><{t}>审核时间<{/t}></th>
+      <th><{t}>审核状态<{/t}></th>
+    </tr>
+    <{foreach from=$apply_info.apply item=item}>
+    <tr>
+      <td><span><{$item.content}></span></td>
+      <td><span><{if $item.apply_time}><{$item.apply_time|cdate:SDATE_STIME}><{/if}></span></td>
+      <td><span><{$item.restore}></span></td>
+      <td><span><{if $item.audit_time}><{$item.audit_time|cdate:SDATE_STIME}><{/if}></span></td>
+      <td><span><{$item.status}></span></td>
+    </tr>
+    <{/foreach}>
+  </table>
+  <{if $allow_apply}>
+  <form>
+    <div>
+      <table id="marketablereply" class="gridlist bbn" cellpadding="0" cellspacing="0" width="100%">
+      <tr>
+        <td>
+          <input type="hidden" value="<{$goods_id}>" name='gid'>
+          <{assign var="placeholder" value="上架申请（最多1000字）"}>
+          <{input type="textarea" class="x-input inputstyle font12px db mb5" onfocus="this.value=''" onblur="if(this.value==''){this.value='上架申请（最多1000字）'}" value="上架申请（最多1000字）" vtype="sendcomments" rows="5" name="content" style="width:97%"}>
+        </td>
+      </tr>
+      </table>
+    </div>
+    <div class="mainFoot">
+      <div class="table-action">
+        <{button label=$___b2c="申请"|t:'b2c'  onclick="saveData()" }>
+      </div>
+    </div>
+  </form>
+  <{/if}>
+  <{else}>
+    <span>没有申请记录</span>
+  <{/if}>
+</div>
+<script>
+  var saveData=function(){
+    var flag = true;
+    $$('#marketablereply textarea[vtype=sendcomments]').each(function(element){
+      if ($(element).get('value') == '' || $(element).get('value').length < 1 || $(element).get('value').length > 1000){
+        flag = false;
+      }
+    });
+    if(!flag) {
+      Message.error('字数应该在1-1000个字之内');
+      return;
+    }
+    new Request({
+      url:'<{link app="business" ctl="site_member" act="toApply"}>',
+      onComplete:function(response){
+        if(!response){
+          Message.error('申请失败！');
+        }else{
+          Message.error('申请成功，请等待审核！');
+        }
+      }
+    }).post($('marketablereply'));
+    var obj = $('marketablereply');
+    if(obj)obj.getParent('.dialog').retrieve('instance').close();
+  }
+  
+  Date.prototype.pattern=function(fmt) {       
+     var o = {        
+     "M+" : this.getMonth()+1, //月份       
+     "d+" : this.getDate(), //日      
+     "h+" : this.getHours() == 0 ? 12 : this.getHours(), //小时       
+     "H+" : this.getHours(), //小时       
+     "m+" : this.getMinutes(), //分       
+     "s+" : this.getSeconds(), //秒       
+     "q+" : Math.floor((this.getMonth()+3)/3), //季度       
+     "S" : this.getMilliseconds() //毫秒       
+     };       
+     var week = {       
+     "0" : "\u65e5",       
+     "1" : "\u4e00",       
+     "2" : "\u4e8c",       
+     "3" : "\u4e09",       
+     "4" : "\u56db",       
+     "5" : "\u4e94",       
+     "6" : "\u516d"      
+     };      
+ 
+     if(/(y+)/.test(fmt)){       
+         fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));       
+     }      
+ 
+     if(/(E+)/.test(fmt)){       
+         fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);       
+     }       
+
+     for(var k in o){       
+         if(new RegExp("("+ k +")").test(fmt)){       
+             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));       
+         }       
+     }       
+     return fmt;       
+  }  
+
+  function timetodate(tim,dat){
+     return  new Date(parseInt(tim)*1000).pattern(dat);   //"yyyy/MM/dd,hh,mm,ss"    
+  }
+
+  
+  var formatDate=function(fdate, formatStr){
+    var fTime, fStr = 'ymdhis'; 
+    if(!formatStr) formatStr= "y-m-d h:i:s";
+    if(fdate) fTime = new Date(fdate);
+    else fTime = new Date();
+    var formatArr = [fTime.getFullYear().toLocaleString(), (fTime.getMonth()+1).toLocaleString(), fTime.getDate().toLocaleString(), fTime.getHours().toLocaleString(), fTime.getMinutes().toLocaleString(), fTime.getSeconds().toLocaleString()];
+    for (var i=0; i<formatArr.length; i++){
+      formatStr = formatStr.replace(fStr.charAt(i), formatArr[i]); 
+    }
+    return formatStr;
+  }
+</script>

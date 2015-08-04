@@ -1,0 +1,27 @@
+<{if $aCart.object.package}>
+  <{foreach from=$aCart.object.package item=package key=_obj_key}>
+    <div class="minicart-single clearfix" chlid_id="del-<{$package.obj_ident}>" urlremove="<{link app=b2c ctl='site_cart' act='removeMiniCart' arg0='package'}>" >
+        <div class="minicart-img goodpic">
+            <!--<img src="<{$package.package.image|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" > -->
+            <img src="<{$package.obj_items.0.default_image.thumbnail|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" >
+        </div>
+        <div class="goods-main minicart-dec">
+            <div class="goodinfo">
+              <h6><{$package.package.name}></h6>
+            </div>
+            <div class="price-wrap">
+             <p>销售价:<span class="micolor2 nc-value ml5"><{$package.package.price|cur_odr}></span></p>
+             <p>数量:
+                <span class="micolor2"><{$package.quantity}></span>
+                <span style="float:right;"><{if $key!='order'}><a class="delcart" href="#" style="color:#367EC1;">移除</a><{/if}></span>
+             </p>
+             <p>商品数量:<span class="micolor2"><{$package.goods_count}></span></p>
+             <input type="hidden" name="modify_quantity[<{$package.obj_ident}>][quantity]" value="<{$package.quantity}>" />
+        </div>
+        </div>
+    </div>
+  <{/foreach}>
+<{/if}>
+
+
+

@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head> 
+    <meta charset="utf-8">
+    <title><{$conf.installer.title}>  -<{t}> 控制台<{/t}></title>
+    <style>
+		html,body{
+		
+			overflow:hidden;
+			margin:0;
+			padding:0;
+			font-size:12px;
+			font-family:Verdana;
+			background:#333;
+		
+		}
+		pre,input{
+			border:none;
+			width:100%;
+			padding:0;
+			margin:0;
+			background:#333;
+			color:#fff;
+			height:100%;
+			font-size:12px;
+		}
+		pre{overflow:hidden;overflow-y:auto;line-height:20px;}
+    </style>
+	<{script src="moo.js"}>  
+	
+</head>
+<body>
+<div id="console_panel">
+<pre>
+</pre>
+<form action="<{link ctl='default' act=console }>" target="console-frame" method="post" ><input type="text" value="" /><input type="hidden" id="cmd" name="cmd" ></form>
+</div>	
+<script>
+    window.addEvent('domready',function(){
+		
+		var _opener = this.opener;
+		if(!_opener)return;
+		var csol = _opener.frames['console-frame'];
+		if(!csol)return;
+		var _textarea = $('console_panel').getElement('pre');
+		var _input = $('console_panel').getElement('input');
+		var _form = $('console_panel').getElement('form');
+		
+		_form.addEvent('submit',function(e){
+			var command = _input.value;
+			if(!command){
+				e.stop();
+			}
+			$('cmd').value = command;
+			_textarea.set('text',_textarea.get('text')+'\n'+command);
+			_input.value = '';
+		});
+		
+		(function(){
+			//console.info(csol);
+			var csolv;
+			if(!csol||!csol.document)return;
+			try{
+				csolv = $(csol.document.body).get('text');
+			}catch(e){
+				if (document.all){
+					if (csol.document.body)
+						csolv = csol.document.body.innerText;
+					else
+						csolv = "";
+				}else{
+					if (csol.document.body)
+						csolv = csol.document.body.textContent;
+					else
+						csolv = "";
+				}
+			}
+			if(csolv.trim()!=""&&_textarea.retrieve('temp::text',"")==csolv)return;
+			_textarea.set('text',_textarea.get('text')+'\n'+csolv);
+			_textarea.store('temp::text',csolv);
+			if(_input.value.trim()!="")return;
+			_textarea.scrollTop = _textarea.scrollHeight - _textarea.offsetHeight;
+			
+		}).periodical(200);
+		
+		window.addEvent('resize',(function(){
+			var winY  = window.getSize().y;
+			//	$('console_panel').setStyle('height',winY);
+			_textarea.setStyle('height',winY*0.9);
+			_input.setStyle('height',winY*0.1).focus();
+			return arguments.callee;
+		})());
+	
+	});
+
+</script>
+</body>
+</html>

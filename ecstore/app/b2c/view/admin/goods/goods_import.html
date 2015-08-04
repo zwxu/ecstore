@@ -1,0 +1,58 @@
+<h3><{t}>商品批量导入<{/t}></h3>
+<div class="division">
+  <div class="span-9">
+    <div class="span-auto">
+      <i class="font-blue f-20">1 <i class="font-gray">&raquo;&raquo;</i></i>
+    </div>
+    <div class="span-auto">
+      <form id="export_form" target="uploadframe" method="post" action="index.php?app=b2c&ctl=admin_goods&act=index&action=to_export" class="tableform"  enctype="multipart/form-data">
+        <h4><{t}>商品数据模板下载 (.CSV格式)<{/t}></h4>
+        <input type='hidden' value='csv' name='_io_type'/>
+        <div class="division">
+          <table cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <th><{t}>请选择商品类型：<{/t}></th>
+              <td>
+                <select name='_gType'>
+                  <{foreach from=$gtype item=item}>
+                  <option value='<{$item.type_id}>'><{$item.name}></option>
+                  <{/foreach}>
+                </select>
+              </td>
+            </tr>
+          </table>
+
+        </div>
+        <div class="table-action">
+          <{button class="btn-primary" label=$___b2c="下载"|t:'b2c' type="button" onclick="$('export_form').submit();"}>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="span-6">
+    <div class="span-auto">
+      <i class="font-blue f-20">2<i class="font-gray">&raquo;&raquo;</i></i>
+    </div>
+    <div class="span-auto">
+      <div class="tableform">
+        <h4><{t}>完成.csv的填写<{/t}></h4>
+      </div>
+    </div>
+  </div>
+  <div class="span-9">
+    <div class="span-auto">
+      <i class="font-blue f-20">3<i class="font-gray">&raquo;&raquo;</i></i>
+    </div>
+    <div class="span-auto">
+      <div id="goods_import_panel">
+        loading...
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+    W.page('index.php?app=b2c&ctl=admin_goods&act=index&action=import',{update: 'goods_import_panel'});
+}).delay(1);
+</script>

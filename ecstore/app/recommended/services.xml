@@ -1,0 +1,5 @@
+<services>
+     <service id="autotask">
+		<class>recommended_misc_task</class>
+	</service>
+</services>

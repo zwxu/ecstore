@@ -1,0 +1,131 @@
+<h2 class="border-bottom cb dis-cons-title"><{t}>相关商品-模板拦截标识<{/t}></h2>
+<div id="gallery-grid-list" class="GoodsSearchWrap goods-link">
+   <ul class="clearfix">
+   <{foreach from=$goods.link item=linklist name=goods}>
+    <li product="<{$linklist.goods_id}>" class="itemsList items-gallery">
+      <{if $linklist.udfimg == 'true'}>
+        <{assign var="gimage" value=$linklist.thumbnail_pic}>
+        <{else}>
+        <{assign var="gimage" value=$linklist.image_default_id|default:$defaultImage}>
+        <{/if}>
+        <div class="goodpic picwidth" style='<{if $image_set.S.width}> width:<{$image_set.S.width}>px; margin:0 auto;height:<{$image_set.S.height}>px;<{/if}>'> <a href='<{link app=b2c ctl=site_product act=index arg0=$linklist.goods_id}>' class="picwidth" style='<{if $image_set.S.width}> width:<{$image_set.S.width}>px;display: table-cell; vertical-align: middle; text-align: center; margin:0 auto;height:<{$image_set.S.height}>px;<{/if}>'> <img src="<{$gimage|storager:'s'}>" style=''/> </a></div>
+        <div class="goodinfo">
+       <h3><a href="<{link app=b2c ctl=site_product act=index arg0=$linklist.goods_id}>" title="<{$linklist.name}>"><{$linklist.name}></a></h3>
+        <p ><span class="price1"><{$linklist.price|cur_odr:$order.currency}></span> <{if $goods.setting.mktprice}> <span class="mktprice1"><{$linklist.mktprice|cur_odr:$order.currency}></span> <{/if}> </p>
+         <ul class="button clearfix mt5">
+                  <{goodsmenu product=$linklist setting=$setting login=$login}>
+                  <li class="btncmp" title="商品对比"> <a href="javascript:void(0)" onclick="gcompare.add({gid:'<{$linklist.goods_id}>',gname:'<{$linklist.name|escape:'quotes'}>',gtype:'<{$linklist.type_id}>'});" class="btncmp" title="商品对比"> </a>
+                  </li>
+                </ul>
+        </div>
+      </li>
+    <{if !($smarty.foreach.goods.iteration%4)}>
+  <{if !$smarty.foreach.goods.last}>
+ <{/if}>
+  <{/if}><{/foreach}>
+</ul>
+ <{assign var="gallery_display" value=$env.conf.b2c.gallery.display.grid.colnum}>
+</div>
+<script>
+new AutoFloatGrid('gallery-grid-list', $$('#gallery-grid-list .items-gallery'), Object.merge({
+    autoRowSize: {
+        'h3': 'height'
+    },
+    cols:<{$gallery_display|default:4}>
+},/*可以在全局定义 GALLERY_AutoFloatGrid_Options  覆盖 AutoFloatGrid 的options*/
+('GALLERY_AutoFloatGrid_Options' in window) ? GALLERY_AutoFloatGrid_Options: {}));
+  /*AUTO HEIGHT*/
+  window.addEvent('domready',function(){
+    var getAmongPos = function(size,to){
+      var elpSize = $(to).getSize(),elpScroll = $(to).getScroll();
+      return {
+        'top':Math.abs((elpSize.y/2).toInt()-(size.height/2).toInt()+to.getPosition().y+elpScroll.y),
+        'left':Math.abs((elpSize.x/2).toInt()-(size.width/2).toInt()+to.getPosition().x+elpScroll.x)
+      };
+    };
+    Ex_Event_Group['_zoomImg_']={fn:function(el,e){
+        e.stop();
+        if(el.retrieve('active'))return;
+        el.store('active',true);
+        var tpic = el.getParent('.goodinfo').getPrevious('.goodpic').getElement('img');
+        var bpic_src = el.get('pic');
+        var loading = new Element('div',{
+          styles:{'background':'#fff url(<{$env.app.res_url}>/images/loading.gif) no-repeat 50% 50%',
+            'width':40,
+            'height':40,
+            'border':'1px #e9e9e9 solid',
+            'opacity':.5}}).inject(document.body).position({target:tpic});
+        new Asset.image(bpic_src,{onload:function(img){
+            loading.destroy();
+            var winsize = window.getSize();
+            var imgSize = $(img).zoomImg(winsize.x,winsize.y,1);
+            var fxv = Object.append(getAmongPos(imgSize,window),imgSize,{'position':'absolute'});
+            var imgFx = new Fx.Morph(img,{link:'cancel'});
+            img.setStyles(Object.append(tpic.getCoordinates(),{opacity:0.5})).inject(document.body).addClass('img-zoom').addEvent('click',function(){
+              imgFx.start(tpic.getCoordinates()).chain(function(){this.element.destroy();el.store('active',false);});
+            });
+            imgFx.start(Object.append(fxv,{opacity:1}));
+            document.addEvent('click',function(){
+              img.fireEvent('click');
+              document.removeEvent('click',arguments.callee);
+            });
+            },onerror:function(){
+            _this.store('active',false);
+            loading.destroy();
+        }});
+    }}
+    /*
+    *商品标签定位
+    */
+    var tips = $$('.GoodsTip');
+    //var opacity = tips.getElement('img').get('op')[0];
+    //tips.getElement('img').setStyle('opacity',opacity);
+    if(tips.length>0){
+      var parSize = {
+        x : tips.getParent('.goodpic')[0].getSize().x,
+        y : tips.getParent('.goodpic')[0].getSize().y
+      };
+      var GoodsTipPos= {
+        tl:{left:0,top:0},
+        tc:{left:(parSize.x)/2 - 25,top:0},
+        tr:{top:0,right:0},
+        ml:{left:0,top:(parSize.y)/2 - 25},
+        mc:{left:(parSize.x)/2 - 25,top:(parSize.y)/2 -25},
+        mr:{top:(parSize.y)/2 - 25,right:0},
+        bl:{bottom:0,left:0},
+        bc:{bottom:0,left:(parSize.x)/2 - 25},
+        br:{bottom:0,right:0}
+      };
+      /*.setStyles({
+        'top':Pos.top,
+        'left':Pos.left,
+        'right':Pos.right,
+        'bottom':Pos.bottom
+      });
+      */
+      tips.each(function(v){
+        v.getElement('img').zoomImg(50,50);
+        var ImgSrc = v.getElement('img').get('src');
+        var ImgStr = "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+ImgSrc+"')";
+        if(Browser.ie6)
+        v.getElement('img').setStyle('filter',ImgStr);
+        var proPos = v.getElement('img').get('pos');
+        var Pos = GoodsTipPos[proPos];
+        //      if(Browser.ie6) {
+          //     if(Pos.left === 0 && Pos.top===0)
+          //         Pos.left -= v.getParent().getSize().x/2;
+          //    };
+        v.setStyles({
+          'top':Pos.top,
+          'left':Pos.left,
+          'right':Pos.right,
+          'bottom':Pos.bottom
+        });
+        //if(Browser.ie6) {
+          //      if(Pos.left === 0 && Pos.top===0)
+          //    Pos.left += v.getParent().getSize().x/2
+          //};
+      });
+    }
+  });
+</script>

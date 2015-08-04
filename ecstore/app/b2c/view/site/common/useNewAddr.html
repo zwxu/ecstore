@@ -1,0 +1,37 @@
+<table class="address">
+		<tr>
+			 <th><em>*</em><{t}>收货地区：<{/t}></th>
+			 <td>
+				<span id="selectArea"><{input type="region" id="addrArea" name="delivery[ship_area]" vtype="area" app="ectools" value=$default_addr.area callback="selectArea1"}></span>
+				<input type="hidden" id="selected-area" value="<{$default_addr.area_arr.0}><{$default_addr.area_arr.1}><{$default_addr.area_arr.2}>" name="delivery[ship_addr_area]">
+				<input type='hidden' id="area_id" value='<{$area_id}>'>
+			 </td>
+		</tr>
+		<tr>
+			 <th><em>*</em><{t}>收货地址：<{/t}></th>
+			 <td><span id="selected-area-show"></span><{input type="text" id="addrMail" name="delivery[ship_addr]" class="width_500" value=$default_addr.addr}>
+			 <input type='hidden' name="delivery[ship_addr]" id="ship_addr" value='<{$default_addr.addr}>'>
+			 </td>
+		</tr>
+		<tr>
+           <th><em>*</em>
+			<{t}>邮编：<{/t}></th>
+			<td><{input type="text" id="addrZip" name="delivery[ship_zip]" class="width_200" value=$default_addr.zip}></td>
+		</tr>
+		<tr>
+			<th><em>*</em><{t}>收货人姓名：<{/t}></th>
+			<td><{input type="text" id="addrName" name="delivery[ship_name]" class="width_200" value=$default_addr.name}></td>
+		</tr>
+		<tr>
+			<th><em>*</em><{t}>手机：<{/t}></th>
+			<td><{input type="text" id="addrMobile" name="delivery[ship_mobile]" class="width_200" value=$default_addr.mobile}></td>
+		</tr>
+		<tr>
+			<th><{t}>固定电话：<{/t}> </th>
+			<td><{input type="text" class="width_100" name="delivery[ship_tel]" id="addrTel" value=$default_addr.tel}></td>
+		</tr>	
+		<tr>
+			<td><input type="button" onclick="useNewConfirm()"  value="确定" class="cart_anniu1"/> </td>
+			<td><input type="button" onclick="useNewCancle()" value="取消" class="cart_anniu1"></td>
+		</tr>
+</table>

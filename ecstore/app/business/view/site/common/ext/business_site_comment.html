@@ -1,0 +1,59 @@
+<{css src="member.css" pdir="css_mini"}>
+<{css src="style.css" app="business"}>
+<script>
+  window.loadedPart = [1,0,(new Date).getTime()];
+  BREADCRUMBS ='0:0';
+  MODALPANEL = {
+    createModalPanel:function(){
+      var mp = new Element('div',{'id':'MODALPANEL'});
+      var mpStyles = {
+        'position': 'fixed',
+        'background': '#333333',
+        'width': '100%',
+        'display':'none',
+        'height': window.getScrollSize().y,
+        'top': 0,
+        'left': 0,
+        'zIndex': 65500,
+        'opacity': .4
+      };
+      this.element = mp.setStyles(mpStyles).inject(document.body);
+      return this.element;
+    },
+    show:function(){
+      var panel = this.element = this.element||this.createModalPanel();
+      panel.setStyles({
+        'width': '100%',
+        'height': window.getScrollSize().y
+      }).show();
+    },hide:function(){
+      if(this.element)this.element.hide();
+    }
+  };
+  Xtip = new Tips({tip:'tip_Xtip',fixed:true,offset: {x: 24, y: -15},onBound:function(bound){
+  if(bound.x2){
+      this.tip.getElement('.tip-top').addClass('tip-top-right');
+      this.tip.getElement('.tip-bottom').addClass('tip-bottom-right');
+  }else {
+      this.tip.getElement('.tip-top').removeClass('tip-top-right');
+      this.tip.getElement('.tip-bottom').removeClass('tip-bottom-right');
+  }
+}});
+var LAYOUT = {
+  container: $('container'),
+  side: $('side'),
+  workground: $('workground'),
+  content_main: $('main'),
+  content_head: $E('#workground .content-head'),
+  content_foot: $E('#workground .content-foot'),
+  side_r: $('side-r'),
+  side_r_content:$('side-r-content')
+};
+</script>
+
+<{script src="load.js" app="business" pdir="js"}>
+<{script src="wpage.js" app="business" pdir="js"}>
+<script>
+  var W = new Wpage({});
+</script>
+<{script src="dialog.js" app="business" pdir="js"}>

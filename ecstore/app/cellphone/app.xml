@@ -1,0 +1,14 @@
+<app>
+    <name>移动商城api接口</name>
+    <description>移动商城api接口</description>
+    <author>
+        <name>开发团队</name>
+        <email>dev@shopex.cn</email>
+        <url>http://www.shopex.cn</url>
+    </author>
+    <version>0.1</version>
+    <license>shopex license</license>
+   <depends>
+      <app>business</app>
+   </depends>
+</app>

@@ -1,0 +1,18 @@
+<tr>
+<td colspan="3" class="gift_item"><div class="gift_name"><{$giftpackage_order.name}></div>
+  <table width="100%" border="0" >
+  <{foreach from=$giftpackage_order.order_items item=item}>
+    <tr>
+      <td class="gift_model" ><{$item.bn}></td>
+      <td >
+        <a href="<{$item.link}>" target="_blank"><{$item.name}></a>
+        <a style='text-decoration:none;' class='x-view-img' href='javascript:void(0);' imgsrc='<{$item.small_pic|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>'  title='<{$item.name}>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+      </td>
+	  <td width="13.5%" style="border-right:none"><{$item.sendnum}></td>
+    </tr>
+  <{/foreach}>
+  </table></td>
+<td><{$giftpackage_order.price|cur_odr}></td>
+<td><{$giftpackage_order.total_amount|cur_odr}></td>
+<td><{$giftpackage_order.quantity}></td>
+</tr>

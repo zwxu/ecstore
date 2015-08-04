@@ -1,0 +1,87 @@
+<form method="post" action="index.php?app=cellphone&ctl=admin_category&act=doAdd" id="cat_form">
+  <div class="tableform">
+    <{help docid="75" type="link-mid"}><{t}>点击查看帮助<{/t}><{/help}>
+    <div class="division">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <th><{t}>分类名称:<{/t}><input type="hidden" value="<{$cat.cat_id}>" name="cat[cat_id]" /></th>
+          <td><input type="text" value="<{$cat.cat_name|escape:'html'}>" name="cat[cat_name]"  vtype='required' class='x-input'/></td>
+        </tr>
+        <tr>
+          <th><{t}>上级虚拟分类:<{/t}></th>
+          <td>
+          <{input type="select"  required='true' name="cat[parent_id]" style="font-size:12px;" value=$cat.parent_id rows=$catList valueColumn="cat_id" labelColumn="cat_name" }><span class="notice-inline"><{t}>顶级分类请选择“无”<{/t}></span></td>
+        </tr>
+        <tr>
+          <th><{t}>排序:<{/t}></th>
+          <td><input style="width:50px;" vtype="number" value="<{$cat.p_order}>" name="cat[p_order]" size="2"/><{t}><span class="notice-inline"><{t}>数字越小越靠前<{/t}></span><{/t}></td>
+        </tr>
+        <tr>
+          <th><{t}>是否隐藏:<{/t}></th>
+          <td><input style="width:50px;" type="checkbox" name="cat[disabled]" value='true' <{if $cat.disabled == 'true'}> checked<{/if}>/></td>
+        </tr>
+        <tr>
+          <th><{t}>小图片:<{/t}></th>
+          <td><{input type='image' name="cat[image]" value=$cat.image}></td>
+        </tr>
+        <tr>
+          <th><{t}>自定义<{/t}></th>
+          <td>
+            <div class="customcontent">
+              <{if $cat.customized}>
+              <{foreach from=$cat.customized item=item key=key}>
+              <table  width="100%">
+                <tr>
+                  <th><{t}>描述:<{/t}></th>
+                  <td><input name="custom[<{$key}>][info]" value="<{$item.info}>"></td>
+                  <th><{t}>地址:<{/t}></th>
+                  <td><input name="custom[<{$key}>][url]" value="<{$item.url}>"></td>
+                  <td><span onclick="$(this).getParent('table').destroy()"><{img src="images/delecate.gif" style="cursor:pointer;" alt=$___b2c="删除"|t:'b2c' title=$___b2c="删除"|t:'b2c'}></span></td>
+                </tr>
+              </table>
+              <{/foreach}>
+              <{/if}>
+            </div>
+            <{button label=$___b2c="添加"|t:'b2c' class="addurl" app="desktop" icon="btn_add.gif"}>
+          </td>
+        </tr>
+        <tr>
+          <th><{t}>筛选条件:<{/t}></th>
+          <td ><{input type="goodsfilter" value=$cat.filter.items}></td>
+        </tr>
+      </table>
+    </div>
+    <div class="table-action">
+    <{button class="btn-primary" label=$___b2c="保存"|t:'b2c' type="submit"}>
+    <{button class="btn-secondary" label=$___b2c="取消"|t:'b2c' type="button" isclosedialogbtn="true"}>
+    </div>
+  </div>
+</form>
+<script>
+(function(){
+  $('cat_form').store('target',{
+    onComplete:function(){
+      if($('cat_form').getParent('.dialog'))
+      $('cat_form').getParent('.dialog').retrieve('instance').close();
+    }
+  });
+  if($ES("#cat_form .addurl"))
+  $ES("#cat_form .addurl").addEvent('click',function(){
+    var table_len = $('cat_form').getElement('.customcontent').getElements('table').length;
+    if(table_len >3){
+      MessageBox.error('<{t}>最多添加4个.<{/t}>');
+      return;
+    }
+    var i=new Date().getTime();
+    var tpl='\
+    <tr>\
+      <th><{t}>描述:<{/t}></th>\
+      <td><input name="custom['+i+'][info]"></td>\
+      <th><{t}>地址:<{/t}></th>\
+      <td><input name="custom['+i+'][url]"></td>\
+      <td><span onclick="$(this).getParent(\'table\').destroy()"><{img src="images/delecate.gif" style="cursor:pointer;" alt=$___b2c="删除"|t:"b2c" title=$___b2c="删除"|t:"b2c"}></span></td>\
+    </tr>';
+    $('cat_form').getElement('.customcontent').adopt(new Element('table',{'html':tpl,'width':'100%'}));
+  });
+})();
+</script>

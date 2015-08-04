@@ -1,0 +1,189 @@
+
+<input type="hidden" name="split_order" value='<{$aCart.json_order_split}>'>
+<{foreach from=$aCart.order_split item=store key=store_key name=store_name}>
+    <{foreach from=$store.slips item=slip key=slip_key name=slip_name}>
+        <table class="pro_list_cart_xu section" width="100%" border="0" cellspacing="0" cellpadding="0" class="ddqr_info" store_id="<{$store_key}>" slip_id="<{$slip_key}>" id="storeid_<{$store_key}>_<{$slip_key}>" <{if $smarty.foreach.slip_name.first}>style="margin-top:10px;"<{/if}>>
+          <colgroup>
+          <col style="width:40%"></col>
+          <col style="width:15%"></col>
+          <col style="width:15%"></col>
+          <col style="width:15%"></col>
+          <col style="width:15%"></col>
+          </colgroup>
+          <{if $smarty.foreach.slip_name.first}>
+          <thead>
+            <tr>  
+              <th class="bl_none">
+                    <p class="goods_shop_info">
+                    <span class="cjm_logo"></span>
+                        <span class="pl_10 pr_10">店铺：<span class="lan"><{$store.info.store_name}></span></span>
+                        <span class="pl_10 pr_10">商家：<span class="lan"><{$store.info.shop_name}></span></span>
+                 </p>
+              </th>
+              <th class="c_969696" width="166"><{t}>规格<{/t}></th>
+              <th class="c_969696" width="98"><{t}>单价<{/t}></th>
+              <th class="c_969696" width="140"><{t}>数量<{/t}></th>
+              <th class="c_969696" width="98"><{t}>优惠方式<{/t}></th>
+              <th class="c_969696" width="166"><{t}>小计（元）<{/t}></th>
+              
+            </tr>
+          </thead>
+              <{/if}>
+          <tbody>
+          <{if $item_section}>
+              <{foreach from=$item_section item=section}>
+                  <{include file=$section.file app=$section.app }>
+              <{/foreach}>
+          <{/if}>
+          
+          </tbody>
+       </table>
+       <table width="100%" border="0" cellspacing="0" cellpadding="0" class="cart_checkout_order section">
+       <tbody>
+       <!--如果是最后一张订单-->
+          <tr class="goods_bj">
+           <td id="store_<{$store_key}>" style="padding:15px 0 15px 10px;width:580px;">
+           补充说明：<input type="text" class="width_500" name="shipping[<{$store_key}>][<{$slip_key}>][memo]" style="height: 22px" />
+           </td>
+           <td  style="padding:15px 10px 15px 0;width:590px;">
+           <table width="100%" store_id="<{$store_key}>" slip_id="<{$slip_key}>" class="J_order_total J_order_total_<{$store_key}>">
+           <colgroup>
+           <col style="width:25%"></col>
+           <col style="width:60%"></col>
+           <col style="width:15%"></col>
+           </colgroup>
+           <{if $is_need_delivery}>
+                <tr id="section_delivery">
+                    <td class="bb_none"><p class='fr'>配送方式：</p></td>
+                    <td class="bb_none">
+                    <{if $slip.shipping}>
+                       <select style="width:200px;" class="shippingSel J_shippingSel_<{$slip_key}> J_shippingSel_<{$store_key}>_<{$slip_key}>" onchange="if(Order)Order.shippingChangeSplit(this,<{$store_key}>,<{$slip_key}>);"  store_id="<{$store_key}>" slip_id="<{$slip_key}>" name="shipping[<{$store_key}>][<{$slip_key}>][shipping_id]">
+                          <{foreach from=$slip.shipping item="shipping" key="key" name="shippings"}>
+                          <option protect="<{$shipping.protect}>" protect_money="<{$shipping.protect_money}>" protect_text="<{$shipping.protect_text}>" value="<{$shipping.dt_id}>"><{$shipping.dt_name}>：<{if $shipping.money==0}>免运费<{else}><{$shipping.money|cur_odr}><{/if}></option>
+                          <{/foreach}>
+                        </select>
+                   <{else}>
+                    <p class="fl red">暂不支持所选地区的配送</p>
+                   <{/if}>
+                    </td>
+                    <td  class="bb_none fr">
+                    <{if $slip.shipping}>
+                    <{foreach from=$slip.shipping item="shipping" key="key" name="shippings"}>
+                        <{if $shipping.default_type && $shipping.default_type=='true'}>
+                        <em class="red1" style='width:100px;' id="shipping_money_<{$store_key}>_<{$slip_key}>"><{$shipping.money|cur_odr}></em>
+                        <{/if}>
+                    <{/foreach}>
+                        
+                     <{/if}>
+                    </td>
+			    </tr>
+            
+            <{if $slip.shipping}>
+            <{foreach from=$slip.shipping item="shipping" key="key" name="shippings"}>
+                <{if $shipping.protect=='true'}>
+                <tr id='protect_<{$shipping.dt_id}>' class="J_project_<{$store_key}>_<{$slip_key}> J_project" <{if $shipping.default_type && $shipping.default_type=='true'}><{else}>style="display:none;"<{/if}>>
+                    <td class="bb_none" ><p class='fr'><{t}>物流保价：<{/t}></p></td>
+                    <td class="bb_none">
+                   <label>
+                   <input id="use_protect_<{$shipping.dt_id}>" type="checkbox" name="shipping[<{$store_key}>][<{$slip_key}>][is_protect]" value="1" onchange="if(Order)Order.protectChange(this,<{$store_key}>,<{$slip_key}>,<{$shipping.dt_id}>);"/>
+                    <{$shipping.protect_text}>
+                    </label>
+                    </td >
+                    <td  class="bb_none fr">
+                    <em class="" style='width:100px;color:#717070' id="protect_money_<{$shipping.dt_id}>"><{$shipping.protect_money|cur_odr}></em>
+                    </td>
+                </tr>
+                <{/if}>
+            <{/foreach}>
+            <{/if}>
+             <{if $smarty.foreach.slip_name.total>1}>            
+             <!--<tr>                    
+                <td class="bb_none"></td>
+                <td class="bb_none"><p class='fr'>订单合计（含运费）：</p>
+                </td>
+                <td  class="bb_none fr">
+                <em class="font_16 red1" style='width:100px;' id="subtotal_slip_<{$store_key}>_<{$slip_key}>">                    
+                    <{$slip.subtotal_prefilter_after|cur_odr}>
+                </em>
+                </td>
+             </tr>-->
+             <{/if}>
+             <{if $store.pickup }>
+                <tr id="section_pickup" style="display: none;">
+                    <td class="bb_none"><p class='fr'>选择自提点：</p></td>
+                    <td class="bb_none">
+                       <select style="width:200px;" class="shippingSel J_shippingSel_<{$slip_key}> J_shippingSel_<{$store_key}>_<{$slip_key}>" store_id="<{$store_key}>" slip_id="<{$slip_key}>" name="shipping[<{$store_key}>][<{$slip_key}>][pickup]">
+                          <{foreach from=$store.pickaddress item="address" key="key"}>
+                          <option value="<{$address.da_id}>"><{$address.area_arr.0}> <{$address.area_arr.1}> <{$address.area_arr.2}> <{$address.address}></option>
+                          <{/foreach}>
+                        </select>
+                    </td>
+                    <td  class="bb_none fr">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bb_none"></td>
+                    <td class="bb_none">
+                    <label>
+                    <input type="checkbox" name="shipping[pickup]" id="ckb_pickup" value="1" onchange="togglePickup(this);"/>
+                    我要自提
+                    </label>
+                    </td>
+                    <td  class="bb_none fr">
+                    </td>
+                </tr>
+                <script>
+                function togglePickup(target) {
+                    var pickup = $('ckb_pickup').checked;
+                    if (pickup) {
+                        $('section_address').setStyle('display', 'none');
+                        $('section_delivery').setStyle('display', 'none');
+                        $('section_pickup').setStyle('display', '');
+                        if(Order)Order.pickupChangeSplit(target,<{$store_key}>,<{$slip_key}>);
+                    } else {
+                        $('section_address').setStyle('display', '');
+                        $('section_delivery').setStyle('display', '');
+                        $('section_pickup').setStyle('display', 'none');
+                        if(Order)Order.shippingChangeSplit($$('.shippingSel')[0],<{$store_key}>,<{$slip_key}>);
+                    }
+                }
+                </script>
+              <{/if}>
+           <{/if}>
+             <{if $smarty.foreach.slip_name.last}>
+                <tr>
+                    <td class="bb_none"><p class='fr'>店铺优惠：</p></td>
+                    <td class="bb_none">
+                    <select onchange="userCoupons(this,<{$store_key}>)" style="width:200px;">
+                        <option value="no">--不使用优惠券--</option>
+                        <{foreach from=$coupon_lists.$store_key item=list_coupon key=key}>
+                            <{if $coupon.$store_key.coupon==$list_coupon.memc_code}>
+                            <option value="<{$list_coupon.memc_code}>" selected><{$list_coupon.memc_code}></option>
+                            <{else}>
+                            <option value="<{$list_coupon.memc_code}>"><{$list_coupon.memc_code}></option>
+                            <{/if}>
+                        <{/foreach}>
+                    </select>
+                    </td>
+                    <td  class="bb_none fr">
+                    <em class="red1" style='width:100px;' id='discount_<{$store_key}>'>-<{$discount.$store_key|cur_odr}></em>
+                    </td>
+                </tr>
+                <{/if}>
+             <{if $smarty.foreach.slip_name.last}>
+                <tr>
+                    <td class="bb_none"></td>
+                    <td class="bb_none"><p class='fr'>店铺合计（含运费）：</p></td>
+                
+                    <td class="bb_none fr">
+                    <em class="font_16 red1" style='width:100px;' id="subtotal_slip_<{$store_key}>"><{if ($aCart.subtotal_store_good_price.$store_key-$discount.$store_key) > 0  }><{($aCart.subtotal_store_good_price.$store_key-$discount.$store_key)|cur_odr}><{else}><{0|cur_odr}><{/if}></em>
+                    </td>
+                </tr>
+             <{/if}>
+            </table>
+           </td>
+          </tr>
+       </tbody>
+       </table>
+    <{/foreach}>
+<{/foreach}>

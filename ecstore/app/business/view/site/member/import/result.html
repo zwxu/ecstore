@@ -1,0 +1,18 @@
+<{foreach from=$result item=res key=kres}>
+    <{if $kres=='error'}>
+        <h3>导入错误：</h3>
+        <span style="padding-left:30px;display:block;padding-top:10px;">
+        <{foreach from=$res item=eres}>
+        <p><{$eres}></p>
+        <{/foreach}>
+        </span>
+    <{/if}>
+    <{if $kres=='warning'}>
+        <h3>导入警告：</h3>
+        <span style="padding-left:30px;display:block;padding-top:10px;">
+        <{foreach from=$res item=wres}>
+        <p><{$wres}></p>
+        <{/foreach}>
+        </span>
+    <{/if}>
+<{/foreach}>

@@ -1,0 +1,140 @@
+<div class="category_wrap">
+	<div class="cat_sel_wrap">
+		<strong>您经常选择的类目：</strong>
+		<select> <option value=''>请选择</option>
+        <{foreach item=item from=$newCat }>
+        <option value='<{$item.cat_path}>'><{$item.cat_name}></option>
+        <{/foreach}>
+
+		</select>
+	</div>
+	<div class="category_filter">
+		<div class="goods_category_body" >
+		</div>
+	</div>
+	<div class="cat_catpath">
+		 <div class="cat_catpath_info">
+		 <strong>您当前选择的类目是：</strong><span class='cat_info'></span>
+		 <input name='goods[category][cat_id]' id="cat_id" type='hidden' value='0'/>
+		 <input name='goods[category][type_id]' id="type_id" type='hidden' value='0'/>
+		 </div>
+	</div>
+</div>
+
+<{area inject=".mainFoot"}>
+<div class="table-action">
+    <{button label=$___desktop="确定"|t:'desktop'  class="btn-primary" }>
+</div>
+<{/area}>
+
+
+<script>
+(function(){
+    var tpl='<li class="{selected} {isParent}" isParent="{isParent}" type="{type_id}"  cat_id="{cat_id}" type_id="{type_id}">'
+			+'{cat_name}<span class="icon"></span></li>';
+	var cat_body=$E('.goods_category_body'),cat_info=$E('.cat_info'),
+		cat_ipt=$('cat_id');
+		cat_type_ipt=$('type_id');
+
+	var dialog = $('cat_id').getParent('.dialog'), dialogObj = dialog.retrieve('instance');
+
+	$E('.btn-primary',dialog).addEvent('click',function(e){
+        var cur = $ES('.cur',cat_body).getLast();
+		if(!cur)return dialogObj.close();
+		dialogObj.handle.getElement('.label').set('text',cur.get('text'));
+		dialogObj.handle.getElement('input[type=hidden]').value = $('cat_id').value;
+		dialogObj.close();
+        var Gtype = dialogObj.handle.getParent('#x-g-basic').getElement('#gEditor-GType-input');
+        var goods_id = $('gEditor-GId-input').value;
+        if(goods_id == ""){
+		    Gtype.value = cat_type_ipt.value;
+           Gtype.fireEvent('change');
+        }
+	});
+
+	var json=<{$cats}>,
+		url='index.php?app=b2c&ctl=admin_goods_cat&act=get_subcat_list';
+
+	var Category={
+		select:function(items){
+			if(!items || !items.length)return;
+			this.items = items;
+			var el =$E('li[cat_id='+this.items.shift()+']',cat_body);
+			el && el.fireEvent('click');
+		},
+		request:function(cat_id,options){
+			var _cache=cat_body.retrieve('cache_'+cat_id);
+			if(_cache) return this.format(_cache).select(this.items);
+			if(this.sync && this.sync.running)return;
+			this.sync=new Request.JSON({url:url,method:'get',data:'p[0]='+cat_id,
+				onComplete:function(rs){
+					cat_body.store('cache_'+cat_id,rs);
+					this.format(rs).select(this.items);
+			}.bind(this)}).send();
+		},
+		format:function(data){
+			var list= new Element('ul',{'class':'cat_select'}),content=[];
+			data.each(function(d,i){content.push(tpl.substitute(d));});
+			list.set('html',content.join('')).inject(cat_body);
+			this.tip().bodySize(list);
+			return this;
+		},
+		addEvent:function(sel){
+			var _this=this;
+			sel.getElements('li[cat_id]').addEvent('click',function(e){
+				var cat_id=this.get('cat_id'), cat_name=this.get('text'),
+					item=this.getParent(), cur =item.getElement('.cur');
+				item && item.getAllNext('ul').destroy();
+				cur && cur.removeClass('cur');
+				this.addClass('cur');
+				_this[this.get('isParent')?'request':'tip'](cat_id);
+			});
+		},
+		tip:function(){
+			var curItem=[],cur =$ES('.cur',cat_body);
+			if(!cur.length) return this;
+			cur.each(function(c){curItem.push(c.get('text'));});
+			cat_info.set('text',curItem.join('>'));
+			cat_ipt.value=cur[cur.length-1].get('cat_id')||'';
+			cat_type_ipt.value=cur[cur.length-1].get('type_id')||'';
+			return this;
+		},
+		bodySize:function(sel){
+			var el_size = sel.getSize(),items=cat_body.getElements('.cat_select'),
+				length=items.length,itemSizeX=el_size.x+sel.getPatch().x,
+				sizeX=itemSizeX*length;
+
+			cat_body.setStyle('width',sizeX);
+			if(el_size.y<el_size.scrollSize.y)this.search(sel);
+			this.scroll();
+			this.addEvent(sel);
+		},
+		search:function(sel){
+			var selectfilter=new Element('input',{'autofocus':true,'class':'ipt_search','placeholder':'输入拼音首字母、关键字'});
+			selectfilter.addEvents({
+				'keyup':function(){
+					var kwords=this.getValue().trim(),
+						soptions=this.getParent('li').getAllNext('li');
+					if(!kwords) return soptions.show();
+					soptions.each(function(opt){
+						opt[opt.get('text').test(kwords,'i')?'show':'hide']();
+					});
+				},
+				'focus':function(){this.setStyle('color','#000');}
+			});
+			var nli = new Element('li',{'class':'filter_item'}).adopt(selectfilter);
+			nli.inject(sel,'top');
+		},
+		scroll:function(){
+			cat_body.retrieve('fxscroll',new Fx.Scroll(cat_body.getParent(),{link:'cancel'})).toRight();
+		}
+	};
+
+	Category.format(json).select([<{$catPath}>]);
+	$E('.cat_sel_wrap select').addEvent('change',function(e){
+		  Category.select(this.value.split(','));
+	});
+    // Category.select([1,2,22,23]);
+})();
+
+</script>

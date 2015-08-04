@@ -1,0 +1,129 @@
+<style>
+#imageset .dft_image{
+	width:100px;
+	height:100px;
+	position:relative;
+	margin:auto;
+}
+#imageset td{
+	vertical-align: top;
+}
+#imageset .dft_image label{
+	position:absolute;
+	background:#fff;
+	padding:3px;
+	left:10px;
+	top:10px;
+    filter:alpha(opacity=70);
+	-moz-opacity:0.7;
+	-khtml-opacity: 0.7
+}
+#imageset .dft_image img{ width:100%;height:100%}
+#imageset .pos-select{border:1px solid #ccc;width:auto;cursor: pointer;}
+#imageset .pos-select .current{background:#36c;color:#fff}
+
+#imageset .watermark-none .pos-select
+,#imageset .watermark-none .watermark-set
+,#imageset .watermark-text .watermark-image-set
+,#imageset .watermark-image .watermark-text-set{
+	display:none
+}
+</style>
+
+<{area inject=".mainHead"}>
+<h5 class="head-title"><{t}>图片尺寸设定<{/t}></h5>
+<div class="head-toolbar" >&nbsp;</div>
+<{/area}>
+
+
+<form method="post" action="index.php?ctl=system&act=imageset">
+<table id="imageset">
+    <tr>
+        <td style="width:300px">&nbsp;</td>
+        <td style="width:150px"><{t}>尺寸<{/t}></td>
+        <td style="width:250px"><{t}>水印<{/t}></td>
+        <td style="width:100px">&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+<{foreach from=$allsize key=size item=item}>
+
+<{if $item.wm_type=='none'}>
+	<tr class="watermark-none">
+<{elseif $item.wm_type=='image'}>
+	<tr class="watermark-image">
+<{elseif $item.wm_type=='text'}>
+	<tr class="watermark-text">
+<{/if}>
+    <td style="text-align:center;padding:10px 0">
+        <div class="dft_image">
+            <label><{$item.title}></label>
+            <img style="width:100%;height:100%" src="statics/logodemo.gif" />
+        </div>
+        <span class="lnk"><{t}>更换缺省图<{/t}></span>
+    </td>
+    <td><table style="width:auto">
+    <tr><td><{input type="number" name="pic[{$size}][width]" value=$item.width size="2"}></td>
+        <td>x</td>
+        <td><{input type="number" name="pic[{$size}][height]" value=$item.height size="2"}></td></tr>
+    <tr><th><{t}>宽<{/t}></th><th></th><th><{t}>高<{/t}></th></tr></table></td>
+        <{if $item.watermark}>
+        <td>
+
+            <label><input <{if $item.wm_type=='none'}>checked="checked"<{/if}> type="radio" name="pic[<{$size}>][wm_type]" value="none" onclick="$(this).getParent('tr').className='watermark-none'" /><{t}>无水印<{/t}></label>
+            <label><input <{if $item.wm_type=='image'}>checked="checked"<{/if}> type="radio" name="pic[<{$size}>][wm_type]" value="image" onclick="$(this).getParent('tr').className='watermark-image'" /><{t}>图片水印<{/t}></label>
+            <label><input <{if $item.wm_type=='text'}>checked="checked"<{/if}> type="radio" name="pic[<{$size}>][wm_type]" value="text" onclick="$(this).getParent('tr').className='watermark-text'" /><{t}>文字水印<{/t}></label>
+			<div class="watermark-set">
+			<div class="watermark-text-set"><{t}>水印文字：<{/t}><input type="text" value="<{$item.wm_text}>" name="pic[<{$size}>][wm_text]" /></div>
+			<div class="watermark-image-set"><{input type="image" value=$item.wm_image name="pic[{$size}][wm_image]" }></div>
+            <div><{t}>透明度：<{/t}><input type="text" name="pic[<{$size}>][wm_opacity]" style="width:30px" value="<{$item.wm_opacity}>" />% </div>
+			</div>
+        </td>
+        <td>
+            <table class="pos-select">
+				<caption><{t}>水印位置<{/t}><input type="hidden" value="<{$item.wm_loc}>" name="pic[<{$size}>][wm_loc]"></caption>
+                <tr>
+				<td v="tl">
+					<{t}>左上<{/t}></td>
+					<td v="tc"><{t}>中上<{/t}></td>
+					<td v="tr"><{t}>右上<{/t}></td>
+				</tr>
+                <tr>
+					<td v="ml"><{t}>左中<{/t}></td>
+					<td v="mc"><{t}>正中<{/t}></td>
+					<td v="mr"><{t}>右中<{/t}></td>
+				</tr>
+                <tr>
+					<td v="bl"><{t}>左下<{/t}></td>
+					<td v="bc"><{t}>中下<{/t}></td>
+					<td v="br"><{t}>右下<{/t}></td>
+				</tr>
+            </table>
+        </td>
+        <{else}>
+        <td colspan="2"></td>
+        <{/if}>
+        <td>&nbsp;</td>
+</tr>
+<{/foreach}>
+</table>
+<input type="submit" />
+</form>
+<script>
+$ES('input[name^=pic[]','imageset').each(function(el){
+	if(el.checked)el.getParent('tr').className="watermark-"+el.value;
+});
+$ES('.pos-select','imageset').each(function(table){
+	var ipt=$E('input',table);
+	table.addEvent('click',function(e){
+		var target=new Event(e).target;
+		if(target.tagName=='TD' && target.get('v')){
+			try{$E('td.current',table).removeClass('current')}catch(e){}			
+			ipt.value=target.get('v');
+			target.addClass('current');
+		}
+	});
+	if(ipt.value){
+		try{$E('td[v="'+ipt.value+'"]',table).addClass('current');}catch(e){}
+	}
+});
+</script>

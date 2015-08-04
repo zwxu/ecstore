@@ -1,0 +1,96 @@
+<div class="member-main">
+<div class="title title2">我的咨询</div>
+    <div id="tab-discus" class="section switch">
+        <ul class="switchable-triggerBox tab_member clearfix">
+            <li class="active"><a href="#"><{t}>我的咨询<{/t}></a></li>
+        </ul>
+        <div class="switchable-content switchable-content2">
+            <{if !$commentList}>
+            <div class="noinfo"><{t}>暂无咨询<{/t}></div>
+            <{/if}>
+			  <table width="100%" cellpadding="0" cellspacing="0" border="0" class="gridlist gridlist_member" style="line-height:20px">
+				<tr>
+						<th width="40%" class="blrn"><{t}>咨询商品<{/t}></th>
+						<th width="46%"><{t}>咨询内容<{/t}></th>
+						<th width="14%"><{t}>回复内容<{/t}></th>
+				</tr>
+                 <{foreach from=$commentList item='commentList'}>
+
+                <tr>
+
+                <td >
+                <a href="<{link app=b2c ctl='site_product' act='index' arg=$commentList.type_id}>" target="_blank"  style="width:90px; height:90px;overflow:hidden;float:left; padding-top:20px" >
+                <img style="width:60px; height:70px;overflow:hidden;" 
+                src="<{if $commentList.udfimg == 'true'}>
+                <{$commentList.thumbnail_pic|storager:'s'}>
+                <{else}>
+                <{$commentList.image_default_id|default:$defaultImage|storager:'s'}>
+                <{/if}>" /> 
+                </a>
+                <a href="<{link app=b2c ctl='site_product' act='index' arg=$commentList.type_id}>" style=" width:250px; overflow:hidden; float:left; padding-left:10px; padding-top:33px; text-align:left"><{$commentList.name}></a>
+                </td>
+
+                <td>
+                <span style=" float:left; width:300px;overflow:hidden; text-align:left;">
+                <{$commentList.comment}>
+                </span>
+                <span style=" float:left; width:120px"><{$commentList.time|cdate:SDATE_STIME}></span>
+                </td>
+
+                <td>
+                <a style="cursor:pointer;margin-left:40px"  id="dis_<{$commentList.comment_id}>" onclick="dis(<{$commentList.comment_id}>,'<{link app=b2c ctl=site_member act=set_read arg0=$commentList.comment_id arg1=ask}>');" class="btn-a flt" ><span><{t}>回复(<{$commentList.items|count}>)<{/t}>
+                </span>
+                <a style="cursor:pointer;margin-left:40px;display:none"  id="none_<{$commentList.comment_id}>" onclick="none(<{$commentList.comment_id}>,'<{link app=b2c ctl=site_member act=set_read arg0=$commentList.comment_id arg1=ask}>');" class="btn-a flt" ><span>
+                <{t}>收起回复<{/t}></span>
+                </a>
+                </td>
+
+                </tr>
+
+                <tr>
+
+                <td colspan="3" style="padding:0;display:none" id="reply_<{$commentList.comment_id}>">
+					<table bgcolor="#f9f9f9" width="988">
+                    <{if $commentList.items}>
+                    <{foreach from=$commentList.items item="reply"}>
+
+                        <tr >
+                            <td width="20%">
+                            <span style=" color:red"><{if $reply.addon.hidden_name =='YES' && ($reply.author_id !=0 || $reply.author_id !=1)}>匿名<{else}><{$reply.author}><{/if}>回复：</span>
+                            </td>
+
+                            <td width="66%">
+                            <span style=" float:left; width:508px; text-align:left"><{$reply.comment}></span>
+                            <span style=" float:left; width:100px"><{$reply.time|cdate:SDATE_STIME}></span>
+                            </td>
+						
+                            <td width="14%"></td>
+                         </tr>
+                     <{/foreach}>
+                     <{/if}>
+
+
+					</table>
+				</td>
+
+               </tr>
+               <{/foreach}>
+               <{pagers data=$pager}>
+
+           </table>
+        </div>
+</div></div>
+<script>
+    function dis(comment_id){
+        $('reply_'+comment_id).setStyle('display','block');
+        $('dis_'+comment_id).setStyle('display','none');
+        $('none_'+comment_id).setStyle('display','block');
+    }
+
+    function none(comment_id){
+        $('reply_'+comment_id).setStyle('display','none');
+        $('dis_'+comment_id).setStyle('display','block');
+        $('none_'+comment_id).setStyle('display','none');
+    }
+
+</script>

@@ -1,0 +1,64 @@
+<form class="tableform" method="post" action="index.php?app=b2c&ctl=admin_member&act=insert_queue&seller=<{$seller}>" id='messenger-email-form' >
+
+
+
+<h4 style="border:none"><{t}>标题<{/t}></h4>
+<div class="division">
+<{input type="text" style=" width:98%" name="title" vtype="required"}>
+</div>
+
+
+<h4><{t}>信息内容<{/t}></h4>
+<div class="division">
+ <{input type="html" style=" width:100%" name="content" vtype="required"}>
+</div>
+<input type="hidden" name="aEmail" value=<{$aEmail}> />
+</form>
+
+<{area inject=".mainFoot"}>
+<div class="table-action">
+	<{button label=$___b2c="发送"|t:'b2c' type="button" id="email-form-submit"}>
+</div>
+<{/area}>
+<script>
+(function(){
+    var _form = $('messenger-email-form');
+    var btn =$('email-form-submit');
+    var finder = finderGroup['<{$env.get.finder_id}>'];
+    
+    _form.store('target',{
+    	onRequest:function() {
+    		btn.set('disabled', true);
+    	},
+        onComplete:function(){            
+            
+        },
+        onSuccess:function(response){
+            var hash_res_obj = JSON.decode(response);
+            if (hash_res_obj.success != undefined && hash_res_obj.success != "")
+            {
+                try{
+                    var _dialogIns = btn.getParent('.dialog').retrieve('instance');
+                }catch(e){}
+                
+                if(_dialogIns)
+                {
+                    _dialogIns.close();
+                    //finder.refresh.delay(400,finder);
+                }
+            }
+            else
+            {
+                //alert(hash_res_obj.error);
+            }            
+        }
+    });
+
+        btn.addEvent('click',function(){
+        
+            _form.fireEvent('submit',{stop:$empty});
+        });
+    
+})();
+
+</script>

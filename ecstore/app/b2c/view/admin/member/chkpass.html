@@ -1,0 +1,42 @@
+﻿<form action="index.php?app=b2c&ctl=admin_member&act=chkpassword" id="member-form" method="POST">
+<div class="division">
+<table>
+<input type="hidden" value=<{$member_id}> name="member_id"/>
+<tr> <td colspan="2"><{t}>输入新密码：<{/t}><input type="password" vtype="required" name="newPassword" class="x-input " autocomplete="off"/></td> 
+</tr> 
+<tr> <td colspan="2"> <{t}>确认新密码：<{/t}><input type="password" vtype="required" name="confirmPassword" class="x-input " autocomplete="off"/> </td> 
+</tr> 
+ </table>
+</div>
+<div class="table-action">
+	<button class="btn" type="submit" id="member-form-submit"><span><span><{t}>保存<{/t}></span></span></button></div>
+</form>
+
+<script>
+(function(){
+	var _form = $('member-form');
+	var btn =$('member-form-submit');
+	//var finder = finderGroup['<{$env.get.finder_id}>'];
+	
+	_form.store('target',{
+		
+		onSuccess:function(response){
+			var hash_res_obj = JSON.decode(response);
+			if (hash_res_obj.success != undefined && hash_res_obj.success != "")
+			{
+				try{
+					var _dialogIns = btn.getParent('.dialog').retrieve('instance');
+				}catch(e){}
+				
+				if(_dialogIns)
+				{	
+					_dialogIns.close();
+					//finder.refresh.delay(400,finder);
+				}
+			}	
+		}
+	});
+	
+})();
+		
+</script>

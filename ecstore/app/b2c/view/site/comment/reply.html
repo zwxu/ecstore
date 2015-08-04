@@ -1,0 +1,58 @@
+
+<div class="FormWrap Comments" id="goods-comment">
+  <div class="division boxBrown">
+    <div class="mainReply"><span class="author font-orange"><{$comment.author}></span><{t}>说：<{/t}><span class="timpstamp font10px font-gray"><{$comment.time|userdate}></span>
+      <div><{$comment.comment}></div>
+    </div>
+  </div>
+
+    <div class="replies pl40 "> <{foreach from=$comment.reply item=items}>
+      <div class="replyitem division "><span class="author font-orange"><{$items.author}>
+         <{t}>回复：<{/t}></span><span class="timpstamp font10px font-gray"><{$items.time|cdate:'SDATE_STIME'}></span>
+        <div><{$items.comment}></div>
+      </div>
+      <{/foreach}> </div>
+<script>
+    var checkFormReqs =function(e){
+           e    = new Event(e);
+       var form= $(e.target);
+
+       var reqs = $$(form.getElements('input[type=text]'),form.getElements('textarea'));
+
+       if(reqs.some(function(req){
+
+            if(req.get('value').trim()==''){
+                       req.focus();
+                       Message.error('<{t}>请完善表单必填项.<{/t}>');
+                       return true;
+            }
+
+              return false;
+
+
+       })){
+
+           e.stop();
+
+       }
+
+    };
+ </script>
+  <h3><{t}>发表回复<{/t}></h3>
+  <form class=" division" method="post" action='<{link app="b2c" ctl="site_comment" act="toReply" arg0=$comment.comment_id}>' onsubmit='checkFormReqs(event);'>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="forform">
+      <tr>
+        <th><em>*</em><{t}>联系方式：<{/t}></th>
+        <td><{input type="text" vtype=required size=20 name="contact"}><span class="infotips"><{t}>(可以是电话、email、qq等)<{/t}></span></td>
+      </tr>
+      <tr>
+        <th><em>*</em><{t}>回复内容：<{/t}></th>
+        <td><{input type="textarea" vtype=required rows="5" name="comment" style="width:80%" }></td>
+      </tr>
+      <tr>
+        <th></th>
+        <td><input type="submit" class="buttonstyle" value="<{t}>回复<{/t}>"></td>
+      </tr>
+    </table>
+  </form>
+</div>

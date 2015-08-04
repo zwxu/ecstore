@@ -1,0 +1,6 @@
+<services>	
+    <service id="ectools_payment.ectools_mdl_payment_cfgs" optname="支付插件列表">
+		<class>chinapay_payment_plugin_chinapay</class>
+	</service>
+	
+</services>

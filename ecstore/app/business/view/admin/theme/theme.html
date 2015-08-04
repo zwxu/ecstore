@@ -1,0 +1,69 @@
+<form method="POST" id='newtheme-form' action="index.php?app=business&ctl=admin_theme&act=save" class="tableform">
+    <div class="division">
+        <table width="100%" >
+            <tr><th><em class="red">*</em><{t}>模版名：<{/t}></th><td><{input type="text" name="name" size="20" vtype="required" value=$theme.name}><{if $theme}><input type="hidden" name="theme_id" value="<{$theme.theme_id}>"><{/if}><span></span></td></tr>
+            <tr><th><em class="red">*</em><{t}>店铺首页：<{/t}></th>
+                <td>
+                    <select name="shop_tmpl_id">
+                        <{foreach from=$shops item=shop}>
+                        <option value="<{$shop.id}>" <{if $theme.shop_tmpl_id==$shop.id}>selected="selected"<{/if}>><{$shop.tmpl_name}> - <{$shop.tmpl_path}></option>
+                        <{/foreach}>
+                    </select>
+                </td></tr>
+            <tr><th><em class="red">*</em><{t}>商品列表：<{/t}></th>
+                <td>
+                    <select name="gallery_tmpl_id">
+                        <{foreach from=$gallerys item=gallery}>
+                        <option value="<{$gallery.id}>" <{if $theme.gallery_tmpl_id==$gallery.id}>selected="selected"<{/if}>><{$gallery.tmpl_name}> - <{$gallery.tmpl_path}></option>
+                        <{/foreach}>
+                    </select>
+                </td></tr>
+            <tr><th><em class="red">*</em><{t}>预览图：<{/t}></th>
+                <td><{input type='vimage' name='image' value=$theme.image width=300 height=150}>
+                </td></tr>
+                
+        </table>
+        <hr style="margin:5px 0;">
+    </div>
+</form>
+<{area inject='.mainFoot'}>
+<div class="table-action"><{button type="submit"  label=$___b2c="保存"|t:'b2c' id='newtheme-form-submit'}></div>
+<{/area}>
+
+<script>
+    (function(){
+        var _form = $('newtheme-form');
+        var btn =$('newtheme-form-submit');
+        var finder = finderGroup['<{$env.get.finder_id}>'];
+
+        _form.store('target',{
+            onComplete:function(){            
+
+            },
+            onSuccess:function(response){
+                var hash_res_obj = JSON.decode(response);
+                if (hash_res_obj.success != undefined && hash_res_obj.success != "")
+                {
+                    try{
+                        var _dialogIns = btn.getParent('.dialog').retrieve('instance');
+                    }catch(e){}
+
+                    if(_dialogIns)
+                    {
+                        _dialogIns.close();
+                        window.finderGroup['<{$env.get._finder.finder_id}>'].refresh();
+                    }
+                }
+                else
+                {
+                    //alert(hash_res_obj.error);
+                }            
+            }
+        });
+
+        btn.addEvent('click',function(){
+            _form.fireEvent('submit',{stop:$empty});
+        });
+
+    })();
+</script>

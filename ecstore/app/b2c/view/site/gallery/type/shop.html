@@ -1,0 +1,98 @@
+<{css src="shop.css" app='b2c'}>
+<div class='grid clearfix' id="gallery-grid-list">
+  <!--店铺循环开始-->
+  <{foreach from=$products key=key item=store name=store}>
+  <div class="shopbox <{if $args.7=='g'}>shopbox-expand<{/if}>">
+    <!--shop info start-->
+    <div class="shopheader">
+      <a target='_blank' class="shopheader-logo" href="<{link app=business ctl=site_shop act=view  arg=$store.store_id}>">
+      <img src="<{$store.image|storager:'s'}>"  alt="<{$store.store_name|escape:html}>" title="<{$store.store_name|escape:html}>">
+      </a>
+      <div class="shopheader-info">
+        <a target='_blank' href="<{link app=business ctl=site_shop act=view  arg=$store.store_id}>" class="shop-header-title"><{$store.store_name|escape:"html"|cut:30}></a>
+        <p title="<{$store.b_brand}>">主营品牌：<{$store.b_brand|cut:35}></p>
+        <p>所在地：<{$store.area}></p>
+      </div>
+      <{input type="storepoint" store="{$store.store_id}" show_name='false'}>
+      <div class="shopheader-enter">
+        <a target='_blank' href="<{link app=business ctl=site_shop act=view arg=$store.store_id}>" class="she-shop">进入店铺<i>&gt;&gt;</i></a>
+        <a href="javascript:;" class="she-product  j_MoreProduct">
+        <em><{$store.gcount}></em>件相关商品
+        <i class="drop-icon"></i></a>
+      </div>
+	  <div class="crl"></div>
+    </div>
+    <!--shop info end-->
+     <!--shop goodsinfo start-->
+      
+    <div class="shopbox-rec">
+      <div class="sbr-con">
+        <{foreach from=$store.goods_list key=key item=product name=product}>
+        <!-- goodsinfo start-->
+        <div class="product">
+          <div class="productImg-wrap">
+           <a target='_blank' href="<{if $product.goods_url}><{$product.goods_url}><{else}><{link app=b2c ctl=site_product act=index arg=$product.goods_id}><{/if}>" class="productImg" target="_blank" data-p="1-1" data-ci="">
+             <{if $product.udfimg == 'true'}>
+            <{assign var="gimage" value=$product.thumbnail_pic}>
+            <{else}>
+            <{assign var="gimage" value=$product.image_default_id|default:$defaultImage}>
+            <{/if}>
+            <{img src="images/transparent.gif" style="width:160px;height:160px;" app="b2c" lazyload=$gimage|storager:'m' class="img-lazyload"  alt=$product.name|escape:html}>
+           </a>
+          </div>   
+          <p class="productPrice">
+            <em>
+            <{$product.price|cur_odr}>
+            </em>
+            <{if $product.mktprice >0 && $product.mktprice!=$product.price && $setting.mktprice eq true}>
+           <del style='color: #CBCBCB;'>
+             <{$product.mktprice|cur_odr}>
+           </del>
+           <{else}>
+           &nbsp;
+           <{/if}>
+          </p>
+          <p class="productTitle">
+           <a target='_blank' href="<{if $product.goods_url}><{$product.goods_url}><{else}><{link app=b2c ctl=site_product act=index arg=$product.goods_id}><{/if}>" title="<{$product.name|escape:html}>" class="entry-title">
+        <{$product.name|escape:"html"}>
+        </a>
+          </p>          
+        <{if $showBuyCount=='true'||$env.conf.b2c.gallery.comment.time=='true'}>
+        <p class="productStatus">
+           <{if $showBuyCount=='true'}>月销量:<em><{$product.buy_m_count}></em><{/if}>
+           <{if $showBuyCount=='true' && $env.conf.b2c.gallery.comment.time=='true'}>|<{/if}><{if $env.conf.b2c.gallery.comment.time=='true'}><a style='color: #568396;' target="_blank" href="<{if $product.goods_url}><{$product.goods_url}><{else}><{link app=b2c ctl=site_product act=index arg=$product.goods_id}><{/if}>#discuss_all_info" >累计评价:<{$product.comments_count}></a><{/if}>
+           </p>
+        <{/if}>
+          <div class="productShop">
+              <a class="productShop-name" target="_blank" href="<{link app=business ctl=site_shop act=view  arg=$product.store_id}>">
+             <{$store.store_name|escape:"html"|cut:30}>
+            </a>
+            <!--<{input type='fixation' position=2 store_id=$product.store_id}>-->
+          </div>
+         
+        </div>        
+        <{/foreach}>        
+        <!--goodsinfo end-->
+      </div>
+      <i class="sbr-arrow"></i>
+      <p class="sbr-more">
+        <a href="<{selector args=$args2 filter=$bfilter key=store_id value=$store.store_id}>" target="_blank">更多相关商品<i>&gt;&gt;</i></a>
+      </p>
+    </div>
+    <!--shop goodsinfo end-->
+  </div>
+   <!--店铺循环end-->
+   <{/if}>
+</div>
+<script>
+(function(){
+  $$('.shopbox').each(function(el){
+     el.getElement('.j_MoreProduct').addEvent('click',function(e){
+       e.stop();
+       $(this).toggleClass('shopbox-expand');
+       //$(this).
+     }.bind(el));
+  });
+  
+})();
+</script>

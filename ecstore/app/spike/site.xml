@@ -1,0 +1,22 @@
+<site>
+    <module controller='site_activity' >
+        <name>spike</name>
+        <title>秒杀活动</title>
+        <disable>false</disable>
+    </module>
+    <module controller='site_product' >
+        <name>spikeProduct</name>
+        <title>秒杀商品</title>
+        <disable>false</disable>
+    </module>
+    <module controller='site_cart' >
+        <name>spikeCart</name>
+        <title>秒杀购物车</title>
+        <disable>false</disable>
+    </module>
+    <module controller='site_order' >
+        <name>spikeOrder</name>
+        <title>秒杀订单</title>
+        <disable>false</disable>
+    </module>
+</site>

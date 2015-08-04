@@ -1,0 +1,7 @@
+<?php
+
+ 
+
+$setting = array(
+
+);

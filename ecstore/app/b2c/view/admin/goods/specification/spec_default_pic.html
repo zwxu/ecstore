@@ -1,0 +1,29 @@
+<form class='tableform' action='index.php?app=b2c&ctl=admin_specification&act=save_default_pic' method='post' id="spec_pic_set_form">
+  <table>
+    <tr>
+      <th><{t}>默认规格图片：<{/t}></th>
+      <td><{input type='image' name='set[spec.default.pic]' value=$spec_default_pic  width=$spec_image_width height=$spec_image_height}></td>
+    </tr>
+    <tr>
+      <th><{t}>规格图片高度：<{/t}></th>
+      <td><{input type='number' name='set[spec.image.height]' vtype='required&&unsigned' value=$spec_image_height }><i> px</i></td>
+    </tr>
+    <tr>
+      <th><{t}>规格图片宽度：<{/t}></th>
+      <td><{input type='number' name='set[spec.image.width]' vtype='required&&unsigned' value=$spec_image_width }><i> px</i></td>
+    </tr>
+  </table>
+<{area inject=".mainFoot"}>
+	<div class="table-action">
+		<{button label=$___b2c="保存"|t:'b2c' class="btn-primary" type="button" onclick="$('spec_pic_set_form').fireEvent('submit',{stop:function(){}})"}>
+	</div>
+<{/area}>
+</form>
+
+<script>
+$('spec_pic_set_form').store('target',{
+  onComplete:function(){
+    $('spec_pic_set_form').getParent('.dialog').retrieve('instance').close();
+  }
+});
+</script>

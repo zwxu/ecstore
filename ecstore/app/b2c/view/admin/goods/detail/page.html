@@ -1,0 +1,67 @@
+<{capture name="header"}>
+<{lang_script src="lang.js" app='b2c'}>
+<{script src="goodseditor.js" pdir="js_mini"}>
+<{/capture}>
+
+
+<{capture name="sidebar"}>
+<div class="side-bx spage-side" style="border-top:none">
+    <div class="spage-side-nav">
+        <ul>
+            <{foreach from=$sections item=section name="sec" key=key}>
+                <li class="l-handle<{if $env.foreach.sec.iteration eq 1}> all<{/if}>" ><span><{if $env.foreach.sec.iteration eq 1}><{t}>商品总览<{/t}><{else}><{$section.label}><{/if}></span></li>                
+            <{/foreach}>
+            <!--tag_foreign_total_sections-->
+        </ul>
+    </div>
+</div>
+
+<div class="side-bx spage-side" style=''>
+    <div class="side-bx-title"><h3><{t}>商品标签<{/t}></h3></div>
+    <div class="side-bx-bd">
+        <div style="overflow: hidden;" class="tag-editor" id="finder-tag">
+            <ul class="tag-editor-group" style="overflow: hidden;">
+            <{foreach key=key from=$tagList item=aTag}>
+                <li><input type='checkbox' name='goods[tag][<{$aTag.tag_id}>][tag][tag_id]' value='<{$aTag.tag_id}>'
+                <{foreach from=$tag item=bTag}>
+                <{if $bTag[tag_id] == $aTag.tag_id}>checked<{/if}>
+                <{/foreach}>
+                />
+               <{$aTag.tag_name}>
+                </li>
+                    <input type='hidden' name='goods[tag][<{$aTag.tag_id}>][app_id]' value='<{$aTag.app_id}>' >
+                    <input type='hidden' name='goods[tag][<{$aTag.tag_id}>][tag_type]' value='<{$aTag.tag_type}>' >
+            <{/foreach}>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<{/capture}>
+
+
+<{foreach from=$sections item=section key=key}>
+<div class="spage-main-box" id="goods_<{$key}>">
+  <{include app=$section.app file=$section.file}>
+</div>
+<{/foreach}>
+<!--tag_foreign_all_sections-->
+
+<{capture name='footbar'}>
+<table cellspacing="0" cellpadding="0" class="table-action">
+      <tbody>
+		<tr valign="middle">
+        <td><{if false}>
+            <{button label=$___b2c="保存并关闭窗口"|t:'b2c' class="btn-primary" onclick="subGoodsForm(event,2)"}>
+            <{if !$goods.goods_id}>
+            <{button label=$___b2c="保存并添加相似商品"|t:'b2c' class="btn-primary" onclick="subGoodsForm(event,1)"}>
+            <{/if}>
+            <{button label=$___b2c="保存当前"|t:'b2c' class="btn-primary" onclick="subGoodsForm(event,3)"}><{/if}>
+            <{assign var=bcclose value=$___b2c='确定退出?'|t:'b2c'}>
+            <{assign var=bclose value="关  闭"}>
+            <{button label=$___b2c=$bclose|t:'b2c' class="btn-secondary" onclick="if(confirm('{$bcclose}'))window.close()"}>
+        </td>
+        </tr>
+        </tbody>
+</table>
+<{/capture}>

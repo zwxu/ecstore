@@ -1,0 +1,96 @@
+<form method="POST" action="index.php?app=desktop&ctl=crontab&act=save" class="tableform" id="crontab_form">
+  <div class="division">
+    <table cellspacing="0" cellpadding="0" width="100%">
+      <tbody>
+	<tr>
+	  <th>
+	    <label>任务名称:</label>
+	  </th>
+	  <td>
+	    <{$task['task']}>
+	  </td>
+	</tr>
+	<tr>
+	  <th>
+	    <label>最后执行时间:</label>
+	  </th>
+	  <td>
+	    <{$task['last']}>
+	  </td>
+	</tr>
+	<tr>
+	  <th>
+	    <label>描述:</label>
+	  </th>
+	  <td>
+	    <{$task['description']}>
+	  </td>
+	</tr>
+	<tr>
+	  <th>
+	    <em class="red">*</em>
+	    <label>规则:</label>
+	  </th>
+	  <td>
+	    <input name="rule" type="text" vtype="required" value="<{$task['rule']}>" />
+	  </td>
+	</tr>
+	<tr>
+	  <th>
+	    <label>是否启用:</label>
+	  </th>
+	  <td>
+	    <select name="enabled">
+	      <option <{if $task['enabled'] == 'true'}> selected <{/if}> value="true">启用</option>
+	      <option <{if $task['enabled'] == 'false'}> selected <{/if}> value="false">禁用</option>
+	    </select>
+	    <input type="hidden" name="task" value="<{$task['task']}>" />
+	  </td>
+	</tr>
+      </tbody>
+    </table>
+    <div class="table-action">
+      <{button type="button" label=$___desktop="保存"|t:'desktop' id="crontab_submit"}>
+    </div>
+  </div>
+</form>
+
+<script type="text/javascript">
+
+
+(function(){
+	var _form = $('crontab_form');
+	var btn =$('crontab_submit');
+	var finder = finderGroup['<{$env.get._finder.finder_id}>'];
+	
+	_form.store('target',{
+		onSuccess:function(response){
+			var hash_res_obj = JSON.decode(response);
+		
+			if (hash_res_obj.success != undefined && hash_res_obj.success != "")
+			{
+				try{
+					var _dialogIns = btn.getParent('.dialog').retrieve('instance');
+				}catch(e){}
+				
+				if(_dialogIns)
+				{	
+					_dialogIns.close();
+					window.finderGroup['<{$env.get._finder.finder_id}>'].refresh();
+				}
+			}
+			
+		}
+	});
+
+	    btn.addEvent('click',function(){
+		
+		    _form.fireEvent('submit',{stop:$empty});
+			
+		
+		
+		});
+	
+})();
+
+</script>

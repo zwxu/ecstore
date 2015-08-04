@@ -1,0 +1,22 @@
+<{if $goods.gift}>
+  <{foreach from=$goods.gift item=gift key=key}>
+    <{if $goods.disabled==='true'}><{continue;}><{/if}>
+    <div class="minicart-single horizontal-m clearfix del-<{$goods.obj_items.products.0.product_id}>" >
+        <div class="minicart-img goodpic">
+            <img src="<{$gift.default_image.thumbnail|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" alt="<{$gift.name|escape:html}>" >
+        </div>
+        <div class="goods-main minicart-dec">
+            <div class="goodinfo"><{$gift.name}>
+                <p class="font-gray">
+                  <{$gift.spec_info}>
+                </p>
+               <span>商品赠送</span>
+            </div>
+            <div class="price-wrap">
+             <p>销售价:</span><span class="micolor2"><{$gift.price|cur_odr}></span></p>
+            <p>数量:</span><span class="micolor2"><{$gift.quantity}></span></p>
+            </div>
+        </div>
+    </div>
+  <{/foreach}>
+<{/if}>

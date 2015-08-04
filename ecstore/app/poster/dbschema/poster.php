@@ -1,0 +1,113 @@
+<?php
+/*
+ * Created on 2011-12-14
+ *
+ * To change the template for this generated file go to
+ * Window - Preferences - PHPeclipse - PHP - Code Templates
+ */
+ $db['poster']=array(
+         'columns'=>array(
+             'poster_id'=>array(
+                     'type'=>'number',
+                     'required'=>true,
+                     'extra'=>'auto_increment',
+                     'pkey'=>true,
+             ),
+             'poster_position'=>array(
+                     'type'=>'table:position',
+                     'required'=>false,
+                     'in_list'=>true,
+                     'default_in_list'=>true,
+                     'label'=>app::get('poster')->_('所属版位'),
+             ),
+            'poster_type'=>array(
+                    'type'=>array(
+                        '0'=>'单张图片',
+                        '1'=>'单张图片轮播',
+                        '2'=>'多张图片轮播'
+                    ),
+                    'required'=>false,
+                    'default'=>0,
+                    'in_list'=>true,
+                    'default_in_list'=>true,
+                    'label'=>app::get('poster')->_('广告显示类型'),
+            ),
+            'poster_switcheffect'=>array(
+                     'type'=>'varchar(50)',
+                     'default'=>'',
+                     'required'=>true,
+                     'label'=>app::get('poster')->_('切换效果'),
+             ),
+             'poster_autoplay'=>array(
+                     'type'=>'varchar(50)',
+                     'default'=>'',
+                     'required'=>true,
+                     'label'=>app::get('poster')->_('自动播放'),
+             ),
+             'poster_isblank'=>array(
+                     'type'=>array(
+                         '0'=>'本网页打开',
+                         '1'=>'弹出新窗口',
+                     ),
+                     'required'=>true,
+                     'default'=>0,
+             ),
+             'poster_imgurl'=>array(
+                     'type'=>'serialize',
+                     'required'=>false,
+                     'in_list'=>false,
+                     'default_in_list'=>false,
+                     'label'=>app::get('poster')->_('图片上传'),
+             ),
+             'poster_starttime'=>array(
+                     'type'=>'time',
+                     'required'=>true,
+                     'in_list'=>true,
+                     'default_in_list'=>true,
+                     'label'=>app::get('poster')->_('上线时间'),
+             ),
+             'poster_endtime'=>array(
+                     'type'=>'time',
+                     'required'=>true,
+                     'in_list'=>true,
+                     'default_in_list'=>true,
+                     'label'=>app::get('poster')->_('下线时间'),
+             ),
+             'poster_author'=>array(
+                     'type'=>'varchar(50)',
+                     'required'=>false,
+                     'in_list'=>false,
+                     'default_in_list'=>false,
+                     'label'=>app::get('poster')->_('维护人员'),
+             ),
+             'poster_createtime'=>array(
+                     'type'=>'time',
+                     'required'=>true,
+                     'in_list'=>true,
+                     'default_in_list'=>false,
+                     'label'=>app::get('poster')->_('创建日期'),
+             ),
+             'poster_updatetime'=>array(
+                     'type'=>'time',
+                     'required'=>true,
+                     'in_list'=>true,
+                     'default_in_list'=>false,
+                     'label'=>app::get('poster')->_('更新日期'),
+             ),
+             'poster_clickcount'=>array(
+                    'type'=>'number',
+                    'required'=>false,
+                     'default'=>0,
+                     //'in_list'=>true,
+                     //'default_in_list'=>true,
+                    'label'=>app::get('poster')->_('点击次数'),
+             ),
+             'disabled' => 
+                array (
+                  'type' => 'bool',
+                  'default' => 'false',
+                  'editable' => false,
+           ),
+         )
+ );
+

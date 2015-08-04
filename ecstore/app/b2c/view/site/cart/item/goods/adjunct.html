@@ -1,0 +1,48 @@
+<{if $goods.adjunct}>
+<{foreach from=$goods.adjunct item=adjunct}>
+<tr class="del-<{$goods.obj_items.products.0.product_id}>" urlupdate="<{link app=b2c ctl='site_cart' act='update' arg0='goods' arg1=$item.link_key}>" urlremove="<{link app=b2c ctl='site_cart' act='remove' arg0='goods'}>" number="<{$adjunct.store.real}>" g_name="<{$adjunct.store.name}>" floatstore="<{$adjunct.floatstore}>"  buy_price="<{$adjunct.price.buy_price}>" store="<{$adjunct.quantity}>" buy_store="<{$adjunct.quantity}>">
+    <td>
+        <div class="cart-adjunct-name horizontal-m clearfix">
+
+            <div class='cart-product-img goodpic' isrc="<{$adjunct.default_image.thumbnail|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" ghref='<{link app=b2c ctl=site_product act="index" arg0=$adjunct.goods_id}>' style='width:50px;height:50px;'>
+                <img src='<{$res_url}>/images/loading.gif'/>
+            </div>
+            <div class="goods-main">
+                <div style="width:69%" class="goodinfo">
+                    <h3><a target="_blank" href="<{link app=b2c ctl=site_product arg0=$adjunct.goods_id }>"><{$adjunct.name}></a></h3>
+                    <span><{$adjunct.spec_info}></span>
+                </div>
+            </div>
+        </div>
+    </td>
+    <td class="cart-goodsprice point textcenter"><{$adjunct.price.buy_price|cur_odr}></td>
+    <td align="center">
+        <{if !$checkout}>
+        <div class="Numinput">
+            <input type="text" class="_x_ipt textcenter" name="modify_quantity[<{$goods.obj_ident}>][adjunct][<{$adjunct.group_id}>][<{$adjunct.product_id}>][quantity]" size="3" value="<{$adjunct.quantity}>"   onchange="if(Cart)Cart.ItemNumUpdate(this,this.value,event);" />
+            <div class="numadjust-arr" style="display:none;">
+                <span class="numadjust increase" ></span>
+                <span class="numadjust decrease"></span>
+            </div><h3 class="t" style="display:none">(<{t}>提示<{/t}>:<{t}>需要备货<{/t}>)</h3>
+        </div>
+        <{else}>
+        <{$adjunct.quantity}>
+        <{/if}>
+    </td>
+
+             <td class="point buy_price" align="center"><{$adjunct.subtotal|cur_odr}></td>
+    <td class="consume_score" align="center"><{$adjunct.gain_score*$adjunct.quantity}></td>
+    <{if !$checkout}>
+    <td class="vm">
+        <ul class="cart-coll-ul">
+            <li class="star-off btn-bj-hover" <{if $login!="nologin"}>star="<{$adjunct.goods_id}>"<{/if}> class="star-off" title=<{$adjunct.name|escape:"html"}> >
+            <a <{if $login=="nologin"}> href="<{link app=b2c ctl="site_passport" act="login"}>" <{else}>href="###" rel="_fav_"<{/if}> class="btn-fav collect-cart">
+                <span><div class="fav"><{t}>收藏<{/t}></div><div class="nofav"><{t}>已收藏<{/t}></div></span>
+            </a>
+            </li>
+            <li><a class="CartNav_del delItem btn-bj-hover "><i class="has-icon"> <img src='<{$env.app.res_url}>/bundle/delecate.gif' /></i><span  class="delItem" ><{t}>删除<{/t}></span></a></li></ul>
+    </td>
+    <{/if}>
+</tr>
+<{/foreach}>
+<{/if}>

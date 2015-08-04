@@ -1,0 +1,99 @@
+﻿@charset "utf-8";/* CSS Document */
+html{color:#6c6c6c;background:#B9EDFB;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, input, ruby, section, summary, time, mark, audio, video{border:0;margin:0px;padding:0px;}
+body, button, input, select, textarea{font:12px/1.5 tahoma,"microsoft yahei","微软雅黑";line-height:18px;}
+body{height:100%;background:#fff;margin:0 auto;padding:0px;min-width:1200px;width:auto !important;width:1200px;overflow:visible;}
+
+.main{min-height:530px;height:auto !important;height:530px;overflow:visible;}
+a{color:#6c6c6c;cursor:pointer;text-decoration:none;}
+a:hover{color:#448CF2;text-decoration:underline;}
+a:focus{outline:0;}
+a,area {blr:expression(this.onFocus=this.blur())} /* for IE */
+:focus {-moz-outline-style:none;} /* for Firefox */
+a{outline:none;} /* for FF Chrome */ 
+
+img{-ms-interpolation-mode:bicubic;border:0;}
+ul, li, ul li{list-style-type:none;}
+button, input, select, textarea{font-size:100%;}
+button{background:none;border:0 none;cursor:pointer;}
+input, label{line-height:18px;vertical-align:middle;padding:2px 0;}
+label{display:inline-block;vertical-align:baseline;}
+select{line-height:18px;padding:2px 0px;}
+table{border-collapse:collapse;border-spacing:0;}
+hr{border:none;*color:#fff;height:1px;}
+
+table{border-collapse:collapse;border-spacing:0;}
+table tr,table tr td{border:none 0;}
+th{text-align:inherit;}
+table tr td, table tr th {empty-cells: show;}
+
+h1{font-size:16px;font-weight:bold;}
+h2{font-size:14px;font-weight:bold;}
+h3{font-size:14px;font-weight:bold;}
+h4{font-size:12px;font-weight:bold;}
+h5{font-size:12px;font-weight:bold;}
+
+.pointer{cursor:pointer;}
+
+.dis_bl{display:block;overflow:hidden;}
+
+.red,.red a,a.red{color:#EA0000;}
+.red1{color:#EA0000}
+.lan,.lan a,a.lan{color:#448CF2;}
+
+.f10{font-size:10px;}
+.f12{font-size:12px;}
+.f14{font-size:14px;}
+.f16{font-size:16px;}
+.f18{font-size:18px;}
+
+.c_bold{font-weight:bold;}
+
+.mTop_07{margin-top:7px;}
+.mTop_010{margin-top:10px;}
+.mTop_020{margin-top:20px;}
+.mt_20{margin-top:20px;}
+.mBottom_015{margin-bottom:15px;}
+.mLeft_010{margin-left:10px;}
+.mTB{margin:20px 0px;}
+
+.fl{float:left;}
+.fr{float:right;}
+.le_zhi{float:left;}
+.ri_zhi{float:right;}
+
+.tl{text-align:left;}
+.tc{text-align:center;}
+.tr{text-align:right;}
+
+.clb:after{visibility:hidden;display:block;font-size:0;content:" ";clear:both;height:0;}
+.clb{zoom:1; clear:both;}
+.clear:after{visibility:hidden;display:block;font-size:0;content:" ";clear:both;height:0;}
+.clear{zoom:1;}/* for IE6 IE7 */ 
+
+.bare{line-height:0;height:0px;visibility:visible;clear:both;font-size:0px;}
+
+.pos_a{position:absolute;}
+.pos_r{position:relative;} 
+
+.w1200{width:1200px;margin:0 auto;}
+.w210{width:210px;}
+.w960{width:980px;}
+.bai960{width:960px;padding:0px 10px;background:#fff;}
+.bai1200{background:#fff;width:1200px;margin:0px auto;}
+
+
+.dots{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+.ellipsis{-o-text-overflow:ellipsis;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+em,i{font-style:normal;}
+
+
+/*weizhi*/
+.weizhi{ border-bottom:1px solid #e5e5e5; line-height:25px; color:#666666;}
+.weizhi a{color:#666666;}
+.weizhi a.current{color:#f83033;}
+
+.red_list{margin:10px auto;}

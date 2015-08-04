@@ -1,0 +1,95 @@
+<div id="handle_<{$params.domid}>" class="object-select clearfix" <{$addons}> >
+  <div class="label" id="<{$id}>" rel="<{$string}>">请选择商品</div>
+  <div class="handle">&nbsp;</div>
+  <input type="hidden" name="<{$params.pdt_name|default:$params.name}>" class="product-ids" vtype="<{$params.vtype}>" value="<{$params.pdt_value|default:$params.linkid}>" />
+  <{if $params.isgroupbuy=='true'}>
+  <input type="hidden" id="isgroupbuy" name="isgroupbuy"  value="<{$params.isgroupbuy}>" />
+  <{/if}>
+  <{if $params.istimedbuy=='true'}>
+  <input type="hidden" id="istimedbuy" name="istimedbuy"  value="<{$params.istimedbuy}>" />
+  <{/if}>
+  <{if $params.timedbuy=='true'}>
+  <input type="hidden" id="timedbuy" name="timedbuy"  value="<{$params.timedbuy}>" />
+  <{/if}>
+  <{if $goods_filter}>
+  <input type="hidden" id="goods_filter" name="goods_filter"  value="<{$params.goods_filter}>" />
+  <{/if}>
+  <input type="hidden" name="<{$params.obj_name|default:'goods'}>" class="params-obj" value='<{$params.obj_value|default:$params.value}>' />
+  <{if $cat_id}>
+  	<input type="hidden" id="cat_id" name="cat_id" class="params-obj" value='<{$cat_id}>' />
+  <{/if}>
+  <div class="object-select-tip">
+    共选择<span class="goods-count num" style="color:#ff3300;font-weight:bold;">0</span>件商品
+</div>
+</div>
+
+<script>
+  (function(){
+    var goodsCount = $E('input.product-ids','handle_<{$params.domid}>').value;
+          goodsCount = goodsCount==""?0:goodsCount.split(',').length;
+    $E('.goods-count','handle_<{$params.domid}>').set('text',goodsCount);
+    $('handle_<{$params.domid}>').getElements('.label,.handle').addEvent('click', function(e){
+      var v = $E('input.product-ids','handle_<{$params.domid}>').value;
+      var _widgets = $E('input.params-obj','handle_<{$params.domid}>').value;
+      if($('isgroupbuy')){
+          var isgroupbuy = $('isgroupbuy').value;
+      }else{
+          var isgroupbuy = 'false';
+      }
+      if($('istimedbuy')){
+          var istimedbuy = $('istimedbuy').value;
+      }else{
+          var istimedbuy = 'false';
+      }
+	  if($('timedbuy')){
+          var timedbuy = $('timedbuy').value;
+		  var timedbuy_url = '&timedbuy='+timedbuy;
+      }else{
+          var timedbuy = 'false';
+		  var timedbuy_url = '';
+      }
+	  
+	  if($('cat_id')){
+		  var cat_id = $('cat_id').value;
+		  var cat_id_url = '&cat_id='+cat_id;
+	  }else{
+		  var cat_id_url = '';
+	  }
+	  
+      var url = '<{$url}>';
+      if(v) url = url+'&ids='+v;
+
+      if($('goods_filter')){
+          url = url+'&goods_filter='+$('goods_filter').value;
+      }
+
+      new Dialog(url, {
+        width:780,
+        height:510,
+        title:'添加商品',
+        resizeable:false,
+        handle:'handle_<{$params.domid}>',
+        onCallback:function(rs){<{if $callback}><{$callback}>(rs);<{/if}>$('handle_<{$params.domid}>').show();},
+        _callback:function(){
+          var item = $ES('.selected-content .product-item',this.dialog_body),ids = [], obj = [];
+          item.each(function(el){
+            var name= el.getElement('input[name=name]').value,
+                id =el.get('data-id'),
+                pic = el.getElement('input[name=pic]').value;
+            ids.push(id);
+            obj.push({id:id,pic:pic,nice:name});
+          });
+
+          $('handle_<{$params.domid}>').getElement('.num').set('text',item.length);
+          $E('.params-obj','handle_<{$params.domid}>').value = JSON.encode(obj);
+          $E('.product-ids','handle_<{$params.domid}>').value = ids;
+        },
+        ajaxoptions:{
+          method: 'post',
+          data:'widgets='+_widgets+'&isgroupbuy='+isgroupbuy+'&istimedbuy='+istimedbuy+cat_id_url+timedbuy_url
+        }
+      });
+
+    });
+  })();
+</script>

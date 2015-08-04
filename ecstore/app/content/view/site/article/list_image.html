@@ -1,0 +1,10 @@
+
+<div class="ArtListWrap">
+    <ul class="list atListModi">
+      <{foreach from=$articles item=article key=key}>
+      <li><{if $article.s_url}><img src="<{$env.base_url}><{$article.s_url|storager}>" alt="<{$article.title}>"/><{/if}>
+	  <a href="<{link app=content ctl=site_article act=index arg0=$article.article_id}>"><{$article.title}></a></li>
+      <{/foreach}>
+    </ul>
+    <{pagers data=$pager}>
+</div>

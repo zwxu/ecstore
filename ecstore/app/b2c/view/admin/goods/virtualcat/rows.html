@@ -1,0 +1,27 @@
+<table cellspacing="0" cellpadding="0" style="width:100%" border="0">
+<col class="Colauto"></col>
+<col class="Coloption_2b"></col>
+<col class="Coloption_1b"></col>
+<col class="Coloption_1b"></col>
+<col class="Coloption_1b"></col>
+<col class="Coloption_1b"></col>
+<col class="Coloption_1b"></col>
+<{foreach from=$tree item=item key=iLoop name="item"}>
+<tr parentid="<{$item.pid}>">
+  <td style=" text-align:left; width:300px; overflow:hidden;">
+<div style="padding-left:<{$item.step*40}>px">
+     <span class="quiet"><{t}>排序:<{/t}></span><input class="orderTextStyle" type="number" size="2"  name="p_order[<{$item.virtual_cat_id}>]" value="<{$item.p_order}>"> <{img class="imgTree" onclick="clickTree(this)" id=$item.virtual_cat_id src="images/menu-sub.png" }>
+    <a style="font-weight:700; color:#000; text-decoration:none;padding-right:15px;" href='index.php?ctl=goods/virtualcat&act=edit&p[0]=<{$item.virtual_cat_id}>'><{$item.virtual_cat_name}></a>
+	</div>
+    </td>
+  <td style="text-align:left;width:150px;"><span class="quiet" style="font-weight:normal;padding:0 5px"><{if $item.type_name}>[<{$item.type_name}>]<{/if}></span></td>
+  <td style="width:50px;"><{assign var="cat_id" value=$item.virtual_cat_id}>
+    <a href='index.php?ctl=goods/virtualcat&act=addNew&p[0]=<{$item.virtual_cat_id}>'><{img src="images/bundle/addcate.gif" border="0" alt=$___b2c="添加子分类"|t:'b2c'}></a>
+    </td>
+    <td style="width:50px;"><a class="i" href='index.php?ctl=goods/virtualcat&act=edit&p[0]=<{$item.virtual_cat_id}>'><{img src="images/bundle/editcate.gif" border="0" alt=$___b2c="编辑"|t:'b2c'}></a></td>
+    <td style="width:50px;"><span onclick="javascript: if(confirm('<{t}>您确定要删除该分类？<{/t}>')){ W.page('index.php?ctl=goods/virtualcat&act=toRemove&p[0]=<{$item.virtual_cat_id}>',{method:'get'});}" style="cursor:pointer"><{img src="images/bundle/delecate.gif" border="0" alt=$___b2c="删除"|t:'b2c'}></span></td>
+    <td style="width:50px;border-right:none;"><a href='index.php?ctl=goods/virtualcat&act=show&p[0]=<{$item.virtual_cat_id}>'><{img src="images/bundle/showcate.gif" border="0" alt=$___b2c="查看此分类下商品"|t:'b2c'}></a></td>
+	<td><a href='<{$item.url}>' target="_blank"><{img src="images/bundle/zoom_btn.gif" border="0" alt=$___b2c="跳转前台查看该"|t:'b2c'}></a></td>
+</tr>
+<{/foreach}>
+</table>

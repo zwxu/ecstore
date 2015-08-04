@@ -1,0 +1,146 @@
+<div class="member-main">
+    <div>
+        <div class="title"><span style="float:left"><{t}>店员角色管理<{/t}><span class="disc">|</span> 
+        <span id='add' class="disc add-icon" >
+            <a href="javascript:void(0);" >
+            <{t}>添加新角色<{/t}></a></span></span>
+            <span class="noticebox"><{t}>在此添加店铺角色<{/t}></span>
+        </div>
+        <{if !$receiver}>
+        <div class="noinfo"><{t}>没有相应的角色，您可以点击添加。<{/t}></div>
+        <{/if}>
+        <div id='addr_div' style="display:none">
+            <form method="post" action="<{link app=business ctl='site_store' act='save_storeroles'}>">
+                <div class="division" style="border:none; border-bottom:1px dashed #ddd">
+                    <table cellpadding="0" class="forform" cellspacing="0" border="0">
+                        <tr>
+                            <th><{t}>角色名：<{/t}></th>
+                            <td>
+                                <{input class="inputstyle" name="role_name" type="text"  id="role_name" size="10" vtype="required&&name_check" value=$role_name|escape:'html' }>
+                                <{input type='hidden' name="store_id" value=$store_id}>
+                                <{input type='hidden' name="account_id" value=$account_id}>
+                            </td>
+                            
+                        </tr>
+                         <tr>
+                         <th><{t}>角色权限：<{/t}></th>
+                          <td >
+                          <input class='parent' type="checkbox"><{t}>全选<{/t}>
+                             <div class='division' style='padding-top:5px;margin-top:5px;'>
+                                   <input type='hidden'  vtype='requiredcheckbox'/>
+                                    <ul>
+                                    <{foreach from=$menus3 item=value}>
+                                    <{$value}>
+                                    <{/foreach}>
+                                    </ul>
+                             </div>
+                             </td>
+                          </tr>
+                    </table>
+
+                </div>
+                <div style="padding-left:142px; "><span class="float-span" >
+                        <{button class="btn submit-btn" type="submit" rel="_request" label=$___b2c="保存"|t:'b2c'}></span>
+                    <span class="float-span" style="float:left; margin-left:8px">
+                        <{button id="unset" type="button" label=$___b2c="取消添加"|t:'b2c'}></span>
+                </div>
+            </form>
+        </div>
+       
+        <{if $receiver}>
+        <table class="gridlist border-all mt10" width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout:fixed;">
+            <tr>
+                
+                <th  class="first" style="word-wrap:break-word;"><{t}>角色名<{/t}></th>
+                <th><{t}>更新时间<{/t}></th>
+                <th><{t}>操  作<{/t}></th>
+            </tr>
+
+            <tbody>
+                <{foreach from=$receiver item=items key=key}>
+                <tr>
+                    <td class="textcenter"><span class="font-blue"><{$items.role_name|escape:'html'}></span></td>
+                    <td class="textcenter" style="word-wrap:break-word;"> <{if $items.regtime}>      <{$items.regtime|cdate:FDATE_FTIME}> <{/if}>
+                    </td>
+                    <td align="center">
+                    <{if $account_id != $items.member_id}>
+                       <a href="###" onclick="a('<{link app=business ctl=site_store act=modify_storeroles arg0=$items.role_id}>');"><{t}>修改<{/t}></a>
+                       <br />
+                       <a class="delete_addr" href="<{link app=business ctl=site_store act=del_storeroles arg0=$items.role_id}>" rel="_request"><{t}>删除<{/t}></a>
+                   <{/if}>
+                   </td>
+                </tr>
+                <{/foreach}>
+            </tbody>
+
+        </table>
+        <{/if}>
+
+    </div>
+</div>
+
+
+<script>
+    function a(url,options){
+        if(!url) return;
+        options = Object.append({
+            width:window.getSize().x*0.8,
+            height:window.getSize().y*0.8
+        },options||{});
+        var params = 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width={width},height={height}';
+        params = params.substitute(options);
+
+        window.open(url,'_blank',params);
+    }
+
+</script>
+
+<script>
+    (function(){
+
+        $("unset").addEvent('click',function(e){
+            $('addr_div').setStyle('display','none');
+        });
+
+        $$(".delete_addr").addEvent('click',function(e){
+            if(!confirm('<{t}>确定删除?<{/t}>')) return false;
+        });
+
+        $("add").addEvent('click',function(e){
+           $('addr_div').setStyle('display','inline');
+        });
+
+        validatorMap['name_check'] = ['<{t}>角色名有误！<{/t}>', function(element, v) {
+            var role_name = $('role_name');
+            var _is_validate = false;
+
+             new Request.JSON({
+                   url:'<{link app=business ctl=site_store act=role_namecheck}>',
+                    method:'post',
+                    data:'name='+encodeURIComponent(role_name.value.trim())+'&store_id=<{$store_id}>',
+                    async:false,
+                    onComplete:function(res){
+                       if (res.status =='success' ) 
+                       {
+                           _is_validate = true;
+
+                       } else {
+                           Ex_Dialog.alert(res.message)
+                       }
+
+                    }
+                }).send();
+          
+
+            return _is_validate;
+        }];
+
+    })();
+
+
+     $$('input.parent').addEvent('change',function(){
+        this.getParent().getElements('ul li input[type=checkbox]').set('checked',this.checked);
+    })
+</script>
+
+

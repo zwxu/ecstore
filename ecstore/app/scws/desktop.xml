@@ -1,0 +1,5 @@
+<desktop>
+    
+    <adminpanel group="desktop_setting" controller="admin_default" action="index" permission="setting" display="true" order='500'>scws组件配置</adminpanel>
+    
+</desktop>

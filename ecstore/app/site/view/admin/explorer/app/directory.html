@@ -1,0 +1,78 @@
+<form action="" id="catEditor" method="post">
+  <{area inject=".mainHead"}>
+
+  <div class="gridlist-action" style="padding:5px 0"> <{button label=$___a="返回上级目录"|t:'site'  class="btn" app="desktop" onclick="history.go(-1)" icon="mceico_13.gif"}>
+    <{if $last_path}><{/if}> </div>
+<div class='gridlist-head mainHead finder-head' style="border-bottom:1px solid #E1E1E1; border-top:1px solid #E1E1E1">
+        <div class="span-2">&nbsp;</div>
+        <div class="span-8"><{t}>模板名称<{/t}></div>
+        <div class="span-2"><{t}>后缀名<{/t}></div>
+        <div class="span-2"><{t}>文件类型<{/t}></div>
+        <div class="span-2"><{t}>编辑<{/t}></div>
+        <div class="span-2"><{t}>删除<{/t}></div>
+    </div>
+    <{/area}>
+    <div id="cat_tree" style="height:auto; border-right:1px solid #E8E8E8; border-left:1px solid #E8E8E8"> <{foreach from=$file item=item name="item"}>
+      <div depath="<{$item.step}>" class="clear_cat row" cid="<{$item.cat_id}>" pid="<{$item.pid}>">
+        <div class='row-line'> <{if $item.filetype eq "css"}>
+          <div class='span-2'  ><span class="opt"><{img app=desktop src="bundle/t_css.gif" border="0" alt=$___a="图标"|t:'site' }></span></div>
+          <{elseif $item.filetype eq "Folder"}>
+          <div class='span-2' style="text-align:center; margin-top:5px"><span class="opt"><{img app=desktop src="bundle/t_Folder.gif" border="0" alt=$___a="图标"|t:'site' }></span></div>
+          <{elseif $item.filetype eq "xml"}>
+          <div class='span-2' ><span class="opt"><{img app=desktop src="bundle/t_xml.gif" border="0" alt=$___a="图标"|t:'site' }></span></div>
+          <{elseif $item.filetype eq "html"}>
+          <div class='span-2' style="text-align:center;margin-top:5px"><span class="opt"><{img app=desktop src="bundle/tupian_3.gif" border="0" alt=$___a="图标"|t:'site' }></span></div>
+          <{elseif $item.filetype eq "jpg" || $item.filetype eq "gif" || $item.filetype eq "bmp" || $item.filetype eq "jpeg"}>
+          <div class='span-2'><span class="opt"><{img app=desktop src="bundle/t_img.gif" border="0" alt=$___a="图标"|t:'site'}></span></div>
+          <{elseif $item.filetype eq "js"}>
+          <div class='span-2'><span class="opt"><{img app=desktop src="bundle/t_js.gif" border="0" alt=$___a="图标"|t:'site' }></span></div>
+          <{else}>
+          <div class='span-2'><span class="opt"><{img app=desktop src="bundle/t_null.gif" border="0" alt=$___a="图标"|t:'site'}></span></div>
+          <{/if}>
+
+          <{if $item.filetype eq "css" ||$item.filetype eq "html"||$item.filetype eq "xml"||$item.filetype eq "js"}>
+          <div class='span-8' style=" text-align:center" onclick="new Dialog('index.php?app=site&ctl=admin_explorer_app&act=detail&app_id=<{$app_id}>&content_path=<{$content_path}>&open_path=<{$open_path}>&file_name=<{$item.name}>',{'title':'<{t}>编辑<{/t}><{$item.name}>',width:0.5,height:0.5});"><span class="quiet"  ><{$item.name}></span></div>
+          <{elseif $item.filetype eq "Folder"}>
+          <div class='span-8' style=" text-align:center"  onclick="W.page('<{$url}>&open_path=<{$open_path}>-<{$item.name}>')"><span class="quiet"  ><{$item.name}></span></div>
+          <{else}>
+          <div class='span-8'   onclick="new Dialog('index.php?app=site&ctl=admin_explorer_app&act=detail&app_id=<{$app_id}>&content_path=<{$content_path}>&open_path=<{$open_path}>&file_name=<{$item.name}>',{'title':'<{t}>编辑<{/t}><{$item.name}>',width:0.5,height:0.5});"><span class="quiet"  ><{$item.name}></span></div>
+          <{/if}>
+          <div class='span-2' ><span class="quiet" style="padding:0 5px"><{$item.filetype}></span></div>
+          <div class='span-2' ><span class="quiet" style="padding:0 5px"><{$item.memo}></span></span></div>
+          <{if $item.filetype eq "css" ||$item.filetype eq "html"||$item.filetype eq "xml"||$item.filetype eq "js"}>
+          <div class='span-2' style="text-align:center;margin-top:5px" ><span class="opt" onclick="new Dialog('index.php?app=site&ctl=admin_explorer_app&act=detail&app_id=<{$app_id}>&content_path=<{$content_path}>&open_path=<{$open_path}>&file_name=<{$item.name}>',{'title':'<{t}>编辑<{/t}><{$item.name}>',width:0.5,height:0.5});" ><{img img app=desktop src="bundle/btn_edit.gif" border="0" alt=$___a="编辑"|t:'site'}></span></div>
+          <{elseif $item.filetype eq "Folder"}>
+          <div class='span-2' style="text-align:center;margin-top:5px"  ><span class="opt" onclick="W.page('<{$url}>&open_path=<{$open_path}>-<{$item.name}>')" ><{img app=desktop src="bundle/btn_edit.gif" border="0" alt=$___a="编辑"|t:'site'}></span></div>
+          <{else}>
+          <div class='span-2' style="text-align:center;margin-top:5px" ><span class="opt" onclick="new Dialog('index.php?app=site&ctl=admin_explorer_app&act=detail&app_id=<{$app_id}>&content_path=<{$content_path}>&open_path=<{$open_path}>&file_name=<{$item.name}>',{'title':'<{t}>编辑<{/t}><{$item.name}>',width:0.5,height:0.5});" ><{img img app=desktop src="bundle/btn_edit.gif" border="0" alt=$___a="编辑"|t:'site'}></span></div>
+          <{/if}>
+          <{if $item.filetype eq "Folder"}>
+          <div class='span-2'><span class="opt">-</span></div>
+          <{else}>
+          <div class='span-2'><span class="opt" onclick="deleteR(this, 'index.php?app=site&ctl=admin_explorer_app&act=delete_file&app_id=<{$app_id}>&content_path=<{$content_path}>&open_path=<{$open_path}>&file_name=<{$item.name}>')"><{img app=desktop src="bundle/delecate.gif" border="0" alt=$___a="删除"|t:'site'}></span></div>
+          <{/if}> </div>
+      </div>
+      <{/foreach}></div> </div>
+    <{area inject=".mainFoot"}>
+    <div class="footer">
+      <table cellspacing="0" cellpadding="0" border="0" align="center" class="table-action">
+        <tr>
+          <td><b class="submitBtn"> </b></td>
+        </tr>
+      </table>
+    </div>
+    <{/area}>
+</form>
+<script>
+function deleteR(event, path){
+    if(confirm('<{t}>您确定要删除该文件?(删除后将不可恢复)<{/t}>')){
+		W.page(path, {onSuccess: function(){
+			$(event).getParent('div').getParent('div').remove();
+		}});
+    }
+}
+(function(){
+
+
+});
+</script>

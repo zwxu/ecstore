@@ -1,0 +1,48 @@
+<desktop>
+    <panelgroup id="setting" icon="panel-setting.png" order="10">商店配置</panelgroup>
+    <panelgroup id="user" icon="panel-user.png" order="50">管理员和权限</panelgroup>
+<!--    <panelgroup id="network" icon="panel-network.png" order="80">联网</panelgroup>-->
+    <panelgroup id="other" icon="panel-other.png" order="70">其他</panelgroup>
+
+
+    <adminpanel group="desktop_other" controller="queue" permission="performance" order="60" display='true'>队列管理</adminpanel> 
+
+    <adminpanel group="desktop_other" controller="crontab" permission="performance" order="70" display='true'>计划任务</adminpanel> 
+    
+    <!--<adminpanel group="desktop_setting" controller="system" permission="performance" action="service" display='true' order="70">系统配置</adminpanel> -->
+    <adminpanel group="desktop_setting" controller="email" permission="performance" action="setting" display='false'>系统配置</adminpanel>
+    
+    
+    <adminpanel group="desktop_user" permission="users" controller="users" display='true'>操作员管理</adminpanel>
+    <adminpanel group="desktop_user" permission="users" controller="roles" display='true'>角色管理</adminpanel>
+    <adminpanel group="desktop_other" permission="other" controller="pam" display='true'>登陆认证设置</adminpanel> 
+    <adminpanel group="desktop_setting" controller="certificate" action="index" permission="shopsetting" display="true" order='51'>授权证书</adminpanel>
+    <adminpanel group="desktop_setting" controller="adminpanel" action="index" permission="setting" display="false" order='20'>配送方式</adminpanel>
+
+<!--    <adminpanel group="desktop_network" controller="network">网店邻居</adminpanel> -->
+    <adminpanel group="desktop_other" permission="setting" controller="data" display='true'>数据备份与还原</adminpanel>
+    <adminpanel group="desktop_other" permission="setting" controller="backup" display='false'>数据备份</adminpanel>
+    <adminpanel group="desktop_other" permission="setting" controller="comeback" display='false'>数据还原</adminpanel>
+    <adminpanel group="desktop_other" permission="setting" controller="debug" display='false'>清除体验数据</adminpanel>
+    
+    
+    
+    
+    <adminpanel group="desktop_other" permission="performance" controller="cachemgr" display='false'>缓存管理</adminpanel>
+    <adminpanel group="desktop_other" permission="performance" controller="cachemgr" action="status" display='true' order="50">缓存管理</adminpanel>
+    <adminpanel group="desktop_other" permission="performance" controller="cachemgr" action="optimize" display='false'>优化缓存</adminpanel>
+    <adminpanel group="desktop_other" permission="performance" controller="cachemgr" action="clean" display='false'>清空缓存</adminpanel>
+    <adminpanel group="desktop_setting" permission="shopsetting" controller="appmgr" display='true' order="20">应用中心</adminpanel>
+    <adminpanel group="desktop_other" permission="other" controller="rpcnotify" display='true'>通知</adminpanel>
+    
+    <adminpanel group="desktop_other" permission="other" controller="shoprelation" display='false'>网店邻居</adminpanel>
+
+    <permissions>
+    	<permission id="shopsetting" display='true'>商店设置</permission>
+        <permission id="setting" display='true'>数据管理</permission>
+        <permission id="performance" display='true'>缓存,队列,计划任务管理</permission>
+        <permission id="users" display='true'>权限管理</permission>
+    	<permission id="other" display='true'>其他</permission>
+    </permissions>
+
+</desktop>

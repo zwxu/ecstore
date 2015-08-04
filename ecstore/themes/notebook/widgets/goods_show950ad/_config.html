@@ -1,0 +1,40 @@
+<div class="tableform">
+			左侧图地址：<input name="pic1" class="inputstyle" value="<{$setting.pic1}>" />
+
+			<br />
+			左侧图链接：<input name="pic1url" class="inputstyle" value="<{$setting.pic1url}>" /> 
+			<br />
+			左侧图描述：<input name="pic1txt" class="inputstyle" value="<{$setting.pic1txt}>" />
+			<br />
+			右侧图地址：<input name="pic2" class="inputstyle" value="<{$setting.pic2}>" />
+			<br />
+			右侧图链接：<input name="pic2url" class="inputstyle" value="<{$setting.pic2url}>" /> 
+			<br />
+			右侧图描述：<input name="pic2txt" class="inputstyle" value="<{$setting.pic2txt}>" /> 
+			<br />
+			挂件标题：<input name="title" class="inputstyle" value="<{$setting.title|default:请填写标题}>">
+			<br />
+			商品数量：<{input required=true type='select' name="goodsNum" options=array('5'=>5,'10'=>10,'15'=>15,'20'=>20) value=$setting.goodsNum|default:5}>	
+			<br />
+			选择商品：<{input type="goods_select" object="goods@b2c" filter=$goodslink_filter multiple="true" return_url="{$related_return_url}" rowselect="true"  textcol="name" name="linkid" linkid=$setting.linkid value=$setting.goods view="b2c:admin/goods/detail/rel_items.html"}>			
+			<br />
+			图片宽高：160*160（为达到最佳效果图片尺寸固定为160*160,请设置您的图片大小为160*160）
+			<br />
+			价格显示：<input name="price_show" class="inputstyle" value="<{$setting.price_show|default:销售价}>">
+</div>
+<script>
+		function addPic1(){
+			var url='index.php?app=desktop&act=alertpages&goto='+encodeURIComponent("index.php?app=image&ctl=admin_manage&act=image_broswer&type=big");
+			return new imgDialog(url,{onCallback:function(image_id,image_src){
+					 $('pic1').value=image_src;
+			}})	;
+
+		}
+				function addPic2(){
+			var url='index.php?app=desktop&act=alertpages&goto='+encodeURIComponent("index.php?app=image&ctl=admin_manage&act=image_broswer&type=big");
+			return new imgDialog(url,{onCallback:function(image_id,image_src){
+					 $('pic2').value=image_src;
+			}})	;
+
+		}
+</script>

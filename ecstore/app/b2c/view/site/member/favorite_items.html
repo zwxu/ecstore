@@ -1,0 +1,49 @@
+<table class="gridlist border-all" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <col class="span-8"></col >
+    <col class="span-2"></col >
+    <col class="span-3"></col >
+    <tr>
+    <th class="first"><{t}>商品名称<{/t}></th>
+    <th><{t}>金额<{/t}></th>
+    <th><{t}>操作<{/t}></th>
+    </tr>
+<{foreach from=$favorite item="good"}>
+      <tr id="goods_<{$good.goods_id}>" class="itemsList" product="<{$good.goods_id}>">
+	   <td style="white-space:normal" class="horizontal-m">
+        <{if $good.udfimg == 'true'}>
+  <{assign var="gimage" value=$good.thumbnail_pic|default:$defaultImage}>
+  <{else}>
+  <{assign var="gimage" value=$good.image_default_id|default:$defaultImage}>
+  <{/if}>
+  <div class="goodpic"><a target="_blank" style='<{if $env.conf.site.thumbnail_pic_width !=0 && $env.conf.site.thumbnail_pic_height !=0}> width:<{$env.conf.site.thumbnail_pic_width}>px;height:<{$env.conf.site.thumbnail_pic_height}>px;<{/if}>' href="<{link app=b2c ctl=site_product act=index arg=$good.goods_id}>">
+    <img  style="width:50px; height:58px;" src="<{$gimage|storager:'s'}>"  alt="<{$good.name|escape:html}>"/>
+
+  </a></div>
+  <div class="goods-main">
+  <div class="goodinfo" >
+  <h6><a href="<{link app="b2c" ctl="site_product" act="index" arg0=$good.goods_id}>" title="<{$good.name}>"><{$good.name}></a></h6>
+   <p><{$good.brief}></p></div>
+  </div>
+  </td>
+   <td class='price-button' align="center">
+        <ul>
+            <li><span class="font-red font13px fontbold"><{$good.price|cur_odr}></span><{if $good.mktprice && $setting.mktprice}><span class="mktprice1"><{t}>市场价: <{/t}><{$good.mktprice|cur_odr}></span><{/if}></li>
+            <{if $good.mktprice > $good.price && $setting.mktprice && $setting.saveprice > 0}>
+            <li style="padding-left:4px; padding-top:8px;">
+			<span class="saveprice1"> <{if $setting.saveprice == 1}><{t}>节省:<{/t}><{$good.mktprice-$good.price|cur_odr}>
+              <{elseif $setting.saveprice == 2}><{t}>优惠:<{/t}><{$good.price/$good.mktprice*100|number:'2'}>%
+              <{elseif $setting.saveprice == 3}><{$good.price/$good.mktprice*10|number:'1'}><{t}>折<{/t}>
+			  <{/if}></span></li>
+            <{/if}>
+          </ul>
+          </td>
+  <td align="left" style="vertical-align:top" class="member-fav">
+<ul class="fav-Operator">
+<li><{goodsmenu product=$good compare=true setting=$setting z-index=9999 showtextbuy=false member=2}></li>
+<li class="icon1 "style="clear:both;height:20px;"><a href="javascript:void(0)" class="member-btn-bj" rel="_gcomp_" data-gcomp="{gid:'<{$good.goods_id}>',gname:'<{$good.name|escape:'quotes'}>',gtype:'<{$good.type_id}>',url:'<{link app=b2c ctl=site_product act=index arg0=$good.goods_id}>'}" title="<{t}>商品对比<{/t}>"><i class="has-icon"> <img src='<{$env.app.res_url}>/bundle/contrast_icon.gif' /></i><span><{t}>商品对比<{/t}></span></a></li>
+<li class="icon2" style="clear:both"><a class="member-btn-bj btn-del-fav" gid="<{$good.goods_id}>" onclick="ajax_del_fav($(this),event);"><i class="has-icon"> <img src='<{$env.app.res_url}>/bundle/delecate.gif' /></i><span><{t}>移除<{/t}></span></a></li>
+</ul>
+        </td>
+      </tr>
+  <{/foreach}>
+    </table>

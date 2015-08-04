@@ -1,0 +1,59 @@
+<table width="100%" cellpadding="0" cellspacing="0" class="finder-header">
+	    <{if $use_buildin_selectrow}>
+		<col class="col-select"></col>
+		<{/if}>
+		<{$detail_col_html}>
+		<{$column_col_html}>
+	    <col></col>
+	<thead>
+	  <tr>
+		<{if $use_buildin_selectrow}>
+		<td> 
+          <{if !$env.get.singleselect}>
+		  <div class="col-select-opt">
+		  <div class="col-select-opt-inner">	
+          <input type="checkbox" class="sellist" onclick='this.blur()'/>
+		  <{img src="bundle/arrow-down.gif"}>
+		  </div>
+		  <div class="col-select-opt-items x-drop-menu">
+		  	  <ul class="group">
+					<li class="item" onclick="finderGroup['<{$name}>'].selectAll()">选择全部</li>
+					<li class="item" onclick="finderGroup['<{$name}>'].selectFav()">选择当页已加星标</li>
+					<li class="item" onclick="finderGroup['<{$name}>'].selectunFav()">选择当页未加星标</li>
+					<li class="item" onclick="finderGroup['<{$name}>'].unselectAll()">无</li>
+			  </ul>
+		  </div>
+          </div>
+		  <script>
+				$$('#finder-header-<{$name}> .col-select-opt').addEvents({
+					'click':function(e){
+						if(e.target.match('input'))return;
+						var menu = this.retrieve('dropmenu',this.getElement('.x-drop-menu'));
+						menu.setStyles({
+								top:(this.getPosition('workground').y+this.offsetHeight.toInt()),
+								left:this.getPosition('workground').x
+						});
+						menu.style.display= (menu.style.display=="block"?'none':'block');
+					},
+					'mouseleave':function(){
+						this.retrieve('dropmenu',this.getElement('.x-drop-menu')).hide();
+					}
+				});
+		  </script>
+          <{/if}>
+        </td>
+		<{/if}>
+		<{$detail_td_html}>
+		<{$column_td_html}>
+		<td>&nbsp;</td>
+	  </tr>
+	  </thead>
+</table>
+
+<script>
+$ES('.finder-filter-comb').each(function(el,v){
+	new DropMenu(el,{offset:{y:20},stopEl:true});
+});
+</script>
+
+<{$filterhandle}>

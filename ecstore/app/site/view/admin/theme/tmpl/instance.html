@@ -1,0 +1,84 @@
+<{include file="admin/theme/tmpl/pagehead.html"}>
+<div class="box-gray">
+  <{button type="button" label="添加挂件实例" icon="btn_add.gif" app="desktop" id="add_instance"}>
+</div>
+<div class="widget-edit-list">
+  <table class="gridlist">
+    <thead>
+      <tr>
+        <th style="width:100px;"></th>
+        <th>样例名称</th>
+        <th>挂件名</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="gray-tr">
+        <td><{img src="images/img.jpg"}></td>
+        <td class="title">名称名称名称名称名称名称<br /><i>备注备注备注备注备注备注备注备注</i></td>
+        <td>menu</td>
+        <td><a href="javascript:void(0);" class="edit-instance">编辑</a> &nbsp;&nbsp; <a href="javascript:void(0);" class="delete-widget">删除</a></td>
+      </tr>
+      <tr>
+        <td><{img src="images/img.jpg"}></td>
+        <td class="title">名称名称名称名称名称名称<br /><i>备注备注备注备注备注备注备注备注</i></td>
+        <td>menu</td>
+        <td><a href="javascript:void(0);" class="edit-instance">编辑</a> &nbsp;&nbsp; <a href="javascript:void(0);" class="delete-widget">删除</a></td>
+      </tr>
+      <tr class="gray-tr">
+        <td><{img src="images/img.jpg"}></td>
+        <td class="title">名称名称名称名称名称名称<br /><i>备注备注备注备注备注备注备注备注</i></td>
+        <td>menu</td>
+        <td><a href="#">编辑</a> &nbsp;&nbsp; <a href="javascript:void(0);" class="delete-widget">删除</a></td>
+      </tr>
+      <tr>
+        <td><{img src="images/img.jpg"}></td>
+        <td class="title">名称名称名称名称名称名称<br /><i>备注备注备注备注备注备注备注备注</i></td>
+        <td>menu</td>
+        <td><a href="#">编辑</a> &nbsp;&nbsp; <a href="javascript:void(0);" class="delete-widget">删除</a></td>
+      </tr>
+      <tr class="gray-tr">
+        <td><{img src="images/img.jpg"}></td>
+        <td class="title">名称名称名称名称名称名称<br /><i>备注备注备注备注备注备注备注备注</i></td>
+        <td>menu</td>
+        <td><a href="#">编辑</a> &nbsp;&nbsp; <a href="javascript:void(0);" class="delete-widget">删除</a></td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="4"><{$pager}></td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<script>
+  $('add_instance').addEvent('click',function(e){
+    new Dialog('index.php?app=site&ctl=admin_theme_manage&act=addinstance',{title:'添加挂件实例',width:.8,height:.8});
+  });
+  $$('.edit-instance').addEvent('click',function(e){
+    e.stop();
+    new Dialog('index.php?app=site&ctl=admin_theme_manage&act=addinstance',{title:'编辑挂件实例',width:.8,height:.8});
+  });
+  $$('.delete-widget').addEvent('click',function(e){
+      e.stop();
+      var _this = this;
+      confirmDialog('确定要删除此挂件实例吗？', function(){
+        W.page('index.php?app=site&ctl=admin_theme_manage&act=reset&theme=<{$theme}>&rid=' + _this.href,{
+          onComplete:function(e){
+            location.reload();
+          }
+        });
+      });
+  });
+
+
+  function confirmDialog(msg,fn){
+      new Dialog(new Element('div.dialog-confirm',{html:'<div class="content">' + msg + '</div><div class="action"><{button label="确定" type="button" class="btn-primary" return="true"}> &nbsp;&nbsp; <{button type="button" class="btn-secondary" label="取消" isCloseDialogBtn="true"}></div>'}),{title:'提示',resizeable:false,width:250,height:110,onLoad:function(){
+          this.dialog.getElement('[return=true]').addEvent('click',function(e){
+              fn&&fn.call(this);
+              this.close();
+          }.bind(this));
+      }});
+  }
+</script>

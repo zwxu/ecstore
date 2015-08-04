@@ -1,0 +1,169 @@
+<form method='post' action='index.php?ctl=order/order&act=saveOrderInfo' class="tableform" target="{update:'messagebox'}">
+<input type="hidden" name="order_id" value="<{$order.order_id}>">
+ <h4><{t}>订单信息<{/t}></h4>
+ <div class="division">
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th><{t}>订单号：<{/t}></th>
+    <td><{$order.order_id}></td>
+    <th><{t}>下单日期：<{/t}></th>
+    <td><{$order.createtime|cdate:'SDATE_STIME'}></td>
+  </tr>
+   <tr>
+    <th><{t}>商品总金额：<{/t}></th>
+    <td><input id="iditem_amount" TYPE="text" name="cost_item" value="<{$order.cost_item}>" size=10 disabled="disabled"></td>
+    <th><{t}>配送方式：<{/t}></th>
+    <td><{if $order.payment == -1}> <{$order.selectDelivery[$order.shipping_id]}><input type="hidden" name="shipping_id" value="<{$order.shipping_id}>" /> <{else}> <select name=shipping_id><{html_options options=$order.selectDelivery selected=$order.shipping_id}></select> <{/if}></td>
+  </tr>
+   <tr>
+    <th><{t}>配送费用：<{/t}></th>
+    <td><{input id="idcost_freight" class='item itemrow' name="cost_freight" value=$order.cost_freight type="unsigned" size=10}></td>
+    <th><{t}>支付方式：<{/t}></th>
+    <td><{if $order.payment == -1}> <{t}>货到付款<{/t}><input type="hidden" name="payment" value="-1" /> <{else}> <select name=payment><{html_options options=$order.selectPayment selected=$order.payment}></select> <{/if}></td>
+  </tr>
+  <tr>
+    <th><{t}>保价：<{/t}></th>
+    <td><{input id="idcost_protect" class="item itemrow" type="unsigned" name="cost_protect" size=10 value=$order.cost_protect }><{t}> 是否要保价<{/t}><input id="idis_protect" name="is_protect" type='checkbox' value='true' <{if $order.is_protect == 'true'}>checked="checked"<{/if}>></td>
+    <th><{t}>商品重量：<{/t}></th>
+    <td><{input name=weight type="unsigned" class=inputstyle size=10 value=$order.weight }></td>
+  </tr>
+  <tr>
+    <th><{t}>支付手续费：<{/t}></th>
+    <td><{input id="idcost_payment" class='item itemrow' name=cost_payment type="unsigned" size=10 value=$order.cost_payment }></td>
+    <th><{t}>发票抬头：<{/t}></th>
+    <td><input id="idtax_company" name="tax_company" value="<{$order.tax_company}>"></td>
+  </tr>
+   <tr>
+    <th><{t}>税金：<{/t}></th>
+    <td><{input id="idcost_tax" class='item itemrow' name="cost_tax" type="unsigned" size=10 value=$order.cost_tax }><{t}> 是否开发票<{/t}><input id="idis_tax" name="is_tax" type='checkbox' value='true' <{if $order.is_tax == 'true'}>checked="checked"<{/if}>></td>
+    <th><{t}>支付币别：<{/t}></th>
+    <td><{if $order.order_id == ''}><{html_options options=$order.curList selected=$order.currency}><{else}><{$order.cur_name}><{if $order.cur_rate != 1}>(<{$order.cur_rate}>)<{/if}><{/if}></td>
+  </tr>
+   <tr>
+    <th><{t}>促销优惠金额：<{/t}></th>
+    <td><input id="idpmt_amount" class='item itemrow' name="pmt_amount" value="<{$order.pmt_amount}>" size=10></td>
+    <th><{t}>订单折扣或涨价：<{/t}></th>
+    <td><input id="iddiscount" class='item itemrow' name="discount" value="<{$order.discount}>" size=10><br><{t}>要给顾客便宜100元，则输入"-100";要提高订单价格100元，则输入"100".<{/t}>
+  </tr>
+   <tr>
+    <th><{t}>订单总金额：<{/t}></th>
+    <td><input id="idtotal_amount" name=total_amount value="<{$order.total_amount}>" disabled="disabled"></td>
+</td>
+  </tr>
+  
+</table>
+</div>
+
+<h4><{t}>购买人信息<{/t}></h4>
+<div class="division">
+  <{if $order.order_id == ''}>
+  <input TYPE="text" NAME="uname" value='' class=inputstyle size=15>
+  <input TYPE="button"  class=inputstyle value="<{t}>导入会员<{/t}>" onClick="seluser(adminForm.uname.value)">
+  <input TYPE="button"  class=inputstyle value="<{t}>非会员<{/t}>" onClick="seluser('anonymous')">
+  <input TYPE="hidden" name="userid" value="{userid}"> 
+  <{/if}>
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  
+   <tr>
+    <th><{t}>姓名：<{/t}></th>
+    <td><{$order.member.name}></td>
+    <th><{t}>会员用户名：<{/t}></th>
+    <td><{$order.member.uname}></td>
+  </tr>
+   <tr>
+    <th><{t}>联系电话：<{/t}></th>
+    <td><{$order.member.tel}></td>
+    <th><{t}>Email地址：<{/t}></th>
+    <td><{$order.member.email}></td>
+  </tr>
+  <tr>
+    <th><{t}>地区：<{/t}></th>
+    <td><{$order.member.area|region}></td>
+    <th><{t}>邮政编码：<{/t}></th>
+    <td><{$order.member.zip}></td>
+  </tr>
+   <tr>
+    <th><{t}>地址：<{/t}></th>
+    <td><{$order.member.addr}></td>
+    <th></th>
+    <td></td>
+  </tr>
+</table>
+</div>
+
+
+<{if $order.is_delivery == 'Y'}>
+ <h4><{t}>收货人信息<{/t}></h4>
+ <div class="division" id="order_edit_receiver">
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+    <th><{t}>收货人姓名：<{/t}></th>
+    <td><{input type="text" NAME="ship_name" required="true" value=$order.ship_name }>*</td>
+    <th><{t}>联系手机：<{/t}></th>
+    <td><input type="text" NAME="ship_mobile" value="<{$order.ship_mobile}>" class=inputstyle></td>
+  </tr>
+   <tr>
+    <th><{t}>联系电话：<{/t}></th>
+    <td><{input type="order_tel" NAME="ship_tel" class=inputstyle value=$order.ship_tel}></td>
+    <th><{t}>Email地址：<{/t}></th>
+    <td><{if $order.member}><{$order.ship_email}><{else}><{input type="email" NAME="ship_email" value=$order.ship_email }><{/if}></td>
+  </tr>
+   <tr>
+    <th><{t}>送货时间：<{/t}></th>
+    <td><input type="text" NAME="ship_time" value="<{$order.ship_time}>" class=inputstyle></td>
+    <th><{t}>邮政编码：<{/t}></th>
+    <td><{input  NAME="ship_zip" class=inputstyle value=$order.ship_zip}>*</td>
+  </tr>
+   <tr>
+    <th><{t}>收货地区：<{/t}></th>
+    <td><{input type="region" name="ship_area" required="true" value=$order.ship_area}>*</td>
+    <th><{t}>收货地址：<{/t}></th>
+    <td><{input type="text" NAME="ship_addr" required="true" class=inputstyle value=$order.ship_addr}>*</td>
+  </tr>
+  
+</table>
+</div>    
+<{/if}><!--
+<table cellspacing="0" cellpadding="0" border="0" align="center" class="tableAction">
+  <tbody><tr>
+    <td><b class="submitBtn">
+    <input type="button" name='butsubmit' value="提交"></b></td>
+  </tr>
+</tbody></table>-->
+</form>
+<script>
+var itemAmount=0;
+var calculate_order_fee = function(){
+	$ES(".itemrow","x-order-info").each(function(ipt){
+            itemAmount += Number(ipt.getValue()).toFloat()*1;
+        });
+        $('idtotal_amount').value=function(){
+            var count=0;
+            count = Number($('iditem_amount').value) + itemAmount - Number($('idpmt_amount').value)*2;
+            itemAmount = 0;
+            return count.round(2);
+        }();
+}
+
+$ES(".itemrow","x-order-info").each(function(item){
+    item.addEvent('change',function(){
+        calculate_order_fee();
+    });
+});
+
+$('idis_protect').addEvent('click',function(e){
+    $('idcost_protect').disabled = !$('idis_protect').checked;
+    });
+
+if($('idis_tax'))
+$('idis_tax').addEvent('click',function(e){
+    $('idcost_tax').disabled = !$('idis_tax').checked;
+
+    });
+
+$('idcost_tax').disabled = !$('idis_tax').checked;
+
+if(!$('idis_protect').checked){
+    $('idcost_protect').disabled = true;
+}
+</script>

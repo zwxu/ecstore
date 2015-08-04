@@ -1,0 +1,130 @@
+<div class="member-main">
+<div class="title title2">我的评论</div>
+    <script>
+        function dis(comment_id,url){
+            $$('.reply_'+comment_id).setStyle('display','block');
+            $('dis_'+comment_id).setStyle('display','none');
+            $('none_'+comment_id).setStyle('display','block');
+            new Request({url:url,method:'post'}).send();
+        }
+
+        function none(comment_id){
+            $$('.reply_'+comment_id).setStyle('display','none');
+            $('dis_'+comment_id).setStyle('display','block');
+            $('none_'+comment_id).setStyle('display','none');
+        }
+
+    </script>
+    <div id="tab-discus" class="section switch">
+        <ul class="switchable-triggerBox tab_member clearfix">
+            <li class="active"><a href="#"><{t}>我的评论<{/t}></a></li>
+        </ul>
+        <div class="switchable-content switchable-content2" >
+            <div class="switchable-panel">
+                <{if !$commentList}>
+                <div class="noinfo"><{t}>暂无评论<{/t}></div>
+                <{/if}>
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" class="gridlist gridlist_member">
+				<tr>
+						<th width="30%" class="blrn"><{t}>评论商品<{/t}></th>
+						<th width="12%"><{t}>评论星级<{/t}></th>
+						<th width="44%"><{t}>评论内容<{/t}></th>
+						<th width="14%"><{t}>回复内容<{/t}></th>
+					</tr>
+          <{foreach from=$commentList item='commentList' name=name}>
+          <tr <{if !$smarty.foreach.name.first}>class="bbsolid"<{/if}>>
+            <td style="width:240px;">
+              <dl>
+                <dt><a href="<{link app=b2c ctl='site_product' act='index' arg=$commentList.type_id}>" target="_blank" style="width:90px; height:90px;overflow:hidden;"><img style="width:60px; height:60px;overflow:hidden;" src="<{if $commentList.udfimg == 'true'}><{$commentList.thumbnail_pic|storager:'s'}><{else}><{$commentList.image_default_id|default:$defaultImage|storager:'s'}><{/if}>" /> </a>
+                </dt>
+                <dd class="width_150h" style="padding-left:10px;"><a href="<{link app=b2c ctl='site_product' act='index' arg=$commentList.type_id}>"><{$commentList.name}></a></dd>
+            </dl></td>
+            <{if $point_status == 'on'}>
+            <td class="star-div" ><ul><li class="star<{$commentList.goods_point.avg}>"></li></ul></td>
+            <{/if}>
+						<td>
+						<ul class="plgl">
+              <li><span  style="width:230px; overflow:hidden; float:left"><{$commentList.title}><{t}>评论：<{/t}><{$commentList.comment}></span><span style="float:right; color:#999; width:90px;"><{$commentList.time|cdate:SDATE_STIME}></span></li>
+              		    </ul>
+						</td>
+            <td>
+              <{if $commentList.items}>
+              <ul>
+                <li class="clearfix" style=" margin:20px auto;">
+                  <div id="dis_<{$commentList.comment_id}>" class="clearfix">
+                    <a  style="cursor:pointer;margin-left:15px" onclick="dis(<{$commentList.comment_id}>,'<{link app=b2c ctl=site_member act=set_read arg0=$commentList.comment_id arg1=discuss}>');" class="btn-a flt"><span ><{t}>回复<{/t}></span></a>
+                    <span class="db p5 flt font-orange"><{$commentList.items|count}></span>
+                  </div>
+                  <div id="none_<{$commentList.comment_id}>" style="float:left; padding:0 15px 0 0;display:none;"  class="upstore">
+                    <a style="cursor:pointer" onclick="none(<{$commentList.comment_id}>);" class="btn-a"><span><{t}>收起回复<{/t}></span></a>
+                  </div>
+                </li>
+              </ul>
+              <{/if}>
+            </td>
+          </tr>
+          <{if $commentList.items}>
+          <{foreach from=$commentList.items item="reply"}>
+          <tr style="display:none" id="reply_<{$reply.comment_id}>" class="reply_<{$commentList.comment_id}>">
+		  <td colspan="4" style="padding:0">
+		  <table width="988" bgcolor="#f9f9f9">
+		  	<tr>
+		  		
+            <td width="12%" class="textleft color1"><{if $reply.addon.hidden_name =='YES' && ($reply.author_id !=0 || $reply.author_id !=1)}>匿名<{else}><{$reply.author}><{/if}><{t}>回复：<{/t}></td>
+            <td width="61%" class="textleft">
+			<{$reply.comment}>
+
+            </td>
+            <td class="textcenter"><span style="color:#999"><{$reply.time|cdate:SDATE_STIME}></span></td>
+			<td width="12%" class="textleft"></td>
+		  	</tr>
+		  </table>
+		  </td>
+            
+          </tr>
+          <{/foreach}>
+          <{/if}>
+          <{foreach from=$commentList.addition item="add"}>
+          <tr>
+            <td ></td>
+            <td></td>
+						<td>
+              <ul>
+                <li><span style="width:230px; overflow:hidden; float:left"><{$add.title}><{t}>追加：<{/t}><{$add.comment}></span><span style="float:right; color:#999; width:90px;"><{$add.time|cdate:SDATE_STIME}></span></li>
+           
+              </ul>
+						</td>
+            <td valign="center">
+              <{if $add.items}>
+              <ul>
+                <li class="clearfix" style=" margin:20px auto; margin-left:15px"><div id="dis_<{$add.comment_id}>" class="clearfix"><a  style="cursor:pointer" onclick="dis(<{$add.comment_id}>,'<{link app=b2c ctl=site_member act=set_read arg0=$add.comment_id arg1=discuss}>');" class="btn-a flt"><span><{t}>回复<{/t}></span></a><span class="db p5 flt font-orange"><{$add.items|count}></span></div>
+                <div id="none_<{$add.comment_id}>" style="float:left; padding:0 15px 0 0;display:none;margin-left:5px"  class="upstore"><a style="cursor:pointer" onclick="none(<{$add.comment_id}>);" class="btn-a"><span><{t}>收起回复<{/t}></span></a></div>
+                </li>
+              </ul>
+              <{/if}>
+            </td>
+          </tr>
+          <{if $add.items}>
+          <{foreach from=$add.items item="reply"}>
+          <tr style="display:none;" id="reply_<{$reply.comment_id}>" class="reply_ask reply_<{$add.comment_id}>">
+            <td style="width:374px;"></td>
+            <td></td>
+            <td>
+              <ul><li style="width:230px;float:left;"><{if $reply.addon.hidden_name =='YES' && ($reply.author_id !=0 || $reply.author_id !=1)}>匿名<{else}><{$reply.author}><{/if}><{t}>回复：<{/t}><{$reply.comment}></li>
+              <li class="clearfix" style="float:left;"><span<span style="float:right;color:#999;width:90px;"><{$reply.time|cdate:SDATE_STIME}></span></li>
+						</ul>
+            </td>
+            <td valign="top"></td>
+          </tr>
+          <{/foreach}>
+          <{/if}>
+          <{/foreach}>
+          <{/foreach}>
+          <{pagers data=$pager}>
+          </table>
+          </div>
+        </div>
+    </div>
+</div>
+
+</div>

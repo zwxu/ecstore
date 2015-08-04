@@ -1,0 +1,95 @@
+<{capture name="header"}>
+<{css src="default/style.css" app="desktop" }>
+<style>
+div.workground{padding:0;}
+</style>
+<{/capture}>
+<{capture name="headbar"}>
+<div id="wg_toolbar" class="toolbar clearfix content-toolbar">
+	<div class="flt"><strong><{t}>单独页编辑<{/t}></strong>( <{$detail.node_name}> )</div>
+	<div class="span-auto">&nbsp;</div>
+	<div class="flt">
+			<a class="tbbtn layout btn-chg-layout" href="javascript:void(0)">
+				<span>	<{t}>选择页面布局<{/t}><span>
+			</a>
+			<!--<a class="tbbtn add btn-addwgt" href="javascript:void(0)">
+				<span>	<{t}>添加版块<{/t}><span>
+			</a>-->
+    </div>
+	<div class="btn-bar frt">
+		<a class="tbbtn save" href="javascript:void(0)" onclick="if(confirm('<{t}>确定保存您对当前页面的修改吗?<{/t}>'))_saveWidgets()">
+			<span>	<{t}>保存<{/t}></span>
+		</a>
+		<a class="tbbtn view" href="<{$site_url}>" target="_blank">
+			<span>	<{t}>浏览<{/t}></span>
+		</a>
+		<a class="tbbtn exit" href="javascript:void(0)" onclick="if(confirm('<{t}>确定退出?<{/t}>'))window.close()">
+			<span>	<{t}>退出<{/t}></span>
+		</a>
+	</div>
+
+</div>
+<{/capture}>
+
+<div style='height:100%' id='widgets_workground'>
+<iframe src="index.php?app=content&ctl=admin_node_single&act=preview&node_id=<{$detail.node_id}>" width='100%' height='100%' frameborder=0 id="themeFrame" name="themeFrame"></iframe>
+</div>
+<input type="hidden" name="ident" value="<{$detail.node_id}>">
+
+<script>
+window.addEvent('domready',function(){
+    window.addEvent('resize',function(){
+        $('themeFrame').set('height',window.getSize().y-$('wg_toolbar').getSize().y-$('wg_toolbar').getPatch().y);
+    }).fireEvent('resize');
+});
+var themeFrame=$('themeFrame').contentWindow;
+var shopWidgetsOBJ=themeFrame.shopWidgets;
+
+var cl=$E('.btn-chg-layout','content-toolbar');
+var saveBtn=$E('.btn-savewgt','content-toolbar');
+cl && cl.addEvent('click',function(){
+   if(confirm('<{t}>选择布局前需要先保存当前页面编辑状态,保存吗?<{/t}>')){
+          _saveWidgets();
+   }else{
+          return;
+   }
+   this.store('dialog',new Dialog('index.php?app=content&ctl=admin_node_single&act=layout&node_id=<{$detail.node_id}>',{title:'<{t}>设置布局<{/t}>',modal:true,width:500,height:350}));
+});
+
+if(saveBtn) {
+   saveBtn.addEvent('click',function(){
+      if(confirm('<{t}>确定保存您对当前页面的修改吗?<{/t}>')) _saveWidgets();
+   });
+}
+
+function _addWeigets(args){
+    var themeFrame=$('themeFrame').contentWindow;
+    var shopWidgetsOBJ=themeFrame.shopWidgets;
+    shopWidgetsOBJ.widgetsDialog&&shopWidgetsOBJ.widgetsDialog.close();
+    shopWidgetsOBJ.widgetsDialog=null;
+    shopWidgetsOBJ.ghostDrop(args[0],args[1]);
+    themeFrame.focus();
+}
+
+function _showWidgetsDialog(url){
+    shopWidgetsOBJ.widgetsDialog=new Dialog(url,{width:770,height:500,title:'<{t}>选择挂件<{/t}>',modal:true,resizeable:false,onShow:function(e){
+        this.dialog_body.id='dialogContent';
+    }});
+}
+
+
+function _saveWidgets(fn,el){
+    $("themeFrame").contentWindow.shopWidgets.saveAll(fn,el);
+    new Request({url:'index.php?app=content&ctl=admin_node_detail&act=updatetime&node_id=<{$detail.node_id}>'}).send()
+return false;
+}
+
+function _out(){
+    if(confirm("<{t}>确定退出模板编辑吗?<{/t}>"))
+        window.close();
+}
+
+
+var SHOPADMINDIR = '<{$shopadmin}>';
+
+</script>

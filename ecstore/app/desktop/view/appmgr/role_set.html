@@ -1,0 +1,15 @@
+<table style="width:auto">
+	<tr><th>&nbsp;</th>
+	<{foreach from=$app_roles key=key item=item}>
+	<td><{$item.name}></td>
+	<{/foreach}>
+	<{foreach from=$system_roles item=role}>
+	<tr>
+		<th><{$role.role_name}></th>
+		<{foreach from=$app_roles key=key item=item}>
+		<td><input type="checkbox" value="1" <{if $app_rolemap[$role.role_id][$key]}>checked="checked"<{/if}> name="rolemap[<{$role.role_id}>][<{$key}>]" /></td>
+		<{/foreach}>
+	</tr>
+	<{/foreach}>
+</tr>
+</table>

@@ -1,0 +1,9 @@
+<desktop>
+    
+    <workground name="营销" id="b2c.wrokground.sale" controller="admin_sales_coupon" action="index" order="40">
+        <menugroup name="优惠券">
+            <menu controller='admin_log' action='index' permission='salescoupon' display='true' order='50'>优惠券使用记录</menu>
+        </menugroup>
+    </workground>
+    
+</desktop>

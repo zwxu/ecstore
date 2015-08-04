@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>
+      TPL FOR AJAX - Powered By BBC
+    </title>
+    
+     <script>window.onload = function(){(parent.loadedPart[1])++;}</script>
+  </head>
+  <body>
+  
+  <!--dialog TPL-->
+    <textarea id='dialog'>
+      <div class="dialog-box" style="display:block">
+        <div class="dialog-head clearfix">
+          <div class="dialog-title flt"></div>
+          <a class="btn-close frt" href='javascript:void(0)'>&#10006;</a>
+        </div>
+        <div class="dialog-content-head" style="font-size:0;height:0;"></div>
+        <div container="true" class="dialog-content-body">
+          <{t}>正在加载...<{/t}>
+        </div>
+        <div class="dialog-content-foot" style="font-size:0;height:0;"></div>
+        <div class="btn-resize"></div>
+      </div>
+    </textarea>
+    
+      <!--dialogwithframe TPL-->
+    <textarea id='dialogwithframe'>
+      <div class="dialog-box" style="display:block">
+        <div class="dialog-head clearfix">
+          <div class="dialog-title flt"></div>
+          <a class="btn-close frt" href='javascript:void(0)'>&#10006;</a>
+        </div>
+        <div class="dialog-content-head" style="font-size:0;height:0;overflow:hidden"></div>
+<iframe frameborder="0" src="about:blank" container="true" class="dialog-content-body dialog-frame-body" name="dialog-frame">
+        	
+        </iframe>
+        <div class="dialog-content-foot" style="font-size:0;height:0;overflow:hidden"></div>
+        <div class="btn-resize">&nbsp;</div>
+      </div>
+    </textarea>
+    
+  </body>
+</html>

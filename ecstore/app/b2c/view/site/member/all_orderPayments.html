@@ -1,0 +1,171 @@
+<div class="orderpay">
+<form id="f_order_pay" target="_blank" action="<{$form_action}>" method="post">
+<{foreach from=$orders item=item key=key}>
+    <input type="hidden" name="payment[<{$key}>][order_id]" value="<{$item.order.order_id}>" />
+    <input type="hidden" name="payment[<{$key}>][money]" value="<{$item.order.total_amount}>" id="hidden_money"/>
+    <input type="hidden" name="payment[<{$key}>][currency]" value="<{$item.order.currency}>" />
+    <input type="hidden" name="payment[<{$key}>][cur_money]" value="<{$item.order.cur_amount}>" id="hidden_cur_money"/>
+    <input type="hidden" name="payment[<{$key}>][cur_rate]" value="<{$item.order.cur_rate}>" />
+    <input type="hidden" name="payment[<{$key}>][cur_def]" value="<{$item.order.cur_def}>" />
+    <input type="hidden" class="all_pay_app_id" name="payment[<{$key}>][pay_app_id]" value="<{$item.order.payinfo.pay_app_id}>" />
+    <input type="hidden" name="payment[<{$key}>][cost_payment]" value="<{$item.order.payinfo.cost_payment}>" />
+    <input type="hidden" name="payment[<{$key}>][cur_amount]" value="<{$item.order.cur_amount}>" />
+    <input type="hidden" name="payment[<{$key}>][memo]" value="<{$item.order.memo}>" />
+<{/foreach}>
+
+<h3 class="payfor_order_title"><{t}>订单信息<{/t}></h3>
+
+  <div class='p15 border-all' >
+     <p class="lh25"><{t}>订单金额：<{/t}><strong class="hueorange font-red font16px" id="total_amount"><{$total_amount|cur_odr:$total_amount:false:true}></strong></p>
+  </div>
+
+<h3 class="payfor_order_title"><{t}>订单支付<{/t}></h3>
+
+
+<div class='p15 border-all'>
+<div class=' p5 fontbold'>
+<{if $total_amount > 0}>
+  <{if !$order.selecttype}>
+	<{t}>您选择了：<{/t}><strong class="hueorange font-red font12px"><{$orders.0.order.payinfo.pay_app_id|pay_name}></strong>
+	 <{if $orders.0.order.payinfo.pay_app_id != '-1'}><{if $payments_nums > 1}><a href='<{link app=b2c ctl="site_member" act="all_orderPayments" arg0="true" arg1=$all_orders}>' ><{t}>[ 选择其他支付方式 ]<{/t}></a><{/if}><{/if}>
+     <{include file="site/order/all_banks.html" app=b2c}>
+  <{else}>
+	 <{t}>请选择支付方式:<{/t}>
+ <{/if}>
+</div>
+	<{if $order.selecttype}>
+    <div class='select-paymethod' id="_normal_payment">
+        <{if $payments}>
+
+           <{foreach from=$payments item=item key=key}>
+                <p class="p3">
+                        <label><input type="radio" onclick="Order.paymentChange(this)" formatmoney="<{$orders.0.order.cur_def}><{$item.cur_money}>" curmoney="<{$total_amount}>" moneyamount="<{$total_amount}>"<{if $orders.0.order.payinfo.pay_app_id == $item.app_id}> checked="checked"<{/if}> value="<{$item.app_id}>" paytype="<{$item.app_id}>" name="payments[pay_app_id]" class="x-payMethod" style="cursor: pointer;"><{$item.app_name}></label>
+
+                    <span class="selected"><{$item.app_des}></span>
+                </p>
+            <{/foreach}>
+
+        <{/if}>
+    </div>
+    <{include file="site/order/all_banks.html" app=b2c}>
+	<{else}>
+		<input type="hidden" name="payments[pay_app_id]" value="<{$orders.0.order.payinfo.pay_app_id}>" />
+		<{if $extendInfo}>
+		<div class='division paymethodextendInfo'>
+			<{foreach from=$extendInfo item=item key=key}>
+			<{if $item.type=='select'}>
+				<select name=<{$key}>>
+					<{foreach from=$item.value item=vitem key=vkey}>
+						<option value="<{$vitem.value}>" <{if $vitem.checked}>selected<{/if}>><{$vitem.name}></option>
+					<{/foreach}>
+				</select>
+			<{else}>
+				<{foreach  from=$item.value item=vitem key=vkey}>
+					<{if $item.type=='radio'}>
+						<input <{$vitem.checked}> type='radio' name=<{$key}> value=<{$vitem.value}>><{if $vitem.imgname}><{$vitem.imgname}><{else}><{$vitem.name}><{/if}></if>
+					<{else if $item.type=='checkbox'}>
+						<input <{$vitem.checked}> type='checkbox' name="<{$key}>[]" value=<{$vitem.value}>><{if $vitem.imgname}><{$vitem.imgname}><{else}><{$vitem.name}><{/if}></if>
+					<{/if}>
+				<{/foreach}>
+			<{/if}>
+			<{/foreach}>
+		</div>
+		<{/if}>
+	<{/if}>
+<{else}>
+	<{t}>订单不需要再支付,请等待我们处理<{/t}>
+<{/if}>
+
+</div>
+
+<{if $orders.0.order.payinfo.pay_app_id != '-1' && $total_amount > 0}>
+<div class="textcenter p10">
+  <{if $orders.0.order.payinfo.pay_app_id!="offline"}>
+  <{button type="submit" class="order-btn lijizhifu btn-has-icon" label=$___b2c="立刻支付"|t:'b2c' icon="set-arrow.gif"}>
+  <{else}>
+  <{button type="submit" class="order-btn lijizhifu " label=$___b2c="确定"|t:'b2c' rel="_request"}>
+  <{/if}>
+</div>
+<{/if}>
+
+
+</form>
+</div>
+<div class="clr"></div>
+
+<script>
+        void function(){
+        var form= $('f_order_pay');
+            Order ={
+
+                paymentChange:function(target){
+                         if(!target)return;
+                         target = $(target);
+                     var money  = target.get('moneyamount');
+                     var fmoney = target.get('formatmoney');
+                     var paytype= target.get('paytype');
+					 var cur_money = target.get('curmoney');
+                     $$('.all_pay_app_id').each(function(item,index){
+                        item.set('value',paytype);
+                     });
+                     $('hidden_money').set('value',money);
+                     $('hidden_cur_money').set('value',cur_money);
+
+					 var btn_odr = form.getElement('button[type=submit]');
+
+                     btn_odr.getElement('span span').innerHTML = paytype!='offline'?'<{t}>支&nbsp;付<{/t}><i class="btn-icon"> <img src="<{$res_url}>/bundle/set-arrow.gif" /></i>':'<{t}>确定<{/t}>';
+                    
+					 if (paytype!='offline'){
+						btn_odr.set('class', 'btn order-btn btn-has-icon lijizhifu');
+					 }else{
+						btn_odr.set('class', 'btn order-btn lijizhifu');
+
+					 }
+                     if(paytype=='ysepay'){
+                        $('cart_paymentzf').setStyle('display','');
+                    }else{
+                        $('cart_paymentzf').setStyle('display','none');
+                    }
+
+                }
+
+            };
+
+            var selecttype = "<{$order.selecttype}>";
+			if(selecttype==0){
+				if(form&&form.getElement('button[type=submit]')){
+					form.getElement('button[type=submit]').addEvent('click',function(e){
+						var bank_type = $('bank_type').value;
+						var paytypeId = $ES('#_normal_payment input[type=radio]:checked');
+						var pay_app_id_js = "<{$orders.0.order.payinfo.pay_app_id}>";
+						if(bank_type==''&&pay_app_id_js=='ysepay'){
+							 Message.error('<{t}>请选择一个银行<{/t}>');
+							 return e.stop();
+						}
+					});
+				}
+			}
+
+            if($('f_order_pay').getElement('.select-paymethod')){
+                Order.paymentChange($('f_order_pay').getElement('.select-paymethod input[checked]'));
+
+                if(form&&form.getElement('button[type=submit]')){
+                    form.getElement('button[type=submit]').addEvent('click',function(e){
+
+                        if(!$('f_order_pay').getElement('.select-paymethod input[checked]')){
+                        Message.error('<{t}>请选择支付方式<{/t}>');
+                        return e.stop();
+                        }else{
+							var bank_type = $('bank_type').value;
+							var paytypeId = $ES('#_normal_payment input[type=radio]:checked').get('paytype');
+							if(paytypeId=='ysepay'&&bank_type==''){
+								 Message.error('<{t}>请选择一个银行<{/t}>');
+								 return e.stop();
+							}
+						}
+
+                    });
+                }
+            }
+        }();
+</script>

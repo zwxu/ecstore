@@ -1,0 +1,19 @@
+<app version="0.1">
+    <name>售后服务</name>
+
+    <description>aftersales售后服务功能</description>
+
+    <author>
+        <name>BBC 开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>0.1</version>
+    <license>BBC license</license>
+    <parent_model_class>dbeav_model</parent_model_class>
+
+	<depends>
+		<app>b2c</app>
+	</depends>
+</app>

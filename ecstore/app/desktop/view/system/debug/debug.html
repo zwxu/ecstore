@@ -1,0 +1,32 @@
+
+<form action='index.php?ctl=system/debug&act=editShopMode' method='POST' class="tableform">
+  <div class="note"><{t}>当您的商店需要暂停营业的时候，您可以在下面输入框输入停业公告，并点击下面“暂停营业”按钮，这样当用户访问商店的时候就会看到商店关闭停业的通知，并且无法访问商店的任何链接。<{/t}><BR>
+   <{t}> 当您需要恢复营业的时候，点击“开启商店”按钮即可。<{/t}></div>
+  <div class="division">
+    <table>
+      <tr>
+        <th><{t}>商店当前状态：<{/t}></th>
+        <td><{if $systemShopMode==1}><div class='success'><{t}>正常营业中<{/t}></div><{else}><div class='error'><{t}>暂停营业<{/t}></div><{/if}></td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <th><{t}>停业公告：<{/t}></th>
+        <td><input type='hidden' id="value_shop_mode" name='shop_mode' />
+            <{input type="html" name="announcement" value=$announcement}>
+        </td>
+      </tr>
+    </table>
+  </div>
+  
+  <div class="table-action">
+  <{if $systemShopMode==1}>
+  <{button label=$___desktop="暂停营业"|t:'desktop' type="submit" onclick=";$('value_shop_mode').value=1"}>
+  <{else}>
+<{button label=$___desktop="更新停业公告"|t:'desktop' type="submit" onclick=";$('value_shop_mode').value=1"}>
+<{button label=$___desktop="开启商店"|t:'desktop' type="submit"  onclick=";$('value_shop_mode').value=0"}>
+<{/if}>
+</div>
+
+
+</form>

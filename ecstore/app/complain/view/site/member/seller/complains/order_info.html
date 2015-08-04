@@ -1,0 +1,91 @@
+<div id="J_BabyDetail" class="boxbase baby-detail J_BabyDetail">
+	<div class="box-hd">
+        <i class="hd-icon"></i>
+        <h4>
+            <span>宝贝信息</span>
+        </h4>
+    </div>
+	<div class="box-bd">
+		<{foreach from=$order.goods_items item=goods name="order_items"}>
+          <{if $goods.product}>
+        <div class="row-item first-row-item">
+            <div class="ctitle">
+                <a alt="img" href="<{$goods.product.link_url}>">
+                <img src="<{$goods.product.thumbnail_pic|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" class="goods-img" alt="<{$goods.product.name}>">
+				</a>
+                <label class=""></label>
+            </div>
+            <div class="info">
+            <a target="_blank" href="<{$goods.product.link_url}>" class="text-link"><{$goods.product.name}></a>
+            <br><{$goods.product.attr}>
+            </div>
+		</div>
+		<div class="row-item">
+            <div class="ctitle"><label>买家：</label></div>
+			<div class="info">
+                <{$complain.from_uname}>
+            </div>
+		</div>
+        <div class="row-item">
+			<div class="ctitle"><label>单价：</label></div>
+			<div class="info"><span><span class="price-thin"><{$goods.product.price|cur_odr:$order.currency}></span>元</span>
+			</div>
+		</div>
+        <div class="row-item">
+			<div class="ctitle"><label>数量：</label></div>
+			<div class="info"><{$goods.product.quantity}></div>
+		</div>
+        <!--<div class="row-item">
+            <div class="ctitle"><label>优惠：</label></div>            
+            <div class="info"><ul>无优惠</ul></div>
+		</div>-->
+        <div class="row-item">
+			<div class="ctitle"><label>小计：</label></div>
+			<div class="info"><span><span class="price-bold"><{$goods.product.amount|cur_odr:$order.currency}></span>元</span></div>
+		</div>
+        <{/if}>
+        <{/foreach}>		
+		<div class="row-item last-row-item">
+            <a hidefocus="" href="javascript:;" id='J_MoreBabyTrigger' class="more ">查看订单信息<s class="spt-icon"></s></a>
+        </div>
+		
+	</div>
+	<div  id='J_MoreBabyBox' class="box-bd  hidden">
+        <div class="row-item first-row-item">
+			<div class="ctitle"><label>订单编号：</label></div>
+			<div class="info">
+                <a target="_blank" href="<{link app=business ctl="site_member" act="orderdetail" arg0=$order.order_id}>" class="text-link"><{$order.order_id}></a> 
+			</div>
+		</div>
+        <div class="row-item">
+			<div class="ctitle"><label>运费：</label></div>
+			<div class="info"><span><span class="price-bold"><{$order.shipping.cost_shipping|cur_odr:$order.currency}></span>元</span></div>
+		</div>
+        <div class="row-item">
+			<div class="ctitle"><label>总优惠：</label></div>
+			<div class="info"><{if $order.pmt_order}><{$order.pmt_order|cur_odr:$order.currency}>元<{else}>无优惠<{/if}></div>
+		</div>
+        <div class="row-item">
+			<div class="ctitle"><label>总计：</label></div>
+			<div class="info"><span><span class="price-bold"><{$order.total_amount|cur_odr:$order.currency}></span>元</span></div>
+		</div>
+        <div class="row-item">
+			<div class="ctitle"><label>成交时间：</label></div>
+			<div class="info"><{$order.createtime|cdate:FDATE_STIME}></div>
+		</div>
+	</div> 
+</div>
+<script>
+(function(){
+$('J_MoreBabyTrigger').addEvent('click',function(e){
+      e.stop();
+      this.toggleClass('close');
+      $('J_MoreBabyBox').toggleClass('hidden');      
+   });
+document.getElement('.J_MoreDescTrigger').addEvent('click',function(e){
+      e.stop();
+      this.toggleClass('shrink');
+      document.getElement('.J_TextDesc').toggleClass('height-auto');
+    });
+})();
+</script>

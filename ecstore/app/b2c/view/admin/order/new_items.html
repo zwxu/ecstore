@@ -1,0 +1,8 @@
+<{capture name="listHeader"}>
+  <div class="span-2"><{t}>购买数量<{/t}></div>
+<{/capture}>
+<{capture name="listBody"}>
+  <div>
+  <{$item.spec_info}>&nbsp;&nbsp;<{t}>销售价：<{/t}><{$item.price|cur_odr}>
+    <{input name="goodsnum[{$id}]" value=1 type="positive" required="true" style="width:50px;text-align:right" }></div>
+<{/capture}>

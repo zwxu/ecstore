@@ -1,0 +1,23 @@
+<style>
+.shop_search_<{$widgets_id}> {   height:30px;   line-height:30px;   padding-top:10px;   padding-bottom:10px;}
+.shop_search_<{$widgets_id}> .shop_input{border:1px solid #989797;height:20px;line-height:20px;width:100px;}
+.shop_search_<{$widgets_id}> .shop_input_key{width:150px;}
+.shop_search_<{$widgets_id}> ul{list-style: none outside none;}
+.shop_search_<{$widgets_id}> li{float: left;padding-left:20px;}
+.shop_search_<{$widgets_id}> .sea_b{background-color: #6D5549;background-image: none;border: 1px solid #DCDCDC;color: #FFFFFF;font-size: 12px;font-weight: 700;height: 21px;width: 60px;}
+</style>
+<div class="shop_search_<{$widgets_id}>">
+<form action="<{link app=business ctl=site_shop act=gallery arg0=$data.store.store_id}>" method="get">
+<ul><li>
+<input type="hidden" value="all" name="searchRange">
+<span class="width_55 tar">关键字：</span>
+<span><input type="text" name="keyword" maxlength="8" class="shop_input shop_input_key" autocomplete="off" /></span>
+</li>
+<li> <span class="width_55 tar">价格：</span>
+    <span><input type="text" autocomplete="off" name="price1" maxlength="8" class="shop_input " /></span>
+    <span>到</span>
+    <span><input type="text" autocomplete="off" name="price2" maxlength="8" class="shop_input "/></span>
+</li>
+<li><input type="submit" class="sea_b" value="搜索"/></li>
+</ul>
+</form></div>

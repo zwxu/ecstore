@@ -1,0 +1,31 @@
+<{if $aCart.object.goods}>
+  <{foreach from=$aCart.object.goods item=goods key=_obj_key}>
+    <div class="minicart-single havechild horizontal-m clearboth clearfix" chlid_id="del-<{$goods.obj_items.products.0.product_id}>" urlremove="<{link app=b2c ctl='site_cart' act='removeMiniCart' arg0='goods'}>" urlupdate="<{link app=b2c ctl='site_cart' act='updateMiniCart' arg0='goods' arg1=$item.link_key}>">
+        <div class="goodpic">
+            <{assign var="gimage" value=$goods.obj_items.products.0.default_image.thumbnail|default:$env.conf.site.default_thumbnail_pic}>
+            <img src="<{$gimage|storager:'s'}>"  alt="<{$goods.name|escape:html}>">
+        </div>
+        <div class="goods-main">
+        <div class="goodinfo">
+            <h3><a href="<{link app=b2c ctl=site_product arg0=$goods.obj_items.products.0.goods_id }>" class="nc-name"><{$goods.obj_items.products.0.name}></a>
+               </h3>
+                <span>
+                 <{$goods.obj_items.products.0.spec_info}>
+                </span>
+          </div>
+            <div class="price-wrap">
+              <p>
+              <{t}>销售价：<{/t}><span class="micolor2 nc-value ml5"><{$goods.obj_items.products.0.price.buy_price|cur_odr}></span></p>
+              <p class="sum-n-del" pstore="<{$goods.store.real}>" ><{t}>数量:<{/t}><a href="javascript:void(0);" class="adjust minus" style="margin-left:5px;"></a><span class="micolor2 nc-value"><{$goods.quantity}></span><a href="javascript:void(0);" class="adjust plus"></a><span style="float:right;"><a href="#" class="delcart" style="line-height:17px;color:#367EC1;"><{t}>移除<{/t}></a></span></p>
+              <input type="hidden" class="quantity-of-this" value="<{$goods.quantity}>" name="modify_quantity[<{$goods.obj_ident}>][quantity]" >
+             </div>
+
+        </div>
+    </div>
+         <{if $item_goods_section}>
+            <{foreach from=$item_goods_section item=section}>
+              <{include file=$section.file app=$section.app }>
+            <{/foreach}>
+        <{/if}>
+  <{/foreach}>
+<{/if}>

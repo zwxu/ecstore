@@ -1,0 +1,773 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title><{t}>用户注册<{/t}></title>
+    <{lang_script src="lang.js" app="site"}>
+    <{css src="framework.css" app="site" pdir="css_mini"}>
+    <{css src="b2c.css" app="b2c" pdir="css_mini"}>
+    <{css src="passport.css" app="b2c" pdir="css_mini"}>
+	<{css src="css.css" app="b2c" pdir="css"}>
+	<{css src="mall.css" app="b2c" pdir="css"}>
+    <{if defined("DEBUG_JS") && DEBUG_JS}>
+        <{script src="mootools.js" app="site"}>
+        <{script src="formplus.js" app="site"}>
+        <{script src="jstools.js" app="site"}>
+        <{script src="shoptools.js" app="b2c"}>
+        <{script src="lab.js" app="site"}>
+        <{script src="coms/datapicker.js" app="site"}>
+    <{else}>
+        <{script src="moo_min.js" app="site" pdir="js_mini"}>
+        <{script src="tools_min.js" app="site" pdir="js_mini"}>
+        <{script src="shoptools_min.js" app="b2c" pdir="js_mini"}>
+        <{script src="regui.js" app="site" pdir="js_mini"}>
+    <{/if}>
+    <{lang_script src="lang.js" app="b2c"}>
+    <{lang_css src="lang.css" app="b2c"}>
+    <style>
+      .error{padding:2px 5px;}
+      /* .notice-inline{position:absolute;} */
+    </style>
+  </head>
+  <body class="pop_reg" style="font-family: Tahoma, Arial, Helvetica,"微软雅黑";font-size: 12px;color: #666666;margin:0;">
+    <div class="gray" style="padding-bottom:8px;color:gray;line-height:20px;padding:0px 10px;"><{t}>欢迎来到我们网站，如果您是新用户，请填写下面的表单进行注册<{/t}></div>
+    <form method="post" action="<{link app=b2c ctl='site_passport' act='create' args01=$next_url}>?mini=1" id="signupform" class="signupform">
+    <div id="changeRegPart">
+      <input id="regType" name="reg_type" type="hidden" value="" />
+      <input name="forward" type="hidden" value="<{$options.url}>">
+      <div class="intro">
+        <div class="customMessages">
+          <!--register_message-->
+        </div>
+      </div>
+      <div class="loginbox" style="padding:5px 0;border:0px;">
+        <ul>
+          <li id="emailReg">
+            <label class="login-k"><i>*</i><{t}>账户名：<{/t}></label>
+            <div class="login-v aling_left">
+              <{input type="text" onblur="regnameBlur(this);" onfocus="regnameFocus(this);" value="邮箱/手机号/用户名" onpaste="return false;" autocomplete="off"  name="regName" id="regName" class="user_name"}>
+              <div class="crl_xu"><span id="remind_regName"></span></div>
+            </div>
+          </li>
+
+          <li>
+            <label class="login-k"><i>*</i><{t}>请输入密码：<{/t}></label>
+            <div class="login-v aling_left"><{input name="pam_account[login_password]" class="inputstyle password"  type="password" id="reg_passwd" size="20" maxlength="20" onfocus="pwdFocus(this);" onblur="pwdBlur(this);" onkeyup="pwdChange(this);"}>
+            <div class="crl_xu possword_strength  "><span id="remind_pwd"></span><span id="weak"></span><span id="middle"></span><span id="strong"></span></div></div>
+          </li>
+
+          <li>
+            <label class="login-k"><i>*</i><{t}>请确认密码：<{/t}></label>
+            <div class="login-v aling_left"><{input name="pam_account[psw_confirm]"  type="password" class="inputstyle password" id="reg_passwd_r" size="20" maxlength="20" onfocus="pwd2Focus(this);" onblur="pwd2Blur(this);"}>
+            <div class="crl_xu  "><span id="remind_repwd"></span><span></span></div></div>
+          </li>
+
+      <li id="mobileCode" style="display:none;">
+            <label class="login-k" style="float:left;"><i>*</i><{t}>短信验证码：<{/t}></label>
+            <div class="" style="float:left; margin-right:20px">
+                <{input size="6" maxlength="6" class="" style="width:60px;padding:6px 0px 6px 14px;" name="mobileverifycode" id="mobileverifycode"}>
+            </div>
+            <div class="getmobilecode" style="float:left;">
+              <button class="sendMobileCode" type="button" onClick="getMobileCode();">获取短信验证码</button>
+              <div id="mobile_success" class="fl_sz">
+                <span id="cut_time" style="display: none;">剩余时间<span class="second_red">58</span>秒</span>
+              </div>
+                   <div style="clear:both;line-height:0px; height:0px; font-size:0px;"></div>
+            </div>
+                 <div style="clear:both;line-height:0px; height:0px; font-size:0px;"></div>
+      </li>
+
+   
+      <li id="commonlyEmail" style="display:none;">
+        <label class="login-k"><i>*</i><{t}>常用邮箱：<{/t}></label>
+        <div class="login-v">
+          <{input name="contact[commonlyemail]" class="inputstyle" id="comm_email" placeholder="yourname@xx.com" onchange="emailCheck(this.value,'comm_email');"}><div class="crl_xu  "><span id="remind_comm_email"></span></div>
+        </div>
+      </li>
+     
+
+
+          <{foreach from=$attr item=item name="item" key='row'}>
+            <li>
+              <label class="login-k">
+                <{if $item.attr_required eq 'true'}><i>*</i><{/if}><{$item.attr_name}>：
+              </label>
+              <div class="login-v">
+                <{if $item.attr_type =='date'}>
+                  <{if $item.attr_value != '0-0-0'}>
+                    <{if $item.attr_required eq 'true'}>
+                      <{input class="cal x-input" type="date" vtype="required&&date" name=$item.attr_column value=$item.attr_value}>
+                    <{else}>
+                      <{input class="cal x-input" type="date" name=$item.attr_column value=$item.attr_value}>
+                    <{/if}>
+                  <{else}>
+                    <{if $item.attr_required eq 'true'}>
+                      <{input class="cal x-input" type="date" vtype="required&&date" name=$item.attr_column}>
+                    <{else}>
+                      <{input class="cal x-input" vtype="date" name=$item.attr_column}>
+                    <{/if}>
+                  <{/if}>
+                <{/if}>
+
+                <{if $item.attr_type =='region'}>
+                  <{if $item.attr_required eq 'true'}>
+                    <{input app=ectools type="region" name=$item.attr_column value=$item.attr_value vtype="area"}>
+                  <{else}>
+                    <{input app=ectools type="region" name=$item.attr_column value=$item.attr_value}>
+                  <{/if}>
+                <{/if}>
+
+                <{if $item.attr_type =='gender'}>
+                  <{if $item.attr_required eq 'true'}>
+                    <{input type='gender' name=$item.attr_column value=$item.attr_value vtype="requiredradio&&required"}>
+                  <{else}>
+                    <{input type='gender' name=$item.attr_column value=$item.attr_value }>
+                  <{/if}>
+                <{/if}>
+
+                <{if $item.attr_type =='select'}>
+                  <select name="<{$item.attr_column}>" <{if $item.attr_required eq 'true'}>vtype="required"<{/if}>>
+                    <option value="" <{if $item.attr_value == ''}>selected="true"<{/if}>>
+                      <{t}>请选择<{/t}>
+                    </option>
+                    <{foreach from=$item.attr_option item=option name="option"}>
+                      <option value="<{$option}>" <{if $item.attr_value == $option}>selected="true"<{/if}>>
+                        <{$option}>
+                      </option>
+                    <{/foreach}>
+                  </select>
+                <{/if}>
+
+                <{if $item.attr_type =='checkbox'}>
+                  <{foreach from=$item.attr_option item=checkbox name="checkbox" }>
+                    <input type='checkbox' name="box:<{$item.attr_column}>[]" value="<{$checkbox}>" <{foreach from=$item.attr_value item=checkboxvalue name="checkboxvalue" }> <{if $checkboxvalue==$checkbox}>checked="true"<{/if}> <{/foreach}>/>
+                    <{$checkbox}>
+                    <br/>
+                  <{/foreach}>
+
+                  <input type="hidden" name="<{$item.attr_column}>[]" value="%no%">
+                  <{if $item.attr_required eq 'true'}>
+                    <input type="hidden" vtype="requiredcheckbox" />
+                  <{/if}>
+                <{/if}>
+
+                <{if $item.attr_type == 'text'}>
+                  <input type='text' class="inputstyle" name="<{$item.attr_column}>" value="<{$item.attr_value}>" vtype="<{if $item.attr_required eq 'true'}>required&&<{/if}><{if $item.attr_valtype=='number'}>check_overflow&&<{/if}><{$item.attr_valtype}>" />
+                <{/if}>
+
+                <{if $item.attr_type == 'number'}>
+                  <input type='text' class="inputstyle" name="<{$item.attr_column}>" value="<{$item.attr_value}>" vtype="<{if $item.attr_required eq 'true'}>required&&<{/if}><{$item.attr_valtype}>" />
+                <{/if}>
+
+                <{if $item.attr_type == 'alpha'}>
+                  <input type='text' class="inputstyle" name="<{$item.attr_column}>" value="<{$item.attr_value}>" vtype="<{if $item.attr_required eq 'true'}>required&&<{/if}><{$item.attr_valtype}>" />
+                <{/if}>
+              </div>
+            </li>
+          <{/foreach}>
+
+        
+          <{if $env.conf.b2c.site.register_valide eq 'true'}>
+            <li id='regcode'>
+              <label class="login-k"><i>*</i><{t}>验证码：<{/t}></label>
+              <div class="login-v">
+                <{input size="4" maxlength="4" class="x-input" name="signupverifycode" id="iptsingup"}>
+                <span class='verifyCode' style='display:none;'>
+                  <img src="" codesrc='<{link app=b2c ctl="site_passport" act="verifyCode" arg0="s"}>' align="absmiddle" id="membercode"/>
+                  <a href="javascript:void(0)">&nbsp;<{t}>看不清楚?换个图片<{/t}></a>
+                </span>
+                <div class="crl_xu  "><span id="remind_vcode"></span></div>
+              </div>
+            </li>
+          <{/if}>
+
+            <li>
+            <label class="login-k"></label>
+            <div class="login-v">
+              <{input type="checkbox" class="chebox_reg" id="license" name="license" value="agree" checked="checked"}>
+              <{t}>我已阅读并同意 <{/t}>
+              <a href="<{link app='content' ctl=site_article act=index arg0=36}>" id="terms_error" class="lnk" target='_blank'>
+                <span class="FormText" id="terms_error_sym">
+                  <{t}>平台会员服务协议<{/t}>
+                </span>
+              </a>
+             <!--  <{t}>和<{/t}>
+              <a href="<{link app='content' ctl=site_article act=index arg0=35}>" id="privacy_error" class="lnk" target='_blank'>
+                <span class="FormText" id="privacy_error_sym"><{t}>隐私保护政策<{/t}></span>
+              </a>。 -->
+            </div>
+          </li>
+
+
+          <li>
+            <label class="login-k"></label>
+            <div class="login-v" style="display:block;width:284px;">
+            <{if $seller !='seller'}>
+              <{button type="submit" id="reg_btn" onclick="return velidateForm();"  style="display:block;"   class="common-btn reg_button" label=$___b2c="注册新用户"|t:'b2c'}>
+            <{else}>
+             <{button type="submit" id="reg_btn" onclick="return velidateForm();"  style="display:block;"   class="common-btn reg_button" label=$___b2c="注册新企业用户"|t:'b2c'}>
+             <input type="hidden" name="seller" value="<{$seller}>"> 
+            <{/if}>
+              <input type="hidden" name="forward" value="<{$forward}>">
+            </div>
+          </li>
+        </ul>
+        <{$redirectInfo}>
+      </div>
+      </div>
+    </form>
+    <script>
+    var Shop = <{$shopDefine}>;
+    <{if $env.conf.b2c.site.register_valide eq 'true'}>
+    void function(formclz){
+        var vcodeBox = document.getElement('.'+formclz+' .verifyCode');
+        var vcodeImg  =vcodeBox.getElement('img');
+        var refreshVcodeBtn  = vcodeBox.getElement('a').addEvent('click',function(e){
+            e.stop();
+            vcodeImg.src = vcodeImg.get('codesrc')+'?'+(+new Date());
+        });
+        $$('.'+formclz+' input').addEvent('focus',function(){
+            if (this.form.retrieve('showvcode',false))return;
+            vcodeBox.show();
+            refreshVcodeBtn.fireEvent('click',{stop:function(){}});
+            this.form.store('showvcode',true);
+        });
+        document.getElement('.'+formclz+'').addEvent('submit',function(e){
+            var str=$("regName").value.trim();
+            var len = 0;
+            for (var i = 0; i < str.length; i++) {
+                str.charCodeAt(i) > 255? len += 3:len ++;
+            }
+            if(len<3)return false;
+        });
+    }('signupform');
+    <{/if}>
+
+
+    $$('.signupform [type=submit]')[0].store('_ajax_config', {
+        onComplete:function(rs){
+            if (!rs) return;
+            rs=JSON.decode(rs[0]);
+            if(rs.status == 'failed') return top.Message.error(rs.msg);
+            else {
+                top.document.getElement('[data-single]').hide();
+                top.Message.success(rs.msg, function(){
+                    top.location.href=rs.url;
+                });
+            }
+        }
+    });
+    /*
+    validatorMap['change_password']= ['<{t}>两次输入的密码不一致！<{/t}>', function(element, v) {
+        var passwd_re = $('reg_passwd');
+        var passwd = $('reg_passwd_r');
+        var _is_validate = false;
+        if (passwd_re.value == passwd.value) _is_validate = true||_is_validate;
+        return _is_validate;
+    }];
+    */
+
+    function nameCheck(regName){
+
+       var strText=regName;
+
+       var reg=/^[a-zA-Z0-9_]{1,}$/;
+      
+       if(! reg.test(strText)){
+
+            //Message.error('用户名方式为3-20为字母数字下划线组合，以字母开头！');
+            //input.value='';
+            $('remind_regName').set('html', '用户名方式为3-20为字母数字下划线组合，以字母开头！');
+            $('remind_regName').setStyle('color','red');
+            return false;
+       }
+
+       /*
+       if (strText.length > 20 || strText.length < 2) {
+           Message.error("用户名长度有误，请核实后在输入");
+           input.value='';
+            return false;
+        }
+        */
+
+        var strCheckf = /^[a-zA-Z]{1,}$/;
+        var ref = strText.substring(0, 1);
+
+        if (!ref.match(strCheckf)) {
+            //Message.error("用户名首字符应为字母，请核实后输入");
+            //input.value='';
+            $('remind_regName').set('html', '用户名首字符应为字母，请核实后输入！');
+            $('remind_regName').setStyle('color','red');
+            return false;
+        }
+
+        new Request.HTML({
+            url:'<{link app=b2c ctl=site_passport act=namecheck}>',
+            update:$('remind_regName'),
+            method:'post',
+            data:'name='+encodeURIComponent(regName)
+        }).send();
+
+         return true;
+    }
+
+   function emailCheck(regName,diff){
+        var r = "^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z0-9]+$";
+
+        if(!new RegExp(r).test(regName)){
+                    //$('remind_regName').set('html', '请输入有效的邮箱地址');
+                    //$('remind_regName').setStyle('color','red');
+                    $('remind_'+diff).set('html', '请输入有效的邮箱地址');
+                    $('remind_'+diff).setStyle('color','red');
+        }else{
+            new Request.HTML({
+                    url:'<{link app=b2c ctl=site_passport act=emailcheck}>',
+                    //update:$('remind_regName'),
+                    update:$('remind_'+diff),
+                    method:'post',
+                    data:'email='+encodeURIComponent(regName)
+             }).send();
+        }
+   }
+
+    (function(){
+        var input = $(document.body).getElements('input[name="contact[area]"]')[0];
+        if(!input)return;
+        var select = input.getNext('select');
+        select.addEvent('change',function(e){
+            if($(e.target).value !='_NULL_'){
+                input.getParent('span').set('vtype','area');
+            }
+            else{
+                input.getParent('span').set('vtype','');
+            }
+        });
+    })();
+
+ 
+   
+    function mobileCheck(regName){
+        new Request.HTML({
+            url:'<{link app=b2c ctl=site_passport act=mobilecheck}>',
+            update:$('remind_regName'),
+            method:'post',
+            data:'mobile='+encodeURIComponent(regName)
+        }).send();
+    }
+
+    //获取手机短信验证码
+    function getMobileCode(){
+        var mobile = $('regName').value.trim();
+        var obj = $$('.getmobilecode button');
+        new Request({
+            url:'<{link app=b2c ctl=site_passport act=getMobileCode}>',
+            onComplete:function(response){
+                if (response==1) {
+                    obj.set('html', '验证码已发送');
+                    obj.set('disabled', true);
+                    hideInfo();
+                    try{timeDown.init(120,obj)}catch(e){};
+                }else{
+                    $('remind_regName').setHTML(response);
+                    displayInfo();
+                    obj.set('html', '获取手机验证码');
+                    obj.set('disabled', false);
+                }
+            },
+            data:'contact[phone][mobile]='+mobile
+        }).send();
+    }
+
+    function displayInfo(){
+//        $('remind_mobile').show();
+        $('mobile_success').hide();
+    }
+
+    function hideInfo(){
+        $('remind_regName').set('html','');
+        $('mobile_success').show();
+    }
+
+
+    (function() {
+        var timeDown = this.timeDown = {
+            init : function(time,dom){
+                var timeDiff = [time];
+                this.s = this.calcTime.periodical(1000,this,{
+                    time:timeDiff,
+                    dom:dom
+                });
+            },
+            addZero : function(timeDiff){
+                for(var i=0;i<timeDiff.length;i++){
+                    if(timeDiff[i].toString().length<2){
+                        timeDiff[i] = "0" + timeDiff[i].toString();
+                        return timeDiff;
+                    }
+                }
+            },
+            formatToInt : function(timeDiff){
+                for(var i=0;i<timeDiff.length;i++){
+                    parseInt(timeDiff[i]);
+                }
+                return timeDiff;
+            },
+            judgeTime : function(timeDiff){
+                if(timeDiff[0]==0){
+                    $clear(this.s);
+                    return;
+                }
+            },
+            calcTime : function (obj){
+                if(!obj.dom) return;
+                var _timeDiff = obj.time;
+                this.formatToInt(_timeDiff);
+                _timeDiff[0]--;
+                this.judgeTime(_timeDiff);
+                this.addZero(_timeDiff);
+                var dom = obj.dom;
+                if(_timeDiff[0] > 0 && dom){
+                    $$('.second_red').set('html', _timeDiff[0]);
+                    $('cut_time').show();
+                }else{
+                    dom.set('disabled', false);
+                    dom.set('html', '再次获取验证码');
+                    $('cut_time').hide();
+                }
+            }
+        };
+    })();
+
+
+
+     //注册账号名 
+    function regnameFocus(input){
+
+        if(input.value=='邮箱/手机号/用户名') input.value='';
+        input.style.color='#333';
+        $('remind_regName').set('html', '请输入邮箱/手机号/用户名');
+        $('remind_regName').setStyle('color','black');
+      
+    }
+
+    function regnameBlur(input){
+
+        var regName=input.value.trim();
+
+        $('remind_regName').set('html', '');
+        $('remind_regName').setStyle('color','black');
+
+        $('mobileCode').setStyle('display','none');
+        if($('regcode')){
+          $('regcode').setStyle('display','');
+        }
+        $('commonlyEmail').setStyle('display','none');
+      
+        if(regName=='') {
+            input.value='邮箱/手机号/用户名';
+            input.style.color='#999999';
+            return;
+        }
+        
+        
+        //邮箱注册
+        if (regName.indexOf("@") > -1) {
+           emailCheck(regName,'regName');
+           $('regType').value='email';
+           return;
+        }
+        
+        //手机注册 
+        var phone = /^13[0-9]{1}[0-9]{8}$|15[0-9]{1}[0-9]{8}$|18[0-9]{1}[0-9]{8}|14[0-9]{1}[0-9]{8}$/;
+        if(new RegExp(phone).test(regName)){
+            mobileCheck(regName);
+            $('mobileCode').setStyle('display','');
+            if($('regcode')){
+              $('regcode').setStyle('display','none');
+            }
+            $('regType').value='mobile';
+            return;
+        }
+        
+        //用户名注册  
+        nameCheck(regName);
+        //常用邮箱为必须项目
+        $('commonlyEmail').setStyle('display','');
+
+           
+        $('regType').value='username';
+       
+        return;
+       
+    }
+    //注册账号名
+
+
+
+    function pwdFocus(input){
+        $('remind_pwd').set('html', '6-20位字符，可使用字母、数字或符号的组合');
+        $('remind_pwd').setStyle('color','black');
+        $('weak').hide();
+        $('middle').hide();
+        $('strong').hide();
+    }
+
+    function pwdBlur(input){
+        if(input.value.trim().length < 6 || input.value.trim().length > 20){
+            new Request.HTML({
+                url:'<{link app=b2c ctl=site_passport act=pwdblur}>',
+                update:$('remind_pwd'),
+                method:'post',
+                data:'pwd='+encodeURIComponent(input.value.trim())
+            }).send();
+            $('weak').hide();
+            $('middle').hide();
+            $('strong').hide();
+        }else{
+            $('remind_pwd').set('html', '安全程度:');
+            $('remind_pwd').setStyle('color','black');
+            $('weak').show();
+            $('middle').show();
+            $('strong').show();
+        }
+    }
+
+    function pwd2Focus(input){
+        $('remind_repwd').set('html', '请再次输入密码');
+        $('remind_repwd').setStyle('color','black');
+    }
+
+    function pwd2Blur(input){
+        if(input.value.trim() != ''){
+            if(input.value.trim() != $('reg_passwd').value.trim()){
+                $('remind_repwd').set('html', '两次输入密码不一致');
+                $('remind_repwd').setStyle('color','red');
+            }else{
+                if(input.value.trim().length > 20 || input.value.trim().length < 6){
+                    $('remind_repwd').set('html', '密码长度只能在6-20位字符之间');
+                    $('remind_repwd').setStyle('color','red');
+                }else{
+                    $('remind_repwd').set('html', '');
+                }
+            }
+        }else{
+            $('remind_repwd').set('html', '');
+        }
+    }
+
+    function pwdChange(input){
+        var pwd_lv = pwdLevel(input.value.trim());
+
+        if(input.value.trim().length >= 6 && input.value.trim().length <= 20){
+            $('remind_pwd').set('html', '安全程度:');
+            $('remind_pwd').setStyle('color','black');
+            $('weak').show();
+            $('middle').show();
+            $('strong').show();
+            $('weak').set('html', '弱');
+            $('middle').set('html', '中');
+            $('strong').set('html', '强');
+            if(pwd_lv>0 && pwd_lv<2){
+                if($('middle').hasClass('orange')){
+                    $('middle').removeClass('orange');
+                }
+                if($('strong').hasClass('orange')){
+                    $('strong').removeClass('orange');
+                }
+                $('weak').addClass('orange');
+                $('middle').addClass('gray');
+                $('strong').addClass('gray');
+            }else if(pwd_lv>=2 && pwd_lv<3){
+                if($('strong').hasClass('orange')){
+                    $('strong').removeClass('orange');
+                }
+                $('weak').addClass('orange');
+                $('middle').addClass('orange');
+                $('strong').addClass('gray');
+            }else if(pwd_lv>=3){
+                $('weak').addClass('orange');
+                $('middle').addClass('orange');
+                $('strong').addClass('orange');
+            }
+        }else{
+            $('remind_pwd').set('html', '6-20位字符，可使用字母、数字或符号的组合');
+            $('remind_pwd').setStyle('color','black');
+            $('weak').hide();
+            $('middle').hide();
+            $('strong').hide();
+        }
+    }
+
+    function pwdLevel(value) {
+        var pattern_1 = /^.*([\W_])+.*$/i;
+        var pattern_2 = /^.*([a-zA-Z])+.*$/i;
+        var pattern_3 = /^.*([0-9])+.*$/i;
+        var level = 0;
+        if (value.length > 10) {
+            level++;
+        }
+        if (pattern_1.test(value)) {
+            level++;
+        }
+        if (pattern_2.test(value)) {
+            level++;
+        }
+        if (pattern_3.test(value)) {
+            level++;
+        }
+        if (level > 3) {
+            level = 3;
+        }
+        return level;
+    }
+
+    //表单验证 
+     function velidateForm(){
+        var flag = true;
+        var str_name = "^[A-Za-z0-9_\\-\\u4e00-\\u9fa5]+$";
+        var str_email = "^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z0-9]+$";
+        var str_mobile = "^0?(13|15|18|14)[0-9]{9}$";
+        var str_num = "^[0-9]+$";
+
+        if($('reg_btn').getProperty('rel') == '_request'){
+            $('reg_btn').removeProperty('rel');
+        }
+
+        if($('reg_btn').hasClass('disabled')){
+            $('reg_btn').removeClass('disabled');
+        }
+
+        
+        if($('regName').value.trim() == '' || $('regName').value.trim() == '邮箱/手机号/用户名' ){
+            $('remind_regName').set('html', '请输入邮箱/手机号/用户名。');
+            $('remind_regName').setStyle('color','red');
+            flag = false;
+        }
+
+
+        if($('regType').value == 'email'){
+            if($('regName').value.trim() == ''){
+                $('remind_regName').set('html', '请输入邮箱');
+                $('remind_regName').setStyle('color','red');
+                flag = false;
+            }else{
+                if(!new RegExp(str_email).test($('regName').value.trim())){
+                    $('remind_regName').set('html', '请输入有效的邮箱地址');
+                    $('remind_regName').setStyle('color','red');
+                    flag = false;
+                }
+            }
+        }
+
+        if($('regType').value == 'mobile'){
+            if($('regName').value.trim() == ''){
+                $('remind_regName').set('html', '请输入手机号');
+                $('remind_regName').setStyle('color','red');
+                flag = false;
+            }else{
+                if(!new RegExp(str_mobile).test($('regName').value.trim())){
+                    $('remind_regName').set('html', '手机号码格式有误，请输入以13/14/15/18开头的11位数字');
+                    $('remind_regName').setStyle('color','red');
+                    flag = false;
+                }
+            }
+        }
+
+        if($('regType').value == 'username'){
+            if($('regName').value.trim() == ''){
+                $('remind_regName').set('html', '请输入用户名');
+                $('remind_regName').setStyle('color','red');
+                flag = false;
+            }else{
+                if($('regName').value.trim().length < 3 || $('regName').value.trim().length >20){
+                    $('remind_regName').set('html', '用户名长度只能在3-20位字符之间');
+                    $('remind_regName').setStyle('color','red');
+                    flag = false;
+                }else if(!new RegExp(str_name).test($('regName').value.trim())){
+                    $('remind_regName').set('html', '用户名只能由中文、英文、数字及“_”、“-”组成');
+                    $('remind_regName').setStyle('color','red');
+                    flag = false;
+                }else if(new RegExp(str_num).test($('regName').value.trim())){
+                    $('remind_regName').set('html', '用户名不能全为数字');
+                    $('remind_regName').setStyle('color','red');
+                    flag = false;
+                }
+            }
+           
+           
+            if($('comm_email').value.trim() == ''){
+                $('remind_comm_email').set('html', '请输入常用邮箱');
+                $('remind_comm_email').setStyle('color','red');
+                flag = false;
+            }else if(!new RegExp(str_email).test($('comm_email').value.trim())){
+                $('remind_comm_email').set('html', '请输入有效的邮箱地址');
+                $('remind_comm_email').setStyle('color','red');
+                flag = false;
+            }
+            
+           
+        }
+
+        if($('reg_passwd').value.trim() == ''){
+            $('remind_pwd').set('html', '请输入密码');
+            $('remind_pwd').setStyle('color','red');
+            flag = false;
+        }else if($('reg_passwd').value.trim().length < 6 || $('reg_passwd').value.trim().length > 20){
+            $('remind_pwd').set('html', '密码长度只能在6-20位字符之间');
+            $('remind_pwd').setStyle('color','red');
+            flag = false;
+        }
+
+        if($('reg_passwd_r').value.trim() == ''){
+            $('remind_repwd').set('html', '请输入确认密码');
+            $('remind_repwd').setStyle('color','red');
+            flag = false;
+        }else if($('reg_passwd_r').value.trim() != $('reg_passwd').value.trim()){
+            $('remind_repwd').set('html', '两次输入密码不一致');
+            $('remind_repwd').setStyle('color','red');
+            flag = false;
+        }
+
+        if($('regType').value != 'mobile'){
+          <{if $env.conf.b2c.site.register_valide eq 'true'}>
+            if($('iptsingup').value.trim() == ''){
+                $('remind_vcode').set('html', '请输入验证码');
+                $('remind_vcode').setStyle('color','red');
+                flag = false;
+            }else{
+                $('remind_vcode').set('html', '');
+            }
+          <{/if}>
+        }
+
+        if(flag == true){
+          if($('reg_btn').hasClass('disabled')){
+              $('reg_btn').removeClass('disabled');
+          }
+          $('reg_btn').set('rel', '_request');
+        }else{
+          $('reg_btn').removeProperty('rel');
+          if(!$('reg_btn').hasClass('disabled')){
+              $('reg_btn').addClass('disabled');
+          }
+        }
+
+        return flag;
+    }
+
+     function  yssign(checkbox){
+         if(checkbox.checked){
+            $('ysreg').setStyle('display','inline');
+           } else {
+            $('ysreg').setStyle('display','none');
+           }
+
+
+    }
+
+    function changeimg(id){
+        $(id).set('src','<{link app="b2c" ctl="site_passport" act="verifyCode"}>#'+(+new Date()));
+    }
+
+    </script>
+    </body>
+</html>

@@ -1,0 +1,18 @@
+<app>
+    <name>数据动态扩展</name>
+    <description>使用Entity-Attribute-Value模型动态扩展数据列，并提供数据回收站机制</description>
+
+    <author>
+        <name>BBC 开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>0.1</version>
+    <license>BBC license</license>
+
+	<depends>
+		<app>base</app>
+	</depends>
+
+</app>

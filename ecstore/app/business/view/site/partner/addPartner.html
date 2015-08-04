@@ -1,0 +1,62 @@
+<{css src="ecmall.css" app="business"}>
+<{css src="style.css" app="business"}>
+
+<{lang_script src="lang.js" app="site"}>
+<{css src="framework.css" app="site" pdir="css_mini"}>
+<{css src="b2c.css" app="b2c" pdir="css_mini"}>
+<{css src="passport.css" app="b2c" pdir="css_mini"}>
+<{if defined("DEBUG_JS") && DEBUG_JS}>
+  <{script src="mootools.js" app="site"}>
+  <{script src="formplus.js" app="site"}>
+  <{script src="jstools.js" app="site"}>
+  <{script src="shoptools.js" app="b2c"}>
+  <{script src="coms/popup.js" app="site"}>
+<{else}>
+  <{script src="moo_min.js" app="site" pdir="js_mini"}>
+  <{script src="tools_min.js" app="site" pdir="js_mini"}>
+  <{script src="shoptools_min.js" app="b2c" pdir="js_mini"}>
+  <{script src="ui_min.js" app="site" pdir="js_mini"}>
+<{/if}>
+<{script src="dialog.js" app="business" pdir="js"}>
+<{script src="modedialog.js" app="business" pdir="js"}>
+<{script src="load.js" app="business" pdir="js"}>
+<{script src="wpage.js" app="business" pdir="js"}>
+<{lang_script src="lang.js" app="b2c"}>
+<{lang_css src="lang.css" app="b2c"}>
+<form id="" action="<{link app=business ctl=site_partner act=save}>"  method="POST" enctype="multipart/form-data">
+    <{input type="hidden" name="edit" value=$edit}>
+	<table width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+	  <th><{t}>链接名称：<{/t}></th>
+	  <td>
+	  <{if !$edit}><{input type="text" name="link_name" id="link_name" style="width:120px" required="true" value=$link_name onblur="nameCheck(this);"}><span id="check"></span>
+	  <{else}>
+       <input type="text" name="link_name" id="link_name" style="width:120px" required="true" value=<{$link_name}>
+	   readonly="readonly"><span id="check"></span>
+	  <{/if}>
+	  </td>
+	</tr>
+	<tr>
+	  <th>友情链接图片：</th>
+	  <td>
+	  <{input type='vimage' name='image_url' width=150 height=100 value=$image_url}>
+      </td>
+	</tr>
+
+	<tr>
+	  <th><{t}>链接地址：<{/t}></th>
+	  <td><{input type="text" name="href" id="href" value='' width='400px' height='200px' value=$href}></td>
+	</tr>
+	</table>
+	<div style="align:center;">
+         <{if !$edit}>
+		<{button type="submit" id="btn" label=$___b2c="添加"|t:'b2c'}>
+		<{else}>
+        <{button type="submit" id="btn" label=$___b2c="编辑"|t:'b2c'}>
+		<{/if}>
+	</div>
+</form>
+
+<script>
+
+</script>

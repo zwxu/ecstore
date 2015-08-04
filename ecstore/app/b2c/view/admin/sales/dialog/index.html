@@ -1,0 +1,7 @@
+<div  style="margin-left:130px;margin-top:-22px">
+<{if $isfront eq 'true'}>
+    <{input type="vobject" mdl_object=$mdl_object object=$object filter=$storeid_filter name=$name cols="name" multiple="true"  cols="name,spec_info" value=$value select="checkbox" vtype="required"  textcol="name,bn" view="b2c:admin/goods/rows.html"}>
+<{else}>
+    <{input type="object" mdl_object=$mdl_object object=$object filter=$storeid_filter name=$name cols="name" multiple="true"  cols="name,spec_info" value=$value select="checkbox" vtype="required"  textcol="name,bn" view="b2c:admin/goods/rows.html"}>
+<{/if}>
+</div>

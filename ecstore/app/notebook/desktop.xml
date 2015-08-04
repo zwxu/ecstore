@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<desktop>
+  <workground name="留言板管理" id="notebook_admin_notebook" controller="admin_notebook" action="index"  order="10">
+    <menugroup name="留言板">
+      <menu controller="admin_notebook" action="index" permission="notebook_manage" display="true" order="1010">留言编辑列表</menu>
+    </menugroup>
+  </workground>
+  <permissions>
+    <permission id="notebook_manage" display='true'>notebook操作</permission>
+  </permissions>
+</desktop>

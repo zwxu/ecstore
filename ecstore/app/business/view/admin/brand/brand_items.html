@@ -1,0 +1,56 @@
+<div class="division">
+  <div  class="table-grid">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+	<col style="width:8%"/>
+	<col style="width:8%"/>
+    <col style="width:15%"/>
+	<col style="width:10%"/>
+	<col style="width:10%"/>
+    <col style="width:10%"/>
+	<col style="width:10%"/>
+	<col style="width:30%"/>
+      <thead>
+	  <tr>
+        <th><{t}>品牌名称<{/t}></th>
+        <th><{t}>品牌英文名<{/t}></th>
+        <th><{t}>商铺名称<{/t}></th>
+		<th><{t}>品牌图标<{/t}></th>
+        <th><{t}>品牌资质文件<{/t}></th>
+        <th><{t}>申请类型<{/t}></th>
+        <th><{t}>审核状态<{/t}></th>
+        <th><{t}>网址<{/t}></th>
+      </tr>
+      </thead>
+        <tr>
+          <td width="8%"><{$brand.brand_name}></td>
+          <td width="8%"><{$brand.brand_keywords}></td>
+          <td class="textleft" ><{$brand.shop_name}></td>
+          <td width="10%"><{if $brand.brand_logo}><a href="<{$brand.brand_logo}>" class='img-tip pointer' target='_blank' onmouseover='bindFinderColTip(event);'><span>&nbsp;pic</span></a><{else}>暂无图片<{/if}></td>
+           <td width="10%"><{if $brand.brand_aptitude}><a href="<{$brand.brand_aptitude}>" class='img-tip pointer' target='_blank' onmouseover='bindFinderColTip(event);'><span>&nbsp;pic</span></a><{else}>暂无图片<{/if}></td>
+          <td class="Colamount" ><{if $brand.type == 0}><{t}>新品牌申请<{/t}><{/if}><{if $brand.type == 1}><{t}>品牌使用<{/t}><{/if}></td>
+          <td width="12%"><{if $brand.status == 0}><{t}>审核中<{/t}><{/if}><{if $brand.status == 1}><{t}>审核通过<{/t}><{/if}><{if $brand.status == 2}><{t}>审核不通过<{/t}><{/if}></td>
+          <td class="Colamount" width="15%"><{$brand.brand_url}></td>
+        </tr>
+	  
+    </table>
+
+    </div>
+    <div  class="table-grid">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+      <thead>
+       <tr>
+       <{if $brand.fail_reason}>
+        <th><{t}>不通过原因<{/t}></th>
+        <{/if}>
+        <th><{t}>详细说明<{/t}></th>
+        </tr>
+      </thead>
+        <tr>
+        <{if $brand.fail_reason}>
+        <td class="Colamount"><{$brand.fail_reason}></td>
+        <{/if}>
+        <td class="Colamount"><{$brand.brand_desc}></td>
+        </tr>
+    </table>
+    </div>
+</div> 

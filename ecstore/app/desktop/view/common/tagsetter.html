@@ -1,0 +1,102 @@
+<form action="<{$url}>&action=settag" method="post" id="tag_from" class="tableform">
+	<div class="note">
+	  <{t}>对选择的<{/t}><strong><{$count}></strong><{t}>个条目应用标签<{/t}>
+	</div>
+
+	 
+   <input type="hidden" name="filter" value='<{$filter}>' class="pkey"/>
+	<div class="clearfix tag-items division" id="tag_setter">
+	<{foreach from=$tags item=t}>
+	<div class="span-auto item" style="line-height:28px; overflow:hidden; zoom:0">
+	<{if $t.tag_id|in_array:$intersect}>
+	<span><{img src="bundle/tag_all.gif" class="icon" stat="0"}></span>
+	<{assign var=used_status value=0}>
+	<{elseif $t.tag_id|in_array:$used_tag}>
+	<span part="true"><{img src="bundle/tag_part.gif" class="icon" stat="2"}></span>
+	<{assign var=used_status value=2}>
+	<{else}>
+	<span ><{img src="bundle/tag_none.gif" class="icon" stat="1"}></span>
+	<{assign var=used_status value=1}>
+	<{/if}>
+	
+		<label <{if $t.tag_abbr}>title="<{$t.tag_abbr}>"<{/if}> class="tag-label" <{if $t.tag_bgcolor}> style="color:<{$t.tag_fgcolor}>;background-color:<{$t.tag_bgcolor}>"<{/if}>>
+			<{$t.tag_name}>
+		</label>
+	     <{if $t.rel_count}> (<{$t.rel_count}>)<{/if}> 
+		 <input type="hidden" name="tag[name][]" value="<{$t.tag_name}>" class="tag-name"/>
+		 <input type="hidden" name="tag[stat][]" value="<{$used_status}>"   class="stat"/>
+		 <input type="hidden" name="tag[tag_id][]" value="<{$t.tag_id}>"   class="tag-id"/>
+	</div>
+	<{/foreach}>
+	</div>
+	
+</form>
+<div class="division">
+   	<{button type="button" app="desktop" icon="add.gif" label=$___desktop="增加新标签"|t:'desktop' onclick="$('new-tag-tmpl').getFirst().clone().inject('tag_setter');"}>  
+</div>
+	<div style="display:none;" id="new-tag-tmpl">
+		<div class="span-auto item" style="line-height:28px;width:134px;width:144px\9">
+		   
+        		<span>
+        		<{img src="bundle/tag_all.gif" class="icon" stat="0"}>
+        		</span>
+        		<input type="text" name="tag[name][]" vtype="required" value="" class="tag-name tag-new" style="width:80px" />
+        		<{img src="bundle/delete.gif" class="del-tag lnk" alt=$___desktop="删除"|t:'desktop' onclick="$(this).getParent('.item').dispose()"}>
+        		<input type="hidden" name="tag[stat][]"  value="0"	class="stat"/>
+        		<input type="hidden" name="tag[tag_id][]" value="0"   class="tag-id"/>
+		    
+		</div>
+	</div>
+	
+<{area inject=".mainFoot"}>
+<div class="table-action">
+    <{button label=$___desktop="保存"|t:'desktop' class="btn-primary" onclick="$('tag_from').fireEvent('submit',new Event(event))" }>
+</div>
+<{/area}>
+
+<script>
+(function(){
+		var status = [
+			{type:'all',icon:'<{img src="bundle/tag_all.gif" class="icon" stat="0"}>'},
+			{type:'none',icon:'<{img src="bundle/tag_none.gif" class="icon" stat="1"}>'},
+			{type:'part',icon:'<{img src="bundle/tag_part.gif" class="icon" stat="2"}>'}
+		];
+		
+		$('tag_setter').addEvent('click',function(e){
+			var target = $(e.target);
+			if(target.hasClass('icon')){		
+				var el=target.getParent('span'),stat=el.getNext('.stat'),n=0;
+				switch(target.get('stat')){
+					case '0':	
+						n=1;
+						break;
+					case '1':
+						n=el.get('part')?2:0;
+						break;
+					default:break;
+				}
+				el.innerHTML=status[n].icon;
+				stat.value=n;
+			}
+		});
+
+		$('tag_setter').addEvent('change',function(e){
+				var target=$(e.target);
+				if(target.hasClass('tag-new')&&target.getNext('.tag-name')){
+					target.getNext('.tag-name').value=target.value;
+				}
+		});
+		
+		$('tag_from').store('target',{onComplete:function(response){
+			try{
+				var _dialogIns = $('tag_from').getParent('.dialog').retrieve('instance');
+				response = JSON.decode(response);
+		     }catch(e){}
+		    if(_dialogIns){
+				if (response && response.error)	return;
+			    _dialogIns.close();
+			}
+		}});
+		
+})();
+</script>

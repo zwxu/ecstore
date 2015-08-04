@@ -1,0 +1,22 @@
+<services>
+    <service id="openapi.cellphoneseller">
+        <class>cellphoneseller_cellphoneseller</class>
+    </service>
+    <service id="openapi.cellphoneseller.goods">
+        <class>cellphoneseller_goods_goods</class>
+    </service>
+	<service id="openapi.cellphoneseller.trades">
+        <class>cellphoneseller_base_order_orders</class>
+    </service>
+    <service id="openapi.cellphoneseller.user">
+        <class>cellphoneseller_base_member_passport</class>
+    </service>
+
+    <service id="openapi.cellphoneseller.services">
+        <class>cellphoneseller_services_service</class>
+    </service>
+    <service id="openapi.cellphoneseller.shops">
+        <class>cellphoneseller_base_store_shop</class>
+    </service>
+
+</services>

@@ -1,0 +1,11 @@
+<div class="cc-cbox-filter">
+    <label for="cc-cbox-filter538">输入名称查找</label>
+    <input role="textbox" autocomplete="off" id="cc-cbox-filter538" style="width: <{if count($pcat)>12}>176<{else}>192<{/if}>px;">
+</div>
+<div role="combobox" class="cc-cbox" aria-activedescendant="cc-cbox-item561">
+    <ul role="listbox" class="cc-cbox-cont">
+        <{foreach from=$pcat item=pitem}>
+        <li cat_id=<{$pitem.cat_id}> id="cc-cbox-item<{$pitem.cat_id}>" class="cc-tree-item <{if $pitem.child_count}>cc-hasChild-item<{/if}>"><{$pitem.cat_name}></li>
+        <{/foreach}>
+    </ul>
+</div>

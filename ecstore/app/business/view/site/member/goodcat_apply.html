@@ -1,0 +1,69 @@
+<{lang_script src="lang.js" app="site"}>
+<{css src="framework.css" app="site" pdir="css_mini"}>
+<{css src="b2c.css" app="b2c" pdir="css_mini"}>
+<{css src="passport.css" app="b2c" pdir="css_mini"}>
+<{if defined("DEBUG_JS") && DEBUG_JS}>
+  <{script src="mootools.js" app="site"}>
+  <{script src="formplus.js" app="site"}>
+  <{script src="jstools.js" app="site"}>
+  <{script src="shoptools.js" app="b2c"}>
+  <{script src="coms/popup.js" app="site"}>
+<{else}>
+  <{script src="moo_min.js" app="site" pdir="js_mini"}>
+  <{script src="tools_min.js" app="site" pdir="js_mini"}>
+  <{script src="shoptools_min.js" app="b2c" pdir="js_mini"}>
+  <{script src="ui_min.js" app="site" pdir="js_mini"}>
+<{/if}>
+<{lang_script src="lang.js" app="b2c"}>
+<{lang_css src="lang.css" app="b2c"}>
+<form id="cat" action=""  method="POST">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+	  <th><{t}>分类名称：<{/t}>
+            <{if $cat.custom_cat_id }><input type="hidden" value="<{$cat.custom_cat_id}>" name="cat[custom_cat_id]" /></th><{/if}>
+          <td><input type="text" value="<{$cat.cat_name|escape:'html'}>" name="cat[cat_name]" vtype='required' class='x-input'/>
+            <{$cat_name}></td>
+	</tr>
+
+	<tr>
+	  <th><{t}>上级分类：<{/t}></th>
+          <td><{input type="select" name="cat[parent_id]" style="font-size:12px;" required='1' value=$cat.parent_id rows=$catList valueColumn="custom_cat_id" labelColumn="cat_name"}>
+            <span class="notice-inline"><{t}>顶级分类请选择“无”<{/t}></span></td>
+	</tr>
+
+	<tr>
+          <th><{t}>排序：<{/t}></th>
+          <td><input style="width:50px;" vtype="unsigned" class="inputstyle" value="<{$cat.p_order}>" name="cat[p_order]" class="_x_ipt"/>
+            <span class="notice-inline"><{t}>数字越小越靠前<{/t}></span></td>
+        </tr>
+	</table>
+	<div style="align:center;">
+		<{button type="button" id="btn" label=$___b2c="保存"|t:'b2c'}>
+	</div>
+</form>
+
+
+<script>
+	$('btn').addEvent('click',function(){
+           if(validate($('cat'))){
+                new Request.JSON({
+                    url:"<{link app=business ctl=site_goods_cat act=save}>",
+                    method:'post',
+                    data:$('cat'),
+                    onComplete:function(res){
+							if(res.status=='success'){
+								Ex_Dialog.alert(res.message);
+							}else{
+								Ex_Dialog.alert(res.message);
+							}
+							 top.location.reload();
+                           
+                        
+                    }
+                }).send();
+            }
+
+   });
+
+
+</script>

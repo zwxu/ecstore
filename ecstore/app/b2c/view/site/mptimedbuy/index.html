@@ -1,0 +1,76 @@
+<div class="famous_cat">
+    <ul>
+        <li class="active"><a href="#">全部分类（137）</a></li>
+        <li><a href="#">电脑/配件/网络（42）</a></li>
+        <li><a href="#">手机/数码/摄影（28）</a></li>
+        <li><a href="#">大家电/生活电器（36）</a></li>
+        <li><a href="#">个护/清洁/纸品（19）</a></li>
+        <li><a href="#">汽车/保养/装饰（6）</a></li>
+    </ul>
+</div>
+<div class="famous_list">
+    <ul>
+    <{foreach from=$timedbuy item=goodsinfo key=key name=timedbuy}>
+        <li <{if ($smarty.foreach.timedbuy.iteration)%2 != 0}><{else}>class="fr"<{/if}>>
+            <h3><span>今日特卖：</span><a href="#"><{$goodsinfo.g_name}></a></h3>
+            <div class="famous_pro">
+            <a href="#" class="famous_pro_img"><img src="images/pro_list_01.jpg" alt="" /></a>
+            <div class="famous_pro_info">
+                <p class="famous_pro_price">
+                    <span class="famous_price"><{$goodsinfo.b_price|cur_odr}></span>
+                    <span class="famous_price_right">
+                        <span class="famous_sall"><{$goodsinfo.discount}>折</span>
+                        <span class="famous_namor"><{$goodsinfo.g_price|cur_odr}></span>
+                    </span>
+                    <span class="crl"></span>
+                </p>
+                <{if $time < $goodsinfo.a_stime}>
+                    <table class="famous_pro_time">
+                        <tr>
+                        <td class="jijiangkaishi">
+                        <img src="images/clock_01.png" alt="" />
+                        <span class="famous_time">0</span>天
+                        <span class="famous_time">0</span>小时
+                        <span class="famous_time">0</span>分
+                        <span class="famous_time">0</span>秒
+                        </td>
+                        </tr>
+                    </table>
+                    <p class="famous_pro_button_01"><input type="button" value="即将开始"/></p>
+                <{elseif $time < $goodsinfo.a_etime}>
+                    <table class="famous_pro_time">
+                        <tr>
+                        <td>
+                        <img src="images/clock.png" alt="" />
+                        <span class="famous_time">5</span>天
+                        <span class="famous_time">2</span>小时
+                        <span class="famous_time">51</span>分
+                        <span class="famous_time">50</span>秒
+                        </td>
+                        </tr>
+                    </table>
+                    <p class="famous_pro_button"><input type="button" value="去看看"/></p>
+                <{else}>
+                    <table class="famous_pro_time">
+                        <tr>
+                        <td class="jijiangkaishi">
+                        <img src="images/clock_01.png" alt="" />
+                        <span class="famous_time">0</span>天
+                        <span class="famous_time">0</span>小时
+                        <span class="famous_time">0</span>分
+                        <span class="famous_time">0</span>秒
+                        </td>
+                        </tr>
+                    </table>
+                    <p class="famous_pro_button_01"><input type="button" value="已结束"/></p>
+                <{/if}>
+                
+                
+                <p class="famous_brand">品牌商家：CAMEL骆驼官方旗舰店</p>
+            </div>
+            </div>
+        </li>
+    <{/foreach}>
+    </ul>
+    <div class="crl"></div>
+</div>

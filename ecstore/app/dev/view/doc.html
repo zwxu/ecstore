@@ -1,0 +1,8 @@
+<div style="margin-left:150px;margin-top:30px">	
+<{foreach from=$doclib item=app}>
+	<h2><{$app.app_name}></h2>
+	<{foreach from=$app.docs item=doc key=bookid}>
+		<a style="display:block;color:#009;padding-left:100px;line-height:30px" href="<{link tapp=$app.app_id act=doc book=$bookid}>"><{$doc}></a>
+	<{/foreach}>
+<{/foreach}>
+</div>

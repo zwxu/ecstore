@@ -1,0 +1,29 @@
+  
+  <div class="tableform">
+	<form action="index.php?<{$env.server.QUERY_STRING}>" method="post">
+	<div class="division">
+	    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+	      <tbody>		
+	        <tr>
+	          <th><{t}>当前积分:<{/t}></th>
+	          <td><span class="price0"><{$member.score.total}></span></td>
+	        </tr>
+	        <tr>
+	          <th><{t}>调整积分(增/减):<{/t}></th>
+	          <td><{input type="number" vtype="required&&number" maxlength="10" name="modify_point" style="float:left;" }> <span class="notice-inline"><{t}>输入负值即可减少积分<{/t}></span></td>
+	        </tr>
+			<tr>
+				          <th><{t}>备注:<{/t}></th>
+	          <td><input type="text" class="inputstyle" size="30" name="modify_remark"/></td>
+
+			</tr>
+	      </tbody>
+	    </table>
+	</div>
+	<div class="table-action"><{button type="submit" label=$___b2c="保存"|t:'b2c' }></div>
+	</form>
+</div>
+
+<div>
+<{include file='admin/member/page_point_list.html'}>
+</div>

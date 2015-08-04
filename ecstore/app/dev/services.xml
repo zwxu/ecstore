@@ -1,0 +1,27 @@
+<services>
+	
+    <service id="dev.project_type">
+        <class>dev_apptmpl</class>
+    </service>
+
+    <service id="desktop_finder.dev_mdl_project">
+        <class>dev_finder_project</class>
+    </service>
+
+    <service id="desktop_finder.base_mdl_apps">
+        <class>dev_finder_apps</class>
+    </service>
+
+	<service id="desktop_finder.site_mdl_themes">
+		<class>dev_finder_themes</class>
+	</service>
+
+    <service id="desktop.widgets">
+        <class>dev_desktop_docs</class>
+    </service>
+
+    <service id="base_mdl_apps_hidden">
+        <class>dev_service_mdlapps</class>
+    </service>
+
+</services>

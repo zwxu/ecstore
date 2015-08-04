@@ -1,0 +1,52 @@
+<div class="tableform">
+  <h5><{t}>您可以从下列预设的商品类型中选择导入<{/t}></h5></div>
+
+
+  <div class="item-list clearfix flt" style="width:666px;">
+  <div id="typeLoding" align="center" valign="top" style="overflow:hidden">
+  <div style="width:300px;"><BR><BR><{t}>正在加载预设商品类型...<{/t}></div>
+
+  </div>
+</div>
+
+<div id="newtypediv" style="width:100px;float:left;text-align:center;">
+  <div class="item-pic">
+      <a class="lnk" href="index.php?app=b2c&ctl=admin_goods_type&act=set"><{img src="bundle/goods_type_custom.gif" app="desktop"}></a><br><{t}>自定义商品类型<{/t}>
+  </div>
+
+
+</div>
+<script language="javascript">
+autoFetch();
+function autoFetch(){
+	W.page('index.php?app=b2c&ctl=admin_goods_type&act=fetchProtoTypes&p[0]=default.php&p[1]=""&p[2]=<{$qs}>',{update:'typeLoding',
+	onComplete:function(){
+	    var images = {
+	    	'http://feed.shopex.cn/goodstype/images/pocketgamer.gif':'<{$env.app.res_url}>/bundle/game-icon.gif',
+	    	'http://feed.shopex.cn/goodstype/images/digitalvideo.gif':'<{$env.app.res_url}>/bundle/vidicon-icon.gif',
+	    	'http://feed.shopex.cn/goodstype/images/digitalcamera.gif':'<{$env.app.res_url}>/bundle/camera-icon.gif',
+	    	'http://feed.shopex.cn/goodstype/images/mobilephone.gif':'<{$env.app.res_url}>/bundle/mobile-icon.gif',
+	    	'http://feed.shopex.cn/goodstype/images/notebook.gif':'<{$env.app.res_url}>/bundle/bookcomputer-icon.gif',
+	    	'http://feed.shopex.cn/goodstype/images/book.gif':'<{$env.app.res_url}>/bundle/book-icon.gif'
+	    };
+	    $('typeLoding').getElements('div img').each(function(item,i){
+	        if (typeof(images[item.src]) !== 'undefined') {
+	        	item.set('src',images[item.src]);
+	        }
+	        item.addEvent('click',function(){
+	            //$('newtypediv').addClass('goodsclass-hide');
+	            $('newtypediv').hide();
+	        });
+	    });
+	    $('newtypediv').show();
+	}
+	});
+}
+function feedFetch(link,qs,nodeType){
+  //$('newtypediv').innerHTML = '';
+  W.page('index.php?app=b2c&ctl=admin_goods_type&act=fetchProtoTypes&p[0]='+link+'&p[1]='+qs+'&p[2]='+nodeType,{update:'typeLoding'});
+}
+function loadLocalBrands(){
+  W.page('index.php?app=b2c&ctl=admin_brand&act=getCheckboxList',{update:'localBrands'});
+}
+</script>

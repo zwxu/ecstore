@@ -1,0 +1,39 @@
+{
+  "elements":[
+    {
+      "type": "area",
+	  "fill-alpha": 0.1,
+      "colour":    "#3367ac", 
+      "font-size": 12,
+      "width":     2,
+      "dot-size":  4,
+      
+      "text":      "<{$title|default:'null'}>",   //data
+      
+      "values" :   <{$values|default:'null'}>
+        
+    }
+  ],
+
+  "y_axis":{
+    "colour":"#d4e0f1",
+    "grid-colour":  "#e3e8ec",
+    "labels":{"colour":"#333333"},
+    
+    "max": <{$max|default:'null'}>,  //data
+    "steps" :<{$steps|default:'null'}>  //data
+  },
+  "x_axis":{
+   "colour":"#d4e0f1",
+   "grid-colour":  "#e3e8ec",
+   "labels":{
+     "colour":"#333333",
+     "size":12,
+     
+     "labels": <{$labels|default:'null'}>
+   }
+  },
+  
+  "bg_colour": "#ffffff"
+
+}

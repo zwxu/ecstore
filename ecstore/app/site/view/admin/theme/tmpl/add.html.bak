@@ -1,0 +1,76 @@
+<form id="insert_tmpl" action="index.php?app=site&ctl=admin_theme_tmpl&act=insert_tmpl" method="post">
+<input type="hidden" name="theme" value="<{$theme}>">
+<input type="hidden" name="tmpl_type" value="<{$type}>">
+<div class="theme-list" id="theme_list">
+  <ul>
+  <{foreach from=$types item=item key=key name=types}>
+  <li><a href="javascript:void(0);" rel="<{$key}>"<{if $key == $type}> class="act"<{/if}>><{$item}></a></li>
+  <{/foreach}>
+  </ul>
+</div>
+<div class="theme-content">
+  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <th style="width:10%;" nowrap><{t}>当前页面类型：<{/t}></th>
+    <td class="source-type"><{t}>首页<{/t}></td>
+  </tr>
+  <tr>
+    <th><{t}>名称：<{/t}></th>
+    <td><{input type="text" name="tmpl_name" value="" vtype='required' }></td>
+  </tr>
+  <tr>
+    <th><{t}>文件名：<{/t}></th>
+    <td><{input type="text" name="tmpl_path" value="" vtype='alphaint'}> <span class="notice-inline"><{t}>留白系统自动生成，只允许英语及数字<{/t}></span></td>
+  </tr>
+   <tr>
+    <th><{t}>所属分类：<{/t}></th>
+    <td><{input type="select" name="type"  options=$cat}> </td>
+  </tr>
+  <tr>
+    <th><{t}>页面源码：<{/t}></th>
+    <td><div style="border:1px solid #ddd;height:240px" id="source_code_area"><{input type="soucecode" name="content" value=$content vtype="required" width='100%' height='100%'}></div></td>
+  </tr>
+  </table>
+</div>
+<{area inject=".mainFoot"}>
+<div class="table-action">
+<{button id="submit_tmpl" type="button" label=$___a="添加"|t:'site'}> &nbsp;&nbsp;
+<{button id="cancel_tmpl" type="button" class="btn-secondary" label=$___a="取消"|t:'site'}>
+</div>
+<{/area}>
+</form>
+<script>
+$('theme_list').setStyle('height',$('theme_list').getParent('.dialog-content-body').getSize().y);
+$('theme_list').getElements('li a').addEvent('click',function(e){
+    e.stop();
+    $$('[name=tmpl_type]')[0].value = this.rel;
+    $$('.source-type')[0].set('text',this.get('text'));
+    this.addClass('act').getParent('li').getSiblings('li .act').removeClass('act');
+    W.page('<{$this->_base_url}>?app=site&ctl=admin_theme_tmpl&act=add_source_page&theme=<{$theme}>&type='+this.rel,{update:$('source_code_area')});
+});
+
+$('insert_tmpl').store('target',{
+  onSuccess:function(rs){
+      rs = JSON.decode(rs);
+      if(rs&&rs.success){
+          $('insert_tmpl').getParent('.dialog').retrieve('instance').close();
+          location.reload();
+      } 
+    }
+});
+
+$('submit_tmpl').addEvent('click',function(e){
+    $('insert_tmpl').fireEvent('submit',{stop:function(){}});
+});
+
+/*
+$('insert_tmpl').store('target',{
+  onComplete:function(){
+    location.reload();
+  }
+});
+*/
+$('cancel_tmpl').addEvent('click',function(e){
+    this.getParent('.dialog').retrieve('instance').close();
+});
+</script>

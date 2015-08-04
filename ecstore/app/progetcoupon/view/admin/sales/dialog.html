@@ -1,0 +1,30 @@
+<{if $isfront=='true'}>
+<{input type="vobject" vtype="required" object=$object name=$name cols="cpna_name" multiple="true"  value=$value select="checkbox"  filter=$filter textcol="cpns_name" view="b2c:admin/goods/rows.html"}>
+<{else}>
+<{input type="object" vtype="required" object=$object name=$name cols="cpna_name" multiple="true"  value=$value select="checkbox"  filter=$filter textcol="cpns_name" view="b2c:admin/goods/rows.html"}>
+<{/if}>
+<script>
+    $ES('input[type=radio]','.stpl_list').each(function(el){
+      if(el.get('name')=='rule[s_template]') {
+          if( $('b2c-sales-promotion-no-mlev')) {
+            if( el.value=='progetcoupon_promotion_solutions_getcoupon' ) {
+                if(el.get('checked')) {
+                try{
+                    $('b2c-sales-promotion-no-mlev').getParent().setStyle('display','none');
+                    $('b2c-sales-promotion-no-mlev').set('disabled','true');
+                }catch(e){}
+                }
+                el.addEvent('click',function(item){
+                    $('b2c-sales-promotion-no-mlev').getParent().setStyle('display','none');
+                    $('b2c-sales-promotion-no-mlev').set('disabled','true');
+                });
+            } else {
+                el.addEvent('click',function(item){
+                    $('b2c-sales-promotion-no-mlev').getParent().setStyle('display','');
+                    $('b2c-sales-promotion-no-mlev').set('disabled','');
+                });
+            }
+          }
+      }
+    })
+</script>

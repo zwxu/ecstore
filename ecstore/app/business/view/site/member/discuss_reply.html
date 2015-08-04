@@ -1,0 +1,111 @@
+<form>
+  <div>
+    <table id="discussreply" class="gridlist bbn" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+      <td>
+        <input type="hidden" name="comment_id" value="<{$comment_id}>">
+        <{assign var="placeholder" value="欢迎发表评论（最多1000字）"}>
+        <{input type="textarea" class="x-input inputstyle font12px db mb5" onfocus="this.value=''" onblur="if(this.value==''){this.value='欢迎发表评论（最多1000字）'}" value="欢迎发表评论（最多1000字）" vtype="sendcomments" rows="5" name="reply_content" style="width:97%"}>
+      </td>
+    </tr>
+    </table>
+  </div>
+  <div class="mainFoot">
+    <div class="table-action">
+      <{button label=$___b2c="确定"|t:'b2c'  onclick="saveData()" }>
+    </div>
+  </div>
+</form>
+<div id="reply-template" style="display:none;">
+  <li class="doshed-line clearfix">
+  <div class="clearfix"><span>{author}</span><span>[{time}]</span></div>
+  <div>{comment}</div>
+  </li>
+</div>
+<script>
+  var saveData=function(e){
+    var flag = true;
+    $$('#discussreply textarea[vtype=sendcomments]').each(function(element){
+      if ($(element).get('value') == '' || $(element).get('value').length < 1 || $(element).get('value').length > 1000){
+        flag = false;
+      }
+    });
+    if(!flag) {
+        Message.error('字数应该在1-1000个字之内');
+        return;
+    }
+    var _input_text = $('reply-template').get('html');
+    new Request({
+      url:'<{link app="business" ctl="site_comment" act="to_reply"}>',
+      onComplete:function(response){
+        if(!response){
+          Message.error('解释失败');
+        }else{
+          response = JSON.decode(response);
+          var replyHtml = '';
+          for(var i=0;i<response.length;i++){
+            var time = timetodate(response[i]['time'],'yy-MM-dd hh:mm');
+            var tpi = {'author':response[i]['author'],'comment':response[i]['comment'],'time':time};
+            replyHtml += _input_text.substitute(tpi);
+          }
+          window.fbox.onSelect(replyHtml);
+        }
+      }
+    }).post($('discussreply'));
+    window.fbox.hide();
+  }
+  
+  Date.prototype.pattern=function(fmt) {       
+     var o = {        
+     "M+" : this.getMonth()+1, //月份       
+     "d+" : this.getDate(), //日      
+     "h+" : this.getHours() == 0 ? 12 : this.getHours(), //小时       
+     "H+" : this.getHours(), //小时       
+     "m+" : this.getMinutes(), //分       
+     "s+" : this.getSeconds(), //秒       
+     "q+" : Math.floor((this.getMonth()+3)/3), //季度       
+     "S" : this.getMilliseconds() //毫秒       
+     };       
+     var week = {       
+     "0" : "\u65e5",       
+     "1" : "\u4e00",       
+     "2" : "\u4e8c",       
+     "3" : "\u4e09",       
+     "4" : "\u56db",       
+     "5" : "\u4e94",       
+     "6" : "\u516d"      
+     };      
+ 
+     if(/(y+)/.test(fmt)){       
+         fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));       
+     }      
+ 
+     if(/(E+)/.test(fmt)){       
+         fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);       
+     }       
+
+     for(var k in o){       
+         if(new RegExp("("+ k +")").test(fmt)){       
+             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));       
+         }       
+     }       
+     return fmt;       
+  }  
+
+  function timetodate(tim,dat){
+     return  new Date(parseInt(tim)*1000).pattern(dat);   //"yyyy/MM/dd,hh,mm,ss"    
+  }
+
+  
+  var formatDate=function(fdate, formatStr){
+    var fTime, fStr = 'ymdhis'; 
+    if(!formatStr) formatStr= "y-m-d h:i:s";
+    if(fdate) fTime = new Date(fdate);
+    else fTime = new Date();
+    var formatArr = [fTime.getFullYear().toLocaleString(), (fTime.getMonth()+1).toLocaleString(), fTime.getDate().toLocaleString(), fTime.getHours().toLocaleString(), fTime.getMinutes().toLocaleString(), fTime.getSeconds().toLocaleString()];
+    for (var i=0; i<formatArr.length; i++){
+      formatStr = formatStr.replace(fStr.charAt(i), formatArr[i]); 
+    }
+    return formatStr;
+  }
+</script>

@@ -1,0 +1,118 @@
+<form method="POST" action="<{$from_submit_url}>" id="groupactivity-from">
+<{if $activity.act_id}>
+<{input type="hidden" value="{$activity.act_id}" name="act_id"}>
+<{/if}>
+<div class="goods-detail tableform">
+    <h3><{t}>基本信息<{/t}></h3>
+    <div class="division">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+            <tr>
+                <th><{t}>活动标签：<{/t}></th>
+                <td><{input type="text" value="{$activity.activity_tag}" name="activity_tag" size="30" vtype="required"}><em><font color="red">*</font></em></td></td>
+            </tr>
+            <tr>
+                <th><{t}>价格标签：<{/t}></th>
+                <td><{input type="text" value="{$activity.price_tag}" name="price_tag" size="30" vtype="required"}><em><font color="red">*</font></em></td></td>
+            </tr>
+            <tr>
+                <th><{t}>活动名称：<{/t}></th>
+                <td><{input type="text" value="{$activity.name}" name="name" size="60" vtype="required"}><em><font color="red">*</font></em></td></td>
+            </tr>
+            <tr>
+                <th><{t}>活动描述：<{/t}></th>
+                <td><{input type="textarea" style=" width:60%" rows="10" value="{$activity.description}" name="description"}></td>
+            </tr>
+        </table>
+    </div>
+    <div class="division">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+            <tr>
+                <th><{t}>商家库存不得少于<{/t}></th>
+                <td><{input type="text" value="{$activity.nums}" name="nums" size="5" vtype="required&&number"}>件(填”0“时表示无限制最少库存)</td>
+            </tr>
+            <tr>
+                <th><{t}>申请开始时间：<{/t}></th>
+                <td><{input type="time" value="{$activity.apply_start_time}" name="apply_start_time"}></td>
+            </tr>
+            <tr>
+                <th><{t}>申请结束时间：<{/t}></th>
+                <td><{input type="time" value="{$activity.apply_end_time}" name="apply_end_time"}></td>
+            </tr>
+            <tr>
+                <th><{t}>活动开始时间：<{/t}></th>
+                <td><{input type="time" value="{$activity.start_time}" name="start_time"}></td>
+            </tr>
+            <tr>
+                <th><{t}>活动结束时间：<{/t}></th>
+                <td><{input type="time" value="{$activity.end_time}" name="end_time"}></td>
+            </tr>
+            <tr>
+                <th><{t}>活动是否开启：<{/t}></th>
+                <td>
+                    <input type="radio" value="true" <{if $activity.act_open=='true'}>checked<{/if}> name="act_open" >开启
+                    <input type="radio" value="false" <{if $activity.act_open!='true'}>checked<{/if}> name="act_open" >关闭
+                </td>
+            </tr>
+             <tr>
+                <th><{t}>商户经营范围：<{/t}></th>
+                <td><{input type="object" object="goods_cat@b2c" name="business_type" multiple="true" filter=$business_type_filter value=$store_region}></td>
+            </tr>
+             <tr>
+                <th><{t}>店铺类型：<{/t}></th>
+                <td>
+                  <input type="hidden" name="store_type" id="store_type" value="<{$activity.store_type}>">
+                  <input type="checkbox" name="store_type_chk[0]" issue_type="0" <{if in_array('0',$store_type)}>checked="checked"<{/if}>><{t}>卖场型旗舰店<{/t}>
+                  <input type="checkbox" name="store_type_chk[1]" issue_type="1" <{if in_array('1',$store_type)}>checked="checked"<{/if}>><{t}>专卖店<{/t}>
+                  <input type="checkbox" name="store_type_chk[2]" issue_type="2" <{if in_array('2',$store_type)}>checked="checked"<{/if}>><{t}>专营店<{/t}>
+                  <input type="checkbox" name="store_type_chk[3]" issue_type="3" <{if in_array('3',$store_type)}>checked="checked"<{/if}>><{t}>品牌旗舰店<{/t}>
+                </td>
+            </tr>
+            
+             <tr>
+                <th><{t}>店铺等级：<{/t}></th>
+                <td>
+                  <div id="storeLv">
+                    <{if $activity.act_id}>
+                    <{input type="object" object="storegrade@business" name="store_lv" multiple="true" filter=$filter value=$store_lv}>
+                    <{/if}>
+                  <div>
+                </td>
+            </tr>
+            
+        </table>
+
+    </div>
+</div>
+<div class="table-action">
+    <{button label="保存" type="button" id="groupactivity-btn" }>
+</div>
+<form>
+<script>
+$('groupactivity-btn').removeEvent('click').addEvent('click',function(){
+    $('groupactivity-from').fireEvent('submit',new Event(this));  
+});
+
+$ES("input[name^=store_type_chk]").each(function(item){
+    item.addEvent('change',function(){
+        var store_type = '';
+        $ES("input[name^=store_type_chk]:checked").each(function(v,k){
+            if(k == 0){
+                store_type += v.get('issue_type');
+            }else{
+                store_type += ','+v.get('issue_type');
+            }
+        });
+        $('store_type').set('value',store_type);
+        var storeLv = $('storeLv');
+        
+        var request = new Request.HTML({
+                    url:'<{link app="groupbuy" ctl="admin_group" act="changeStoreLv" }>',
+                    update:storeLv,
+                    onComplete:function(res){
+                        storeLv.show();
+                    }
+         }).post('store_type='+store_type);
+
+    });
+});
+</script>

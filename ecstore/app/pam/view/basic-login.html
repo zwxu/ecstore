@@ -1,0 +1,63 @@
+
+<form class="passport-form" action="<{$callback}>" method="post">
+	<ul>
+
+		<li><label for="uname"><{t}>用户名：<{/t}></label><input class="inputstyle" type="text" required="true" name="uname" id="uname" value=""/></li>
+		<li style="padding-left:9px"><label for="password"><{t}>密&nbsp;码：<{/t}></label><input class="inputstyle" type="password" name="password" id="password" onkeypress="detectCapsLock(event);" value=""/>
+		<{if $type=="member"}><a href="<{link app='b2c' ctl='site_passport' act='lost'}>"><{t}>忘记密码<{/t}></a><{/if}>
+
+			<div class="info-tip" id="caps-info">
+			<div class="info-tip-arrow">&nbsp;</div>
+			<{t}>Caps Lock键已开启,<{/t}><br /><{t}>密码输入是大写状态!<{/t}>
+		</div>
+		</li>
+		<{if $show_varycode}>
+        <li><label for="verifycode"><{t}>验证码：<{/t}></label><input maxlength="4" autocomplete="off" class="inputstyle inputstyle-short" name="verifycode" id="verifycode" value=""  />
+     <img id="shopadminvocde" src="index.php?app=desktop&ctl=passport&act=gen_vcode&<{$smarty.now}>" align="top" class="verifycodeimg"><a href="javascript:changeimg('shopadminvocode')">&nbsp;<{t}>看不清楚?换个图片<{/t}></a></li>
+		<{/if }>
+
+		<li class="colspan">
+
+			<input type="checkbox" name="remember" value="true" <{if $env.cookie.pam_passport_basic_uname}>checked=true<{/if}> >
+				<label for="remember"><{t}>保存用户名、密码<{/t}></label>
+			</li>
+		<li class="colspan"> 
+			   <!-- <input class="btn-login" type="submit" value="<{t}>登陆<{/t}>" />  -->
+			   <button type="submit" value="<{t}>登陆<{/t}>" class="btn-login btn common-btn"><span><span><{t}>登陆<{/t}></span></span></button>
+
+		</li>
+	</ul>
+</form>
+
+<{if $error_info}>
+<div class="error-info">
+	<{$error_info}>
+</div>
+<{/if}>
+
+<script>
+var capsTip = document.getElementById('caps-info');  
+
+function detectCapsLock(e){  
+   valueCapsLock  =  e.keyCode ? e.keyCode:e.which;
+   valueShift  =  e.shiftKey ? e.shiftKey:((valueCapsLock  ==   16 ) ? true : false );  
+
+    if (((valueCapsLock >=   65   &&  valueCapsLock  <=   90 )  &&   ! valueShift)   
+    || ((valueCapsLock >=   97   &&  valueCapsLock  <=   122 )  &&  valueShift))   
+       capsTip.style.visibility  =  'visible';  
+    else   
+       capsTip.style.visibility  =  'hidden';  
+}  
+</script>
+
+<{if $show_varycode}>
+<script>
+function changeimg(id){
+	var timestamp = Date.parse(new Date());
+		document.getElementById('shopadminvocde').src='index.php?app=desktop&ctl=passport&act=gen_vcode#'+timestamp;
+		
+    
+}
+</script>
+
+<{/if}>

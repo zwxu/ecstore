@@ -1,0 +1,23 @@
+<div class="tableform widgetconfig">
+<div class="division" style='border:1px solid #d8d8d8;'>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">  
+  <tr>
+    <th><{t app='b2c'}>标题：<{/t}></th>
+    <td><{input type="text" name="title" value=$setting.title|default:'请填写标题'}></td>
+  </tr>
+  <tr>
+    <th><{t app='b2c'}>显示商品数：<{/t}></th>
+    <td><{input name="limit" value=$setting.limit|default:'3' size=8 required="true" type="digits" id='show_limit'}></td>
+  </tr>
+  <tr>
+    <th><{t app='business'}>推荐依据：<{/t}></th>
+    <td>
+            <select name="ranking"> 
+    <{foreach from=$data.orderby item=orderby key=key}>
+    <option value="<{$orderby.sql}>" <{if $setting.ranking==$orderby.sql}>selected<{/if}>><{$orderby.label}></option>
+    <{/foreach}>
+    </select></td>
+  </tr>
+</table>
+</div>
+</div>

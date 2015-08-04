@@ -1,0 +1,11 @@
+<{foreach from=$shippings item="shipping" key="key"}>
+<tr<{if $key%2==0}> class="row2"<{else}> class="row1"<{/if}>>
+  <td>
+    <label><input type="radio" name="delivery[shipping_id]" value="<{$shipping.dt_id}>" /><{$shipping.dt_name}> +<{$shipping.price|cur_odr}>
+</label><{if $shipping.protect == 1}>
+    <label class="nof kef"><input type="checkbox" name="delivery[is_protect][<{$shipping.dt_id}>]" value="1" /><{t}>保价 +<{/t}><{$shipping.protect_rate|cur_odr}></label>
+    <{/if}>
+    <div class="info" style="padding:3px 0 0 20px; color:#666;"><{$shipping.detail|default:'&nbsp;'}></div>
+  </td>
+</tr>
+<{/foreach}>

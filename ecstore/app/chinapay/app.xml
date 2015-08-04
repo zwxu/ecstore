@@ -1,0 +1,19 @@
+<app version="0.1">
+    <name>银联在线</name>
+
+    <description>银联在线支付ChinaPay</description>
+
+    <author>
+        <name>shopex开发团队</name>
+        <email>dev@shopex.cn</email>
+        <url>http://www.shopex.cn</url>
+    </author>
+
+    <version>0.1</version>
+    <license>shopex license</license>
+    <parent_model_class>dbeav_model</parent_model_class>
+
+	<depends>
+		<app>ectools</app>
+	</depends>
+</app>

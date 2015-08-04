@@ -1,0 +1,62 @@
+<p class="notice">
+<{t}>通过本界面对以往备份的数据库进行恢复或下载，请注意在恢复后，所有数据库信息包括管理员用户名密码都会恢复成备份时的状态。<{/t}>
+</p>
+
+<form action='index.php?app=desktop&ctl=comeback&act=removeTgz' method='POST'>
+<!--
+<div class="gridlist-action">
+    <{button class="delete" label="删除" icon="delete.gif" onclick="if(confirm('删除后将无法恢复，确认要删除吗？'))return new Event(event).stop();" }>
+</div>
+-->
+<table class="gridlist" width="100%" cellspacing="0" cellpadding="0" border="0">
+<thead>
+<tr>
+<!--<th>&nbsp;</th>-->
+<th><{t}>备份文件名<{/t}></th>
+<th><{t}>app<{/t}></th>
+<!--
+<th><{t}>子版本<{/t}></th>
+<th><{t}>卷数<{/t}></th>
+-->
+<th><{t}>大小(字节)<{/t}></th>
+<th><{t}>备份时间<{/t}></th>
+<th><{t}>恢复<{/t}></th>
+</tr>
+</thead>
+<tbody>
+  <{foreach from=$archive key=id item=tgz}>
+  <tr>
+  <!--
+    <td>
+        <input type='checkbox' name='tgz[]' value='<{$tgz.name|regex_replace:'/^(.*)[\\\|\/]/':''}>'>
+    </td>
+    -->
+    <td>
+        <a href='index.php?app=desktop&ctl=backup&act=getFile&file=<{$tgz.name|regex_replace:'/^(.*)[\\\|\/]/':''}>' target="download"><{$tgz.name|regex_replace:'/^(.*)[\\\|\/]/':''}></a>
+    </td>
+    <td><{$tgz.app}></td>
+    <!--
+    <td><{$tgz.backup.rev}></td>
+    <td><{$tgz.backup.vols}></td>
+    -->
+    <td><{$tgz.size}></td>
+    <td><{$tgz.time|cdate:'FDATE_FTIME'}></td>
+    <td>
+    <{if $appver.rev!=$tgz.backup.rev}>
+        <font color='red'><{t}>版本不符，无法恢复<{/t}></font>
+    <{else}>
+        <a href="javascript:void(0)" onclick="run('<{$tgz.name|regex_replace:'/^(.*)[\\\|\/]/':''}>', '<{$tgz.time}>')"><{t}>恢复<{/t}></a>
+    <{/if}>
+    </td>
+  </tr>
+  <{/foreach}>
+  
+    </tbody>
+</table>
+</form>
+<script>
+var sqlcomback;
+function run(filename, time){
+   sqlcomeback = new Dialog('index.php?app=desktop&ctl=comeback&act=comeback&file='+filename+'&time='+time,{width:400,height:300,title:'<{t}>数据恢复<{/t}>'})
+}
+</script>

@@ -1,0 +1,13 @@
+<div class="tableform">
+	<h4><{t}>详情<{/t}></h4>
+	<div class="division">
+		<table>
+			<{foreach from=$sdf item=item key=key}>
+			<tr>
+				<th><{$key}>：</th>
+				<td><{$item}></td>
+			</tr>
+			<{/foreach}>
+		</table>
+	</div>
+</div>

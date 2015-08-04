@@ -1,0 +1,24 @@
+<div class="shop2_hot">
+	      <h4><{$setting.title}></h4>
+	      <ul class="shop2_hot_ul">
+		     <{foreach from=$data.goods item=good key=key name="_good"}>
+         <li>
+         <a target="_blank" href="<{link app=b2c ctl="site_product" act="index" arg0=$good.goods_id}>">
+         <img class="img-lazyload" src="images/transparent.gif" lazyload="<{$good.image_default_id|default:$data.defaultImage|storager:'m'}>" alt="<{$good.name|cut:72}>" />
+         </a>
+			  <div class="shop2_hot_ul_info" style='height:40px;overflow:hidden;'>
+        <a title="<{$good.name}>" target="_blank" href="<{link app=b2c ctl="site_product" act="index" arg0=$good.goods_id}>" >
+        <{$good.name}>
+        </a>
+        </div>
+			  <div class="shop2_hot_ul_pice">
+			   <span class="price le_zhi col_03418a"><{$good.price|cur_odr}></span>
+			   <span class="sall ri_zhi">近期售出：<strong class="col_03418a"><{$good.buy_m_count}></strong>笔</span>
+			   <div class="cl_zhi"></div>
+			  </div>
+			 </li>
+       <{/foreach}>
+			 <div class="cl_zhi"></div>
+		  </ul>
+		  <div class="cl_zhi"></div>
+</div>

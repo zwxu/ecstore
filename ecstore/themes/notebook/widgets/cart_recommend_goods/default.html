@@ -1,0 +1,178 @@
+<style type="text/css">
+ul,li{list-style:none; padding:0;margin:0}
+.cat_recommend{width:1180px;margin:20px auto;background:#fff;padding:10px 10px;}
+.recommend_title{height:32px;border-bottom:2px solid #398DFF;}
+.recommend_title span.t2r{}
+.recommend_title a{float:left;width:120px;font-size:16px;height:32px;line-height:32px;display:block;text-decoration:none;text-align:center;}
+.recommend_title a.hover{background:#398DFF;color:#FFFFFF;
+-webkit-border-radius:4px 4px 0 0;
+-moz-border-radius:4px 4px 0 0;
+-ms-border-radius:4px 4px 0 0;
+-o-border-radius:4px 4px 0 0;
+border-radius:4px 4px 0 0;}
+.recommend_content{margin-top:10px;background:#fff;display:block;height:260px;}
+.recommend_content .recommend_goods_list li{width:212px;height:212px;margin:0 10px;float:left}
+.recommend_content .recommend_goods_list li img{width:210px;height:210px;border:1px solid #E5E5E5;} 
+.recommend_content .recommend_goods_list li span{width:212px;color:#EA0000;display:block;line-height:25px;overflow:hidden;}
+
+/*修正*/
+.recommend_content .recommend_goods_list li a.goods_namecart{width:212px;display:block;line-height:25px;height:25px;overflow:hidden;}
+</style>
+
+<div class="cat_recommend">
+    <div class="recommend_title">
+      <span class="t2r" id="cart_goods_title_<{$widgets_id}>">
+        <a href="javascript:void(0)" class="hover" >为您推荐商品</a>
+        <a href="javascript:void(0)" >最近浏览商品</a>
+        <a href="javascript:void(0)">猜你喜欢</a>
+      </span>
+      <div class="clr"></div>
+    </div>
+    <div class="recommend_content">
+        <ul class="recommend_goods_list" id="cart_youlike_goods_<{$widgets_id}>">
+        <{foreach from=$data.youlike_goods item=item key=key}>
+            <li>
+                <a target="_blank" href="<{link app=b2c ctl=site_product act=index arg0=$item.goods_id}>"><{$imageDefault}>
+                    <img class="img-lazyload" src="<{if $item.image_default_id}><{$item.image_default_id|storager:'s'}><{else}><{$data.imageDefault}><{/if}>" alt="<{$item.name}>" width="210" height="210"/>
+                 </a>
+                <a target="_blank" href="<{link app=b2c ctl=site_product act=index arg0=$item.goods_id}>" class="goods_namecart">
+                  <{$item.name}>
+                </a>
+                <span><{$item.price|cur}></span>
+            </li>
+        <{/foreach}>
+        </ul>
+        <ul class="recommend_goods_list" id="cart_recommend_goods_<{$widgets_id}>" style="display:none">
+        <!-- <{foreach from=$data.looked item=item key=key}>
+            <li>
+                <img class="img-lazyload" src="<{$item.image_default_id|storager:'s'}>"  alt="<{$item.name}>" width="155" height="155"/>
+                <a target="_blank" href="<{link app=b2c ctl=site_product act=index arg0=$item.goods_id}>">
+                  <{$item.name}>
+                </a>
+                <span><{$item.price|cur}></span>
+            </li>
+        <{/foreach}> -->
+        </ul>
+        <ul class="recommend_goods_list" id="cart_looked_goods_<{$widgets_id}>" style="display:none">
+        <{foreach from=$data.recommend item=item key=key}>
+            <li>
+                <a target="_blank" href="<{link app=b2c ctl=site_product act=index arg0=$item.goods_id}>"><{$imageDefault}>
+                    <img class="img-lazyload" src="<{if $item.image_default_id}><{$item.image_default_id|storager:'s'}><{else}><{$data.imageDefault}><{/if}>" alt="<{$item.name}>" width="210" height="210"/>
+                 </a>
+                <a target="_blank" href="<{link app=b2c ctl=site_product act=index arg0=$item.goods_id}>" class="goods_namecart">
+                  <{$item.name}>
+                </a>
+                <span><{$item.price|cur}></span>
+            </li>
+        <{/foreach}>
+        </ul>
+    </div>
+</div>
+<script>
+$('cart_goods_title_<{$widgets_id}>').getElements('a').each(function(item,index){
+    item.addEvent('mouseover',function(){
+        if(index == 0){
+            $('cart_goods_title_<{$widgets_id}>').getElements('a')[0].set('class','hover');
+            $('cart_goods_title_<{$widgets_id}>').getElements('a')[1].set('class','');
+            $('cart_goods_title_<{$widgets_id}>').getElements('a')[2].set('class','');
+            $('cart_youlike_goods_<{$widgets_id}>').setStyle('display','');
+            $('cart_recommend_goods_<{$widgets_id}>').setStyle('display','none');
+            $('cart_looked_goods_<{$widgets_id}>').setStyle('display','none');
+        }
+        if(index == 1){
+            $('cart_goods_title_<{$widgets_id}>').getElements('a')[0].set('class','');
+            $('cart_goods_title_<{$widgets_id}>').getElements('a')[1].set('class','hover');
+            $('cart_goods_title_<{$widgets_id}>').getElements('a')[2].set('class','');
+            $('cart_youlike_goods_<{$widgets_id}>').setStyle('display','none');
+            $('cart_recommend_goods_<{$widgets_id}>').setStyle('display','');
+            $('cart_looked_goods_<{$widgets_id}>').setStyle('display','none');
+        }
+        if(index == 2){
+            $('cart_goods_title_<{$widgets_id}>').getElements('a')[0].set('class','');
+            $('cart_goods_title_<{$widgets_id}>').getElements('a')[1].set('class','');
+            $('cart_goods_title_<{$widgets_id}>').getElements('a')[2].set('class','hover');
+            $('cart_youlike_goods_<{$widgets_id}>').setStyle('display','none');
+            $('cart_recommend_goods_<{$widgets_id}>').setStyle('display','none');
+            $('cart_looked_goods_<{$widgets_id}>').setStyle('display','');
+        }
+    });
+
+});
+
+withBrowserStore(function(browserStore){
+  var box=$('cart_recommend_goods_<{$widgets_id}>');
+  browserStore.get('history',function(v){
+    v=JSON.decode(v);
+    if(!v||!v.length)return;
+    var html='';
+    
+    var template = '<li>';
+    template+= '<a href="<{link app=b2c ctl='site_product' act='index' arg0='{goodsId}'}>" target="_blank" title="{goodsName}" inner_img="{goodsImg}" class="goodpic" gid="{goodsId}">'.replace('index-','');
+    template+= '</a>';
+    template+='<a href="<{link app=b2c ctl='site_product' act='index' arg0='{goodsId}'}>" target="_blank" title="{goodsName}" class="goods_namecart">{goodsName}</a>'.replace('index-','');
+    template+= '<span>{goodsPrice}</span></li>';
+
+    var max=Math.min(v.length,<{$setting.max|default:5}>);
+
+    if(v.length>1)
+    v.sort(function(a, b){
+    return b['sortTime']-a['sortTime'];
+    });
+
+    v.each(function(goods,index){
+      if(index<max)
+      html += template.substitute(goods);
+    });
+
+    box.set('html',html);
+
+    box.getElements('.goodpic').each(function(i){
+    var imga=i.set('text','loading...');
+    var imgsrc=imga.get('inner_img');
+    new Asset.image(imgsrc,{
+      onload:function(){
+      var img=$(this);
+      if(!img.get('src')){
+        loadImg(imga,img,v,max);
+      }else{
+        if(img.$e)return;
+        img.zoomImg(155,155);
+        img.inject(imga.empty());
+        img.$e=true;
+      }
+      },
+      onerror:function(){
+      var img=$(this);
+      loadImg(imga,img,v,max);
+      }
+    });
+    });
+
+  });
+
+  function loadImg(imga,img,v,max){
+    imga.set('text','update...');
+    var gid = imga.get('gid');
+    new Request.JSON({url:"<{link app=b2c ctl=site_product act=picsJson}>",
+    onComplete:function(data){
+      new Asset.image(data,{onload:function(){
+        var img=$(this);
+        if(img.$e)return;
+        img.zoomImg(70,70);
+        img.inject(imga.empty());
+        img.$e=true;
+      },onerror:function(){
+        imga.destroy();
+      }});
+
+      v.map(function(goods,index){
+      if(index<max&&goods['goodsId']==gid)
+      return goods['goodsImg']=data;
+      });
+
+      browserStore.set('history',JSON.encode(v));
+    }}).get({'gids':gid});
+  }
+
+});
+</script>

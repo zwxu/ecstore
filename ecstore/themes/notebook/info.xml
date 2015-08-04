@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<theme>
+  <name>notebook</name>
+  <id>notebook</id>
+  <version>0.1</version>
+  <info></info>
+  <author>ShopEx-bryant</author>
+  <site>http://www.shopex.cn</site>
+  <update_url></update_url>
+  <borders>
+    <set key="邮件订阅" tpl="borders/border1.html" />
+    <set key="边栏样式" tpl="borders/border2.html" />
+    <set key="品牌热卖排行" tpl="borders/border4.html" />
+    <set key="热销排行" tpl="borders/border5.html" />
+    <set key="首页商品列表" tpl="borders/border6.html" />
+    <set key="页尾文章列表" tpl="borders/border9.html" />
+    <set key="购买本商品的顾客还买过" tpl="borders/border10.html" />
+  </borders>
+  <views></views>
+  <config></config>
+</theme>

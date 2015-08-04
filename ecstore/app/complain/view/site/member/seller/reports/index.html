@@ -1,0 +1,121 @@
+<{css src="style.css" app="business"}>
+<{script src="dialog.js" app="business" pdir="js"}>
+<{script src="modedialog.js" app="business" pdir="js"}>
+<{script src="load.js" app="business" pdir="js"}>
+<{script src="wpage.js" app="business" pdir="js"}>
+<div class="member-main">
+<div class="title">举报管理</div>
+<div class="FormWrap" style="background-color:#FFFFFF;">
+	<form action="<{link app='complain' ctl='site_seller_reports' act='reports_main'}>" method='POST' >
+    <table>
+     <colgroup>
+       <col style="width:88px;">
+       <col style="width:170px;">
+       <col style="width:88px;">
+       <col style="width:240px;">
+       <col style="width:88px;">
+       <col style="width:170px;">
+     </colgroup>
+     <tbody>
+     <tr>
+     <td style='text-align:right;padding:8px 0;'>商品名称：</td>
+     <td style='text-align:left;padding-left:10px;'><input type="text" vtype="text" id="search_goods_name" size="20" value="" name="goods_id" class="x-input " autocomplete="off">			</td>
+     <td style='text-align:right;'>举报编号：</td>
+     <td style='text-align:left;padding-left:10px;'><input type="text" vtype="text" id="search_reports_id" size="20" value="" name="reports_id" class="x-input " autocomplete="off">			</td>
+     <td style='text-align:right;'>举报原因：</td>
+     <td style='text-align:left;padding-left:10px;'>
+       <{input  type="vobject"  filter="disabled=false"  object="reports_cat@complain"  name="cat_id"  id="search_cat_id"   }>
+    </td>
+     </tr>
+     <tr>
+     <td style='text-align:right;'>举报状态：</td>
+     <td style='text-align:left;padding-left:10px;'>
+        <select class=" x-input-select inputstyle" required="1" name="status" id="ot" type="select">
+        <option value="all">请选择</option>
+        <option value="intervene">平台已经介入</option>
+        <option value="success">举报成立</option>
+        <option value="error">举报不成立</option>
+        <option value="cancel">举报撤销</option>
+      </select>
+     </td>
+     <td style='text-align:right;'>申请时间：</td>
+     <td style='text-align:left;padding-left:10px;'>
+    <{input class="cal " type="date" name="applyTime[start]" id="applyTime_start"  size="30" value='' style="margin-right:0;padding-left:10px;width:80px;"}>
+     到
+    <{input class="cal " type="date" name="applyTime[end]" id="applyTime_end"  size="30" value='' style="margin-right:0;padding-left:10px;width:80px;"}>
+     </td>
+     <td colspan='2' style='padding-left:30px;'>
+     <button id="btnsearch" class="btn search1"><span><span>搜索</span></span></button>	
+     </td>
+     </tr>
+     </tbody>
+     </table>
+     </form>
+		 </div>
+<div id="tab-sdiscus" class="section switch">
+<!--<ul class="switchable-triggerBox tab_member clearfix">
+            <li class="active"><a href="#">我发起的举报</a></li>
+            <li><a href="#">我收到的举报</a></li>
+            
+            
+</ul>-->
+    <div class="switchable-content">
+        <div class="switchable-panel">
+            <table width="100%" cellspacing="0" cellpadding="0" border="0" class="switchable gridlist">
+              <colgroup>
+                <col width="190px">
+                <col width="190px">
+                <col width="150px">
+                <col width="100px">
+                <col width="100px">
+                <col width="150px">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th class="comment first">举报编号</th>
+                  <th class="ratee">商品名称</th>
+                  <th class="things">举报原因</th>
+                  <th class="things">举报状态</th>
+                  <th class="things">申请时间</th>
+                  <th class="operate">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+              <{foreach from=$complain_list item=item}>
+                 <tr>
+                  <input type="hidden" value="1" name="complain_id">
+                  <td valign="middle">
+                    <{$item.reports_id}>
+                  </td>
+                  <td valign="middle">
+                        <a href='<{link app=b2c ctl="site_product" act="index" arg0=$item.goods_id}>' style="color:#0579C6"><{$item.goods_name}></a>
+                  </td>
+                  <td valign="middle">
+                   <{$item.cat_name}>
+                  </td>
+                  <td valign="middle"<{if $item.status=='intervene'}> style='color:#FF3300;'<{/if}>>
+                      <{if $item.status=='intervene'}>
+                      平台已经介入
+                      <{elseif $item.status=='success'}>
+                      举报成立
+                      <{elseif $item.status=='error'}>
+                      举报不成立
+                      <{else}>
+                      举报撤销
+                      <{/if}>
+                  </td>
+                  <td valign="middle">
+                    <{$item.createtime|cdate:FDATE_STIME}>
+                  </td>
+                  <td valign="middle">
+                    <a class="btn-bj-hover operate-btn" href="<{link app='complain' ctl='site_seller_reports' act='show_comment' arg0=$item.reports_id}>">查看详情</a>
+                  </td>
+                </tr>   
+            <{/foreach}>                    
+              </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+ <{pagers data=$pager}>
+</div>

@@ -1,0 +1,45 @@
+<div class="tableform">
+<button type="button" id="addLink"> 添加链接</button>
+<div class="widgetconfig">
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+  <tbody id="navList">
+  <{if $setting.nav}>
+      <{foreach from=$setting.nav item=nav_s key=nav_k name=nav_n}>
+      <tr>
+        <th><{t app='b2c'}>标题：<{/t}></th>
+        <td><input type="text" name="nav[<{$smarty.foreach.nav_n.iteration}>][title]" value="<{$nav_s.title}>"></td>
+      
+        <th><{t app='b2c'}>链接：<{/t}></th>
+        <td><input type="text" name="nav[<{$smarty.foreach.nav_n.iteration}>][link]"  vtype="purl" required='true'  value="<{$nav_s.link}>"></td>
+    <td><button type="button" onclick="$(this).getParent('tr').remove()" > 删除</button></td>
+      </tr>
+      <{/foreach}>
+  <{else}>
+  <tr>
+    <th><{t app='b2c'}>标题：<{/t}></th>
+    <td><input type="text" name="nav[0][title]" value=""></td>
+  
+    <th><{t app='b2c'}>链接：<{/t}></th>
+    <td><input type="text" name="nav[0][link]" vtype="purl" required='true' value=""></td>
+    <td><button type="button" onclick="$(this).getParent('tr').remove()" > 删除</button></td>
+  </tr>
+  <{/if}>
+   
+</tbody>
+</table>
+</div>
+</div>
+<script>
+	(function(){
+
+	var btn_delete = '<button type="button" onclick="$(this).getParent(\'tr\').remove()" >删除</button>';
+	var PROPSTMP = '<th>标题：</th><td><input type="text" name="nav[{key}][title]" value=""></td><th>链接：</th> <td><input type="text" name="nav[{key}][link]"  vtype="purl" required="true"  value=""></td><td>'+btn_delete+'</td>';
+	
+	$('addLink').addEvent('click',function(e){
+          var propsItem = $('navList').getElements('tr');
+          var index=propsItem?propsItem.length:0;
+		  var el = new Element('tr').setHTML( PROPSTMP.substitute({'key':'new_'+index++}) );
+		  $('navList').adopt(el);
+	});
+})();
+</script>

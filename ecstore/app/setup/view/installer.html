@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head> 
+    <meta charset="utf-8">
+    <title><{$conf.installer.title}></title>
+    <{css src="framework.css"}>
+    <{css src="installer.css"}>
+    <style>
+		<{$conf.installer.style}>
+    </style>
+	<{script src="moo.js"}>  
+	<{script src="taskRunner.js"}>
+	<script>
+	_open = function(url,options){
+	   options = $extend({
+	     width:window.getSize().x*0.8,
+	     height:window.getSize().y*0.8
+	   },options||{})
+	   var params = 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width={width},height={height}';
+	       params = params.substitute(options);
+
+	   window.open(url||'about:blank','_blank',params);
+
+	};    
+	Element.implement({
+		isDisplay:function(){return true;}
+	});
+	var validateMap=new Hash({
+	  'required':['本项必填',function(element,v){
+	   return v!=null && v!=''&& v.trim()!='';
+	  }],
+	  'number':['请录入数值',function(element,v){
+	   return v==null || v=='' || !isNaN(v) && !/^\s+$/.test(v);
+      }],
+      'samePas':['两次密码输入不一致',function(element,v){
+        var parEl = element.getParent(".tableform").getElements("input")[1];
+        return parEl.value === v;
+      }]  
+	});
+
+	</script>
+</head>
+<body>
+<div class="container">
+	<div class="logo">	
+		<div class="banner"><{$conf.installer.banner}></div>
+	</div>
+
+<div class="container-all">
+ <div class="installer-main clearfix" id="installer-body">
+   <form id="installer_check_form" action="" method="post">
+   <input type="hidden" name="dfd" value="dfd" />
+   <{if $serverinfo}>
+   	<{foreach from=$serverinfo.data item=group key=name}>
+            <div class="installer-detection">
+            <div class="installer-detection-title">
+			<h4><{$name}></h4>
+            </div>
+			<table class="tableform">
+			<{foreach from=$group.items item=item key=key}>
+			<tr>
+			<th><{$key}></th>
+			<td><span class="installer-detection-success <{if $item.result==0}>installer-detection-failure<{/if}>"><{$item.value}></span></td>
+			</tr>
+			<{/foreach}>
+			</table> 
+	<{/foreach}>
+    <div class="right-main-btn"><input type="button" class="taskstepbutton-start taskstepbutton-detection" onclick="document.getElementById('installer_check_form').submit();" value="<{t}>重新检测<{/t}>" /></div> 
+   </form>
+   </div>
+   <{else}>
+	  <div class="installer-steps">
+		  <div class="installer-steps-main">
+				<ul>
+					<li class="step-installing1"><em>1</em><span><{t}>软件协议<{/t}></span></li>
+					<li class="installer-step2"><em>2</em><span><{t}>信息配置<{/t}></span></li>
+					<li class="installer-step3"><em>3</em><span><{t}>安装软件包<{/t}></span></li>
+				</ul>
+		  </div>
+	  </div> 
+
+  <div class="installer-info">
+	   <div class="right-main complete">
+				<div class="right-main-info ">
+					 <div class="info-license">
+									<{if file_exists($conf.licence.file) }>
+								<textarea class='license'>
+								<{$conf.licence.file|file_get_contents}>
+								</textarea>  
+								<{else}>
+								<textarea class="license">
+									  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								</textarea>
+								<{/if}>
+					 </div>
+				</div>
+			<div class="right-main-btn">&nbsp;<input type="button" class="taskstepbutton taskstepbutton_out taskstepbutton_move" value="<{t}>同意协议进入下一步<{/t}>"/>&nbsp;</div>
+	   </div>
+   
+	   <div class="right-main" style="display:none">
+			<div class="right-main-info">
+				 <div class="info-license" id="taskconfig">
+						<{foreach from=$install_options item=group key=app_id}>
+						<h4><{$apps[$app_id].name}></h4>
+						<table class="tableform">
+						<{foreach from=$group item=item key=key}>
+						<tr>
+						<th>
+						<{if $item['required'] == true}><em style="padding-right:4px"><font color="red">*</font></em><{/if}><label><{$item.title}></label>
+						</th>
+						<td><{input params=$item class="tasks_ipt" name="options[{$app_id}][{$key}]"}></td>
+						</tr>
+						<{/foreach}>							
+						</table>							
+					<{/foreach}>
+				 </div>
+				 <div class="info-license" id="taskdemodata">
+					<{foreach from=$install_demodata_options item=demo_item key=key}>
+					<h4><{$demo_item.name}></h4>
+					<table class="tableform">					
+						<tr>
+							<th>
+							<{if $demo_item['required'] == true}><em style="padding-right:4px"><font color="red">*</font></em><{/if}><label><{$demo_item.title}></label>
+							</th>
+							<td><{input params=$demo_item class="tasks_ipt" name="options[{$key}][{$key}]"}></td>
+						</tr>
+					</table>
+					<{/foreach}>
+				 </div>
+			</div>
+			<div class="right-main-btn"><a class="step-back" href="process" onClick="Cookie.dispose('setup_Step')"><<上一步</a>&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="taskstepbutton-start taskstepbutton-startin tasks_start" id="task_install" value="<{t}>开始安装软件<{/t}>" /></div>
+	   </div>
+      
+	   <div class="right-main" style="display:none">
+		   <div class="console_handle">
+			    <span class="flt" style="color:#333; margin-left:10px;"><{t}>系统正在安装...<{/t}></span>	
+			</div>
+			<div class="clear loadpart">	
+				<div  class="loader"><strong class="appNum"></strong></div>
+			</div>
+			<div  class="btnbox">
+				<span class="flt" style="margin-left:10px"><{t}>app名称：<{/t}><span class="appName"></span></span>
+				<span class="lnk frt" onclick="$('setupinfo').toggleClass('hide');"><{t}>安装细节<{/t}>&raquo;</span>
+			</div>
+
+			<div class="right-main-info hide" id="setupinfo">
+				 <{foreach from=$apps item=app key="app_id"}>
+					<div class="clearfix box item package" appname="<{$app.name}>" action="<{link ctl="default" act=install_app}>?app=<{$app_id}>">
+						<img src="%BASE_URL%/app/<{$app_id}>/icon.png" style="float:left;margin-right:10px" width="32px" height="32px" />
+					  <div class="span-3 name">
+						 <strong><{$app.name}></strong><{if $app.version}><sup><{$app.version}></sup><{/if}>
+					  </div>
+					  <div class="span-auto desc">
+						 <{$app.description}>
+					  </div>
+				</div>
+				<{/foreach}>
+				<{if $demodata.install == 'true'}>
+				<div id="setupinfo_demodata" class="clearfix box item package" appname="<{$demodata.name}>" action="<{link ctl="default" act="install_demodata"}>">
+						<img src="%BASE_URL%/app/<{$app_id}>/icon.png" style="float:left;margin-right:10px" width="32px" height="32px" />
+					  <div class="span-3 name">
+						 <strong><{$demodata.name}></strong>
+					  </div>
+					  <div class="span-auto desc">
+						 <{$demodata.description}>
+					  </div>
+				</div>
+				<{/if}>
+		        <span class="lnk frt" style="padding:4px 0 0 0;" onclick="_open('?console=true');"><{t}>打开安装控制台<{/t}>&raquo;</span>
+			</div>
+
+	   </div>
+	
+  </div>
+     <{/if}>
+ </div>  
+ </div>
+ 
+  <div class="copyright">Powered by <a href="http://www.shopex.cn" target="_blank">ShopEx</a></div>  
+		<iframe name="console-frame" id="console-frame" style="display:none" src="about:blank" tabindex='-1'></iframe>
+</div>
+<script>
+window.addEvent('domready',function(){
+
+	var main=$('installer-body'), item= $ES('.right-main',main),
+		item_tip=$ES('.installer-steps-main li'),			
+		tasks_setup={
+			tasks_start:function(){
+				var result=validate($('taskconfig'),'div');
+				if(!result)return;
+				item[1].addClass('complete');
+			},
+			recovery:function(){
+				var arr=['step-installed','step-installing','installer-step'];
+				item_tip.each(function(tip,i){
+					tip.className=arr[i]+(i+1);
+					item[i].style.display=(i==1)?'':'none';
+				});
+			}
+		};
+
+	var step=Cookie.read('setup_Step');
+	if(step&&step!=1)tasks_setup.recovery();
+	
+	var installer = new Object();
+	setuptools={
+			init:function(){
+				var tasks=[];
+				$ES('.box').each(function(el){if (!el.hasClass('disabled'))tasks.push(el.get('action'))});
+				
+				installer = new TaskRunner(tasks,{
+					iframe:$('console-frame'),
+					container:main,
+					onError:function(text){
+						Cookie.dispose('setup_Step');
+						text+='\n是否返回上一步?';
+						if(window.confirm(text))
+						   tasks_setup.recovery();
+						
+					},
+					onLoader:function(){
+						
+						var num=this.step/this.num*100;
+						this.showStep.setText(num.toInt()+'%');
+						this.showStep.getParent().setStyle('width',num+'%');
+					},
+					onSuccess:function(){
+						Cookie.dispose('setup_Step');
+						location.href='<{$success_page}>';
+					}
+				});
+			},
+			check:function(app, method, e){
+				var option={onComplete:function(json){
+					if(json.error)alert('error');				
+				}};			
+				this.request('setuptools?app='+app+'&method='+method,option);
+			},
+			getdata:function(app, method, e){
+				var el=$(e);
+				var option={onComplete:function(json){
+					var selected=el.getSelected()?el.getSelected().value:'';
+					el.empty();
+					var fdoc = document.createDocumentFragment();
+					$H(json).each(function(k,v){
+						if(k == selected){
+							var option_el = {'value':k,'text':v,'selected':true};
+						}else{
+							var option_el = {'value':k,'text':v};
+						}
+						fdoc.appendChild(new Element('option', option_el));
+					});
+					el.appendChild(fdoc);
+				}};
+				this.request('setuptools?app='+app+'&method='+method,option);
+			},
+			request:function(url,options){
+				new Request.JSON($extend(options,{url:url,data:$E('.installer-info')})).post();
+			}
+        };
+
+	setuptools.init();	
+	
+	/** demo数据的确认 **/
+	var _demodata = $$("select[name^='options[demodata]']");
+	if (_demodata){
+		_demodata.addEvent('change',function(el){
+			var _target = $(el.target)||$(el);
+			if (_target.value == '1'){
+				$('setupinfo_demodata').addClass('disabled');
+				$('setupinfo_demodata').style.display = 'none';
+			}else{
+				$('setupinfo_demodata').removeClass('disabled');
+				$('setupinfo_demodata').style.display = 'block';
+			}
+			setuptools.init();
+		});
+	}
+
+	['taskstepbutton','tasks_start'].each(function(el,index){
+		if($E('.'+el,main))
+		$E('.'+el,main).addEvent('click',function(e){
+
+			if(tasks_setup[el])tasks_setup[el]();
+
+			if(item[index].hasClass('complete')){
+				item[index].style.display='none';
+				var i=index+1;
+				item[i].style.display='';
+			
+				item_tip[index].className='step-installed'+i;
+				item_tip[i].className='step-installing'+(i+1);
+
+				if(index-1>=0)item_tip[index-1].addClass('step-installed');
+			
+				Cookie.write('setup_Step',i+1);
+
+				if(i==item.length-1){
+					
+					installer.run('<{link ctl='default' act=initenv }>');
+				}
+			}
+		});		
+	});
+	
+});   
+	
+</script>
+</body>
+</html>

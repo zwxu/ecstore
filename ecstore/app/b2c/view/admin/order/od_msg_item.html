@@ -1,0 +1,14 @@
+<{foreach from=$ordermsg item=msgitem name="ordermsg"}>
+	<table cellspacing="0" cellpadding="0" border="0" style="margin-bottom:5px; width:99%" class="gridlist">
+	  <tbody>
+	    <tr>
+	      <td rowspan="2" style="width:10%; font-weight:bold;"><{$smarty.foreach.ordermsg.iteration}></td>
+	      <td style="text-align:left;"><label><{t}>标题：<{/t}></label><{$msgitem.title}><label><{t}>时间：<{/t}></label><{$msgitem.time|cdate:SDATE_STIME}><label><{t}>留言人：<{/t}></label><{$msgitem.author}>
+	    </td>
+	      </tr>
+	    <tr>
+	      <td valign="bottom" style="text-align:left; width:70%"><label><{t}>内容：<{/t}></label><{$msgitem.comment|nl2br}></td>
+	    </tr>
+	  </tbody>
+	</table>	       	
+<{/foreach}>

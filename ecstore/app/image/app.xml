@@ -1,0 +1,19 @@
+<app>
+    <name>图库</name>
+    <description>图片存储系统</description>
+
+    <author>
+        <name>BBC 开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>0.1</version>
+    <license>BBC license</license>
+    <parent_model_class>dbeav_model</parent_model_class>
+
+	<depends>
+		<app>desktop</app>
+	</depends>
+
+</app>

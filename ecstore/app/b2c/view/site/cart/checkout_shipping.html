@@ -1,0 +1,18 @@
+<{if $shippings}>
+<select class="inputstyle shippingSel" name="shipping[<{$store_id}>][shipping_id]">
+  <{foreach from=$shippings item="shipping" key="key" name="shippings"}>
+  <option value="<{$shipping.dt_id}>"><{$shipping.dt_name}>:<{if $shipping.money==0}>免运费<{else}><{$shipping.money|cur_odr}><{/if}></option>
+  <{/foreach}>
+</select>
+<{else}>
+	暂不支持所选地区的配送
+<{/if}>
+<{foreach from=$shippings item="shipping" key="key" name="shippings_protect"}>
+<{if $shipping.protect=='true'}>
+<div style="<{if $smarty.foreach.shippings_protect.first}>display:'';<{else}>display:none;<{/if}>">
+  <input id="use_protect_<{$shipping.dt_id}>"  class="chk_protect_<{$store_id}>"  type="checkbox" name="shipping[<{$store_id}>][is_protect]" <{if $shipping_method.is_protect=='true' && $shipping_method.shipping_id == $shipping.dt_id}> checked="checked" protect="1"<{/if}> value="1" />
+  <label for="use_protect_<{$key}>"><{t}>物流保价<{/t}></label>
+  <{t}>(商品价格的<{/t}><{$shipping.protect_rate*100}>% ，<{t}>不足<{/t}><{$shipping.minprice|cur_odr}><{t}>按<{/t}><{$shipping.minprice|cur_odr}><{t}>计算<{/t}>)。
+</div>
+<{/if}>
+<{/foreach}>

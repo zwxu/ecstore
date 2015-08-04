@@ -1,0 +1,17 @@
+<desktop>
+    <permissions>
+        <permission id="feedback" display='true'>反馈</permission>
+        <permission id="aboutus" display='true'>关于我们</permission>
+    </permissions>
+
+    <workground name="移动天下" id="cellphone.wrokground.mobile" controller="admin_basic" action="index" order='70'>
+        <menugroup name="反馈">
+            <menu controller='admin_feedback' action='index' permission='feedback' display='true' order='11'>卖家版反馈信息</menu>
+        </menugroup>
+        <menugroup name="关于我们">
+            <menu controller='admin_aboutus' action='getcopyright' permission='aboutus' display='true' order='15'>卖家版版权信息</menu>
+            <menu controller='admin_aboutus' action='getlicense' permission='aboutus' display='true' order='16'>卖家版软件许可协议</menu>
+            <menu controller='admin_aboutus' action='getdescription' permission='aboutus' display='true' order='17'>卖家版说明</menu>
+        </menugroup>
+    </workground>
+</desktop>

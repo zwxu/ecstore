@@ -1,0 +1,25 @@
+<{if $arr_products}>
+
+<{img class="operater"  alt=$___b2c="删除"|t:'b2c' src="bundle/delecate.gif" style="display:none;"}>
+
+<{foreach from=$arr_products item=item}>
+    <div class="row">
+      <div class="row-line">
+        <input type="checkbox" id="" value="<{$item.id}>" name="_obj_sel">
+        <label ><{$item.name}></label>
+      </div>
+    </div>
+<{/foreach}>
+<{pagers data=$pager}>
+
+    <div class="dialog-content-foot" style="">
+        <div class="table-action">
+            <button class="btn" onclick="var dialog=$(this).getParent('.dialog');dialog.retrieve('callback')(dialog);dialog.retrieve('instance').close();" type="button">
+                <span><{t}>确定<{/t}></span>
+            </button>
+            <button class="btn" onclick="$(this).getParent('.dialog').retrieve('instance').close()" type="button">
+                <span><{t}>取消<{/t}></span>
+            </button>
+        </div>
+    </div>
+<{/if}>

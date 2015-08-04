@@ -1,0 +1,132 @@
+<h3><{t}>编辑注册项<{/t}></h3>
+<form method="POST" action="index.php?app=b2c&ctl=admin_member_attr&act=edit" class="tableform">
+<div class="division"><table width="100%" border="0" cellpadding="0" cellspacing="0" id='attr_table'>        
+    <tr>
+    <th><em class="red">*</em><{t}>注册项名称:<{/t}></th>
+    <td><{input type="text" name="attr_name" required="true" vtype="required" value=$memattr.attr_name}></td>
+  </tr>
+  <tr>
+    <th><{t}>是否必填:<{/t}></th>
+    <td><input type="checkbox" name="attr_required" value="true" <{if $memattr.attr_required eq 'true'}>checked='true'<{/if}></td>
+  </tr>
+  <{if $memattr.attr_group != 'defalut'}>
+  <tr>
+    <th><{t}>类型:<{/t}></th>
+    <td><select name='attr_tyname' id="attr_tyname">
+  <{if $memattr.attr_group eq 'input'}>
+    <optgroup label="<{t}>输入项<{/t}>">
+    <{if $memattr.attr_tyname eq $___b2c='输入内容不限制'|t:'b2c'}>selected='true'<{/if}>>&nbsp;&nbsp;<{t}>输入内容不限制<{/t}><option value="<{t}>输入内容不限制<{/t}>" <{if $memattr.attr_tyname eq $___b2c='输入内容不限制'|t:'b2c'}>selected='true'<{/if}>>&nbsp;&nbsp;<{t}>输入内容不限制<{/t}></option>
+    <{if $memattr.attr_tyname eq $___b2c='仅限输入数字'|t:'b2c'}>selected='true'<{/if}>>&nbsp;&nbsp;<{t}>仅限输入数字<{/t}><option value="<{t}>仅限输入数字<{/t}>"<{if $memattr.attr_tyname eq $___b2c='仅限输入数字'|t:'b2c'}>selected='true'<{/if}>>&nbsp;&nbsp;<{t}>仅限输入数字<{/t}></option>
+    <{if $memattr.attr_tyname eq $___b2c='仅限输入字符'|t:'b2c'}>selected='true'<{/if}>>&nbsp;&nbsp;<{t}>仅限输入字符<{/t}><option value="<{t}>仅限输入字符<{/t}>"<{if $memattr.attr_tyname eq $___b2c='仅限输入字符'|t:'b2c'}>selected='true'<{/if}>>&nbsp;&nbsp;<{t}>仅限输入字符<{/t}></option>
+    <{if $memattr.attr_tyname eq $___b2c='仅限输入数字和字符'|t:'b2c'}>selected='true'<{/if}>>&nbsp;&nbsp;<{t}>仅限输入数字和字符<{/t}><option value="<{t}>仅限输入数字和字符<{/t}>" <{if $memattr.attr_tyname eq $___b2c='仅限输入数字和字符'|t:'b2c'}>selected='true'<{/if}>>&nbsp;&nbsp;<{t}>仅限输入数字和字符<{/t}></option>
+    </optgroup>
+    <{/if}>
+     <{if $memattr.attr_group eq 'select'}>
+    <optgroup label="<{t}>选择项<{/t}>">
+    <{if $memattr.attr_tyname eq $___b2c='单选项'|t:'b2c'}>selected='true'<{/if}>>&nbsp;&nbsp;<{t}>单选项<{/t}><option value="<{t}>单选项<{/t}>" <{if $memattr.attr_tyname eq $___b2c='单选项'|t:'b2c'}>selected='true'<{/if}>>&nbsp;&nbsp;<{t}>单选项<{/t}></option>
+    <{if $memattr.attr_tyname eq $___b2c='多选项'|t:'b2c'}>selected='true'<{/if}>>&nbsp;&nbsp;<{t}>多选项<{/t}><option value="<{t}>多选项<{/t}>"<{if $memattr.attr_tyname eq $___b2c='多选项'|t:'b2c'}>selected='true'<{/if}>>&nbsp;&nbsp;<{t}>多选项<{/t}></option>
+    </optgroup>
+    <{/if}>
+     <{if $memattr.attr_type eq 'date'}>
+     <optgroup label="<{t}>时间项<{/t}>">
+    <{if $memattr.attr_tyname eq $___b2c='日期(年月日)'|t:'b2c'}>selected='true'<{/if}>>&nbsp;&nbsp;<{t}>日期(年月日)<{/t}><option value="<{t}>日期(年月日)<{/t}>"<{if $memattr.attr_tyname eq $___b2c='日期(年月日)'|t:'b2c'}>selected='true'<{/if}>>&nbsp;&nbsp;<{t}>日期(年月日)<{/t}></option>
+    </optgroup>
+      <{/if}>
+       <{if $memattr.attr_group eq 'contact' && $memattr.attr_type!='data'}>
+     <optgroup label="<{t}>即时通讯项<{/t}>">
+    <{if $memattr.attr_tyname eq 'QQ'}>selected='true'<{/if}>>&nbsp;&nbsp;QQ<option value="QQ" <{if $memattr.attr_tyname eq 'QQ'}>selected='true'<{/if}>>&nbsp;&nbsp;QQ</option>
+    <{if $memattr.attr_tyname eq 'MSN'}>selected='true'<{/if}>>&nbsp;&nbsp;MSN<option value="MSN"<{if $memattr.attr_tyname eq 'MSN'}>selected='true'<{/if}>>&nbsp;&nbsp;MSN</option>
+    <{if $memattr.attr_tyname eq $___b2c='旺旺'|t:'b2c'}>selected='true'<{/if}>>&nbsp;&nbsp;<{t}>旺旺<{/t}><option value="<{t}>旺旺<{/t}>"<{if $memattr.attr_tyname eq $___b2c='旺旺'|t:'b2c'}>selected='true'<{/if}>>&nbsp;&nbsp;<{t}>旺旺<{/t}></option>
+    <{if $memattr.attr_tyname eq 'Skype'}>selected='true'<{/if}>>&nbsp;&nbsp;Skype<option value="Skype"<{if $memattr.attr_tyname eq 'Skype'}>selected='true'<{/if}>>&nbsp;&nbsp;Skype</option>
+    </optgroup>
+     <{/if}>
+     
+
+    </select></td>
+  </tr>
+  <{/if}>
+  <{if $memattr.attr_option != ''}>
+  
+  
+  
+<tr>
+<th><{t}>选项内容:<{/t}></th>
+<td><input type='text' name='attr_option[]' value='<{$memattr.attr_optionNo1}>' class='_x_ipt'  required='true'><span onclick='deleteAtoRow($(this))' style='cursor:pointer'><{img title=$___b2c="删除" |t:'b2c' alt=$___b2c="删除"|t:'b2c' style="cursor: pointer;" src="bundle/delecate.gif"}></span></td>
+</tr>
+
+<{foreach from=$memattr.attr_option item=option name="option"}>
+<tr>
+<th></th>
+<td><input type='text' name='attr_option[]' value='<{$option}>' class='_x_ipt'  required='true'/><span onclick='deleteAtoRow($(this))' style='cursor:pointer'><{img title=$___b2c="删除"|t:'b2c' alt=$___b2c="删除"|t:'b2c' style="cursor: pointer;" src="bundle/delecate.gif"}></span></td>
+</tr>
+<{/foreach}>
+<tr>
+<th></th>
+
+<td><input type='button' style='cursor:pointer'title='<{t}>增大选项<{/t}>' onclick='toadd();' class='button-add'/>&nbsp;<input type='button'  onclick='todel();' style='cursor:pointer'title='<{t}>删除选项<{/t}>' class='button-cut'/></td>
+
+</tr>
+
+
+
+
+
+<{/if}> 
+
+
+
+
+    </table></div>
+  
+<input type='hidden' name='attr_id' value="<{$memattr.attr_id}>"/> 
+<div class="table-action">
+	<{button label=$___b2c="保存"|t:'b2c' type="submit"}>
+	<!--<{button label=$___b2c="取消"|t:'b2c' href="index.php?app=b2c&ctl=admin_member_attr&act=index"}> -->
+</div>
+
+</form>
+
+
+<script>
+function toadd(){
+
+var nRow2=$('attr_table').rows.length;
+var objTheRow2=$('attr_table').insertRow(nRow2-1);
+var obj3 = $(objTheRow2).adopt([new Element('th'),new Element('td')]);
+var otr2=objTheRow2.getElements('*').filter(function(i){return i.getTag()=='th'||i.getTag()=='td';});
+ otr2[0].setText('');
+ otr2[1].setHTML('<input type="text" name="attr_option[]" class="_x_ipt"  required="true"><span onclick="deleteAtoRow($(this))" style="cursor:pointer"><{img title=$___b2c="删除"|t:"b2c" alt=$___b2c="删除"|t:"b2c" style="cursor: pointer;" src="bundle/delecate.gif"}></span>');
+
+
+}
+
+
+function todel(){
+
+
+var nRow2=$('attr_table').rows.length;
+if(nRow2>5){
+
+$('attr_table').deleteRow(nRow2-2);
+}else{
+alert('<{t}>至少要有一个选项<{/t}>');
+
+}
+}
+function deleteAtoRow(el){
+  if($ES('tr','attr_table').length<=5){
+    alert('<{t}>至少有一个选项<{/t}>');
+    return;
+  }
+  if($ES('tr','attr_table')[5].getElement('th').getText()==''){
+    $ES('tr','attr_table')[5].getElement('th').setText('<{t}>选项内容:<{/t}>');
+  }
+  $(el).getParent('tr').remove();
+
+}
+
+
+</script>
+
+
+

@@ -1,0 +1,7 @@
+<h5><{$spec.spec_name}></h5>
+<p><{$spec.spec_memo}>&nbsp; [<{t}>显示方式：<{/t}><{if $spec.spec_show_type == 'select'}><{t}>下拉显示<{/t}><{else}><{t}>平铺显示<{/t}><{/if}>]</p>
+<ul class='goods-spec-box' > 
+	<{foreach from=$spec.spec_value item=vItem }>
+	  <li style="cursor:default;"><{if $spec.spec_type == 'text'}><span ><{$vItem.spec_value}></span><{else}><{$vItem.spec_value}> <img src='<{if $vItem.spec_image}><{$vItem.spec_image|storager}><{else}><{$spec_default_pic|storager}><{/if}>' alt='<{$vItem.spec_value}>' width='30' height='30'/><{/if}></li>
+	  <{/foreach}>
+</ul>

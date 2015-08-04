@@ -1,0 +1,16 @@
+<app>
+    <name>商品通api接口</name>
+    <description>商品通api接口</description>
+    <author>
+        <name>BBC 开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>0.1</version>
+    <license>BBC license</license>
+
+   <depends>
+      <app>b2c</app>
+    </depends>
+</app>

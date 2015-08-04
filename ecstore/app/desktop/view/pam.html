@@ -1,0 +1,52 @@
+<form action="index.php?app=desktop&ctl=pam&act=setting&p[0]=<{$passport}>" id="pam-edit-form" method="post">
+<div class="tableform">
+ <{$html}>
+</div>
+</from>
+
+ <{area inject=".mainFoot"}>
+<div class="table-action">
+    <table width="100%" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td><button class="btn btn-primary" id="pam-edit-form-submit" type="submit"><span><span><{t}>确定<{/t}></span></span></button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<{/area}>
+<script>
+(function(){
+    var _form = $('pam-edit-form');
+    var btn =$('pam-edit-form-submit');
+    var finder = finderGroup['<{$env.get.finder_id}>'];
+   _form.store('target',{
+	  onComplete:function(){
+	  },
+	  onSuccess:function(response){
+		var hash_res_obj = JSON.decode(response);
+		if (hash_res_obj.success != undefined && hash_res_obj.success != ""){
+		  try{
+			var _dialogIns = btn.getParent('.dialog').retrieve('instance');
+		  }catch(e){}
+
+		  if(_dialogIns){
+			_dialogIns.close();
+
+		  }
+		}
+	  }
+	});
+
+        btn.addEvent('click',function(){
+        
+            _form.fireEvent('submit',{stop:$empty});
+            
+        
+        
+        });
+    
+})();
+    
+    
+</script>

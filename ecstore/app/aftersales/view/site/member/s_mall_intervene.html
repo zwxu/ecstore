@@ -1,0 +1,69 @@
+<div class="member-main">
+    <h1 class="title title2"><{t}>要求平台介入<{/t}></h1>
+    <form action="<{link app=aftersales ctl=site_member act=intereven}>" enctype="multipart/form-data" encoding="multipart/form-data" method="post" name="return_save" id='x-return-form'>
+        <div class="FormWrap">
+            <div class="division">
+                <h4 class="fontnormal"><{t}>退款原因：<{/t}></h4>
+                <{input id="J_DelayDays" type="select" name='comment' rows=$comment valueColumn="id" labelColumn="name" onchange="$('dlycorp_list').get('value')=='other'?$('otherinput').show():$('otherinput').hide(this);"}>
+            </div>
+			<div class="division">
+                <h4 class="fontnormal"><{t}>手机号码：<{/t}></h4>
+                <{input type="text" id="phone" name="phone" maxlength=13}>
+                <h4 class="fontnormal"><{t}>邮箱：<{/t}></h4>
+                <{input type="text" id="email" name="email"}>
+            </div>
+			<div class="textcenter p10 division">
+	<{button class="" type="submit" label=$___b2c="提交申请"|t:'b2c'}>
+    <{button class="" type="button" onclick="refuse();" label=$___b2c="撤销申请"|t:'b2c'}>
+	</div>
+    </div>
+    <input type="hidden" name="order_id" value="<{$return_item.order_id}>">
+    <input type="hidden" name="intervene" value="intervene">
+    <input type="hidden" name="return_id" value="<{$return_item.return_id}>">
+</form>
+<form action="<{link app=aftersales ctl=site_member act=return_refuse}>" enctype="multipart/form-data" encoding="multipart/form-data" method="post" name="return_save" id='x-return-form-refuse'>
+    <input type="hidden" name="order_id" value="<{$return_item.order_id}>">
+    <input type="hidden" name="return_id" value="<{$return_item.return_id}>">
+</form>
+</div>
+
+<script>
+
+function refuse(){
+    $('x-return-form-refuse').submit();
+}
+
+$('x-return-form').getElement('button[type=submit]').addEvent('click',function(e){
+
+    var reason=$('J_DelayDays').value;
+    if(reason == ''){
+        Message.error('请选择退款原因！');
+        return false;
+    }
+
+    var phone=$('phone').value;
+    if(phone == ''){
+        Message.error('请填写电话！');
+        return false;
+    }else{
+        if(/^13[0-9]{9}$|15[0-9]{9}$|18[0-9]{9}$|14[0-9]{9}$/.test(phone)){
+        }else{
+            Message.error('请填写正确的电话！');
+            return false;
+        }
+    }
+
+    var email=$('email').value;
+    if(email == ''){
+        Message.error('请填写邮箱！');
+        return false;
+    }else{
+        if(/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(email)){
+        }else{
+            Message.error('请填写正确的邮箱！');
+            return false;
+        }
+    }
+});
+
+</script>

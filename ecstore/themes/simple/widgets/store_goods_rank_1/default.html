@@ -1,0 +1,98 @@
+
+<div class="sj_info mt_10">
+<h4><div class="info_title rankTitle"><{$data.title}></div></h4>
+<!--<ul class=" hot_kind_ul" >
+    <li class="le_zhi "><a id="a_ranking_buy" href="javascript:void(0);" class="hover">本月热销排行</a></li>
+    <li class="ri_zhi"><a id="a_ranking_fav" href="javascript:void(0);">热门收藏排行</a></li>
+    <div class="cl_zhi"></div>
+</ul>-->
+<h4 class="rankListTitle"><span class="rankCurrentTitle" id="r_1"">销售量</span><span  id="r_2">收藏数</span></h4>
+<div id="ranking_buys">
+<{foreach from=$data.buys item=good}>
+<div class="ranking_info">
+   <div class="ranklist">
+    <a target='_blank' class="le_zhi" href="<{link app=b2c ctl=site_product act=index arg=$good.goods_id}>">
+      <{if $good.udfimg == 'true'}>
+      <{assign var="gimage" value=$good.thumbnail_pic}>
+      <{else}>
+      <{assign var="gimage" value=$good.image_default_id|default:$data.defaultImage}>
+      <{/if}>
+      <img class="img-lazyload" src="images/transparent.gif" lazyload="<{$gimage|storager}>" alt="<{$good.name}>"></a>
+	  <div class="ranklist_ri ri_zhi">
+	    <p><a target='_blank' href="<{link app=b2c ctl=site_product act=index arg=$good.goods_id}>"><{$good.name}></a></p>
+	    <p class="price"><{$good.price|cur}></p>
+	    <p class="sell">已售出<{$good.buy_count}>笔</p>
+	  </div>
+	  <div class="cl_zhi"></div>
+	</div>
+     <div class="cl_zhi"></div>
+</div>
+<{/foreach}>
+</div>
+<div id="ranking_favs" style="display:none">
+<{foreach from=$data.favs item=good}>
+<div class="ranking_info">
+   <div class="ranklist">
+    <a target='_blank' class="le_zhi" href="<{link app=b2c ctl=site_product act=index arg=$good.goods_id}>">
+      <{if $good.udfimg == 'true'}>
+      <{assign var="gimage" value=$good.thumbnail_pic}>
+      <{else}>
+      <{assign var="gimage" value=$good.image_default_id|default:$data.defaultImage}>
+      <{/if}>
+      <img class="img-lazyload" src="images/transparent.gif" lazyload="<{$gimage|storager}>" alt="<{$good.name}>"></a>
+	  <div class="ranklist_ri ri_zhi">
+	    <p><a target='_blank' href="<{link app=b2c ctl=site_product act=index arg=$good.goods_id}>"><{$good.name}></a></p>
+	    <p class="price"><{$good.price|cur}></p>
+	    <p class="sell">收藏人气<{$good.fav_count}>笔</p>
+	  </div>
+	  <div class="cl_zhi"></div>
+	</div>
+     <div class="cl_zhi"></div>
+</div>
+<{/foreach}>
+</div>
+<div class="moreGoods">
+<a class="moreGoodsA" target="_blank" href="<{link app=business ctl="site_shop" act="gallery" arg0=$data.store_id}>">查看更多宝贝</a>
+</div>
+
+</div>
+<!--<script>
+    (function(){
+        $('a_ranking_buy').addEvent('click',function(){
+            this.addClass('hover');
+            $('a_ranking_fav').removeClass('hover');
+            $('ranking_buys').setStyle('display', ''); 
+            $('ranking_favs').setStyle('display', 'none'); 
+            return false;
+        });
+        $('a_ranking_fav').addEvent('click',function(){
+            this.addClass('hover');
+            $('a_ranking_buy').removeClass('hover');
+            $('ranking_buys').setStyle('display', 'none'); 
+            $('ranking_favs').setStyle('display', ''); 
+            return false;
+        });
+
+    })();
+</script>  -->
+<script>
+window.addEvent('domready', function() {
+    $E('.rankListTitle').getChildren('span').each(function(item,index){
+           
+        item.addEvent('mouseenter',function(){
+   
+          $('r_1').removeClass('rankCurrentTitle');
+          $('r_2').removeClass('rankCurrentTitle');
+          if(index === 0){
+            $('r_1').addClass('rankCurrentTitle');
+            $('ranking_buys').setStyle('display','');
+            $('ranking_favs').setStyle('display','none');
+          }else if(index === 1){
+            $('r_2').addClass('rankCurrentTitle');
+            $('ranking_favs').setStyle('display','');
+            $('ranking_buys').setStyle('display','none');
+          }
+      });
+    });
+});
+</script>

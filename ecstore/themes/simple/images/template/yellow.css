@@ -1,0 +1,112 @@
+﻿*{margin:0px; padding:0px;}
+p,div{font-size:12px;}
+.fl_zhi {float:left;}
+.ri_zhi {float:right;}
+.cl_zhi {clear:both; height:0px; line-height:0px; font-size:0px;}
+img,input {border:0px;}
+.tar {text-align:right;}
+/*---------------------------------模板黄首页---------------------------------------*/
+.shopinfo {background:url(../yellow_03.gif); height:120px;padding-left:10px; padding-top:30px;font-family:tahoma,"microsoft yahei","微软雅黑"; margin-top:10px;}
+.shopinfo_le { margin-right:10px;padding-left:10px;}
+.shopinfo_ri h3{ font-size:22px; color:#444444; margin-bottom:5px;}
+.shopinfo_ri P {color:#fff;}
+.shop_nav {margin-top:12px;}
+.shop_nav li {float:left; list-style:none;margin-right:3px;}
+.shop_nav li a.shop_nav_1,.shop_nav li a.shop_nav_2,.shop_nav li a.shop_nav_3{display:block;height:25px;text-decoration:none; color:#fff; line-height:25px;text-align:center;color:#333;}
+.shop_nav li a.shop_nav_1 {background:url(../yellow_06.gif) no-repeat;width:54px;color:#fff;}
+.shop_nav li a.shop_nav_2{ background:url(../yellow_08.gif) no-repeat;width:78px;}
+.shop_nav li a.shop_nav_3{ background:url(../yellow_10.gif) no-repeat;width:66px;}
+
+
+.shop_le {border:1px solid #f4ac2f; width:188px;}
+.shop_le h4 {background:url(../yellow_20.gif) repeat-x;height:24px; line-height:24px; color:#fff; padding-left:10px;}
+
+.pro_kind {padding-left:15px;}
+.pro_kind h5{height:20px; line-height:20px; margin-top:12px;}
+.pro_kind h5 a{text-decoration:none; color:#444;font-size:12px;}
+.pro_kind .plus { background:url(../red_36.gif) center center no-repeat; padding-left:10px;width:9px; height:20px;}
+.pro_kind .mius { background:url(../red_50.gif)  center center no-repeat; padding-left:10px;width:9px; height:20px;}
+
+.pro_kind_ul {border-bottom:1px dashed #eee;padding-bottom:3px;}
+.pro_kind_ul li{float:left; list-style:none; margin-top:3px;}
+.pro_kind_ul li a {text-decoration:none; color:#444; margin:0px 2px; }
+.pro_kind>p{border-bottom:1px dashed #eee;}
+.pro_kind>p>a {text-decoration:none; color:#444;display:block; height:20px; line-height:20px;}
+.pro_kind span{display:block;float:left;}
+.pro_kind>p>a.plus_2 {height:20px; line-height:20px; padding-left:25px;}
+
+.fri_link li,.pro_kind li{list-style:none; border-bottom:1px dashed #ccc; line-height:22px;margin-left:10px;}
+.fri_link li a{text-decoration:none;color:#444;}
+
+.Ranking_ul {margin-top:10px; border-bottom:1px solid #b2d1ff; height:27px;}
+.Ranking_ul li {float:left; list-style:none;}
+.Ranking_ul li a {border:1px solid #b2d1ff; background:#f0f7ff;width:81px; height:26px; line-height:26px;text-align:center;color:#000;display:block;text-decoration:none; margin-left:3px;}
+.Ranking_ul li a:hover {background:#fff; border-bottom:1px solid #fff;}
+.Ranking_ul li a.hover {background:#fff; border-bottom:1px solid #fff;}
+.ranking_info {border-bottom:1px dashed #ccc;padding:10px;}
+.ranking_info_le {width:42px; margin-right:5px;}
+.ranking_info_ri {width:115px;}
+.ranking_info_le a {border:1px solid #ccc; width:40px; height:40px;display:block; }
+.ranking_info_ri>p>a {text-decoration:none; color:#444; height:15px; line-height:15px;}
+.ranking_info_ri .price {color:#999;}
+.ranking_info_ri .price span{color:#e40303;}
+.ranking_info_ri .sell {background:url(../red_61.gif) no-repeat; padding-left:35px;}
+.view_other {background:url(../red_68.gif) repeat-x; border:1px solid #ffd863;line-height:36px; text-align:center;color:#000; width:125px; margin:10px 30px;}
+.search_shop_table {border:0px;border-spacing:0px; width:100%; border-collapse:collapse;}
+.search_shop_table  td input {float:left;}
+.width_55 {width:50px;}
+.width_125 {width:120px;}
+.shop_input {border:1px solid #999; height:20px;}
+.sea_b {background:url(../red_32.gif) no-repeat; width:60px; line-height:21px;height:21px; text-align:center;cursor:pointer;}
+
+.shop_ri {width:1000px;}
+.shop_ri h4{background:url(../yellow_17.gif) repeat-x;height:23px; line-height:27px; color:#f0982f; padding-left:10px;}
+.shop_ri h4>span {float:left;}
+.shop_ri h4>a { color:#333;text-decoration:none; margin:0 10px; font-weight:normal;display:block;}
+.shop_right_button {background:url(../yellow_25.gif) no-repeat; width:82px; height:22px; line-height:22px; color:#fff; text-align:center; margin-top:20px; margin-bottom:10px;}
+.new_shop {width:;}
+.new_shop li {float:left; list-style:none; width:162px; margin:10px 19px;}
+.new_shop li>a {width:160px; height:160px; display:block; border:1px solid #ccc; margin-bottom:5px;}
+.new_shop li>p>a {text-decoration:none; color:#444; height:36px; line-height:18px; width:160px; color:#444;overflow:hidden;display:block;}
+.shop_price {color:#e40303; font-weight:bold;}
+.shop_zhi {color:#999;}
+.price_p{color:#000; margin-top:20px;font-weight:bold;}
+.host_say {background:#ffffcf; border:1px solid #ffe5a8; line-height:22px;font-size:12px;color:#000; padding-left:10px; width:890px; overflow:hidden;}
+.host,.time{color:#848484;}
+.view_more {text-decoration:none; color:#3366cc; height:22px; line-height:22px;}
+.Ranking_ul li.last,.fri_link li.last,.pro_kind li.last {border:0px;}
+.search_shop_p span {float:left;display:inline-block; margin:0 2px;}
+.search_shop_p,.search_shop_p_s  {margin:5px 0px; line-height:20px;}
+.search_shop_p_s {padding-left:55px; }
+/*---------------------------------模板黄列表页---------------------------------------*/
+
+.minus {background:url(../rl_03.gif) no-repeat; width:25px; height:25px;position:absolute;right:0px; top:0px;}
+.Decoration {border:1px solid #e5e5e5;background:#fcfcfc; position:relative;}
+.Decoration h5 {height:25px; line-height:25px; color:#e9711f; padding-left:15px; border-bottom:1px solid #f0f0f0; width:971px;}
+.shop_kind li{float:left; list-style:none;}
+.shop_kind li a {background:url(../rl_07.gif) left center no-repeat; padding-left:15px;text-decoration:none; line-height:20px;color:#e9711f; margin:20px;display:block;}
+.findsing span{float:left; line-height:20px; height:20px; margin:0 3px;}
+.findsing span>input {vertical-align:middle}
+.fing_end {width:447px; padding-left:10px;}
+.findsing {margin:10px 0px;}
+
+.list_search {padding:5px;}
+.shop_list_show { width: 150px; float:left;}
+.shop_list_show li{float:left; list-style:none; margin:0 5px; line-height:20px;}
+.shop_list_Sequence li a { width:44px; height:16px; line-height:16px;text-align:center;display:block;border-left:1px solid #ccc; border-bottom:2px solid #ccc; border-top:1px solid #ccc;background:url(../rl_16.gif) right center no-repeat #eceeeb; padding-right:5px;text-decoration:none; color:#000;}
+.shop_list_Sequence li {float:left; list-style:none; line-height:20px;}
+.shop_list_Sequence li a:hover {background:url(../rl_19.gif) right center no-repeat #e3e8eb; border-left:1px solid #448dba; border-bottom:2px solid #448dba; border-top:1px solid #448dba;}
+.shop_vip {float:left; padding-left:20px;; line-height:20px;}
+.shop_vip>input {vertical-align:middle; margin:0 3px;}
+.shop_page { width:125px;}
+.shop_page li {float:left; list-style:none; margin:0 5px; line-height:19px;color:#acadb1;}
+.shop_page li a,.shop_scroll_page li a{border:1px solid #cacccb; height:19px;line-height:19px; text-align:center;text-decoration:none;display:block;color:#a1a1a3;}
+.shop_scroll_page li {float:left; list-style:none; margin:0px 5px;}
+.ok {border:1px solid #ccc; background:#f5f5f5; color:#000;text-align:center; line-height:19px; height:19px; width:40px;cursor:pointer;}
+.dopage {border:1px solid #ccc; width:40px; height:19px; line-height:19px;margin:0 5px;}
+.shop_scroll_page li a.current {border:0px; font-weight:bold; color:#f4ac2f;padding:0px;}
+.shop_scroll_page  {margin-top:70px; margin-bottom:20px;}
+
+.shopinfo_le>img{width:80px; height:80px; overflow:hidden;}
+.new_shop li>a>img {width:160px; height:160px; overflow:hidden;}
+.ranking_info_le a>img{width:40px; height:40px;overflow:hidden}

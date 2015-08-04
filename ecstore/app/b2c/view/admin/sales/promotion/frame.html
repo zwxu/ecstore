@@ -1,0 +1,25 @@
+
+<form action="index.php?app=b2c&ctl=admin_sales_<{$promotion_type}>&act=toAdd" method="post" id="promotion_form" name="promotion_form">
+  <input type="hidden" name="rule[rule_id]" value="<{$rule.rule_id}>"/>
+
+  <div>
+     <{include file="admin/sales/promotion/page.html" app=b2c}>
+  </div>
+</form>
+<script>
+$('promotion_form').retrieve('setTabs',function(){
+		 var gtabs=$ES('#menu-desktop .spage-side-nav li.l-handle');
+		 new ItemAgg(gtabs,$ES('#promotion_form .spage-main-box'),{
+			activeName:'cur',
+			onActive:function(tab,item){
+				 var anotherItems=$$($A(this.items).remove(item));
+                  if(tab.hasClass('all')){
+                     anotherItems.show();
+                  }else{
+                     anotherItems.hide();
+                  }
+        	}
+		 });
+}());
+
+</script>

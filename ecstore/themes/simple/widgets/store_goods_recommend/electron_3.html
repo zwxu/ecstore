@@ -1,0 +1,18 @@
+<div class="shop2_floor"><h4 class="none"><{$setting.title}></h4></div>
+<div class="fitt">
+		  <ul>
+      <{foreach from=$data.goods item=good key=key name="_good"}>
+		     <li>
+         <a target="_blank" href="<{link app=b2c ctl="site_product" act="index" arg0=$good.goods_id}>">
+         <img class="img-lazyload" src="images/transparent.gif" lazyload="<{$good.image_default_id|default:$data.defaultImage|storager:'m'}>" alt="<{$good.name|cut:72}>" />
+         </a>
+        <div style='height:40px;overflow:hidden;'>
+        <a title="<{$good.name}>"  target="_blank" href="<{link app=b2c ctl="site_product" act="index" arg0=$good.goods_id}>"><{$good.name}></a>
+        </div>
+        <span>RMB:<{$good.price}>元</span>
+        </li>
+        
+		    <{/foreach}>
+			 <div class="cl_zhi"></div>
+		  </ul>
+</div>

@@ -1,0 +1,11 @@
+<services>
+
+<service id="comment_list">
+		<class>commenterprise_comment_setting</class>
+	</service>
+
+<service id="ask_list">
+		<class>commenterprise_ask_setting</class>
+	</service>
+
+</services>    

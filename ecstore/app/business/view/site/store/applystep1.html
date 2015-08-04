@@ -1,0 +1,135 @@
+<{css src="ecmall.css" app="business"}>
+<div class="content">
+    <!-- <div class="module_common mall_settle">
+        <h2><b class="set_up_shop" title="我要开店"></b></h2>
+        <div class="wrap">
+            <div class="wrap_child">
+
+                <div class="module_new_shop">
+
+                    <div class="chart">
+                       <div class="pos_x1 bg_a1 sett_on" ><span>1.</span><{t}>选择店铺类型<{/t}></div>
+                        <div class="pos_x2 bg_b2" ><span>2.</span><{t}>填写店主和店铺信息<{/t}></div>
+                        <div class="pos_x3 bg_c" ><span>3.</span><{t}>上传公司证件<{/t}></div>
+						<div class="pos_x4 bg_c" ><span>4.</span><{t}>提交审核<{/t}></div>
+                    </div>
+
+                    <div class="grade_shop">
+                        <table>
+                        <{foreach from=$sgrades item=sgrade}>
+                            <tr>
+                               
+                                 <{switch  from=$sgrade.issue_type}>
+                                 <{case value=0}>
+                                    <th><{t}>卖场型旗舰店<{/t}></th>
+                                 <{case value=1}>
+                                    <th><{t}>专卖店<{/t}></th>
+                                 <{case value=2}>
+                                    <th><{t}>专营店<{/t}></th>
+                                 <{case value=3}>
+                                    <th><{t}>品牌旗舰店<{/t}></th>
+                                 <{/switch}>
+                               
+                                <td class="padding1 width5">
+                                    <p><{t}>允许商品数 : <{/t}><span class="fontColor1"><{$sgrade.goods_num}></span></p>
+                                    <p><{t}>可选模板套数: <{/t}><span class="fontColor1"><{$sgrade.theme_num}></span></p>
+                                    <p><{t}>收费标准: <{/t}><span class="fontColor1"><{$sgrade.grade_money|cur}></span></p>
+                                    <p><{t}>保证金额: <{/t}><span class="fontColor1"><{$sgrade.issue_money|cur}></span></p>
+                                    <p><{t}>需要审核: <{/t}><span class="fontColor2">
+                                    <{if $sgrade.certification == 1}>
+                                    <{t}>是<{/t}>
+                                    <{else}>
+                                    <{t}>否<{/t}>
+                                    <{/if}>
+                                    
+                                    </span></p>
+                                </td>
+                                <td class="width6 padding2">
+                                    <table>
+                                        <tr>
+                                            <td style='text-align:left;'><{t}>备注:&nbsp;&nbsp;<{/t}><{$sgrade.grade_name}></td>
+                                            <td><{$sgrade.remark}>                                     
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                
+                                <td><a href="<{link app='business' ctl='site_store' act='storeapplystep2' arg0=$sgrade.grade_id }>" class="shop_btn">立即开店</a></td>
+                            </tr>
+                        <{/foreach}>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div> -->
+	
+	
+	<div class="reg new_reg dis_bl">
+        <div class="title">
+            <div class="title_img">
+                <img src="<{$env.base_url}>/app/business/statics/images/reg_stpe.jpg" alt="" />
+            </div>
+        </div>
+        <div class="reg_step_2">
+            <!-- <p class="reg_step_tip"><span>*</span>请选择店铺类型</p> -->
+            <div class="reg_shop">
+
+                   <{foreach from=$sgrades item=sgrade}>
+                        <{switch  from=$sgrade.issue_type}>
+                         <{case value=0}>
+                           <{assign var="issuename" value='卖场型旗舰店'}>
+                           <{assign var="issuepic" value="step_2_02.png"}>
+                         <{case value=1}>
+                           <{assign var="issuename" value='专卖店'}>
+                           <{assign var="issuepic" value="step_2_04.png"}>
+                         <{case value=2}>
+                           <{assign var="issuename" value='专营店'}>
+                           <{assign var="issuepic" value="step_2_01.png"}>
+                         <{case value=3}>
+                           <{assign var="issuename" value='品牌旗舰店'}>
+                           <{assign var="issuepic" value="step_2_03.png"}>
+                         <{/switch}>
+                   <div class="fl" id=<{$sgrade.grade_id}> >
+                        <h3><img src="<{$env.base_url}>/app/business/statics/images/<{$issuepic}>" alt="<{$issuename}>" /></h3>
+                        <p class="reg_shop_info">
+                           <{$sgrade.remark}>
+                        </p>
+                   </div>
+                   <{/foreach}>
+                <div class="crl"></div>
+                <div class="t_c">
+                <a  id='nextstep'  href="<{link app='business' ctl='site_store' act='storeapplystep2' arg0='gradeid' }>" class="reg_step_2_button">下一步 &gt;</a><div class="crl"></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+ window.addEvent('domready',function(){
+
+        $$('.fl').addEvents({
+        click:function(){
+            $$('.fl').removeClass('active');
+           this.addClass('active');
+           var str="<{link app='business' ctl='site_store' act='storeapplystep2' arg0='gradeid'}>";
+            str=str.replace('gradeid',this.id)
+           $('nextstep').href= str;
+
+        }
+        });
+
+        if($$('.fl').length>0){
+            $$('.fl')[0].addClass('active');
+            var str="<{link app='business' ctl='site_store' act='storeapplystep2' arg0='gradeid'}>";
+            str=str.replace('gradeid', $$('.fl')[0].id)
+           $('nextstep').href= str;
+        }
+
+
+   });
+
+
+</script>
+

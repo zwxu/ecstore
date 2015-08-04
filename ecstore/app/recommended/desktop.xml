@@ -1,0 +1,7 @@
+<desktop>
+    <workground name="商品" id="b2c.wrokground.goods" controller="admin_goods" action="index" order="20">
+        <menugroup name="应用配置">
+            <menu controller="admin_setting" action="index" permission="goods" display="true" order="180">购买该商品的用户还购买了</menu>
+        </menugroup>
+    </workground>
+</desktop>

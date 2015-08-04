@@ -1,0 +1,33 @@
+二次开发目录手册
+
+since   :   %%date(%Y-%m-%d)  $Rev$
+
+%!target:html
+%!postproc(tex): '\.gif' '.eps'
+%!preproc(html): '\.dot' '.gif'
+%!preproc(tex): '\.dot' '.pdf'
+%!encoding:utf-8
+=CUSTOM_CORE_DIR二次开发目录简介=
+    二次开发目录(以下简称CUSTOM_CORE_DIR)提供一个独立的二次开发环境目录，需要开发者在config.php中自定义一个文件目录，用于接管系统原有的流程，从而达到在不影响系统本身代码的情况下进行二次开发的目的。
+=此手册目标人群=
+开发者：二次开发者，基于BBC的新应用或扩展已有应用
+
+=CUSTOM_CORE_DIR目前可以重载的目录或文件有(每个APP下)：=
+- MVC文件
+- LIB
+- dbschema
+- XML文件(site.xml,services.xml,desktop.xml等)
+- 设置setting.php
+- widgets文件
+- xmlschema文件
+- initial初始化文件
+- task.php安装任务文件
+
+
+
+=CUSTOM_CORE_DIR使用方法与规则=
+- 首先我们需要在系统的config.php中加入一行"define('CUSTOM_CORE_DIR',ROOT_DIR.'/xxx');"来定义二次开发的环境目录。xxx代表二次开发目录名，二者需要一致。
+- 然后我们在与APP文件夹同级的目录下新建立一个名为xxx的文件夹，把需要接管的文件按原目录(APP下目录)重建。
+- 把需要接管的文件按照原APP，原路径，以及原文件名重建(如果需要还原，把新文件删掉即可)。
+- 如果需要改动dbschema,或者xml文件，后台更新维护才能生效。
+

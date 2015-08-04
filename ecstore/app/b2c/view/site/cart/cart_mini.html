@@ -1,0 +1,43 @@
+<{if $aCart.object.goods}>
+<h4>最近加入宝贝：</h4>
+<ul class="baby_list">
+    <{foreach from=$aCart.object.goods item=goods key=k}>
+    <li>
+      <a href="<{link app=b2c ctl=site_product act=index arg0=$goods.obj_items.products.0.goods_id }>" class="baby_img"><img src="<{$goods.obj_items.products.0.default_image.thumbnail|default:$env.conf.b2c.site.default_thumbnail_pic|storager:'s'}>" title='<{$goods.obj_items.products.0.name}>' width='38' height='38'/></a>
+      <div class="cart_baby_info le_zhi">
+        <p><a href="<{link app=b2c ctl=site_product act=index arg0=$goods.obj_items.products.0.goods_id }>" class="cart_p_name" title="<{$goods.obj_items.products.0.name}>"><{$goods.obj_items.products.0.name}></a></p>
+      <p><a href="<{link app=b2c ctl=site_product act=index arg0=$goods.obj_items.products.0.goods_id }>" class="cart_p_info"><{$goods.obj_items.products.0.spec_info}></a></p>
+      </div>
+      <div class="cart_baby_edit ri_zhi">
+        <p><a href="<{link app=b2c ctl=site_product act=index arg0=$goods.obj_items.products.0.goods_id }>" class="cart_p_det">详情</a></p>
+      <p><a href='javascript:void(0);' onclick="del_cart_goods('<{$goods.obj_ident}>',<{$goods.obj_items.products.0.quantity}>,this)" class="cart_p_del">删除</a></p>
+      </div>
+      <div class="cl_zhi"></div>
+    </li>
+    <{/foreach}>
+</ul>
+<a class="cart_sett" href="<{link app=b2c ctl='site_cart' act='index'}>">立即结算</a>
+<{else}>
+<div class="nogoods">
+<b></b>
+<span>购物车中还没有商品，赶紧选购吧！</span>
+<div class="cl_zhi"></div>
+</div>
+<{/if}>
+
+<script>
+function del_cart_goods(goods,num,obj){
+  new Request({
+          url:'<{link app="b2c" ctl="site_cart" act="remove"}>',
+          onComplete:function(){
+            obj.getParent('li').destroy();
+            <{if $setting.cart_show_type==1}>
+            $('cart_num').innerHTML = (Cookie.read('S[CART_NUMBER]')?Cookie.read('S[CART_NUMBER]'):'0');
+          <{else}>
+            $('cart_num').innerHTML = (Cookie.read('S[CART_COUNT]')?Cookie.read('S[CART_COUNT]'):'0');
+          <{/if}>
+          }
+        }).post('modify_quantity['+goods+'][quantity]='+num+'&response_type=true');
+
+}
+</script>

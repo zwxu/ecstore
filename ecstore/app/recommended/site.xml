@@ -1,0 +1,7 @@
+<site>
+    <module id="recommended" controller='site_show' >
+        <name>recommendedshowwidget</name>
+        <title>显示挂件数据</title>
+        <disable>false</disable>
+    </module>
+</site>

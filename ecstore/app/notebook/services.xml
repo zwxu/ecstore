@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services>
+	<service id="notebook_addon">
+		<class>notebook_gravatar</class>
+	</service>
+	<service id="desktop_finder.notebook_mdl_item">
+    <class>notebook_finder_item</class>
+  </service>
+</services>

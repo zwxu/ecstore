@@ -1,0 +1,79 @@
+<form action="<{if $form_url}><{$form_url}><{else}><{link app=b2c ctl=site_cart act=add arg0='goods'}><{/if}>" method="post"
+<{if $setting.buytarget == 2}> target="_blank_cart"<{elseif $setting.buytarget == 3}> target="_dialog_minicart"<{/if}>
+gnotify="<{link app=b2c ctl=site_product act=gnotify}>">
+    <div class="dialog-specbox ec-spec-box ec-spec-box2" id='dialog-spec'>
+        <div class="spec-pic">
+              <{if $product.udfimg == 'true'}>
+                    <{assign var="gimage" value=$goods.thumbnail_pic}>
+                    <{else}>
+                    <{assign var="gimage" value=$goods.image_default_id|default:$defaultImage}>
+              <{/if}>
+
+            <img src="<{$gimage|storager:'s'}>" height="85">
+            <q><{t}>价格<{/t}>: <span class="font-red font13px fontbold" updatespec="updateprice"><{$goods.current_price|cur:$order.currency}></span></q>
+        </div>
+        <div class="dialog-specwrap">
+        <div class="dialog-specauto">
+          <div class="spec_name">
+            <{$goodshtml.name}>
+          </div>
+          <div class="spec-content">
+            <{goodsspec goods_id=$goods.goods_id}>
+            <input name="goods[goods_id]"  value="<{$goods.goods_id}>" type="hidden" />
+            <input name="goods[product_id]" updatespec="updatepid" value="" type="hidden" />
+            <input name="goods[pmt_id]"  value="" type="hidden" />
+            <input name="goods[num]" value="1" type="hidden" />
+            <{if !$goods.nostore_sell}>
+            <span class="goods-store" style="display:none;"  updatespec="text_store"><{$goods.store}></span>
+            <{/if}>
+            <div class="clear"></div>
+          </div>
+        </div>
+        </div>
+        <div style="clear:both" updatespec="stockout" class="specbox-btn">
+            <{$goodshtml.button}>
+        </div>
+    </div>
+</form>
+
+<script>
+(function(){
+
+
+  var isDebug = '<{if defined("DEBUG_JS") && DEBUG_JS}>js<{else}>js_mini<{/if}>/',
+  path ='<{$env.base_url}>/app/b2c/statics/' + isDebug;
+
+  $LAB.setOptions({BasePath:path}).script('spec.js').wait(function(){
+    var spec_update=$$('#dialog-spec .goods-spec')[0].retrieve('_goods_spec');
+    if(!spec_update) return;
+    var btns = spec_update.contains.getElement('.small-specbtn');
+    var confirm = spec_update.contains.getElement('.confirm');
+    Goods_spec._selectedUpdate['stockout']=function(el,v,pid,pdata){
+        var callback = el.retrieve('default:callback') || function(){
+            var storeBtn=spec_update.contains.getElement('.goods-store');
+
+            if(storeBtn&&storeBtn.get('text')==='0') return btns.addClass('stockout');
+            btns.removeClass('stockout');
+
+            if(confirm) {
+                btns.addClass('confirm-spec');
+            }
+        };
+        callback();
+    };
+    spec_update.options.selectItems.combine(['confirmspec']);
+    Goods_spec._selectUpdate['confirmspec']=function(el,selected){
+        var btns = spec_update.contains.getElement('.small-specbtn');
+        selected.length < spec_update.specItems.length && confirm && btns.removeClass('confirm-spec'); 
+    };
+
+    spec_update.contains.getElement('.nostore').addEvent('click',function(){
+        var backup = this.form.action;
+        this.form.action=this.form.get('gnotify');
+        this.form.submit();
+        this.form.action = backup;
+    });
+
+  });
+})();
+</script>

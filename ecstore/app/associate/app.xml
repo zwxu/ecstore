@@ -1,0 +1,19 @@
+<app>
+    <name>联想自动搜索</name>
+    <description>联想自动搜索</description>
+
+    <author>
+        <name>BBC 开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>0.1</version>
+    <license>BBC license</license>
+    <parent_model_class>dbeav_model</parent_model_class>
+    <optional app="dev">开发者工具</optional>
+	<depends>
+		<app>b2c</app>
+	</depends>
+
+</app>

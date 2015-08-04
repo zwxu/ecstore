@@ -1,0 +1,6 @@
+  <select name="cat[gallery_setting][gallery_template]">
+			<option value="0">默认模板</option>
+			<{foreach from=$tmpl_info item=item key=key}>
+				<option value="<{$item.tmpl_path}>" <{if $gallery_setting.gallery_template==$item.tmpl_path}>  selected<{/if}>><{$item.tmpl_name}></option>
+			<{/foreach}>
+  </select>

@@ -1,0 +1,26 @@
+<div class="sj_info">
+	<div class="info_title"><{$data.title}></div>
+  <{if $data.store_id}>
+    <div class="info_details">
+    <img class="img-lazyload" src="images/transparent.gif" lazyload="images/sjinfo_1.jpg" class="mr_6"><img class="img-lazyload" src="images/transparent.gif" lazyload="images/sjinfo_2.jpg" class="mr_6"><img class="img-lazyload" src="images/transparent.gif" lazyload="images/sjinfo_3.jpg">
+    <{if $data.showname && $data.showname == '1'}>
+    <{assign var="showname" value="true"}>
+    <{else}>
+    <{assign var="showname" value="false"}>
+    <{/if}>
+    <{input type="storepoint" store="{$data.store_id}" show_name=$showname}>
+    <a href="<{link app=business ctl=site_shop act=view arg=$data.store_id}>" class="info_enter"><{t}>进入店铺<{/t}></a>
+    <p>
+      <ul class="button">
+        <li class="star-off" isspecial="1" <{if $data.login=="member"}>star="<{$data.store_id}>" data-type="on"<{/if}>> <a <{if $data.login=="nologin"}>href="<{link app="b2c" ctl="site_passport" act="login"}>"<{elseif $data.login=="business"}>href="javascript:void(0);" <{else}>href="javascript:void(0);" rel="_fav_"<{/if}> class=" listact"><!--<i class="has-icon"> </i>--><span>
+            <div class="fav"><{t}>收藏本店铺<{/t}></div>
+            <div class="nofav"><{t}>已收藏<{/t}></div>
+        </span></a>
+        </li>
+      </ul>
+    </p>
+    </div>
+  <{else}>
+    <span>没有获取到任何店家信息</span>
+  <{/if}>
+</div>

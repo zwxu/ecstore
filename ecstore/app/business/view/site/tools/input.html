@@ -1,0 +1,6 @@
+<div id="ipt_<{$_input.domid}>" class='clearfix'>
+<{input type="vobject" object="{$_input.object}" mdl_object=$_input.mdl_object callback=$_input.callback obj_filter=$_input.obj_filter return_url=$_input.return_url filter_url=$_input.filter_url app=$_input.app_id id="sel_{$_input.domid}" data=$_input cols=$_input.cols filter=$_input.filter select=checkbox}>
+<div class="gridlist rows-body" id="handle_<{$_input.domid}>" <{if $_input.display_datarow != 'true'}>style="display:none;"<{/if}>>
+<{include file="site/tools/input-row.html" app="business"}>
+</div>
+</div>

@@ -1,0 +1,24 @@
+<div id="x-pdt-history" class="GoodsSearchWrap">
+</div>
+
+<script>
+withBrowserStore(function(browserStore){
+    browserStore.get('history',function(v){
+       v=JSON.decode(v);
+       if(v && v.length && v.length>0){
+          v.reverse();
+          var dt=[];
+          $('x-pdt-history').innerHTML='<{t}>数据载入中...<{/t}>';
+          v.each(function(i){dt.push(i['goodsId'])});
+          new Request.HTML({url:'<{link app=b2c ctl=site_tools act=products}>',method:'post',update:$('x-pdt-history'),data:'goods='+dt.join(','),onComplete:function(){
+             new DataLazyLoad({lazyDataType:'img',img:'lazyload'});
+             _fav_();
+             try{specdialog(); miniCart.init();}catch(e){}
+          }}).send();
+
+        }else{
+           $('x-pdt-history').innerHTML='<{t}>浏览记录为空.<{/t}>';
+        }
+   });
+});
+ </script>

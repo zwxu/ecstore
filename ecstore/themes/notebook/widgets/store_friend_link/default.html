@@ -1,0 +1,8 @@
+<h4><{$data.title}></h4>
+<ul class="fri_link">
+    <{foreach from=$data.partners item=partner name="_partner"}>
+        <li <{if $smarty.foreach._partner.last}>class="last"<{/if}>>
+            <a target="_blank" href="<{$partner.href}>"><{$partner.link_name}></a>
+        </li>
+    <{/foreach}>
+</ul>

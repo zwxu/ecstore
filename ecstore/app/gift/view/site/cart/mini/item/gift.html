@@ -1,0 +1,29 @@
+<{if $aCart.object.gift}>
+<{foreach from=$aCart.object.gift key=key item=gift}>
+  <{foreach from=$gift item=goods}>
+    <{if $goods.disabled==='true'}><{continue;}><{/if}>
+    <div class="minicart-single horizontal-m" chlid_id="del-<{$goods.obj_items.products.0.goods_id}>" urlremove="<{link app=b2c ctl='site_cart' act='removeMiniCart' arg0='gift'}>"  >
+        <div class="minicart-img goodpic">
+            <img src="<{$goods.default_image.thumbnail|default:$defaultImage|storager:'s'}>" >
+        </div>
+        <div class="good-main">
+           <div class="minicart-dec goodinfo">
+            <p><{$goods.name}>
+                <SPAN style="color:#d11919">
+                  <{$goods.spec_info}>
+                </SPAN>
+                <{if $key=='order'}>订单赠送<{/if}>
+            </p>
+             <p><span style="color:#777">销售价:</span><span style="color:red"><{$goods.price|cur_odr}></span></p>
+            <p><span style="color:#777">数量:</span><span style="color:red"><{$goods.quantity}></span><span style="float:right;"><{if $key!='order'}><a class="delcart" href="#">移除</a><{/if}></span></p>
+        <{if $key=='cart'}>
+            <input type="hidden" name="modify_quantity[<{$goods.obj_ident}>][quantity]" value="<{$goods.quantity}>" />
+        <{/if}>
+        </div>
+        </div>
+    </div>
+   <{/foreach}>
+ <{/foreach}>
+<{/if}>
+
+

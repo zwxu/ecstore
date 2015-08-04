@@ -1,0 +1,136 @@
+<{css src="member.css" app='b2c'}>
+<{include file="site/common/header.html" app="b2c"}>
+<div class="member-main">
+    <div>
+       <div class="title">
+	   <span style="float:left"><{t}>分类列表<{/t}>
+	   <span class="disc">|</span> 
+	   <span id='add' class="disc add-icon" ><a href="javascript:void(0);" ><{t}>添加分类<{/t}></a></span>
+	   </span>
+	   </div>
+		<!------------------>
+	   <div id='add_div' <{if !$edit && !$apply}>style="display:none"<{/if}>>
+            <form method="post" action="<{link app=business ctl=site_goods_cat act=save}>">
+                <div class="division" style="border:none; border-bottom:1px dashed #ddd">
+                    <table cellpadding="0" class="forform" cellspacing="0" border="0">
+					 <{if $cat.custom_cat_id }><input type="hidden" value="<{$cat.custom_cat_id}>" name="cat[custom_cat_id]" /><{/if}>
+                        <tr>
+                        <th><{t}>分类名称：<{/t}></th><td><input type="text" value="<{$cat.cat_name|escape:'html'}>" name="cat[cat_name]" vtype='required' class='x-input'/>
+						<{$cat_name}></td></tr>
+                        <tr><th><{t}>上级分类：<{/t}></th><td><{input type="select" name="cat[parent_id]" style="font-size:12px;" required='1' value=$cat.parent_id rows=$catList valueColumn="custom_cat_id" labelColumn="cat_name"}>
+						<span class="notice-inline"><{t}>顶级分类请选择“无”<{/t}></span></td></tr>
+                        <tr><th><{t}>排序：<{/t}></th><td><input style="width:50px;" vtype="unsigned" class="inputstyle" value="<{$cat.p_order}>" name="cat[p_order]" class="_x_ipt"/>
+						<span class="notice-inline"><{t}>数字越小越靠前<{/t}></span></td></tr>
+                    </table>
+                </div>
+                <div style="padding-left:142px; "><span>
+                        <{button class="btn submit-btn" type="submit" rel="_request" label=$___b2c="保存"|t:'b2c'}></span>
+                    <span class="float-span" style="float:left; margin-left:8px">
+                        <{button id="unset" type="button" label=$___b2c="取消添加"|t:'b2c'}></span>
+                </div>
+            </form>
+        </div>
+		<!------>
+		<form action="<{link app=business ctl='site_goods_cat' act='removeSelect'}>" id="custom_cat" method="post">
+        <table class="gridlist border-all mt10" width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout:fixed;">
+            <tr>
+			    <th class="bln" width="50"><{t}><{/t}></th>
+                <th ><{t}>分类名称<{/t}></th>
+				<th ><{t}>排序<{/t}></th>
+                <th><{t}>操作<{/t}></th>				
+            </tr>
+           <{foreach from=$data item=data key=key}>
+            <tbody depath="<{$data.step}>" cid="<{if $data.parent_id!=0}><{$data.parent_id}><{else}><{$data.custom_cat_id}><{/if}>" pid="<{$data.parent_id}>" <{if $data.parent_id!=0 }>style="display:none;" <{/if}> >
+                <tr > 
+				    <td class="textcenter" style="word-wrap:break-word;"><{input type='checkbox'class="checkbox customs" type="checkbox" name="chkCustom[]" value=$data.custom_cat_id}></td>
+                    <td class="textcenter" style="word-wrap:break-word;"><{if $data.cls == true && $data.child_count > 0}><span span_type='show' class="disc add-icon" style="cursor:pointer"></span><{/if}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<{$data.cat_name}></td>
+					<td class="textcenter" style="word-wrap:break-word;"><{$data.p_order|default:0}></td>
+                    <td align="center"><{if $data.parent_id ==0}><a href="<{link app=business ctl=site_goods_cat act=return_goodcat  arg0='apply' arg1=$data.custom_cat_id}>">新增下级</a><{/if}>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<{link app=business ctl=site_goods_cat act=return_goodcat  arg0='edit' arg1=$data.custom_cat_id}>">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:remove(<{$data.custom_cat_id}>);">删除</a></td>
+                </tr>
+            </tbody>
+		<{/foreach}>
+        </table>
+</form>
+<div class="list-footer2" style="padding-left:16px;background:#f9f9f9;height:31px;line-height:31px;"><{input type='checkbox' id='c2'}><{t}>全选<{/t}> <button class="trigger-btn" onclick="javascript:removeSel();" type="button">删 除</button></div>
+     </div>
+</div>
+<script>
+$("add").addEvent('click',function(e){      
+                $('add_div').setStyle('display','inline');
+});
+$("unset").addEvent('click',function(e){
+            $('add_div').setStyle('display','none');
+        });
+function removeSel(){
+     var reqs = $$('input[name^=chkCustom]:checked').length;
+		 if(reqs == 0){
+            Ex_Dialog.alert('<{t}>请选择要删除的选项！<{/t}>');
+		 }else{
+		    Ex_Dialog.confirm('<{t}>确定要删除所选项吗？<{/t}>', function(e){
+				if(!e) return;
+				$('custom_cat').submit();
+			});
+		 }
+}
+
+window.addEvent('domready',function() { 
+
+
+  $('c2').addEvent('click',function(){
+     
+	     $$('input[name^=chkCustom]').each(function(item){
+		 if($('c2').checked == true){
+            item.checked = true;
+		 }else{
+		    item.checked = false;
+		 }
+		});
+ 
+ })
+
+$$('span[span_type=show]').addEvent('click',function(){
+
+	var flag=false;
+	if(this.hasClass('add-icon')){
+		flag=true;
+		this.removeClass('add-icon');
+		this.addClass('reduce-icon');
+	}else{
+		flag=false;
+		this.addClass('add-icon');
+		this.removeClass('reduce-icon');
+	}
+	var cid=this.getParent('tbody').get('cid');
+
+	this.getParent('tbody').getAllNext('tbody').each(function(item,index){
+		if(item.get('depath')==2 && item.get('cid')==cid){
+			if(flag){
+				item.show();
+			}else{
+				item.hide();
+			}
+		}
+	});
+	
+});
+
+});
+
+ function remove(cat_id) {
+	 Ex_Dialog.confirm('<{t}>确定要删除该分类吗？<{/t}>', function(e){
+		if(!e) return;
+		new Request.JSON({
+			url:"<{link app=business ctl='site_goods_cat' act='toRemove' }>",
+			data:'custom_cat_id='+cat_id,
+			method:'POST',
+			onSuccess:function(rs){
+			
+			Ex_Dialog.alert(rs.message);
+			//Modify by hzy 2013-8-14 15:51:59
+			setTimeout(function(){window.location.reload();},1000);
+			}
+		  }).send();
+	});
+ }
+
+</script>

@@ -1,0 +1,77 @@
+<form class="tableform" method='post' action='index.php?ctl=order/order&act=toRefund' target="{'update':OrderMgr.currentInfo,'onRequest':function(){openHandler.dialog_body.setText('sending....');},'onComplete':function(re){openHandler.close();}}">
+    <input type='hidden' name='order_id' value='<{$order.order_id}>'>
+    
+    
+    <div class="division">    
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+  <!--<tr>
+        <th><{t}>收取支付费用:<{/t}></th>
+    <td><{$order.cost_payment}></td>
+    <th><{t}>是否开票:<{/t}></th>
+    <td><{if $order.is_tax == 'true'}><{t}>是<{/t}><{else}><{t}>否<{/t}><{/if}></td>
+  </tr>
+    <tr>
+    <th><{t}>税金:<{/t}></th>
+    <td><{$order.cost_tax}></td>
+    <th><{t}>发票抬头:<{/t}></th>
+    <td><{$order.tax_company}></td>    
+    </tr> -->
+    <tr>
+    <th><{t}>订单号:<{/t}></th>
+    <td><{$order.order_id}> 【<{if $order.pay_status == 0}><{t}>未支付<{/t}><{elseif $order.pay_status == 1}><{t}>已支付<{/t}><{elseif $order.pay_status == 2}><{t}>处理中<{/t}><{elseif $order.pay_status == 3}><{t}>部分付款<{/t}><{elseif $order.pay_status == 4}><{t}>部分退款<{/t}><{elseif $order.pay_status == 5}><{t}>已退款<{/t}><{/if}>】</td>
+    <th><{t}>下单日期:<{/t}></th>
+    <td><{$order.createtime|cdate:'SDATE_STIME'}></td>
+    </tr>
+  <tr>
+    <th><{t}>订单金额:<{/t}></th>
+    <td><{$order.total_amount|cur}></td>
+    <th><{t}>已付金额:<{/t}></th>
+    <td><{$order.payed|cur}></td>
+    </tr>   
+  <tr>
+    <th><{t}>退款类型:<{/t}></th>
+    <td><{input type="radio" name="pay_type" options=$typeList value=$pay_type}></td>
+    <th><{t}>退款方式:<{/t}></th>
+    <td><{input type="select" name='payment' rows=$payment valueColumn="id" labelColumn="custom_name" value=$payment_id}></td>
+  </tr>
+<!--  <tr>
+        <th><{t}>退款操作者:<{/t}></th>
+    <td><{$op_name}></td>
+    <th><{t}>货币:<{/t}></th>
+    <td><{$order.currency}></td>
+  </tr> -->
+    <tr>
+    <th><{t}>退款银行:<{/t}></th>
+    <td colspan="3"><{input type='text' id='payBank' name='bank' value='' width="140"}> <{input id="selectAccount" type="select" name='select_account' options=$pay_account  value=0 }></td>
+    </tr>
+  <tr>
+    <th><{t}>退款帐号:<{/t}></th>
+    <td><{input type='text' name='account' id='payAccount' value='' width="140"}></td>
+    <th><{t}>收款人:<{/t}></th>
+    <td><{input type='text' name='pay_account' value=$member.name  width="80"}></td>
+  </tr>
+  <tr>
+        <th><{t}>退款金额:<{/t}></th>
+    <td><{input type='text' name='money' value=$order.payed-$order.cost_payment width="100"}></td>
+    <th><{t}>扣除用户积分:<{/t}></th>
+    <td><{input type='text' name='return_score' value=$order.score_g width="100"}></td>
+  </tr>
+</table>
+</div>
+
+<div class="table-action">
+	<{button label=$___b2c="提交"|t:'b2c' type="submit"}>
+</div>
+
+
+</form>
+<script>
+$('selectAccount').addEvent('change', function(e){
+  e=new Event(e);
+  var ipt=e.target;
+  var str = ipt.value;
+  var aItems = str.split('-');
+  $('payBank').value = aItems[0];
+  $('payAccount').value = aItems[1];
+});
+</script>

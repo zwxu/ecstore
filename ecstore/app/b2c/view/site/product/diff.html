@@ -1,0 +1,117 @@
+<{if $diff.error==1}>
+<p><{t}>抱歉，您选的对比物品超过4个<{/t}></p>
+<{else}>
+<div class="cmpresult GoodsSearchWrap" style="*width:100%;overflow:auto;position:relative;border-bottom:none"> <{if $diff.goods}>
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="gridlist border-all " >
+  <col style="width:12%" />
+<thead>
+<tr>
+        <th class="first" ><strong><{t}>商品<{/t}></strong></th>
+       <{foreach from=$diff.goods item=goods}>
+        <td width="<{$diff.length}>%">
+		<ul class="goods-diff ">
+				<li  <{if $goods.store === 0}>class="diff-pic"<{else}>class="diff-pic itemsList items-gallery"<{/if}> product="<{$goods.goods_id}>">
+		<div class="goodpic" style='<{if $image_set.S.width}> width:<{$image_set.S.width}>px;position:relative; margin:0 auto;height:<{$image_set.S.height}>px;<{/if}>'>
+		<a href="<{link app=b2c ctl="site_product" act="index" arg=$goods.goods_id}>" style='<{if $image_set.S.width}> width:<{$image_set.S.width}>px;display: table-cell; vertical-align: middle; text-align: center; margin:0 auto;height:<{$image_set.S.height}>px;<{/if}>'>
+		<img src="<{$goods.image_default_id|default:$defaultImage|storager:'s'}>" title="<{$goods.name}>"></a></div>
+        <div class="goods-main clearfix">
+		<div class="goodinfo">
+		<h3><a href="<{link app=b2c ctl="site_product" act="index" arg=$goods.goods_id}>" title="<{$goods.name}>"><{$goods.name}></a></h3>
+		<div class="price-wrap">
+        <p class="font-red font14px fontbold"><{$goods.price|cur_odr}></p>
+          <ul class="button price-button botton-w clearfix mt5">
+            <{goodsmenu product=$goods compare=true setting=$setting login=$login zindex=10}>
+          </ul>
+          </div>
+          </div>
+          </div>
+ 		</li>
+		</ul>
+		</td><{/foreach}>
+         </tr>
+        </thead>
+     <tbody>
+
+
+    <{foreach from=$diff.params item=params key=group }>
+		<{foreach from=$params item=p key=item name="param"}>
+           <tr >
+            <th class="first"><strong><{$item}></strong></th>
+            <{foreach from=$diff.goods item=goods}>
+            <td width="<{$diff.length}>%"><{$p[$goods.goods_id]}>&nbsp;</td>
+            <{/foreach}>
+			</tr>
+          <{/foreach}>
+    <{/foreach}>
+    </tbody>
+  </table>
+  <{else}>
+  <p class="noborder p10"><{t}>没有选中商品<{/t}></p>
+  <{/if}> </div>
+<{/if}>
+<!--<{script src='goodscupcake.js' app='b2c'}>-->
+
+<script>
+void function(){
+    var getAmongPos = function(size,to){
+    var elpSize = $(to).getSize(),elpScroll = $(to).getScroll();
+    return {
+    'top':Math.abs((elpSize.y/2).toInt()-(size.height/2).toInt()+to.getPosition().y+elpScroll.y),
+    'left':Math.abs((elpSize.x/2).toInt()-(size.width/2).toInt()+to.getPosition().x+elpScroll.x)
+    };
+    };
+
+    $$('.itemsList .goodinfo .zoom').addEvent('click',function(e){
+        e.stop();
+        if(this.retrieve('active'))return;
+        var _this = this;
+        _this.store('active',true);
+        var tpic = this.getParent('.goods-main').getPrevious('.goodpic').getElement('img');
+        var bpic_src = this.getElement('a').get('pic');
+
+        var loading = new Element('div',{
+            styles:{'background':'#fff url(<{$env.app.res_url}>/images/loading.gif) no-repeat 50% 50%',
+                'width':40,
+                'height':40,
+                'border':'1px #e9e9e9 solid',
+                'opacity':.5}}).inject(document.body).position({target:tpic});
+
+        new Asset.image(bpic_src,{onload:function(img){
+
+                loading.destroy();
+                var winsize = window.getSize();
+                var imgSize = $(img).zoomImg(winsize.x,winsize.y,1);
+                var fxv = Object.append(getAmongPos(imgSize,window),imgSize);
+                var imgFx = new Fx.Morph(img,{link:'cancel'});
+                img.setStyles(Object.append(tpic.getCoordinates(),{opacity:0.5})).inject(document.body).addClass('img-zoom').addEvent('click',function(){
+                    imgFx.start(tpic.getCoordinates()).chain(function(){this.element.destroy();_this.store('active',false);});
+                });
+                imgFx.start(Object.append(fxv,{opacity:1}));
+                document.addEvent('click',function(){
+
+                    img.fireEvent('click');
+                    document.removeEvent('click',arguments.callee);
+
+                });
+
+                },onerror:function(){
+                _this.store('active',false);
+                loading.destroy();
+        }});
+
+    });
+    }();
+</script>
+
+<script>
+/*AUTO HEIGHT*/
+window.addEvent('domready',function(){
+new AutoFloatGrid('gallery-grid-list', $$('#gallery-grid-list .items-gallery'), Object.merge({
+    autoRowSize: {
+        'h3': 'height'
+    },
+    cols:<{$gallery_display|default:4}>
+},/*可以在全局定义 GALLERY_AutoFloatGrid_Options  覆盖 AutoFloatGrid 的options*/
+('GALLERY_AutoFloatGrid_Options' in window) ? GALLERY_AutoFloatGrid_Options: {}));
+});
+</script>

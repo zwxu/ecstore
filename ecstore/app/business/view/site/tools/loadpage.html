@@ -1,0 +1,13 @@
+<{capture name="header"}>
+<{/capture}>
+
+<script>
+var shopeEvents = {},TaskRemote=null;
+W.page('<{$goto}>dialog=true&dd'+Date.now(),{clearUpdateMap:false,onComplete:function(){
+		var modedialog=window.dialogArguments;		
+		if(modedialog)modedialog.onLoad.call(modedialog,window);
+		 window.resizeLayout();
+}});
+
+</script>
+

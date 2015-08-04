@@ -1,0 +1,154 @@
+<{if $addrlist}>
+<div id="b2c-checkout-recaddr-list">
+  <{include file="site/cart/checkout_recaddr_list.html"}>
+</div>
+<div id="checkout-recaddr"></div>
+<{else}>
+<div id="b2c-checkout-recaddr-list"></div>
+<div id='checkout-recaddr'>
+  <{include file="site/common/rec_addr.html"}>
+</div>
+<{/if}>
+
+<input type="hidden" name="has_def_addr" value="<{if $def_arr_addr_other}>1<{else}>0<{/if}>" />
+<input type="hidden" name="has_def_addr_member" value="<{if $def_arr_addr_member}>1<{else}>0<{/if}>" />
+
+<div class='receivermore' style="padding:0 0 0 108px;<{if $site_checkout_receivermore_open != 'true'}> display:none;<{/if}>">
+  <input type='checkbox'<{if $def_arr_addr.day}> checked="checked"<{/if}> id="b2c-checkout-special-delivery" /><{t}> 指定送货时间：<{/t}>
+  <span id="b2c-checkout-special-delivery-time" style='<{if !$def_arr_addr.day}>display:none;<{/if}>margin-top:4px'>
+    <select class="inputstyle"  style="margin-left:10px;" name="delivery[day]">
+      <option<{if !$def_arr_addr.day}> selected="selected"<{elseif $def_arr_addr.day == '任意日期'}> selected="selected"<{/if}> value="<{t}>任意日期<{/t}>"><{t}>任意日期<{/t}></option>
+      <option<{if $def_arr_addr.day == '仅工作日'}> selected="selected"<{/if}> value="<{t}>仅工作日<{/t}>"><{t}>仅工作日<{/t}></option>
+      <option<{if $def_arr_addr.day == '仅休息日'}> selected="selected"<{/if}> value="<{t}>仅休息日<{/t}>"><{t}>仅休息日<{/t}></option>
+      <option<{if $def_arr_addr.day == 'specal'}> selected="selected"<{/if}> value="specal"><{t}>指定日期<{/t}></option>
+    </select>&nbsp;
+    <span id="specal_day"<{if !$def_arr_addr.specal_day}> style="display:none"<{/if}>>
+      <{input type="text" name="delivery[specal_day]" class="cal inputstyle" value=$def_arr_addr.specal_day real=true style="width:80px" readonly=true}>
+    </span>
+    <{if $def_arr_addr.specal_day}>
+    <script>
+      (function(){
+        $('specal_day').getFirst().makeCalable();
+        return '';
+      })();
+    </script>
+    <{/if}>
+    <select class="inputstyle" name="delivery[time]">
+      <option<{if $def_arr_addr.time == '任意时间段'}> selected<{/if}> value="<{t}>任意时间段<{/t}>"><{t}>任意时间段<{/t}></option>
+      <option<{if $def_arr_addr.time == '上午'}> selected<{/if}> value="<{t}>上午<{/t}>"><{t}>上午<{/t}></option>
+      <option<{if $def_arr_addr.time == '下午'}> selected<{/if}> value="<{t}>下午<{/t}>"><{t}>下午<{/t}></option>
+      <option<{if $def_arr_addr.time == '晚上'}> selected<{/if}> value="<{t}>晚上<{/t}>"><{t}>晚上<{/t}></option>
+    </select>
+  </span>
+</div>
+
+<script>
+  window.addEvent('domready',function(){
+
+    var url_area = '<{link app=b2c ctl="site_cart" act="getAddr" }>#<{$smarty.now}>';
+
+    deliverying={
+      init:function(){
+
+        $('receiver').addEvent('click',function(e){
+          var target=$(e.target)||$(e);
+          if (target.hasClass('receiver_radio_addr_id')){
+            deliverying.generateShippings(target);
+            $('receiver').store('b2c-cart-checkout-ship-addr', 'false');
+            if (target.value != '0')
+              $('receiver').store('b2c-cart-checkout-last-select', target.value);
+          }
+        });
+
+        var addlistRadios=$('receiver').getElements('input[name^=delivery[addr_id]');
+        var _has_def_addr = document.getElement('input[name^=has_def_addr]').get('value');
+        var _has_def_addr_member = document.getElement('input[name^=has_def_addr_member]').get('value');
+
+        if(addlistRadios.length){
+          var def=document.getElement('input[name^=def_addr]'),
+          cur=!def?addlistRadios[0]:document.getElement('.receiver_radio_addr_id[value='+def.value+']'),
+          arg=-1;
+          if (def.value != '0'){
+            $('receiver').store('b2c-cart-checkout-last-select', def.value);
+          }
+          if (_has_def_addr == '1') arg=-1;
+          else if (_has_def_addr_member == '1') arg=def.value;
+          else arg=cur.value;
+
+          deliverying.generateShippings(cur,arg);
+          $('receiver').store('def_recaddr', cur);
+          }else{
+          if (_has_def_addr == '1' && document.getElement('input[name^=purchase[member_id]]').value != '')
+          deliverying.generateShippings(null,-1);
+        }
+
+        document.getElement('select[name^=delivery[day]]').addEvent('change',function(e){
+          $('specal_day').style.display=(this.value=='specal')?function(){$('specal_day').getFirst().makeCalable();document.getElement('input[name^=delivery[specal_day]]').set('vtype','required'); return '';}():'none';
+          if (document.getElement('select[name^=delivery[day]]').get('value') != 'specal'){
+            document.getElement("input[name^=delivery[specal_day]]").removeProperty("vtype").set("value","");
+            if (document.getElement('select[name^=delivery[time]]').get('value') == '<{t}>任意时间段<{/t}>' && document.getElement('select[name^=delivery[day]]').get('value') == '<{t}>任意日期<{/t}>'){
+              $('b2c-checkout-special-delivery').checked = false;
+              $('b2c-checkout-special-delivery-time').hide();
+            }
+          }
+        });
+
+        $('b2c-checkout-special-delivery').addEvent('click',function(e){
+          $('b2c-checkout-special-delivery-time')[this.checked?"show":"hide"]();
+          if (!(this.checked)){
+            document.getElement("select[name^=delivery[day]]").getElements("option").each(function(item){item.removeProperty("selected");});
+            document.getElement("select[name^=delivery[day]]").getElements("option[value='<{t}>任意日期<{/t}>']").set("selected","selected");
+            $("specal_day").hide();
+            document.getElement("input[name^=delivery[specal_day]]").removeProperty("vtype").set("value","");
+            document.getElement("select[name^=delivery[time]]").getElements("option").each(function(item){item.removeProperty("selected");});
+            document.getElement("select[name^=delivery[time]]").getElements("option[value='<{t}>任意时间段<{/t}>']").set("selected","selected");
+          }
+        });
+      },
+      generateShippings:function(target, index){
+        if (target)
+        target.checked = true;
+        var _value=(index != '-1') ? target.value : '-1';
+        var _last_select_value = $('receiver').retrieve('b2c-cart-checkout-last-select') ? $('receiver').retrieve('b2c-cart-checkout-last-select') : '0';
+
+        var _extends_args = $('order-create') && $('order-create').getElement('input[name^=extends_args]') ? $('order-create').getElement('input[name^=extends_args]').value : null;
+        new Request.HTML({
+          url:url_area,
+          update:'checkout-recaddr',
+          method:'get',
+          data:{'addr_id':_value+":"+_last_select_value,'member_id':document.getElement('input[name^=purchase[member_id]]')?document.getElement('input[name^=purchase[member_id]]').value:null,'extends_args':_extends_args},
+          onRequest:function(){
+            $('checkout-recaddr').set('html','<div class="font-green">loading...</div>');
+          },
+          onFailure:function(){
+            Ex_Dialog.alert('<{t}>由于网络延迟问题，请重新刷新页面！<{/t}>');
+          },
+          onComplete:function(){
+            /*if(_value=='0')
+            return $('shipping').set('html','<div class="valierror clearfix" style=" padding-left:20px"><{t}>请先完善收货信息.<{/t}></div>');
+
+
+            if(lastsel=$$('#checkout-select-area select').getLast()){
+              if(!lastsel.get('value')||lastsel.get('value')=='_NULL_'){
+                $('shipping').set('html','<div class="valierror clearfix" style=" padding-left:20px"><{t}>请先完善收货信息.<{/t}></div>');
+                Message.error('<{t}>请重新选择：收货地区.<{/t}>');
+              }
+            }*/
+        }}).send();
+      }
+    };
+    deliverying.init();
+
+    /*$('receiver_info').addEvent('click', function(el){
+      var addlistRadios=$('receiver').getElements('input[name^=delivery[addr_id]');
+
+      var _has_def_addr = $$('input[name^=has_def_addr]').get('value');
+      if(addlistRadios.length){
+        var def=document.getElement('input[name^=def_addr]');
+        var cur=!def?addlistRadios[0]:document.getElement('.receiver_radio_addr_id[value='+def.value+']');
+        if (_has_def_addr == '1')
+        deliverying.generateShippings(cur, def.value);
+      }
+    });*/
+  });
+</script>

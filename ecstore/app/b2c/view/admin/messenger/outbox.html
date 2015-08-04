@@ -1,0 +1,31 @@
+<{if count($oubox)>0}>
+<div class="finder-list table-grid">
+
+<table class="gridlist" cellpadding="0" cellspacing="0">
+<col class="Coldate"></col>
+<col class="Colamount"></col>
+<col  class="Coldetails"></col>
+<thead>
+  <tr>
+    <th><{t}>时间<{/t}></th>
+    <th><{t}>发送数量<{/t}></th>
+    <th><{t}>标题<{/t}></th>
+    <th><{t}>内容概要<{/t}></th>
+    <th><{t}>操作<{/t}></th>
+  </tr>
+</thead>
+<tbody>
+  <{foreach from=$oubox item=item}>
+  <tr>
+    <td><{$item.creattime|cdate}></td>
+    <td class="Colamount"><{$item.sendcount}></td>
+    <td><{$item.subject|cut:40}></td>
+    <td class="Coldetails"><{$item.content|escape:"html"}></td>
+    <th><{button type="button" onclick="if(window.confirm('确认删除吗？'))W.page('index.php?ctl=member/messenger&act=toRemove&p[0]={$item.out_id}&p[1]={$sender}')" label="删除"}></th>
+  </tr>
+  <{/foreach}></tbody>
+</table>
+</div>
+<{else}>
+<div class="notice"><{t}>发件箱中无内容<{/t}></div>
+<{/if}>

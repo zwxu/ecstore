@@ -1,0 +1,156 @@
+
+<form action='index.php?app=site&ctl=admin_seo&act=saveseo&p[0]=<{$id}>' method='post' class="settingform" id="site_basic"  target="{update:'messagebox'}">
+<div class="tableform">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" >
+
+    </table>
+    <div class="division" style="position:static;">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0"  class="shop-setting">
+            <tr>
+                <th><{t}>TITLE(页面标题)：<{/t}></th>
+                <td>
+                          <input type="text" name="seo_title" value="<{$param.seo_title}>" vtype="required" class="_x_ipt inputstyle" size="60%" >
+                          <div class="seo-tip" style="display:none">
+                          <{if count($config) > 0}>
+                                <{foreach from=$config item=item}>
+                                    <button class="span1" title="<{$item.value}>" type="button" svalue="<{$item.id}>" style="color:#1b4d91;border:1px solid #98bbd2;line-height:20px; height:24px; margin:2px; cursor:pointer; background:#d6edf4;"><{$item.value|t:'site'}></button>
+                                <{/foreach}>
+                                <div class="tipline" style="height:1px; background:#98bbd2; overflow:hidden; margin:5px 2px;"></div>
+                                <{button style='font-size:12px;' type="button" label=$___site="恢复默认值"|t:'site' }>
+                                <span value="<{$param.seo_title}>"></span>
+                            <{/if}>
+
+                        </div>
+                </td>
+            </tr>
+            <tr>
+                <th>META_KEYWORDS<br /><{t}>(关键词)：<{/t}></th>
+                <td>
+
+                          <input type="text" name="seo_keywords" value="<{$param.seo_keywords}>" vtype="required" class="_x_ipt inputstyle"  size="60%" >
+                          <div class="seo-tip" style="display:none">
+                          <{if count($config) > 0}>
+                                <{foreach from=$config item=item}>
+                                    <button class="span1" title="<{$item.value}>" type="button" svalue="<{$item.id}>" style="color:#1b4d91;border:1px solid #98bbd2;line-height:20px; height:24px; margin:2px; cursor:pointer; background:#d6edf4;"><{$item.value|t:'site'}></button>
+                                <{/foreach}>
+                                <div class="tipline" style="height:1px; background:#98bbd2; overflow:hidden; margin:5px 2px;"></div>
+                                <{button style='font-size:12px;' type="button" label=$___site="恢复默认值"|t:'site' }>
+                                <span value="<{$param.seo_keywords}>"></span>
+                            <{/if}>
+
+
+
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>META_DESCRIPTION<br /><{t}>(页面描述)：<{/t}></th>
+                <td>
+                    <textarea style="width:70%" class="inputstyle" name="seo_content" rows="6"><{$param.seo_content}></textarea>
+                    </div>
+                         <div class="seo-tip" style="display:none">
+                             <{if count($config) > 0}>
+                                <{foreach from=$config item=item}>
+                                    <button class="span1" title="<{$item.value}>" type="button" svalue="<{$item.id}>" style="color:#1b4d91;border:1px solid #98bbd2;line-height:20px; height:24px; margin:2px; cursor:pointer; background:#d6edf4;"><{$item.value|t:'site'}></button>
+                                <{/foreach}>
+                                <div class="tipline" style="height:1px; background:#98bbd2; overflow:hidden; margin:5px 2px;"></div>
+                                <{button style='font-size:12px;' type="button" label=$___site="恢复默认值"|t:'site' }>
+                                <span value="<{$param.seo_content}>"></span>
+                            <{/if}>
+                         </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" >
+
+        </table>
+         <{assign var=yes value=$___site="是"|t:'site'}>
+         <{assign var=no value=$___site="否"|t:'site'}>
+        <div class="division" style="position:static;">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0"  class="shop-setting">
+                <tr>
+                    <th><{t}>是否启用nofollow：<{/t}></th>
+                    <td><input type="radio" name="seo_nofollow" value='<{t}>是<{/t}>' <{if $param.seo_nofollow==$yes}>checked<{/if}>><{t}>是<{/t}></label><label><input type="radio" name="seo_nofollow" value='<{t}>否<{/t}>' <{if $param.seo_nofollow==$no}>checked<{/if}>><{t}>否<{/t}></td>
+                </tr>
+                <tr>
+                    <th><{t}>是否启用noindex：<{/t}></th>
+                   
+                    <td><input type="radio" name="seo_noindex" value='<{t}>是<{/t}>' <{if $param.seo_noindex==$yes}>checked<{/if}>><{t}>是<{/t}></label><label><input type="radio" name="seo_noindex" value='<{t}>否<{/t}>' <{if $param.seo_noindex==$no}>checked<{/if}>><{t}>否<{/t}></td>
+                </tr>
+            </table>
+        </div>
+    <div class="table-action">
+        <{button type="submit" label=$___a="保存"|t:'site' }>
+    </div>
+</div>
+</form>
+<script >
+(function(){
+textareaEditor =new Object();
+$extend(textareaEditor,{
+   element:$ES('#site_basic input[type=text]')[0],
+   initRange:function(){
+          this.element.focus();
+          if(!!document.selection) {
+           var range=this.element.createTextRange();
+           range.moveStart('character',this.element.value.length);
+           range.collapse(true);
+           range.select();}
+   },
+   replaceSelection:function (text) {
+        var scrollTop=this.element.scrollTop;
+        if(!!document.selection) {
+           this.element.focus();
+           var range=this.range||document.selection.createRange();
+           range.text=text;
+        }else if(!!this.element.setSelectionRange) {
+            var selection_start=this.element.selectionStart;
+            this.element.value=this.element.value.substring(0,selection_start)+text+this.element.value.substring(this.element.selectionEnd);
+            this.element.setSelectionRange(selection_start+text.length,selection_start+text.length);
+        }
+        this.element.focus();
+        this.element.scrollTop=scrollTop;
+     }
+ });
+$ES("#site_basic .seo-tip").each(function(el,key){
+    var getInput=el.getPrevious("input")||el.getPrevious("textarea");
+
+    getInput.addEvents({
+        'click':function(e){
+              e.stopPropagation();
+
+              el.setStyle('display','');
+              var tempel=$('site_basic').retrieve('openel',$ES("#site_basic .seo-tip")[0]);
+              if(tempel==el)return;
+              $('site_basic').store('openel',el);
+              tempel.setStyle('display','none');
+        },'focus':function(e){
+            textareaEditor.element=$(this);
+        }
+    });
+    el.getLast('button[class=btn]').addEvents({
+        'click':function(e){
+            e.stop();
+
+            var defaultValue=this.getNext('span').getAttribute('value');
+            getInput.set('value',defaultValue);
+         }
+    },this);
+    el.getElements('button[class=span1]').addEvent('click',function(e){
+        e.stop();
+        var ipt=this.getParent('.seo-tip').getPrevious("input")||this.getParent('.seo-tip').getPrevious("textarea");
+        if(ipt)ipt.fireEvent('focus');
+        var text=this.getAttribute('svalue');
+        textareaEditor.replaceSelection(text);
+    },this);
+    if(key==0){el.setStyle('display','');textareaEditor.initRange();}
+});
+    document.body.addEvent('click',function(){
+         $ES("#site_basic .seo-tip").each(function(el){
+            el.setStyle('display','none');
+        });
+        $ES("#site_basic .x-input").removeEvent('click');
+    });
+})();
+</script>

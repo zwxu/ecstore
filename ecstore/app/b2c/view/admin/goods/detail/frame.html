@@ -1,0 +1,203 @@
+<style>
+.pic-uploader{display:inline-block;*display:inline;zoom:1}
+</style>
+<form action="index.php?app=b2c&ctl=admin_goods_editor&act=toAdd" method="post" name="gEditor" id="gEditor">
+  <input type="hidden" name="goods[goods_id]" value="<{$goods.goods_id}>" id="gEditor-GId-input"/>
+  <input type="hidden" name="productkey" value="<{$productkey}>"/>
+  <div id="gEditor-Body">
+     <{include file="admin/goods/detail/page.html"}>
+  </div>
+</form>
+
+<!-- 暂时先注释掉，优化的时候统一修改 -->
+<div class="std-upload-txt" style="top:426px;top:418px\9;left:280px;display:none">
+    <div><{t}>无法打开图片选择窗口？点此<{/t}></div>
+    <div class="browse">
+        <form target="upload" method="post" enctype="multipart/form-data" action="#">
+            <input type="file" name="Filedata" accept="image/*" onchange="new StdUpload('index.php?app=image&ctl=admin_manage&act=gimage_swf_remote&sess_id='+sess_id,'add_img').start();" />
+        </form>
+        &nbsp;&nbsp;<a href="javascript:void(0);"><span><span><{t}>上传图片<{/t}></span></span></a>
+    </div>
+    <div class="std-loading-icon"></div>
+</div>
+<script>
+function setPos(){
+
+  $$('.pic-uploader').each(function(el){
+      $$('.std-upload-txt')[0].setStyle('top',el.getPosition().y+$('main').getScroll().y);
+  });
+}
+window.addEvent('domready',function(){
+//  setPos.periodical(200);
+});
+var goodsEditor = null;
+
+var goodsEditFrame = (function(){
+ // setPos();
+  goodsEditor = new ShopExGoodsEditor('gEditor',{imgtype:'<{$uploader}>',url:'<{$url}>',goods_id:'<{$goods.id}>'});
+  Ex_Loader('uploader',function(){
+
+      $$('.pic-uploader').each(function(el,j){
+        if (document.getElements('.swiff-uploader-box')) {
+            document.getElements('.swiff-uploader-box').destroy();
+        }
+        var pic_main = el.getParent('.pic-main');
+        var area = pic_main.getElement('.pic-area');
+        var pics = pic_main.getElement('.all-pics');
+        new Swiff.Uploader( {
+            allowDuplicates: true,
+            verbose: true,
+            url:'index.php?app=image&ctl=admin_manage&act=gimage_swf_remote&sess_id='+sess_id,
+            path: '<{$image_dir}>/uploader.swf',
+            typeFilter: {
+                'Images (*.jpg, *.jpeg, *.gif, *.png)': '*.jpg; *.jpeg; *.gif; *.png'
+            },
+            fileSizeMax:'<{$IMAGE_MAX_SIZE}>',
+            target:el,
+            onSelect:function(rs){
+                if(rs)
+                rs.each(function(v){
+                    if(v.size>this.fileSizeMax){
+                        alert(v.name+'<{t}>\n\n文件超出大小<{/t}>');
+                    };
+                },this);
+            },
+            onSelectFail:function(rs){
+                rs.each(function(v){
+                    if(v.validationError=='sizeLimitMax'){
+                        alert(v.name+'<{t}>\n\n文件超出大小<{/t}>');
+                    };
+                });
+            },
+            onSelectSuccess:function(rs){
+                var PID='up_';
+                var _this=this;
+                rs.each(function(v,i){
+                     new Element('div',{'class':'gpic-box','id':PID+j+v.id}).inject(pics);
+                });
+                this.start();
+            },
+            onFileOpen:function(e){
+                $('up_'+j+e.id).setHTML('<em style="font-size:13px;font-family:Georgia;">0%</em>');
+            },
+            onFileProgress:function(e){
+                $('up_'+j+e.id).getElement('em').set('text',e.progress.percentLoaded+'%');
+            },
+            onFileComplete: function(res){
+                if(res.response.error){
+                    return  new MessageBox.error('<{t}>文件<{/t}>'+res.name+'<{t}>上传失败<{/t}>');
+                }
+                $('up_'+j+res.id).setHTML(res.response.text);
+                if(!$E('.current',area)&&$E('.gpic',area)){
+                  $E('.gpic',area).onclick();
+                }
+            }
+        });
+
+      });
+
+    });
+        /*
+         *  sign:{
+               1:保存并增加相似商品,
+               2:保存并返回,
+               3:保存当前不返回，
+         *    }
+         */
+   var _form=$('gEditor'),_formActionURL=_form.get('action');
+
+
+   subGoodsForm = function (event,sign){
+       var specOBJ='';
+       var _target=$(new Event(event).target);
+
+       if($('productNode')&&$('productNode').retrieve('specOBJ')){
+            if(!$('productNode').retrieve('specOBJ').data.length){
+                return new MessageBox('<{t}>请先添加货品!!!<{/t}>',{type:'error',autohide:true});
+            }
+            specOBJ=$('productNode').retrieve('specOBJ').toHideInput($('productNode').getElement('tr'));
+       }
+       var target={extraData:$('finder-tag').toQueryString()+'&'+specOBJ,onRequest:function(){_target.disabled = true;}};
+
+       switch (sign){
+            case 1:                    //添加相似
+                $extend(target,{
+                    onComplete:function(){
+                        if(window.opener.finderGroup&&window.opener.finderGroup['<{$env.get.finder_id}>'])
+                        window.opener.finderGroup['<{$env.get.finder_id}>'].refresh();
+                        clearOldValue();
+                        _target.disabled = false;
+                }});
+            break;
+            case 2:                   //保存关闭
+                $extend(target,{
+                    onComplete:function(rs){
+                        if(rs&&!!JSON.decode(rs).success){
+                            if(window.opener.finderGroup&&window.opener.finderGroup['<{$env.get.finder_id}>']){
+                                window.opener.finderGroup['<{$env.get.finder_id}>'].refresh();
+                            }
+                            window.close();
+                        }
+                        _target.disabled = false;
+                    }}
+                );
+            break;
+            case 3:
+                $extend(target,{            //保存当前
+                    onComplete:function(rs){
+                        var id = JSON.decode(rs).goods_id;
+                        if(id > 0){
+                            $('gEditor-GId-input').value =id;
+                        }
+                        if(window.opener.finderGroup&&window.opener.finderGroup['<{$env.get.finder_id}>'])
+                        window.opener.finderGroup['<{$env.get.finder_id}>'].refresh();
+
+                        _target.disabled = false;
+                    }}
+                );
+            break;
+       }
+
+        _form.store('target',target);
+        _form.set('action',_formActionURL+'&but='+sign).fireEvent('submit',new Event(event));
+    };
+
+    var clearOldValue=function(){
+         $('id_gname').set('value','');
+         $('gEditor-GId-input').set('value','');
+         if($$('.product_id').length)
+         $$('.product_id').each(function(el){
+            el.value='';
+         });
+    };
+});
+
+goodsEditFrame();
+</script>
+<script>
+(function(){
+   /* var cur = '<{$workground.menu_title}>';
+    $$('.head-nav .wg').each(function(wg){
+
+        if(cur&&wg.getElement('span:contains("<{$workground.menu_title}>")')){
+            wg.addClass('current');
+        }else{
+            wg.removeClass('current');
+        }
+
+    });  */
+
+    $$('.side-bx-title').addEvent('click', function(e){
+        e.stop();
+        var bx = this.getParent(),
+            bd = this.getNext('.side-bx-bd');
+        if(bx.hasClass('side-bx-toggled')){
+            bd.show();
+            bx.removeClass('side-bx-toggled');
+        }else{
+            bd.hide();
+            bx.addClass('side-bx-toggled');
+        }
+    });
+})();
+</script>

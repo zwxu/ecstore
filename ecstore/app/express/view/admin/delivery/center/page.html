@@ -1,0 +1,57 @@
+
+<div class="spage-main-box">
+    <{if $express}>
+        <{if $express.is_has_remote_pdts!=='true'}>
+            <{include file="admin/delivery/delivery_edit.html"}>
+        <{elseif $express.is_has_remote_pdts=='true'}>
+        
+            <{include file="admin/delivery/edit_po.html"}> 
+            
+        <{/if}>   
+	<{else}>   
+        <{include file="admin/delivery/center/detail.html"}> 
+    <{/if}>   
+</div>
+
+<script>
+
+subDeliveryCenterForm = function (event,sign){ 
+	   var target={};
+	   switch (sign){
+			case 1:                    //保存不关闭
+				$extend(target,{
+					onComplete:function(){
+						window.location.reload();
+					}}
+				);
+			break;
+			case 2:                   //保存关闭
+				$extend(target,{
+					onComplete:function(){
+						window.close();
+					}}
+				);
+			break;				
+	   }
+	    var _form=$('delivery_detail');
+		if(!_form)return;
+		var _formActionURL=_form.get('action'); 
+		
+		_form.store('target',target);
+        _form.set('action',_formActionURL+'&but='+sign).fireEvent('submit',new Event(event));
+    };
+</script>
+ 
+<{capture name='footbar'}>
+<table cellspacing="0" cellpadding="0" style="margin:0 auto; width:100%" class="table-action">
+      <tbody><tr valign="middle">
+        <td>
+		  <{assign var="___dk" value="关  闭"}>
+		  <{assign var="___dg" value=$___express='确定退出?'|t:'express'}>
+            <{button label=$___express="保存并关闭窗口"|t:'express' class="btn-primary" onclick="subDeliveryCenterForm(event,2)"}>
+            <{button label=$___express="保存当前"|t:'express' class="btn-primary" onclick="subDeliveryCenterForm(event,1)"}>
+            <{button label=$___express=$___dk|t:'express' class="btn-secondary" onclick="if(confirm('{$___dg}'))window.close()"}>
+        </td>
+        </tr>
+        </tbody></table>
+<{/capture}>

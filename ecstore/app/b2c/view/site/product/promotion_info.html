@@ -1,0 +1,15 @@
+<{if $promotionMsg}>
+<ul class="promotion-list sale-info">
+  <li><div class="fl"><b><{t}>商品促销：<{/t}></b></div>
+    <div class="fl">
+      <{foreach from=$promotionMsg item=pm}>
+        <div class="pitem"><{$pm.name}><br>
+          <{if $pm.member}><i>此优惠限于</i><{$pm.member}>
+          <{/if}>
+        </div>
+      <{/foreach}>
+    </div>
+  </li>
+</ul>
+<{else}>
+<{/if}>

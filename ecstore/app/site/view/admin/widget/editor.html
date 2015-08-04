@@ -1,0 +1,115 @@
+<{capture name="header"}>
+<{css src="default/style.css" app="desktop" }>
+<style>
+div.workground{padding:0;}
+
+.toolbar{height:auto;background-position:0 100%;background-color:#D4D0C7;}
+</style>
+<{/capture}>
+
+<script>
+//void function(){
+    var themeFrame=$('themeFrame').contentWindow;
+    var shopWidgetsOBJ=themeFrame.shopWidgets;
+    shopWidgetsOBJ.widgetsDialog = null;
+    _addWeigets = function(args){
+        shopWidgetsOBJ.widgetsDialog?shopWidgetsOBJ.widgetsDialog.close.call(shopWidgetsOBJ.widgetsDialog):'';
+        shopWidgetsOBJ.widgetsDialog=null;
+        shopWidgetsOBJ.ghostDrop(args[0],args[1]);
+        themeFrame.focus();
+    }
+
+    _showWidgetsDialog  = function (url){
+        var _win =  $('themeFrame').contentWindow;
+        if(widget = $(_win.document.body).getElement('.shopWidgets_box')){
+            if(!confirm("<{t}>每次操作只能对一个挂件进行实例化，是否删除当前挂件区的挂件？<{/t}>"))return;
+            return _win.shopWidgets.fireEvent('delete',[widget,_showWidgetsDialog.bind(self,url)]);
+        }
+        shopWidgetsOBJ.widgetsDialog = new Dialog(url,{width:770,height:500,title:'<{t}>选择挂件<{/t}>',modal:true,resizeable:false,onShow:function(e){
+        this.dialog_body.id='dialogContent';
+    }});
+
+ }
+
+//}();
+
+
+   function _saveWidgets(){
+        new Request({url:'index.php?app=site&ctl=admin_widget_proinstance&act=save_widget', method:'post', data:$('widgets_proinstance_form'),
+            onComplete: function(re) {
+                var data = JSON.decode(re);
+                if(data.success){
+                    var su = data.success.split('@');
+                    MessageBox.success(su[0]);
+                    if(su[1] > 0){
+                        document.getElementById('instance_id').value = su[1];
+                    }
+                }else{
+                    MessageBox.error(data.error);
+                }
+            }
+        }).send();
+   }
+
+    $('main').setStyle('overflow','hidden');
+    var SHOPADMINDIR = '<{$shopadmin}>';
+</script>
+<{capture name="headbar"}>
+
+<div id="wg_toolbar" class="toolbar clearfix tableform" style="padding:5px">
+<h3 class="clear" style="margin-bottom:5px"><{t}>挂件实例化<{/t}>
+    <span class="c-gray f-12">&raquo;<{if $level!="system"}><{t}>模板级<{/t}><{else}><{t}>系统级<{/t}> <{/if}></span>
+</h3>
+        <div class="span-auto">
+            <i class="c-gray f-20">1&raquo;</i>
+        </div>
+        <form id="widgets_proinstance_form">
+        <div class="span-auto">
+            <h4 class="clear"><{t}>选择一个挂件\编辑挂件<{/t}></h4>
+            <a class="tbbtn add" href="javascript:void(0)" onclick="_showWidgetsDialog('index.php?app=site&ctl=admin_theme_widget&act=add_widgets_page&theme=<{$theme}>')">
+                <span>  <{t}>选择挂件<{/t}><span>
+            </a>
+        </div>
+        <div class="span-auto">
+            <i class="c-gray f-20">2&raquo;</i>
+        </div>
+        <div class="span-auto">
+            <h4 class="clear"><{t}>填写实例化信息<{/t}></h4>
+                <table>
+                    <tr>
+                            <th class="t-r"><{t}>实例名称:<{/t}></th>
+                            <td>
+                                <input type="text" value="<{$instance.name}>" name="instance_name" />
+                                <span class="notice-line"><{t}><{/t}></span>
+                            </td>
+                    </tr>
+                    <tr>
+                            <th class="t-r"><{t}>备注:<{/t}></th>
+                            <td>
+                                <input type="text" value="<{$instance.memo}>" name="instance_memo" />
+                                <span class="notice-line"><{t}><{/t}></span>
+                            </td>
+                    </tr>
+                </table>
+                <input type="hidden" value="<{$instance.level|default:$level}>" name="instance_level" >
+                <input type="hidden" value="<{$instance.flag|default:$flag}>" name="instance_flag" >
+                <input type="hidden" value="<{$instance.widgets_id}>" name="instance_id" id="instance_id">
+        </div>
+        <div class="span-auto">
+            <i class="c-gray f-20">3&raquo;</i>
+        </div>
+        <div class="span-auto">
+            <h4 class="clear"><{t}>保存并生成实例<{/t}></h4>
+            <a class="tbbtn save" href="javascript:void(0)" onclick="if(confirm('<{t}>确定保存实例吗?<{/t}>'))_saveWidgets()">
+                <span>  <{t}>保存<{/t}></span>
+            </a>
+            <a class="tbbtn exit" href="javascript:void(0)" onclick="if(confirm('<{t}>确定退出?<{/t}>'))window.close()">
+                <span>  <{t}>退出<{/t}></span>
+            </a>
+        </div>
+        </form>
+
+</div>
+<{/capture}>
+
+<iframe id="themeFrame" frameborder="0" width='100%' height='100%' src="index.php?app=site&ctl=admin_widget_proinstance&act=preview&id=<{$instance.widgets_id}>&theme=<{$theme}>"></iframe>

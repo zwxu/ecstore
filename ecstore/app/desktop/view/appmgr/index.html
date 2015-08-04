@@ -1,0 +1,58 @@
+<{area inject=".mainHead"}>
+<div class="clearfix ColColorGray borderup" style="padding:0 5px">
+<h4><{t}>应用程序<{/t}></h4>
+<p class="info">
+<{t}>应用中心简介<{/t}>
+<{button type="button" label=$___desktop="在线安装应用程序"|t:'desktop' onclick='new Dialog("index.php?ctl=system/appmgr&act=app_onlince",{onShow:function(e){
+     this.dialog_body.id="dialogContent";
+     },title:$___desktop="在线安装应用程序"|t:"desktop",width:870,height:560,onClose:function(){W.page("index.php?ctl=system/appmgr&act=index");}})'}>
+</p>
+
+</div>
+<{/area}>
+
+<div class="apps-wrapper">
+	<h4><{t}>当前安装的应用<{/t}></h4>
+	<div class="app-list-wrap">
+	<{foreach from=$apps item=app}>
+	<div class="app-item clearfix">
+		<!--<div class="app-img">
+				<a href="index.php?ctl=system/appmgr&act=view&p[0]=<{$app.plugin_ident}>">
+					<img src="<{if $app.icon}><{$app.icon}><{else}>images/type-app.png<{/if}>?<{$env.now}>" width="80" height="80"/>
+				</a>
+		</div>-->
+		<div class="app-opt">
+			<{if $app.disabled eq 'false'}>
+				<{button href="index.php?ctl=system/appmgr&act=disable&p[0]={$app.plugin_ident}" label=$___desktop="关闭程序"|t:'desktop'}>
+				<{if $app.has_setting==1}>
+					<{button href="index.php?ctl=system/appmgr&act=setting&p[0]={$app.plugin_ident}" label=$___desktop="设置选项"|t:'desktop'}>
+				<{/if}>
+			<{else}>
+				<{if $app.status neq 'used'}>
+					<{button href="index.php?ctl=system/appmgr&act=install&p[0]={$app.plugin_ident}" icon="btn_add.gif" label=$___desktop="启用程序"|t:'desktop'}>		
+				<{else}>
+					<{button href="index.php?ctl=system/appmgr&act=uninstall&p[0]={$app.plugin_ident}" label=$___desktop="清除数据"|t:'desktop'}>
+					<{button href="index.php?ctl=system/appmgr&act=enable&p[0]={$app.plugin_ident}" icon="btn_add.gif" label=$___desktop="启用程序"|t:'desktop'}>
+				<{/if}>
+			<{/if}>
+		</div>
+		<h6 class="app-title"><a href="index.php?ctl=system/appmgr&act=view&p[0]=<{$app.plugin_ident}>"><{$app.plugin_name}></a></h6>
+		<div class="app-info">
+			<ul>
+				<li><span class="label"><{t}>作者<{/t}></span>
+					<{if $app.plugin_author}>
+						 <a href="<{$app.plugin_website}>" target="_blank" ><{$app.plugin_author}></a>
+					<{else}>
+						 <{$app.plugin_author}>
+					<{/if}>
+				</li>
+				<li><span class="label"><{t}>安装量<{/t}></span> 29928</li>
+				<li><span class="label"><{t}>版本<{/t}></span><span> <{$app.plugin_version}></span></li>
+				<li><span class="label"><{t}>更新时间<{/t}></span> 2009.11.16</li>
+			</ul>
+		</div>
+		<!--<div class="app-desc"><{$app.plugin_desc}></div>-->
+	</div>
+	<{/foreach}>
+	</div>
+</div>

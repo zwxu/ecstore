@@ -1,0 +1,42 @@
+  <input type="hidden" name="addr_id" value="<{$addr_id}>">
+  <div class="FormWrap" style="background:none">
+       <table width="100%" border="0" cellspacing="0" cellpadding="0" class="liststyle data" style="border:none">
+       <col class="span-4 bg-gray"/>
+       <col class="span-auto"/>
+        <tr>
+          <th><{t}>默认收货地址：<{/t}></th>
+          <td><span><{input type="radio" name="default" options=$defOpt value=$default}></span></td>
+        </tr>
+        <tr>
+          <th><em>*</em><{t}>姓名：<{/t}></th>
+          <td><{input class="inputstyle" name="name" type="text" vtype=required value=$name}></td>
+        </tr>
+        <tr>
+          <th><{t}>电话：<{/t}></th>
+          <td><{input class="inputstyle" name="phone[telephone]" type="order_tel" vtype="phone" value=$phone.telephone}><span class="infotips"><{t}>其中联系电话和联系手机必须填写一项<{/t}></span></td>
+        </tr>
+        <tr>
+          <th><{t}>手机：<{/t}></th>
+          <td><{input class="inputstyle" name="phone[mobile]" vtype="number&&mobile" value=$phone.mobile}></td>
+        </tr>
+        <tr>
+          <th><em>*</em><{t}>地区：<{/t}></th>
+          <td><span id="checkout-select-area"><{input type="region" name="area" vtype=area app="ectools" value=$area callback="selectArea"}></span></td>
+        </tr>
+        <tr>
+          <th><{t}>地址：<{/t}></th>
+          <td><{input id="addr" class="inputstyle" type="textarea"  name="addr" cols="30" rows="3" value=$addr}></td>
+        </tr>
+        <tr>
+          <th><em>*</em><{t}>邮编：<{/t}></th>
+          <td><{input class="inputstyle" name="zipcode"  vtype="required&&number&&check_zipcode" value=$zipcode}></td>
+        </tr>
+        <tr>
+          <th></th>
+          <td>
+          <{button class="submit-btn" type="submit" rel="_request" label=$___b2c="提交"|t:'b2c'}>
+          <button  onclick="$('addr_div').setStyle('display','none');" class="btn" type="button"> <span><span> <{t}>取消<{/t}></span></span> </button>
+          </td>
+      </tr>
+      </table>
+  </div>

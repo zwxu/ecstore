@@ -1,0 +1,18 @@
+<{if count($logi)}>
+<table class="express_tracking liststyle" width="100" cellspacing="0" cellpadding="0" border="0" style="border-top:1px solid #D0D2D5;border-left:1px solid #D0D2D5;background:#DDD;">
+ <thead>
+	<th><{t}>时间<{/t}></th><th><{t}>地点和跟踪进度<{/t}></th>
+ </thead>
+ <tbody>
+	<{foreach from=$logi item=item}>
+	<tr>
+	 <td><{$item.time}></td><td><{$item.context}></td>
+	</tr>
+	<{/foreach}>
+ </tbody>
+</table>
+<{else}>
+<div class="logistic-corp">
+	<{t}>不能提供物流状态：<{/t}><{$logi_error}>
+</div>
+<{/if}>

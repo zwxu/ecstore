@@ -1,0 +1,11 @@
+<form method="POST" action="<{link app=site act=save ctl=admin_errorpage}>" class="tableform" id="notice-page-form">
+    <h3><{t}>页面提示 <{/t}><span class="num"><{t}>(当<{$info.title}>时)<{/t}></span></h3>
+            <{input name="errorpage" type="html" value=$errorpage}>
+            <input type='hidden' name="key" value='<{$info.key}>'>
+
+<{capture name="footbar"}>
+    <div class="table-action">
+        <{button type="button" label="保存" onclick="$('notice-page-form').fireEvent('submit',{stop:function(){}})"}>
+    </div>
+<{/capture}>
+</form>

@@ -1,0 +1,252 @@
+
+
+
+<{if $cart_status}>
+<form action="index.php?app=b2c&ctl=admin_order&act=docreate" method="post" id="order-create" extra="subOrder">
+
+<input type="hidden" value="<{$member_id}>" name="member_id" />
+<{include file="admin/order/checkout_base.html"}>
+
+<div class="FormWrap">
+
+<div class="section">
+<div class="form-title"><h5>4<{t}>支付订单确认<{/t}></h5></div>
+<div class="form-body"><div class="division" id='amountInfo'><{include file="admin/order/checkout_total.html"}></div>
+</div>
+
+
+<div id="hiddenData">
+  <{foreach from=$hiddenInput key=key item=item}><input type="hidden" name="<{$key}>" value="<{$item}>"><{/foreach}>
+</div>
+<div style="display:none"><{input type="checkForm" }></div>
+<!--<div class="table-action">
+	<{button label="创建订单" type="submit"}>
+</div>-->
+</div>
+</div>
+</form>
+
+<script>
+var extra_validator={};
+
+void function(){
+var  Shop={
+  url:{
+    shipping:'index.php?app=b2c&ctl=admin_order&act=shipping',
+    payment:'index.php?app=b2c&ctl=admin_order&act=payment',
+    total:'index.php?app=b2c&ctl=admin_order&act=total'
+  }
+};
+
+Order =new Object();
+    
+    $extend(Order,{
+		init:function(){
+            var _this=this;                                     /*配送方式事件*/
+            $E('#shipping').addEvent('click',function(e){
+                var target=$(e.target);
+                switch (target.get('type')){
+                    case 'radio':
+                        _this.shippingChange(target);
+                        break;
+                    case 'checkbox':
+                        var shipping=target.getParent('tr').getElement('input[type=radio]');
+                        _this.shippingMerge(shipping,{protect:'true'},target.checked);
+                        break;
+                    default :break;
+                }
+            });
+
+            $('payment').addEvent('click',function(e){
+                if(e.target.tagName=='INPUT')_this.paymentChange();
+            });
+			
+			/** 
+			 * 添加全局变量，判断地址是否需要加入容错的“.”
+			 */
+			$('receiver').store('b2c-cart-checkout-ship-addr', 'true');
+			
+			validatorMap.set('mobile_or_phone', ['<{t}>手机或电话必填其一！<{/t}>', function(element, v) {
+				var _mobile = $(element).getParent('tr').getPrevious('tr').getElement('input');
+				var _phone = $(element).getPrevious('input');
+				
+				return (_mobile.value != '') || (_phone.value != '');
+			}]);
+			
+			if (!$('payment-cur'))return;
+			
+			$('payment-cur').addEvent('change',function(){
+				_this.setCurrency();
+				_this.paymentChange();
+				return _this;
+			}).fireEvent('change');
+        },
+        paymentChange:function(){
+          $$('#payment th .ExtendCon input[type=radio]').fireEvent('checkedchange');
+          this.updateTotal();
+        },
+        setShippingFromArea:function(lastselect){
+			var _this = this;
+			if(!lastselect)throw new Error('<{t}>非法的地区信息.<{/t}>');
+			var _value = lastselect.value;
+			var _mem_hide = $E('#order-create input[type=hidden]');
+			new Request.HTML({
+				url:Shop.url.shipping,
+				update:'shipping',
+				onRequest:function(){
+				$('shipping').set('text','<{t}>正在根据地区信息获得配送方式...<{/t}>');
+				},
+				onComplete:function(){
+					_this.updateTotal();
+				}}).post({area:_value, member_id:_mem_hide ? _mem_hide.getValue() : null});
+        },
+        setCurrency:function(){         
+            new Request.HTML({url:Shop.url.payment,update:$('payment'),onComplete:this.updatePayment.bind(this)}).post($H({
+               'cur':$('payment-cur').getValue(),
+			   'member_id':$E('input[name^=member_id')?$E('input[name^=member_id').value:null,
+               'payment':$E('#payment th input:checked')?$E('#payment th input:checked').value:null,
+               'd_pay':$E('#payment th input:checked')?$E('#payment th input:checked').get('has_cod'):null
+            }));      
+        },
+        updatePayment:function(){
+            if(!this.synTotalHash)return;
+			
+			if(this.synTotalHash.d_pay&&this.synTotalHash.d_pay == 'true'){
+				if ($('_normal_payment'))
+					$('_normal_payment').hide();
+				if ($('_pay_cod'))
+					$('_pay_cod').show().getElement('input[type=radio]').checked=true;
+			}else{
+				if ($('_normal_payment'))
+					$('_normal_payment').show();
+				if ($('_pay_cod'))
+					$('_pay_cod').hide().getElement('input[type=radio]').checked=false;
+				
+				if (!$E('.x-payMethod:checked]') && $('_normal_payment')) {$('_normal_payment').getElement('input[type=radio]').checked=true;}
+			}
+        },
+        shippingChange:function(target,evt){
+		   this.clearProtect(target);
+           //this.updateTotal({onRequest:this.updatePayment.bind(this)});
+		   this.updateTotal();
+        },
+		clearProtect:function(target){
+		   if(tmpEl=$('shipping').retrieve('tmp_protect')){
+		   		if(tmpEl!=target){
+					tmpEl.removeProperty('protect');				
+ 					$E('input[name^=delivery[is_protect]',tmpEl.getParent('tr')).checked=false;
+				}
+		   } 	
+		   if(tmpEl!=target&&target.get('protect'))$('shipping').store('tmp_protect',target);	
+		}, 
+        shippingMerge:function(target,mg,checked,evt){
+           if(!checked){
+               $H(mg).getKeys().each(target.erase.bind(target));
+           }else{
+               $(target).set(mg);
+			   $(target).checked=true;
+           }
+           this.shippingChange($(target));
+        },
+        updateTotal:function(options){
+            options = options||{};
+            this.synTotalHash = (this.synTotalHash||{});
+            
+            var _shipping       = $E('#shipping tr input[type=radio]:checked'),
+            _coin     = $('payment-cur'),
+            _tax      = $('is_tax'),
+			_mem_hide = $E('#order-create input[type=hidden]');
+			
+            if(_shipping){
+                $extend(this.synTotalHash,{
+                    shipping_id:_shipping.value,
+                    is_protect:_shipping.get('protect')?'true':'false',
+                    d_pay:_shipping.get('has_cod')
+                });
+				this.updatePayment();
+            }
+			
+			var _payment  = $E('#payment tr input[type=radio]:checked');
+            if(_payment){
+                 $extend(this.synTotalHash,{
+                    payment:_payment.value
+                });
+            }
+             $extend(this.synTotalHash,{
+                cur:_coin.getValue(),
+                is_tax:(_tax&&_tax.checked)?'true':'false',
+                area:$E('input[name^=delivery[ship_area]')?$E('input[name^=delivery[ship_area]').getValue():null,
+				member_id:_mem_hide ? _mem_hide.getValue() : null 
+            });
+            
+            new Request.HTML($extend({url:Shop.url.total,update:$('amountInfo')},options)).post($H(this.synTotalHash));
+        
+        }
+    
+    });
+	
+	Order.init();
+    
+}();
+
+
+subOrderForm = function (event,sign){ 
+	   var target={};
+	   switch (sign){
+			case 1:                    //保存不关闭
+				$extend(target,{
+					onComplete:function(res){
+						var response = JSON.decode(res);
+						if (response.error == undefined || response.error == '')
+						{
+							if(window.opener.finderGroup&&window.opener.finderGroup['<{$finder_id}>'])
+								window.opener.finderGroup['<{$finder_id}>'].refresh();
+							$('btn-save-stay').set('disabled', 'disabled');
+							window.location.reload();
+						}
+					}}
+				);
+			break;
+			case 2:                   //保存关闭
+				$extend(target,{
+					onComplete:function(res){
+						var response = JSON.decode(res);
+						if (response.error == undefined || response.error == '')
+						{
+							if(window.opener.finderGroup&&window.opener.finderGroup['<{$finder_id}>'])
+								window.opener.finderGroup['<{$finder_id}>'].refresh();
+							$('btn-save-close').set('disabled', 'disabled');
+							window.close();
+						}
+					}}
+				);
+			break;				
+	   }
+	    var _form=$('order-create');
+		if(!_form)return;
+		var _formActionURL=_form.get('action'); 
+		
+		_form.store('target',target);
+        _form.set('action',_formActionURL+'&but='+sign).fireEvent('submit',new Event(event));
+    };
+</script>
+ 
+<{capture name='footbar'}>
+<table cellspacing="0" cellpadding="0" style="margin:0 auto; width:100%;" class="table-action" >
+      <tbody>
+	   <tr valign="middle">
+        <td>
+        <{assign var="___da" value=$___b2c='确定退出?'|t:'b2c'}>
+        <{assign var="___ca" value="关  闭"}>
+            <{button label=$___b2c="保存并关闭窗口"|t:'b2c' class="btn-primary" id="btn-save-close" onclick="subOrderForm(event,2)"}>
+            <{button label=$___b2c="保存当前"|t:'b2c' class="btn-primary" id="btn-save-stay" onclick="subOrderForm(event,1)"}>
+            <{button label=$___b2c="确定退出"|t:'b2c' class="btn-secondary" onclick="if(confirm('{$___da}'))window.close()"}>
+        </td>
+        </tr>
+        </tbody>
+</table>
+<{/capture}> 
+<{$env.capture.footbar}>
+<{else}>
+<div class="error" style="background-image:none"><{$cart_error_html}></div>
+<{/if}>

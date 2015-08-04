@@ -1,0 +1,88 @@
+<!--<div class="prepend-1">
+-->
+
+<form method='post' action='index.php?app=b2c&ctl=admin_reship&act=edit' target="{update:'reship_info'}">
+  <div class="tableform">
+    <div class="division">
+      <input type='hidden' name='reship_id ' value='<{$reships.reship_id }>'>
+      <table border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+          <tr>
+            <th><label><{t}>退货单号：<{/t}></label></th>
+            <td><{$reships.reship_id }></td>
+            <th><label><{t}>订单号:<{/t}></label></th>
+            <td><{$reships.order_id}></td>
+            <th><label><{t}>配送方式:<{/t}></label></th>
+            <td><{$reships.delivery}></td>
+            <th><label><{t}>操作员:<{/t}></label></th>
+            <td><{$reships.op_name}></td>
+          </tr>
+          <tr>
+           <th><label><{t}>会员:<{/t}></label></th>
+            <td><{$reships.member_id}></td>
+          <th><label><{t}>生成时间:<{/t}></label></th>
+            <td><{$reships.t_begin|cdate:SDATE_STIME}></td>
+            <th><label><{t}>退货人:<{/t}></label></th>
+            <td><{$reships.ship_name}></td>
+            <th><label><{t}>退货地区:<{/t}></label></th>
+            <td><{$reships.ship_area|region}></td>
+                 </tr>
+          <tr>
+                   <th><label><{t}>退货地址:<{/t}></label></th>
+            <td><{$reships.ship_addr}></td>
+            <th><label><{t}>邮编:<{/t}></label></th>
+            <td><{$reships.ship_zip}></td>
+               <th><label><{t}>电话:<{/t}></label></th>
+            <td><{$reships.ship_tel}></td>
+            <th><label><{t}>手机:<{/t}></label></th>
+            <td><{$reships.ship_mobile}></td>
+          </tr>
+          <tr>
+                      <th><label><{t}>物流公司:<{/t}></label></th>
+            <td><{$reships.logi_name}></td>
+            <th><label><{t}>配送费用:<{/t}></label></th>
+            <td><{$reships.money|cur_odr}></td>
+            <th><label><{t}>物流单号:<{/t}></label></th>
+            <td><{$reships.logi_no}></td>
+          </tr>
+        </tbody>
+      </table>
+      <!--  <div class="span-5"><label><{t}>收货时间:<{/t}></label><{$reships.t_end|cdate:SDATE_STIME}></div>-->
+    </div>
+  </div>
+  <{if count($reships.reship_items) > 0}>
+  <div class="tableform">
+    <h3><{t}>退货明细:<{/t}></h3>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+      <col class="span-auto"> </col>
+      <col class="span-auto"></col>
+      <col class="span-auto"></col>
+      <col class="span-auto" ></col>
+      <col class="span-auto" ></col>
+      
+      <thead>
+        <tr>
+          <th><{t}>物品货号<{/t}></th>
+          <th><{t}>物品类型<{/t}></th>
+          <th><{t}>物品名称<{/t}></th>
+          <th><{t}>退货量<{/t}></th>
+          <th><{t}>备注<{/t}></th>
+        </tr>
+      </thead>
+      <tbody>
+      <{foreach from=$reships.reship_items item=aProduct}>
+      <tr>
+        <td><{$aProduct.product_bn}></td>
+        <td><{if $aProduct.item_type == 'gift'}><{t}>礼品<{/t}><{else}><{t}>商品<{/t}><{/if}></td>
+        <td><{$aProduct.product_name}></td>
+        <td class="Colamount"><{$aProduct.number}></td>
+        <td><{$reships.memo}></td>
+      </tr>
+      <{/foreach}>
+      </tbody>
+      
+    </table>
+  </div>
+  <{/if}>
+</form>
+<!--</div>-->

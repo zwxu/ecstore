@@ -1,0 +1,110 @@
+<div class="goods-info-wrap clearfix ec-spec-box" id="goods-viewer">
+    <div class="goods-leftbox">
+      <{$goodshtml.goodspic}>
+    </div>
+    <div class="goods-rightbox">
+        <!------------------------------------ 购买区域 开始 -------------------------------->
+    <form class="goods-action" action="<{link app="b2c" ctl='site_cart' act='add' arg0='gift'}>" gnotify="<{link app=b2c ctl=site_product act=gnotify}>" method="post"<{if $goods.setting.buytarget==2}> target="_blank_cart"<{elseif $goods.setting.buytarget==3}> target="_dialog_minicart"<{/if}>>
+
+            <{include file="site/product/info/name.html" app="gift"}>
+            <{include file="site/product/info/brief.html" app="gift"}>
+            <{include file="site/product/info/basic.html" app="gift"}>
+
+            <{if $gift.marketable == 'false' }>
+             <!---已下架--->
+            <div class="hight-offline">
+                <div class="hightbox">
+                    <div class="btnBar clearfix">
+                        <div class="flt" style="font-weight:bold; padding-top:15px;"><{t}>此赠品已下架<{/t}></div>
+                    </div>
+                </div>
+            </div>
+
+            <{elseif $gift.is_expire === "true"}>
+            <div class="hight-offline">
+                <div class="hightbox">
+                    <div class="btnBar clearfix">
+                        <div class="flt" style="font-weight:bold; padding-top:15px;"><{t}>此赠品已超出可兑换期限<{/t}></div>
+                    </div>
+                </div>
+            </div>
+            <{else}>
+             <!---购物面板--->
+            <div class='hightline'>
+              <div class='hightbox'>
+                <!---规格开始--->
+                  <{$goodshtml.spec}>
+                <!---规格结束--->
+
+                <!--购买数量-->
+                  <{if $gift.max_buy_store}><span class="buy-limit-storess" style="display:none"><{$gift.max_buy_store}></span><{/if}>
+                  <{$goodshtml.store}>
+                <!--购买数量结束-->
+				<{if $site_get_policy_method == '1'}>
+                    系统未启用积分!不能兑换
+                <{else}>
+					<{if $site_point_usage == '1'}>
+					<div class="btnBar clearfix" <{if count($goods.product)<0}>style="visibility:hidden"<{/if}>>
+
+					  <div class="flt">
+					  <{if $goods.store>0}>
+								<input class="actbtn btn-gift-exchange updateBtn " value="<{t}>加入购物车<{/t}>" type="submit" />
+							<{else}>
+						   该赠品暂时缺货
+					   <{/if}>
+					   </div>
+					</div>
+					<{else}>
+						只用于抵扣，不能兑换
+					<{/if}>
+                <{/if}>
+                <!--购买按钮结束-->
+
+
+              </div><!-- end hightbox-->
+            </div><!-- end hightline-->
+            <{/if}>
+        </form>
+
+    </div>
+
+  <!--++++++++++++++++++++++++++++++++++ 购买区域 结束 ++++++++++++++++++++++++++++++-->
+
+  <{if $goods.description}>
+  <div class="body indent uarea-output clearboth" id="goods-intro">
+    <{$goods.description}>
+  </div>
+  <{/if}>
+ </div>
+</div>
+<script>
+
+
+
+    String.implement({
+      toFormElements:function(){
+            if(!this.contains('=')&&!this.contains('&'))return new Element('input',{type:'hidden'});
+            var elements=[];
+            var queryStringHash=this.split('&');
+            Array.from(queryStringHash).each(function(item){
+                if(item.contains('=')){
+                    item=Array.from(item.split('='));
+                    elements.push(new Element('input',{type:'hidden',name:item[0],value:item[1]}));
+                }else{
+                  elements.push(new Element('input',{type:'hidden',name:item}));
+                }
+            });
+            return new Elements(elements);
+            }
+    });
+    Number.implement({
+           interzone:function(min,max){
+                 var _v=this.toFloat();
+                 if(!_v)_v=0;
+                 return _v>=min&&_v<=max;
+             }
+          });
+
+
+</script>
+

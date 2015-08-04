@@ -1,0 +1,875 @@
+<{script src="exmvc.js" app="b2c"}>
+<{script src="mustache.js" app="b2c"}>
+<{if $goods_spec_images && count($goods_spec_images)>0}>
+<div id="goods_spec_images">
+<{foreach from=$goods_spec_images item=imageid}>
+<input type="hidden" name="img[<{$imageid}>]" value="<{$imageid|storager:'s'}>" />
+<{/foreach}>
+</div>
+<{/if}>
+<textarea id="specTpl" style="display:none;">
+    {{#specValue}}
+    <tr spec="{{trSpec}}" class="{{spec_type}}" point="{{trPoint}}">
+        <th>系统规格</th>
+        <th>规格值</th>
+        {{#has_img}}
+        <th>规格图片</th>
+        {{/has_img}}
+        <th width="*"><{img src="bundle/btn_edit.gif" app="desktop"}> <span class="sel-albums-images lnk">关联商品图册图片</span></th>
+        <th class="last">操作</th>
+    </tr>
+    <tr pspecid="{{private_spec_value_id}}">
+      <td>
+    <input type="hidden" value="{{private_spec_value_id}}" name="spec[{{spec_id}}][option][{{private_spec_value_id}}][private_spec_value_id]">
+    <input type="hidden" key="spec_value" value="{{spec_value}}" name="spec[{{spec_id}}][option][{{private_spec_value_id}}][spec_value]">
+    <input type="hidden" value="{{spec_value_id}}" name="spec[{{spec_id}}][option][{{private_spec_value_id}}][spec_value_id]">
+    <input type="hidden" key="spec_image" value="{{spec_image}}" name="spec[{{spec_id}}][option][{{private_spec_value_id}}][spec_image]">
+    <input type="hidden" key="spec_goods_images" value="{{spec_goods_images}}" name="spec[{{spec_id}}][option][{{private_spec_value_id}}][spec_goods_images]">
+    <input type="hidden" value="{{spec_type}}" name="spec[{{spec_id}}][spec_type]">
+    <input type="hidden" value="{{spec_id}}" name="spec[{{spec_id}}][spec_id]">
+    <input type="hidden" value="{{spec_name}}" name="spec[{{spec_id}}][spec_name]">
+        <span name="specImg"><img src="{{#has_img}}{{spec_image_url}}{{/has_img}}"/></span></td>
+        <td><input class = "spec-value" type="text" value="{{spec_value}}" name="specValue[]" /></td>
+        {{#has_img}}
+        <td><span><img src="{{spec_image_url}}" /></span><b class="chooseSpecImage"></b></td>
+        {{/has_img}}
+        <td>
+            <span style="width:auto;" class="sel-imgs-area">
+            {{#spec_goods_images_url}}
+                <img src="{{.}}" />
+            {{/spec_goods_images_url}}
+            </span>
+
+            {{#spec_goods_images}}
+            <input class="spec_goods_images" type="hidden" value="{{.}}"/>
+            {{/spec_goods_images}}
+        </td>
+        <td><i class="top"></i><i class="bottom"></i><i class="delete"></i></td>
+    </tr>
+    {{/specValue}}
+</textarea>
+<textarea id="goodTpl" style="display:none;">
+    <tr product_id="{{product_id}}">
+        <td>
+            <{permission perm_id='editmarketable'}><input type="checkbox" class="pro-marketable-check" value="{{marketable}}" state="" key="marketable" name="goods[product][{{product_id}}][status]"><{/permission}>
+        </td>
+        <td>
+            <div style="position:relative;" class="spec_item">
+            {{#spec_desc}}
+            <div class="spec-block">
+            <div specid="{{spec_id}}" class="select-spec-unselect goods-spec-selected  clearfix flt" style="margin:0 10px;">
+                <div key="spec_value_{{spec_id}}" class="spec_sel clearfix">
+                    <div class="flt" style="line-height:30px;">{{spec_name}}:</div>
+                    <div class="flt specSelect" style="cursor:pointer;"><span class="flt" style="margin:0 5px;"><img style="border:1px solid #ddd;" width="30" height="30" src="{{spec_image_url}}" style="vertical-align:bottom;"></span><p style="height:30px;line-height:30px;" class="flt db selectedValue">{{spec_value}}</p></div>
+                </div>
+            <div style="display:none" class="select-spec-value"><ul style="width:200px;" class="goods-spec-box"></ul></div>
+            </div>
+            <input type="hidden" value="{{spec_value}}" class="spec_value" name="goods[product][{{product_id}}][spec_desc][spec_value][{{spec_id}}]" key="spec_value_{{spec_id}}">
+            <input type="hidden" value="{{spec_private_value_id}}" class="private_spec_value_id" name="goods[product][{{product_id}}][spec_desc][spec_private_value_id][{{spec_id}}]" key="spec_private_value_id_{{spec_id}}" spec_id="{{spec_id}}">
+            <input type="hidden" value="{{spec_value_id}}" class="spec_value_id" name="goods[product][{{product_id}}][spec_desc][spec_value_id][{{spec_id}}]" key="spec_value_id_{{spec_id}}">
+            </div>
+            {{/spec_desc}}
+            </div>
+        </td>
+        <td>
+            <div class="fill"><input type="text" value="{{bn}}" key="bn" name="goods[product][{{product_id}}][bn]" size="18">
+                <input type="hidden" value="{{product_id}}" key="product_id" name="goods[product][{{product_id}}][product_id]"></div>
+        </td>
+        <td>
+        <{permission perm_id='editstore'}>
+        <input type="text" vtype="unsigned" value="{{store}}" key="store" name="goods[product][{{product_id}}][store]" size="10"></td>
+        <{/permission}>
+        <td>
+            <div class="fill">
+                <{permission perm_id='editprice'}>
+                <input type="text" vtype="unsigned" value="{{price}}" key="price" name="goods[product][{{product_id}}][price][price][price]" size="8">
+                <{/permission}>
+                {{#mLevelPrice}}
+                <input type="hidden" value="{{ml_price}}" key="member_lv_price_{{member_lv_id}}" lv_id="{{member_lv_id}}" name="goods[product][{{product_id}}][price][member_lv_price][{{member_lv_id}}]">
+                {{/mLevelPrice}}
+                <{img src="bundle/btn_edit.gif" align="absmiddle" app="desktop"}> <{permission perm_id='editmemberlevelprice' noshow='true'}><span class="edit lnk"><{t}>会员价<{/t}></span><{/permission}>
+            </div>
+        </td>
+        <td>
+            <div class="fill">
+                <{permission perm_id='editcostprice'}>
+                <input type="text" vtype="unsigned" value="{{cost}}" key="cost" name="goods[product][{{product_id}}][price][cost][price]" size="8">
+                <{/permission}>
+            </div>
+        </td>
+        <td>
+            <div class="fill">
+                <{permission perm_id='editmktprice'}>
+                <input type="text" vtype="unsigned" value="{{mktprice}}" key="mktprice" name="goods[product][{{product_id}}][price][mktprice][price]" size="8">
+                <{/permission}>
+            </div>
+        </td>
+        <td>
+            <div class="fill">
+                <input type="text" vtype="unsigned" value="{{weight}}" key="weight" name="goods[product][{{product_id}}][weight]" size="4">
+            </div>
+        </td>
+        <td><input type="text" value="{{store_place}}" key="store_place" name="goods[product][{{product_id}}][store_place]" size="4"></td>
+        <td><{permission perm_id='deleteproducts' noshow='true'}><{img class="operater" style="cursor:pointer;" alt=$___b2c="删除"|t:'b2c' src="icons/icon_delete.gif"}><{/permission}></td>
+    </tr>
+</textarea>
+<div id='gEditor-sepc-panel'>
+    <div class="specification">
+        <div class="tt"><strong>商品规格</strong>点击选择当前商品需要的规格。</div>
+        <div class="td clearfix">
+            <div class="type">
+                <ul id="typeList"></ul>
+                <!--p><a target="dialog::{title:'添加规格', width:800, height:420}" href="index.php?app=b2c&ctl=admin_specification&act=add&_finder[finder_id]=d2d8b4&finder_id=d2d8b4">+ 添加新规格</a></p-->
+            </div>
+            <div class="list">
+                <div class="list-wrap">
+                    <div class="selectAll"><input type="checkbox" name="selectAll" id="selectAll" /> <label for="selectAll">全选</label></div>
+                    <div class="typeItem clearfix">
+                        <ul id="typeItem"></ul>
+                        <a href="javascript:void(0);" class = "add-item" id="add-item" style="float:left;margin:15px 0 0 10px;"><span>+</span>新增</a>
+                    </div>
+                    <div class="item">
+                        <table id="typeDetailView">
+                        </table>
+                    </div>
+                </div>
+                <div class="table-action" id="create-good" style="border-top:0;">
+                    <button type="button" id="createAllGoods" class="btn btn-primary"><span><span>生成所有货品</span></span></button>
+                    <button type="button" class="btn btn-primary" id="addOneGood"><span><span>添加一个货品</span></span></button>
+                </div>
+            </div>
+            <div class="item-wrap">
+                <div class="item">共<b id="goodsNum">0</b>件货品</div>
+                <table cellspacing="0" cellpadding="0" border="0" class="gridlist" id="goods-table">
+                    <thead id="productNodeTitle">
+                        <tr>
+                            <th style="cursor: pointer;width:5%;">上架</th>
+                            <th style="cursor: pointer;width:17%;">规格值</th>
+                            <th style="cursor: pointer;width:8%;">货号</th>
+                            <th style="cursor: pointer;width:10%;">库存</th>
+                            <th style="cursor: pointer;width:15%;">销售价</th>
+                            <th style="cursor: pointer;width:8%;">成本价</th>
+                            <th style="cursor: pointer;width:7%;">市场价</th>
+                            <th style="cursor: pointer;width:5%;">重量</th>
+                            <th style="cursor: pointer;width:8%;">货位</th>
+                            <th style="cursor: pointer;width:5%;">操作</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="pager gridlist-footer" style="display:none;">
+                    <a title="上一页" class="prev" href="javascript:void(0)">&lt;上一页</a>
+                    <a title="下一页" class="next" href="javascript:void(0)">下一页&gt;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-action" style="border-top:0;">
+        <{button  id="save-action" label=$___b2c="保存"|t:'b2c'}>
+    </div>
+</div>
+<script>
+    (function(){
+        var typeData,selectedSpec,selectedGoods;
+        var currentPageGoods = [];
+        var GoodsParams={};
+        var GSpec=null;
+
+        if(window.opener && window.opener.$('new_goods_spec')){
+           GSpec =  window.opener.$('new_goods_spec').get('value');
+        }
+
+        var initdata=GSpec===null?'goods_id=<{$goods_id}>&spec=<{$params_spec}>':'goods_id=<{$goods_id}>&spec=<{$params_spec}>&' + new Hash(JSON.decode(GSpec)).toQueryString();
+
+        new Request.JSON({
+            url:'index.php?app=b2c&ctl=admin_products&act=set_spec&type_id=<{$type_id}>',
+            method:'post',
+            data:initdata,
+            onComplete:function(re){
+                typeData = re.spec;
+                selectedSpec = re.selectedSpec;
+                typeMod.init();
+                if(re.product) selectedGoods = re.product;
+                GoodMod.init(re.spec_info);
+                GoodMod.spec = re.spec_info;
+                GoodMod.all_use_spec = re.all_use_spec;
+            }
+        }).send();
+
+        var typeMod = {
+            ev:{
+                            'click i.top':function(){
+                                var target = arguments[1].getParent('tbody');
+                                var spec = target.getElement('tr').get('spec');
+                                if(target.getPrevious('tbody tr[spec='+spec+']')) target.inject(target.getPrevious('tbody tr[spec='+spec+']').getParent('tbody'),'before');
+                            },
+                            'click i.bottom':function(){
+                                var target = arguments[1].getParent('tbody');
+                                var spec = target.getElement('tr').get('spec');
+                                if(target.getNext('tbody tr[spec='+spec+']')) target.inject(target.getNext('tbody tr[spec='+spec+']').getParent('tbody'),'after');
+                            },
+                            'click i.delete':function(){
+                                if(parseInt($('goodsNum').get('html')) > 0){
+                                    alert('已生成货品,请先删除全部货品');
+                                    return;
+                                }
+                                var target = arguments[1].getParent('tbody');
+                                if($(target.getElement('tr').get('point'))) $(target.getElement('tr').get('point')).checked = false;
+                                target.dispose();
+                                typeMod.calcNum(target.getElement('tr').get('spec'));
+                            },
+                            'click b.chooseSpecImage':function(){
+                                var target = arguments[1];
+                                Ex_Loader('modedialog',function(){
+                                    new imgDialog('<{$spec_image_request_url}>',{
+                                        handle:this,
+                                        onCallback:function(img,imgsrc){
+                                            target.getPrevious('span').getElement('img').set('src',imgsrc);
+                                            target.getParent('tr').getElement('input[key=spec_image]').set('value',img);
+                                        }
+                                    });
+                                }.bind(this))
+                            },
+                            'click .sel-albums-images':function(){
+                                var tNode = arguments[1].getParent('tbody');
+                                var _img_data = null;
+                                var imgArea = arguments[1].getParent('tr').getNext('tr').getElement('span[class=sel-imgs-area]');
+                                var selImgs = imgArea.getAllNext('.spec_goods_images');
+                                var _img_data = 'selImgs='+selImgs.get('value')+'&';
+                                var _img_tmp = '<img src="{imgsrc}" width="22" height="22" style="margin:0 1px;border:1px solid #DDD;" />';
+                                if($('goods_spec_images')) _img_data += $('goods_spec_images').toQueryString();
+                                new Dialog('index.php?app=b2c&ctl=admin_goods_editor&act=selAlbumsImg',{title:'<{t}>关联商品相册图片<{/t}>',
+                                 ajaxoptions:{data:_img_data, method:'post'},
+                                 callback:function(_sel_img_data,src){
+                                        var outimghtml = '';
+                                        _sel_img_data.length && _sel_img_data.each(function(selImgId, outImgIteration){
+                                            if(outImgIteration < 4) outimghtml += _img_tmp.substitute({'imgsrc':src[outImgIteration]});
+                                            if( outImgIteration == 4 ) outimghtml += '...';
+                                        });
+                                        imgArea.set('html',outimghtml);
+                                        selImgs.set('value',_sel_img_data.join());
+                                        tNode.getElement('input[key=spec_goods_images]').set('value',_sel_img_data.join());
+                                }});
+                            },
+                            'keyup input.spec-value':function(){
+                                arguments[1].getParent('tbody').getElement('input[key=spec_value]').set('value',arguments[1].value);
+                            }
+                },
+            init:function(){
+                var self = this;
+                //left sidebar init
+                if(typeData.length===0) return;
+                typeData.each(function(item,i){
+                    new Element('li',{ html:'<a href="javascript:void(0)" spec="'+ item.tp +'" spec_id="'+item.spec_id+'" spec_type="'+item.spec_type+'" spec_name="'+item.text+'">'+item.text+'<span class="specNum" style="margin-left:5px;">['+0+']</span>'+'</a>'}).inject($('typeList'));
+                    $('typeList').getElements('li')[0].getElement('a').addClass('c');
+                });
+
+                $('typeList').getElements('li a').each(function(item){
+                    item.addEvent('click',function(e){
+                        e.stop();
+                        if(e.target.get('class') === 'specNum') e.target = e.target.getParent('a');
+                        $('typeList').getElements('li a[class=c]').removeClass('c');
+                        e.target.addClass('c');
+                        $('typeItem').getNext('.add-item').set('spec_name',e.target.get('spec_name')).set('spec_id',e.target.get('spec_id')).set('spec_type',e.target.get('spec_type'));
+                        self.showSpecType(e.target.get('spec'));
+                        self.checkIsAll(e.target.get('spec'));
+                    });
+                });
+
+                var cur = $('typeList').getElements('li a[class=c]');
+                $('typeItem').getNext('.add-item').set('spec_name',cur.get('spec_name')).set('spec_id',cur.get('spec_id')).set('spec_type',cur.get('spec_type'));
+
+                typeData.each(function(item){
+                    for(var i= 0; i<item.value.length;i++){
+                        if(item.spec_type === 'image') {
+                            var tpl = '<input type="checkbox" id="'+item.tp+i+'" name="'+item.tp+'" spec = "'+item.tp+'" /><label spec_id="'+item.spec_id+'" spec_name="'+item.text+'"spec_value_id="'+item.value[i].spec_value_id+'"spec_type="'+item.spec_type+'" spec_value="'+item.value[i].spec_value+'" spec_image="'+item.value[i].spec_image+'" for="'+item.tp+i+'"><span><img src="'+item.value[i].view+'"></span><em>'+item.value[i].color+'</em></label>';
+                            } else {
+                            var tpl = '<input type="checkbox" id="'+item.tp+i+'" name="'+item.tp+'" spec = "'+item.tp+'"  /><label spec_id="'+item.spec_id+'" spec_name="'+item.text+'" spec_value_id="'+item.value[i].spec_value_id+'"spec_type="'+item.spec_type+'" spec_value="'+item.value[i].spec_value+'" spec_image="'+item.value[i].spec_image+'" for="'+item.tp+i+'"><em>'+item.value[i].spec_value+'</em></label>';
+                        }
+                        new Element('li',{html:tpl}).inject($('typeItem'));
+                    }
+                });
+
+                //init selectedSpec
+                selectedSpec.each(function(item){
+                    ExMvc.View.initance({
+                        tpl:$('specTpl').get('value'),
+                        events:self.ev,
+                        config:{tagName:'tbody',attrs:{'class':'item','candel':'no'}},
+                        contains:$('typeDetailView')
+                    }).add(item);
+                    self.calcNum(item.specValue.trSpec);
+                    self.checkIsAll(item.specValue.trSpec);
+                    $(item.specValue.trPoint).checked = true;
+                });
+
+                //all spec add click event
+                $('typeItem').getElements('input[type=checkbox]').addEvent('click',function(e){
+                    self.toogleDetailSpec(e.target.getNext('label'),e.target.checked);
+                });
+
+                $('add-item').addEvent('click',function(e){
+                    self.toogleDetailSpec(e.target,true);
+                });
+
+                //init first spec
+                this.showSpecType(typeData[0].tp);
+
+                //add Goods
+                $('addOneGood').addEvent('click',function(){
+                    GoodMod.addOne();
+                });
+
+                $('createAllGoods').addEvent('click',function(e){
+                    GoodMod.createAllGoods(e.target);
+                });
+
+                $('save-action').addEvent('click',function(){
+                    var params = '';
+
+                    $('goods-table').getElements('tbody').each(function(item,k){
+                        item.getElements('input').each(function(i){
+                         currentPageGoods[(parseInt($$('span.current')[0].get('html'))-1)*10 + k][i.get('key')] = i.get('value');
+                        }.bind(this));
+                    }.bind(this));
+
+                    var postData = {};
+                    var t={};
+                    currentPageGoods.each(function(i,k){
+                        t[i.product_id] = i;
+                        postData['product'] = t;
+                    });
+
+                    new Request.JSON({
+                        url:'index.php?app=b2c&ctl=admin_products&act=save_editor',
+                        method:'post',
+                        data:$('typeDetailView').toQueryString()+'&'+Object.toQueryString(postData)+"&goods[goods_id]=<{$goods_id}>",
+                        onComplete:function(rs) {
+                            if(rs.result == 'success') {
+                                if(rs.data.is_new == '1' && window.opener.isNew){
+                                    window.opener.isNew(JSON.encode(rs.data));
+                                }else if(window.opener.rendSpec){
+                                    window.opener.rendSpec(rs.data.used_spec,rs.data.productNum);
+                                }
+                                if(confirm('保存成功,确定关闭窗口吗'))window.close();
+                            }else{
+                                MessageBox.error(rs.msg);
+                            }
+                        }
+                    }).send();
+                });
+
+                this.allSelectEvent();
+                this.checkSta();
+
+                $$('#typeList li a').each(function(i){
+                    self.calcNum(i.get('spec'));
+                })
+            },
+            showSpecType:function(spec){
+                $('typeItem').getElements('input[spec!='+spec+']').getParent('li').setStyle('display','none');
+                $('typeItem').getElements('input[spec='+spec+']').getParent('li').setStyle('display','');
+                $('typeDetailView').getElements('tbody').setStyle('display','none');
+                $('typeDetailView').getElements('tr[spec='+spec+']').getParent('tbody').setStyle('display','');
+            },
+            toogleDetailSpec:function(e,flag){
+                var self = this;
+                var url = 'index.php?app=b2c&ctl=admin_products&act=addSpecValue';
+                var dataString;
+                if(e.tagName.toLowerCase() ==='label'){
+                    dataString = 'specId=' + e.get('spec_id') + '&specName=' + encodeURIComponent(e.get('spec_name')) + '&specValueId=' + e.get('spec_value_id') + '&spec_value=' + encodeURIComponent(e.get('spec_value')) + '&specImage=' + e.get('spec_image') + '&trPoint=' + e.get('for')+ '&trSpec=' +  e.getPrevious('input').get('spec') + '&specType=' +  e.get('spec_type');
+                }else{
+                    if(e.tagName.toLowerCase() === 'span') e = e.getParent('a');
+                    dataString = 'specId=' + e.get('spec_id') + '&specName=' + e.get('spec_name') + '&specValueId=' + '' + '&spec_value=' + '' + '&specImage=' + '' + '&trPoint=' + '' + '&trSpec=' + $('typeList').getElement('a[class=c]').get('spec') + '&specType=' +  e.get('spec_type')  + '&isNew=true';
+                }
+                dataString = dataString + '&' +$('typeDetailView').toQueryString();
+                if(flag){
+                if(e.tagName.toLowerCase() ==='label') e.getPrevious('input').checked = true;
+                ExMvc.Controller.initance({
+                    modelOpt:{
+                        method:'post',
+                        link:'chain',
+                        data:dataString,
+                        url:url,
+                        onSuccess:function(e){
+                            var spec = e.specValue.trSpec;
+                            self.calcNum(spec);
+                            self.checkSta();
+                            self.showSpecType($('typeList').getElement('li a[class=c]').get('spec'));
+                            if(parseInt($('goodsNum').get('html')) > 0){ GoodMod.specSelectEvent(e.spec); GoodMod.spec = e.spec; }
+                        }
+                    },
+                    viewOpt:{
+                        contains:$('typeDetailView'),
+                        tpl:$('specTpl').get('value'),
+                        events:$extend(self.ev,{
+                              'click i.delete':function(){
+                                var target = arguments[1].getParent('tbody');
+                                if($(target.getElement('tr').get('point'))) $(target.getElement('tr').get('point')).checked = false;
+                                target.dispose();
+                                self.calcNum(target.getElement('tr').get('spec'));
+                                var spec_type = target.getElements('tr')[0].get('class');
+                                var private_id = target.getElements('tr')[1].get('pspecid');
+                                if(parseInt($('goodsNum').get('html')) > 0){
+                                   new Hash(GoodMod.spec).each(function(item){
+                                        if(item.spec_type === spec_type ){
+                                            item.option.each(function(i,k){
+                                                if(i.private_spec_value_id === private_id) item.option.splice(k,1);
+                                            })
+                                        }
+                                    });
+                                    GoodMod.specSelectEvent(GoodMod.spec);
+                                }
+                            }
+                        }),
+                        config:{tagName:'tbody',attrs:{'class':'item'}}
+                    }
+                }).fetch();
+                }else{
+                    var tag = e.get('for');
+                    target =  $('typeDetailView').getElement('tr[point='+tag+']').getParent('tbody');
+                    /*
+                    if(target.get('candel') === 'no'){
+                    }
+                    */
+                    if(parseInt($('goodsNum').get('html')) > 0){
+                        var spec_type = target.getElements('tr')[0].get('class');
+                        var private_id = target.getElements('tr')[1].get('pspecid');
+                        new Hash(GoodMod.spec).each(function(item){
+                            if(item.spec_type === spec_type ){
+                                item.option.each(function(i,k){
+                                    if(i.private_spec_value_id === private_id) item.option.splice(k,1);
+                                })
+                            }
+                        });
+                        GoodMod.specSelectEvent(GoodMod.spec);
+                        e.getPrevious('input').checked = true;
+                        alert('已生成货品,请先删除全部货品');
+                        return;
+                    }
+                    if($('typeDetailView').getElement('tr[point='+tag+']')){
+                        $('typeDetailView').getElement('tr[point='+tag+']').getParent('tbody').dispose();
+                        $('typeItem').getElement('input[id='+tag+']').checked = false;
+                        this.calcNum(e.getPrevious('input').get('spec'));
+                    }else{
+                        (function(){
+                            $('typeDetailView').getElement('tr[point='+tag+']').getParent('tbody').dispose();
+                            $('typeItem').getElement('input[id='+tag+']').checked = false;
+                            self.calcNum(e.getPrevious('input').get('spec'));
+                        }).delay(2000);
+                    }
+                    self.showSpecType(e.getPrevious('input').get('spec'));
+                }
+                this.checkSta();
+                this.checkIsAll($('typeList').getElement('a[class=c]').get('spec'));
+            },
+            allSelectEvent:function(){
+                var self = this;
+                $('selectAll').addEvent('change',function(e){
+                    var flag = this.checked ? true : false;
+                    var spec = $('typeList').getElement('a[class=c]').get('spec');
+                    if(flag){
+                        $('typeItem').getElements('input[spec='+spec+']').each(function(item){
+                            if(!item.checked) self.toogleDetailSpec(item.getNext('label'),true);
+                        });
+                    }else{
+                        if(parseInt($('goodsNum').get('html')) > 0){
+                          alert('已生成货品请先删除货品!');
+                          this.checked = true;
+                          return;
+                        }
+                        $('typeItem').getElements('input[spec='+spec+']').each(function(item){
+                            if(item.checked) self.toogleDetailSpec(item.getNext('label'),false);
+                        });
+                    }
+                });
+            },
+            checkSta:function(){
+                if($('typeDetailView').getElement('tbody')){
+                    $$('#create-good,.item-wrap').setStyle('display','');
+                    }else{
+                    $$('#create-good,.item-wrap').setStyle('display','none');
+                }
+            },
+            calcNum:function(spec){
+                if($('typeDetailView').getElements('tr[spec='+spec+']').length === 0 ){$('typeList').getElement('a[spec='+spec+']').getElement('.specNum').setStyle('display','none');}else{$('typeList').getElement('a[spec='+spec+']').getElement('.specNum').setStyle('display','');}
+                $('typeList').getElement('a[spec='+spec+']').getElement('.specNum').set('text','['+$('typeDetailView').getElements('tr[spec='+spec+']').length+']');
+            },
+            checkIsAll:function(spec){
+                var isAll = true;
+                $('typeItem').getElements('input[spec='+spec+']').each(function(item){
+                    if(!item.checked) isAll = false;
+                });
+                if(isAll){$('selectAll').checked = true;}else{$('selectAll').checked = false;}
+            }
+        };
+
+        var canSpecs = [] , selectedSpecs = [];
+        var GoodMod = {
+            productId:0,
+            nowSelected:[],
+            all_use_spec:[],
+            spec:{},
+            ev:{
+                                'click .operater':function(){
+                                        if(confirm('删除后货品数据将不能恢复，确认删除本行？')){
+                                            var productId = arguments[1].getParent('tbody').getElements('.private_spec_value_id').get('value');
+                                            GoodMod.nowSelected.each(function(i,k){
+                                                 if(i.sort().toString() === productId.sort().toString()) GoodMod.nowSelected.splice(k,1);
+                                            });
+                                            arguments[2].target.getParent('.productNode').dispose();
+                                            var id = arguments[2].target.getParent('tr').get('product_id');
+                                            currentPageGoods.each(function(i,k){
+                                                if(id === i['product_id']) currentPageGoods.splice(k,1);
+                                            });
+                                            GoodMod.calcGoodsNum();
+                                            if(parseInt($('goodsNum').get('html'))%10 === 0 && GoodMod.p) GoodMod.p.toPrev();
+                                        }
+                                },
+                                'click span.edit':function(){
+                                             var pid=arguments[1].getParent('tr').get('product_id');
+                                             var member_lv=arguments[1].getParent('tr').getElements('input[key^=member_lv_price]');
+                                             var info='';
+                                             member_lv.each(function(v,i){
+                                                    var vl = v.get('value') || '';
+                                                    info+='&level['+v.get('lv_id')+']='+vl;
+                                             });
+                                             window.fbox= new Dialog('index.php?app=b2c&ctl=admin_goods_editor&act=set_mprice',{ajaxoptions:{data:info,method:'post'},modal:true});
+                                             window.fbox.onSelect=function(arr){
+                                                 arr.each(function(el,i){
+                                                      member_lv[i].value=el.value;
+                                                 });
+                                             }
+                                 },
+                                 'click .pro-marketable-check':function(){
+                                        arguments[1].value = arguments[1].checked?true:false;
+                                 }
+
+                    },
+            init:function(spec){
+                var self = this;
+                if(selectedGoods){
+                currentPageGoods = selectedGoods;
+                selectedGoods.each(function(item,k){
+                    var goodSpec = [];
+                    item.spec_desc.each(function(item){
+                        goodSpec.push(item.spec_private_value_id);
+                    });
+                    self.nowSelected.push(goodSpec);
+                });
+                    self.calcGoodsNum();
+                    self.specSelectEvent(spec);
+                }
+            },
+            createAllGoods:function(target){
+                var self = this;
+                new Request.JSON({
+                        url:'index.php?app=b2c&ctl=admin_products&act=doAddSpec&create=true',
+                        method:'post',
+                        data:$('typeDetailView'),
+                        onComplete:function(es){
+                            if(!es){alert('请求失败或者超出最大限额');return;}
+                            if(es.msg) {alert(es.msg);return;}
+                            var goods=selectedGoods=es.goods.products;
+                            if(es.goods.all_use_spec) self.all_use_spec=es.goods.all_use_spec;
+                            currentPageGoods = self.objtoArr(goods);
+                            currentPageGoods.each(function(g, i) {
+                                Object.merge(g,self.json2data(i)||{});
+                            });
+                            self.calcGoodsNum();
+                            GoodMod.spec = es.goods.spec;
+                            self.specSelectEvent(es.goods.spec);
+                            self.nowSelected = [];
+                            self.all_use_spec.each(function(i){
+                                self.nowSelected.push(this.objtoArr(i));
+                            }.bind(self));
+                            //target.set('disabled',true);
+                            //target.getNext().set('disabled',true);
+                        }
+                }).send();
+            },
+            json2data: function (i) {
+                var rs = location.search.match(/goods_info=([^&]*)(?=\\s|&|$)/i);
+                if(rs) {
+                    rs = rs[1];
+                    rs = JSON.decode(decodeURIComponent(rs));
+                    return {
+                        //bn: rs['goods[product][0][bn]'] ? rs['goods[product][0][bn]'] + '-' + i : String.uniqueID(),
+                        bn:rs['goods[product][0][bn]'] ? rs['goods[product][0][bn]'] + '-' + i:'',
+                        cost: rs['goods[product][0][price][cost][price]'],
+                        mLevelPrice:[
+                            {member_lv_id:1,ml_price:rs['goods[product][0][price][member_lv_price][1]']||''},
+                            {member_lv_id:2,ml_price:rs['goods[product][0][price][member_lv_price][2]']||''},
+                            {member_lv_id:3,ml_price:rs['goods[product][0][price][member_lv_price][3]']||''},
+                            {member_lv_id:4,ml_price:rs['goods[product][0][price][member_lv_price][4]']||''}
+                        ],
+                        mktprice: rs['goods[product][0][price][mktprice][price]']||'',
+                        price: rs['goods[product][0][price][price][price]']||'',
+                        store: rs['goods[product][0][store]']||'',
+                        store_place: rs['goods[product][0][store_place]']||'',
+                        weight: rs['goods[product][0][weight]']||''
+                    }
+                }
+            },
+            objtoArr:function(e){
+                var arr = [];
+                Object.each(e, function(v,k){
+                    arr.push(v);
+                });
+                return arr;
+            },
+            calcGoodsNum:function(){
+                $('goodsNum').set('html',currentPageGoods.length);
+                $$('.item-wrap,#save-action').setStyle('display','');
+                if(parseInt($('goodsNum').get('html')) === 0){
+                    $$('.item-wrap,#save-action').setStyle('display','none');
+                }
+                if(this.p && $$('span.current')[0]){
+                    this.p.goPage(parseInt($$('span.current')[0].get('html')));
+                }else{
+                    this.p = new Pager(currentPageGoods,document.getElement('.pager'),parseInt($('goodsNum').get('html')),10);
+                    this.p.goPage(1);
+                }
+            },
+            addOne:function(){
+                    var self = this;
+                    new Request.JSON({
+                        url:'index.php?app=b2c&ctl=admin_products&act=addProduct&product_id='+self.productId,
+                        method:'post',
+                        data:$('typeDetailView'),
+                        onComplete:function(re){
+                            self.all_use_spec = re.all_use_spec;
+                            if(parseInt($('goodsNum').get('html')) >= re.all_use_spec.length) return;
+                            currentPageGoods.push(re.product);
+                            currentPageGoods.each(function(g,i) {
+                                Object.merge(g,self.json2data(i)||{});
+                            });
+                            self.calcGoodsNum();
+                            self.productId++;
+                            GoodMod.spec = re.spec;
+                            self.specSelectEvent(GoodMod.spec);
+                        }
+                }).send();
+            },
+            specSelectEvent:function(allSpec){
+                var self = this;
+                var arrIsHas=function(b,a){
+                     var bool = false;
+                     b.each(function(i){
+                         if(i.sort().toString() === a.sort().toString()) bool=true;
+                     });
+                     return bool;
+                };
+                var isCanClick = function(item,id,currentSpec){
+                    currentSpec[id] = item;
+                    var a  = this.objtoArr(currentSpec);
+                    var b = self.nowSelected;
+                    return arrIsHas(b,a);
+                }.bind(this);
+                $('goods-table').getElements('.goods-spec-selected').removeEvents('mouseenter').addEvents({'mouseenter':function(e){
+                    e.stop();
+                    var target = $(e.target);
+                    var id = this.get('specid');
+                    var specNode = this.getParent().getElement('.select-spec-value');
+                    specNode.setStyles({
+                        'display':'block',
+                        'position':'absolute',
+                        'border':'1px solid #ddd',
+                        'z-index':'999',
+                        'top':this.getSize().y-8,
+                        'left':this.getPosition().x-52
+                    });
+                    var canSelectSpecs = allSpec[id].option;
+                    var currentSpecKey = this.getParent('td').getElements('.private_spec_value_id').get('spec_id');
+                    var currentSpecValue  = this.getParent('td').getElements('.private_spec_value_id').get('value');
+                    var currentSpec =  currentSpecValue.associate(currentSpecKey);
+                    if(allSpec[id].spec_type === 'image'){
+                        canSelectSpecs.each(function(item){
+                                new Element('li',{
+                                    'html':'<img width="30" height="30" style="border:1px solid #ddd" src="'+item.spec_goods_imagesrc+'" alt="'+item.spec_value+'">',
+                                    'spec_value':item.spec_value,
+                                    'spec_value_id':item.spec_value_id,
+                                    'private_spec_value_id':item.private_spec_value_id,
+                                    'class':isCanClick(item.private_spec_value_id,allSpec[id].spec_id,currentSpec) === false?'':'noclick',
+                                    'spec_goods_imagesrc':item.spec_goods_imagesrc
+                                }).inject(specNode.getElement('ul'));
+                        });
+                    }else{
+                        canSelectSpecs.each(function(item){
+                            new Element('li',{
+                                'html':item.spec_value,
+                                'spec_value':item.spec_value,
+                                'spec_value_id':item.spec_value_id,
+                                'private_spec_value_id':item.private_spec_value_id,
+                                'class':isCanClick(item.private_spec_value_id,allSpec[id].spec_id,currentSpec) === false?'':'noclick',
+                                'styles':{
+                                    'height':30,
+                                    'width':30,
+                                    'lineHeight':30,
+                                    'overflow':'hidden',
+                                    'border':'1px solid #ddd'
+                                }
+                            }).inject(specNode.getElement('ul'));
+                        });
+                    }
+                    self.onSelectSpec(specNode.getElements('ul li'),canSelectSpecs,currentSpecValue);
+                    },
+                    'mouseleave':function(e){
+                        e.stop();
+                        $$('.select-spec-value').setStyle('display','none').getElement('ul').set('html','');
+                    }
+                    });
+            },
+            onSelectSpec:function(els,specs,currentSpec){
+                var self = this;
+                var setValue = function(nodeItem){
+                        nodeItem.getParent('.goods-spec-selected').getNext('.spec_value').set('value',nodeItem.get('spec_value'));
+                        nodeItem.getParent('.goods-spec-selected').getNext('.private_spec_value_id').set('value',nodeItem.get('private_spec_value_id'));
+                        nodeItem.getParent('.goods-spec-selected').getNext('.spec_value_id').set('value',nodeItem.get('spec_value_id'));
+                }
+                els.addEvent('click',function(e){
+                    var nodeItem = e.target.tagName.toLowerCase() === 'li' ? $(e.target) : $(e.target).getParent('li');
+                    if(nodeItem.get('class') && nodeItem.get('class').contains('noclick')) return;
+                    currentPageGoods.each(function(i){
+                        if(i.product_id === $(e.target).getParent('tr').get('product_id')){
+                            i.spec_desc.each(function(k){
+                                if(parseInt(k.spec_id) === parseInt(nodeItem.getParent('.spec-block').getElement('.select-spec-unselect').get('specid'))){
+                                   k.spec_value = nodeItem.get('spec_value');
+                                   //k.private_spec_value_id = nodeItem.get('private_spec_value_id');
+                                   k.spec_private_value_id = nodeItem.get('private_spec_value_id');
+                                   k.spec_value_id = nodeItem.get('spec_value_id');
+                                   if(nodeItem.get('spec_goods_imagesrc')) k.spec_image_url = nodeItem.get('spec_goods_imagesrc');
+                                }
+                            });
+                        }
+                    });
+                    if(nodeItem.get('spec_goods_imagesrc')){
+                        nodeItem.getParent('.goods-spec-selected').getElement('.specSelect img').set('src',nodeItem.get('spec_goods_imagesrc'));
+                    }
+                    setValue(nodeItem);
+                    nodeItem.getParent('.goods-spec-selected').getElement('.specSelect .selectedValue').set('html',nodeItem.get('spec_value'));
+                    if(currentSpec[0] != "" && currentSpec[1] != ""){
+                        self.nowSelected.each(function(i,k){
+                             if(i.sort().toString() === currentSpec.sort().toString()) self.nowSelected.splice(k,1);
+                        })
+                    }
+                    var privateId = nodeItem.getParent('tbody').getElements('.private_spec_value_id').get('value');
+                    if(privateId[0] != "" && privateId[1] != "") self.nowSelected.push(privateId);
+                    $$('.select-spec-value').setStyle('display','none').getElement('ul').set('html','');
+                    GoodMod.specSelectEvent(GoodMod.spec);
+                });
+            }
+        };
+
+
+        /*
+        * 翻页组件
+        */
+
+        var Pager = function(items,pageBar,totalNum,pageNum){
+            this.items = items;
+            this.pageBar = pageBar;
+            this.totalNum = totalNum;
+            this.pageNum = pageNum;
+        };
+        Pager.prototype = {
+            init:function(){
+                if(currentPageGoods.length>10) this.pageBar.setStyle('display','');
+                var prevNode = this.pageBar.getElement('.prev').clone();
+                var nextNode = this.pageBar.getElement('.next').clone();
+                var pageBarNode = this.bindLink();
+                this.pageBar.innerHTML = pageBarNode;
+                prevNode.inject(this.pageBar,'top');
+                nextNode.inject(this.pageBar,'bottom');
+                this.pageBar.getElements('.prev,.next').removeEvents('click').addEvent('click',function(e){
+                    var isPrev = $(e.target).get('class').test(/prev/) === true ? true : false;
+                    if(isPrev) {
+                        this.toPrev();
+                    }else{
+                        this.toNext();
+                    }
+                }.bind(this));
+                this.pageBar.getElements('.pagernum').removeEvents('click').addEvent('click',function(e){
+                    this.goPage(parseInt($(e.target).get('html')));
+                }.bind(this));
+            },
+            goPage:function(n){
+                $('goods-table').getElements('tbody').each(function(item,k){
+                    var f=0;
+                    item.getElements('input').each(function(i){
+                     if(i.get('key').test(/member_lv_price/)){
+                         currentPageGoods[(this.currentPage-1)*10 + k]['mLevelPrice'][f]['ml_price'] = i.get('value');
+                         f++;
+                     }
+                     else{
+                         currentPageGoods[(this.currentPage-1)*10 + k][i.get('key')] = i.get('value');
+                     }
+                    }.bind(this));
+                }.bind(this));
+                var t=this.totalNum%this.pageNum === 0 ? this.totalNum/this.pageNum : parseInt(this.totalNum/this.pageNum +1);
+                if(this.currentPage<1) this.currentPage=1;
+                if(this.currentPage>t) this.currentPage=t;
+                this.currentPage=n;
+                //if(this.currentPage) GoodsParams[this.currentPage] = $('goods-table').toQueryString();
+                this.totalNum = parseInt($('goodsNum').get('html'));
+                if(n<1) n=1;
+                if(n>t) n=t;
+                this.currentPage = n;
+                this.init();
+                var goods = this.getGoodsJson(currentPageGoods,this.currentPage);
+                if(goods) $('goods-table').getElements('tbody').dispose();
+                Object.each(goods,function(i){
+                    ExMvc.View.initance({
+                            tpl:$('goodTpl').get('value'),
+                            events:GoodMod.ev,
+                            config:{tagName:'tbody',attrs:{'class':'productNode'}},
+                            contains:$('goods-table'),
+                            onRender:function(){
+                                if(this.el.getElement('input').get('value') === 'true') this.el.getElement('input').set('checked','checked');
+                            }
+                    }).add(i);
+                }.bind(this));
+                GoodMod.specSelectEvent(GoodMod.spec);
+            },
+            toNext:function(){
+                this.goPage(this.currentPage+1);
+            },
+            toPrev:function(){
+                this.goPage(this.currentPage-1);
+            },
+            getGoodsJson:function(obj,n){
+                var o = {};
+                for(var i=0;i<this.pageNum;i++){
+                    if(!obj[i+(n-1)*this.pageNum]) continue;
+                    o[i] = obj[i+(n-1)*this.pageNum];
+                }
+                return o;
+            },
+            pageLink:function(from,to){
+                var links=[];
+                for(var i=from,l=to+1;i<l;i++){
+                    this.currentPage==i?links.push('<span class="current">'+i+'</span>'):links.push('<a class="pagernum" href="javascript:void(0)">'+i+'</a>');
+                }
+                return links.join(' ');
+            },
+            bindLink:function(){
+            var links=[],t=this.totalNum%this.pageNum === 0 ? this.totalNum/this.pageNum : parseInt(this.totalNum/this.pageNum +1),c=this.currentPage;
+            if(t<11){links.push(this.pageLink(1,t));
+            }else{
+                if(t-c<8){
+                    links.push(this.pageLink(1,3));
+                    links.push(this.pageLink(t-8,t));
+                }else if(c<10){
+                    links.push(this.pageLink(1,Math.max(c+3,10)));
+                    links.push(this.pageLink(t-1,t));
+                }else{
+                    links.push(this.pageLink(1,3));
+                    links.push(this.pageLink(c-2,c+3));
+                    links.push(this.pageLink(t-1,t));
+                }
+            }
+                return links.join('...');
+            }
+        };
+    })();
+</script>

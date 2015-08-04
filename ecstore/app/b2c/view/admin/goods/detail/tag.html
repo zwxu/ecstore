@@ -1,0 +1,19 @@
+<table width="100%" border="0" cellpadding="0" cellspacing="0" >
+<tr>
+<td width='90%'><h3><{t}>标签<{/t}></h3></td>
+<td style="text-align:right;padding-top:3px;padding-right:10px;">
+
+ <{help docid="74" type="link-mid"}><{t}>点击查看帮助<{/t}><{/help}>
+
+</td>
+</tr>
+</table>
+<textarea style="width:60%;height:70px" id="x_tags" name="tags"></textarea>
+<div class="tagEditor" style="height:auto" id="x_taginputer">
+<{foreach from=$goods.taglist item=aTag}>
+  <span><{$aTag.tag_name}></span>
+<{/foreach}>
+</div>
+<script>
+new tagInputer($('x_tags'),$ES('span','x_taginputer')).set(<{json from=$goods.taged}>);
+</script>

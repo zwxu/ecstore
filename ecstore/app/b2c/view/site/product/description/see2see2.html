@@ -1,0 +1,88 @@
+<div id="ald-skuRight" class="ald-skuRight seeModi">
+  <div class="ald ald-03054">
+    <div class="ald-inner">
+      <div class="ald-hd">
+      <s></s>
+      <span>猜你喜欢</span>
+      </div>
+      <div class="ald-carousel">
+        <div class="wrapCon" style="position: relative;">
+          <ul class="ald-switchable-content" style="position: absolute;">
+            <{if !!$seelist}>
+            <{foreach from=$seelist item=linklist}>
+            <li class="ks-switchable-panel-internal963" img_id='<{$image_default}>' style="display: block;">
+              <{if $linklist.udfimg == 'true'}>
+              <{assign var="gimage" value=$linklist.thumbnail_pic}>
+              <{else}>
+              <{assign var="gimage" value=$linklist.image_default_id|default:$defaultImage}>
+              <{/if}>
+              <a href='<{link app=b2c ctl=site_product act=index arg0=$linklist.goods_id}>' class="ald-03054-act" target="_blank">
+                <img lazyload="<{$gimage|storager:'s'}>" style='height:112px;width:112px'/>
+              </a>
+              <p class="look_price"><{$linklist.price|cur_odr:$order.currency}></p>
+            </li>
+            <{/foreach}>
+            <{/if}>
+          </ul>
+        </div>
+        <ul class="ald-switchable-trigger">
+        <li class="scrollarrow ald-switchable-prev-btn">上一个</li>
+        <li class="scrollarrow ald-switchable-next-btn">下一个</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+window.addEvent('domready',function(){
+  var picThumbnailItems=$$('#ald-skuRight .ald-switchable-content li a');
+  var picThumbnail=$('ald-skuRight').getElement('.ald-switchable-content li');
+  if(!picThumbnailItems.length)return;
+  var picscroll=$('ald-skuRight').getElement('.ald-switchable-trigger');
+  var scrollARROW=picscroll.getElements('.scrollarrow');
+  var picsContainer=$E('#ald-skuRight .ald-switchable-content').scrollTo(0,0);
+  picsContainer.store('selected',picThumbnailItems[0]);
+	var picsMain=picsContainer.getParent('.wrapCon');
+
+  if(picsContainer.getSize().y<picThumbnail.getSize().y*picThumbnailItems.length)
+  scrollARROW.addClass('visible');
+
+  var carousel = new Switchable(document.getElement('.ald-carousel'), {
+    effect: 'scrolly',
+    autoplay:false,
+    //steps: (picsContainer.getSize().y/picThumbnail.getSize().y).toInt(),
+    prev:'.ald-switchable-prev-btn',
+    next:'.ald-switchable-next-btn',
+    hasTriggers:false,
+    viewSize: [picsMain.getSize().y,150],
+    content:'.ald-switchable-content',
+    panels:'li[img_id]',
+    circular: false,
+    haslrbtn:true,
+    disableCls: 'disable',
+    lazyDataType: 'img'
+  });
+  new DataLazyLoad({lazyDataType:'img',img:'lazyload'});
+  var forInit = $$('#ald-skuRight .ald-switchable-content img[lazyload]');
+  var win = this;
+  (function(){
+      if(!forInit.length)return false;
+      var loop = arguments.callee;
+      var loop = function(){
+          forInit.each(function(item,index){
+              if(!item)return;
+              if((item.getPosition().y-750)<picsMain.getSize().y){
+                  if(item.get('lazyload')){
+                     item.set('src',item.get('lazyload')).removeProperty('lazyload')
+                  }
+                  // forInit.erase(item);
+              }
+
+              if(index == (forInit.length-1)){loop.delay(200);}
+
+          });
+      }
+      loop.delay(200);
+  })();
+});
+</script>

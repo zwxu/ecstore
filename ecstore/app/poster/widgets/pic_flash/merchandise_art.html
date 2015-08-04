@@ -1,0 +1,64 @@
+ <h4 class="new_bou_h4">晒单</h4>
+<div class="Drying_single" id="<{$widgets_id}>_goods-viewer"   style="height:280px;">
+   <div class="none toleft" style="float: left;cursor:pointer;border:0px;margin-right:11px; width:12px;">
+       <a  class="clo_ds_le"><img src="images/clo_121.gif" alt="" /></a>
+   </div>
+
+   <div class='picscroll' style="height:260px;float: left;width:519px;margin:10px 0px 0px 0px;">
+      <div  class='pics' style='width:519px;float: left;overflow:hidden;'>
+          <{assign var=count value=count($data.poster_imgurl)*173}>
+          <div  style="height:260px;overflow:hidden;float: left;width:<{$count}>px;">
+          <{foreach from=$data.poster_imgurl item=pic key=k}>
+              <li style="float: left;">
+              <a href="javascript:void(0);" posterurl="<{$pic.linktarget}>" posterid="<{$data.poster_id}>"   onclick="toclickcount_<{$widgets_id}>(this);" >
+              <img src="images/transparent.gif" lazyload=<{$pic.link|storager}> class="img-lazyload"  alt="<{$setting.ad_pic_txt}>" <{if $pic.width}>width='<{$pic.width}>'<{/if}> <{if $pic.height}>height='<{$pic.height}>'<{/if}> style="width:149px; height:196px;overflow:hidden;">
+              </a>
+              <p><{$pic.linkinfo}></p>
+              </li>
+           <{/foreach}>
+           </div>
+       </div>
+       <div class="cl_zhi"></div>
+   </div>
+
+    <div class="none toright" style="float: left;cursor:pointer;margin-right:0px;border:0px;width:12px;">
+        <a  class="clo_ds_le"><img src="images/clo_118.gif" alt="" /></a>
+    </div>
+   <div class="cl_zhi"></div>
+</div>
+
+
+<script> 
+window.addEvent('domready',function(){
+    var picscroll=$E('#<{$widgets_id}>_goods-viewer .picscroll');
+    var scrollARROW=$E('#<{$widgets_id}>_goods-viewer').getElements('.none');
+    var picsContainer=$E('.pics',picscroll).scrollTo(0,0);
+    var num='<{$num}>';
+    if(picsContainer.getSize().x < picsContainer.getScrollSize().x){
+         scrollARROW.setStyle('visibility','visible').addEvent('click',function(){
+              var scrollArrow=this;
+               var to=eval("picsContainer.scrollLeft"+(scrollArrow.hasClass('toleft')?"-":"+")+"picsContainer.offsetWidth");
+               picsContainer.retrieve('fxscroll',new Fx.Scroll(picsContainer,{'link':'cancel'})).start(to);
+         });
+    };
+});
+
+function toclickcount_<{$widgets_id}>(e){
+    var rehref=e.getAttribute('posterurl');
+    var posterid=e.getAttribute('posterid');
+    new Request({
+        url:'<{link app=poster ctl=site_poster act=clickcount}>',
+        method:'get',
+        onComplete:function(a){
+           var newtarget=<{if $data.poster_isblank}>"_blank"<{else}>"_self"<{/if}>;
+            if(rehref){
+                window.open(rehref,newtarget);
+            }else{
+                
+            }
+        },
+        data:"posterid="+posterid
+        }).send();
+}
+
+</script> 

@@ -1,0 +1,236 @@
+<input type='hidden' id='sequence-<{$sid}>'/>
+<div id='region-treelist-<{$sid}>-loading'></div>
+<div id='region-treelist-<{$sid}>' class='x-tree-list' style="overflow-y:auto;height:85%"></div>
+<div class="mainFoot" style="padding: 5px;">
+  <{button type="button" id="dlg_ok-{$sid}" label="确定"}>
+  <{button type="button" isclosedialogbtn="true" id="dlg_cancel-{$sid}" label="取消"}>
+</div>
+<script>
+void function(){
+
+ var sequence=$('sequence-<{$sid}>');
+ var sequence_dialog=$('sequence-<{$sid}>').getParent('.dialog');
+ var _inputText=sequence_dialog.retrieve('iptText');
+ var _inputHidden=sequence_dialog.retrieve('iptHidden');
+ var _imputHiddenValue=_inputHidden.value.split(',');
+ var multi='<{$multi}>';
+ var RegionList=TreeList;
+
+<{if $multi}>
+      $('dlg_ok-<{$sid}>').addEvent('click',function(){
+      var nodes=sequence_dialog.getElements('.node').filter(function(n){
+         return n.getElement('input[type=checkbox]').checked;
+      });
+
+     var IDdatas=[];
+     var Namedatas=[];
+     nodes.each(function(node){
+
+       IDdatas.push(node.getElement('input[type=checkbox]').getValue());
+       if(node.getParent().id=='region-treelist-<{$sid}>'){
+             Namedatas.push(node.getElement('.node-name').get('text'));
+         }
+     });
+      _inputText.set('value',Namedatas.join(','));
+      _inputHidden.set('value',IDdatas.join(','));
+
+      sequence_dialog.retrieve('instance').close();
+
+     });
+     RegionList=new Class({
+        Extends:TreeList,
+        createNode:function(data,ext){
+          var options=this.options;
+          var nc=options.nodeClass;
+          var node_handle=new Element('span',{'class':nc.handle})
+                          .set({'pid':data['PID'],
+                                'nid':data['NID'],
+                                'hasc':data['HASC']
+                                })
+                           .setHTML('&nbsp;');
+          var node_line=new Element('span',{'class':nc.nl}).setHTML('&nbsp;');
+
+          var node_checkbox=new Element('input',{
+                  type:'checkbox',
+                  name:options.checkboxName,
+                  value:data['NID'],
+                  pid:data['PID']
+
+                });
+
+              if(_imputHiddenValue.indexOf(data['NID'])>-1){
+                  node_checkbox.store('edit',true).addEvent('change',function(){
+                     this.retrieve('edit')=false;
+                     this.removeEvevt('change',arguments.callee);
+                  });
+                   node_checkbox.store('check',true);
+
+              }else if(_imputHiddenValue.indexOf(data['NID']+"|close")>-1){
+                   node_checkbox.store('check',true);
+              }
+          var node_icon=new Element('span',{'class':nc.icon}).setHTML('&nbsp;');
+          var node_name=  new Element('span',{'class':nc.name}).setText(data['CNAME']);
+
+          var node=new Element('span',{'class':nc.clazz})
+               .adopt([node_handle,node_line,node_checkbox,node_icon,node_name]);
+          if(!!data['HASC'].toInt()){
+             var _this=this;
+             node_handle.addClass(nc.close);
+             node_checkbox.set('value',node_checkbox.get('value')+'|close');
+             node_handle.addEvent('click',function(e){
+                 var node=this.getParent('.'+nc.clazz);
+                 if(this.hasClass(nc.close)){
+                   if(!node.getNext()||node.getNext().getTag()!=='div'){
+                     var ncontainer=new Element('div',{'class':nc.cbox}).injectAfter(node);
+                     _this.loadNodes(this.get('nid'),ncontainer);
+                     this.addClass(nc.loading);
+                     node_checkbox.set('value',node_checkbox.get('value').toInt());
+
+                   }else{
+                     if(node.getNext()&&node.getNext().getTag()=='div'){
+                        node.getNext().show();
+                      }
+                   }
+                    this.removeClass(nc.close);
+                 }else{
+                    if(node.getNext()&&node.getNext().getTag()=='div'){
+                            node.getNext().hide();
+                            this.addClass(nc.close);
+                    }
+                 }
+             });
+
+
+          }
+           var checkPNode=function(cnode,checked){
+                var pnode=cnode.getParent().getPrevious();
+                while(pnode.hasClass(nc.hasc)){
+                   pnode.getElement('input[type=checkbox]').set('checked',checked);
+                   pnode=pnode.getParent().getPrevious();
+                }
+           };
+           node_checkbox.addEvent('click',function(rc){
+
+                    var node=this.getParent('.'+nc.clazz);
+                    var nodeNext=node.getNext();
+                    if(nodeNext&&nodeNext.getTag()=='div'){
+                            $ES('input[type=checkbox]',nodeNext).set('checked',this.checked==true?true:false);
+                         }
+                     var nodebox=node.getParent();
+                     if(nodebox.hasClass(nc.cbox)&&nodebox.getFormElementsPlus().length>0){
+                        checkPNode(node,true);
+                     }else if(nodebox.hasClass(nc.cbox)){
+                         checkPNode(node,false);
+                     }
+                 });
+
+              var pcheckbox=$E('input[value='+node_checkbox.get('pid')+']',this.container);
+              if(pcheckbox&&pcheckbox.checked){
+                   if(!pcheckbox.retrieve('edit')){
+                       node_checkbox.store('check',true);
+                   }
+                }
+
+              return node;
+     }
+   });
+<{else}>
+      $('dlg_ok-<{$sid}>').addEvent('click',function(){
+      var node=sequence_dialog.getElements('.node').filter(function(n){
+         return n.getElement('input[type=radio]').checked;
+      });
+
+       if(!node||!node.length>0){
+
+         _inputText.set('value','<{t}>[无上级]<{/t}>');
+         _inputHidden.set('value',0);
+      }else{
+      _inputText.set('value',node.getElement('.node-name').get('text'));
+      _inputHidden.set('value',node.getElement('input[type=radio]').getValue());
+      }
+      $('dlg_cancel-<{$sid}>').fireEvent('click');
+
+     });
+     RegionList=new Class({
+        Extends:TreeList,
+        createNode:function(data){
+          var options=this.options;
+          var nc=options.nodeClass;
+          var node_handle=new Element('span',{'class':nc.handle})
+                          .set({'pid':data['PID'],
+                                'nid':data['NID'],
+                                'hasc':data['HASC']
+                                })
+                           .setHTML('&nbsp;');
+          var node_line=new Element('span',{'class':nc.nl}).setHTML('&nbsp;');
+          var node_checkbox=new Element('input',{
+          type:'radio',
+          name:options.checkboxName,
+          value:data['NID'],pid:data['PID']}
+          );
+          var node_icon=new Element('span',{'class':nc.icon}).setHTML('&nbsp;');
+          var node_name=  new Element('span',{'class':nc.name}).setText(data['CNAME']);
+
+          var node=new Element('span',{'class':nc.clazz})
+               .adopt([node_handle,node_line,node_checkbox,node_icon,node_name]);
+
+
+
+
+
+          if(!!data['HASC'].toInt()){
+             var _this=this;
+             node_handle.addClass(nc.close);
+             node_checkbox.set('value',node_checkbox.get('value'));
+             node_handle.addEvent('click',function(e){
+                 var node=this.getParent('.'+nc.clazz);
+                 if(this.hasClass(nc.close)){
+                   if(!node.getNext()||node.getNext().getTag()!=='div'){
+                     var ncontainer=new Element('div',{'class':nc.cbox}).injectAfter(node);
+                     _this.loadNodes(this.get('nid'),ncontainer);
+                     this.addClass(nc.loading);
+                     node_checkbox.set('value',node_checkbox.get('value').toInt());
+
+                   }else{
+                     if(node.getNext()&&node.getNext().getTag()=='div'){
+                        node.getNext().show();
+                      }
+                   }
+                    this.removeClass(nc.close);
+                 }else{
+                    if(node.getNext()&&node.getNext().getTag()=='div'){
+                            node.getNext().hide();
+                            this.addClass(nc.close);
+                    }
+                 }
+             });
+
+          }
+
+         return node;
+     }
+
+     });
+
+ <{/if}>
+
+
+ new RegionList({
+                           remoteURL:'index.php?ctl=dly_type&act=getRegionById&{param}={value}',
+                           remoteParamKey:'p[0]',
+                           container:'region-treelist-<{$sid}>',
+                           checkboxName:'region',
+                           showStep:1,
+                           dataMap:{
+                              PID:'p_region_id',
+                              NID:'region_id',
+                              CNAME:'local_name',
+                              HASC:'child_count'
+                           }
+  });
+
+}();
+
+
+</script>
+

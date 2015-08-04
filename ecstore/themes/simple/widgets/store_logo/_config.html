@@ -1,0 +1,36 @@
+<div class="tableform">
+<div class="widgetconfig">
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+  <tbody><tr>
+    <th><{t app='b2c'}>广告尺寸：<{/t}></th>
+    <td><{t app='b2c'}>宽<{/t}>
+  <input type="text" name="ad_pic_width" value="<{$setting.ad_pic_width}>" style="width:40px">px <{t app='b2c'}>高<{/t}><input type="text" name="ad_pic_height" style="width:40px" value="<{$setting.ad_pic_height}>">px
+	</td>
+  </tr>
+  <tr>
+    <th><{t app='b2c'}>图片：<{/t}></th>
+    <td>
+	<input type=hidden name="ad_pic" value="<{$setting.ad_pic}>"><input name='ad_pic' class="imgsrc" id="ad_pic" value="<{$setting.ad_pic}>"><input type=button value="<{t app='b2c'}>上传图片<{/t}>" class="uploadbtn" onclick="addPic()">
+	</td>
+  </tr>
+   <tr>
+    <th><{t app='b2c'}>图片描述：<{/t}></th>
+    <td><input type="text" name="ad_pic_txt" value="<{$setting.ad_pic_txt}>"></td>
+  </tr>
+  <tr>
+    <th><{t app='b2c'}>图片链接：<{/t}></th>
+    <td><input type="text" name="ad_pic_link" value="<{$setting.ad_pic_link}>"></td>
+  </tr>
+</tbody></table>
+</div>
+</div>
+<script>
+	function addPic(){
+			var url='index.php?app=desktop&act=alertpages&goto='+encodeURIComponent("index.php?app=image&ctl=admin_manage&act=image_broswer&type=big");
+			Ex_Loader('modedialog',function(){
+			return new imgDialog(url,{onCallback:function(image_id,image_src){
+					 $('ad_pic').value=image_src;
+			}})	;
+			});
+		}
+</script>

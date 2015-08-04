@@ -1,0 +1,59 @@
+<{if $standalone}>
+<html>
+ <head>
+  <title><{t}>网店管理<{/t}></title>
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<link rel="apple-touch-icon-precomposed" href="mobile/images/home_icon.png" />
+	<link rel="shortcut icon" href="../favicon.gif" type="image/gif" /> 
+	<link rel="stylesheet" href="statics/flow.css" type="text/css" media="screen"/>
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0, user-scalable=yes" />
+	<style>
+	html{overflow-y:scroll;margin:0;padding:0;border:0;outline:0;}
+	*{font-size:0.7em}
+	table{border-collapse: collapse;}
+	body{color:#000;margin:0;padding:0;border:0;outline:0;}
+	</style>
+	<!--[if !IE]>-->
+	<style>
+	@media handheld{*{font-size:1em}}
+	@media only screen and (max-device-width: 480px) {  *{font-size:1em}}
+	</style>
+	<!--<![endif]-->
+	<{script src="flow-standalone.js" }>
+ </head>
+ <body id="flow">
+ <noscript>  
+  <div class='noscript error'>
+     <{t}>您好，要正常运行BBC后台，浏览器必须支持Javascript<{/t}>
+  </div>
+</noscript>
+
+<table id="flow-main-menu"><tr>
+<{foreach from=$_ACTIONS_ item=menu key=key}>
+	<td<{if $env.get.act eq $key}> class="current"<{/if}> style="width:<{100/count($_ACTIONS_)|number_format:0}>%" onclick="flow.tab('<{$key}>')"><{$menu}></td>
+<{/foreach}>
+</tr></table>
+
+<{/if}>
+
+<div class="tabs-wrap" id="flow-menu-bar">
+	<ul>
+<{foreach from=$menus item=menu key=key}>
+	<li class="tab <{if $env.get.menu eq $key}>current<{/if}>" onclick="flow.tab('<{$key}>')"><span><{$menu}></span></li>
+<{/foreach}>
+	</ul>
+</div>
+
+<{if $_OUTPUT_}>
+<{$_OUTPUT_}>
+<{else}>
+<{include file=$_PAGE_}>
+<{/if}>
+<script>
+flow.action="<{$_QUERY_STRING}>";
+</script>
+
+<{if $standalone}>
+ </body>
+</html>
+<{/if}>

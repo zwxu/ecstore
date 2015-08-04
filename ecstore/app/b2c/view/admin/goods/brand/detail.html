@@ -1,0 +1,135 @@
+<form id="brandForm" action="index.php?app=b2c&ctl=admin_brand&act=save"  method="POST" >
+<input type="hidden" name="brand_id" value="<{$brandInfo.brand_id}>">
+<div class="tableform">
+<div class="division">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+  <th><{t}>品牌名称：<{/t}></th>
+  <td><{input type="text" name="brand_name" style="width:120px" vtype="required" value=$brandInfo.brand_name}><em><font color='red'>*</font></em></td>
+</tr>
+<tr>
+  <th><{t}>排序：<{/t}></th>
+  <td><{input style="width:50px;" type="unsigned" name="ordernum"  value=$brandInfo.ordernum}></td>
+</tr>
+
+<tr>
+  <th><{t}>品牌别名：<{/t}></th>
+  <td><{input type="text" name="brand_keywords" value=$brandInfo.brand_keywords}><{t}>（|分隔，以|开头与结尾）<{/t}></td>
+</tr>
+
+</table>
+</div>
+
+<div class="division">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+  <th><{t}>网址：<{/t}></th>
+  <td><{input type="text" name="brand_url" style="width:240px" value=$brandInfo.brand_url}></td>
+</tr>
+<tr>
+  <th>LOGO：</th>
+  <td>
+  <{input type="image" name="brand_logo" value=$brandInfo.brand_logo width=160 height=90}></td>
+</tr>
+
+<tr>
+  <th>品牌资质文件：</th>
+  <td>
+  <{input type="image" name="brand_aptitude" value=$brandInfo.brand_aptitude width=160 height=90}></td>
+</tr>
+
+<tr>
+  <th><{t}>模板：<{/t}></th>
+  <td>
+  <{template_filter type="brandlist" selected=$brandInfo.brand_setting.brand_template name="brand_setting[brand_template]"}></td>
+</tr>
+
+</table>
+</div>
+
+  <!--delete begin-->
+    <div class="division">
+      <table cellpadding="0" cellspacing="0" border="0">
+	  <tr>
+          <th><{t}>TITLE<br>
+            (页面标题)<{/t}></th>
+          <td><input type="text" name="seo_title" style="width:360px" class="inputstyle" maxlength="255" value="<{$brandInfo.seo_info.seo_title}>"></td>
+        </tr>
+          <tr>
+          <th><{t}>META_KEYWORDS<br>
+            (页面关键词)<{/t}></th>
+          <td><input type="text" name="seo_keywords" style="width:360px" maxlength="255" class="inputstyle" value="<{$brandInfo.seo_info.seo_keywords}>"></td>
+        </tr>
+        <tr>
+          <th><{t}>META_DESCRIPTION<br>
+            (页面描述)<{/t}></th>
+          <td><textarea name="seo_description" rows=4 style="width:360px" class="inputstyle" cols=35 maxlength="255"/><{$brandInfo.seo_info.seo_description}></textarea></td>
+        </tr>
+      </table>
+    </div>
+  <!--delete end-->
+
+<!--tag_foreign_goods_brand-->
+
+<{if $gtype.status > 0}>
+<div class="division">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+  <th><{t}>商品类型关联：<{/t}></th>
+  <td>
+	<span style="margin-left:16px;"></span>
+  <{input type="object_select" object="goods_type@b2c" multiple="true" rowselect="true" textcol="name" name="gtype[linkid]" linkid=$gtype.linkid obj_name='gtype[info]' value=$gtype.info}>
+  </td>
+</tr>
+</table>
+</div>
+<{else}>
+<input type="hidden" class="gType" name="gtype[]" value="<{$type.default.type_id}>">
+<{/if}>
+<div class="division">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+  <th><{t}>详细说明：<{/t}></th>
+  <td><{input type="html" name="brand_desc" value=$brandInfo.brand_desc}></td>
+</tr>
+</table>
+</div>
+</div>
+
+  <div class="table-action">
+	<{button type="submit"  label=$___b2c="保存"|t:'b2c'}>
+</div>
+
+</form>
+<script>
+var extra_validator={};
+if(!extra_validator['subBrand']){
+  extra_validator['subBrand'] ={
+    'checkForm':['',function(f,i){
+        var checkNum = 0;
+        var obj = $E('.params-obj',"brandForm");
+        if(obj){
+          var val = obj.get('value');
+          val = JSON.decode(val);alert(val.length);
+          checkNum = val.length;
+        }
+        if(checkNum == 0){
+          if(confirm('<{t}>您未选择关联类型，这样将导致商品无法使用该品牌。是否确认保存<{/t}>')){
+            return true;
+          }else{
+            return false;
+          }
+        }else{
+          return true;
+        }
+      }]
+  };
+}
+$('brandForm').store('target',{
+	onComplete:function(){
+		if(opener.finderGroup['<{$env.get._finder.finder_id}>'])
+		opener.finderGroup['<{$env.get._finder.finder_id}>'].refresh();
+		//window.close();
+	}
+});
+</script>

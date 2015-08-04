@@ -1,0 +1,371 @@
+
+<div class="member-main">
+    <div>
+
+        <div class="title"><span style="float:left"><{t}>店员管理<{/t}><span class="disc">|</span> <span id='add' class="disc add-icon" >
+        <a href="javascript:void(0);" >
+        <{t}>添加新店员<{/t}></a></span></span>
+        <span class="noticebox"><{t}>在此添加管理店铺会员<{/t}></span></div>
+
+        <{if !$receiver}>
+        <div class="noinfo"><{t}>没有店员<{/t}></div>
+        <{/if}>
+        <!--<span><a href="<{link app=b2c ctl='site_member' act='add_receiver'}>" class="lnk"><img src="<{$res_url}>/btn-addaddress.gif" /></a></span>
+        -->
+        <div id='addr_div' style="display:none">
+            <form id='apply_form' method="post" action="<{link app=business ctl='site_store' act='insert_rec'}>">
+                <div class="division" style="border:none; border-bottom:1px dashed #ddd">
+                    <table cellpadding="0" class="forform" cellspacing="0" border="0">
+                        <tr>
+                            <th><span class="fontColor3">*</span><{t}>用户名：<{/t}></th>
+                            <td><{input class="inputstyle" name="name" type="text"  id="uname" size="30" vtype="required"  onblur='namecheck(this);' value=$name|escape:'html' }><span id="remind_comm_name"></span>
+                            <{input type='hidden' name='user' id='usertype'}>
+                            <{input type='hidden' name='store_id' id='storeid' value=$store_id}>
+                            </td>
+                            </tr>
+
+                            <tr id='reg_pass' style='display:none;'><th><span class="fontColor3">*</span><{t}>注册密码：<{/t}></th>
+                                <td>
+                                 <{input name="pam_account[login_password]" class="inputstyle" type="password" vtype="required" id="reg_passwd" size="30"}>
+                                </td>
+                            </tr>
+                           
+                            <tr id='reg_compass' style='display:none;'><th><span class="fontColor3">*</span><{t}>确认密码：<{/t}></th>
+                                <td>
+                                 <{input name="pam_account[psw_confirm]" type="password" class="inputstyle" vtype="required&&change_password" id="reg_passwd_r" size="30"}>
+                                </td>
+                            </tr>
+
+                             <tr id='reg_mail' style='display:none;'><th><span class="fontColor3">*</span><{t}>常用邮箱：<{/t}></th>
+                                <td>
+                                 <{input name="contact[commonlyemail]" class="inputstyle" id="comm_email" placeholder="yourname@xx.com" onBlur="emailCheck(this.value);" size="30"}><span id="remind_comm_email"></span>
+                                 <{t}>此邮箱将用做客服账号<{/t}>
+                                </td>
+                            </tr>
+                          
+
+                             <tr>
+                                <th><{t}>角色: <{/t}></th>
+                                <td>
+                                    <{input type="select" name="roles" options=$roles   required="true"  }>
+                                </td>
+                                <td></td>
+                            </tr>
+                    </table>
+                </div>
+                <div style="padding-left:142px; "><span class="float-span" >
+                        <{button class="btn submit-btn" type="submit" rel="_request" id='btn_new' label=$___b2c="保存"|t:'b2c'}></span>
+                    <span class="float-span" style="float:left; margin-left:8px">
+                        <{button id="unset" type="button" label=$___b2c="取消添加"|t:'b2c'}></span>
+                </div>
+            </form>
+        </div>
+       
+        <{if $receiver}>
+        <table class="gridlist border-all mt10" width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout:fixed;">
+            <tr>
+                
+                <th  class="first" style="word-wrap:break-word;"><{t}>用户名<{/t}></th>
+                <th><{t}>角  色<{/t}></th>
+                <th><{t}>联系电话<{/t}></th>
+                <th><{t}>姓  名<{/t}></th>
+                <th><{t}>邮  箱<{/t}></th>
+                <th><{t}>注册时间<{/t}></th>
+                <th><{t}>操  作<{/t}></th>
+            </tr>
+
+            <tbody>
+                <{foreach from=$receiver item=items key=key}>
+                <tr>
+                   
+                    <td class="textcenter"><span class="font-blue"><{$items.login_name|escape:'html'}></span></td>
+                     <td class="textcenter"><span class="font-blue"><{$items.role_name|escape:'html'}></span></td>
+                    <td class="textcenter"><{if $items.mobile}><{$items.mobile|escape:'html'}><{else}><{$items.tel|escape:'html'}><{/if}></td>
+                    <td class="textcenter"><span class="font-blue"><{$items.name|escape:'html'}></span></td>
+                    <td class="textcenter"><span class="font-blue"><{$items.email|escape:'html'}></span></td>
+                    <td class="textwrap textleft" style="word-wrap:break-word;"> <{$items.regtime|cdate:FDATE}></td>
+
+                    <td align="center">
+                    <{if $account_id != $items.member_id}>
+                    <!--   <a href="###" onclick="a('<{link app=business ctl=site_store act=modify_stroemember arg0=$items.store_id arg1=$items.member_id}>');"><{t}>修改密码<{/t}></a>
+                       <br />-->
+                       <a href="###" onclick="a('<{link app=business ctl=site_store act=modify_stroeroles arg0=$items.store_id arg1=$items.member_id}>');"><{t}>修改<{/t}></a>
+                       <br />
+                       <a class="delete_addr" href="<{link app=business ctl=site_store act=del_stroemember arg0=$items.store_id arg1=$items.member_id}>" rel="_request"><{t}>删除<{/t}></a>
+                   <{/if}>
+                   </td>
+                </tr>
+                <{/foreach}>
+            </tbody>
+
+        </table>
+
+
+    </div>
+</div>
+<{/if}>
+
+<script>
+    function a(url,options){
+        if(!url) return;
+        options = Object.append({
+            width:window.getSize().x*0.8,
+            height:window.getSize().y*0.8
+        },options||{});
+        var params = 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width={width},height={height}';
+        params = params.substitute(options);
+
+        window.open(url,'_blank',params);
+    }
+
+</script>
+
+<script>
+
+        function emailCheck(regName){
+                var r = "^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z0-9]+$";
+
+                if(!new RegExp(r).test(regName)){
+                            $('remind_comm_email').set('html', '<span class="error caution notice-inline">&nbsp;请输入有效的邮箱地址</span>');
+                            //$('remind_comm_email').setStyle('color','red');
+                }else{
+                    new Request.HTML({
+                            url:'<{link app=business ctl=site_store act=emailcheck}>',
+                            update:$('remind_comm_email'),
+                            async:false,
+                            method:'post',
+                            data:'email='+encodeURIComponent(regName)
+                     }).send();
+                }
+       }
+
+
+
+       function namecheck(input){
+            var uname = input.value.trim();
+            if(uname ==''){
+                return;
+            }
+
+             new Request.JSON({
+                   url:'<{link app=business ctl=site_store act=namecheck}>',
+                    method:'post',
+                    data:'name='+encodeURIComponent(uname),
+                    async:false,
+                    onComplete:function(res){
+
+                       if (res.status =='success' ) 
+                       {   $('remind_comm_name').className='';
+                           $('remind_comm_name').set('html','');
+                           $('usertype').value='';
+                           $('reg_pass').setStyle('display','none');
+                           $('reg_compass').setStyle('display','none');
+                           $('reg_mail').setStyle('display','none');
+
+                       } else {
+                           
+                           if(res.status =='false' || res.status =='noseller' ){
+                            $('remind_comm_name').set('html',res.message);
+                            $('remind_comm_name').setStyle('color','red');
+                            $('remind_comm_name').className="error caution notice-inline";
+                            return;
+                             //Ex_Dialog.alert(res.message);
+
+                           }else if($('usertype').value!='seller'){
+                                $('usertype').value=''; 
+                                $('remind_comm_name').className='';
+                                $('remind_comm_name').set('html','');
+                                var str = res.message.replace(/<[^>].*?>/g,"");
+                                Ex_Dialog.confirm(str +'<{t}> 是否用此用户名注册企业用户？<{/t}>', function(e){
+                                        if(!e){ 
+                                          $('uname').value='';
+                                          $('remind_comm_name').className='';
+                                          $('remind_comm_name').set('html','');
+                                          return;
+                                        }
+
+                                        $('reg_pass').setStyle('display','');
+                                        $('reg_compass').setStyle('display','');
+                                        $('reg_mail').setStyle('display','');
+                                        $('remind_comm_name').set('html','');
+                                        $('usertype').value='seller';
+                                       
+                                  });
+
+                               
+
+                                 
+                                  
+                           }
+
+
+
+                       }
+
+                    }
+                }).send();
+
+        
+
+
+       }
+
+
+
+    (function(){
+
+         $('btn_new').addEvent('click',function(e){
+              
+              var _form=$('apply_form'); 
+              if (_form){
+                      if($('usertype').value =='seller'){
+                           new Request.JSON({
+                        url:'<{link app=business ctl=site_store act=namecheck}>',
+                        method:'post',
+                        data:'name='+encodeURIComponent(uname.value.trim()),
+                        async:false,
+                        onComplete:function(res){
+
+                           if (res.status =='success' ) 
+                           {
+                               $('remind_comm_name').set('html','');
+
+                           } else {
+
+                               if(res.status =='false' || res.status =='noseller' ){
+                                $('remind_comm_name').set('html',res.message);
+                                $('remind_comm_name').setStyle('color','red');
+                                return;
+                                 //Ex_Dialog.alert(res.message);
+
+                               }else if($('usertype').value!='seller'){
+
+                                    Ex_Dialog.confirm(res.message+'<{t}> 是否用此用户名注册企业用户？<{/t}>', function(e){
+                                            if(!e){ 
+                                                $('uname').value='';
+                                                return;
+                                             }
+
+                                            $('reg_pass').setStyle('display','');
+                                            $('reg_compass').setStyle('display','');
+                                            $('reg_mail').setStyle('display','');
+                                            $('remind_comm_name').set('html','');
+                                            $('usertype').value='seller';
+                                           
+                                      });
+
+                                      return;
+                                      
+                               }
+
+
+                           }
+
+                        }
+
+                         }).send();
+
+
+                         emailCheck($('comm_email').value);  
+
+                      }
+
+                 
+                 if($$('.notice-inline').length >0  ) {
+                     e.stop();
+                     return;
+                 } 
+            }
+
+         });
+
+        $("unset").addEvent('click',function(e){
+            $('addr_div').setStyle('display','none');
+            $('remind_comm_name').set('html','');
+            $('usertype').value='';
+             $('uname').value='';
+            $('reg_pass').setStyle('display','none');
+            $('reg_compass').setStyle('display','none');
+            $('reg_mail').setStyle('display','none');
+             $('remind_comm_name').className="";
+        });
+
+
+        $$(".delete_addr").addEvent('click',function(e){
+            if(!confirm('<{t}>确定删除?<{/t}>')) return false;
+        });
+        $("add").addEvent('click',function(e){
+           $('addr_div').setStyle('display','inline');
+        });
+
+
+    
+
+       /*
+
+        validatorMap['name_check'] = ['<{t}>用户名不正确！<{/t}>', function(element, v) {
+            var uname = $('uname');
+            var _is_validate = false;
+
+             new Request.JSON({
+                   url:'<{link app=business ctl=site_store act=namecheck}>',
+                    method:'post',
+                    data:'name='+encodeURIComponent(uname.value.trim()),
+                    async:false,
+                    onComplete:function(res){
+
+                       if (res.status =='success' ) 
+                       {
+                           _is_validate = true;
+
+                       } else {
+
+                           if(res.status =='false'){
+                             Ex_Dialog.alert(res.message);
+
+                           }else{
+
+                                Ex_Dialog.confirm(res.message+'<{t}> 是否用此用户名注册企业用户？<{/t}>', function(e){
+                                        if(!e) return;
+
+                                        $('reg_pass').setStyle('display','');
+                                        $('reg_compass').setStyle('display','');
+                                        $('reg_mail').setStyle('display','');
+
+                                       
+                                  }); 
+                                  
+                           }
+
+
+
+                       }
+
+                    }
+                }).send();
+           
+          
+
+            return _is_validate;
+        }];
+
+        */
+
+
+
+        validatorMap['change_password']= ['<{t}>两次输入的密码不一致！<{/t}>', function(element, v) {
+            var passwd_re = $('reg_passwd');
+            var passwd = $('reg_passwd_r');
+            var _is_validate = false;
+            if (passwd_re.value == passwd.value) _is_validate = true||_is_validate;
+            return _is_validate;
+        }];
+
+
+
+
+       
+    })();
+</script>
+
+

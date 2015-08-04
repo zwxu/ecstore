@@ -1,0 +1,10 @@
+<{if $data.__shownode}>
+<dt>
+    <{if !$data.__stripparenturl}>
+        <a href="<{$data.node_url}>"  class="cat0" ><{$data.node_name}></a>
+    <{else}>
+        <{$data.node_name}>
+    <{/if}>
+</dt> 
+<{/if}>
+<{$data.__html}>

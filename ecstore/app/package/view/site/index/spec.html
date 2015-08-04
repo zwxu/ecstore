@@ -1,0 +1,296 @@
+<div class="goods-spec">
+  <div class="speci">
+    <{foreach from=$item.spec key=speckey item=goodsFlatSpecDesc}>
+    <{if $goodsFlatSpecDesc.spec_show_type != 'flat'}><{assign var=hasSelSpec value='true'}><{continue}><{/if}>
+    <div class="spec-item specItem clearfix">
+      <div class="spec-label"><p><em><{$goodsFlatSpecDesc.spec_name}></em>：</p></div>
+      <div class="spec-values">
+        <ul class="clearfix" >
+          <{foreach from=$goodsFlatSpecDesc.option key=skey item="subDesc" name=specname}>
+          <{if $goodsFlatSpecDesc.display!="block"}>
+          <li >
+            <a href="javascript:void(0);" specvid="<{$skey}>" specid="<{$speckey}>"<{if $smarty.foreach.specname.first}><{if $goodsFlatSpecDesc.spec_type!='text'}>class="selected spce-color"<{else}>class="selected"<{/if}><{else}><{if $goodsFlatSpecDesc.spec_type!='text'}>class="spce-color"<{/if}><{/if}>  onclick="toSelSpec($(this));">
+              <{if $goodsFlatSpecDesc.spec_type=='text'}>
+                <p><{$subDesc.spec_value}></p>
+              <{else}>
+                <img src="<{if $subDesc.spec_image}><{$subDesc.spec_image|storager}><{else}><{$spec_default_pic|storager}><{/if}>"  alt="<{$subDesc.spec_value}>" title="<{$subDesc.spec_value}>" width="20px" height="20px" >
+              <{/if}>
+              <i title="<{t}>点击取消选择<{/t}>">&nbsp;</i>
+            </a>
+          </li>
+          <{/if}>
+          <{/foreach}>
+        </ul>
+      </div>
+    </div>
+  <input type="hidden" data-type-spec="true" value='<{$goodsFlatSpecDesc.spec2product}>' />
+  <input type="hidden" data-type-product="true" value='<{$goodsFlatSpecDesc.product2spec}>' />
+    <{/foreach}>
+
+  </div>
+</div>
+
+<script type="text/javascript">
+  // $ES('.spec-values a').each(function(item,index){
+  //   item.addEvent('click', function(e){
+  //     alert(item.get('class'));
+  //   });
+  // });
+  // $ES('.spec-values a').addEvent('click', function(e){
+  //   alert(this);
+  // });
+</script>
+
+<script>
+  if (!priceControl) {
+    var priceControl={
+      base:198,
+      _format:{"decimals":"2","dec_point":".","thousands_sep":"","fonttend_decimal_type":"0","fonttend_decimal_remain":"2","sign":"\uffe5"},/*"decimals":2,"dec_point":".","thousands_sep":"","fonttend_decimal_type":0,"fonttend_decimal_remain":2,"sign":"\uffe5"*/
+      format:function(num,force){
+        var part;
+        var sign = this._format.sign || '';
+        if(!(num || num === 0)) return;
+        var num = num.toFloat();
+        if(this._format.cur_rate) {
+          num = num * this._format.cur_rate;
+        }
+        num = num.round(this._format.decimals)+'';
+        var p =num.indexOf('.');
+        if(p<0){
+          p = num.length;
+          part = '';
+        }else{
+          part = num.substr(p+1);
+        }
+        while(part.length<this._format.decimals){
+          part+='0';
+        }
+        var c=[];
+        while(p>0){
+          if(p>2){
+            c.unshift(num.substr(p-=3,3));
+          }else{
+            c.unshift(num.substr(0,p));
+            break;
+          }
+        }
+        if(!part){
+          this._format.dec_point='';
+        }
+        if(force) {
+          sign = '<ins class="price-currency">' + sign + '</ins>';
+        }
+        return sign + c.join(this._format.thousands_sep)+this._format.dec_point+part;
+      },
+      number: function(format) {
+        if(!format) return null;
+        if(typeOf(format) === 'number') return format;
+        if(typeOf(format)==='element') format = format.get(format.tagName === 'INPUT' ? 'val' : 'text');
+        if(format.indexOf(this._format.sign) == 0) format = format.split(this._format.sign)[1];
+        return Number.from(format);
+      },
+      calc: function(calc, n1, n2, noformat) {
+        if(!(n1 || n1 === 0)) return null;
+        if(!n2) {
+          n1 = this.number(n1);
+        }
+        else {
+          calc = !calc || calc == 'add' ? 1 : -1;
+          var t1 = 1, t2 = 1;
+          if(typeOf(n1) === 'array') {
+            t1 = n1[1];
+            n1 = n1[0];
+          }
+          if(typeOf(n2) === 'array') {
+            t2 = n2[1];
+            n2 = n2[0];
+          }
+          var decimals = Math.pow(10, this._format.decimals * this._format.decimals);
+          n1 = Math.abs(t1 * decimals * this.number(n1) + calc * t2 * decimals * this.number(n2)) / decimals;
+        }
+        if(!noformat) n1 = this.format(n1);
+        return n1;
+      },
+      add: function(n1, n2, flag) {
+        return this.calc('add', n1, n2, flag);
+      },
+      diff: function(n1, n2, flag) {
+        return this.calc('diff', n1, n2, flag);
+      }
+    }; 
+  }
+  (function(){
+        //由于规格是随机排列的 第一个货品选中出现的价格不一定是第一个的
+         $$('a[specvid]').each(function(item,index){
+            if(item.hasClass('selected')){
+                var spec=item.getParent('.goods-spec');
+                var pricediv=spec.getParent('.small_box').getPrevious('.gift-chose');
+                var updateprice=pricediv.getElement('.goodsprice');
+                var product_id=pricediv.getElement('.productId');
+                var proData = spec.getElement('input[data-type-product]').value;
+                var specData = spec.getElement('input[data-type-spec]').value;
+                
+                proData=proData ? JSON.decode(proData) :'';
+                
+                var spec_id=item.get('specid');
+                var specvid=item.get('specvid');
+                var specarr={};
+                item.getParent('.gift-null').getElements('a[specvid]').each(function(item,index){
+                    if(item.get('specid')==spec_id && item.get('specvid')!=specvid){
+                        item.removeClass('selected');
+                        
+                    }
+                    if(item.hasClass('selected')){
+                        specarr[index]={'lv':item.get('specid'),'value':item.get('specvid')};
+                       
+                    }
+                });
+                
+                var arr=item.getParent('.gift-null').getElements('a[specvid]').get('specid');
+                arr.sort(function(a,b){return a-b;});
+                var specidarr = []; 
+                for(var i = 0,len = arr.length;i < len;i++){ 
+                ! RegExp(arr[i],"g").test(specidarr.join(",")) && (specidarr.push(arr[i])); 
+                } 
+                
+                var speccount=specidarr.length;
+                var proHS={};
+                var flag=false;
+                var counter=0;
+                var curpid=0;
+                Object.each(proData,function(item,index){
+                    if(flag==false){
+                        counter=0;
+                        Object.each(specarr,function(spec){
+                            
+                            if(item['spec_private_value_id'][spec['lv']]==spec['value'] ){
+                                 counter++;
+                            }
+                        });
+                        // console.log(item);
+                        if(counter==speccount){
+                            proHS=item;
+                            curpid=index;
+                            flag=true;
+                        }else{
+                            flag=false;
+                        }
+                    }
+                });
+                
+                if( !Cookie.read('S[MEMBER]')){
+                    price=proHS['price'];
+                }else{
+                    if(proHS['mprice']){
+                        var mlv=Cookie.read('MLV');
+                        price=proHS['mprice'][mlv];
+                    }
+                   
+                }
+               
+                product_id.value=curpid;
+                updateprice.innerHTML=priceControl.format(price);
+            }
+         });
+        
+})();
+
+
+            function toSelSpec(a){
+            
+            var spec=a.getParent('.goods-spec');
+            var pricediv=spec.getParent('.small_box').getPrevious('.gift-chose');
+            var updateprice=pricediv.getElement('.goodsprice');
+            var goods_price=pricediv.getElement('#goods_price_hid').value;
+            var product_id=pricediv.getElement('.productId');
+            var proData = spec.getElement('input[data-type-product]').value;
+            var specData = spec.getElement('input[data-type-spec]').value;
+            proData=proData ? JSON.decode(proData) :'';
+            spec_hash = specData ? JSON.decode(specData) :'';
+            var spec_id=a.get('specid');
+            var specvid=a.get('specvid');
+            var specarr={};
+            var specselflag=false;//所有规格中 是否都有一个选中
+            if(a.hasClass('selected')){
+                a.removeClass('selected');
+            }else{
+                a.addClass('selected');
+            }
+            a.getParent('.gift-null').getElements('a[specvid]').each(function(item,index){
+                if(item.get('specid')==spec_id && item.get('specvid')!=specvid){
+                    item.removeClass('selected');
+                    
+                }
+                if(item.hasClass('selected')){
+                    specarr[index]={'lv':item.get('specid'),'value':item.get('specvid')};
+                   
+                }
+            });
+            
+            var arr=a.getParent('.gift-null').getElements('a[specvid]').get('specid');
+            arr.sort(function(a,b){return a-b;});
+            var specidarr = []; 
+            for(var i = 0,len = arr.length;i < len;i++){ 
+            ! RegExp(arr[i],"g").test(specidarr.join(",")) && (specidarr.push(arr[i])); 
+            } 
+            var speccount=specidarr.length;
+            var proHS={};
+            var itemflag=false;
+            var flag=false;
+            var counter=0;
+            var curpid=0;
+            Object.each(proData,function(item,index){
+                if(flag==false){
+                    counter=0;
+                    Object.each(specarr,function(spec){
+                        
+                        if(item['spec_private_value_id'][spec['lv']]==spec['value'] ){
+                             counter++;
+                        }
+                    });
+                    if(counter==speccount){
+                        proHS=item;
+                        curpid=index;
+                        flag=true;
+                    }else{
+                        flag=false;
+                    }
+                }
+            });
+           
+            var selcounter=0;//选择规格计数器
+            a.getParent('.gift-null').getElements('a[specvid]').each(function(item){
+                /*
+                if(item.get('specid')==spec_id && item.get('specvid')!=specvid){
+                    item.removeClass('selected');
+                }
+                */
+                if(specidarr.contains(item.get('specid')) && item.hasClass('selected')){
+                    selcounter++;
+                }
+            });
+            if(specidarr.length==selcounter){
+                specselflag=true;
+            }
+           
+           
+            var price=0;
+            if(specselflag){
+                if( !Cookie.read('S[MEMBER]')){
+                    price=proHS['price'];
+                }else{
+                    if(proHS['mprice']){
+                    var mlv=Cookie.read('MLV');
+                    price=proHS['mprice'][mlv];
+                    }
+                   
+                }
+            }else{
+                price=goods_price;
+            }
+            updateprice.innerHTML=priceControl.format(price);
+            product_id.value=curpid;
+            
+        }
+
+</script>

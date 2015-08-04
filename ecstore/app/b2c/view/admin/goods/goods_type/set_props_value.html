@@ -1,0 +1,104 @@
+ <div class="division selectBox">
+      <div class="gridlist-action">
+        <{button app="desktop" label=$___b2c="添加可选值"|t:'b2c' class="addselect" icon="btn_add.gif" }>
+      </div>
+     
+      <table border="0" cellspacing="0" cellpadding="0" class="gridlist sepc_value_table ">
+        <thead>
+         <tr>
+            <th><{t}>选择项可选值<{/t}>
+			<{help}><{t}>多个可选值请用逗号"<{/t}><font color='blue'>,</font><{t}>"分割<{/t}><{t}>，如果某个可选值包含别名，请用竖线"<{/t}><font color='blue'>|</font><{t}>"分隔<{/t}><br /><br /><{t}>例如：手机的制式有GSM、CDMA、双模（别名：G/C双模）。写成格式如：GSM,CDMA,双模|G/C双模<{/t}><{/help}></th>
+            
+            <th><{t}>操作<{/t}></th>
+          </tr>
+        </thead>
+        <tbody>
+        <{foreach from=$props_value.options.value item=aOption key=aOpId}>
+			<tr>
+			<td style="vertical-align:middle; text-align:center" class="ipt_pro">
+			<input type="hidden" name="gtype[props][<{$props_key}>][options][id][]" class="" value ='<{$props_value.options.id[$aOpId]}>'/>
+			<input type="text" maxlength='20'  name="gtype[props][<{$props_key}>][options][value][]" value='<{$aOption}>'  vtype='required'/></td>
+			<td style="vertical-align:middle;">
+				<{img app=desktop src='bundle/icon_asc.gif' class='asc'  title=$___b2c='向上移动'|t:'b2c' style="cursor:pointer;"}> &nbsp; &nbsp; 
+				<{img app=desktop src='bundle/icon_desc.gif' class='desc' title=$___b2c='向下移动'|t:'b2c' style="cursor:pointer;"}> &nbsp; &nbsp; 
+				<{img app=desktop src='bundle/delete.gif' class='delete'  title=$___b2c='删除'|t:'b2c' style="cursor:pointer;" }>
+			</td>
+        </tr>
+        <{/foreach}>
+        </tbody>
+      </table>
+</div>
+ 
+<{area inject='.mainFoot'}>
+<div class="table-action">
+    <{button label=$___b2c="保存"|t:'b2c'  type="button" class="selectbtn"}>
+</div>
+<{/area}>
+
+<script>
+(function(){
+	var selectBox=$E('.selectBox'),dialog=selectBox.getParent('.dialog');
+	var n=0;
+	$E('.addselect',dialog).addEvent('click',function(e,v){
+		 var newRow=new Element('tr');
+         newRow.inject($E('tbody',selectBox)).setHTML(getTemp(v||''));
+		 bindEditEvent(newRow);
+    });
+    var getTemp =function(v){
+	n++;
+	return '<td style="vertical-align:middle; text-align:center;" class="ipt_pro"><input type="hidden" name="gtype[props][<{$props_key}>][options][id][]" class="" value =""/><input type="text"  name="gtype[props][<{$props_key}>][options][value][]" maxlength="20" value="'+v+'"/></td><td style="vertical-align:middle;"><{img app=desktop src="bundle/icon_asc.gif" class="asc"  title=$___b2c="向上移动"|t:"b2c"  style="cursor:pointer;"}> &nbsp; &nbsp; <{img app=desktop src="bundle/icon_desc.gif" class="desc" title=$___b2c="向下移动"|t:"b2c"  style="cursor:pointer;"}> &nbsp; &nbsp; <{img app=desktop src="bundle/delete.gif" class="delete"  title=$___b2c="删除"|t:"b2c"  style="cursor:pointer;" }></td>';
+	}
+
+  
+   var bindEditEvent=function(row){
+            var sel_image=row.getElement('span.sel_image'),asc=row.getElement('img.asc'),
+				desc=row.getElement('img.desc'),del=row.getElement('img.delete');
+
+            asc.addEvent('click',function(){
+               var pre=row.getPrevious('tr');
+               if(pre)row.injectBefore(pre);
+            });
+            desc.addEvent('click',function(){
+                var next=row.getNext('tr');
+                   if(next)row.injectAfter(next);
+                  
+            });
+            del.addEvent('click',function(){
+               if(confirm('<{t}>删除不可恢复，确认删除本行吗？<{/t}>'))row.remove();
+            });    
+   };
+
+  $ES('tbody tr',dialog).each(bindEditEvent);
+
+  $E('.selectbtn',dialog).addEvent('click',function(e){
+	 var obj=dialog.retrieve('instance'),
+		 ipt=$ES('input[type=text]',selectBox);
+		
+	 if(!ipt)return obj.close();
+	 
+	 new Request({url:'index.php?app=b2c&ctl=admin_goods_type&act=doSetPropsValue',
+		  method:'post',
+          data:selectBox,
+		  onSuccess:function(re){
+
+      //     return messageBox('dsdsds');
+	var hs=[];
+   
+	$ES('.ipt_pro input' ,dialog).each(function(el){
+        hs.push( [el.get('name'), el.get('value')] );
+	});
+	 var v= ipt.get('value').join(',');
+	 dialog.retrieve('callback')(v||'',hs);
+
+	 obj.close();
+
+		  }
+    }).send();
+
+
+  });
+	 
+})();
+
+
+</script>

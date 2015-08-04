@@ -1,0 +1,79 @@
+<div class="division" style="margin-left:0; margin-right:0">
+<div class="finder-filter-body" >
+  <{if $filter.type_id}>
+  <input type="hidden" name="type_id" value="<{$filter.type_id}>"/>
+  <{/if}>
+<table style="width:auto;">
+
+<tr title="<{t}>同时按住Ctrl可以多选<{/t}>">
+  <td ><label for="f_cat"><{t}>商品分类<{/t}> </label><select style="width:120px" size="7" multiple="multiple" id="f_cat" title="<{t}>同时按住Ctrl可以多选<{/t}>"  name="cat_id[]">
+
+  <option style="font-weight:bold" value="_ANY_" <{if !$cat_id}>selected="selected"<{/if}>><{t}>- 所有分类 -<{/t}></option>
+  <{foreach from=$filter.cats item=cat key=key name="_s"}>
+  <option <{if $env.foreach._s.iteration is odd}> class="row2"<{/if}> value="<{$cat.cat_id}>" <{if $cat.cat_id==$cat_id}>selected<{/if}>><{$cat.cat_name|paddingleft:$cat.step*4-4:'&nbsp;'}></option>
+  <{/foreach}>
+  </select>
+
+  </td>
+  <td><label for="f_brand"><{t}>品牌<{/t}> </label>
+    <select style="width:120px" id="f_brand" name="brand_id[]" size="7" multiple="multiple">
+      <option style="font-weight:bold" value="_ANY_" selected="selected"><{t}>任意<{/t}></option>
+      <{foreach from=$filter.brands item=brand name="_s"}>
+                <option<{if $env.foreach._s.iteration is odd}> class="row2"<{/if}> value="<{$brand.brand_id}>">
+                          <{$brand.brand_name}>
+                </option>
+      <{/foreach}>
+    </select>
+  </td>
+  <{if count($filter.tags)>0}>
+  <td><label for="f_tag"><{t}>标签<{/t}> </label>
+    <select style="width:120px" id="f_tag" name="tag[]" size="7" multiple="multiple">
+      <option style="font-weight:bold" value="_ANY_" selected="selected"><{t}>全部<{/t}></option>
+      <{foreach from=$filter.tags item=tag name="_s"}>
+      <option<{if $env.foreach._s.iteration is odd}> class="row2"<{/if}> value="<{$tag.tag_id}>"><{$tag.tag_name}></option>
+      <{/foreach}>
+    </select>
+  </td>
+  <{/if}>
+
+  <{foreach from=$filter_items item=item}>
+	<td>
+		<{$item}>
+	</td>
+  <{/foreach}>
+
+</tr>
+</table>
+
+<{if $filter.props}>
+<{counter start=0 assign="result" print=false }>
+<{foreach from=$filter.props key=key item="prop"}>
+  <{if $prop.type == 'select'}>
+    <{if ($result mod 5) eq 0 }>
+    <table>
+    <tr>
+    <{/if}>
+      <td><label for="f_p_<{$key}>"><{$prop.name}></label>
+    
+        <select id="f_p_<{$key}>" name="props[<{$key}>][]" size="7" multiple="multiple">
+          <option style="font-weight:bold" value="_ANY_" selected="selected"><{t}>任意<{/t}></option>
+          <{foreach from=$prop.options item=item name="_s" key="value"}>
+            <option<{if $env.foreach._s.iteration is odd}> class="row2"<{/if}> value="<{$value}>"><{$item}></option>
+          <{/foreach}>
+        </select>
+      </td>
+    <{if ($result mod 5) eq 4 }>
+    </tr>
+    </table>
+    <{/if}>
+    <{counter assign="result" print=false }>
+  <{/if}>
+<{/foreach}>
+<{if ($result mod 5) neq 0 }>
+</tr>
+</table>
+<{/if}>
+<{/if}>
+</div></div>
+
+<div style="margin-top:-5px; width:300px"><span class="notice-inline-icon"><{t}>以上选项，可以按住CTRL来进行多选<{/t}></span></div>

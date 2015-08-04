@@ -1,0 +1,385 @@
+<{css src="ecmall.css" app="business"}>
+<{css src="style.css" app="business"}>
+<{script src="dialog.js" app="business" pdir="js"}>
+<{script src="modedialog.js" app="business" pdir="js"}>
+<{script src="load.js" app="business" pdir="js"}>
+<{script src="wpage.js" app="business" pdir="js"}>
+
+<script>
+  var W = new Wpage({});
+  var MODALPANEL = {
+    createModalPanel:function(){
+      var mp = new Element('div',{'id':'MODALPANEL'});
+      var mpStyles = {
+        'position': 'absolute',
+        'background': '#333333',
+        'width': '100%',
+        'display':'none',
+        'height': window.getScrollSize().y,
+        'top': 0,
+        'left': 0,
+        'zIndex': 65500,
+        'opacity': .4
+      };
+      this.element = mp.setStyles(mpStyles).inject(document.body);
+      return this.element;
+    },
+    show:function(){
+      var panel = this.element = this.element||this.createModalPanel();
+      panel.setStyles({
+        'width': '100%',
+        'height': window.getScrollSize().y
+      }).show();
+    },hide:function(){
+      if(this.element)this.element.hide();
+    }
+  };
+</script>
+<script>
+var BREADCRUMBS ='0:0';
+var LAYOUT = {
+  container: $('container'),
+  side: $('side'),
+  workground: $('workground'),
+  content_main: $('main'),
+  content_head: $E('#workground .content-head'),
+  content_foot: $E('#workground .content-foot'),
+  side_r: $('side-r'),
+  side_r_content:$('side-r-content')
+};
+</script>
+
+
+
+<div class="member-main">
+  <div class="title" ><{t}>店铺信息<{/t}>
+  
+  </div>
+
+    <div class="FormWrap" style="background:none; border:none; padding:0; margin:0;">
+    <{if count($shopinfo)> 2}>
+    <{ if($shopinfo.approved==0) }>
+       <div class="FormWrap" style="border:none;padding-top:0; border-bottom:1px dashed #ddd;color:red;">
+        <{t}>您提交的开店申请正在审核中...<{/t}> 
+       </div>
+   <{elseif ($shopinfo.approved==2)  }>
+        <div class="FormWrap" style="border:none;padding-top:0; border-bottom:1px dashed #ddd;color:red;">
+        <{t}>您提交的开店申请未通过审核:<{$shopinfo.approvedremark}>，请重新提交申请材料...<{/t}> 
+       </div>
+   <{/if}>
+
+    <{if $shopinfo.is_shopper =='false'}> 
+       <div class="FormWrap" style="border:none;padding-top:0; border-bottom:1px dashed #ddd;">
+        <{t}>您还没有开店，以下您所在店铺信息<{/t}> 
+       </div>
+    <{/if}>
+ 
+      <div class="division" style="border:none;margin-bottom:0">
+      
+         <table class="forform" width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                    <tr>
+                        <th><{t}>店主姓名: <{/t}></th>
+                        <td class="width7">
+                        <{input readonly='true' style="color:#AAAAAA;" type="text" name="shopinfo[store_idcardname]" id="store_idcardname"  size="30" vtype="required" value=$shopinfo.store_idcardname}>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><{t}>身份证号: <{/t}></th>
+                        <td>
+                        <{input readonly='true' style="color:#AAAAAA;" type="alphaint" name="shopinfo[store_idcard]" id="store_idcard"  size="40" vtype="required" value=$shopinfo.store_idcard onblur="idcardCheck(this)"}><span></span></td>
+                       
+                    </tr>
+                    <tr>
+                        <th><{t}>店铺名称: <{/t}></th>
+                        <td>
+                          <{input readonly='true' style="color:#AAAAAA;" type="text" name="shopinfo[store_name]" id="store_name"  size="40" vtype="required" value=$shopinfo.store_name}>
+                        </td>
+                    </tr>
+                       
+                    <tr><th ><{t}>店铺类型: <{/t}></th>
+                        <td>
+                        <{input readonly='true' style="color:#AAAAAA;" type="text" name="shopinfo[store_gradename]" id="store_gradename"  size="40" vtype="required" value=$shopinfo.store_gradename}>
+                        </td>
+                    </tr>
+                    <!--
+                    <{if $shopinfo.certification}>
+                     <tr><th ><{t}>店铺认证：<{/t}></th>
+                        <td>
+                        <{input disabled='true' type="text" name="shopinfo[certification]" id="certification"  size="40" vtype="required" value=$shopinfo.certification}>
+                        </td>
+                    </tr>
+                    <{/if}>
+                    -->
+
+                    <tr><th ><{t}>保证金: <{/t}></th>
+                        <td>
+                        <{input readonly='true' style="color:#AAAAAA;" type="text" name="shopinfo[earnest]" id="earnest"  size="40" vtype="required" value=$shopinfo.earnest}>
+                        </td>
+                    </tr>
+                    <tr style='display:none'>
+                        <th><{t}>所属分类: <{/t}></th>
+                        <td>
+                          <{input readonly='true' style="color:#AAAAAA;"  type="text"  size="40"  value=$shopinfo.store_catname name="shopinfo[store_cat]"}>
+                        </td>
+                        <td></td>
+                    </tr>
+                     <tr>
+                        <th><{t}>经营范围: <{/t}></th>
+                        <td>
+                        <{input readonly='true' style="color:#AAAAAA;"  type="text"  size="60"  value=$shopinfo.store_region name="shopinfo[store_region]"}>
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <th><{t}>联系地址: <{/t}></th>
+                        <td>
+                        <{input readonly='true' style="color:#AAAAAA;"  type="text"  size="40"  value=$shopinfo.area name="shopinfo[area]"}>
+                        </td></tr>
+                    </tr>
+                    <tr>
+                        <th><{t}>&nbsp;&nbsp;&nbsp;&nbsp; <{/t}> </th>
+                        <td><{input readonly='true' style="color:#AAAAAA;" type="text" id=addr name="shopinfo[addr]" size="60" vtype="required"   value=$shopinfo.addr}></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th><{t}>邮箱: <{/t}></th>
+                        <td><{input readonly='true' style="color:#AAAAAA;" type="text" id=zip name="shopinfo[zip]" size="20"  value=$shopinfo.zip vtype='number' }></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th><{t}>手机: <{/t}></th>
+                        <td>
+                           <{input  size="20" readonly='true' style="color:#AAAAAA;" type='text' vtype="required" id=tel name="shopinfo[tel]" value=$shopinfo.tel}>
+                        </td>
+                    </tr>
+ 
+                    <tr>
+                       <td colspan=2><{t}>申请公司信息: <{/t}></td>
+                        
+                    </tr>
+
+                    <tr>
+                        <th><{t}>企业名称: <{/t}></th>
+                        <td class="width7">
+                        <{input readonly='true' style="color:#AAAAAA;" type="text" name="shopinfo[company_name]" id="company_name"  size="30" vtype="required" value=$shopinfo.company_name}>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th><{t}>营业执照号: <{/t}></th>
+                        <td class="width7">
+                        <{input readonly='true' style="color:#AAAAAA;" type="text" name="shopinfo[company_no]" id="company_no"  size="30" vtype="required" value=$shopinfo.company_no}>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th><{t}>税务登记证号: <{/t}></th>
+                        <td class="width7">
+                        <{input readonly='true' style="color:#AAAAAA;" type="text" name="shopinfo[company_taxno]" id="company_taxno"  size="30" vtype="required" value=$shopinfo.company_taxno}>
+                        </td>
+                    </tr>
+
+                      <tr>
+                        <th><{t}>企业组织机构代码: <{/t}></th>
+                        <td class="width7">
+                        <{input readonly='true' style="color:#AAAAAA;" type="text" name="shopinfo[company_codename]" id="company_codename"  size="30" vtype="required" value=$shopinfo.company_codename}>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><{t}>法定代表人: <{/t}></th>
+                        <td class="width7">
+                        <{input readonly='true' style="color:#AAAAAA;" type="text" name="shopinfo[company_idname]" id="company_idname"  size="30" vtype="required" value=$shopinfo.company_idname}>
+                        </td>
+                    </tr>
+
+                      <tr>
+                        <th><{t}>法人身份证号: <{/t}></th>
+                        <td class="width7">
+                        <{input readonly='true' style="color:#AAAAAA;" type="text" name="shopinfo[company_idcard]" id="company_idcard"  size="30" vtype="required" value=$shopinfo.company_idcard}>
+                        </td>
+                    </tr>
+
+                     <tr>
+                        <th><{t}>公司负责人: <{/t}> </th>
+                        <td class="width7">
+                        <{input readonly='true' style="color:#AAAAAA;" type="text" name="shopinfo[company_cname]" id="company_cname"  size="30" vtype="required" value=$shopinfo.company_cname}>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th><{t}>负责人身份证号: <{/t}> </th>
+                        <td class="width7">
+                        <{input readonly='true' style="color:#AAAAAA;" type="text" name="shopinfo[company_cidcard]" id="company_cidcard"  size="30" vtype="required" value=$shopinfo.company_cidcard}>
+                        </td>
+                    </tr>
+
+                     <tr>
+                        <th><{t}>负责人职务: <{/t}> </th>
+                        <td class="width7">
+                        <{input readonly='true' style="color:#AAAAAA;" type="text" name="shopinfo[company_charge]" id="company_charge"  size="30" vtype="required" value=$shopinfo.company_charge}>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th><{t}>公司负责人手机: <{/t}> </th>
+                        <td class="width7">
+                        <{input readonly='true' style="color:#AAAAAA;" type="text" name="shopinfo[company_ctel]" id="company_ctel"  size="30" vtype="required&&number" value=$shopinfo.company_ctel}>
+                        </td>
+                    </tr>
+
+                     <tr>
+                        <th><{t}>公司注册地址: <{/t}></th>
+                        <td>
+                        <{input readonly='true' style="color:#AAAAAA;"  type="text"  size="40"  value=$shopinfo.company_area name="shopinfo[company_area]"}>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th><{t}>&nbsp;&nbsp;&nbsp;&nbsp; <{/t}> </th>
+                        <td><{input readonly='true' style="color:#AAAAAA;" type="text" id=company_addr name="shopinfo[company_addr]" size="60" vtype="required"   value=$shopinfo.company_addr}></td>
+                    </tr>
+
+                     <tr>
+                        <th><{t}>公司注册资金: <{/t}> </th>
+                        <td class="width7">
+                        <{input readonly='true' style="color:#AAAAAA;" type="text" name="shopinfo[company_earnest]" id="company_earnest"  size="15" vtype="required" value=$shopinfo.company_earnest}><{t}>万元<{/t}>
+                        </td>
+                    </tr>
+                     <!--
+                      <tr>
+                        <th><{t}>公司联系地址: <{/t}></th>
+                        <td>
+                        <{input disabled='true'  type="text"  size="40"  value=$shopinfo.company_carea name="shopinfo[company_carea]"}>
+                        </td>
+                    </tr>
+
+                     <tr>
+                        <th><{t}>&nbsp;&nbsp;&nbsp;&nbsp; <{/t}> </th>
+                        <td><{input disabled='true' type="text" id=company_caddr name="shopinfo[company_caddr]" size="60" vtype="required"   value=$shopinfo.company_caddr}></td>
+                    </tr>
+                    -->
+
+                     <tr>
+                        <th><{t}>公司成立时间: <{/t}> </th>
+                        <td class="width7">
+                        <{input readonly='true' style="color:#AAAAAA;"  type="text"  size="40"  value=$shopinfo.company_time name="shopinfo[company_time]"}>
+                        </td>
+                    </tr>
+
+                     <tr>
+                        <th><{t}>公司官网地址: <{/t}> </th>
+                        <td class="width7">
+                        <{input readonly='true' style="color:#AAAAAA;" type="text" name="shopinfo[company_url]" id="company_url"  size="30" vtype="required" value=$shopinfo.company_url}>
+                        </td>
+                    </tr>
+
+                    
+                     <tr>
+                        <th><{t}>营业执照有效期: <{/t}> </th>
+                     <td>
+                     <{input readonly='true' style="color:#AAAAAA;"  type="text"  size="10"  value=$shopinfo.company_timestart name="shopinfo[company_timestart]"}>
+                     &nbsp;&nbsp;~&nbsp;&nbsp;
+                     <{input readonly='true' style="color:#AAAAAA;"  type="text"  size="10"  value=$shopinfo.company_timeend name="shopinfo[company_timeend]"}>
+                     </td></tr>
+                      <tr>
+                        <th><{t}>营业执照经营范围: <{/t}> </th>
+                        <td class="width7">
+                        <{input readonly='true' style="color:#AAAAAA;" type="text" name="shopinfo[company_remark]" id="company_remark"  size="80" vtype="required" value=$shopinfo.company_remark}>
+                        </td>
+                    </tr>
+                    <{if $shopinfo.store_cert}>
+                    <tr>
+                        <th><{t}>店铺识别码: <{/t}> </th>
+                        <td class="width7">
+                        <{input readonly='true' style="color:#AAAAAA;" type="text" name="shopinfo[store_cert]" id="store_cert"  size="80" vtype="required" value=$shopinfo.store_cert}>
+                        </td>
+                    </tr>
+                    <{/if}>
+
+
+                    
+                    <tr>
+                      <td colspan=2><{t}><{/t}></td>
+                    </tr>
+                    <tr style="line-height: 250%;">
+                      <th><{t}>图片空间: <{/t}></th>
+                      <td class="width7">
+                        <ul id="awardBubbleul" style="overflow:visible;">
+                          <li class="clearfix relative">
+                            <div class="remainingSpaceUi">
+                              <span id="remainingSpaceUi_tail" class="remainingSpaceUi_span" style="width: <{$shopinfo.space_width}>px; background: none repeat scroll 0% 0% rgb(52, 130, 218);"></span>
+                            </div>
+                            <div class="remainingSpace">
+                              <span id="remainingSpace"><{$shopinfo.store_usedspace}>G</span>
+                              <span>/<{$shopinfo.store_space}>G</span>
+                            </div>
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                  
+                </table>
+
+
+      </div>
+      <div class="division" style="border:none;padding-top:0; border-bottom:1px dashed #ddd;height:50px;">
+      </div>
+
+      <{else}>
+       <div class="FormWrap" style="border:none;padding-top:0; border-bottom:1px dashed #ddd;height:50px;">
+        <{t}>无相关店铺信息<{/t}> 
+       </div>
+      <{/if}>
+     
+      <div class="division" style="border:none;padding-top:0; border-bottom:1px dashed #ddd">
+       <table class="forform" width="100%" border="0" cellspacing="0" cellpadding="0">
+       <tr>
+         <{if $shopinfo.is_shopper =='true' }>
+            <{if  $shopinfo.approved==1}>
+          <tr>
+          <{if $shopinfo.earnest  <  $shopinfo.earnestlimit}>
+            <td>
+            <div class="seller_btn"><a href="<{link app=business ctl='site_store'  full='1' act='earnestdeposit'}>">支付保证金</a></div>
+            </td>
+          <{/if}>
+        <td >
+        <div class="seller_btn"><a href="<{link app=business ctl='site_store'  full='1' act='storeapplystep4' arg0=$shopinfo.account_id arg1='isedit'}>">上传/修改资质文件</a></div>
+        </td>
+        <td>
+        <div class="seller_btn"><a href="<{link app=business ctl='site_store'  full='1' act='editstore'}>">店铺设置</a></div>
+        </td>
+         <td>
+         <div class="seller_btn"><a href="<{link app=business ctl='site_brand'  full='1' act='return_brand'}>">品牌管理</a></div>
+        </td>
+         <td>
+         <div class="seller_btn"><a href="<{link app=business ctl='site_store'  full='1' act='storemember'}>">店员管理</a></div>
+
+        </td>
+         </tr>
+          <{/if}>
+        <{else}>
+         <tr>
+         <td >&nbsp;&nbsp;&nbsp;&nbsp; </td >
+         <td >
+              <a class="submit-btn"  href="<{link app=business ctl='site_store'  full='1' act='storeinfo'}>"><img src='<{$res_url}>/images/1.jpg'/></img></a>
+         </td>
+          <{if $shopinfo.isshopmember =='true'}>
+          
+          <{else}>
+             <td>
+                  <a class="submit-btn"  href="<{link app=business ctl='site_store'  full='1' act='index'}>"> <img src='<{$res_url}>/images/2.jpg'/></img></a>
+            </td>
+         <{/if}>
+         </tr>
+        <{/if}>
+        
+        </table>
+    
+       </div>
+  
+      
+ 
+
+
+

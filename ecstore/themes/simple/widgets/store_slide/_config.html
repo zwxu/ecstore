@@ -1,0 +1,122 @@
+<div id="picAddress" class="tableform">
+  <div class="division widgetconfig">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th width="20%"><{t}>图片宽度：<{/t}></th>
+        <td width="30%" ><{input name="width" style="width:50px" value=$setting.width|default:'1162' required="true" type="digits"}></td>
+        <th width="20%" >图片高度：</th>
+        <td width="30%" ><{input name="height" style="width:50px" value=$setting.height|default:'340' required="true" type="digits"}></td>
+      </tr>
+      <tr>
+        <th width="20%"><{t}>切换效果：<{/t}></th>
+        <td width="30%" >
+			<{input required=true type='radio' name="switcheffect" options=array('scrollx'=>横向滚动,'scrolly'=>竖向滚动,'fade'=>渐现渐隐) value=$setting.switcheffect|default:scrollx}>
+        </td>
+        <th width="20%" >自动播放：</th>
+        <td width="30%" >
+			<{input required=true type='select' name="autoplay" options=array('true'=>是,'false'=>否) value=$setting.autoplay|default:true}>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div id='button_type' class="division widgetconfig" <{ if $setting.button_type=='shop1'||empty($setting.button_type)}>style="display:none;"<{/if}>>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+    <th><{t app='b2c'}>箭头样式：<{/t}></th>
+    <td>
+    <label><input type="radio" name="button_type" <{ if $setting.button_type=='shop1'||empty($setting.button_type)}>checked<{/if}> value="shop1">&nbsp;透明箭头</label>
+    <label><input type="radio" name="button_type" <{ if $setting.button_type=='shop2'}>checked<{/if}> value="shop2">&nbsp;灰色背景小箭头</label>
+    </td>
+  </tr>
+  </table>
+  </div>
+  <div class="piccontent">
+    <{foreach from=$setting.pic item=data key=key}>
+    <table  width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <th><{t app="b2c"}>图片地址:<{/t}></th>
+        <td>
+          <input type=hidden name=pic[<{$data.id}>][id] value="<{$data.id}>">
+          <input name='pic[<{$data.id}>][link]'  autocomplete='off'  vtype="img_url" required='true'  class="imgsrc x-input" id="pic[<{$data.id}>][link]"  value="<{$data.link}>">
+          <input type=button value=上传图片 class="uploadbtn">
+        </td>
+        <th><{t app="b2c"}>链接地址:<{/t}></th>
+        <td>
+          <input name="pic[<{$data.id}>][linktarget]"  vtype="purl"   class='x-input' autocomplete='off'   value="<{$data.linktarget}>">
+        </td>
+      </tr>
+      <tr>
+        <th><{t app="b2c"}>描述:<{/t}></th>
+        <td>
+          <input name="pic[<{$data.id}>][linkinfo]"  class='x-input' autocomplete='off'  value="<{$data.linkinfo}>">
+        </td>
+        <th><{t app="b2c"}>删除该图片及描述:<{/t}></th>
+        <td><span onclick="$(this).getParent('table').destroy()"><{img src="delecate.gif" style="cursor:pointer;" alt=$___b2c="删除"|t:'b2c' title=$___b2c="删除"|t:'b2c'}></span></td>
+      </tr>
+    </table>
+    <{/foreach}>
+  </div>
+  <{button label=$___b2c="添加图片"|t:'b2c' class="addimage" app="desktop" icon="btn_add.gif"}>
+
+</div>
+<script>
+  (function(){
+    function getCfgForm(id){
+      var config = $$(id)[0];
+      while(config.tagName != 'FORM'){
+        config = config.getParent();
+      }
+      return config;
+    }
+    function getWgtTpl(){
+      var sels = getCfgForm('.wgtconfig').getElements('select');
+      var wgtTpl = '';
+      sels.each(function(sel){
+        if(sel.getProperty('name') == '__wg[tpl]') wgtTpl = sel;
+      });
+      return wgtTpl;
+    }
+    var SelectTp = getWgtTpl();
+    SelectTp.addEvent('change',function(){
+      if(this.value == 'default_LR.html'){
+        $('button_type').show();
+      }else{
+        $('button_type').hide();
+      }
+    });
+    var tag_type='table',tag_class='pic_items';
+
+    document.getElement(".addimage").addEvent('click',function(){
+
+      var i=new Date().getTime();
+
+      var tpl='\
+      <tr><th><{t app="b2c"}>图片地址:<{/t}></th>\
+        <td><input type=hidden name=pic['+i+'][id] value="'+i+'"><input autocomplete="off" name="pic['+i+'][link]"  vtype="img_url" required="true"  class="imgsrc x-input">\
+          <input type=button value=<{t app="b2c"}>上传图片<{/t}> class="uploadbtn" id="pic['+i+']"></td>\
+        <th><{t app="b2c"}>链接地址:<{/t}></th>\
+        <td><input name="pic['+i+'][linktarget]"  vtype="purl" required="true"  class="x-input" autocomplete="off"></td></tr>\
+      <tr><th><{t app="b2c"}>描述:<{/t}></th>\
+        <td><input name="pic['+i+'][linkinfo]"  class="x-input" autocomplete="off" ></td>\
+        <th><{t app="b2c"}>删除该图片及描述:<{/t}></th>\
+        <td><span onclick="$(this).getParent(\'table\').destroy()"><{img src="delecate.gif" style="cursor:pointer;" alt=$___b2c="删除"|t:'b2c' title=$___b2c="删除"|t:'b2c'}></span></td>\
+      </tr>';
+
+      $('picAddress').getElement('.piccontent').adopt(new Element(tag_type,{'html':tpl,'width':'100%','class':tag_class}));
+
+      $('pic['+i+']').addEvent('click',function(e){bindevent(this)});
+    });
+    $$(".piccontent .uploadbtn").addEvent('click',function(e){bindevent(this)});
+
+    function bindevent(el){
+      var target=$(el).getParent(tag_type).getElement('.imgsrc');
+      url='btools-alertpages.html?dd='+Date.now()+'&goto='+encodeURIComponent("btools-image_broswer.html?type=big");
+      Ex_Loader('modedialog',function(){
+        return new imgDialog(url,{onCallback:function(image_id,image_src){
+            target.value=image_src;
+        }});
+      });
+    }
+
+  })();
+</script>

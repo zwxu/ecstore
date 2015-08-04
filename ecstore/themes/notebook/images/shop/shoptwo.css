@@ -1,0 +1,94 @@
+﻿*{margin:0px; padding:0px;}
+.cl_zhi {clear:both;line-height:0px; height:0px; font-size:0px;}
+.le_zhi {float:left;}
+.ri_zhi {float:right;}
+p {font-size:12px;}
+a img{border:0px none;}
+.mb5 {margin-bottom:5px;}
+.m10{margin:10px 0px;}
+
+.shop_backgro{background:#fff;overflow:hidden;}
+.shop2_main {width:1200px; margin:0 auto;overflow:hidden;background:#fff;}
+.shop2_head {height:115px;background:#F6F6F6;}
+.shop2_nav {background:url(shop2_10.gif) repeat-x; height:34px; line-height:34px;}
+.shop2_nav_ul {padding-left:40px; margin-right:40px;}
+.shop2_nav_ul li {float:left; list-style:none; background:url(shop2_12.gif) right top no-repeat; height:35px;}
+.shop2_nav_ul li a {display:block; margin:0 25px;text-decoration:none; color:#fff;font-size:14px;}
+.shop2_nav_ul li a.home {background:url(shop2_15.gif) left center no-repeat; padding-left:40px;}
+.nav_search {background:url(shop2_18.gif) no-repeat; width:170px; height:23px; position:relative; margin-top:5px;}
+.nav_search input{border:0 none}
+.s_on {background:url(shop2_19.gif) no-repeat; width:12px; height:11px; position:absolute; top:6px;left:10px;}
+.s_t {position:absolute;left:26px;height:20px;width:130px; top:2px; background:none;}
+.scroll {width:1200px;position:relative;}
+.shop2_pre {background:url(shop2_20.gif) no-repeat; width:38px; height:79px; position:absolute; left:47px;top:196px;}
+.shop2_nex {background:url(shop2_21.gif) no-repeat; width:38px; height:79px; position:absolute; right:37px;top:196px;}
+
+
+.scroll img {width:1200px;overflow:hidden;}
+.shop2_three {padding-top:10px;}
+.shop2_three li{float:left; list-style:none;}
+.shop2_three li a { width:380px; height:195px;display:block;}
+.shop2_three li a img{ width:380px; height:195px;}
+.shop2_three li a.mr {margin-right:13px;}
+.shop2_hot {border-left:1px solid #DCDCDC;border-right:1px solid #DCDCDC;border-bottom:1px solid #DCDCDC; margin-top:5px;background:#fff; padding-bottom:10px;}
+.shop2_hot h4 {background:url(shop2_37.jpg) repeat-x; height:39px; line-height:39px;font-size:14px; padding-left:20px;}
+.shop2_hot_ul li {width:210px; border:1px solid #dddddd;padding:10px; margin:5px 3px 0px; float:left; list-style:none;}
+.shop2_hot_ul li>a>img {width:210px; height:210px;}
+.shop2_hot_ul_info {border-bottom:1px dashed #000;  text-align:center; }
+.shop2_hot_ul_info a{height:40px; line-height:20px;font-size:12px;text-decoration:none;color:#000;}
+.shop2_hot_ul_pice {font-size:12px;font-family:tahoma,"microsoft yahei","微软雅黑"; height:20px; line-height:20px; margin-top:5px;}
+.col_03418a {color:#03418a;}
+.col_fcff0d {color:red;}
+.shop2_hot_ul_pice .price {font-weight:bold;}
+
+.shop2_newp_ul {background:url(shop2_47.gif) left bottom no-repeat;width:1170px; padding:0px 15px 30px 15px; *padding:0px 15px 28px 15px;}
+.shop2_newp h4{background:url(shop2_44.jpg) repeat-x; height:11px; position:relative; margin-top:25px;}
+.shop2_newp h4>span{background:#fff; width:80px; height:20px; position:absolute; left:50px; top:-5px;text-align:center; color:#0f2c7a; line-height:20px;}
+.shop2_newp_ul {margin-top:25px;}
+.shop2_newp_ul li {float:left; list-style:none; margin:4px 4px;}
+.shop2_newp_ul li>a {background:#fff; border-left:1px solid #dddddd;border-right:1px solid #dddddd; width:224px;display:block;border-top:1px solid #dddddd;}
+.shop2_newp_ul li>a img{width:215px; height:250px;}
+.shop2_newp_ul_div {background:#eeeeee; width:206px; padding:0px 10px;}
+.shop2_newp_ul_div a {height:40px; line-height:20px; text-align:center; font-size:12px;text-decoration:none; width:206px;display:block; padding:7px 0px;}
+.shop2_newp_ul_div p {font-family:tahoma,"microsoft yahei","微软雅黑";color:#000;font-weight:bold;height:25px; }
+
+
+
+.ip_classiss {width:100%;  border-collapse:collapse;}
+.ip_classiss td {border:1px solid #dddddd; border-collapse:collapse; width:237px;}
+.ip_td_a {text-align:center; padding:10px 0px;background:#fff;}
+.ip_td_a img{ width:170px; height:170px;}
+.ip_td_bg {background:url(shop2_55.jpg) repeat-x; height:42px; line-height:42px; border:1px solid #c7c7c7; text-align:center;}
+.ip_td_bg a {background:url(shop2_58.jpg) left center no-repeat; padding-left:15px;text-decoration:none;color:#878787;font-family:tahoma,"microsoft yahei","微软雅黑"; font-size:12px;}
+.ip_td_87 {background:#fff; height:87px; padding-left:30px; color:#878787;font-family:tahoma,"microsoft yahei","微软雅黑"; font-size:14px;padding-right:50px;}
+.ip_td_87 p {color:#878787;font-family:tahoma,"microsoft yahei","微软雅黑"; font-size:14px;}
+
+.shop2_floor {border:1px solid #d6d4d4; margin-top:10px;}
+.shop2_floor h4{ height:35px; line-height:35px;font-family:tahoma,"microsoft yahei","微软雅黑"; font-size:16px; padding-left:20px;border-bottom:1px solid #d6d4d4;color:#000;}
+.shop2_floor h4.none {border-bottom:0px;}
+.shop2_floor span img{width:1198px;overflow:hidden;}
+.shop2_floor_ul {margin:5px 0px;}
+.shop2_floor_ul input {border:0 none;}
+.shop2_floor_ul li {border:1px solid #d5d5d5; width:232px;background:#fff; text-align:center; padding:5px 3px;float:left; list-style:none;}
+.shop2_floor_ul li.mr {}
+.shop2_floor_ul li a {text-decoration:none;}
+.shop2_floor_ul li .shop_p_info {height:40px; overflow:hidden; line-height:15px; text-align:center;font-size:12px; color:#000; margin:10px 0px;}
+.shop2_floor_ul li .shop_p_info a{line-height:20px;}
+.shop2_floor_ul li a img {width:160px; height:125px;}
+.shop2_price {font-family:tahoma,"microsoft yahei","微软雅黑"; font-size:16px; color:#054eb8; font-weight:bold;}
+.buy_now {background:url(shop2_70.jpg) no-repeat; width:130px; line-height:25px; height:25px; color:#fff; font-size:14px;cursor:pointer;}
+
+
+.fitt {width:100%;  border-collapse:collapse; margin-bottom:20px;}
+.fitt td {border-collapse:collapse; border:1px solid #d6d4d4;width:217px;background:#fff; padding:0 10px;}
+.fitt td a{text-decoration:none;font-family:tahoma,"microsoft yahei","微软雅黑";}
+.fitt td a img{width:160px; height:125px;margin:10px auto;display:block;}
+.fitt td a div {font-size:12px; color:#000;}
+.fitt td a span {font-size:14px; color:#000; font-weight:bold; margin:5px 0px;display:inline-block;}
+.fitt li{float: left;border:1px solid #d6d4d4;width:218px;background:#fff; padding:5px 10px;list-style:none;}
+.fitt li a{text-decoration:none;font-family:tahoma,"microsoft yahei","微软雅黑";}
+.fitt li a img{width:160px; height:125px;margin:10px auto;display:block;}
+.fitt li div a  {font-size:12px; color:#000;line-height:20px;}
+.fitt li  span {font-size:14px; color:#000; font-weight:bold; margin:5px 0px;display:inline-block;}
+
+

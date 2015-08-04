@@ -1,0 +1,130 @@
+<div class="ItemsWarp clearfix">
+<h2 class="off-screen">商品列表</h2>
+    <{assign var='zindex' value='1000'}>
+	<ul class="horizontal-m">
+    <{foreach from=$products item="product"}>
+    <li class="items-list <{$mask_webslice}> itemsList  clearfix" product="<{$product.goods_id}>" id="pdt-<{$product.goods_id}>">
+		<div class="goodpic" style="<{if $image_set.S.width}> width:<{$image_set.S.width}>px;position:relative;<{/if}>">
+
+			      <{if $product.tags}>
+			      <{foreach from=$product.tags item=tags}>
+			        <{assign var="tagImage" value=$tags.params.tag_image}>
+			        <{if $tagImage}>
+                    <div style="margin: 0pt auto;">
+			        <div class="goods-tip" style="filter:alpha(opacity=<{$tags.params.tag_opacity}>);position:absolute">
+			            <img src="<{$tagImage|storager}>" style="opacity:<{$tags.params.tag_opacity/100}>;filter:alpha(opacity=<{$tags.params.tag_opacity}>);" pos="<{$tags.params.pic_loc}>" />
+			        </div>
+                    </div>
+                    <{/if}>
+			      <{/foreach}>
+			      <{/if}>
+                    <{if $product.udfimg == 'true'}>
+                    <{assign var="gimage" value=$product.thumbnail_pic}>
+                    <{else}>
+                    <{assign var="gimage" value=$product.image_default_id|default:$defaultImage}>
+                    <{/if}>
+                    <a target="_blank" style='<{if $image_set.S.width}> width:<{$image_set.S.width}>px;height:<{$image_set.S.height}>px;display:table-cell;vertical-align:middle;*font-size:<{$image_set.S.height*0.875}>px;<{/if}>' href="<{link app=b2c ctl=site_product act=index arg=$product.goods_id}>">
+                      <{img src="images/transparent.gif" app="b2c" lazyload=$gimage|storager:'s' class="img-lazyload"  alt=$product.name|escape:html}>
+                        <{*<span class='zoom-handle' pic='<{$product.big_pic|default:$env.conf.site.default_big_pic|storager}>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>*}>
+                    </a>
+
+		</div>
+        <div class="goods-main clearfix">
+            <div class="goodinfo">
+                <h3>
+                    <a href="<{link app=b2c ctl=site_product act=index arg=$product.goods_id}>" title="<{$product.name|escape:html}>" class="entry-title" target="_blank"><{$product.name|escape:"html"}></a>
+                    <{if $product.tags}>
+                    <{foreach from=$product.tags item=tags}>
+                    <{if $tags.params.tag_showOnIndex}>
+                    &nbsp;<span class="tag-label" style="background-color:<{$tags.tag_bgcolor}>;color:<{$tags.tag_fgcolor}>"><{$tags.tag_name}></span>
+                    <{/if}>
+                    <{/foreach}>
+                    <{/if}>
+                </h3>
+                <p><{$product.brief}>
+
+                <{if $site.props}>
+                <div class="standard">
+                    <p><{t}>品牌：<{/t}><span>KUKU</span><{t}>风格：<{/t}><span><{t}>夏季<{/t}></span></p>
+                    <p><th><{t}>质地：<{/t}><span><{t}>纯棉<{/t}></span><{t}>款式：<{/t}><span><{t}>双排扣<{/t}></span></p>
+                    </div>
+                    <{/if}></p>
+                </div>
+			<div class="price-wrap ">
+					<ul class="pricelist clearfix">
+                      <li>
+                        <{* <span><{t}>销售价：<{/t}></span><em class="sell-price"><{$product.price|cur_odr}></em></li>
+                        *}>
+                     <li>
+                       <span><{t}>销售价：<{/t}></span>
+                       <em class="goodsprice" updatespec="updateprice">
+                         <{if $product.minprice && $product.maxprice}>
+                           <{$product.minprice|cur_odr}>-<{$product.maxprice|cur_odr}>
+                         <{else}>
+                           <{$product.price|cur_odr}>
+                         <{/if}>
+                       </em>
+                     </li>
+
+                       <{if $product.timebuyprice}>
+                       <li>
+                          <span><{t}>抢购价：<{/t}></span><em class="font-red font14px fontbold"><{$product.timebuyprice|cur_odr}></em></li><{/if}>
+
+                        <{if $product.mktprice && $setting.mktprice eq true}>
+                        <li><span><{t}>市场价：<{/t}></span>
+                            <del>
+                                <{if $product.minmktprice && $product.maxmktprice}>
+                                   <{$product.minmktprice|cur_odr}>-<{$product.maxmktprice|cur_odr}>
+                                 <{else}>
+                                     <{$product.mktprice|cur_odr}>
+                                 <{/if}>
+                             </del>
+                         </li>
+                        <{/if}>
+                        <{if $product.mktprice > $product.price && $setting.mktprice && $setting.saveprice > 0}>
+                           <{if $setting.saveprice == 1}>
+                           <li>
+                           <span><{t}>节省：<{/t}></span><em><{if $product.timebuyprice}><{$product.mktprice-$product.timebuyprice|cur_odr}><{else}><{$product.mktprice-$product.price|cur_odr}><{/if}></em>
+                           </li>
+                           <{elseif $setting.saveprice == 2}>
+                           <li>
+                             <span><{t}>优惠:<{/t}></span><em>
+                             <{if $product.timebuyprice}>
+                               <{$product.timebuyprice/$product.mktprice*100|number:'2'}>
+                             <{else}>
+                               <{$product.price/$product.mktprice*100|number:'2'}>
+                             <{/if}>%
+							</li>
+                           <{elseif $setting.saveprice == 3}>
+							<li>
+							<span><{t}>折扣:<{/t}></span>
+                             <{if $product.timebuyprice}>
+                               <{$product.timebuyprice/$product.mktprice*10|number:'1'}>
+                             <{else}>
+                               <{$product.price/$product.mktprice*10|number:'1'}>
+							<{/if}><{t}>折<{/t}></em>
+                             </li>
+                        <{/if}>
+                        <{/if}>
+
+                        <!--<li class="intro rank-<{$product.rank|default:3}>">Rank <{$product.rank|default:3}></li>-->
+                    </ul>
+
+                        <ul class="button clearboth" >
+                        <{goodsmenu product=$product setting=$setting login=$login zindex=$zindex-- }>
+                        <li >
+                        <a href="javascript:void(0)" rel="_gcomp_" data-gcomp="{gid:'<{$product.goods_id}>',gname:'<{$product.name|addslashes|escape:html}>',gtype:'<{$product.type_id}>',url:'<{link app=b2c ctl=site_product act=index arg=$product.goods_id}>'}" class="btn-a"><i class="has-icon"> <img src='<{$env.app.res_url}>/bundle/contrast_icon.gif' /></i><span><{t}>对比<{/t}></span></a>
+
+                        <!-- <a href="javascript:void(0)" onclick="gcompare.add({gid:'<{$product.goods_id}>',gname:'<{$product.name|addslashes|escape:html}>',gtype:'<{$product.type_id}>'});" class="btncmp" title="<{t}>商品对比<{/t}>">
+                            <{t}>商品对比<{/t}>
+                        </a>-->
+                        </li>
+                    </ul>
+		</div>
+        </div>
+
+    </li>
+    <{/foreach}>
+	</ul>
+</div>
+

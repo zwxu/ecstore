@@ -1,0 +1,24 @@
+<h3><{t}>SEO设置<{/t}></h3>
+<{assign var=seo_info value=$goods.seo_info}>
+
+	<div class="tableform" >
+		 <table border="0" cellpadding="0" cellspacing="0">
+		 <tr>
+			  <th>Page Title</th>
+			  <td><input type='text' class="inputstyle" name='goods[seo_info][seo_title]' value='<{$seo_info.seo_title}>'/></td>
+		 </tr>
+		 <tr>
+			  <th>Meta Keyword</th>
+			  <td><input type='text' class="inputstyle" name='goods[seo_info][seo_keywords]' value='<{$seo_info.seo_keywords}>'/></td>
+		 </tr>
+		  <tr>
+			  <th>Meta Description</th>
+			  <td><input type='text' class="inputstyle" name='goods[seo_info][seo_description]' value='<{$seo_info.seo_description}>'/></td>
+		 </tr>
+		  <tr>
+			  <th><{t}>自定义url<{/t}></th>
+			  <td><input type='text'class="inputstyle" name='goods_static' value='<{$goods_static}>'/></td>
+		 </tr>
+		 </table>
+	</div>
+

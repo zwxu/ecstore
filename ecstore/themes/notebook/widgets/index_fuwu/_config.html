@@ -1,0 +1,212 @@
+<div class="tableform">
+<div class="widgetconfig">
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+  <tbody>
+    <tr>
+      <th colspan="4" style="text-align:left;background:#DDE5FC;color:#669">&nbsp;
+      <strong>第一层</strong></th>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>LOGO一：<{/t}></th>
+        <td>
+            <input type=hidden name="fuwu[0][logo]" value="<{$setting.fuwu.0.logo}>">
+            <input name='fuwu[0][logo]' class="imgsrc" id="logo_1" value="<{$setting.fuwu.0.logo}>">
+            <input type=button value="<{t app='b2c'}>上传图片<{/t}>" class="uploadbtn" onclick="addPic('logo_1')">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>标题一：<{/t}></th>
+        <td>
+            <input type="text" name="fuwu[0][title]" value="<{$setting.fuwu.0.title}>">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>标题链接：<{/t}></th>
+        <td>
+            <input type="text" name="fuwu[0][title_link]" value="<{$setting.fuwu.0.title_link}>">
+        </td>
+    </tr>
+  </tbody>
+</table>
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+  <tbody>
+    <tr>
+      <th colspan="4" style="text-align:left;background:#DDE5FC;color:#669">&nbsp;
+      <strong>第二层</strong></th>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>LOGO二：<{/t}></th>
+        <td>
+            <input type=hidden name="fuwu[1][logo]" value="<{$setting.fuwu.1.logo}>">
+            <input name='fuwu[1][logo]' class="imgsrc" id="logo_2" value="<{$setting.fuwu.1.logo}>">
+            <input type=button value="<{t app='b2c'}>上传图片<{/t}>" class="uploadbtn" onclick="addPic('logo_2')">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>标题二：<{/t}></th>
+        <td>
+            <input type="text" name="fuwu[1][title]" value="<{$setting.fuwu.1.title}>">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>标题链接：<{/t}></th>
+        <td>
+            <input type="text" name="fuwu[1][title_link]" value="<{$setting.fuwu.1.title_link}>">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>内容一：<{/t}></th>
+        <td>
+            <input type=hidden name="fuwu[1][info][0][pic]" value="<{$setting.fuwu.1.info.0.pic}>">
+            <input name='fuwu[1][info][0][pic]' class="imgsrc" id="info_1_1" value="<{$setting.fuwu.1.info.0.pic}>">
+            <input type=button value="<{t app='b2c'}>上传图片<{/t}>" class="uploadbtn" onclick="addPic('info_1_1')">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>链接一：<{/t}></th>
+        <td>
+            <input type="text" name="fuwu[1][info][0][link]" value="<{$setting.fuwu.1.info.0.link}>">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>内容二：<{/t}></th>
+        <td>
+            <input type=hidden name="fuwu[1][info][1][pic]" value="<{$setting.fuwu.1.info.1.pic}>">
+            <input name='fuwu[1][info][1][pic]' class="imgsrc" id="info_1_2" value="<{$setting.fuwu.1.info.1.pic}>">
+            <input type=button value="<{t app='b2c'}>上传图片<{/t}>" class="uploadbtn" onclick="addPic('info_1_2')">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>链接二：<{/t}></th>
+        <td>
+            <input type="text" name="fuwu[1][info][1][link]" value="<{$setting.fuwu.1.info.1.link}>">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>内容三：<{/t}></th>
+        <td>
+            <input type=hidden name="fuwu[1][info][2][pic]" value="<{$setting.fuwu.1.info.2.pic}>">
+            <input name='fuwu[1][info][2][pic]' class="imgsrc" id="info_1_3" value="<{$setting.fuwu.1.info.2.pic}>">
+            <input type=button value="<{t app='b2c'}>上传图片<{/t}>" class="uploadbtn" onclick="addPic('info_1_3')">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>链接三：<{/t}></th>
+        <td>
+            <input type="text" name="fuwu[1][info][2][link]" value="<{$setting.fuwu.1.info.2.link}>">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>内容四：<{/t}></th>
+        <td>
+            <input type=hidden name="fuwu[1][info][3][pic]" value="<{$setting.fuwu.1.info.3.pic}>">
+            <input name='fuwu[1][info][3][pic]' class="imgsrc" id="info_1_4" value="<{$setting.fuwu.1.info.3.pic}>">
+            <input type=button value="<{t app='b2c'}>上传图片<{/t}>" class="uploadbtn" onclick="addPic('info_1_4')">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>链接四：<{/t}></th>
+        <td>
+            <input type="text" name="fuwu[1][info][3][link]" value="<{$setting.fuwu.1.info.3.link}>">
+        </td>
+    </tr>
+  </tbody>
+</table>
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+  <tbody>
+    <tr>
+      <th colspan="4" style="text-align:left;background:#DDE5FC;color:#669">&nbsp;
+      <strong>第三层</strong></th>
+    </tr>
+     <tr>
+        <th><{t app='b2c'}>LOGO三：<{/t}></th>
+        <td>
+            <input type=hidden name="fuwu[2][logo]" value="<{$setting.fuwu.2.logo}>">
+            <input name='fuwu[2][logo]' class="imgsrc" id="logo_3" value="<{$setting.fuwu.2.logo}>">
+            <input type=button value="<{t app='b2c'}>上传图片<{/t}>" class="uploadbtn" onclick="addPic('logo_3')">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>标题三：<{/t}></th>
+        <td>
+            <input type="text" name="fuwu[2][title]" value="<{$setting.fuwu.2.title}>">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>标题链接：<{/t}></th>
+        <td>
+            <input type="text" name="fuwu[2][title_link]" value="<{$setting.fuwu.2.title_link}>">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>内容一：<{/t}></th>
+        <td>
+            <input type=hidden name="fuwu[2][info][0][pic]" value="<{$setting.fuwu.2.info.0.pic}>">
+            <input name='fuwu[2][info][0][pic]' class="imgsrc" id="info_2_1" value="<{$setting.fuwu.2.info.0.pic}>">
+            <input type=button value="<{t app='b2c'}>上传图片<{/t}>" class="uploadbtn" onclick="addPic('info_2_1')">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>链接一：<{/t}></th>
+        <td>
+            <input type="text" name="fuwu[2][info][0][link]" value="<{$setting.fuwu.2.info.0.link}>">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>内容二：<{/t}></th>
+        <td>
+            <input type=hidden name="fuwu[2][info][1][pic]" value="<{$setting.fuwu.2.info.1.pic}>">
+            <input name='fuwu[2][info][1][pic]' class="imgsrc" id="info_2_2" value="<{$setting.fuwu.2.info.1.pic}>">
+            <input type=button value="<{t app='b2c'}>上传图片<{/t}>" class="uploadbtn" onclick="addPic('info_2_2')">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>链接二：<{/t}></th>
+        <td>
+            <input type="text" name="fuwu[2][info][1][link]" value="<{$setting.fuwu.2.info.1.link}>">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>内容三：<{/t}></th>
+        <td>
+            <input type=hidden name="fuwu[2][info][2][pic]" value="<{$setting.fuwu.2.info.2.pic}>">
+            <input name='fuwu[2][info][2][pic]' class="imgsrc" id="info_2_3" value="<{$setting.fuwu.2.info.2.pic}>">
+            <input type=button value="<{t app='b2c'}>上传图片<{/t}>" class="uploadbtn" onclick="addPic('info_2_3')">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>链接三：<{/t}></th>
+        <td>
+            <input type="text" name="fuwu[2][info][2][link]" value="<{$setting.fuwu.2.info.2.link}>">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>内容四：<{/t}></th>
+        <td>
+            <input type=hidden name="fuwu[2][info][3][pic]" value="<{$setting.fuwu.2.info.3.pic}>">
+            <input name='fuwu[2][info][3][pic]' class="imgsrc" id="info_2_4" value="<{$setting.fuwu.2.info.3.pic}>">
+            <input type=button value="<{t app='b2c'}>上传图片<{/t}>" class="uploadbtn" onclick="addPic('info_2_4')">
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='b2c'}>链接四：<{/t}></th>
+        <td>
+            <input type="text" name="fuwu[2][info][3][link]" value="<{$setting.fuwu.2.info.3.link}>">
+        </td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+</div>
+<script>
+    function addPic(id){
+            var url='index.php?app=desktop&act=alertpages&goto='+encodeURIComponent("index.php?app=image&ctl=admin_manage&act=image_broswer&type=big");
+            Ex_Loader('modedialog',function(){
+            return new imgDialog(url,{onCallback:function(image_id,image_src){
+                     $(id).value=image_src;
+            }});
+            });
+        }
+</script>

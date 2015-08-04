@@ -1,0 +1,9 @@
+<div class="p10" style="padding-left:30%">
+  <input type="radio" id="wg_show_cur" value=1 name="cart_show_type" <{if $setting.cart_show_type==1}>checked="checked"<{/if}> /><label for="wg_show_cur"><{t app="b2c"}>显示商品总数量<{/t}></label>
+  <input type="radio" id="wg_show_cur" value=2 name="cart_show_type" <{if $setting.cart_show_type!=1}>checked="checked"<{/if}> /><label for="wg_show_cur"><{t app="b2c"}>显示商品种类<{/t}></label><br />
+  <!-- <span><{t app="b2c"}>是否显示购物车总值<{/t}></span>
+  <select name="cart_show_total">
+	<option<{if $setting.cart_show_total == "1"}> selected="selected"<{/if}> value="1"><{t}>显示<{/t}></option>
+	<option<{if $setting.cart_show_total == "2"}> selected="selected"<{/if}> value="2"><{t}>不显示<{/t}></option>
+  </select> -->
+</div>

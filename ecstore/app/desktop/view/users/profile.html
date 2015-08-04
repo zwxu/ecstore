@@ -1,0 +1,50 @@
+<div class="tableform">
+    <{tabber}>
+        <{tab name=$___desktop="当前登录用户"|t:'desktop'}>
+
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th><{t}>姓名:<{/t}></th><td><{$name}> <{if $super}>&nbsp;&nbsp;<i class="c-red">(<{t}>超级管理员<{/t}>)</i><{/if}></td>
+                    </tr>          
+                    
+                    <tr>
+                        <th><{t}>登录密码修改:<{/t}></th>
+
+                        <td>
+            <a class="btn" href="index.php?ctl=dashboard&act=chkpassword" target="dialog::{width:400,height:240,title:'<{t}>密码修改<{/t}>'}">
+                    <span><span><{t}>密码修改<{/t}></span></span>
+                </a>
+            
+                    </td> 
+
+                    </tr>
+                </table>
+
+        <{/tab}>
+        <{tab name=$___desktop="后台操作习惯"|t:'desktop'}>
+
+                <table width="100%" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th><{t}>操作界面风格选择:<{/t}></th><td>
+            <{input type="select" name="theme" options=$themes value=$current_theme  required="true" default="desktop/default" onchange="(function(d){if(!confirm('confirm?')){return}W.page('index.php?app=desktop&ctl=dashboard&act=profile',{data:d});})($(this.parentNode));"}></td>
+                    </tr>
+                    <tr>
+                        <th><{t}>主导航菜单设置:<{/t}></th><td><a class="btn" href="index.php?app=desktop&ctl=default&act=main_menu_define" target="dialog::{title:'<{t}>菜单定制<{/t}>',width:350,height:0.7}">
+                                <span><span><{t}>菜单定制<{/t}></span></span>
+                            </a></td>
+                    </tr>
+                    
+                    <tr>
+                        <th><{t}>快捷键设置<{/t}></th>
+                        <td>
+                            <a class="btn" href="index.php?app=desktop&ctl=default&act=keyboard_setting" target="dialog::{title:'<{t}>快捷键定制<{/t}>',width:650,height:300}">
+                                <span><span><{t}>快捷键定制<{/t}></span></span>
+                            </a>
+                        </td>
+                    </tr>
+                    
+                <table>
+
+        <{/tab}>
+    <{/tabber}>
+</div>

@@ -1,0 +1,17 @@
+<app>
+    <name>促销--送优惠券</name>
+    <description>促销--送优惠券</description>
+
+    <author>
+        <name>BBC 开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>0.1</version>
+    <license>BBC license</license>
+
+    <depends>
+        <app>b2c</app>
+    </depends>
+</app>

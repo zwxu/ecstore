@@ -1,0 +1,156 @@
+<!-- right-->
+<div class="member-main">
+    <div id="tab-discus" class="section switch">
+        <ul class="switchable-triggerBox clearfix">
+            <li ><a href="<{link app=b2c ctl='site_member' act='comment'}>"><{t}>我的评论<{/t}></a></li>
+            <li><a href="<{link app=b2c ctl='site_member' act='ask'}>"><{t}>我的咨询<{/t}></a></li>
+            <li class="active" ><a href="#"><{t}>站内信<{/t}></a></li>
+        </ul>
+        <div class="switchable-content">
+            <div class="switchable-panel">
+                <!--<textarea class="textarea-lazyload">-->
+                    <div id="message-tab" class="switch" style="padding-top:0">
+                        <div class="site-mail">
+                            <ul class="switchable-triggerBox2 clearfix">
+                                <li ><a href="<{link app=b2c ctl='site_member' act='send'}>"><{t}>发送消息<{/t}></a></li>
+                                <li><a href="<{link app=b2c ctl='site_member' act='inbox'}>"><{t}>收件箱<{/t}></a><{if $inbox_num}><span>(<{$inbox_num}>)</span><{/if}></li>
+                                <li class="active"><{t}>发件箱<{/t}><span></span></li>
+                                <li><a href="<{link app=b2c ctl='site_member' act='outbox'}>"><{t}>草稿箱<{/t}></a><{if $outbox_num}><span>(<{$outbox_num}>)</span><{/if}></li>
+                                <li style="border:none"><a href="<{link app=b2c ctl='site_member' act='message'}>"><{t}>给管理员发站内信<{/t}></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    var prediv = '';
+                    function showMsg(obj,msgid,url) {
+                        var currdiv = $('view_msg_pro_'+msgid);
+                        if(!obj.parentNode.id) {
+                            if(typeof prediv == "object") {prediv.style.display='none'};
+                            currdiv.style.display = '';
+                            if($('view_msg_'+msgid))
+                            //new Request.HTML({url:url,method:'post',update:'view_msg_'+msgid,data:''}).send();
+                            new Request({
+                                url:url,
+                                method:'post',
+                                data:'',
+                                onComplete:function(res){
+                                    new Element('div',{'html':res}).inject($('view_msg_'+msgid));
+                                }
+                            }).send();
+                            obj.parentNode.id = 'span_'+msgid;
+                            if(prediv) {
+                                var link = $('span_'+prediv.id.substr(13)).getElementsByTagName('a')[0];
+                                link.className = 'viewmsgoff';
+                                toggleBg(link, false);
+                            }
+                            prediv = $('view_msg_pro_'+msgid);
+                            obj.className = 'viewmsg';
+                            toggleBg(obj, true);
+                            } else {
+                            if(currdiv.style.display == 'none') {
+                                currdiv.style.display = '';
+                                obj.className = 'viewmsg';
+                                toggleBg(obj, true);
+                                if(prediv) {
+                                    prediv.style.display = 'none';
+                                    var link = $('span_'+prediv.id.substr(13)).getElementsByTagName('a')[0];
+                                    link.className = 'viewmsgoff';
+                                    toggleBg(link, false);
+                                }
+                                prediv = currdiv;
+                                } else {
+                                currdiv.style.display = 'none';
+                                obj.className = 'viewmsgoff';
+                                toggleBg(obj, false);
+                                prediv = '';
+                            }
+                        }
+                    }
+
+                    function toggleBg(el, state){
+                        while(el.tagName != 'TR'){
+                            el = el.parentNode;
+                        }
+                        if(!state) $(el).removeClass('msgon');
+                        else $(el).addClass('msgon');
+                    }
+
+                    function checkAll(obj,box) {
+                        var tag = obj.getElementsByTagName('input');
+                        for(var i = 0;i < tag.length;i++){
+                            tag[i].checked = box.checked;
+                        }
+                    }
+
+                </script>
+                <div class="title"><{t}>已发送<{/t}></div>
+                <form action="<{link app=b2c ctl='site_member' full='1' act='del_track_msg'}>" method="post">
+                    <table width="100%" cellspacing="0" cellpadding="0" class="liststyle-option">
+    <col class="span-1 textcenter"></col>
+    <col class=" textleft"></col>
+
+                        <tr>
+                            <th class="textcenter"><input type="checkbox" onclick="checkAll(this.form,this)" name="chkall" id="chkall" title="<{t}>全选<{/t}>"></th>
+                            <td>
+                                <{button type="submit" name="pmsend" label=$___b2c="删除"|t:'b2c' rel="_request"}>
+                            </td>
+                            <td  style="padding-right:10px; text-align:right"><{t}>共有短消息:<{/t}>&nbsp;<em id="pmtotalnum" class="siteparttitle-orage"><{$total_msg}></em></td>
+                        </tr>
+
+                    </table>
+                    <table width="100%" cellspacing="0" cellpadding="0" class="gridlist" summary="<{t}>已发送<{/t}>">
+     <col class="span-1 bg-graydark"></col>
+                        <col></col>
+                        <col class="span-3"></col>
+                        <col class="span-4"></col>
+                        <thead>
+                            <tr>
+                                <th >&nbsp;</th>
+                                <th ><{t}>标题<{/t}></th>
+                                <th ><{t}>发送到<{/t}></th>
+                                <th ><{t}>时间<{/t}></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <{if count($message)>0}>
+                            <{foreach item=msg from=$message}>
+                            <tr class="msgon">
+                                <td class="selector textcenter" bgcolor="#FFFFFF"><input type="checkbox" value=<{$msg.comment_id}> name="deltrack[]"></td>
+                                <td class="textleft"><span><a href="<{link ctl='member' act='viewMsg' arg0=$msg.comment_id }>" onclick="showMsg(this,<{$msg.comment_id}>,'<{link app='b2c' ctl='site_member' act='viewMsg' arg0=$msg.comment_id }>');return false;" class="viewmsgoff"><{$msg.title|nl2br}></a></span></td>
+                                <td align="center"><{if $msg.to_type == 1}><{t}>管理员<{/t}><{else}><{$msg.to_uname}><{/if}></td>
+                                <td class="textcenter"><{$msg.time|cdate:SDATE_STIME}></td>
+                            </tr>
+                            <tr id="view_msg_pro_<{$msg.comment_id}>" style="display:none; white-space:normal;">
+                                <td class="textleft memberviewinfo " colspan="6"><p id="view_msg_<{$msg.comment_id}>" class="pt10 pr10 pb10 pl10"><{$msg.message|escape:'html'}></p></td>
+                            </tr>
+                            <{/foreach}>
+                            <{else}>
+                            <tr>
+                                <td height="60" colspan="4" class="bg-white">
+                                    <{t}>您尚未发送过站内短信息。<{/t}>
+                                </td>
+                            </tr>
+                            <{/if}>
+                        </tbody>
+                    </table>
+                    <table width="100%" cellspacing="0" cellpadding="0" class="liststyle-option">
+    <col class="span-1 textcenter"></col>
+    <col class=" textleft"></col>
+                        <tr>
+                            <th class="textcenter"><input type="checkbox" onclick="checkAll(this.form,this)" name="chkall" id="chkall" title="<{t}>全选<{/t}>"></th>
+                            <td>
+                                <{button type="submit" name="pmsend" label=$___b2c="删除"|t:'b2c' rel="_request"}>
+                            </td>
+                            <td style="padding-right:10px; text-align:right"><{t}>共有短消息:<{/t}>&nbsp;<em id="pmtotalnum" class="siteparttitle-orage"><{$total_msg}></em></td>
+                        </tr>
+
+                    </table>
+                    <{pagers data=$pager}>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- right-->

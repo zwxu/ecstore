@@ -1,0 +1,15 @@
+<{if $data.link_type!='map'}>
+  <{if $data.ad_pic_link}><a href="<{$data.ad_pic_link}>" title="<{$data.ad_pic_txt}>" target="_blank"><{/if}>
+  <img src="images/transparent.gif" lazyload="<{$data.ad_pic|storager}>" class="img-lazyload"  alt="<{$data.ad_pic_txt}>" <{if $data.ad_pic_width}>width='<{$data.ad_pic_width}>'<{/if}> <{if $data.ad_pic_height}>height='<{$data.ad_pic_height}>'<{/if}>>
+  <{if $data.ad_pic_link}></a><{/if}>
+<{else}>
+  <img usemap='#Map_<{$widgets_id}>' src="images/transparent.gif" lazyload="<{$data.ad_pic|storager}>" class="img-lazyload"  alt="<{$setting.ad_pic_txt}>" <{if $data.ad_pic_width}>width='<{$data.ad_pic_width}>'<{/if}> <{if $data.ad_pic_height}>height='<{$data.ad_pic_height}>'<{/if}>>
+  <{if $data.ad_pic_link}>
+  <map name="Map_<{$widgets_id}>">
+     <{foreach from=$data.area item=ar}>
+     <area shape="<{$data.area_type}>" coords="<{$ar}>" href="<{$data.ad_pic_link}>" title="<{$data.ad_pic_txt}>">
+     <{/foreach}>
+  </map>
+  <{/if}>
+<{/if}>
+  

@@ -1,0 +1,20 @@
+<div class="tableform">
+    <table>
+        <tr>
+            <th><{t}>模板缓存：<{/t}></th>
+		    <td>
+                <a href="javascript:;" onClick="javascript:doClean();" ><{t}>清除缓存<{/t}></a>
+				<{help}>模板发生异常时，可手工清空模板缓存！如果你启用了全页缓存，请至控制面板下缓存管理界面清空缓存<{/help}>
+		    </td>
+        </tr>
+    </table>
+</div>
+<script>
+    function doClean() {
+        if(confirm('<{t}>确定要删除缓存吗？<{/t}>')) {
+            W.page(
+                'index.php?app=site&ctl=admin_theme_manage&act=cache_version&theme={$theme}'
+            );
+        };
+    }
+</script>

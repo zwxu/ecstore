@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?><theme>
+	<name>极致简约框架版</name>
+	<id>simple</id>
+	<version>启明星</version>
+	<info>请添加备注名称</info>
+	<author>Jxwinter</author>
+	<site></site>
+	<update_url></update_url>
+
+	<borders>
+			</borders>
+	<views>
+			</views>
+	<config>	  
+			</config>
+
+	<widgets>
+				<widget app="" theme="simple" file="block/footer.html" slot="4" type="other_customhtml" order="21" title="" domid="1334296086740" border="__none__" classname="" tpl="default.html" coreid="bottom-tel">
+		a:1:{s:10:&quot;usercustom&quot;;s:153:&quot;&lt;p&gt;
+热线电话：&lt;br/&gt;
+&lt;span&gt;4008 888 888&lt;/span&gt;&lt;br/&gt;
+
+服务时间：&lt;br/&gt;
+周一 - 周五 ：09:00 ~ 21:00&lt;br/&gt;
+周六 - 周日 ：09:00 ~ 18:00
+&lt;/p&gt;&quot;;}		</widget>
+				<widget app="" theme="simple" file="block/footer.html" slot="5" type="basic_nav" order="22" title="" domid="1334296766606" border="__none__" classname="" tpl="default.html" coreid="footer-menu">
+		a:3:{s:8:&quot;max_leng&quot;;s:0:&quot;&quot;;s:8:&quot;showinfo&quot;;s:0:&quot;&quot;;s:9:&quot;className&quot;;s:10:&quot;menu_index&quot;;}		</widget>
+				<widget app="content" theme="" file="block/footer.html" slot="0" type="articles" order="17" title="" domid="1334288185079" border="__none__" classname="" tpl="default.html" coreid="helplist">
+		a:8:{s:7:&quot;node_id&quot;;s:2:&quot;13&quot;;s:5:&quot;limit&quot;;s:1:&quot;5&quot;;s:2:&quot;lv&quot;;s:1:&quot;2&quot;;s:8:&quot;shownode&quot;;s:1:&quot;1&quot;;s:10:&quot;showallart&quot;;s:1:&quot;1&quot;;s:10:&quot;order_type&quot;;s:7:&quot;pubtime&quot;;s:5:&quot;order&quot;;s:3:&quot;asc&quot;;s:14:&quot;stripparenturl&quot;;s:1:&quot;0&quot;;}		</widget>
+				<widget app="content" theme="" file="block/footer.html" slot="1" type="articles" order="18" title="" domid="1334288261470" border="__none__" classname="" tpl="default.html" coreid="helplist2">
+		a:8:{s:7:&quot;node_id&quot;;s:2:&quot;14&quot;;s:5:&quot;limit&quot;;s:1:&quot;5&quot;;s:2:&quot;lv&quot;;s:1:&quot;2&quot;;s:8:&quot;shownode&quot;;s:1:&quot;1&quot;;s:10:&quot;showallart&quot;;s:1:&quot;1&quot;;s:10:&quot;order_type&quot;;s:7:&quot;pubtime&quot;;s:5:&quot;order&quot;;s:3:&quot;asc&quot;;s:14:&quot;stripparenturl&quot;;s:1:&quot;0&quot;;}		</widget>
+				<widget app="content" theme="" file="block/footer.html" slot="2" type="articles" order="19" title="" domid="1334288282619" border="__none__" classname="" tpl="default.html" coreid="helplist3">
+		a:8:{s:7:&quot;node_id&quot;;s:2:&quot;15&quot;;s:5:&quot;limit&quot;;s:1:&quot;5&quot;;s:2:&quot;lv&quot;;s:1:&quot;2&quot;;s:8:&quot;shownode&quot;;s:1:&quot;1&quot;;s:10:&quot;showallart&quot;;s:1:&quot;1&quot;;s:10:&quot;order_type&quot;;s:7:&quot;pubtime&quot;;s:5:&quot;order&quot;;s:3:&quot;asc&quot;;s:14:&quot;stripparenturl&quot;;s:1:&quot;0&quot;;}		</widget>
+				<widget app="content" theme="" file="block/footer.html" slot="3" type="articles" order="20" title="" domid="1334288297356" border="__none__" classname="" tpl="default.html" coreid="helplist4">
+		a:8:{s:7:&quot;node_id&quot;;s:2:&quot;16&quot;;s:5:&quot;limit&quot;;s:1:&quot;5&quot;;s:2:&quot;lv&quot;;s:1:&quot;2&quot;;s:8:&quot;shownode&quot;;s:1:&quot;1&quot;;s:10:&quot;showallart&quot;;s:1:&quot;1&quot;;s:10:&quot;order_type&quot;;s:7:&quot;pubtime&quot;;s:5:&quot;order&quot;;s:3:&quot;asc&quot;;s:14:&quot;stripparenturl&quot;;s:1:&quot;0&quot;;}		</widget>
+				<widget app="" theme="simple" file="block/header.html" slot="7" type="basic_cart" order="7" title="" domid="1334114829471" border="__none__" classname="" tpl="default.html" coreid="cart">
+		a:2:{s:14:&quot;cart_show_type&quot;;s:1:&quot;1&quot;;s:15:&quot;cart_show_total&quot;;s:1:&quot;2&quot;;}		</widget>
+				<widget app="" theme="simple" file="block/header.html" slot="5" type="other_menu" order="5" title="" domid="1334053033497" border="__none__" classname="" tpl="default.html" coreid="hot-menu">
+		a:2:{s:14:&quot;top_link_title&quot;;a:5:{i:0;s:6:&quot;新品&quot;;i:1;s:6:&quot;品牌&quot;;i:2;s:6:&quot;促销&quot;;i:3;s:9:&quot;风云榜&quot;;i:4;s:12:&quot;选取中心&quot;;}s:12:&quot;top_link_url&quot;;a:5:{i:0;s:10:&quot;./new.html&quot;;i:1;s:12:&quot;./brand.html&quot;;i:2;s:13:&quot;./cuxiao.html&quot;;i:3;s:12:&quot;./cloud.html&quot;;i:4;s:12:&quot;./check.html&quot;;}}		</widget>
+				<widget app="" theme="simple" file="block/header.html" slot="0" type="basic_member" order="0" title="" domid="1334047846256" border="__none__" classname="" tpl="default.html" coreid="login">
+		a:1:{s:7:&quot;welcome&quot;;s:24:&quot;欢迎光临网上商城&quot;;}		</widget>
+				<widget app="" theme="simple" file="block/header.html" slot="2" type="basic_logo" order="2" title="" domid="1334047857564" border="__none__" classname="" tpl="default.html" coreid="logo">
+		a:1:{s:7:&quot;logotxt&quot;;s:25:&quot;请填写logo文字描述&quot;;}		</widget>
+				<widget app="" theme="simple" file="block/header.html" slot="4" type="basic_nav" order="4" title="" domid="1334053934013" border="__none__" classname="" tpl="default.html" coreid="nav">
+		a:3:{s:8:&quot;max_leng&quot;;s:0:&quot;&quot;;s:8:&quot;showinfo&quot;;s:0:&quot;&quot;;s:9:&quot;className&quot;;s:10:&quot;menu_index&quot;;}		</widget>
+				<widget app="" theme="simple" file="block/header.html" slot="6" type="articel_notice" order="6" title="" domid="1334121054618" border="__none__" classname="" tpl="default.html" coreid="notice">
+		a:3:{s:9:&quot;noticetxt&quot;;s:6:&quot;公告&quot;;s:10:&quot;articeltxt&quot;;s:23:&quot;全场满99元免运费&quot;;s:10:&quot;articelurl&quot;;s:16:&quot;http://shopex.cn&quot;;}		</widget>
+				<widget app="" theme="simple" file="block/header.html" slot="3" type="basic_search" order="3" title="" domid="1334047830045" border="__none__" classname="" tpl="default.html" coreid="search">
+		a:3:{s:6:&quot;hotkey&quot;;s:15:&quot;热门关键词&quot;;s:14:&quot;top_link_title&quot;;a:3:{i:0;s:9:&quot;畅销品&quot;;i:1;s:9:&quot;特价款&quot;;i:2;s:6:&quot;爆款&quot;;}s:12:&quot;top_link_url&quot;;a:3:{i:0;s:0:&quot;&quot;;i:1;s:0:&quot;&quot;;i:2;s:0:&quot;&quot;;}}		</widget>
+				<widget app="" theme="simple" file="block/header.html" slot="1" type="other_menu" order="1" title="" domid="1334047892770" border="__none__" classname="" tpl="default.html" coreid="topmenu">
+		a:2:{s:14:&quot;top_link_title&quot;;a:3:{i:0;s:12:&quot;网站首页&quot;;i:1;s:12:&quot;帮助中心&quot;;i:2;s:12:&quot;其他链接&quot;;}s:12:&quot;top_link_url&quot;;a:3:{i:0;s:0:&quot;&quot;;i:1;s:0:&quot;&quot;;i:2;s:0:&quot;&quot;;}}		</widget>
+				<widget app="" theme="simple" file="default.html" slot="0" type="basic_position" order="8" title="" domid="1334226843958" border="__none__" classname="" tpl="default.html" coreid="position">
+		a:0:{}		</widget>
+				<widget app="" theme="simple" file="index.html" slot="0" type="ad_pic" order="8" title="" domid="1334125891210" border="__none__" classname="" tpl="default.html" coreid="ad001">
+		a:5:{s:12:&quot;ad_pic_width&quot;;s:0:&quot;&quot;;s:13:&quot;ad_pic_height&quot;;s:0:&quot;&quot;;s:6:&quot;ad_pic&quot;;s:22:&quot;%THEME%/images/ad1.jpg&quot;;s:10:&quot;ad_pic_txt&quot;;s:12:&quot;广告图片&quot;;s:11:&quot;ad_pic_link&quot;;s:2:&quot;./&quot;;}		</widget>
+				<widget app="" theme="simple" file="index.html" slot="3" type="ad_pic" order="11" title="" domid="1334130738175" border="__none__" classname="" tpl="default.html" coreid="article-ad">
+		a:5:{s:12:&quot;ad_pic_width&quot;;s:0:&quot;&quot;;s:13:&quot;ad_pic_height&quot;;s:0:&quot;&quot;;s:6:&quot;ad_pic&quot;;s:21:&quot;%THEME%/images/rk.png&quot;;s:10:&quot;ad_pic_txt&quot;;s:0:&quot;&quot;;s:11:&quot;ad_pic_link&quot;;s:0:&quot;&quot;;}		</widget>
+				<widget app="content" theme="" file="index.html" slot="2" type="articles" order="10" title="" domid="1334130701057" border="__none__" classname="" tpl="default.html" coreid="article-right">
+		a:8:{s:7:&quot;node_id&quot;;s:2:&quot;11&quot;;s:5:&quot;limit&quot;;s:1:&quot;5&quot;;s:2:&quot;lv&quot;;s:1:&quot;2&quot;;s:8:&quot;shownode&quot;;s:1:&quot;1&quot;;s:10:&quot;showallart&quot;;s:1:&quot;1&quot;;s:10:&quot;order_type&quot;;s:7:&quot;pubtime&quot;;s:5:&quot;order&quot;;s:3:&quot;asc&quot;;s:14:&quot;stripparenturl&quot;;s:1:&quot;1&quot;;}		</widget>
+				<widget app="" theme="simple" file="index.html" slot="8" type="basic_comment" order="16" title="" domid="1334210809564" border="__none__" classname="" tpl="default.html" coreid="common">
+		a:2:{s:5:&quot;title&quot;;s:12:&quot;用户评论&quot;;s:5:&quot;limit&quot;;s:1:&quot;5&quot;;}		</widget>
+				<widget app="" theme="simple" file="index.html" slot="1" type="ad_slide" order="9" title="" domid="1334127842031" border="__none__" classname="" tpl="default.html" coreid="flash">
+		a:5:{s:5:&quot;width&quot;;s:3:&quot;700&quot;;s:6:&quot;height&quot;;s:3:&quot;340&quot;;s:6:&quot;effect&quot;;s:7:&quot;scrollx&quot;;s:8:&quot;autoplay&quot;;s:4:&quot;true&quot;;s:3:&quot;pic&quot;;a:3:{s:13:&quot;1334127815154&quot;;a:4:{s:2:&quot;id&quot;;s:13:&quot;1334127815154&quot;;s:4:&quot;link&quot;;s:25:&quot;%THEME%/images/flash1.jpg&quot;;s:10:&quot;linktarget&quot;;s:0:&quot;&quot;;s:8:&quot;linkinfo&quot;;s:0:&quot;&quot;;}s:13:&quot;1334127816010&quot;;a:4:{s:2:&quot;id&quot;;s:13:&quot;1334127816010&quot;;s:4:&quot;link&quot;;s:25:&quot;%THEME%/images/flash2.jpg&quot;;s:10:&quot;linktarget&quot;;s:0:&quot;&quot;;s:8:&quot;linkinfo&quot;;s:0:&quot;&quot;;}s:13:&quot;1334127816914&quot;;a:4:{s:2:&quot;id&quot;;s:13:&quot;1334127816914&quot;;s:4:&quot;link&quot;;s:25:&quot;%THEME%/images/flash3.jpg&quot;;s:10:&quot;linktarget&quot;;s:0:&quot;&quot;;s:8:&quot;linkinfo&quot;;s:0:&quot;&quot;;}}}		</widget>
+				<widget app="" theme="simple" file="index.html" slot="4" type="goodscat_show" order="12" title="" domid="1334286248250" border="__none__" classname="" tpl="default.html" coreid="goodscat">
+		a:0:{}		</widget>
+				<widget app="" theme="simple" file="index.html" slot="5" type="ad_pic" order="13" title="" domid="1334135273482" border="__none__" classname="" tpl="default.html" coreid="goodscat-ad">
+		a:5:{s:12:&quot;ad_pic_width&quot;;s:0:&quot;&quot;;s:13:&quot;ad_pic_height&quot;;s:0:&quot;&quot;;s:6:&quot;ad_pic&quot;;s:22:&quot;%THEME%/images/bk2.jpg&quot;;s:10:&quot;ad_pic_txt&quot;;s:0:&quot;&quot;;s:11:&quot;ad_pic_link&quot;;s:0:&quot;&quot;;}		</widget>
+				<widget app="" theme="simple" file="index.html" slot="7" type="goods_show700" order="15" title="" domid="1334214161199" border="__none__" classname="" tpl="default.html" coreid="product-wonderful">
+		a:5:{s:5:&quot;title&quot;;s:12:&quot;本周特价&quot;;s:8:&quot;goodsNum&quot;;s:1:&quot;8&quot;;s:6:&quot;linkid&quot;;s:29:&quot;68,67,66,65,63,62,61,60,59,58&quot;;s:5:&quot;goods&quot;;s:311:&quot;[{&quot;id&quot;:&quot;68&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;67&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;66&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;65&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;63&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;62&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;61&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;60&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;59&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;58&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;}]&quot;;s:10:&quot;price_show&quot;;s:6:&quot;特价&quot;;}		</widget>
+				<widget app="" theme="simple" file="index.html" slot="6" type="goods_show950" order="14" title="" domid="1334136715571" border="__none__" classname="" tpl="default.html" coreid="product001">
+		a:5:{s:5:&quot;title&quot;;s:12:&quot;推荐商品&quot;;s:8:&quot;goodsNum&quot;;s:2:&quot;10&quot;;s:6:&quot;linkid&quot;;s:56:&quot;49,48,47,46,45,44,43,42,41,40,39,37,36,35,32,31,30,29,27&quot;;s:5:&quot;goods&quot;;s:590:&quot;[{&quot;id&quot;:&quot;49&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;48&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;47&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;46&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;45&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;44&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;43&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;42&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;41&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;40&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;39&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;37&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;36&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;35&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;32&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;31&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;30&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;29&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;27&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;}]&quot;;s:10:&quot;price_show&quot;;s:9:&quot;销售价&quot;;}		</widget>
+				<widget app="" theme="simple" file="index.html" slot="6" type="goods_show950ad" order="15" title="" domid="1334305254765" border="__none__" classname="" tpl="default.html" coreid="product001">
+		a:11:{s:4:&quot;pic1&quot;;s:25:&quot;%THEME%/images/ad-001.jpg&quot;;s:7:&quot;pic1url&quot;;s:2:&quot;./&quot;;s:7:&quot;pic1txt&quot;;s:15:&quot;广告图片一&quot;;s:4:&quot;pic2&quot;;s:25:&quot;%THEME%/images/ad-002.jpg&quot;;s:7:&quot;pic2url&quot;;s:2:&quot;./&quot;;s:7:&quot;pic2txt&quot;;s:15:&quot;广告图片二&quot;;s:5:&quot;title&quot;;s:12:&quot;特约促销&quot;;s:8:&quot;goodsNum&quot;;s:2:&quot;10&quot;;s:6:&quot;linkid&quot;;s:24:&quot;7,6,5,4,3,32,31,30,29,27&quot;;s:5:&quot;goods&quot;;s:306:&quot;[{&quot;id&quot;:&quot;7&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;6&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;5&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;4&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;3&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;32&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;31&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;30&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;29&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;},{&quot;id&quot;:&quot;27&quot;,&quot;pic&quot;:&quot;&quot;,&quot;nice&quot;:&quot;&quot;}]&quot;;s:10:&quot;price_show&quot;;s:9:&quot;销售价&quot;;}		</widget>
+				<widget app="" theme="simple" file="product-1.html" slot="0" type="basic_position" order="8" title="" domid="1334226960481" border="__none__" classname="" tpl="default.html" coreid="position">
+		a:0:{}		</widget>
+				<widget app="" theme="simple" file="product-1.html" slot="1" type="basic_comment" order="9" title="" domid="1334225130272" border="__none__" classname="" tpl="default.html" coreid="product-left">
+		a:2:{s:5:&quot;title&quot;;s:12:&quot;用户评论&quot;;s:5:&quot;limit&quot;;s:1:&quot;5&quot;;}		</widget>
+			</widgets>
+
+	<proinstances>
+			</proinstances>
+
+</theme>

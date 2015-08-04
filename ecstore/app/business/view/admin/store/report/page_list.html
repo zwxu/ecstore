@@ -1,0 +1,87 @@
+<div container='true'>
+<div class="tableform">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="gridlist">
+<col class="Coldate"></col>
+<col class="Coldetails"></col>
+<col class="Colamount"></col>
+<thead>
+<tr>
+  <th><{t}>服务月<{/t}></th>
+  <th><{t}>退款<{/t}></th>
+  <th><{t}>退款率<{/t}></th>
+  <th><{t}>平均退款速度<{/t}></th>
+  <th><{t}>投诉<{/t}></th>
+  <th><{t}>违规<{/t}></th>
+  <th><{t}>评价总数<{/t}></th>
+  <th><{t}>原始中差评数<{/t}></th>
+  <th><{t}>删除中差评数<{/t}></th>
+</tr></thead><tbody>
+
+<{foreach from=$report item=reportitem key=key}>
+<tr>
+   <td><{$key}></td>
+   <td class="Coldetails">  <{if $reportitem.ref_count}>
+                            <{$reportitem.ref_count}>
+                            <{else}>0
+                            <{/if}>
+                          &nbsp;<{t}>笔<{/t}></td>
+   <td class="Coldetails"><{$reportitem.total_lv * 100}>%</td>
+   <td class="Colamount">
+                            <{if $reportitem.total_days}>
+                            <{$reportitem.total_days}>
+                            <{else}>0
+                            <{/if}>
+   &nbsp;<{t}>天<{/t}>
+  <{if $reportitem.total_days > $reportitem.counter_days }>
+   <span class="td_color_2"><{t}>比平均行业慢<{/t}></span><span class="td_color_2"><{$reportitem.total_days - $reportitem.counter_days }></span><{t}>天<{/t}>
+  <{else}>
+   <span class="td_color_1"><{t}>比平均行业快<{/t}></span>
+   <span class="td_color_1"><{$reportitem.counter_days-$reportitem.total_days}></span><{t}>天<{/t}>
+  <{/if}>
+   
+   
+   </td>
+   <td class="Colamount">
+                            <{if $reportitem.com_count}>
+                            <{$reportitem.com_count}>
+                            <{else}>0
+                            <{/if}>
+   
+   &nbsp;<{t}>笔<{/t}></td>
+   <td class="Colamount">
+                            <{if $reportitem.vio_count}>
+                            <{$reportitem.vio_count}>
+                            <{else}>0
+                            <{/if}>
+   &nbsp;<{t}>笔<{/t}></td> 
+   <td class="Colamount">
+                            <{if $reportitem.comm_count}>
+                            <{$reportitem.comm_count}>
+                            <{else}>0
+                            <{/if}>
+   &nbsp;<{t}>笔<{/t}></td>
+   <td class="Colamount">
+                            <{if $reportitem.score_count}>
+                            <{$reportitem.score_count+$reportitem.del_count }>
+                            <{else}> 
+                                <{if $reportitem.del_count}>
+                                <{$reportitem.del_count}>
+                                <{else}>0
+                                <{/if}>
+                            <{/if}>
+   &nbsp;<{t}>笔<{/t}></td>
+   <td class="Colamount">
+                            <{if $reportitem.del_count}>
+                            <{$reportitem.del_count}>
+                            <{else}>0
+                            <{/if}>
+   &nbsp;<{t}>笔<{/t}></td>
+</tr>
+
+
+<{/foreach}>
+</tbody>
+</table>
+ <{$pager}>
+</div>
+</div>

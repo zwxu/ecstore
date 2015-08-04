@@ -1,0 +1,392 @@
+<{capture name="body"}>
+ <{$_PAGE_}>
+<{/capture}>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title><{$title}></title>
+<link rel="shortcut icon" href="../favicon.gif" type="image/gif" />
+<{if defined('DEBUG_CSS') && DEBUG_CSS}>
+<link rel="stylesheet" href="<{$desktop_path}>/css/framework.css" type="text/css" media="screen, projection"/>
+<link rel="stylesheet" href="<{$desktop_path}>/css/default/style.css" type="text/css" media="screen, projection"/>
+<link rel="stylesheet" href="<{$desktop_path}>/css/default/singlepage.css" type="text/css" media="screen, projection"/>
+<{else}>
+<link rel="stylesheet" href="<{$desktop_path}>/css/default/style_min.css" type="text/css" media="screen, projection"/>
+<link rel="stylesheet" href="<{$desktop_path}>/css/default/singlepage_min.css" type="text/css" media="screen, projection"/>
+<{/if}>
+<!-- 引进app的singlepage页面自定义css-@lujy -->
+<{$singleappcss}>
+
+ <{lang_css src="lang.css" app="desktop"}>
+ <{lang_script src="lang.js" app='desktop'}>
+ <{script src="loader.js" app="desktop"}>
+
+<{if defined('DEBUG_JS') && DEBUG_JS}>
+	 <{script src="moo.js" app="desktop"}>
+	 <{script src="moomore.js" app="desktop"}>
+	 <{script src="mooadapter.js" app="desktop"}>
+	 <{script src="jstools.js" app="desktop"}>
+
+	 <{script src="coms/messagebox.js" app="desktop"}>
+	 <{script src="coms/validate.js" app="desktop"}>
+	 <{script src="coms/wpage.js" app="desktop"}>
+	 <{script src="coms/dialog.js" app="desktop"}>
+	 <{script src="coms/dropmenu.js" app="desktop"}>
+
+ <{else}>
+	<script src="<{$desktop_path}>/js_mini/moo_min.js" ></script>
+	<script src="<{$desktop_path}>/js_mini/tools_min.js"></script>
+<{/if}>
+
+
+<script>
+
+(function(){
+
+	<{if defined('DEBUG_JS') && DEBUG_JS}>
+		var js_path='js';
+	<{else}>
+		var js_path='js_mini';
+	<{/if}>
+
+	var	hs = {
+			'autocompleter': {path:'<{$desktop_path}>/'+js_path+'/coms/autocompleter.js',type:'js'},
+			'finder': {path:'<{$desktop_path}>/'+js_path+'/coms/finder.js',type:'js'},
+			'uploader': {path:'<{$desktop_path}>/'+js_path+'/coms/uploader.js',type:'js'},
+			'modedialog': {path:'<{$desktop_path}>/'+js_path+'/coms/modedialog.js',type:'js'},
+			'pager':{path:'<{$desktop_path}>/'+js_path+'/coms/pager.js',type:'js'},
+			<{if defined('DEBUG_JS') && DEBUG_JS}>
+			'colorpicker': {path:'<{$desktop_path}>/'+js_path+'/coms/colorpicker.js',type:'js'},
+			'editor_style_1': {path:'<{$desktop_path}>/'+js_path+'/coms/editor_style_1.js',type:'js',requires:['picker']},
+			<{/if}>
+
+			'picker': {path:'<{$desktop_path}>/'+js_path+'/coms/datapicker.js',type:'js',requires:['colorpicker']},
+			'editor': {path:'<{$desktop_path}>/'+js_path+'/coms/editor.js',type:'js',requires:['editor_style_1']}
+		};
+
+	Object.each(hs,function(v,k){
+		Ex_Loader.add(k,v);
+	});
+
+	if(window.ie6)Ex_Loader('<{$desktop_path}>/js/fixie6.js');
+
+})();
+
+var startTime = (new Date).getTime();
+var SHOPADMINDIR='<{$shopadmin_dir}>';
+var SHOPBASE='<{$shop_base}>';
+var DESKTOPRESURL='<{$desktopresurl}>';
+var DESKTOPRESFULLURL='<{$desktopresfullurl}>';
+var DEBUG_JS=false;
+var Setting = {};
+var Menus = "json from=$mlist";
+var sess_id = '<{$session_id}>';
+var BREADCRUMBS ='0:0';
+<{$script}>
+<{if $statusId}>
+window.statusId = <{$statusId}>;
+<{/if}>
+window.loadedPart = [1,0,(new Date).getTime()];
+
+</script>
+
+<{$env.capture.header}>
+<{desktop_header}>
+</head>
+<body class="single-page <{if $env.capture.sidebar}>single-page-col2<{/if}>">
+<noscript>
+  <div class='noscript error'>
+     <{t}>您好，要正常运行BBC后台，浏览器必须支持Javascript<{/t}>
+  </div>
+</noscript>
+<div style="display:none;height:0;overflow:hidden;">
+<iframe src='<{$desktop_path}>/tpl.html' id='tplframe' tabindex=-1 ></iframe>
+<iframe src='<{$desktop_path}>/about.html' name='download' tabindex=-2  id='downloadframe'></iframe>
+<iframe src='<{$desktop_path}>/about.html' name='upload' tabindex=-2  id='uploadframe'></iframe>
+</div>
+<div class='body' id='body'>
+	<div class='msgbox' id='messagebox'></div>
+    <div class='container clearfix' id='container'>
+        <div class='side span-auto side-close' id='side' <{if !$env.capture.sidebar}>style="display:none;width:0"<{/if}>>
+            <div class='side-menu mlist'  id="menu-desktop">
+				<{$env.capture.sidebar}>
+			</div>
+		</div>
+        <div class='workground' style="width:100%" id='workground'>
+			<div class="toggler-left flt hide" id='leftToggler'>
+	            <div class="toggler-left-inner">&nbsp;</div>
+	        </div>
+			 <div class='content-head' style="<{if !$env.capture.headbar}>font-size:0;height:0;<{/if}>"><{$env.capture.headbar}></div>
+            <div class='content-main' id='main'>
+			   <{$env.capture.body}>
+            </div>
+          <div class='content-foot' style="<{if !$env.capture.footbar}>font-size:0;height:0;<{/if}>"><{$env.capture.footbar}></div>
+        </div>
+		<div class="side-r hide" id="side-r">
+			<div class="side-r-resize" id="side-r-resize">&nbsp;</div>
+		  <div class="side-r-top clearfix">
+	        <b class="side-r-title flt f-14"></b>
+	        <span class="frt side-r-close pointer"><{img src="bundle/finder_drop_arrow_close.gif" app="desktop"}></span>
+	      </div>
+		  <div class="side-r-head" style="border-bottom:1px #999 solid;padding:2px 0 2px 0;font-size:0;height:0;"></div>
+	      <div id="side-r-content" class="side-r-content" conatainer="true" style="overflow:auto"></div>
+		  <div class="side-r-foot" style="font-size:0;height:0;"></div>
+        </div>
+    </div>
+</div>
+
+<script hold="true">
+
+var LAYOUT = {
+	    container: $('container'),
+	    side: $('side'),
+	    workground: $('workground'),
+	    content_main: $('main'),
+	    content_head: $E('#workground .content-head'),
+	    content_foot: $E('#workground .content-foot'),
+	    side_r: $('side-r'),
+		side_r_content:$('side-r-content')
+
+	};
+
+var initDefaultPart = function(){
+           //fixSideLeft = $empty;
+           window.resizeLayout = fixLayout = fixSideLeft =function(){
+
+				var winSize = window.getSize();
+			 	var _NUM = function(num){
+				   num =  isNaN(num)?0:num;
+				   if(num<0)num=0;
+				   return num;
+				}
+
+		        var containerHeight = winSize.y;
+				var mw=0,mh=0;
+
+				LAYOUT.container.setStyle('height',_NUM(containerHeight-LAYOUT.container.getPatch().y));
+		        LAYOUT.container.setStyle('width',_NUM(winSize.x.limit(960, 2000)));
+
+
+				if(!LAYOUT.side.hasClass('hide')){
+		        	LAYOUT.side.setStyle('width',_NUM( (winSize.x * 0.12).limit(150,winSize.x)));
+				}
+
+				LAYOUT.workground.setStyle('width',_NUM(
+			 		(winSize.x - LAYOUT.workground.getPatch().x)
+					-LAYOUT.side.getSize().x
+					-LAYOUT.side_r.getSize().x)
+				).setStyle('left',LAYOUT.side.offsetWidth);
+
+				LAYOUT.content_main.setStyles({'height':
+						(mh=_NUM(containerHeight -
+						LAYOUT.content_head.getSize().y  -
+						LAYOUT.content_foot.getSize().y -
+						LAYOUT.workground.getPatch().y
+						)),
+						'width':(mw=_NUM(LAYOUT.workground.getSize().x-LAYOUT.workground.getPatch().x))
+					}).fireEvent('resizelayout',[mw,mh]);
+
+				if(!LAYOUT.side_r.hasClass('hide')){
+			    	if(!LAYOUT.side_r.get('widthset'))
+	           		LAYOUT.side_r.setStyle('width',_NUM((winSize.x*0.15).limit(150,winSize.x)));
+					LAYOUT.side_r_content.setStyle('height',_NUM(
+						containerHeight
+					-LAYOUT.side_r.getElement('.side-r-top').getSize().y
+					-LAYOUT.side_r.getElement('.side-r-head').getSize().y
+					-LAYOUT.side_r.getElement('.side-r-foot').getSize().y
+					-LAYOUT.side_r_content.getPatch().y-LAYOUT.side_r.getPatch().y));
+					LAYOUT.side_r.setStyle('left',winSize.x - LAYOUT.side_r.offsetWidth);
+				}
+
+
+
+
+           };
+
+
+	    /*MODAL PANEL*/
+		MODALPANEL = {
+			createModalPanel:function(){
+				var mp = new Element('div',{'id':'MODALPANEL'});
+		        var mpStyles = {
+		            'position': 'absolute',
+		            'background': '#333333',
+		            'width': '100%',
+					'display':'none',
+		            'height': window.getScrollSize().y,
+		            'top': 0,
+		            'left': 0,
+		            'zIndex': 65500,
+		            'opacity': .4
+		        };
+				this.element = mp.setStyles(mpStyles).inject(document.body);
+				return this.element;
+			},
+			show:function(){
+				var panel = this.element = this.element||this.createModalPanel();
+				panel.setStyles({
+					'width': '100%',
+	                'height': window.getScrollSize().y
+				}).show();
+			},hide:function(){
+				if(this.element)this.element.hide();
+			}
+		};
+
+
+
+
+
+		  var windowResizeTimer = 0;
+		  window.addEvent('resize',function(){
+			 $clear(windowResizeTimer);
+			 windowResizeTimer = window.resizeLayout.delay(200);
+
+			 if(MODALPANEL.element&&MODALPANEL.element.style.display!='none'){
+						MODALPANEL.element.setStyles({
+							   'height':window.getScrollSize().y
+						});
+				}
+	   	 }).fireEvent('resize');
+
+		   EventsRemote = new Request({url:'index.php?ctl=default&act=desktop_events'});
+
+
+           W = new Wpage({update:document.body,'singlepage':true});
+           W.render(document.body);
+		   W.onComplete();
+		   Xtip = new Tips({tip:'tip_Xtip',fixed:true,offset: {x: 24, y: -15},onBound:function(bound){
+              if(bound.x2){
+                  this.tip.getElement('.tip-top').addClass('tip-top-right');
+                  this.tip.getElement('.tip-bottom').addClass('tip-bottom-right');
+              }else {
+                  this.tip.getElement('.tip-top').removeClass('tip-top-right');
+                  this.tip.getElement('.tip-bottom').removeClass('tip-bottom-right');
+              }
+           }});
+
+
+		Side_R = new Class({
+		    Implements: [Options, Events],
+		    options: {
+
+		        onShow: $empty,
+		        onHide: $empty,
+		        onReady: $empty,
+				isClear:true,
+				width:false
+
+		    },
+		    initialize: function(url, opts) {
+		        this.setOptions(opts);
+		       	this.panel = $('side-r');
+		        this.container = $('side-r-content');
+				var trigger = this.options.trigger;
+
+				if(trigger&&!trigger.retrieve('events',{})['dispose']){
+				            trigger.addEvent('dispose',function(){
+
+								 $('side-r').addClass('hide');
+								 $('side-r-content').empty();
+								 $('side-r').removeProperty('widthset').store('url','');
+
+							});
+				}
+
+				if(this.panel.retrieve('url','') == url)return;
+
+				if (url) {
+		            this.showSide(url);
+		        } else {
+		            throw Exception('NO TARGET URL');
+		            return;
+		        }
+
+		       var btn_close = this.panel.getElement('.side-r-close');
+			   var _title = this.panel.getElement('.side-r-title');
+
+				   _title.set('text',this.options.title||"")
+
+				  if(btn_close){
+	                btn_close.removeEvents('click').addEvent('click', this.hideSide.bind(this));
+	            }
+
+		    },
+		    showSide: function(url) {
+		        this.cleanContainer();
+
+		        var _this = this;
+				if(_this.options.width&&!_this.panel.get('widthset')){
+				    _this.panel.set({'widthset':_this.options.width,styles:{width:_this.options.width}});
+				 }
+				_this.panel.removeClass('hide');
+				 _this.fireEvent('show');
+				window.resizeLayout();
+
+				if(this.cache)return;
+	            W.page(url,{
+	                update:_this.container,
+				    render:false,
+	                onRequest: function() {
+	                    _this.panel.addClass('loading');
+	                },
+
+	                onComplete: function() {
+	                    _this.panel.removeClass('loading');
+	                    _this.fireEvent('ready', $splat(arguments));
+	                    _this.panel.store('url',url);
+						_this.container.style.height = (_this.container.style.height.toInt()-_this.container.getPrevious().getSize().y-_this.container.getNext().getSize().y)+'px';
+	                }
+	            });
+
+		    },
+		    hideSide: function() {
+
+		        this.panel.addClass('hide');
+		        window.resizeLayout();
+		        this.cleanContainer();
+		        this.fireEvent('hide');
+
+		    },
+		    cleanContainer: function() {
+		        this.panel.store('url','');
+		        if(this.options.isClear)this.container.empty();
+		    }
+
+		});
+
+		new Drag($('side-r-resize'), {
+			modifiers: {
+				'x': 'left',
+				'y':false
+			},
+			onBefore:function(el){
+				el.addClass('side-r-resize-ing');
+			},
+			onDrag: function(el) {
+
+				el.addClass('side-r-resize-ing');
+
+			},
+			onComplete: function(el) {
+				el.removeClass('side-r-resize-ing');
+
+				var left = el.getStyle('left');
+					left = left.toInt();
+				var _w =  LAYOUT.side_r.style.width.toInt()-(left-(-5));
+				LAYOUT.side_r.style.width = _w+'px';
+				LAYOUT.side_r.set('widthset',_w);
+				el.style.left = '-5px';
+				resizeLayout();
+			}
+		});
+
+		$exec($("__eval_scripts__").get("html"));
+   };
+
+	window.addEvent('domready',initDefaultPart);
+</script>
+<{desktop_footer}>
+</body>
+</html>

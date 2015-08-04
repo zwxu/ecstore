@@ -1,0 +1,444 @@
+<!-- 原捆绑商品 -->
+<div class="goods-detail-tab clearfix"> </div>
+<{foreach from=$addons item=tmpl}>
+<{require file=$tmpl}>
+<{/foreach}>
+<div class="goodsDetailContent">
+  <{if $goods.description}>
+  <div class="section pdtdetail" tab="<{t}>商品详情<{/t}>">
+    <div class="body indent uarea-output" >
+      <ul class="goods-intro-list clearfix">
+        <{if $goodsbndisplay eq 'true'}>
+        <li title="" ><{t}>编号：<{/t}><{$goods.bn}></li>
+        <{/if}>
+        <li title="" ><{t}>货号：<{/t}><{if $goods.product_bn}><{$goods.product_bn}><{else}><{$product0bn.bn}><{/if}></li>
+        <{if $goods.brand.brand_name}>
+        <li title=""><{t}>品牌：<{/t}><{$goods.brand.brand_name}></li>
+        <{/if}>
+        <li title=""><{t}>价格区间
+          <{if $goods.minmktprice && $goods.maxmktprice}>
+          <{$goods.minmktprice|cur_odr}>&nbsp;-&nbsp;<{$goods.maxmktprice|cur_odr}>
+          <{else}>
+          <{$goods.mktprice|cur_odr}>
+          <{/if}>
+          <{/t}> </li>
+        <{if $env.conf.b2c.goodsprop.display.position != 1}>
+        <{foreach from=$goods.type.props item=propord key=key}>
+        <{if $propord.show}>
+        <{assign var="pkey" value="p_{$key}"}>
+        <{assign var="pcol" value=$goods.props.$pkey.value}>
+        <{if trim($pcol) !== ''}>
+        <li> <span><{$propord.name}>：</span> <{if $propord.type == 'select'}>
+          <{if $env.conf.b2c.goodsprop.display.switch == 'true'}><a href="<{selector args=array("{$goods[category][cat_id]}") value="{$goods[category][cat_id]}" filter=array('cat_id'=>array("{$goods[category][cat_id]}"),"p_{$key}"=>array($pcol))}>" target="_blank"><{$propord.options.$pcol}></a><{else}><{$propord.options.$pcol}><{/if}>
+          <{else}>
+          <{$pcol}>
+          <{/if}> </li>
+        <{/if}>
+        <{/if}>
+        <{/foreach}>
+        <{/if}>
+      </ul>
+    </div>
+    <div id="goods-intro" class="uarea-output p10"> <{$goods.description|lazyimg}> </div>
+    <script>
+    new DataLazyLoad({img:'lazy-load-img',lazyDataType:'img'},$('goods-intro'));
+</script>
+    <div class="goods-intro-shop">
+      <div  class="pt10 pb10 bg-white">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <th  class="goods-introbtn" width="35%"> <{t}>现价：<{/t}><span class="font-red font20px fontbold price1"><{if $goods.minprice && $goods.maxprice}>
+              <{$goods.minprice|cur_odr}>&nbsp;-&nbsp;<{$goods.maxprice|cur_odr}>
+              <{else}>
+              <{$goods.current_price|cur_odr}>
+              <{/if}></span></th>
+            <td width="65%" align="left">
+              <div class="flt">
+              <{if count($goods.products)>0}>
+                <{if $env.conf.system.goods.fastbuy}>
+                <input class="actbtn btn-fastbuy" value="<{t}>立即购买<{/t}>" type="button" />
+                <{/if}>
+                <input class="actbtn btn-buy" value="<{t}>加入购物车<{/t}>" type="submit" />
+                <input class="actbtn btn-notify" value="<{t}>缺货登记<{/t}>" type="submit" style="display: none;" />
+              <{else}>
+                <{if $goods.store-$goods.freez>0 || $goods.store==='' || $goods.store === null}>
+                <{if $env.conf.system.goods.fastbuy}>
+                <input class="actbtn btn-fastbuy" value="<{t}>立即购买<{/t}>" type="button" />
+                <{/if}>
+                <input class="actbtn btn-buy" value="<{t}>加入购物车<{/t}>" type="submit" />
+                <{else}>
+                <input  class="actbtn btn-notify" value="<{t}>缺货登记<{/t}>" type="submit" />
+                <{/if}>
+              <{/if}>
+              </div>
+              <div class="flt" style="margin:12px 0 0 5px">
+                <ul class="button">
+                  <li class="star-off" <{if $login!="nologin"}>star="<{$goods.goods_id}>"<{/if}> title="<{$goods.name|escape:html}>"> <a <{if $login=="nologin"}>href="<{link app="b2c" ctl="site_passport" act="login"}>" <{else}>href="javascript:void(0);" rel="_fav_"<{/if}> class="btn-a listact"><i class="has-icon"> <!-- <img src='<{$env.app.res_url}>/bundle/collect_icon.gif' /> --></i><span >
+                  <div class="fav"><{t}>收藏此商品<{/t}></div>
+                  <div class="nofav"><{t}>已收藏<{/t}></div>
+                  </span></a>
+                  </li>
+                </ul>
+              </div></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="referbox"> </div>
+  </div>
+  <{/if}>
+
+  <{if count($goods.params)>0 && $goods.params}>
+  <div class="section pdtdetail" style="display:none" tab="<{t}>详细参数<{/t}>" >
+    <h2><{t}>详细参数<{/t}></h2>
+    <div class="body"  id="goods-params">
+      <table width="100%" cellpadding="0" cellspacing="0" class="liststyle data">
+        <col class="span-4 bg-gray font-black">
+        </col>
+
+        <{foreach from=$goods.params item=params key=group}>
+        <tr>
+          <td colspan="2" class="colspan bg-graydark"><{$group}><span class="gname"></span></td>
+        </tr>
+        <{foreach from=$params item=value key=key}>
+        <{if $value != ''}>
+        <tr>
+          <th><{$key}></th>
+          <td><{$value|default:'-'}></td>
+        </tr>
+        <{/if}>
+        <{/foreach}>
+        <{/foreach}>
+      </table>
+    </div>
+  </div>
+  <{/if}>
+  <{if $goods.link_count > 0}>
+  <div class="section pdtdetail" style="display:none" tab="<{t}>相关商品<{/t}>">
+    <h2 style="border-bottom:1px solid #ddd"><{t}>相关商品<{/t}></h2>
+    <div class="body" id="goods-rels">
+      <div id="gallery-grid-list" class="GoodsSearchWrap">
+           <ul class="clearfix">
+		   <{foreach from=$goods.link item=linklist name=goods}>
+            <li product="<{$linklist.goods_id}>" class="itemsList items-gallery">
+			  <{if $linklist.udfimg == 'true'}>
+                <{assign var="gimage" value=$linklist.thumbnail_pic}>
+                <{else}>
+                <{assign var="gimage" value=$linklist.image_default_id|default:$defaultImage}>
+                <{/if}>
+                <div class="goodpic picwidth" style='<{if $image_set.S.width}> width:<{$image_set.S.width}>px; margin:0 auto;height:<{$image_set.S.height}>px;<{/if}>'> <a href='<{link app=b2c ctl=site_product act=index arg0=$linklist.goods_id}>' class="picwidth" style='<{if $image_set.S.width}> width:<{$image_set.S.width}>px;display: table-cell; vertical-align: middle; text-align: center; margin:0 auto;height:<{$image_set.S.height}>px;<{/if}>'> <img src="<{$gimage|storager:'s'}>" style=''/> </a></div>
+                <div class="goodinfo">
+                 <ul>
+                      <li><h3><a href="<{link app=b2c ctl=site_product act=index arg0=$linklist.goods_id}>;" title="<{$linklist.name}>"><{$linklist.name}></a></h3></li>
+
+                      <li class="pt5 textcenter"><span class="price1"><{$linklist.price|cur}></span> <{if $goods.setting.mktprice}> <span class="mktprice1"><{$linklist.mktprice|cur}></span> <{/if}> </li>
+
+                      <li class="pt5 clearfix"><ul class="button" >
+                          <{goodsmenu product=$linklist setting=$setting login=$login}>
+                          <li class="btncmp" title="商品对比"> <a href="javascript:void(0)" rel="_gcomp_" data-gcomp="{gid:'<{$linklist.goods_id}>',gname:'<{$linklist.name|escape:'quotes'}>',gtype:'<{$linklist.type_id}>'}" class="btncmp" title="商品对比"> </a> </li>
+                        </ul></li>
+                    </ul>
+                </div>
+              </li>
+            <{if !($smarty.foreach.goods.iteration%4)}> </li>
+          <{if !$smarty.foreach.goods.last}>
+         <{/if}>
+          <{/if}>
+          <{/foreach}>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <{/if}>
+
+<script>
+/*AUTO HEIGHT*/
+window.addEvent('domready',function(){
+
+new AutoFloatGrid('gallery-grid-list', $$('#gallery-grid-list .items-gallery'), Object.merge({
+    autoRowSize: {
+        'h3': 'height'
+    },
+    cols:<{$gallery_display|default:4}>
+},/*可以在全局定义 GALLERY_AutoFloatGrid_Options  覆盖 AutoFloatGrid 的options*/
+('GALLERY_AutoFloatGrid_Options' in window) ? GALLERY_AutoFloatGrid_Options: {}));
+});
+</script>
+
+  <{if $comment.switch.ask == 'on'}>
+  <div class="section pdtdetail" style="display:none" tab="<{t}>购买咨询<{/t}>(<em><{$comment.askCount|default:'0'}></em>)">
+    <div class="referbox">
+      <div class="goods-discus-title">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 10px">
+          <tr>
+            <td width="40%"><span class="font16px fontbold" style="margin:0 8px 0 0"><{t}>购买咨询<{/t}></span><{t}>共<{/t}><a href="<{link app="b2c" ctl="site_comment" act="commentlist" arg0=$goods.goods_id arg1="ask"}>" class="font-red"><{$comment.askCount|default:'0'}></a><{t}>人咨询，<{/t}><a href="<{link app="b2c" ctl="site_comment" act="commentlist" arg0=$goods.goods_id arg1="ask"}>" style="text-decoration:underline"><{t}>浏览所有问答<{/t}></a></td>
+            <td width="45%" align="right">&nbsp;</td>
+            <td width="13%" style="vertical-align:middle; text-align:center"><!--   <button type="button" class="btn discuss"> <span><span> <{t}>我要咨询<{/t}></span></span> </button>--></td>
+          </tr>
+        </table>
+      </div>
+      <{foreach from=$comment.list.ask item=comlist name=asklist}>
+      <div class="goods-referbox">
+        <div class="goods-referbox-q">
+          <table width="100%" border="0" cellpadding="0" cellspacing="0">
+            <{if $comlist.gask_type}>
+            <tr>
+              <td colspan="2" style="padding:0 10px; font-weight:bold"><{t}>咨询项目<{/t}>:<{$comlist.gask_type}></td>
+            </tr>
+            <{/if}>
+            <tr>
+              <td width="5%" style=" padding-top:5px" align="right"><img src='<{$env.app.res_url}>/bundle/question_icon.gif' /></td>
+              <td width="95%"><dl style="border:none; margin-top:0">
+                  <dt><span class="flt font-blue"><{if $comlist.addon.hidden_name =='YES' && $comlist.author_id!=0}>匿名<{else}><{$comlist.author}><{/if}> </span> <{if $base_setting.display_lv == 'on'}><{$comlist.member_lv_name}><{/if}> <span class="floatright"><{$comlist.time|cdate:'SDATE_STIME'}></span></dt>
+                  <dd><{$comlist.comment|nl2br}></dd>
+                  <dd style="padding:0x"><div class="repaybtn"><a class="btn-a listact" href="<{link app=b2c ctl=site_comment act=reply arg0=$comlist.comment_id}>"><i class="has-icon"> <img  style="margin:0"src='<{$env.app.res_url}>/bundle/mceico_13.gif' /></i><span>回复</span></a></div></dd>
+                  <div class="clear" style="margin-bottom:15px"></div>
+                </dl></td>
+              <{if $base_setting.switch_reply == 'on'}>
+              <{/if}> </tr>
+          </table>
+        </div>
+        <{foreach from=$comlist.items item=items}>
+        <div class="goods-referbox-a">
+          <div class="goods-referbox-a-i">
+            <div class="goods-referbox-a-arr"> <img src='<{$env.app.res_url}>/arr_top.gif' /></div>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td width="4%" style=" padding-top:5px" align="right"><img src='<{$env.app.res_url}>/bundle/aswer_icon.gif' /></td>
+                <td width="96%"><dl style="border:none; margin-top:0">
+                    <dt><span class="flt font-orange"><{if $items.addon.hidden_name =='YES' && ($items.author_id !=0 || $items.author_id !=1)}>匿名<{else}><{$items.author}><{/if}></span> <{if $base_setting.display_lv == 'on'}><{$items.member_lv_name}><{/if}> <span class="floatright" style="padding:0 14px 0 0"><{$items.time|cdate:'SDATE_STIME'}></span></dt>
+                    <dd><{$items.comment|nl2br}></dd>
+                  </dl></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <{/foreach}> </div>
+      <{/foreach}> </div>
+    <form class="addcomment" method="post" action='<{link app=b2c ctl=site_comment act=toComment arg0=$goods.goods_id arg1=ask}>' onsubmit='checkFormReqs(event);'>
+      <h4><{t}>发表咨询<{/t}></h4>
+      <div class='title'><{t}>标题：<{/t}><{input type="text" class="inputstyle blur"  required="true" size=50 name="title" value="[咨询]".$goods.name }></div>
+      <div class="division">
+        <table border="0" width="100%" cellpadding="0" cellspacing="0" class="forform">
+          <tr>
+            <th>&nbsp;</th>
+            <td><{foreach from=$gask_type item=gask_type key=key}>
+              <div class="flt"><{$gask_type}><input type="radio" <{if $key == 0}>checked="checked"<{/if}> value="<{$gask_type}>" name="gask_type" /></div>
+              <{/foreach}></td>
+          </tr>
+          <tr>
+            <th><em>*</em><{t}>咨询内容：<{/t}></th>
+            <td><{input type="textarea" class="inputstyle"  vtype="sendcomments" rows="5" name="comment" style="display:block;width:100%;"}><br />
+              <span class="infotips floatright"><{t}>字数限制为5-200个<{/t}></span>
+              <script>
+	                window.addEvent('domready',function(){
+                      $LAB.wait(function(){
+	                    validatorMap['sendcomments']= ['<{t}>字数应该在5-200个字之内<{/t}>', function(element, v) {
+	                        if ($(element).get('value') == '' || $(element).get('value').length < 5 || $(element).get('value').length >= 200){
+	                            return false;
+	                        }
+	                        else
+	                            return true;
+	                    }];
+	                });
+	                });
+	            </script></td>
+          </tr>
+          <{if $login eq "nologin"}>
+          <tr>
+            <th><{t}>联系方式：<{/t}></th>
+            <td><{input type="text" vtype=required class="inputstyle"   size=20 name="contact"}><span class="infotips"><{t}>(可以是电话、email、qq等)<{/t}></span></td>
+          </tr>
+          <{/if}>
+          <{if $askshow == "on"}>
+          <tr>
+            <th><em>*</em><{t}>验证码：<{/t}></th>
+            <td><{input type="text" vtype=required size="4" maxlength="4" name="askverifyCode"}>&nbsp;<img src="<{link app="b2c" ctl="site_comment" act="gen_askvcode" arg0=$smarty.now}>" align="absmiddle" id="askimgVerifyCode"/><a href="javascript:changeimg('askimgVerifyCode','ask')">&nbsp;<{t}>看不清楚?换个图片<{/t}></a></td>
+          </tr>
+          <{/if}>
+          <{if $login != "nologin"}>
+          <tr>
+            <th>匿名发表:</th>
+            <td><input type="checkbox" name="hidden_name" value="YES"/></td>
+          </tr>
+          <{/if}>
+          <tr>
+            <td></td>
+            <td>
+              <{button id="cart-coupon-submitBtn" type="submit" rel="_request" label=$___b2c="提交咨询"|t:'b2c'}>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </form>
+  </div>
+  <{/if}>
+
+  <{if $comment.switch.discuss == 'on'}>
+  <div class="section pdtdetail" style="display:none" tab="<{t}>商品评论<{/t}> (<em><{$comment.discussCount|default:'0'}></em>)">
+    <div class="referbox">
+      <div class="goods-discus-title">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 10px">
+          <tr>
+            <td width="40%"><span class="font16px fontbold" style="margin:0 8px 0 0"><{t}>商品评论<{/t}></span><{t}>共<{/t}><a href="<{link app=b2c ctl="site_comment" act="commentlist" arg0=$goods.goods_id arg1="discuss"}>" class="font-red"><{$comment.discussCount|default:'0'}></a><{t}>人评论，<{/t}><a href="<{link app=b2c ctl="site_comment" act="commentlist" arg0=$goods.goods_id arg1="discuss"}>" style="text-decoration:underline"><{t}>查看所有评论<{/t}></a></td>
+            <td width="45%" align="right"><{t}>购买过该商品的用户才能进行评论<{/t}></td>
+            <td width="13%" style="vertical-align:middle; text-align:center"><!--  <button type="button" class="btn discuss"> <span><span> <{t}>我要评论<{/t}></span></span> </button>--></td>
+          </tr>
+        </table>
+      </div>
+      <{foreach from=$comment.list.discuss item=comlist name=discusslist}>
+      <dl>
+        <dt><div class="flt font-blue"><span class="font-blue"><{if $comlist.addon.hidden_name =='YES' && $comlist.author_id!=0}>匿名<{else}><{$comlist.author}><{/if}> </span>&nbsp;<span class="font-red"><{if $base_setting.display_lv == 'on'}><{$comlist.member_lv_name}><{/if}></span></div> <div class="floatright"><{$comlist.time|cdate:'SDATE_STIME'}></div></dt>
+        <dt><{foreach from=$comlist.goods_point item=goods_point}><div class="floatright" style="padding:0 10px 0 0"> <{$goods_point.type_name}> : <span class="price1"><{$goods_point.goods_point}> </span></div><{/foreach}></dt>
+        <dd><{$comlist.comment|nl2br}></dd>
+        <{if $base_setting.switch_reply == 'on'}>
+        <dd style="padding:0 0 6px 0">
+          <div class="repaybtn"><a class="btn-a listact" href="<{link app=b2c ctl=site_comment act=reply arg0=$comlist.comment_id}>"><i class="has-icon"> <img  style="margin:0"src='<{$env.app.res_url}>/bundle/mceico_13.gif' /></i><span>回复</span></a></div>
+          <div class="clear"></div>
+        </dd>
+        <{/if}>
+      </dl>
+      <!-- 添加回复 begin-->
+      <div class="commentReply"> <{foreach from=$comlist.items item=items}>
+        <!--        <div class="flt commentReply-admin"><{t}>回复<{/t}></div>
+				-->
+        <dl style="margin:-5px 0 0 0">
+          <dt><span class="author font-orange flt"><{if $items.addon.hidden_name =='YES' && ($items.author_id !=0 || $items.author_id !=1)}>匿名<{else}><{$items.author}><{/if}> <{if $base_setting.display_lv == 'on'}><{$items.member_lv_name}><{/if}><{t}>&nbsp;&nbsp;回复：<{/t}></span><span class="floatright"><{$items.time|cdate:'SDATE_STIME'}></span></dt>
+          <dd><{$items.comment|nl2br}></dd>
+        </dl>
+        <{/foreach}> </div>
+      <!-- 添加回复 end-->
+      <{/foreach}> </div>
+    <form class="addcomment" method="post" action='<{link app=b2c ctl=site_comment act=toComment arg0=$goods.goods_id arg1=discuss}>' onsubmit='checkFormReqs(event);'>
+      <h4><{t}>发表评论<{/t}></h4>
+      <div class='title'><{t}>标题：<{/t}><{input type="text" class="inputstyle blur"  required="true" size=50 name="title" value="[评论]".$goods.name}></div>
+      <div class="division">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="forform">
+          <{if $point_status == 'on'}>
+          <tr>
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="forform">
+              <tr>
+                <td width="18%"></td>
+                <td colspan="5"><div class="star-div">
+                    <ul>
+                      <li class="star1"></li>
+                      <li class="star2"></li>
+                      <li class="star3"></li>
+                      <li class="star4"></li>
+                      <li class="star5"></li>
+                    </ul>
+                  </div></td>
+              </tr>
+              <{foreach from=$comment_goods_type item=comment_goods_type}>
+              <tr>
+                <td width="18%" align="center" style="padding-left:55px; line-height:12px"><b><{$comment_goods_type.name}></b></td>
+                <td colspan="5" style="padding-top:0"><div class="point-div">
+                    <ul>
+                      <li>
+                        <input type='radio' name="point_type[<{$comment_goods_type.type_id}>][point]" value=1 />
+                        1分</li>
+                      <li>
+                        <input type='radio' name="point_type[<{$comment_goods_type.type_id}>][point]" value=2 />
+                        2分</li>
+                      <li>
+                        <input type='radio' name="point_type[<{$comment_goods_type.type_id}>][point]" value=3 />
+                        3分</li>
+                      <li>
+                        <input type='radio' name="point_type[<{$comment_goods_type.type_id}>][point]" value=4 >
+                        4分</li>
+                      <li>
+                        <input type='radio' checked="checked" name="point_type[<{$comment_goods_type.type_id}>][point]" value=5 />
+                        5分</li>
+                    </ul>
+                  </div></td>
+              </tr>
+              <{/foreach}>
+            </table>
+          </tr>
+          <{/if}>
+          <table cellpadding="0" cellspacing="0" border="0" width="100%" class="forform">
+            <tr>
+              <th><em>*</em><{t}>评论内容：<{/t}></th>
+              <td><{input type="textarea" class="x-input inputstyle"  vtype="sendcomments" rows="5" name="comment" style="display:block;width:80%;"}> <span class="infotips floatright">字数限制为5-200个</span><br /></td>
+            </tr>
+          </table>
+          <{if $login eq "nologin"}>
+          <table cellpadding="0" cellspacing="0" border="0" width="100%" class="forform">
+            <tr>
+              <th><{t}>联系方式：<{/t}></th>
+              <td><{input type="text" vtype=required class="inputstyle"  size=20 name="contact"}><span class="infotips"><{t}>(可以是电话、email、qq等).<{/t}></span></td>
+            </tr>
+          </table>
+          <{/if}>
+          <{if $discussshow == "on"}>
+          <table cellpadding="0" cellspacing="0" border="0" width="100%" class="forform">
+            <tr>
+              <th><em>*</em><{t}>验证码：<{/t}></th>
+              <td><{input type="text" vtype=required size="4" maxlength="4" name="discussverifyCode"}>&nbsp;<img src="<{link app="b2c" ctl="site_comment" act="gen_dissvcode" arg0=$smarty.now}>" align="absmiddle" id="discussimgVerifyCode"/><a href="javascript:changeimg('discussimgVerifyCode','discuss')">&nbsp;<{t}>看不清楚?换个图片<{/t}></a></td>
+            </tr>
+          </table>
+          <{/if}>
+          <table cellpadding="0" cellspacing="0" border="0" width="100%" class="forform">
+            <{if $login != "nologin"}>
+            <tr>
+              <th>匿名发表:</th>
+              <td><input type="checkbox" name="hidden_name" value="YES"/></td>
+            </tr>
+            <{/if}>
+            <tr>
+              <th></th>
+              <td><{button id="cart-coupon-submitBtn" type="submit" rel="_request" label=$___b2c="提交评论"|t:'b2c'}></td>
+            </tr>
+          </table>
+        </table>
+      </div>
+    </form>
+  </div>
+  <{/if}>
+  <div id='template-modal' style='display:none;'>
+    <div class='dialog'>
+      <div class='dialog-title clearfix'>
+        <div class='title span-auto'>{title}</div>
+        <div class='dialog-close-btn' onclick='$(this).getParent(".dialog").destroy();'>X</div>
+      </div>
+      <div class='dialog-content'> {content} </div>
+    </div>
+  </div>
+  <{if $comment.switch.ask == 'on' or $comment.switch.discuss == 'on'}>
+  <script>
+
+	    var checkFormReqs =function(e){
+	           e    = new Event(e);
+	       var _form= $(e.target);
+
+	       var reqs = $$(_form.getElements('input[type=text]'),_form.getElements('textarea'));
+
+
+	       if(reqs.some(function(req){
+	            if(!req.get('required')&&!req.get('vtype').contains('required'))return;
+	            if(req.get('value').trim()==''){
+	                       req.focus();
+	                       Message.error('<{t}>请完善表单必填项<{/t}><sup>*</sup>');
+	                       return true;
+	            }
+
+	              return false;
+
+
+	       })){
+
+	           e.stop();
+
+	       }
+
+	    };
+
+	    function changeimg(){
+	    $('discussimgVerifyCode').set('src','<{link app="b2c" ctl="site_comment" act="gen_dissvcode" }>?'+(+new Date()));
+	}
+	</script>
+  <{/if}>
+
+
+   </div>
+<img src="<{link app=b2c ctl=site_product act=cron arg=$goods.goods_id }>" width="1" border="none" height="1">

@@ -1,0 +1,31 @@
+<div id="gEditor-GCat-category" dropmenu="gEditor-GCat-list" class="object-select clearfix" >	
+	<div class="label" id="<{$id}>">
+	<{if $category}>
+	<{$category.cat_name}>
+	<{else}>
+	<{t}>分类不限<{/t}>
+	<{/if}>
+	
+	</div>
+	<div class="handle">&nbsp;</div><input type="hidden"  id="gEditor-GCat-input" name=<{$params.name}> value="<{$category.cat_id}>" />
+</div>					
+<div id="gEditor-GCat-list" class="x-drop-menu" style="width:200px"></div>
+<script>
+window.addEvent('domready',function(){
+
+	new DropMenu($('gEditor-GCat-category'),{offset:{x:-222},stopEl:true,onLoad:function(el){
+		if(window.ie6)this.fix=new OverlayFix(this.menu);
+		new CatalogSelect(el,{updateMain:this.menu,
+		onShow:function(){if(this.fix)this.fix.show();}.bind(this),
+		onCallback:<{if $params.callback}><{$params.callback}><{else}>$empty<{/if}>,url:'index.php?app=gift&ctl=admin_gift_cat&act=get_subcat_list'});
+
+	},onShow:function(menu){
+		if(window.ie6)this.fix.show();
+	},onHide:function(){
+		if(window.ie6)this.fix.hide();
+	}});
+
+
+});
+	
+</script>

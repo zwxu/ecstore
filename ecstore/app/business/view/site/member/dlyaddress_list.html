@@ -1,0 +1,64 @@
+<div style="width:960px;overflow-y:auto;">
+<table class="gridlist table-goods-list" style="border-bottom:none" width="1400" border="0" cellspacing="0"  cellpadding="0">
+  <tbody>
+    <tr>
+      <th class="first"><{t}>发货地址<{/t}></th>
+      <th><{t}>退货地址<{/t}></th>
+      <th><{t}>自提地址<{/t}></th>
+      <th><{t}>联系人<{/t}></th>
+      <th><{t}>所在地区<{/t}></th>
+      <th><{t}>街道地址<{/t}></th>
+      <th><{t}>邮编<{/t}></th>
+      <th><{t}>电话号码<{/t}></th>
+      <th><{t}>手机号码<{/t}></th>
+      <th><{t}>公司名称<{/t}></th>
+      <th><{t}>操作<{/t}></th>
+    </tr>
+    <{foreach from=$da_list item="dly" name=dly key="key"}>
+    <tr>
+      <td><input type="radio" name="consign" ahref="<{link app=business ctl=site_member act=dlyaddress_update_consign arg=$dly.da_id}>" <{if $dly.consign}> checked="checked"<{/if}> value="true" ><{t}>默认<{/t}></td>
+      <td><input type="radio" name="refund" ahref="<{link app=business ctl=site_member act=dlyaddress_update_refund arg=$dly.da_id}>" <{if $dly.refund}> checked="checked"<{/if}> value="true" ><{t}>默认<{/t}></td>
+      <td><input type="checkbox" name="pickup" ahref="<{link app=business ctl=site_member act=dlyaddress_update_pickup arg=$dly.da_id}>" <{if $dly.pickup}> checked="checked"<{/if}> value="true" ><{t}>选为自提地址<{/t}></td>
+      <td><{$dly.uname}></td>
+      <td><{$dly.region}></td>
+      <td align="left" style=" width:300px;word-break: break-all; word-wrap:break-word;text-align:left;"><{$dly.address}></td>
+      <td><{$dly.zip}></td>
+      <td><{$dly.phone}></td>
+      <td><{$dly.mobile}></td>
+      <td><{$dly.company}></td>
+      <td class="edit1">
+        <a title="" href="<{link app=business ctl=site_member act=dlyaddress arg0=$orderBy arg2=$dly.da_id}>">编辑<a>
+        <a title="" class="btn-quit" href="<{link app=business ctl=site_member act=dlyaddress_delete arg=$dly.da_id}>">删除</a>
+      </td>
+    </tr>
+    <{/foreach}>
+  </tbody>
+</table>
+</div>
+<{pagers data=$pager}>
+<script>
+  var quit = $$('.table-goods-list .btn-quit')||'';
+  if(quit)
+  quit.removeEvents('click').addEvent('click',function(e){
+    if(confirm('确定退出?'))return true;
+    return false;
+  });
+  var consign = $$('.table-goods-list input[name^=consign]')||'';
+  if(consign)
+  consign.removeEvents('click').addEvent('click',function(e){
+    var url = this.get('ahref');
+    new Request({url:url,method:'get'}).send();
+  });
+  var refund = $$('.table-goods-list input[name^=refund]')||'';
+  if(refund)
+  refund.removeEvents('click').addEvent('click',function(e){
+    var url = this.get('ahref');
+    new Request({url:url,method:'get'}).send();
+  });
+  var consign = $$('.table-goods-list input[name^=pickup]')||'';
+  if(consign)
+  consign.removeEvents('click').addEvent('click',function(e){
+    var url = this.get('ahref');
+    new Request({url:url,method:'get'}).send();
+  });
+</script>

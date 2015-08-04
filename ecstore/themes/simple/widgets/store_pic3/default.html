@@ -1,0 +1,26 @@
+<style>
+.shop_classiess_3_<{$widgets_id}> {margin:10px 0px;}
+.shop_classiess_3_<{$widgets_id}> li {float:left;list-style:none;}
+.shop_classiess_3_<{$widgets_id}> li a,.shop_classiess_3_<{$widgets_id}> li a img{display:block; height:120px;}
+
+.shop_classiess_3_<{$widgets_id}> li a.tu_5,.shop_classiess_3_<{$widgets_id}> li a.tu_5 img{width:397px; margin-right:4px;}
+.shop_classiess_3_<{$widgets_id}> li a.tu_6,.shop_classiess_3_<{$widgets_id}> li a.tu_6 img{width:397px;margin-right:4px;}
+.shop_classiess_3_<{$widgets_id}> li a.tu_7,.shop_classiess_3_<{$widgets_id}> li a.tu_7 img {width:397px;}
+</style>
+<div class="shop_classiess_3_<{$widgets_id}>">
+    <ul <{if $data.height}>style="height:<{$data.height}>px"<{/if}>>
+       <li><a class="tu_5" target="_blank" title="<{$data.pic.0.pic_txt}>" href="<{$data.pic.0.pic_link}>">
+       <img src="images/transparent.gif" lazyload="<{$data.pic.0.pic|storager}>" class="img-lazyload"  alt="<{$data.pic.0.pic_txt}>" <{if $data.height}>style="height:<{$data.height}>px"<{/if}>>
+       </a>
+       </li>
+       <li><a title="<{$data.pic.1.pic_txt}>"  target="_blank"  class="tu_6" href="<{$data.pic.1.pic_link}>">
+       <img src="images/transparent.gif" lazyload="<{$data.pic.1.pic|storager}>" class="img-lazyload"  alt="<{$data.pic.1.pic_txt}>" <{if $data.height}>style="height:<{$data.height}>px"<{/if}>>
+       </a>
+       </li>
+       <li><a title="<{$data.pic.2.pic_txt}>"  target="_blank"  class="tu_7" href="<{$data.pic.2.pic_link}>">
+       <img src="images/transparent.gif" lazyload="<{$data.pic.2.pic|storager}>" class="img-lazyload"  alt="<{$data.pic.2.pic_txt}>" <{if $data.height}>style="height:<{$data.height}>px"<{/if}>>
+       </a>
+       </li>
+       <div class="cl_zhi"></div>
+    </ul>
+</div>

@@ -1,0 +1,9 @@
+<site>
+    
+    <module controller='site_activity' >
+        <name>activity</name>
+        <title>限时抢购</title>
+        <disable>false</disable>
+    </module>
+    
+</site>

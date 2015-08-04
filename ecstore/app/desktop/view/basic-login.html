@@ -1,0 +1,156 @@
+<{if $error_info}>
+<div class="error-info">
+	<{$error_info}>
+</div>
+<{/if}>
+<form class="passport-form" action="<{$callback}>" method="post" name="basicloginform">
+	<ul>
+		<li><label for="uname"><{t}>用户名：<{/t}></label><input class="inputstyle-out inputstyle-out-name" autofocus type="text" required="true" name="uname" id="uname" value=""/></li>
+		<li>
+		<label for="password"><{t}>密&nbsp;码：<{/t}></label><input class="inputstyle-out inputstyle-out-pw" type="password" name="password" id="password" value=""/>
+		<{if $type=="member"}><a href="<{link app='b2c' ctl='site_passport' act='lost'}>"><{t}>忘记密码<{/t}></a><{/if}>
+			<div class="info-tip" id="caps-info">
+			<div class="info-tip-arrow">&nbsp;</div>
+			<{t}>Caps Lock键已开启,密码输入是大写状态!<{/t}>
+		</div>
+		</li>
+		<{if $show_varycode}>
+        <li><label for="verifycode"><{t}>验证码：<{/t}></label><input maxlength="4" autocomplete="off" class="inputstyle-short-out" name="verifycode" id="verifycode" value=""  />
+     <img id="shopadminvocde" src="<{$desktop_url}>index.php?app=desktop&ctl=passport&act=gen_vcode&<{$smarty.now}>" align="top" class="verifycodeimg"><a href="javascript:changeimg('shopadminvocode')">&nbsp;<{t}>看不清楚?换个图片<{/t}></a></li>
+		<{/if}>
+		<li class="colspan">
+			<input type="checkbox" id="autologin" <{if $env.cookie.autologin}>checked=true<{/if}>/>
+			<label for="autologin"><{t}>下次自动登录<{/t}></label>
+		</li>
+		<li class="colspan">
+			   <button id="btn-login" type="submit" class="btn-login btn common-btn">
+				<span>
+					<span id="btn-login-inner"><{t}>登 录<{/t}></span>
+				</span>
+			  </button>
+		</li>
+	</ul>
+</form>
+<script>
+var ck = function(key){
+	this.key = key;
+	this.options = {
+		path: '/',
+		domain: false,
+		duration: 30,
+		secure: false,
+		document: document,
+		encode: true
+	};
+};
+ck.prototype = {
+	w:function(value){
+			if (this.options.encode) value = encodeURIComponent(value);
+			if (this.options.domain) value += '; domain=' + this.options.domain;
+			if (this.options.path) value += '; path=' + this.options.path;
+			if (this.options.duration){
+				var date = new Date();
+				date.setTime(date.getTime() + this.options.duration * 24 * 60 * 60 * 1000);
+				value += '; expires=' + date.toGMTString();
+			}
+			if (this.options.secure) value += '; secure';
+			this.options.document.cookie = this.key + '=' + value;
+	},
+	r:function(){
+			var value = this.options.document.cookie.match('(?:^|;)\\s*' + this.key + '=([^;]*)');
+			return (value) ? decodeURIComponent(value[1]) : null;
+	}
+};
+var cukie = {
+	w:function(k,v){
+		var ins = new ck(k);
+		ins.w(v);
+	},
+	r:function(k){
+		var ins = new ck(k);
+		return ins.r();
+	},
+	d:function(k){
+		var ins = new ck(k);
+		ins.options.duration = -1;
+		ins.w('');
+	}
+};
+
+
+(function(){
+var uname=document.getElementById("uname");
+var password=document.getElementById("password");
+var verifycode=document.getElementById("verifycode");
+var capsTip = document.getElementById('caps-info');
+var autologin = document.getElementById('autologin');
+var blf = document.basicloginform;
+
+uname.onmouseover=function(){
+	this.className='inputstyle-move inputstyle-move-name';
+}
+uname.onmouseout=function(){
+	this.className='inputstyle-out inputstyle-out-name';
+}
+
+password.onmouseover=function(){
+		this.className='inputstyle-move inputstyle-move-pw';
+}
+password.onmouseout=function(){
+	this.className='inputstyle-out inputstyle-out-pw';
+}
+password.onblur=function(){
+	capsTip.style.visibility  =  'hidden';
+}
+password.onkeypress=function(event){
+	detectCapsLock(event);
+}
+
+function detectCapsLock(e){
+	e=e||window.event;
+   valueCapsLock  =  e.keyCode ? e.keyCode:e.which;
+   valueShift  =  e.shiftKey ? e.shiftKey:((valueCapsLock  ==   16 ) ? true : false );
+
+    if (((valueCapsLock >=   65   &&  valueCapsLock  <=   90 )  &&   ! valueShift)
+    || ((valueCapsLock >=   97   &&  valueCapsLock  <=   122 )  &&  valueShift))
+       capsTip.style.visibility  =  'visible';
+    else
+       capsTip.style.visibility  =  'hidden';
+}
+var submitHandle = function(e){
+	var str ="<{t}>登录中..<{/t}>";
+	var bl =document.getElementById('btn-login');
+	bl.setAttribute('type','button');
+	var bli = document.getElementById('btn-login-inner');
+	if(autologin.checked){
+		cukie.w('autologin', 30*1440);
+	}else{
+		cukie.d('autologin');
+	}
+	bli[bli.innerText?'innerText':'textContent']=str;
+};
+
+if(blf.addEventListener){
+	blf.addEventListener('submit',submitHandle,false);
+}else{
+	blf.attachEvent('onsubmit',submitHandle);
+}
+
+if(!verifycode)return;
+verifycode.onmouseover=function(){
+	this.className='inputstyle-short-move';
+}
+verifycode.onmouseout=function(){
+	this.className='inputstyle-short-out';
+}
+
+<{if $show_varycode}>
+changeimg = function(id){
+	var timestamp = Date.parse(new Date());
+	document.getElementById('shopadminvocde').src='<{$desktop_url}>index.php?app=desktop&ctl=passport&act=gen_vcode#'+timestamp;
+
+}
+<{/if}>
+
+})();
+</script>

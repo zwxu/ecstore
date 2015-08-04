@@ -1,0 +1,458 @@
+
+<div class="cart-wrap" id="log">
+     <div class="cart-nav stepbj2"><span class="step1"><a style="color:#fff;text-decoration:none;" href="<{link app='b2c' ctl='site_cart' act='index'}>"><{t}>购物车<{/t}></a></span><span class="step2"><{t}>填写订单并确认<{/t}></span><span class="step3"><{t}>成功提交订单<{/t}></span><span class="my-cart"><{t}>我的购物车<{/t}></span></div>
+
+    <form method="post" action='<{link app=b2c ctl="site_order" act="create"}>' id="order-create">
+        <{if $env.post.isfastbuy}>
+        <input type='hidden' name='isfastbuy' value=1 />
+        <{/if}>
+        <!--<div style="display:none"><{input type="checkForm" }></div>-->
+        <input type="hidden" name="purchase[member_id]" value="<{$address.member_id}>" />
+        <input type="hidden" name="purchase[addr_id]" value="<{$def_addr}>" />
+        <input type="hidden" name="purchase[def_area]" value="<{$def_area}>" />
+        <input type="hidden" name="md5_cart_info" value="<{$md5_cart_info}>" />
+        <input type="hidden" name="extends_args" value='<{$json_args}>' />
+
+    <{include file="site/cart/checkout_base.html" app=b2c}>
+    <{include file="site/cart/cart_items.html" app=b2c}>
+    <{include file="site/cart/cart_solution.html" app=b2c}>
+
+    <{foreach from=$addItems item=item}>
+        <{$item}>
+    <{/foreach}>
+    <div class="division clearfix">
+      <h4 class="order-title-bg"><{t}>结算信息<{/t}></h4>
+
+      <div class="clearfix">
+        <div id="order_promotion">
+          <!-- promotion start -->
+          <{if isset($edit_ajax_data)}>
+          <input type="hidden" id='update-ajax-num' value='<{if $update_cart_type_godos}><{$edit_ajax_data}><{else}><{$edit_ajax_data}><{/if}>' error_msg="<{$error_msg}>" />
+          <{/if}>
+        
+        
+          <{if $aCart.promotion.goods}>
+          <{foreach from=$aCart.promotion.goods item=promotion }>
+            <input type="hidden" class="goods_rule_id" value="<{$promotion.rule_id}>" />
+          <{/foreach}>
+          <{/if}>
+          <{if $aCart.promotion.order}>
+          <div id="cart-real-sales-promotion" class="sales-promotion">
+            <h4><{t}>已享受的促销优惠<{/t}></h4>
+            <ul>
+            <{foreach from=$aCart.promotion item=promotion key=key}>
+            <{if $key=='goods'}><{continue;}><{/if}>
+            <{if $key=='coupon'}><{continue;}><{/if}>
+              <{foreach from=$promotion item=item}>
+            <li class="clearfix">
+            <span class="promotion-name"><input type="hidden" class="order_rule_id" value="<{$item.rule_id}>" /><{$item.name}> </span>
+            <span class="promotion-inf"><{if $item.solution}><{$item.solution}><{else}><{$item.desc}><{/if}></span>
+            </li>  
+            <{/foreach}>
+            <{/foreach}>
+            </ul>
+            <!-- <table width="100%" cellpadding="3" cellspacing="0" >
+            <{foreach from=$aCart.promotion item=promotion key=key}>
+            <{if $key=='goods'}><{continue;}><{/if}>
+            <{if $key=='coupon'}><{continue;}><{/if}>
+             <{foreach from=$promotion item=item}>
+              <tr>
+                <td class="span-auto">
+                  <input type="hidden" class="order_rule_id" value="<{$item.rule_id}>" />
+                  <{$item.name}> 
+                </td>
+                <td class="span-auto" style="text-align:left"><{$item.solution}> </td>
+              </tr>
+             <{/foreach}>
+            <{/foreach}>
+            </table> -->
+          </div>
+          <{/if}>
+          <!-- promotion end -->
+        
+          <{if $is_group_orders == 'false'}><{include file="site/cart/cart_coupon.html" app=b2c}>
+          <{if $point_dis_html}><{$point_dis_html}><{/if}><{/if}>
+        
+          <div class="order-memory clearfix">
+            <h4 class="fl"><{t}>订单备注：<{/t}>
+              <span class="link_update">
+                <a href="javascript:void(0);" title="<{t}>修改<{/t}>" id="memo_info" class="hid_item cancel_memo_info" style="display:none"><{t}>修改<{/t}></a>
+                <a href="javascript:void(0);" title="<{t}>取消修改<{/t}>" class="hid_item" id="cancel_memo_info" style="display:none"><{t}>取消修改<{/t}></a>
+              </span>
+            </h4>
+            <div class="fl hid_item memo_info">
+              <{input name="memo" type="textarea" rows="5" cols="60" style="width:99%;"}>
+            </div>
+          </div>
+        </div>
+        <div class='clearfix fr' id="amountInfo"><{include file="site/cart/checkout_total.html" app=b2c}></div>
+      </div>
+        <div align="right" style="margin:10px 40px;">
+        <{if $show_gotocart_button=='true'}>
+            <span class="return-cart">
+            <a href="<{link app=b2c ctl='site_cart' act='index'}>" class="btn-a"><i class="has-icon"> <{img src="bundle/return_icon.gif" app="b2c" }></i><span>返回购物车</span></a>
+            </span>
+        <{/if}>
+        <{button type="submit" class="order-btn" label=$___b2c="提交订单"|t:'b2c' rel="_request"}>
+       </div>
+    </div>
+
+    <div class="CartBtn clearfix" >
+        <input type="hidden" name="fromCart" value="true" />
+        <!--<div class="span-auto floatRight last"><input class="actbtn btn-confirm" type="submit" value="<{t}>确认无误，下订单<{/t}>" /></div>-->
+    </div>
+    </form>
+</div>
+<script>
+/*下单*/
+
+(function(){
+    window.addEvent('domready',function(){
+        var f=$('order-create');
+      f.removeEvents('submit').addEvent('submit', function(e){
+            if (!validate(f)) {
+              e.stop();
+              return;
+          }
+        });
+    });
+
+    button_valiate = {
+        is_validate:function(e){
+            // el element id.
+            var section=e.getParent('div').getPrevious('.hid_item') || e.getParent('div.hid_item');
+            var _validate_return = true;
+
+            return section.getElements('[vtype]').every(function(el){
+                    return validate(el);
+              });
+        },
+        fold:function(e, act){
+            var section=e.getParent('.section');
+            if (!section.getElement('.cart-confirm-btn'))return this;
+            section.getElement('.cart-confirm-btn')[act == 'fold'?'removeClass':'addClass']('unfold');
+            return this;
+        },
+        removeCaution:function(e){
+            var section=e.getParent('.section');
+            if (!section.getElement('.cart-confirm-btn'))return this;
+            var _caution = section.getElement('.cart-confirm-btn').getNext('.caution');
+            if (_caution && _caution.hasClass('error')) _caution.destroy();
+        },
+        init:function(){
+            validatorMap['need_confirmed']= ['<{t}>配送方式没有确认！<{/t}>', function(element, v) {
+                if ($(element).hasClass('unfold')){new Fx.Scroll(window).toElement($(element.getParent('.section')));return false;}
+                else return true;
+            }];
+
+            validatorMap['mobile_or_phone']= ['<{t}>手机或电话必填其一！<{/t}>', function(element, v) {
+                var _mobile = $(element).getParent('tr').getPrevious('tr').getElement('input');
+                var _phone = $(element).getPrevious('input');
+
+                return (_mobile.value != '') || (_phone.value != '');
+            }];
+        }
+    }
+    button_valiate.init();
+
+    Order={
+        init:function(){
+            var _this=this;
+            $('shipping').addEvent('click',function(e){
+                var target=$(e.target||e);
+                switch (target.get('type')){
+                    case 'radio':
+                       target.checked = true;
+					   target.disabled = true;
+                       _this.shippingChange(target);
+                        break;
+                    case 'checkbox':
+                        var shipping=target.getParent('tr').getElement('input[type=radio]');
+						target.disabled = true;
+                        _this.shippingMerge(shipping,{protect:'true'},target.checked);
+                        break;
+                    default :break;
+                }
+            });
+
+            $('payment').addEvent('click',function(e){
+                if($(e.target).hasClass('x-payMethod')){
+					$(e.target).disabled = true;
+                    _this.updateTotal();
+                    /** 暂时保存支付方式 **/
+                    _this.save_payment(e.target);
+                }
+            });
+
+            $$('.link_update a').addEvent('click',function(e){
+                var el=e.target||e;
+                _this.isEdit($(el));
+            });
+
+            if (!$('payment-cur'))return;
+
+            $('payment-cur').addEvent('change',function(){
+          _this.setCurrency().updateTotal();
+            });
+
+            if (!!(document.getElement('input[name^=purchase[member_id]').get('value')))
+                $('payment-cur').fireEvent('change'); //会员还是需要调用
+
+            /**
+             * 添加全局变量，判断地址是否需要加入容错的“.”
+             */
+            $('receiver').store('b2c-cart-checkout-ship-addr', 'true');
+        },
+        isEdit:function(el){
+			el = el.getParent('a') || el;
+            var section=el.getParent('.section'),
+                item=section.getElements('.hid_item'),
+				el_id=el.id;
+
+            item.hide();
+            $$('#order-create .'+el_id).show();
+
+            // add or remove unfold class
+            if (el.get('class').indexOf('cancel_') > -1){
+                button_valiate.fold(el, 'unfold');
+            }
+
+            if (el_id.indexOf('cancel_') > -1){
+				// 还原收货地址。
+				deliverying.generateShippings(document.getElement('.receiver_radio_addr_id[checked]'),-1);
+                button_valiate.fold(el, 'fold');
+                button_valiate.removeCaution(el);
+            }
+        },
+        setShippingFromArea:function(lastselect){
+           var _this = this;
+           if(!lastselect)throw new Error('<{t}>非法的地区信息.<{/t}>');
+           var _value = lastselect.value;
+           var _shipping_method = '';
+           if (document.getElement('input[name^=purchase[shipping_method]]'))
+            _shipping_method = document.getElement('input[name^=purchase[shipping_method]]').get('value');
+           var _isfastbuy = '<{$env.post.isfastbuy}>';
+           var _payment = document.getElement('input[name^=payment[pay_app_id]]:checked') ? document.getElement('input[name^=payment[pay_app_id]]:checked').value : null;
+           var _extends_args = $('order-create').getElement('input[name^=extends_args]') ? $('order-create').getElement('input[name^=extends_args]').value : null;
+
+            if (parseInt(_value) > 0)
+            new Request.HTML({
+                    url:Shop.url.shipping,
+                    update:'shipping',
+                    method:'post',
+                    data:{area:_value, isfastbuy:_isfastbuy, shipping_method:_shipping_method, payment:_payment, extends_args:_extends_args},
+                    onRequest:function(){
+                      $('shipping').set('text','<{t}>正在根据地区信息获得配送方式...<{/t}>');
+                   },
+                   onComplete:function(){
+                        _this.updateTotal();
+                        if ($('def_shipping_info') && !$('def_shipping_info').isDisplay()) $('shipping_info').hide();
+                    }
+                }).send();
+        },
+        setCurrency:function(){
+            var _this = this;
+            new Request.HTML({
+                url:Shop.url.payment,
+                update:$('payment'),
+                method:'post',
+                data:{
+                   'cur':$('payment-cur').get('value'),
+                   'payment':$('payment').getElement('th input:checked')?$('payment').getElement('th input:checked').value:null,
+                   'd_pay':$('shipping').getElement('th input:checked')?$('shipping').getElement('th input:checked').get('has_cod'):null,
+                   'def_payment':document.getElement('input[name^=purchase[pay_app_id]]') ? document.getElement('input[name^=purchase[pay_app_id]]').value : null,
+                   'extends_args':$('order-create').getElement('input[name^=extends_args]') ? $('order-create').getElement('input[name^=extends_args]').value : null
+                },
+                onComplete:function(){
+                    _this.updatePayment.call(_this);
+                }
+            }).send();
+            return this;
+        },
+        updatePayment:function(){
+            var _this = this;
+            if(!this.synTotalHash)return;
+
+            if(this.synTotalHash.d_pay&&this.synTotalHash.d_pay == 'true'){
+                if ($('_normal_payment'))
+                    $('_normal_payment').hide();
+
+                if ($('_pay_cod'))
+                   $('_pay_cod').show().getElement('input[type=radio]').checked=true;
+            }else{
+                if ($('_normal_payment'))
+                    $('_normal_payment').show();
+
+                if ($('_pay_cod'))
+                    $('_pay_cod').hide().getElement('input[type=radio]').checked=false;
+
+                if (!document.getElement('.x-payMethod:checked]') && $('_normal_payment')) {$('_normal_payment').getElement('input[type=radio]').checked=true;}
+            }
+        },
+        save_payment:function(target){
+            new Request({
+                url:Shop.url.purchase_payment,
+                method:'post',
+                data:{
+					'pay_app_id':$(target).get('value'),
+                    'extends_args':$('order-create').getElement('input[name^=extends_args]') ? $('order-create').getElement('input[name^=extends_args]').value : null
+				},
+                onComplete:function(res){
+                }
+            }).send();
+        },
+        shippingChange:function(target){
+           this.clearProtect(target);
+           this.updateTotal();
+           this.save_shipping(target);
+        },
+        clearProtect:function(target){
+           if(tmpEl=$('shipping').retrieve('tmp_protect')){
+                if(tmpEl!=target){
+                    tmpEl.removeProperty('protect');
+                    tmpEl.getParent('tr').getElement('input[name^=delivery[is_protect]').checked=false;
+                }
+           }
+           if(tmpEl!=target&&target.get('protect')){$('shipping').store('tmp_protect',target);}
+        },
+        save_shipping:function(target){
+            /** 暂时记住保存配送方式 **/
+            var _chk_protect = $(target).getParent('td').getElement('input[type=checkbox]:checked');
+            new Request({
+                url:Shop.url.purchase_shipping,
+                method:'post',
+                data:{
+                    'shipping_id':$(target).get('value'),
+                    'is_protect':_chk_protect?'true':'false',
+                    'extends_args':$('order-create').getElement('input[name^=extends_args]') ? $('order-create').getElement('input[name^=extends_args]').value : null
+                },
+                onComplete: function(rs){
+                    if(rs) {
+                        var s = $('shipping_change').getElement('input[name="delivery[shipping_id]"]:checked').getParent('td');
+                        var name = s.getElement('label').get('text').trim();
+                        s = name + s.getElement('.shipping-information').get('html');
+                        $('shipping_list').set('html','<tr><td>' + s + '</td></tr>');
+                        $('cancel_shipping_info').fireEvent('click',$('cancel_shipping_info'));
+                    }
+                }
+            }).send();
+        },
+        shippingMerge:function(target,mg,checked,evt){
+           if(!checked){
+               Object.keys(mg).each(target.erase.bind(target));
+           }else{
+               $(target).set(mg);
+               $(target).checked=true;
+           }
+           this.clearProtect($(target));
+           this.updateTotal();
+           this.save_shipping(target);
+        },
+        updateTotal:function(options){
+            options = options||{};
+            this.synTotalHash = (this.synTotalHash||{});
+
+            var _shipping       = $('shipping').getElement('tr input[type=radio]:checked'),
+                _coin           = $('payment-cur'),
+                _tax            = $('is_tax'),
+                _tax_company    = document.getElement('input[name^=payment[tax_company]'),
+                _dis_point      = document.getElement('input[name^=payment[dis_point]');
+
+            if(_shipping){
+                Object.append(this.synTotalHash,{
+                    shipping_id:_shipping.value,
+                    is_protect:_shipping.getParent('td').getElement('input[type=checkbox]:checked')?'true':'false',
+                    d_pay:_shipping.get('has_cod')
+                });
+                this.updatePayment();
+            }
+
+            var _payment        = $('payment').getElement('tr input[type=radio]:checked');
+            if(_payment){
+                 Object.append(this.synTotalHash,{
+                    payment:_payment.value
+                });
+            }
+
+            if($('order-create').getElement('input[name=isfastbuy]')){
+                Object.append(this.synTotalHash,{isfastbuy:1});
+            }
+            if(_coin == null){
+                 return;
+            }
+            Object.append(this.synTotalHash,{
+                cur:_coin.get('value'),
+                is_tax:(_tax&&_tax.checked)?'true':'false',
+                area:document.getElement('input[name^=delivery[ship_area]')?document.getElement('input[name^=delivery[ship_area]').get('value'):null,
+                tax_company:(_tax_company != null && _tax_company != undefined) ? _tax_company.get('value') : null,
+                dis_point:_dis_point ? _dis_point.value : null,
+                extends_args:$('order-create').getElement('input[name^=extends_args]') ? $('order-create').getElement('input[name^=extends_args]').value : null
+            });
+            var cart_coupon_list_modal;
+
+            new Request.HTML(Object.append({url:Shop.url.total,update:$('amountInfo'),onRequest:function(){
+                    $$('#cart-coupon-list .delItem').setStyle('visibility','hidden');
+            },onSuccess:function(){
+				$$('#cart-coupon-list .delItem').fade(1);
+				$$('#payment .x-payMethod').set('disabled', false);
+				$$('#shipping .shipping_radio_shipping_id').set('disabled', false);
+				$$('#shipping input[name^=delivery[is_protect]]').set('disabled', false);
+                <{$point_dis_js}>
+            }},options)).post(this.synTotalHash);
+        }
+    };
+    Order.init();
+})();
+
+
+
+
+/*购物车小图mouseenter效果*/
+function thumb_pic(){
+  if(!$('goodsbody'))return;
+  var cart_product_img_viewer=new Element('div',{styles:{'position':'absolute','zIndex':500,'opacity':0,'border':'1px #666 solid'}}).inject(document.body);
+  var cpiv_show=function(img,event){
+
+      if(!img)return;
+      cart_product_img_viewer.empty().adopt($(img).clone().removeProperties('width','height').setStyle('border','1px #fff solid')).fade(1);
+
+      var size = window.getSize(), scroll = window.getScroll();
+        var tip = {x: cart_product_img_viewer.offsetWidth, y: cart_product_img_viewer.offsetHeight};
+        var props = {x: 'left', y: 'top'};
+        for (var z in props){
+            var pos = event.page[z] + 10;
+            if ((pos + tip[z] - scroll[z]) > size[z]) pos = event.page[z] - 10 - tip[z];
+            cart_product_img_viewer.setStyle(props[z], pos);
+        }
+
+  };
+
+  $$('.cart-product-img').each(function(i){
+      new Asset.image(i.get('isrc'),{
+          onload:function(img){
+              if(!img)return;
+              var _img=img.zoomImg(50,50);
+              if(!_img)return;
+              _img.setStyle('cursor','pointer').addEvents({
+                  'mouseenter':function(e){
+                      cpiv_show(_img,e);
+                  },
+                  'mouseleave':function(e){
+                      cart_product_img_viewer.fade(0);
+                  }
+              });
+              i.empty().adopt(new Element('a',{href:i.get('ghref'),target:'_blank',styles:{border:0}}).adopt(_img));
+          },onerror:function(){
+              i.empty();
+          }
+      });
+  });
+
+};
+
+
+
+window.addEvent('domready',function(){
+    thumb_pic();
+});
+</script>

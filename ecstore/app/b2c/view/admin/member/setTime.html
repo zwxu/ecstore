@@ -1,0 +1,88 @@
+<form action="index.php?app=b2c&ctl=admin_member_attr&act=updateTime" method="post" name="return_save" id='x-return-form'>
+    <div class="goods-detail tableform"> 
+        <h3><{t}>时间设置<{/t}></h3>
+        <div class="division">
+            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+              <tr>
+                <th><{t}>快递自动确认收货时间：<{/t}></th>
+                <td><input type="text" id="to_finish" name="to_finish" value="<{$to_finish|default:10}>" size="2">天
+                （卖家选择快递发货后几天时间内买家不确认收货，系统会自动确认（单位：天，默认：10天））</td>
+              </tr>
+              <tr>
+                <th><{t}>平邮自动确认收货时间：<{/t}></th>
+                <td><input type="text" id="to_finish_BAM" name="to_finish_BAM" value="<{$to_finish_BAM|default:30}>" size="2">天
+                （卖家选择平邮发货后几天时间内买家不确认收货，系统会自动确认（单位：天，默认：30天））</td>
+              </tr>
+                      <tr>
+                <th><{t}>虚拟物品自动确认收货时间：<{/t}></th>
+                <td><input type="text" id="to_finish_XU" name="to_finish_XU" value="<{$to_finish_XU|default:1}>" size="2">天
+                （买家购买虚拟商品后几天时间内买家不确认收货，系统会自动确认（单位：天，默认：1天））</td>
+              </tr>
+              <tr>
+                <th><{t}>买家申请退款时间限制：<{/t}></th>
+                <td><input type="text" id="to_refund" name="to_refund" value="<{$to_refund|default:1}>" size="2">天
+                （买家付款后，卖家不发货，买家在一定时间后可以申请退款（单位：天，默认：1天））</td>
+              </tr>
+              <tr>
+                <th><{t}>付款超时，自动关闭订单时间：<{/t}></th>
+                <td><input type="text" id="to_close" name="to_close" value="<{$to_close|default:7}>" size="2">天
+                （买家拍下宝贝后不付款，一定时间后订单将会自动关闭（单位：天，默认：7天））</td>
+              </tr>
+              <tr>
+                <th><{t}>买家申请退款自动同意时间：<{/t}></th>
+                <td><input type="text" id="to_agree" name="to_agree" value="<{$to_agree|default:3}>" size="2">天
+                （买家申请退款，卖家在一定时间内不处理，系统将会自动同意退款申请（单位：天，默认：3天））</td>
+              </tr>
+              <tr>
+                <th><{t}>买家修改申请最大期限：<{/t}></th>
+                <td><input type="text" id="to_buyer_edit" name="to_buyer_edit" value="<{$to_buyer_edit|default:7}>" size="2">天（卖家不同意退款申请，买家在一定时间内没有修改申请或者申请平台介入，系统将会自动取消退款申请（单位：天，默认：7天））</td>
+              </tr>
+                      <tr>
+                <th><{t}>买家寄回退货最大期限：<{/t}></th>
+                <td><input type="text" id="to_buyer_refund" name="to_buyer_refund" value="<{$to_buyer_refund|default:15}>" size="2">天（卖家同意退款，买家在一定时间内没有机会货品，系统将会自动取消退款申请（单位：天，默认：15天））</td>
+              </tr>
+              <tr>
+                <th><{t}>买家申请维权最大期限：<{/t}></th>
+                <td><input type="text" id="to_buyer_slr" name="to_buyer_slr" value="<{$to_buyer_slr|default:15}>" size="2">天
+                （买家确认收货后在一定时间内还能进行申请维权（单位：天，默认：15天））</td>
+              </tr>
+              <tr>
+                <th><{t}>活动订单付款后发货天数：<{/t}></th>
+                <td><input type="text" id="payed_ship_time" name="payed_ship_time" value="<{$payed_ship_time|default:3}>" size="2">天（活动商品卖家须在买家付款后的几天内完成发货（单位：天，默认：3天））</td>
+              </tr>
+              <tr>
+                <th><{t}>取消店铺该项活动资格天数：<{/t}></th>
+                <td><input type="text" id="no_attendActivity_time" name="no_attendActivity_time" value="<{$no_attendActivity_time|default:60}>" size="2">天（卖家出现不发货等问题，将取消店铺该项活动资格天数（单位：天，默认：60天））</td>
+              </tr>
+              <tr>
+                <th><{t}>团购订单必须下单后付款时间：<{/t}></th>
+                <td><input type="text" id="group_payed_time" name="group_payed_time" value="<{$group_payed_time|default:3}>" size="2">小时（买家拍下团购商品后3小时内必须付款否则自动关闭订单（单位：小时，默认：3小时））</td>
+              </tr>
+              <tr>
+                <th><{t}>秒杀订单必须下单后付款时间：<{/t}></th>
+                <td><input type="text" id="spike_payed_time" name="spike_payed_time" value="<{$spike_payed_time|default:15}>" size="2">分钟（买家拍下秒杀商品后15分钟内必须付款否则自动关闭订单（单位：分钟，默认：15分钟））</td>
+              </tr>
+              <tr>
+                <th><{t}>积分换购订单必须下单后付款时间：<{/t}></th>
+                <td><input type="text" id="score_payed_time" name="score_payed_time" value="<{$score_payed_time|default:3}>" size="2">小时（买家拍下积分换购商品后3小时内必须付款否则自动关闭订单（单位：小时，默认：3小时））</td>
+              </tr>
+              <tr>
+                <th><{t}>限时抢购订单必须下单后付款时间：<{/t}></th>
+                <td><input type="text" id="timedbuy_payed_time" name="timedbuy_payed_time" value="<{$timedbuy_payed_time|default:15}>" size="2">分钟（买家拍下限时商品后15分钟内必须付款否则自动关闭订单（单位：分钟，默认：15分钟））</td>
+              </tr>
+              <tr>
+                <th><{t}>订单完成评论的期限时间：<{/t}></th>
+                <td><input type="text" vtype="unsigned" id="timedbuy_payed_time" name="comment_original_time" value="<{$comment_original_time|default:30}>" size="2">天（完成的订单从创建订单开始到设定的期限内可以对订单内商品和店铺评论和评分（单位：天，默认：30天））</td>
+              </tr>
+              <tr>
+                <th><{t}>订单追加评论的期限时间：<{/t}></th>
+                <td><input type="text" vtype="unsigned" id="timedbuy_payed_time" name="comment_additional_time" value="<{$comment_additional_time|default:90}>" size="2">天（完成的订单从创建订单开始到设定的期限内，在已经对订单评论后可以对订单内商品追加评论（单位：天，默认：90天））</td>
+              </tr>
+            </table>
+            <div class="table-action">
+                <{button label="保存" type="submit" id="groupactivity-btn" }>
+                <{button label="取消" id="groupactivity-cancel"}>
+            </div>
+        </div>
+    </div>
+</form>

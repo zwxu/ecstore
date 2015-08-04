@@ -1,0 +1,18 @@
+<div class="gallery_ri dis_bl clb">
+      <div class="gallery_ri_tit"><span>热卖推荐</span></div>
+	   <ul class="gallery_ri_ul">
+     <{foreach from=$data.goods item=linklist name=product}>
+	     <li>
+       <a target='_blank' href="<{link app=b2c ctl=site_product act=index arg=$linklist.id}>">
+       <{if $linklist.udfimg == 'true'}>
+    <{assign var="gimage" value=$linklist.thumbnail_pic}>
+    <{else}>
+    <{assign var="gimage" value=$linklist.pic|default:$data.defaultImage}>
+    <{/if}>
+    <img src="images/transparent.gif" lazyload="<{$gimage|storager:'m'}>" class="img-lazyload"  alt=<{$linklist.nice|escape:html}>>
+    <span class="span_<{$smarty.foreach.product.iteration%7}>"><{$linklist.nice|cut:40}></span>
+    </a>
+		 </li>
+     <{/foreach}>
+	   </ul>
+</div>

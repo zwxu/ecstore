@@ -1,0 +1,615 @@
+<div class="bd" id="J_DataTable">
+
+  <div class="list-head">
+          <table class="sale_goods gridlist3" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <colgroup >
+            <col width="26">
+            <col width="58">
+            <col width="205">
+            <col width="135">
+            <col width="95">
+            <col width="50">
+            <col width="80">
+            <col width="92">
+            <col width="76">
+          </colgroup>
+          <thead>
+            <tr>
+              <th class="bln"></th>
+              <th></th>
+              <th><{t}>宝贝名称<{/t}></th>
+              <th class="price-head"><{t}>            价格<{/t}></th>
+              <th class="num-head"><{t}>        库存<{/t}></th>
+              <th class="num-head"><{t}>        冻结<{/t}></th>
+              <th>
+              <a id="sold-amount-label" class="<{$buy_count_orderby}>" href="javascript:orderByBidCount()" title="总销量"><{t}>总销量<{/t}></a>
+              </th>
+              <th>
+              <a id="left-time-label" class="<{$uptime_orderby}>" href="javascript:orderByStartsTime()" title="发布时间"><{t}>发布时间<{/t}></a>
+              </th>
+              <th>操作</th>
+            </tr>
+			 <tr>
+          <td colspan="9" class="p0 list-top bln bnn">
+            <div class="operations mr_5">
+              <span class="lineall"><input class="all-selector" type="checkbox"><label>全选</label></span>
+              <button class="trigger-btn" onclick="javascript:deleteItem();" type="button">删 除</button>
+              <{if $switch eq 'onsell'}>
+              <button class="trigger-btn" onclick="javascript:offShelf()" type="button"> 下 架 </button>
+              <button class="trigger-btn" onclick="javascript:onFree()" type="button"> 免运费 </button>
+              <button class="trigger-btn" onclick="javascript:onHave()" type="button"> 有运费 </button>
+              <button class="trigger-btn" onclick="javascript:recommendGoods('recommend',1)" type="button"> 热门推荐 </button>
+                            <button class="trigger-btn" onclick="javascript:recommendGoods('recommend',0)" type="button"> 取消推荐 </button>
+              <button class="trigger-btn" onclick="javascript:recommendGoods('new',1)" type="button"> 新品上架 </button>
+              <button class="trigger-btn" onclick="javascript:recommendGoods('new',0)" type="button"> 取消新品</button>
+              <{elseif $switch eq 'instock'}>
+              <button class="trigger-btn" onclick="javascript:onShelf()" type="button"> 上 架 </button>
+              <{/if}>
+            </div>
+          </td>
+        </tr>
+          </thead>
+        </table>
+     <table id="switchable" width="100%" cellpadding="0" cellspacing="0" border="0" class="switchable mr_5 ml_10">
+    <colgroup>
+      <col width="26">
+      <col width="58">
+      <col width="205">
+      <col width="135">
+      <col width="95">
+      <col width="50">
+      <col width="80">
+      <col width="92">
+      <col width="76">
+    </colgroup>
+    <tbody class="data">
+      <{if $goods}>
+      <input type="hidden" value="" name="operate">
+      <{foreach from=$goods item="item" name="item"}>
+        <tr class="goods-sid">
+          <td class="recommend-td" style="position:relative;height:25px;" colspan="9">
+            <input class="selector" type="checkbox" value="<{$item.goods_id}>" name="item[]">
+            <label><{t}>商家编码：<{/t}><{$item.bn}></label>
+          </td>
+        </tr>
+        <tr class="recommend with-sid">
+          <td></td>
+          <td>
+            <{if $item.udfimg == 'true'}>
+              <{assign var="gimage" value=$item.thumbnail_pic}>
+            <{else}>
+              <{assign var="gimage" value=$item.image_default_id|default:$defaultImage}>
+            <{/if}>
+            <div class='product-list-img member-gift-pic goodpic' isrc="<{$gimage|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" ghref='<{link app=b2c ctl=site_product act="index" arg0=$item.goods_id}>' > 
+            <img src='<{$env.app.res_url}>/images/loading.gif'/> </div>
+          </td>
+          <td class="desc">
+            <div class="item-title-area" title="编辑宝贝标题">
+              <p>
+              <a class="item-title" title="<{$item.name}>" href="<{link app=b2c ctl=site_product act=index arg=$item.goods_id}>"><{$item.name}></a><br /><{if $item.is_tui == 'true'}><span style="background-color:red;color:#fff;">热门推荐</span><{/if}><{if $item.is_new == 'true'}>&nbsp;<span style="background-color:red;color:yellow;">新品上架</span><{/if}>
+              </p>
+            </div>
+          </td>
+          <td>
+            <p class="item-price-area" title="编辑价格">
+              <span id="itemId:<{$item.goods_id}>" class="price-now"><{$item.price}></span>
+            </p>
+          </td>
+          <td>
+            <p class="item-num-area" title="编辑库存">
+              <span id="itemId:<{$item.goods_id}>"><{$item.store}></span>
+            </p>
+          </td>
+          <td>
+            <p class="item-num-area">
+              <span><{$item.freez}></span>
+            </p>
+          </td>
+          <td width="10%" align="right"><{$item.buy_count}></td>
+          <td><{$item.uptime|cdate:'SDATE_STIME'}></td>
+          <td class="col-right">
+            <a title="" href="<{link app=business ctl=site_member act=goods_edit arg0=$item.goods_id arg1=$goods_switch}>">编辑宝贝</a>
+            <{if $switch eq 'violate'}>
+            <br/><a title="" href="#" onclick="window.fbox = new Dialog('<{link app=business ctl=site_member act=goods_apply arg0=$item.goods_id}>',{title:'申请',width:800,height:300, modal:true});window.fbox.onSelect='';return false;">申请上架</a>
+            <{/if}>
+          </td>
+        </tr>
+      <{/foreach}>
+      <{/if}>
+    </tbody>              
+  </table>
+  </div>
+  
+
+  <div class="list-footer">
+    <table class="" width="100%" cellpadding="0" cellspacing="0" border="0">
+      <colgroup>
+        <col width="26">
+        <col width="58">
+        <col width="205">
+        <col width="155">
+        <col width="105">
+        <col width="90">
+        <col width="92">
+        <col width="86">
+      </colgroup>
+      <thead>
+        <tr>
+          <td colspan="9" class="p0">
+            <div class="operations">
+              <span class="lineall"><input class="all-selector" type="checkbox"><label>全选</label></span>
+              <button class="trigger-btn" onclick="javascript:deleteItem();" type="button">删 除</button>
+              <{if $switch eq 'onsell'}>
+              <button class="trigger-btn" onclick="javascript:offShelf()" type="button"> 下 架 </button>
+              <{elseif $switch eq 'instock'}>
+              <button class="trigger-btn" onclick="javascript:onShelf()" type="button"> 上 架 </button>
+              <{/if}>
+            </div>
+          </td>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <{pagers data=$pager}>
+<script>
+  var item = $$('#J_DataTable input[name^=item[]')||[];
+  var all = $$('#J_DataTable .all-selector')||[];
+  var parent = $('J_DataTable').getParent('div');
+  var gdata_hash = new Hash(<{$gall}>);
+  var gdata = [];
+  gdata_hash.forEach(function(v){
+    if(typeof v == 'string')gdata.push(v);
+  });
+  window.addEvent('domready', function(){
+    if(item){
+      item.set('checked', !!$ES('#J_DataTable .all-selector').checked);
+      item.removeEvents('click').addEvent('click',function(e){
+        var target=$(e.target);
+        if(!target.checked && all)
+        all.set('checked', false);
+        $ES('#switchable input[name^=operate]').set('value', false);
+      });
+    }
+    if(all)
+      all.removeEvents('click').addEvent('click',function(e){
+        var target=$(e.target);
+        all.set('checked', !!target.checked);
+        if(item) item.set('checked', !!target.checked);$E('#switchable input[name^=operate]').set('value', !!target.checked);
+      });
+  });
+  window.addEvent('domready', function(){
+    var cart_product_img_viewer=new Element('div',{styles:{'position':'absolute','zIndex':500,'opacity':0,'border':'1px #666 solid'}}).inject(document.body);
+    var cpiv_show=function(img,event){
+        if(!img)return;
+        cart_product_img_viewer.empty().adopt($(img).clone().removeProperties('width','height').setStyle('border','1px #fff solid')).fade(1);
+
+        var size = window.getSize(), scroll = window.getScroll();
+        var tip = {x: cart_product_img_viewer.offsetWidth, y: cart_product_img_viewer.offsetHeight};
+        var props = {x: 'left', y: 'top'};
+        for (var z in props){
+            var pos = event.page[z] + 10;
+            if ((pos + tip[z] - scroll[z]) > size[z]) pos = event.page[z] - 10 - tip[z];
+            cart_product_img_viewer.setStyle(props[z], pos);
+        }
+
+    };
+
+    $$('#switchable .product-list-img').each(function(i){
+        new Asset.image(i.get('isrc'),{onload:function(img){
+            if(!img)return;
+            var _img=img.zoomImg(70,70);
+            if(!_img)return;
+            _img.setStyle('cursor','pointer').addEvents({
+                'mouseenter':function(e){
+                    cpiv_show(_img,e);
+                },
+                'mouseleave':function(e){
+                    cart_product_img_viewer.fade(0);
+                }
+            });
+            i.empty().adopt(new Element('a',{href:i.get('ghref'),target:'_blank',styles:{border:0}}).adopt(_img));
+            },onerror:function(){
+                i.empty();
+        }});
+
+    });
+    
+    /*$$('#switchable .edit-item-title').removeEvents('click').addEvent('click',function(e){
+      var target = $(e.target);
+      var handle = target.getParent('.item-title-area').getElement('p').getElement('a');
+      var gid= target.getAttribute('gid');
+      e.stop();
+    });*/
+    
+    var current_page = <{$pager.current}> || 1;
+    var obj = $E('.pager', $('J_DataTable'));
+    if(obj)var obj_a = obj.getElements('a');
+    if(obj_a && obj_a.length)obj_a.removeEvents('click').addEvent('click',function(e){
+      _this = this;
+      var page = 1;
+      if(_this.hasClass('next')) page = current_page.toInt()+1;
+      else if(_this.hasClass('prev')) page = current_page.toInt()-1;
+      else page = _this.get('text').toInt();
+      searchItems(page);
+      return false;
+    });
+    /*
+    var ids = parent.retrieve('ids');
+    var ida = parent.retrieve('ida');
+    ids = JSON.decode(ids) || [];
+    if(ida && all.length)all.set('checked', true);
+    if(item.length){
+      item.each(function(i){
+        if(ida)i.set('checked',true);
+        else if(ids.length && ids.contains(i.get('value')))i.set('checked',true);
+        else i.set('checked',false);
+      });
+      item.removeEvents('click').addEvent('click',function(e){
+        var target=$(e.target);
+        ids = JSON.decode(parent.retrieve('ids')) || [];
+        target.checked?ids.push(target.get('value')):ids.erase(target.get('value'));
+        parent.store('ids',JSON.encode(ids));alert(JSON.encode(ids));
+        parent.store('ida',false);
+        if(all.length)all.set('checked', false);
+      });
+    }
+    if(all.length)all.removeEvents('click').addEvent('click',function(e){
+      var target=$(e.target);
+      var bcheck = !!target.checked;
+      all.set('checked', bcheck);
+      if(item.length) item.set('checked', bcheck);
+      parent.store('ids',(!!target.checked?JSON.encode(gdata):''));
+      parent.store('ida',!!target.checked);
+    });*/
+  });
+  
+  function setOrderBy(){
+    var oBuy = $('sold-amount-label').get('class');
+    var oTime = $('left-time-label').get('class');
+    if(oBuy == 'desc') oBuy = 'desc';
+    else oBuy = 'asc';
+    if(oTime == 'desc') oTime = 'desc';
+    else oTime = 'asc';
+    return oBuy+','+oTime;
+  }
+  
+  function isSelected(){
+    if(!item) return false;
+    for(i=0;i<item.length;i++){
+      if(item[i].checked){
+        return true;
+      }
+    }
+    if(!all) return false;
+    for(i=0;i<all.length;i++){
+      if(all[i].checked){
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  function deleteItem(){
+    if(!isSelected()){
+      Ex_Dialog.alert('请选中要删除的宝贝！');
+      return false;
+    }
+    Ex_Dialog.confirm('确认删除宝贝？',function(e){
+      if(!e) return false;
+      new Request.JSON({
+      url:'<{link app=business ctl=site_member act=goods_delete arg=$switch}>',
+        method:'post',
+        secure:false,
+        data:$('tab-obj'),
+        onComplete:function(res,text){
+          if (res.error){
+            Message.error(res.error);
+          }else{
+            if (!res.data&&res.reload != null){
+              location.href=res.reload;
+            }else{
+              var js='';
+              var html = res.data.stripScripts(function(script){
+                  js = script;
+              });
+
+              $('J_DataTable').innerHTML = html;
+              Browser.exec(js);
+              return;
+            }
+          }
+        }
+      }).send();
+      return false;
+    });
+  }
+  function offShelf(){
+    if(!isSelected()){
+      Ex_Dialog.alert('请选中要下架的宝贝！');
+      return false;
+    }
+    Ex_Dialog.confirm('确认下架宝贝？',function(e){
+      if(!e) return false;
+      new Request.JSON({
+        url:'<{link app=business ctl=site_member act=goods_enabled arg=$switch}>',
+        method:'post',
+        secure:false,
+        data:$('tab-obj'),
+        onComplete:function(res,text){
+          if (res.error){
+            Message.error(res.error);
+          }else{
+            if (!res.data&&res.reload != null){
+              location.href=res.reload;
+            }else{
+              var js='';
+              var html = res.data.stripScripts(function(script){
+                  js = script;
+              });
+
+              $('J_DataTable').innerHTML = html;
+              Browser.exec(js);
+              return;
+            }
+          }
+        }
+      }).send();
+      return false;
+    });
+  }
+  
+  function onShelf(){
+    if(!isSelected()){
+      Ex_Dialog.alert('请选中要上架的宝贝！');
+      return false;
+    }
+    Ex_Dialog.confirm('确认上架宝贝？',function(e){
+      if(!e) return false;
+      new Request.JSON({
+        url:'<{link app=business ctl=site_member act=goods_enabled arg=$switch}>',
+        method:'post',
+        secure:false,
+        data:$('tab-obj'),
+        onComplete:function(res,text){
+          if (res.error){
+            Message.error(res.error);
+          }else{
+            if (!res.data&&res.reload != null){
+              location.href=res.reload;
+            }else{
+              var js='';
+              var html = res.data.stripScripts(function(script){
+                  js = script;
+              });
+
+              $('J_DataTable').innerHTML = html;
+              Browser.exec(js);
+              return;
+            }
+          }
+        }
+      }).send();
+      return false;
+    });
+  }
+
+  function onFree(){
+    if(!isSelected()){
+      Ex_Dialog.alert('请选中包邮的宝贝！');
+      return false;
+    }
+    Ex_Dialog.confirm('是否确认包邮？',function(e){
+      if(!e) return false;
+      new Request.JSON({
+        url:'<{link app=business ctl=site_member act=goods_tofree arg=$switch}>',
+        method:'post',
+        secure:false,
+        data:$('tab-obj'),
+        onComplete:function(res,text){
+          if (res.error){
+            Message.error(res.error);
+          }else{
+            if (!res.data&&res.reload != null){
+              location.href=res.reload;
+            }else{
+              var js='';
+              var html = res.data.stripScripts(function(script){
+                  js = script;
+              });
+
+              $('J_DataTable').innerHTML = html;
+              Browser.exec(js);
+              return;
+            }
+          }
+        }
+      }).send();
+      return false;
+    });
+  }
+  
+  function onHave(){
+    if(!isSelected()){
+      Ex_Dialog.alert('请选中不包邮的宝贝！');
+      return false;
+    }
+    Ex_Dialog.confirm('是否确认不包邮？',function(e){
+      if(!e) return false;
+      new Request.JSON({
+        url:'<{link app=business ctl=site_member act=goods_tohave arg=$switch}>',
+        method:'post',
+        secure:false,
+        data:$('tab-obj'),
+        onComplete:function(res,text){
+          if (res.error){
+            Message.error(res.error);
+          }else{
+            if (!res.data&&res.reload != null){
+              location.href=res.reload;
+            }else{
+              var js='';
+              var html = res.data.stripScripts(function(script){
+                  js = script;
+              });
+
+              $('J_DataTable').innerHTML = html;
+              Browser.exec(js);
+              return;
+            }
+          }
+        }
+      }).send();
+      return false;
+    });
+  }
+  
+  function searchItems(page){
+    page = page?page:1;
+    var orderby = setOrderBy();
+    new Request.JSON({
+      url:'<{link app=business ctl=site_member act=goods_search arg0=$switch}>?orderby='+orderby+'&page='+page,
+      method:'post',
+      secure:false,
+      data:$('tab-obj'),
+      onComplete:function(res,text){
+        if (res.error){
+          Message.error(res.error);
+        }else{
+          if (!res.data&&res.reload != null){
+            location.href=res.reload;
+          }else{
+            var js='';
+            var html = res.data.stripScripts(function(script){
+                js = script;
+            });
+
+            $('J_DataTable').innerHTML = html;
+            Browser.exec(js);
+            return;
+          }
+        }
+      }
+    }).send();
+  } 
+  
+  function orderByBidCount(){
+    var oBuy = $('sold-amount-label').get('class');
+    var oTime = $('left-time-label').get('class');
+    if(oTime == 'desc') oTime = 'desc';
+    else oTime = 'asc';
+    if(oBuy == 'desc'){
+      orderby = 'asc,'+oTime;
+      $('sold-amount-label').removeClass('desc').addClass('asc');
+    }else{
+      orderby = 'desc,'+oTime;
+      $('sold-amount-label').removeClass('asc').addClass('desc');
+    }
+    new Request.JSON({
+      url:'<{link app=business ctl=site_member act=goods_search arg0=$switch}>?orderby='+orderby,
+      method:'post',
+      secure:false,
+      data:$('tab-obj'),
+      onComplete:function(res,text){
+        if (res.error){
+          Message.error(res.error);
+        }else{
+          if (!res.data&&res.reload != null){
+            location.href=res.reload;
+          }else{
+            var js='';
+            var html = res.data.stripScripts(function(script){
+                js = script;
+            });
+
+            $('J_DataTable').innerHTML = html;
+            Browser.exec(js);
+            return;
+          }
+        }
+      }
+    }).send();
+  }
+  
+  function orderByStartsTime(){
+    var oBuy = $('sold-amount-label').get('class');
+    var oTime = $('left-time-label').get('class');
+    if(oBuy == 'desc') oBuy = 'desc';
+    else oBuy = 'asc';
+    if(oTime == 'desc'){
+      orderby = oBuy+',asc';
+      $('left-time-label').removeClass('desc').addClass('asc');
+    }else{
+      orderby = oBuy+',desc';
+      $('left-time-label').removeClass('asc').addClass('desc');
+    }
+    new Request.JSON({
+      url:'<{link app=business ctl=site_member act=goods_search arg0=$switch}>?orderby='+orderby,
+      method:'post',
+      secure:false,
+      data:$('tab-obj'),
+      onComplete:function(res,text){
+        if (res.error){
+          Message.error(res.error);
+        }else{
+          if (!res.data&&res.reload != null){
+            location.href=res.reload;
+          }else{
+            var js='';
+            var html = res.data.stripScripts(function(script){
+                js = script;
+            });
+
+            $('J_DataTable').innerHTML = html;
+            Browser.exec(js);
+            return;
+          }
+        }
+      }
+    }).send();
+  }
+
+   function recommendGoods(goodstype,status){
+    if(status>0){
+        var act = '推荐';
+    }else{
+         var act = '取消推荐';
+    }
+    if(!isSelected()){
+      Ex_Dialog.alert('请选中要'+act+'的宝贝！');
+      return false;
+    }
+
+		var url = '<{link app=business ctl=site_member act=goods_recommend}>?goodstype='+goodstype+'&status='+status;
+
+    Ex_Dialog.confirm('确认'+act+'宝贝？',function(e){
+      if(!e) return false;
+      new Request.JSON({
+        url:url,
+        method:'post',
+        secure:false,
+        data:$('tab-obj'),
+        onComplete:function(res,text){
+          if (res.error){
+            Message.error(res.error);
+          }else{
+            if (!res.data&&res.reload != null){
+              location.href=res.reload;
+            }else{
+              var js='';
+              var html = res.data.stripScripts(function(script){
+                  js = script;
+              });
+
+              $('J_DataTable').innerHTML = html;
+              Browser.exec(js);
+              return;
+            }
+          }
+        }
+      }).send();
+      return false;
+    });
+  }
+  
+</script>
+</div>

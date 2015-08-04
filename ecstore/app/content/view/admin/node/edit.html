@@ -1,0 +1,132 @@
+<form action="index.php?app=content&ctl=admin_node&act=save" method="POST" id="node_add_form">
+    <div class="tableform">
+    <div class="division">
+    <h4><{t}>文章类目信息<{/t}></h4>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+      <tr>  <th><{t}>文章类目名称：<{/t}></th>
+      <td> <{input type='text' name='node[node_name]' vtype='required&&text' caution=$__content='请填写文章类目名称'|t:'content' value=$node.node_name }>  </td>
+      </tr>
+
+      <tr>  <th><{t}>上级类目：<{/t}></th>
+      <td> <{input type='select' name='node[parent_id]' value=$node.parent_id required='true' vtype='required' caution=$__content='请选择上级类目'|t:'content' rows=$selectmaps valueColumn="node_id" labelColumn="node_name"}> <span class="notice-inline"><{t}>顶级类目请选'无'<{/t}></span> </td>
+      </tr>
+      <tr>
+        <th><em><font color="red">*</font></em><{t}>文章列表页模板：<{/t}></th>
+        <td>
+        <{template_filter id="aEditor-Nodeid-input" type='articlelist' name='node[list_tmpl_path]' selected=$node.list_tmpl_path class='x-input'}><span class="notice-inline" style="white-space:normal"><{help}>如果您不喜欢“默认模板”或当前的文章列表页模板，您可以前往“模板编辑”中的自定义添加“文章列表页”以个性化您的模板<{/help}></span>
+        </td>
+      </tr>
+
+      <tr>  <th><{t}>URL路径：<{/t}></th>
+      <td> <{input type='text' name='node[node_pagename]' value=$node.node_pagename size='20' vtype='text' }><span class="notice-inline"> <{t}>默认为文章类目名称的拼音缩写<{/t}></span> </td>
+      </tr>
+
+      <tr>  <th><{t}>SEO title：<{/t}></th>
+      <td> <{input type='text' name='node[seo_title]' size='40' vtype='text' value=$node.seo_title }> <span class="notice-inline"><{t}>默认为文章类目名称<{/t}></span> </td>
+      </tr>
+
+      <tr>  <th><{t}>SEO keywords：<{/t}></th>
+      <td> <{input type='text' name='node[seo_keywords]' size='20' vtype='text' value=$node.seo_keywords }> <span class="notice-inline"><{t}>默认为文章类目名称<{/t}></span> </td>
+      </tr>
+
+      <tr>  <th><{t}>SEO description：<{/t}></th>
+      <td> <{input type='textarea' rows='2' cols='60' name='node[seo_description]' size='20' vtype='text' value=$node.seo_description }> <span class="notice-inline"><{t}>默认为文章类目名称<{/t}></span> </td>
+      </tr>
+
+      <tr>  <th><{t}>是否发布：<{/t}></th>
+      <td>
+        <input type="radio" value="1" name="node[ifpub]" <{if $node.ifpub == 'true'}>checked<{/if}> /><{t}>是<{/t}>
+        <input type="radio" value="0" name="node[ifpub]" <{if $node.ifpub != 'true'}>checked<{/if}> /><{t}>否<{/t}>
+      </td>
+      </tr>
+      <{*}><tr>  <th><{t}>是否图文并茂：<{/t}></th>
+      <td>
+        <input type="radio" value="1" name="node[hasimage]" <{if $node.hasimage == 'true'}>checked<{/if}> /><{t}>是<{/t}>
+        <input type="radio" value="0" name="node[hasimage]" <{if $node.hasimage != 'true'}>checked<{/if}> /><{t}>否<{/t}>
+      </td>
+      </tr><{*}>
+      <tr>  <th><{t}>排序：<{/t}></th>
+      <td> <{input type='text' name='node[ordernum]' size='20' size='3' vtype='required&&number' value='0' caution=$__content='请填写排序值'|t:'content' value=$node.ordernum }> <span class="notice-inline"><{t}>数字越小越靠前<{/t}> </span></td>
+      </tr>
+      <tr>
+        <th><{t}>是否使用站点栏目单独页：<{/t}></th>
+        <td>
+            <{input type='hidden' name='node_id' value=$node.node_id id='aEditor-Nodeid-input'}>
+            <input type="radio" class="homepage" value="true" name="node[homepage]" <{if $node.homepage=='true'}> checked <{/if}> ><{t}>是<{/t}>
+            <input type="radio" class="homepage" value="false" name="node[homepage]" <{if $node.homepage!='true'}> checked <{/if}> ><{t}>否<{/t}>
+        </td>
+      </tr>
+      </table>
+      </div>
+
+        <div class="division">
+              <div id="show-edit-view" <{if $node.homepage=='false'}>style="display:none"<{/if}>>
+                  <{foreach from=$sections item=section}>
+                    <{include file=$section.file}>
+                  <{/foreach}>
+              </div>
+        </div>
+    </div>
+</form>
+<{area inject='.mainFoot'}>
+	<div class="table-action">
+	  <{button type="button" label=$__content="保存"|t:'content' class="btn-primary" id="node_add_form_submit_btn"}>
+	  <{button type="button" label=$__content="取消"|t:'content' isCloseDialogBtn="true" class="btn-secondary"}>
+	</div>
+<{/area}>
+
+<script>
+(function(){
+  $$('input[name^=node[homepage]').addEvent('change', function(e){
+      var v = $E('input[name^=node[homepage]:checked').get('value');
+      if(v == 'true'){
+          $('show-edit-view').setStyle('display','');
+      }else{
+          $('show-edit-view').setStyle('display','none');
+      }
+    /*var dialog;
+    if(dialog = $('node_add_form').getParent('.dialog')){
+      dialog  = dialog.retrieve('instance');
+      dialog.initContent('index.php?app=content&ctl=admin_node&act=add&'+ this.getParent().toQueryString());
+    }
+    new Request({
+        url:this.getParent('form').get('action'),
+        method:this.getParent('form').get('method'),
+        data:this.getParent('td'),
+        onRequest:function(){
+          new MessageBox('<{t}>正在更新设置<{/t}>');
+        },
+        onComplete:function(){
+            var dialog;
+                if(dialog = $('node_add_form').getParent('.dialog')){
+              dialog  = dialog.retrieve('instance');
+              dialog.reload();
+            }
+          
+        }
+      }).send()*/
+     });
+
+
+  $('node_add_form').store('target',{
+      onComplete:function(){
+      var dialog;
+          if(dialog = $('node_add_form').getParent('.dialog')){
+        dialog  = dialog.retrieve('instance');
+        dialog.close();
+      }
+          
+      }
+  });
+
+
+  $('node_add_form_submit_btn').addEvent('click',function(){
+    
+      $('node_add_form').fireEvent('submit',{stop:$empty});
+  });
+
+})();
+
+ 
+</script>

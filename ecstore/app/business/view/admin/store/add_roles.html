@@ -1,0 +1,70 @@
+    <form id="rolesform" action="index.php?app=business&ctl=admin_storeroles&act=save" method="POST">
+		<div style="text-align:right;padding:3px 18px"><{help docid="101" type="link"}><{t}>点击查看帮助<{/t}><{/help}></div>
+        <input type="hidden" name="role_id" value="<{$roles.role_id}>" />
+		<div class="division">   
+				<h4><{t}>角色名称<{/t}></h4>
+	   
+       	<input type="text" vtype="required" name="role_name" value="<{$roles.role_name}>" class="x-input " autocomplete="off" >
+       </div>
+     
+           <div class='division'>
+          <h4><{t}>角色权限<{/t}></h4>
+         <input type='hidden'  vtype='requiredcheckbox'/>
+<ul><input class='parent' type="checkbox">全选(业务权限)
+<{foreach from=$menus3 item=value}>
+<{$value}>
+<{/foreach}>
+</ul>
+</div>
+    </form>
+
+
+<{area inject=".mainFoot"}>
+		<div class="table-action">
+                   <{button label=$___desktop="确定"|t:'desktop' id="rolesform-submit" class="btn-primary"}>
+	   </div>
+<{/area}>
+
+<script>
+(function(){
+    var _form = $('rolesform');
+    var btn =$('rolesform-submit');
+    var finder = finderGroup['<{$env.get.finder_id}>'];
+    
+    _form.store('target',{
+       onComplete:function(){
+	  },
+	  onSuccess:function(response){
+		var hash_res_obj = JSON.decode(response);
+		if (hash_res_obj.success != undefined && hash_res_obj.success != ""){
+		  try{
+			var _dialogIns = btn.getParent('.dialog').retrieve('instance');
+		  }catch(e){}
+
+		  if(_dialogIns){
+			_dialogIns.close();
+			finder.refresh.delay(400,finder);
+
+		  }
+		}
+	  }
+        
+    });
+
+        btn.addEvent('click',function(){
+        
+            _form.fireEvent('submit',{stop:$empty});
+            
+        
+        
+        });
+    
+})();
+    
+    
+</script>
+<script>
+    $$('input.parent').addEvent('change',function(){
+        this.getParent().getElements('ul li input[type=checkbox]').set('checked',this.checked);
+    })
+</script>

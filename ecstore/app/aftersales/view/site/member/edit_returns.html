@@ -1,0 +1,38 @@
+<div class="member-main">
+    <h1 class="title"><{t}>申请退款<{/t}></h1>
+    <form action="<{link app=aftersales ctl=site_member act=return_edit_buyer}>" enctype="multipart/form-data" encoding="multipart/form-data" method="post" name="return_save" id='x-return-form'>
+        <div class="FormWrap">
+			<div class="division">
+                <h4 class="fontnormal"><{t}>退款金额：<{$return_products.amount}><{/t}></h4>
+                <input type="hidden" name="amount" value="<{$return_products.amount}>"/>
+            </div>
+			<div class="division">
+                <h4 class="fontnormal"><{t}>退款原因：<{/t}></h4>
+                <select id="J_DelayDays" class="delay-days" name="comment">
+					<option value="">请选择退款原因</option>
+					<option value="协商一致退款" <{if $return_products.comment == "协商一致退款"}>selected<{/if}>>协商一致退款</option>
+					<option value="未按约定时间发货" <{if $return_products.comment == "未按约定时间发货"}>selected<{/if}>>未按约定时间发货</option>
+					<option value="虚假发货" <{if $return_products.comment == "虚假发货"}>selected<{/if}>>虚假发货</option>
+					<option value="其他" <{if $return_products.comment == "其他"}>selected<{/if}>>其他</option>
+				</select>
+            </div>
+			<div class="division">
+                <h4 class="fontnormal"><{t}>退款说明：<{/t}></h4>
+                <{input type="textarea" id="x-return-content" name="content" class='x-inputs x-input' cols="80" rows="5" style="width:98%" value=$return_products.content}>
+            </div>
+			<div class="division">
+                <h4 class="fontnormal"><{t}>上传凭证：<{/t}></h4>
+                <input type="hidden" name="MAX_FILE_SIZE" value="2097152" />
+                <input type="file" class="x-input x-inputs" name="file" id="fileField" />
+				<input type="file" class="x-input x-inputs" name="file1" id="fileField1" />
+				<input type="file" class="x-input x-inputs" name="file2" id="fileField2" />
+            </div>
+
+    </div>
+    <input type="hidden" name="order_id" value="<{$return_products.order_id}>">
+	<input type="hidden" name="return_id" value="<{$return_products.return_id}>">
+	<input type="hidden" name="member_id" value="<{$return_products.member_id}>">
+	<{button id="sub" class="common-btn" type="submit" label="确认"}>
+</form>
+</div>
+

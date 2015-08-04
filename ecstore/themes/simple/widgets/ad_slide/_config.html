@@ -1,0 +1,155 @@
+<div id="picAddress" class="tableform">
+  <div class="division widgetconfig">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th width="20%"><{t}>图片宽度：<{/t}></th>
+        <td width="30%" ><{input name="width" style="width:50px" value=$setting.width|default:'700' required="true" type="digits"}></td>
+        <th width="20%" >图片高度：</th>
+        <td width="30%" ><{input name="height" style="width:50px" value=$setting.height|default:'340' required="true" type="digits"}></td>
+      </tr>
+      <tr>
+        <th width="20%"><{t}>切换效果：<{/t}></th>
+        <td width="30%" >
+			<{input required=true type='radio' name="switcheffect" options=array('scrollx'=>横向滚动,'scrolly'=>竖向滚动,'fade'=>渐现渐隐) value=$setting.switcheffect|default:scrollx}>
+        </td>
+        <th width="20%" >自动播放：</th>
+        <td width="30%" >
+			<{input required=true type='select' name="autoplay" options=array('true'=>是,'false'=>否) value=$setting.autoplay|default:true}>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="piccontent">
+    <{foreach from=$setting.pic item=data key=key}>
+    <table  width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <th><{t app="b2c"}>图片地址:<{/t}></th>
+        <td>
+          <input type=hidden name=pic[<{$data.id}>][id] value="<{$data.id}>">
+          <input name='pic[<{$data.id}>][link]' class="imgsrc" id="pic[<{$data.id}>][link]"  value="<{$data.link}>">
+          <input type=button value=上传图片 class="uploadbtn">
+        </td>
+        <th><{t app="b2c"}>链接地址:<{/t}></th>
+        <td>
+          <input name="pic[<{$data.id}>][linktarget]" value="<{$data.linktarget}>">
+        </td>
+      </tr>
+      <tr>
+        <th><{t app="b2c"}>描述:<{/t}></th>
+        <td>
+          <input name="pic[<{$data.id}>][linkinfo]" value="<{$data.linkinfo}>">
+        </td>
+        <th><{t app="b2c"}>删除该图片及描述:<{/t}></th>
+        <td><span onclick="$(this).getParent('table').destroy()"><{img src="delecate.gif" style="cursor:pointer;" alt=$___b2c="删除"|t:'b2c' title=$___b2c="删除"|t:'b2c'}></span></td>
+      </tr>
+    </table>
+    <{/foreach}>
+  </div>
+  <{button label=$___b2c="添加图片"|t:'b2c' class="addimage" app="desktop" icon="btn_add.gif"}>
+  <div id="small_pic" style="display:none;">
+    <h4>添加小图</h4>
+    <div class="small_piccontent">
+      <{foreach from=$setting.small_pic item=data key=key}>
+      <table  width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <th><{t app="b2c"}>图片地址:<{/t}></th>
+          <td>
+            <input type=hidden name=small_pic[<{$data.id}>][id] value="<{$data.id}>">
+            <input name='small_pic[<{$data.id}>][link]' class="imgsrc" id="small_pic[<{$data.id}>][link]"  value="<{$data.link}>">
+            <input type=button value=上传图片 class="uploadbtn">
+          </td>
+        </tr>
+        <tr>
+          <th><{t app="b2c"}>描述:<{/t}></th>
+          <td>
+            <input name="small_pic[<{$data.id}>][linkinfo]" value="<{$data.linkinfo}>">
+          </td>
+          <th><{t app="b2c"}>删除该图片及描述:<{/t}></th>
+          <td><span onclick="$(this).getParent('table').destroy()"><{img src="delecate.gif" style="cursor:pointer;" alt=$___b2c="删除"|t:'b2c' title=$___b2c="删除"|t:'b2c'}></span></td>
+        </tr>
+      </table>
+      <{/foreach}>
+    </div>
+    <{button label=$___b2c="添加图片"|t:'b2c' class="addsmallimage" app="desktop" icon="btn_add.gif"}>
+  </div>
+</div>
+<script>
+  (function(){
+    function getCfgForm(id){
+      var config = $$(id)[0];
+      while(config.tagName != 'FORM'){
+        config = config.getParent();
+      }
+      return config;
+    }
+    function getWgtTpl(){
+      var sels = getCfgForm('.wgtconfig').getElements('select');
+      var wgtTpl = '';
+      sels.each(function(sel){
+        if(sel.getProperty('name') == '__wg[tpl]') wgtTpl = sel;
+      });
+      return wgtTpl;
+    }
+    var SelectTp = getWgtTpl();
+    SelectTp.addEvent('change',function(){
+      if(this.value == 'advance.html'){
+        $('small_pic').show();
+      }else{
+        $('small_pic').hide();
+      }
+    });
+    var tag_type='table',tag_class='pic_items';
+
+    document.getElement(".addimage").addEvent('click',function(){
+
+      var i=new Date().getTime();
+
+      var tpl='\
+      <tr><th><{t app="b2c"}>图片地址:<{/t}></th>\
+        <td><input type=hidden name=pic['+i+'][id] value="'+i+'"><input name="pic['+i+'][link]" class="imgsrc">\
+          <input type=button value=<{t app="b2c"}>上传图片<{/t}> class="uploadbtn" id="pic['+i+']"></td>\
+        <th><{t app="b2c"}>链接地址:<{/t}></th>\
+        <td><input name="pic['+i+'][linktarget]"></td></tr>\
+      <tr><th><{t app="b2c"}>描述:<{/t}></th>\
+        <td><input name="pic['+i+'][linkinfo]"></td>\
+        <th><{t app="b2c"}>删除该图片及描述:<{/t}></th>\
+        <td><span onclick="$(this).getParent(\'table\').destroy()"><{img src="delecate.gif" style="cursor:pointer;" alt=$___b2c="删除"|t:'b2c' title=$___b2c="删除"|t:'b2c'}></span></td>\
+      </tr>';
+
+      $('picAddress').getElement('.piccontent').adopt(new Element(tag_type,{'html':tpl,'width':'100%','class':tag_class}));
+
+      $('pic['+i+']').addEvent('click',function(e){bindevent(this)});
+    });
+
+    document.getElement(".addsmallimage").addEvent('click',function(){
+      var i=new Date().getTime();
+      var tpl='\
+      <tr><th><{t app="b2c"}>图片地址:<{/t}></th>\
+        <td><input type=hidden name=small_pic['+i+'][id] value="'+i+'"><input name="small_pic['+i+'][link]" class="imgsrc">\
+          <input type=button value=<{t app="b2c"}>上传图片<{/t}> class="uploadbtn" id="small_pic['+i+']"></td>\
+      <tr><th><{t app="b2c"}>描述:<{/t}></th>\
+        <td><input name="small_pic['+i+'][linkinfo]"></td>\
+        <th><{t app="b2c"}>删除该图片及描述:<{/t}></th>\
+        <td><span onclick="$(this).getParent(\'table\').destroy()"><{img src="delecate.gif" style="cursor:pointer;" alt=$___b2c="删除"|t:'b2c' title=$___b2c="删除"|t:'b2c'}></span></td>\
+      </tr>';
+
+      $('picAddress').getElement('.small_piccontent').adopt(new Element(tag_type,{'html':tpl,'width':'100%','class':tag_class}));
+
+      $('small_pic['+i+']').addEvent('click',function(e){bindevent(this)});
+    });
+
+    $$(".piccontent .uploadbtn").addEvent('click',function(e){bindevent(this)});
+    $$(".small_piccontent .uploadbtn").addEvent('click',function(e){bindevent(this)});
+
+    function bindevent(el){
+      var target=$(el).getParent(tag_type).getElement('.imgsrc');
+      var url='index.php?app=desktop&act=alertpages&goto='+encodeURIComponent("index.php?app=image&ctl=admin_manage&act=image_broswer&type=big");
+      Ex_Loader('modedialog',function(){
+        return new imgDialog(url,{onCallback:function(image_id,image_src){
+            target.value=image_src;
+        }});
+      });
+    }
+
+  })();
+</script>

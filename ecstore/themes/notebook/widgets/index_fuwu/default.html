@@ -1,0 +1,173 @@
+<{foreach from=$data.fuwu item=item key=key}>
+<div class="service_two dis_bl">
+    <{if $item.title_link}><a href="<{$item.title_link}>"><{/if}>
+    <h4><{if $item.logo}><img src="<{$item.logo}>" align="absmiddle"/><{/if}><span class="mLeft_010"><{$item.title}></span><i></i></h4>
+    <{if $item.title_link}></a><{/if}>
+    <ul style="display:none;">
+        <{if $key == 0}>
+            <div class="life_service">
+                <div class="life_ser_bt">
+                    <h4>所在地区</h4>
+                </div>
+                <div class="life_ser_m">
+                    <div class="life_ser_ml fl">
+                        <select id="province" name="province" size="1" vtype='required'>
+
+                            <option value="">--选择省--</option>
+
+                        </select>
+
+                        <select id="city" name="city" size="1" vtype='required'>
+
+                            <option value="">--选择市--</option>
+
+                        </select>
+                    </div>
+                    <div class="life_ser_mr fr">
+                        <button type="button" onclick="jump();"></button>
+                    </div>
+                </div>
+            </div>
+        <{else}>
+            <{foreach from=$item.info item=info key=k}>
+                <{if $info.pic}>
+                <li><a href="<{$info.link}>"><img src="<{$info.pic}>"/></a></li>
+                <{/if}>
+            <{/foreach}>
+        <{/if}>
+    </ul>
+</div>
+<{/foreach}>
+<script>
+window.addEvent('domready',function(){
+    var flag = true;
+    $ES('.service_two').each(function(item,index){
+        var ul = item.getElement('ul');
+        var li_len = ul.getElements('li').length;
+        if(index != 0){
+            if(li_len == 0){
+                item.getElement('i').destroy();
+                ul.destroy();
+            }
+        }else{
+            ul.setStyle('display','');
+        }
+
+        item.getElement('h4').addEvent('click',function(){
+            if(item.getElement('ul')){
+                $ES('.service_two').each(function(i,k){
+                    if(i.getElement('ul')){
+                        i.getElement('ul').setStyle('display','none');
+                    }
+                });
+            
+                item.getElement('ul').setStyle('display','');
+            }
+        });
+    });
+});
+
+
+var strCity='<{$data.regions}>';
+
+function fillcity(p)
+
+{
+
+    var i,j;
+
+    var objcity=document.getElementById('city');
+
+    for (i=objcity.options.length-1;i>=1;i--) objcity.removeChild(objcity.options[i]);    
+
+    var str=JSON.decode(strCity);
+
+    var t2;
+
+    for(i=0;i<str.length;i++)
+
+    {
+
+        t2=str[i]['cities'];
+
+        for (j=0;j<t2.length;j++)
+
+        {
+
+            if (t2[j]['p_region_id'] == p){
+
+                oItem=document.createElement('OPTION');
+
+                oItem.text=t2[j]['local_name'];
+
+                oItem.value=t2[j]['region_id'];
+
+                objcity.options.add(oItem);
+
+                if (oItem.text=='') oItem.selected=true;
+
+            }
+
+        }
+
+    }
+
+}
+
+<{if $data.regions != 'null'}>
+
+window.addEvent('domready', function() {
+
+    var i,j;
+
+    var str=JSON.decode(strCity);
+
+    var t2;
+
+    var objprovince=document.getElementById('province');
+
+    for(i=0;i<str.length;i++)
+
+    {
+
+        t2=str[i];
+
+        oItem=document.createElement('OPTION');
+
+        oItem.text=t2['local_name'];
+
+        oItem.value=t2['region_id'];
+
+        objprovince.options.add(oItem);
+
+        if (t2['region_id']=='')
+
+        {
+
+            oItem.selected=true;
+
+            fillcity(t2['region_id']);
+
+        }
+
+    }
+
+    objprovince.onchange=function(){
+
+        fillcity(this.value);
+
+    }
+
+});
+<{/if}>
+
+function jump(){
+    var city_id = $('city').value;
+    if(city_id != ''){
+        Cookie.write('CITY_ID',city_id,{path:'<{$data.base_url}>',duration:20});
+    }else{
+        Cookie.dispose('CITY_ID',{path:'<{$data.base_url}>'});
+    }
+    window.location.href='';
+}
+</script>

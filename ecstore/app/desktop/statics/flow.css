@@ -1,0 +1,12 @@
+#message{border:1px solid #ccc;margin:0;padding:0;cursor: pointer;}
+#message dt .subject{margin-left:50px;display:block;}
+#message dt.read{background:#e1ecfe;font-weight: normal;}
+#message dt.read{clear:both;padding:5px;border-bottom:1px solid #ccc;text-shadow:5px 5px 6px #ccc;
+	background:#e1ecfe; background: -moz-linear-gradient(top,#e1ecfe,#fff);background: -webkit-gradient(linear, 0 0, 0 100%, from(#e1ecfe), to(white));}
+#message dt.current{border:1px solid #3366CC;border-bottom-style:none}
+#message dd{display:none;margin:0;padding:5px}
+#message dd.current{border:1px solid #3366CC;border-top-style:none;display:block}
+#flow-main-menu,#flow-menu-bar{width:100%}
+#message dt .star{float:left;display:block;width:50px;height:30px;background:url(statics/bundle/star_0.gif) 50% 50% no-repeat}
+#message dt span.starred{background:url(statics/bundle/star_1.gif) 50% 50% no-repeat}
+#flow .notice{border-radius: 10px; -moz-border-radius: 10px;-webkit-border-radius: 10px;margin:20px;padding:20px;}

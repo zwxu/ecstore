@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title><{$title}> - <{$title_desc}></title>
+<link rel="shortcut icon" href="../favicon.gif" type="image/gif" />
+ 
+<{if defined('DEBUG_CSS') && DEBUG_CSS}>
+<link rel="stylesheet" href="<{$env.app.res_url}>/css/framework.css" type="text/css" media="screen, projection"/>
+<link rel="stylesheet" href="<{$env.app.res_url}>/css/default/style.css" type="text/css" media="screen, projection"/>
+<{else}>
+<link rel="stylesheet" href="<{$env.app.res_url}>/css/default/style_min.css" type="text/css" media="screen, projection"/>
+<{/if}>
+
+
+<{foreach from=$theme_css item="desktop_theme_css_file"}>
+<link rel="stylesheet" href="<{$desktop_theme_css_file}>" type="text/css" media="screen, projection"/>
+<{/foreach}>
+<{lang_css src="lang.css" app="desktop"}>
+<{desktop_header}>
+
+<{assign var=desktop_sideleft value="desktop_{$uname}_sideleft"}>
+<script>
+   startTime = (new Date).getTime();
+
+   currentWorkground = null;
+
+  /*商店事件、状态 推送包*/
+   shopeEvents = {};
+   SESS_ID=null;
+   SHOPBASE='<{$shop_base}>';
+   SHOPADMINDIR='<{$shopadmin_dir}>';
+   DESKTOPRESURL='<{$env.app.res_url}>';
+   DESKTOPRESFULLURL='<{$env.app.res_full_url}>';
+   CURRENTUSER =  '<{$uname}>';
+   BREADCRUMBS ='0:0';
+   window.loadedPart = [1,0,(new Date).getTime()];
+</script>
+</head>
+<body>
+<noscript>
+  <div class='noscript error'>
+    <{t}>您好，要正常运行，浏览器必须支持Javascript<{/t}>
+  </div>
+</noscript>
+<div style="display:none;height:0;overflow:hidden;">
+<iframe src='<{$env.app.res_url}>/tpl.html' id='tplframe' class='hide'></iframe>
+<iframe src='<{$env.app.res_url}>/about.html' name='download' id='downloadframe' class='hide'></iframe>
+<iframe src='<{$env.app.res_url}>/about.html' name='upload' id='uploadframe' class='hide'></iframe>
+</div>
+<div class="wrapper" id='body' style='visibility:hidden'>
+  <div class="msgbox" id="messagebox"></div>
+  <div class="header" id="header">
+    <div class="header-inner clearfix">
+      <div class="top-bar clearfix" id="topbar">
+        <h1 class="logo">
+          <a href="index.php?ctl=dashboard&act=index">BizMall</a>
+        <!--  <span class="head-license">
+             <a target="_blank" href="<{$certificate_url}>" id="license" style="display:none;"></a>
+          </span>-->
+        </h1>
+        <{if $desktop_active_url}><{$desktop_active_url}><{/if}>
+        <div class="frt">
+          <div class="head-opts flt">
+            <div class="flt first">
+                <div class="favor" id="favor">
+                    <span class="favor-handle"><{t}>快捷菜单<{/t}></span>
+                    <div class="x-drop-menu" style="display:block;visibility:hidden;">
+                        <ul>
+                          <{foreach from=$shortcuts_menus item=item key=key}>
+                          <li>
+                            <a href="index.php?<{$item}>"><span><{$key}></span></a>
+                          </li>
+                          <{/foreach}>
+                        </ul>
+                        <div  style="height:22px;line-height:22px" <{if count($shortcuts_menus)}>class="x-edit-menu clear"<{/if}>>
+                            <a onClick="new Dialog('index.php?app=desktop&ctl=default&act=allmenu',{'title':'<{t}>快捷菜单配置<{/t}>'});" href="javascript:void(0)"><span><{t}>点此编辑快捷菜单<{/t}></span></a>
+                        </div>
+                     </div>
+                </div>
+          </div>
+          <div class="flt"><span>|</span> </div>
+          <div class="rpcnotify flt" style="display:none">
+            <a href='index.php?ctl=rpcnotify&act=index'><{t}>系统通知<{/t}></a><i class="notify_num"></i>
+            <span>|</span>
+          </div>
+          <div class="flt">
+            <{$desktop_menu}>
+          </div>
+        </div>
+        <div class="head-user flt">
+         <div class="span-auto"><span>|</span> </div>
+          <{$uname}>
+          [<a href="index.php?ctl=dashboard&act=profile" target="dialog::{width:463,height:280,title:'<{t}>设置<{/t}>'}" ><{t}>设置<{/t}></a>]
+          [<a href='index.php?ctl=passport&act=logout'><{t}>退出<{/t}></a>]
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="head-nav clearfix">
+      <div class="head-nav-inner clearfix">
+        <{foreach from=$fav_menus item=item  key=key}>
+        <{if $menus.menu.$item}>
+        <{assign var=menu_group value=$menus.menu.$item}>
+        <dl>
+          <dt>
+            <a href="index.php?<{$menus.workground.$item.menu_path}>" <{if $menus.workground.$item.target}>target="<{$menus.workground.$item.target}>"<{/if}>class="wg" mid="<{$menus.workground.$item.menu_id}>"><span><{t}><{$menus.workground.$item.menu_title}><{/t}></span></a>
+          </dt>
+          <dd>
+          <ul>
+            <{foreach from=$menu_group item=groups name=groups0 key=key1}>
+            <li <{if $env.foreach.groups0.last}>class="last"<{/if}>>
+            <{if $key1=='nogroup'}>
+            <{foreach from=$groups item=group name=groups1}>
+            <li <{if $env.foreach.groups1.last}>class="last"<{/if}>>
+              <a href="index.php?<{$group.menu_path}>" <{if $group.target}> target="<{$group.target}>"<{/if}>><span><{t}><{$group.menu_title}><{/t}></span></a>
+            </li>
+            <{/foreach}>
+            <{else}>
+            <a class="head-nav-sub" href="javascript:void(0)"><span><{$key1|t:"desktop"}></span></a>
+            <ul>
+              <{foreach from=$groups item=group name=groups2}>
+              <li <{if $env.foreach.groups2.last}>class="last"<{/if}>>
+                <a href="index.php?<{$group.menu_path}>" <{if $group.target}> target="<{$group.target}>"<{/if}>><span><{t}><{$group.menu_title}><{/t}></span></a>
+              </li>
+              <{/foreach}>
+            </ul>
+            </li>
+            <{/if}>
+            <{/foreach}>
+          </ul>
+          </dd>
+        </dl>
+        <{/if}>
+        <{/foreach}>
+        </div>
+    </div>
+  </div>
+
+  <div class="container clearfix" id="container">
+    <div class="side <{if $env.cookie[$desktop_sideleft] == 'OFF-SHOW'}>hide<{/if}>" id="side">
+      <div class="side-inner">
+        <div class="side-content">
+        </div>
+      </div>
+    </div>
+    <div class='workground' id='workground'>
+      <div class="toggler-left" id='leftToggler'>
+          <a href="javascript:void(0)" class="toggler-left-inner" title="<{t}>点击收起或展开左侧<{/t}>">&nbsp;</a>
+       </div>
+      <div class='content-head' style="font-size:0;height:0;"></div>
+      <div class='content-main' id='main'></div>
+      <div class='content-foot' style="font-size:0;height:0;"></div>
+    </div>
+
+    <div class="side-r hide" id="side-r">
+      <div class="side-r-resize" id="side-r-resize">&nbsp;</div>
+      <div class="side-r-top clearfix">
+        <b class="side-r-title flt f-14"></b>
+        <span class="frt side-r-close pointer"><{img src="bundle/finder_drop_arrow_close.gif"}></span>
+      </div>
+      <div class="side-r-head" style="border-bottom:1px #999 solid;padding:2px 0 2px 0;font-size:0;height:0;">&nbsp;
+      </div>
+      <div id="side-r-content" class="side-r-content" conatainer="true" style="overflow:auto">
+      </div>
+      <div class="side-r-foot" style="font-size:0;height:0;"></div>
+    </div>
+  </div>
+</div>
+<{lang_script src="lang.js"}>
+<{script src="loader.js" }>
+
+<{if defined('DEBUG_JS') && DEBUG_JS}>
+  <{script src="moo.js"}>
+  <{script src="moomore.js"}>
+  <{script src="mooadapter.js"}>
+  <{script src="jstools.js"}>
+  <{script src="coms/wpage.js"}>
+  <{script src="coms/messagebox.js"}>
+  <{script src="coms/dialog.js"}>
+  <{script src="coms/validate.js"}>
+  <{script src="coms/dropmenu.js"}>
+  <{script src="coms/finder.js"}>
+<{else}>
+  <{script src="moo_min.js" pdir="js_mini"}>
+  <{script src="tools_min.js" pdir="js_mini"}>
+  <{script src="coms/finder.js" asycn="true" pdir="js_mini"}>
+<{/if}>
+
+<script>
+(function(){
+  <{if defined('DEBUG_JS') && DEBUG_JS}>
+    var js_path='<{$env.app.res_url}>/js/';
+    var timer = '?<{$smarty.now}>';
+  <{else}>
+    var js_path='<{$env.app.res_url}>/js_mini/';
+    var timer = '';
+  <{/if}>
+
+    var hs = {
+        'cmdrunner':{path:js_path+'coms/cmdrunner.js'+timer,type:'js'},
+        'historyMan':{path:js_path+'coms/hst.js'+timer,type:'js'},
+        'autocompleter':{path:js_path+'coms/autocompleter.js'+timer,type:'js'},
+        'uploader':{path:js_path+'coms/uploader.js'+timer,type:'js'},
+        'modedialog':{path:js_path+'coms/modedialog.js'+timer,type:'js'},
+        'pager':{path:js_path+'coms/pager.js'+timer,type:'js'},
+        <{if defined('DEBUG_JS') && DEBUG_JS}>
+        'colorpicker':{path:js_path+'coms/colorpicker.js'+timer,type:'js'},
+        'editor_style_1':{path:js_path+'coms/editor_style_1.js'+timer,type:'js',requires:['picker']},
+        <{/if}>
+        'picker':{path:js_path+'coms/datapicker.js'+timer,type:'js',requires:['colorpicker']},
+        'editor':{path:js_path+'coms/editor.js'+timer,type:'js',requires:['editor_style_1']}
+    };
+    Object.each(hs,function(v,k){Ex_Loader.add(k,v);});
+
+    if(window.ie6)Ex_Loader(js_path+'fixie6.js'+timer);
+})();
+
+var LAYOUT = {
+    head: $('header'),
+    container: $('container'),
+    side: $('side'),
+    workground: $('workground'),
+    content_main: $('main'),
+    content_head: $E('#workground .content-head'),
+    content_foot: $E('#workground .content-foot'),
+    side_r: $('side-r'),
+    side_r_content:$('side-r-content'),
+    leftToggler:$('leftToggler')
+};
+
+/*init  script
+
+this Function will run at 'loadedPart[1]==loadedPart[0]'
+*/
+var initDesktop = function() {
+
+    window.resizeLayout = fixLayout = function() {
+
+        var _NUM = function(num){
+            num =  isNaN(num)?0:num;
+            if(num<0)num=0;
+            return num;
+        };
+        var mw=0,mh=0;
+        var winSize = window.getSize();
+        var containerHeight = winSize.y - LAYOUT.head.getSize().y;
+        LAYOUT.container.setStyle('height',_NUM(containerHeight-LAYOUT.container.getPatch().y));
+        LAYOUT.container.setStyle('width',_NUM(winSize.x.limit(960, 2000)));
+
+        if(!LAYOUT.side.hasClass('hide')){
+            LAYOUT.side.setStyle('width',_NUM( (winSize.x * 0.12).limit(0,winSize.x)));
+        }
+
+        LAYOUT.workground.setStyle('width',_NUM(
+            (winSize.x - LAYOUT.workground.getPatch().x)-
+            LAYOUT.side.getSize().x-
+            LAYOUT.side_r.getSize().x)
+        ).setStyle('left',LAYOUT.side.offsetWidth);
+
+        LAYOUT.content_main.setStyles({'height':
+            (mh=_NUM(containerHeight -
+            LAYOUT.content_head.getSize().y  -
+            LAYOUT.content_foot.getSize().y  -
+            LAYOUT.workground.getPatch().y)),
+            'width':(mw=_NUM(LAYOUT.workground.getSize().x-LAYOUT.workground.getPatch().x))
+        }).fireEvent('resizelayout',[{x:mw,y:mh}]);
+
+
+        if(!LAYOUT.side_r.hasClass('hide')){
+            if(!LAYOUT.side_r.get('widthset'))
+                LAYOUT.side_r.setStyle('width',_NUM((winSize.x*0.15).limit(0,winSize.x)));
+            LAYOUT.side_r_content.setStyle('height',
+                _NUM(containerHeight-
+                LAYOUT.side_r.getElement('.side-r-top').getSize().y-
+                LAYOUT.side_r.getElement('.side-r-head').getSize().y-
+                LAYOUT.side_r.getElement('.side-r-foot').getSize().y-
+                LAYOUT.side_r_content.getPatch().y-
+                LAYOUT.side_r.getPatch().y)
+            );
+            LAYOUT.side_r.setStyle('left',winSize.x - LAYOUT.side_r.offsetWidth);
+        }
+
+
+
+
+    };
+
+    resizeLayout();
+
+    Side_R = new Class({
+        Implements: [Options, Events],
+        options: {
+            onShow: $empty,
+            onHide: $empty,
+            onReady: $empty,
+            isClear:true,
+            width:false
+        },
+        initialize: function(url, opts) {
+            this.setOptions(opts);
+            var panel = this.panel = $('side-r');
+            var container = this.container = $('side-r-content');
+            var trigger = this.options.trigger;
+
+            if(trigger&&!trigger.retrieve('events',{})['dispose']) {
+                 trigger.addEvent('dispose',function(){
+                     panel.addClass('hide');
+                     container.empty();
+                     panel.removeProperty('widthset').store('url','');
+                    });
+              }
+
+
+            if(panel.retrieve('url','') == url)return;
+
+            if (url) {
+                this.showSide(url);
+            } else {
+                throw Exception('NO TARGET URL');
+                return;
+            }
+
+            var btn_close = panel.getElement('.side-r-close');
+            var _title = panel.getElement('.side-r-title');
+
+            _title.set('html',this.options.title||"");
+
+            if(btn_close){
+                btn_close.removeEvents('click').addEvent('click', this.hideSide.bind(this));
+            }
+
+        },
+        showSide: function(url) {
+            this.cleanContainer();
+
+            var _this = this;
+            if(_this.options.width&&!_this.panel.get('widthset')){
+                _this.panel.set({'widthset':_this.options.width,styles:{width:_this.options.width}});
+            }
+            _this.panel.removeClass('hide');
+            _this.fireEvent('show');
+            window.resizeLayout();
+            if(this.cache)return;
+            W.page(url,{
+                update:_this.container,
+                render:false,
+                onRequest: function() {
+                    _this.panel.addClass('loading');
+                },
+                onComplete: function() {
+                    _this.panel.removeClass('loading');
+                    _this.fireEvent('ready', $splat(arguments));
+                    _this.panel.store('url',url);
+                    _this.container.style.height = (_this.container.style.height.toInt()-_this.container.getPrevious().getSize().y-_this.container.getNext().getSize().y)+'px';
+
+                }
+            });
+        },
+        hideSide: function() {
+            this.panel.addClass('hide');
+            window.resizeLayout();
+            this.cleanContainer();
+            this.fireEvent('hide');
+        },
+        cleanContainer: function() {
+            this.panel.store('url','');
+            if(this.options.isClear)this.container.empty();
+        }
+    });
+
+
+    new Drag($('side-r-resize'), {
+        modifiers: {
+            'x': 'left',
+            'y':false
+        },
+        onBefore:function(el){
+                el.addClass('side-r-resize-ing');
+        },
+        onDrag: function(el) {
+
+            el.addClass('side-r-resize-ing');
+
+        },
+        onComplete: function(el) {
+            el.removeClass('side-r-resize-ing');
+
+            var left = el.getStyle('left');
+                left = left.toInt();
+            var _w =  LAYOUT.side_r.style.width.toInt()-(left-(-5));
+            LAYOUT.side_r.style.width = _w+'px';
+            LAYOUT.side_r.set('widthset',_w);
+            el.style.left = '-5px';
+            resizeLayout();
+        }
+    });
+
+
+    /*MODAL PANEL*/
+    MODALPANEL = {
+        createModalPanel:function(){
+            var mp = new Element('div',{'id':'MODALPANEL'});
+            var mpStyles = {
+                'position': 'absolute',
+                'background': '#333333',
+                'width': '100%',
+                'display':'none',
+                'height': window.getScrollSize().y,
+                'top': 0,
+                'left': 0,
+                'zIndex': 65500,
+                'opacity': .4
+            };
+            this.element = mp.setStyles(mpStyles).inject(document.body);
+            return this.element;
+        },
+        show:function(){
+            var panel = this.element = this.element||this.createModalPanel();
+            panel.setStyles({
+                'width': '100%',
+                'height': window.getScrollSize().y
+            }).show();
+        },hide:function(){
+            if(this.element)this.element.hide();
+        }
+    };
+
+
+    var windowResizeTimer = 0;
+    window.addEvent('resize',function() {
+        $clear(windowResizeTimer);
+        windowResizeTimer = window.resizeLayout.delay(200);
+
+        if(MODALPANEL.element&&MODALPANEL.element.style.display!='none'){
+                MODALPANEL.element.setStyles({
+                       'height':window.getScrollSize().y
+                });
+        }
+
+    });
+
+
+    $('leftToggler').addEvent('click',function(e) {
+        if(this.hasClass('fixed'))return;
+
+        LAYOUT.side.toggleClass('hide');
+
+        var fcokk =  'desktop_'+CURRENTUSER+'_sideleft';
+        if(!LAYOUT.side.hasClass('hide')){
+            Cookie.dispose(fcokk);
+            }else{
+              Cookie.write(fcokk,'OFF-SHOW',{duration:365});
+        }
+        fixSideToggler();
+        window.resizeLayout();
+    });
+
+    var fixSideToggler = (function(){
+        $('leftToggler').getElement('.toggler-left-inner')[ LAYOUT.side.hasClass('hide')? 'addClass' : 'removeClass' ]('hide');
+        return arguments.callee;
+    })();
+
+    fixSideLeft = function(act){
+        $('leftToggler')[act+'Class']('fixed');
+        if(Cookie.read('desktop_'+CURRENTUSER+'_sideleft'))act='add';
+        LAYOUT.side[act+'Class']('hide');
+        window.resizeLayout();
+    };
+    /*快捷菜单处理*/
+
+    $('favor').addEvents({
+        'mouseenter':function(){
+            this.addClass('favor-active');
+            var drop_menu=this.getElement('.x-drop-menu'),
+                handle_h=this.getElement('.favor-handle').offsetHeight,
+                drop_menu_h= window.getSize().y-handle_h;
+            drop_menu.setStyles({
+                top:handle_h-1,
+                left:-1,
+                visibility:'visible'
+            });
+
+            if(drop_menu_h <= drop_menu.offsetHeight){
+                var edit_menu=this.getElement('.x-edit-menu'),
+                    menu_h=drop_menu_h-drop_menu.getPatch().y;
+
+                drop_menu.setStyle('height',menu_h).getElement('ul')
+                         .setStyles({'overflow-y':'auto','height':menu_h-edit_menu.offsetHeight});
+            }
+        },
+        'mouseleave':function(){
+            this.removeClass('favor-active');
+            this.getElement('.x-drop-menu').setStyles({
+                visibility:'hidden',
+                height:'auto'
+            }).getElement('ul').setStyle('height','auto');
+        }
+    });
+
+
+    void function(){
+        var winSize = window.getSize();
+        var dmenu = $('favor').getElement('.x-drop-menu');
+        dmenu.setStyle('width', Math.max(winSize.x-$('favor').getPosition().x-dmenu.getPatch().x - 7, 0));
+        var favs = $$('#favor li');
+            favs.pop();
+        new Equalizer(favs).equalize('width');
+    }();
+
+
+<{if count($fav_menus)>0}>
+   /*顶部菜单处理*/
+   void function(){
+    var _timer = 0;
+    var _mouse = true;
+    var _absoluteFix =  function(f,t){
+          var pos =  {};
+
+          var fcis = f.getCoordinates();
+          var tsize = t.getSize();
+          var wsize = window.getSize();
+          if((wsize.x-fcis.right)<tsize.x){
+            $extend(pos,{left:Math.abs(fcis.right-tsize.x),top:fcis.bottom});
+          }else{
+            $extend(pos,{left:fcis.left,top:fcis.bottom});
+          }
+
+
+          return pos;
+    }
+    var getCurWgMenu =function(){return LAYOUT.head.getElement('a[mid='+BREADCRUMBS.split(":")[0]+']');}
+    $$('.head-nav dl').each(function(item){
+        var lis = item.getElements('ul li li');
+        lis.addEvent('click',function(){
+                   item.fireEvent('mouseleave');
+                   _mouse=false;
+            });
+            new Equalizer(lis).equalize('width');//等宽
+    });
+    var workMenus = $$('.head-nav dl');
+    workMenus.addEvents({
+
+        'mouseenter':function(){
+            _mouse=true;
+            $clear(_timer);
+             var dd = this.getElement('dd'),wg,cwg;
+             if(!dd)return;
+                if(wg = this.getElement('.wg')){
+                    if(cwg = getCurWgMenu()){
+                        if(Slick.uidOf(wg)!=Slick.uidOf(cwg)){
+
+                          cwg.removeClass('current');
+
+                       }
+                    }
+                    wg.addClass('current');
+
+                }
+
+                 dd.setStyle('visibility','visible');
+                 dd.setStyles(_absoluteFix(this,dd));
+
+                if(window.ie6){
+
+                    /*fix html select visible*/
+                    dd.retrieve('iframe', new Element('iframe', {
+                        src: 'javascript:void(0);',
+                        styles: {
+                            position: 'absolute',
+                            zIndex: - 1,
+                            border: 'none',
+                            'filter': 'alpha(opacity=0)'
+                        }
+                    }).inject(dd)).setStyles({
+                        'top': -1,
+                        'left': -1,
+                        width: dd.offsetWidth,
+                        height: dd.offsetHeight
+                    });
+                }
+
+        },
+        'mouseleave':function(e){
+
+            if(!_mouse)return;
+            var dd = this.getElement('dd'),wg;
+                         if(!dd)return;
+            var cwg = getCurWgMenu();
+                 if(wg = this.getElement('.wg')){
+                     if(cwg&&e){
+                        if(Slick.uidOf(wg)!=Slick.uidOf(cwg)){
+                          _timer = cwg.addClass.delay(200,cwg,'current');
+                          wg.removeClass('current');
+                        }
+                     }else{
+
+                       wg.removeClass('current');
+                     }
+                 }
+                 dd.setStyle('visibility','hidden');
+        },
+        'click':function(e){
+
+            this.fireEvent('mouseleave');
+
+
+        }
+
+
+    });
+
+
+
+
+        /*fix head nav inner*/
+    void function(){
+            var dltmp = workMenus[0];
+            var hnavInner = dltmp.getParent();
+            var _w = hnavInner.getParent().getPatch().x;
+            workMenus.each(function(item){
+                _w+= (item.getSize().x+item.getPatch().x);
+            });
+
+
+            if(_w>(window.screen.width - 30)){
+
+                hnavInner.setStyle('width',_w);
+                var hnav = hnavInner.getParent();
+                var hnavautoscroll = new Scroller(hnav, {
+                    onChange:function(x,y){
+
+                        this.element.scrollTo(x, 0);
+
+                    }});
+                hnav.addEvents({
+                    'mouseover':function(){
+
+                              hnavautoscroll.start();
+                              if(window.ie6){
+                                    this.setStyle('width',window.getSize().x - this.getPatch().x);
+                                }
+
+                        },
+                    'mouseout':function(){hnavautoscroll.stop();}
+                });
+
+            }
+
+    }();
+
+
+ }();
+
+<{/if}>
+
+
+
+        /*每 30秒 同步一下后台 的事项*/
+    TaskRemote = {
+        url: "index.php?ctl=default&act=status",
+        timer: 30000,
+        delay: 0,
+        stop:function(){
+            $clear(this.delay);
+        },
+        start:function(){
+            this.delay = this.doit.delay(this.timer, this);
+        },
+        init: function() {
+            var _this = this;
+            this.request = (new Request.HTML({
+                url:this.url,
+                onSuccess: function(nodes, elements, responsetext, javascript) {
+                    $clear(_this.delay);
+                    _this.delay = _this.doit.delay(_this.timer, _this);
+                },
+                onCancel: function() {
+                    _this.delay = _this.doit.delay(_this.timer, _this);
+                },
+                onFailure: function() {
+                    _this.delay = _this.doit.delay(_this.timer * 2, _this);
+                }
+            }));
+            return this;
+        },
+        doit: function(_chain) {
+
+            _chain =$type(_chain)=='function'?_chain : $empty;
+
+            return this.request.post({
+                events: shopeEvents
+            }).chain(_chain);
+        }
+    };
+    TaskRemote.init().start();
+
+
+    EventsRemote = new Request({url:'index.php?ctl=default&act=desktop_events'});
+
+    var keyObj = <{$keyboard_setting_json}>;
+    $(window.gecko?document.documentElement:document.body).addEvent('keydown',function(e){
+        if(e.target==this){
+            if(e.code==32)e.stop();
+            Hotkey.init(e,keyObj);
+        }
+    });
+
+    /** 获取授权证书 **/
+
+    var _timer,_request = function(){
+            new Request({
+                url:'index.php?app=desktop&ctl=default&act=set_open_api',
+                method:'post',
+                onComplete:function(res){
+                    new Asset.image(res,{
+                            onload:function(img){
+                                $('license').show().adopt(img);
+                                $clear(_timer);
+                            },
+                            onerror:function(){
+                                _timer = _request.delay(30000);
+                            }
+                    });
+                }
+            }).send();
+        };
+    _request();
+
+
+
+     Xtip = new Tips({tip:'tip_Xtip',fixed:true,offset: {x: 24, y: -15},onBound:function(bound){
+        if(bound.x2){
+            this.tip.getElement('.tip-top').addClass('tip-top-right');
+            this.tip.getElement('.tip-bottom').addClass('tip-bottom-right');
+        }else {
+            this.tip.getElement('.tip-top').removeClass('tip-top-right');
+            this.tip.getElement('.tip-bottom').removeClass('tip-bottom-right');
+        }
+     }});
+
+    /*default Action
+        ctl=dashboard&act=index
+    */
+    W = new Wpage({},'ctl=dashboard&act=index').chain(function(){
+        $('body').setStyles({visibility:'visible'});
+    });
+
+
+    W.render(document.body);
+
+    (function(){
+        if(!Browser.Platform.ios)return;
+        var start = {x:0,y:0};
+        var fx = new Fx.Scroll('main',{link:'cancel'});
+        $('main').addEvents({
+                touchstart:function(e){
+                    start = e.page;
+                },
+                touchmove:function(e){
+                    e.stop();
+                    fx.start(this.scrollLeft-(e.page.x-start.x),this.scrollTop-(e.page.y-start.y));
+                }
+        });
+    })();
+
+
+
+
+
+
+};//function end;
+
+window.addEvent('domready',initDesktop);
+
+
+function _get_rpcnotify_num(obj) {
+    W.page('index.php?app=desktop&ctl=rpcnotify&act=read',{method:'POST',onComplete:function(){
+                var notify=$E('#topbar .notify_num');
+                if(notify){
+                    var msg=notify.get('text'),n;
+                    n=msg.substring(1,msg.length-1);
+                    n=n-1>0?'('+(n-1)+')':'';
+                    notify.set('text',n);
+                }
+            },data:{id:$(obj).getParent('tr').getElement('input').get('value')}
+       });
+}
+
+
+
+
+var NOTEPOP = new NotePop();
+</script>
+<{foreach from=$theme_scripts item="desktop_theme_js"}>
+<script type="text/javascript" src="<{$desktop_theme_js}>"></script>
+<{/foreach}>
+<{desktop_footer}>
+</body>
+</html>

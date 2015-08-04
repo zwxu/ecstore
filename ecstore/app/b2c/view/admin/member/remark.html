@@ -1,0 +1,25 @@
+<form action="index.php?<{$env.server.QUERY_STRING}>" method="post">
+	<div class="tableform">
+	    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	        <tr>  <th><{t}>标记：<{/t}></th><td>	   
+	             <label><input type='radio' name='remark_type' value='b1' id='b1'><img src='<{$res_url}>/remark_icons/b1.gif' width='20' height='20'></label>
+	            <label><input type='radio' name='remark_type' value='b2' id='b2'><img src='<{$res_url}>/remark_icons/b2.gif' width='20' height='20'></label>
+	            <label><input type='radio' name='remark_type' value='b3' id='b3'><img src='<{$res_url}>/remark_icons/b3.gif' width='20' height='20'></label>
+	            <label><input type='radio' name='remark_type' value='b4' id='b4'><img src='<{$res_url}>/remark_icons/b4.gif' width='20' height='20'></label>
+	            <label><input type='radio' name='remark_type' value='b5' id='b5'><img src='<{$res_url}>/remark_icons/b5.gif' width='20' height='20'></label>
+	            <label><input type='radio' name='remark_type' value='b0' id='b0'><img src='<{$res_url}>/remark_icons/b0.gif' width='20' height='20'></label> </td></tr>
+            <tr>  <th><{t}>会员备注：<{/t}></th><td><{input type=textarea name='remark' style=" width:90%" rows="6" value=$remark  }></td></tr>
+      </table>
+	<div class="table-action"><{button type="submit" label=$___b2c="保存"|t:'b2c' }></div>
+</div>
+</form>
+
+ <script>
+	window.addEvent('domready',function(){
+		if('<{$remark_type}>'!=''){
+		    $('<{$remark_type}>').checked = true;
+		}else{
+		    $('b1').checked = true;
+		}
+	});
+</script>

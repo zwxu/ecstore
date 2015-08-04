@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8">
+<title><{$conf.installer.title}></title>
+	<{css src="framework.css"}>
+    <{css src="installer.css"}>
+    <style>
+		<{$conf.installer.style}>
+    </style>
+    <{if $install_bg}>
+    <style>.installer-info .installer-proimg{ background:url(<{$install_bg}>) no-repeat;}</style>
+    <{else}>
+    <style>.installer-info .installer-proimg{ background:url(<{$statics_url}>/undefine_setup_product.jpg) no-repeat;}</style>
+    <{/if}>
+	</head>
+	<body>
+<div class="container">
+ <div class="logo">
+    <div class="banner"><{$conf.installer.banner}></div>
+ </div>
+ <div class="container-all">
+  <div class="installer-main clearfix" id="installer-body">
+  <div class="installer-steps"></div>
+     <div class="installer-info" style="height:310px;">
+       <div class="installer-proimg"></div>
+       <div class="installer-proinfo">
+        <div class="installer-proinfo-title"><{t}><{$conf.product_name}><{/t}></div>
+		<{$conf.product_desc}>
+        <p style="padding-top:18px"><input type="button" class="taskstepbutton-start tasks_start" onclick="location.href='default/process'" value="<{t}>开始安装软件<{/t}>" />&nbsp;</p>
+       </div>
+     </div>
+  </div>
+ </div>
+ <div class="copyright">Power by <a href="http://www.shopex.cn" target="_blank">ShopEx</a></div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+<app>
+	<name>广告管理</name>
+	<description>广告管理</description>
+	<author>
+		<name>qianlei</name>
+	</author>
+	<version>1.0</version>
+	<license>license</license>
+	<parent_model_class>dbeav_model</parent_model_class>
+	<optional app="dev">开发者工具</optional>
+	<depends>
+		<app>b2c</app>
+	</depends>
+</app>

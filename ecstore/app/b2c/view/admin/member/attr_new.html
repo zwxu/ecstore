@@ -1,0 +1,165 @@
+<form method="POST" action="index.php?app=b2c&ctl=admin_member_attr&act=add" class="tableform" id="attr_add">
+<div class="division"><table width="100%" border="0" cellpadding="0" cellspacing="0" id='attr_table'>        
+    <tr>
+    <th><em class="red">*</em><{t}>注册项名称:<{/t}></th>
+    <td><{input type="text" name="attr_name" required="true" vtype="required"}></td>
+  </tr>
+  <tr>
+    <th><em class="red">*</em><{t}>注册项字段名:<{/t}></th>
+    <td><{input type="text" name="attr_column" required="true" vtype="required&&alpha"}></td>
+  </tr>
+  <tr>
+    <th><{t}>是否必填:<{/t}></th>
+    <td><input type="checkbox" name="attr_required" value="true" id='srequired'/></td>
+  </tr>
+  <tr>
+    <th><{t}>类型:<{/t}></th>
+    <td><select name='attr_tyname' id="attr_tyname">
+    <optgroup label="<{t}>输入项<{/t}>">
+    <option value="<{t}>输入内容不限制<{/t}>">&nbsp;&nbsp;<{t}>输入内容不限制<{/t}></option>
+    <option value="<{t}>仅限输入数字<{/t}>">&nbsp;&nbsp;<{t}>仅限输入数字<{/t}></option>
+    <option value="<{t}>仅限输入字符<{/t}>">&nbsp;&nbsp;<{t}>仅限输入字符<{/t}></option>
+    <option value="<{t}>仅限输入数字和字符<{/t}>">&nbsp;&nbsp;<{t}>仅限输入数字和字符<{/t}></option>
+    </optgroup>
+    <optgroup label="<{t}>选择项<{/t}>">
+    <option value="<{t}>单选项<{/t}>">&nbsp;&nbsp;<{t}>单选项<{/t}></option>
+    <option value="<{t}>多选项<{/t}>">&nbsp;&nbsp;<{t}>多选项<{/t}></option>
+    </optgroup>
+     <optgroup label="<{t}>时间项<{/t}>">
+    <option value="<{t}>日期(年月日)<{/t}>">&nbsp;&nbsp;<{t}>日期(年月日)<{/t}></option>
+    </optgroup>
+     <optgroup label="<{t}>即时通讯项<{/t}>">
+    <option value="QQ">&nbsp;&nbsp;QQ</option>
+    <option value="MSN">&nbsp;&nbsp;MSN</option>
+    <option value="<{t}>旺旺<{/t}>">&nbsp;&nbsp;<{t}>旺旺<{/t}></option>
+    <option value="Skype">&nbsp;&nbsp;Skype</option>
+    </optgroup>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </select></td>
+  </tr>
+
+
+    </table>
+   
+    </div>
+  
+
+    <div class="table-action">
+    <{button label=$___b2c="保存"|t:'b2c' type="submit"}>
+    <{button class="btn-secondary"  type="button" label=$___b2c="取消"|t:'b2c' isCloseDialogBtn="true"}>
+</div>
+
+
+</form>
+
+
+<script>
+var dotest = function(){
+var nRow=$('attr_table').rows.length;
+var attr_tvalue=$('attr_tyname').getValue();
+if((attr_tvalue=='<{t}>单选项<{/t}>'&&nRow==4)||(attr_tvalue=='<{t}>多选项<{/t}>'&&nRow==4)){
+var nRow2=$('attr_table').rows.length;
+var objTheRow2=$('attr_table').insertRow(nRow2);
+var obj3 = $(objTheRow2).adopt([new Element('th'),new Element('td')]);
+var otr2=objTheRow2.getElements('*').filter(function(i){return i.getTag()=='th'||i.getTag()=='td';});
+var nRow4=$('attr_table').rows.length;
+var objTheRow=$('attr_table').insertRow(nRow4);
+var obj1 = $(objTheRow).adopt([new Element('th'),new Element('td')]);
+var otr=objTheRow.getElements('*').filter(function(i){return i.getTag()=='th'||i.getTag()=='td';});
+ otr[0].setText('<{t}>选项内容:<{/t}>');
+ otr[1].setHTML('<input type="text" name="attr_option[]" class="_x_ipt"  required="true"><span onclick="deleteAtoRow($(this))" style="cursor:pointer"><{img title=$___b2c="删除"|t:"b2c" alt=$___b2c="删除"|t:"b2c" style="cursor: pointer;" src="bundle/delecate.gif"}></span>');
+var nRow1=$('attr_table').rows.length;
+var objTheRow1=$('attr_table').insertRow(nRow1);
+var obj2 = $(objTheRow1).adopt([new Element('th'),new Element('td')]);
+var otr1=objTheRow1.getElements('*').filter(function(i){return i.getTag()=='th'||i.getTag()=='td';});
+ otr1[0].setText('');
+ otr1[1].setHTML("<input type='button' style='cursor:pointer'title='<{t}>增大选项<{/t}>' onclick='toadd();' class='button-add'/>&nbsp;<input type='button'  onclick='todel();' style='cursor:pointer'title='<{t}>删除选项<{/t}>' class='button-cut'/>");
+
+ 
+}else{
+ //alert($('attr_table').rows.length);
+if(($('attr_table').rows.length!=4&&attr_tvalue!='<{t}>单选项<{/t}>')&&($('attr_table').rows.length!=3&&attr_tvalue!='<{t}>多选项<{/t}>')){
+for(var i=4;i<=$('attr_table').rows.length+1;i++){
+$('attr_table').deleteRow(4);
+}
+
+}
+
+
+
+
+}
+
+};
+
+
+
+
+function toadd(){
+
+var nRow2=$('attr_table').rows.length;
+var objTheRow2=$('attr_table').insertRow(nRow2-1);
+var obj3 = $(objTheRow2).adopt([new Element('th'),new Element('td')]);
+var otr2=objTheRow2.getElements('*').filter(function(i){return i.getTag()=='th'||i.getTag()=='td';});
+ otr2[0].setText('');
+ otr2[1].setHTML('<input type="text" name="attr_option[]" class="_x_ipt"  required="true"><span onclick="deleteAtoRow($(this))" style="cursor:pointer"><{img title=$___b2c="删除"|t:"b2c" alt=$___b2c="删除"|t:"b2c" style="cursor: pointer;" src="bundle/delecate.gif"}></span>');
+
+
+}
+
+function deleteAtoRow(el){
+  if($ES('tr','attr_table').length<=6){
+    alert('<{t}>至少有一个选项<{/t}>');
+    return;
+  }
+  if($ES('tr','attr_table')[5].getElement('th').getText()==''){
+    $ES('tr','attr_table')[5].getElement('th').setText('<{t}>选项内容:<{/t}>');
+  }
+  $(el).getParent('tr').remove();
+
+}
+
+function todel(){
+    var nRow2=$('attr_table').rows.length;
+    if(nRow2!=6){
+    $('attr_table').deleteRow(nRow2-2);
+    }else{
+    alert('<{t}>至少要有一个选项<{/t}>');
+    }
+}
+
+
+
+window.addEvent('domready',function(){
+   $('attr_tyname').addEvent('change',dotest);
+});
+
+
+        $('attr_add').store('target',{
+            onComplete:function(){
+//                if($('attr_add').getParent('.dialog'))
+//                $('attr_add').getParent('.dialog').retrieve('instance').close();
+            },
+            onSuccess:function(response){
+                var hash_res_obj = JSON.decode(response);
+            if (hash_res_obj.success != undefined && hash_res_obj.success != "")
+            {
+                if($('attr_add').getParent('.dialog'))
+                $('attr_add').getParent('.dialog').retrieve('instance').close();
+            }    
+            }        
+        });
+
+
+
+</script>
+

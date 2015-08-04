@@ -1,0 +1,201 @@
+<div id="order_create" class="tableform">
+<h4><{t}>请选择顾客用户名和订单中商品<{/t}></h4>
+<div class="division">
+<form action="index.php?ctl=order/order&act=create" method="post" id="order_detail" target="{update:'c_order_detail'}">
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th><{t}>请输入用户名：<{/t}></th>
+    <td><{input type="object:member/member:uname" name="username" style="width:120px" value=""}> &nbsp; <{help}><{t}>此处填写订单客户的前台会员用户名，如果该顾客没有注册过会员请留空<{/t}><{/help}></td>
+  </tr>
+  <tr>
+    <th><{t}>添加订单商品：<{/t}></th>
+    <td><{input type="object:goods/finderPdt" view="order/new_items.html" name="goods" multiple="true"}><label><input type="checkbox" id="package_controller_box"><{t}>添加捆绑销售商品<{/t}></label></td>
+  </tr>
+  <tr id="package_tr">
+    <th><{t}>添加捆绑销售商品：<{/t}></th>
+    <td><{input type="object:trading/package" view="order/new_pkgitems.html"  multiple="true"}></td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+    <td><{button label=$___b2c="下一步"|t:'b2c' type="submit"}></td>
+  </tr>
+</table>
+</form>
+</div>
+</div>
+<div id="c_order_detail" class="tableform">
+</div>
+<script>
+var extra_validator={};
+$('package_controller_box').addEvent('click',function(){
+      $('package_tr').style.display=($('package_controller_box').checked)?"":"none";
+}).fireEvent('click');
+
+void function(){
+var  Shop={
+  url:{
+    shipping:'index.php?ctl=admin_order&act=shipping',
+    payment:'index.php?ctl=admin_order&act=payment',
+    total:'index.php?ctl=admin_order&act=total'
+  }
+};
+Order =new Object();
+    
+    $extend(Order,{
+        paymentChange:function(){
+          $$('#payment th .ExtendCon input[type=radio]').fireEvent('checkedchange');
+          this.updateTotal();
+        },
+        setShippingFromArea:function(lastselect){
+           if(!lastselect)throw new Error('<{t}>非法的地区信息.<{/t}>');
+           var _value = lastselect.value;
+            new Request.HTML({url:Shop.url.shipping,update:'shipping',onRequest:function(){
+                  $('shipping').set('text','<{t}>正在根据地区信息获得配送方式...<{/t}>');
+               }}).post({area:_value});
+        },
+        setCurrency:function(){
+           
+            new Request.HTML({url:Shop.url.payment,update:$('payment'),onComplete:this.updatePayment.bind(this)}).post($H({
+               'cur':$('payment-cur').getValue(),
+               'payment':$E('#payment th input[checked]')?$E('#payment th input[checked]').value:null,
+               'd_pay':$E('#payment th input[checked]')?$E('#payment th input[checked]').get('has_cod'):null
+            }));      
+        },
+        updatePayment:function(){
+      
+             if(this.synTotalHash.d_pay&&this.synTotalHash.d_pay>0){
+                    $('_normal_payment').hide();
+                    $('_pay_cod').show().getElement('input[type=radio]').checked=true;
+                }else{
+                    $('_normal_payment').show();
+                    $('_pay_cod').hide().getElement('input[type=radio]').checked=false;
+                }
+        },
+        shippingChange:function(target,evt){
+		   this.clearProtect(target);
+           this.updateTotal({onRequest:this.updatePayment.bind(this)});
+        },
+		clearProtect:function(target){
+		   if(tmpEl=$('shipping').retrieve('tmp_protect')){
+		   		if(tmpEl!=target){
+					tmpEl.removeProperty('protect');				
+ 					$E('input[name^=delivery[is_protect]',tmpEl.getParent('tr')).checked=false;
+				}
+		   } 	
+		   if(tmpEl!=target&&target.get('protect'))$('shipping').store('tmp_protect',target);	
+		}, 
+        shippingMerge:function(target,mg,checked,evt){
+       
+           if(!checked){
+               $H(mg).getKeys().each(target.erase.bind(target));
+           }else{
+               $(target).set(mg);
+			   $(target).checked=true;
+           }
+           this.shippingChange($(target));
+        },
+        updateTotal:function(options){
+            options = options||{};
+            
+            this.synTotalHash = (this.synTotalHash||{});
+            
+            var _shipping = $E('#shipping th input[checked]');
+            var _payment  = $E('#payment th input[checked]');
+            var _coin     = $('payment-cur');
+            var _tax      = $('is_tax');
+            if(_shipping){
+                $extend(this.synTotalHash,{
+                    shipping_id:_shipping.value,
+                    is_protect:_shipping.get('protect')?'true':'false',
+                    d_pay:_shipping.get('has_cod')
+                });
+            }
+            if(_payment){
+                 $extend(this.synTotalHash,{
+                    payment:_payment.value
+                });
+            }
+             $extend(this.synTotalHash,{
+                cur:_coin.getValue(),
+                is_tax:(_tax&&_tax.checked)?'true':'false',
+                area:$E('input[name^=delivery[ship_area]')?$E('input[name^=delivery[ship_area]').getValue():null
+            });
+            
+            new Request.HTML($extend({url:Shop.url.total,update:$('amountInfo')},options)).post($H(this.synTotalHash));
+        
+        }
+    
+    });
+    
+}();
+var _warning=function(msg,go){    
+    alert(msg);
+    go.show(); 
+    $('main').scrollTo(0,(go||$('order-create')).getPosition($('main')).y-50);
+};
+
+if(!extra_validator['subOrder']){
+  extra_validator['subOrder'] ={
+    'checkForm':['',function(f,i){        
+        var addr_num = 0;
+        var checkTag = false;
+        $$('input[name^=delivery[addr_id]','receiver').each(function(item){
+            addr_num++;
+            if(item.checked){
+                checkTag = true;
+            }
+        });
+        if(checkTag==false && addr_num>0){
+            _warning('<{t}>请选择收货地址！<{/t}>',$('checkout-recaddr'));
+            return false;
+        }
+        $ES('select', 'checkout-select-area').each(function(item){
+            if(!item.getValue()){
+                _warning('<{t}>请重新选择收货地区！<{/t}>',$('checkout-recaddr'));
+                $('checkout-recaddr').style.display='block';
+                item.focus();
+                return false;
+            }
+        });
+        if($('checkout-recaddr').getElement('input[name^=delivery[ship_tel]').getProperty('value').trim() == '' && $('checkout-recaddr').getElement('input[name^=delivery[ship_mobile]').getProperty('value').trim() == ''){
+          _warning('<{t}>请至少输入联系电话和联系手机中的一项！<{/t}>',$('checkout-recaddr'));
+          return false;
+        }
+        
+        var checkNum = 0;
+        $ES('input[name^=delivery[shipping_id]',"shipping").each(function(item){
+          if(item.checked == true) checkNum++;
+        });
+        if(checkNum == 0){
+          _warning('<{t}>您未选择配送方式！<{/t}>',$('shipping'));
+          return false;
+        }
+        
+        checkNum = 0;
+        $ES('input[name^=payment[payment]',"payment").each(function(item){
+          if(item.checked == true) checkNum++;
+        });
+        if(checkNum == 0){
+          _warning('<{t}>您未选择支付方式！<{/t}>',$('payment'));
+          return false;
+        }
+		
+		checkNum = 0;
+		if($ES('tr',"_normal_payment").some(function(el){return el.hasClass('checked');})){		
+			$E('#payment .checked').getElements('input').each(function(item){
+					  if(item.checked == true) checkNum++;
+			});
+			if(checkNum == 0){
+				alert('<{t}>请选择支付银行！<{/t}>',$('payment'));
+				return false;
+			} 
+ 	 	}
+		
+          return true;
+       
+      }]
+  };
+}
+
+</script> 

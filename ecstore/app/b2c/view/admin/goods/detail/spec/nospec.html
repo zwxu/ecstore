@@ -1,0 +1,157 @@
+<{if $goods.product}>
+<{assign var=product value=$goods.product|current}>
+<{/if}>
+<input type='hidden' name='goods[product][0][status]' value='true'/>
+<table border="0" cellpadding="0" cellspacing="0" id="nospec_body"  class="advui">
+<tbody>
+  <tr>
+    <th><{t}>销售价：<{/t}><input type='hidden' name='goods[product][0][product_id]' value='<{$product.product_id}>'></th>
+    <td>
+      <{permission perm_id='editprice'}>
+      <{input vtype="unsigned" key="price" class="inputstyle" value=$product.price.price.price name="goods[product][0][price][price][price]" style="width:60px" maxlength="25" }>
+      <{/permission}>
+        <{permission perm_id='editmemberlevelprice'}>
+        <{button type="button" label=$___b2c="编辑会员价格"|t:'b2c' onclick="goodsEditor.mprice.bind(goodsEditor)(this)" icon="btn_edit.gif" app='desktop'}>
+        <{/permission}>
+        <span>
+    <{foreach from=$mLevels item=lv }>
+    <input type="hidden" key="member_lv_price_<{$lv.member_lv_id}>" name="goods[product][0][price][member_lv_price][<{$lv.member_lv_id}>]" level="<{$lv.member_lv_id}>" value="<{if $product.price.member_lv_price[$lv.member_lv_id][custom] == 'true'}><{$product.price.member_lv_price[$lv.member_lv_id][price]}><{/if}>" type="money" vtype="mprice" />
+      <{/foreach}>
+      </span><!--tag_foreign_nospec-->
+      </td>
+  </tr>
+  <tr>
+    <th><{t}>成本价：<{/t}></th>
+    <td>
+    <{permission perm_id='editcostprice'}>
+    <{input vtype="unsigned" key="cost" name="goods[product][0][price][cost][price]" maxlength="30" style="width:60px" value=$product.price.cost.price }>
+    <{/permission}>
+    <span class="notice-inline"><{t}>前台不会显示，仅供后台使用。<{/t}></span></td>
+  </tr>
+  <tr>
+    <th><{t}>市场价：<{/t}></th>
+    <td>
+    <{permission perm_id='editmktprice'}>
+    <{input vtype="unsigned" key="mktprice" name="goods[product][0][price][mktprice][price]" maxlength="30" style="width:60px" value=$product.price.mktprice.price }>
+    <{/permission}>
+    </td>
+  </tr>
+  <tr>
+    <th><{t}>货号：<{/t}></th>
+    <td><{input type="text" value=$product.bn key="bn" name="goods[product][0][bn]" maxlength="25" }></td>
+  </tr>
+  <tr>
+    <th><{t}>重量：<{/t}></th>
+    <td><{input type="unsigned" key="weight" value=$product.weight name="goods[product][0][weight]" style="width:60px" maxlength="25" }><{t}>克(g)<{/t}></td>
+  </tr>
+  <{if $goods.type.is_physical || $gtype.0.is_physical}>
+  <tr>
+    <th><{t}>库存：<{/t}></th>
+    <td>
+    <{permission perm_id='editstore'}>
+    <{input type="unsigned" key="store" value=$product.store name="goods[product][0][store]" style="width:60px" maxlength="25" }>
+    <{/permission}>
+    </td>
+  </tr>
+  <{/if}>
+    <{if $storeplace == 'true'}>
+    <tr>
+        <th><{t}>货位：<{/t}></th>
+        <td><{input type="text" key="store_place" value=$goods.store_place name="goods[product][0][store_place]" maxlength="25" }></td>
+    </tr>
+    <{/if}>
+    <{if $spec}>
+  <tr>
+    <th><{t}>规格：<{/t}></th>
+    <td style="padding:4px 0">
+        <{button icon="btn_add.gif" label=$___b2c="开启规格"|t:'b2c' app="desktop" id="open_spec" }>
+        <span class="notice-inline"><{t}>开启规格前先填写以上价格等信息，可自动复制信息到货品<{/t}></span>
+    </td>
+  </tr>
+  <{/if}>
+</tbody>
+</table>
+<div style="display:none;">
+<h2 class="head-title"><{t}>规格<{/t}></h2>
+<div class="goods-spec-detail">
+    <{button label="label" label=$___b2c="编辑"|t:'b2c' app="desktop" class="selectspec"}>
+    <div class="goods-spec-selected">
+        <dl>
+            <dt>已经启动的规格项:</dt>
+            <{foreach from=$goods.used_spec item=u_spec}>
+            <dd><{$u_spec.spec_name}>(<{$u_spec.nums}>)</dd>
+            <{/foreach}>
+        </dl>
+        <p class="goods-num">
+              已生成货品(<{$goods.product_num}>)
+        </p>
+    </div>
+    <{button label="label" label=$___b2c="关闭"|t:'b2c' class="closespec"}>
+</div>
+</div>
+<input name="new_goods_spec" type='hidden' id='new_goods_spec' value=''/>
+<script>
+function toJSON(element, string) {
+    var json = {};
+    element.getElements('input,select,textarea').each(function(el){
+        if((el.type == 'checkbox' || el.type=='radio') && !el.checked || !el.name || !el.value || el.disabled) return;
+        json[el.name] = el.value;
+    });
+    console.log(json)
+    return string ? JSON.encode(json) : json;
+}
+<{if $spec}>
+$('open_spec').addEvent('click',function(e){
+    if($('gEditor-GType-input').getValue()=='1'){
+        alert('请先选择商品类型！');
+        $('gEditor-GType-input').focus();
+        return false;
+    }
+    var hsspec=new Hash();
+    $ES('#nospec_body input[key]').each(function(ipt){
+        if(ipt.value.trim().length)
+        hsspec.set(ipt.get('key'),ipt.value);
+    });
+    $('goods-spec').store('hsspec',hsspec);
+    var url = 'index.php?app=b2c&ctl=admin_products&act=set_spec_index&nospec=1&'+$$('.pic-area')[0].toQueryString()+'&type_id=' + $('gEditor-GType-input').value + '&goods_info='+toJSON($('goods-spec'),true);
+    var goods_id = '<{$goods.goods_id}>';
+    if(goods_id){
+        url = url + '&goods_id=' + goods_id;
+    }
+    window.open(url,'new');
+});
+
+    $$('.goods-spec-detail .selectspec')[0].addEvent('click',function(e){
+        window.open('index.php?app=b2c&ctl=admin_products&act=set_spec_index&nospec=0&'+$$('.pic-area')[0].toQueryString()+'&goods_id=<{$goods.goods_id}>','edit');
+    });
+    $$('.goods-spec-detail .closespec')[0].removeEvents('click').addEvent('click',function(e){
+       if(e&&!confirm('<{t}>关闭后现有已添加的货品数据将全部丢失，确定要关闭规格吗？<{/t}>'))return;
+       new Request.HTML({
+       url:'index.php?app=b2c&ctl=admin_goods_editor&act=nospec',method:'post',
+       update:'goods-spec',data:'goods_id=<{$goods.goods_id}>&type_id='+$('gEditor-GType-input').getValue()}).send();
+    });
+
+<{/if}>
+function isNew(data){
+        var goodsNum,specJson;
+
+        goodsNum = JSON.decode(data).productNum;
+        specJson = JSON.decode(data).used_spec;
+
+        $$('#goods-spec table.advui').setStyle('display','none');
+        $$('#goods-spec table.advui').getNext().setStyle('display','block');
+
+        $('new_goods_spec').set('value',data);
+
+        $$('.goods-spec-detail .goods-spec-selected p')[0].innerHTML = "已生成货品("+goodsNum+")";
+
+
+        $$('.goods-spec-detail .goods-spec-selected dl dd').destroy();
+
+        specJson.each(function(item){
+            new Element('dd',{
+                html:item.spec_name+'('+item.nums+')'
+            }).inject($$('.goods-spec-detail .goods-spec-selected dl dt')[0],'after');
+        });
+}
+</script>

@@ -1,0 +1,92 @@
+<form id='giftCatForm'  method='post' action='index.php?app=gift&ctl=admin_gift_cat&act=toAdd'>
+<div class="tableform">
+<div class="division">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <th><{t}>赠品分类名称：<{/t}></th>
+      <td><{input type='text' value=$giftcat.cat_name name='giftcat[cat_name]' required='true' vtype='required'}></td>
+    </tr>
+    <tr>
+      <th><{t}>发布：<{/t}></th>
+      <td>
+          <label><input type='radio' name='giftcat[ifpub]' value='true' <{if $giftcat.ifpub!='false'}>checked="checked"<{/if}>><{t}>是<{/t}></label>&nbsp; &nbsp;
+      	  <label><input type='radio' name='giftcat[ifpub]' value='false' <{if $giftcat.ifpub=='false'}>checked="checked"<{/if}>><{t}>否<{/t}></label>&nbsp; &nbsp; <{help}><{t}>如果选择发布，前台赠品页面将显示此分类<{/t}><{/help}>
+     </td>
+    </tr>
+    <tr>
+      <th><{t}>排序：<{/t}></th>
+      <td><{input type='unsignedint' style="width:50px" value=$giftcat.p_order name='giftcat[p_order]'}></td>
+    </tr>
+  </table>
+</div>
+
+<{capture name='footbar'}>
+<table cellspacing="0" cellpadding="0" class="table-action">
+  <tbody><tr valign="middle">
+	<td>
+	<{assign var="message" value="关  闭"}><{assign var="message1" value=$___gift="确定退出?"|t:'gift'}>
+	   <{button label=$___gift="保存并关闭窗口"|t:'gift' class="btn-primary" onclick="subGoodsForm(event,2)"}>
+	   <!--<{button label=$___gift="保存并添加相似商品"|t:'gift' class="btn-primary" onclick="subGoodsForm(event,1)"}>-->
+	   <{button label=$___gift="保存当前"|t:'gift' class="btn-primary" onclick="subGoodsForm(event,3)"}>
+	   <{button label=$___gift=$message|t:'gift' class="btn-secondary" onclick="if(confirm('{$message1}'))window.close()"}>
+	</td>
+	</tr>
+	</tbody>
+</table>
+<{/capture}>
+
+</div>  
+
+<input type='hidden' id="gCatEditor-catID-input" value='<{$giftcat.cat_id}>' name='giftcat[cat_id]'>
+
+</form>
+<script>
+	/*
+         *  sign:{
+               1:保存并增加相似商品,
+               2:保存并返回,
+               3:保存当前不返回，
+         *    }
+         */
+   var _form=$('giftCatForm'),_formActionURL=_form.get('action');
+   
+	subGoodsForm = function (event,sign){      
+
+        switch (sign){
+            case 1:
+            var target={
+					onComplete:function(){
+						location.reload();
+                }};
+            break;
+            case 2:
+            var target={
+				onComplete:function(rs){
+					if(JSON.decode(rs).error) {
+						return ;
+					}
+					if(window.opener.finderGroup&&window.opener.finderGroup['<{$env.get.finder_id}>']){
+						window.opener.finderGroup['<{$env.get.finder_id}>'].refresh();
+					}
+					window.close();
+				}};
+            break;
+            case 3:
+            var target={           //保存当前
+				onComplete:function(rs){
+					var id = JSON.decode(rs).cat_id;
+					if(id > 0){
+						$('gCatEditor-catID-input').value =id;
+					}
+					if(window.opener.finderGroup&&window.opener.finderGroup['<{$env.get.finder_id}>']){
+						window.opener.finderGroup['<{$env.get.finder_id}>'].refresh();
+					}
+				}};
+            break;
+       }
+
+       _form.store('target',target);
+       _form.fireEvent('submit',new Event(event));
+
+    };
+</script>

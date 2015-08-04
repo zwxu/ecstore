@@ -1,0 +1,6 @@
+<apiv_mapper>
+  <api version="2.0">
+    <target version="2.2">ecos.ome</target>
+    <target version="">ecos.taocrm</target>
+  </api>
+</apiv_mapper>

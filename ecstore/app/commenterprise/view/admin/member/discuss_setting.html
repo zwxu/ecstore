@@ -1,0 +1,118 @@
+ <h4 ><{t}>高级设置：<{/t}></h4>
+    <div class="division">
+      <table width="100%" cellspacing="0" cellpadding="2" border="0">
+        <tr>
+          <th><{t}>是否开启 评分：<{/t}></th>
+          <td><input type='radio' name="comment_point_status"  <{if $status=='on'}>checked="checked"<{/if}>value="on" class="status"><{t}>是<{/t}>
+          <input type='radio' name="comment_point_status"  <{if $status=='off'}>checked="checked"<{/if}> value="off" class="status"><{t}>否<{/t}></td>
+        </tr>
+        <tr <{if $status=='off'}> style="display:none"<{/if}>>
+                  <th><{t}>评分项目：<{/t}></th>
+        <td>
+        <ul>
+        <input type='hidden'  vtype='requiredradio'/>
+        <{foreach from=$point_type item=point_type}>
+        <li>
+        <{input type='text' name="point_type_name[{$point_type.type_id}][name]" vtype="required" value="{$point_type.name}"  /}>
+        <span><input type=radio name="total_point" <{if $point_type.addon.is_total_point == 'on'}>checked="checked"<{/if}> value="<{$point_type.type_id}>"/></span>
+        <{if $point_type.type_id!=1}>
+        <span class='delete_point_type'><{t}><{img src="bundle/delete.gif" class="del-tag lnk"}><{/t}></span>
+        <{else}>
+        <span><{t}>勾选代表作为商品总分<{/t}></span>
+        <{/if}>
+        <div>
+          <span>5分描述：</span><textarea clos="10" rows="5" warp="virtual" name="point_type_desc[<{$point_type.type_id}>][5]"/}><{$point_type.addon.description.5|htmlspecialchars}></textarea>
+          <span>4分描述：</span><textarea clos="10" rows="5" warp="virtual" name="point_type_desc[<{$point_type.type_id}>][4]"/}><{$point_type.addon.description.4|htmlspecialchars}></textarea>
+          <span>3分描述：</span><textarea clos="10" rows="5" warp="virtual" name="point_type_desc[<{$point_type.type_id}>][3]"/}><{$point_type.addon.description.3|htmlspecialchars}></textarea>
+          <span>2分描述：</span><textarea clos="10" rows="5" warp="virtual" name="point_type_desc[<{$point_type.type_id}>][2]"/}><{$point_type.addon.description.2|htmlspecialchars}></textarea>
+          <span>1分描述：</span><textarea clos="10" rows="5" warp="virtual" name="point_type_desc[<{$point_type.type_id}>][1]"/}><{$point_type.addon.description.1|htmlspecialchars}></textarea>
+        </div>
+        </li>
+        <{/foreach}>
+        <li id="new_point_type" style="display:none" ><input type="text" class="x-input" vtype="required" />
+        <span><input type=radio name="total_point"/></span>
+        <span class='delete_point_type'><{t}><{img src="bundle/delete.gif" class="del-tag lnk"}><{/t}></span>
+        <div>
+          <span>5分描述：</span><textarea clos="10" rows="5" warp="virtual"></textarea>
+          <span>4分描述：</span><textarea clos="10" rows="5" warp="virtual"></textarea>
+          <span>3分描述：</span><textarea clos="10" rows="5" warp="virtual"></textarea>
+          <span>2分描述：</span><textarea clos="10" rows="5" warp="virtual"></textarea>
+          <span>1分描述：</span><textarea clos="10" rows="5" warp="virtual"></textarea>
+        </div>
+        </li>
+        </ul>
+
+        </td>
+        </tr>
+        <tr><th></th>
+        <td><!-- <input type="button" value="添加" id='add_point_type'/> -->
+        <{if $status=='off'}>
+        <{button style="display:none;" label="添加" value="添加" id='add_point_type'}>
+        <{else}>
+        <{button  label="添加" value="添加" id='add_point_type'}>
+        <{/if}>
+        </td>
+        </tr>
+        <{if $point_status != '1'}>
+        <tr>
+          <th><{t}>评论审核后可获得积分：<{/t}></th>
+          <td><input type='text' name="member_point" vtype='required&&digits' value='<{$member_point}>'/></td>
+        </tr>
+        <{/if}>
+      </table>
+    </div>
+<script>
+(function(){
+$('add_point_type').addEvent('click',function(item){
+        var addTr = $('new_point_type').clone();
+        var timestamp = $time();
+        addTr.setStyle('display','');
+        addTr.getElement('input').name="point_type_name["+timestamp+"][name]";
+        addTr.getElement('input[name=total_point]').value=timestamp;
+        var obj = addTr.getElement('div').getElements('textarea')||[];
+        if(obj) obj.each(function(el,i){
+            if(i<5)
+            el.name="point_type_desc["+timestamp+"]["+(5-i)+"]";
+        });
+        var broTable = this.getParent('table').getElements('li').getLast().getPrevious();
+        addTr.inject(broTable,'after');
+    });
+
+
+    // $('add_point_type').addEvent('click',function(item){
+ //          var lastLi = this.getParent('tr').getPrevious('tr').getElements('li').getLast();
+ //          var lastUl_li = this.getParent('tr').getPrevious('tr').getElements('ul').getLast().getElements('li').getLast();
+ //          var _input_value = lastUl_li.getElements('input').getLast().value.toInt();
+ //          var lastInput = lastLi.getElements('input').getLast();
+ //          lastInput.value = $time();
+ //          var newLi = lastLi.clone();
+ //          newLi.setStyle('display','');
+ //          newLi.inject(lastUl_li,'after');
+    //     $$('.insert').getLast().value = '';
+    //     $$('.delete_point_type').addEvent('click',function(){
+    //         this.getParent('li').remove();
+    //     });
+    //     //lastLi.remove();
+
+    // });
+
+    $$('.status').addEvent('click',function(){
+    if(this.value=='on'){
+        this.getParent('tr').getNext('tr').show();
+        $('add_point_type').show();
+    }
+    if(this.value=='off'){
+        this.getParent('tr').getNext('tr').hide();
+        $('add_point_type').hide();
+    }
+    });
+
+    $('comment_setting').addEvent('click',function (e) {
+        e = $(e.target);
+        if(e.hasClass('del-tag')){
+            e.getParent('li').destroy();
+        }
+    });
+
+})();
+</script>

@@ -1,0 +1,85 @@
+<form id="desktop_delivery_center_form" class="tableform" action="index.php?app=express&ctl=admin_delivery_center&act=<{$save_action}>" method="post">
+	
+	<input type="hidden" name="finder_id" value="<{$env.get.finder_id}>" />
+	
+	
+	<{if $dly_center.dly_center_id}>
+	<input type="hidden" name="delivery_center[dly_center_id]" value="<{$dly_center.dly_center_id}>" />
+	<{/if}>
+  
+
+ <table border="0" cellspacing="0" cellpadding="0">
+   <tr>
+     <td><table border="0" cellpadding="0" cellspacing="0">
+       <tr><th><{t}>发货点名称：<{/t}></th>
+         <td colspan="3"  >
+           <input name="delivery_center[name]" vtype="required" value="<{$dly_center.name}>" size="10" style="width:145px;"  class="item itemrow _x_ipt inputstyle" autocomplete="off"/>
+        </td>
+         </tr>
+         <tr>
+           <th><{t}>发货人姓名：<{/t}>
+               
+          </th>
+			<td><input name="delivery_center[uname]" value="<{$dly_center.uname}>" size="10" style="width:80px;"  class="item itemrow _x_ipt inputstyle" id="input2" autocomplete="off"/></td>
+           <th><{t}>性别：<{/t}>
+               
+           </th>
+           <td >
+			<label>
+				<input name="delivery_center[sex]" class="inputstyle" type="radio" value="male" <{if $dly_center.sex eq "male"}>checked="checked"<{/if}> /><{t}>先生<{/t}></label>
+             <label>
+				<input type="radio" name="delivery_center[sex]" class="inputstyle" value="female" <{if $dly_center.sex eq "female"}>checked="checked"<{/if}> /><{t}>女士<{/t}></label>
+			 </td>
+           </tr>
+         <tr>
+           <th><{t}>地区：<{/t}></th>
+           <td >
+           
+             <{input vtype="area" type="region" class="inputstyle" name="delivery_center[region]" value=$dly_center.region app="ectools"}></td>
+             <th><{t}>邮编：<{/t}></th>
+             <td><input style="width:90px;" size="6"  name="delivery_center[zip]" value="<{$dly_center.zip}>" class="item itemrow _x_ipt inputstyle" autocomplete="off"/> 
+		  </td>
+           </tr>
+         <tr>
+           <th><{t}>地址：<{/t}></th>
+           <td colspan="3"><input type="unsigned" vtype="required"  name="delivery_center[address]" value="<{$dly_center.address}>" size="50" style="width:400px;"   class="item itemrow _x_ipt inputstyle" autocomplete="off"/></td>
+           </tr>
+         <tr>
+           <th><{t}>手机：<{/t}></th>
+           <td><input size="36" name="delivery_center[cellphone]" value="<{$dly_center.cellphone}>" style="width:145px;" class="item itemrow _x_ipt inputstyle" autocomplete="off"/></td>
+           <th><{t}>电话：<{/t}></th>
+           <td><input size="36" name="delivery_center[phone]" value="<{$dly_center.phone}>" style="width:145px;"  class="item itemrow _x_ipt inputstyle" autocomplete="off"/></td>
+           </tr>
+           
+           <tr><th>&nbsp;</th>
+             <td colspan="3"><input type="checkbox" name="is_default"  class="inputstyle" id="is_default_dc" <{if $default_dc == $dly_center.dly_center_id}>checked="checked"<{/if}> /> 
+               <label for="is_default_dc"><{t}>设置为默认地址<{/t}></label></td>
+            </tr>
+         <tr>
+           <th><{t}>备注：<{/t}></th>
+           <td colspan="3"><textarea name="delivery_center[memo]" style="width:395px;" class="inputstyle" cols="45" rows="5"><{$dly_center.memo|escape:'html'}></textarea></td>
+           </tr>
+       </table>
+       </td>
+   </tr>
+ </table>
+
+<div class="table-action">
+	<{button label=$___express="提交"|t:'express' type="submit" name="butsubmit"}>
+</div>
+
+</form>  
+<script>
+$('desktop_delivery_center_form').store('target',{
+	onComplete:function(re){ 
+		
+		re = JSON.decode(re);
+		
+		if('success' in re){
+		  $('desktop_delivery_center_form').getParent('.dialog').retrieve('instance').close();  
+		}
+	    
+	}
+	
+});
+</script>

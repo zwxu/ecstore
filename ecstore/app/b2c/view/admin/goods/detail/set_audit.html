@@ -1,0 +1,68 @@
+<{if $apply_info.apply}>
+<table class="gridlist" cellspacing="0" cellpadding="0" border="0">
+  <thead>
+    <tr>
+      <th style="cursor: pointer;width:25%;">申请内容</th>
+      <th style="cursor: pointer;width:10%;">申请时间</th>
+      <th style="cursor: pointer;width:10%;">申请人</th>
+      <th style="cursor: pointer;width:25%;">审核内容</th>
+      <th style="cursor: pointer;width:10%;">审核时间</th>
+      <th style="cursor: pointer;width:10%;">审核人</th>
+      <th style="cursor: pointer;width:10%;">审核状态</th>
+    </tr>
+  </thead>
+  <tbody>
+  <{foreach from=$apply_info.apply item=item}>
+  <tr>
+    <td><span><{$item.content}></span></td>
+    <td><span><{if $item.apply_time}><{$item.apply_time|cdate:SDATE_STIME}><{/if}></span></td>
+    <td><span><{$account_info[$item.apply_user].login_name}></span></td>
+    <td><span><{$item.restore}></span></td>
+    <td><span><{if $item.audit_time}><{$item.audit_time|cdate:SDATE_STIME}><{/if}></span></td>
+    <td><span><{$account_info[$item.audit_user].login_name}></span></td>
+    <td><span><{$item.status}></span></td>
+  </tr>
+  <{/foreach}>
+  </tbody>
+</table>    
+<form action="index.php?app=b2c&ctl=admin_goods&act=update_apply" method="post" id="form01">
+  <div>
+    <table id="marketablereply" class="gridlist bbn" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+      <th><{t}>审核状态<{/t}></th>
+      <td>
+        <input type="radio" name="status" value="1" checked><{t}>审核通过<{/t}>
+        <input type="radio" name="status" value="2"><{t}>审核不通过<{/t}>
+      </td>
+    </tr>
+    <tr>
+      <th><{t}>审核备注<{/t}></th>
+      <td>
+        <input type="hidden" value="<{$goods_id}>" name='gid'>
+        <{input type="textarea" class="x-input" value="" name="restore" required="true" vtype="required" style="resize:none;" cols="50" rows="5" maxth="255" }>
+      </td>
+    </tr>
+    </table>
+  </div>
+  <div class="mainFoot">
+    <div class="table-action">
+      <{button label=$___b2c="审核"|t:'b2c' type="button" id="btn01" class="btn-primary"}>
+    </div>
+  </div>
+</form>    
+<{else}>
+  <span>没有申请记录</span>
+<{/if}>
+<script>
+  $('btn01').addEvent('click',function(){
+      $('form01').store('target',{onComplete:function(re){
+           re = JSON.decode(re);
+           if(re.error)return;
+           if(window.opener.finderGroup&&window.opener.finderGroup['<{$env.get.finder_id}>']){
+              window.opener.finderGroup['<{$env.get.finder_id}>'].refresh();
+          }
+          window.close();
+      }});
+      $('form01').fireEvent('submit',{stop:$empty});
+  });
+</script>

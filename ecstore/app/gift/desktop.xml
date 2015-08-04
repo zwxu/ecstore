@@ -1,0 +1,18 @@
+<desktop>
+
+	<permissions>
+        <permission id="gift" display='false' workground='b2c.wrokground.sale'>赠品</permission>
+    </permissions>
+
+    <workground name="营销" id="b2c.wrokground.sale" controller="admin_sales_coupon" action="index" order="40">
+        <menugroup name="赠品管理">
+            <menu controller='admin_gift' action='index' permission='gift' display='false' params="filter[goods_type]=gift" order='70'>赠品</menu>
+            <menu controller='admin_gift' action='add' permission='gift' display='false' target="_blank" order='80'>添加赠品</menu>
+            <menu controller='admin_gift_cat' action='index' permission='gift' display='false' order='90'>赠品分类</menu>
+            <menu controller='admin_gift_cat' action='add' permission='gift' display='false' order='100'>添加赠品分类</menu>
+        </menugroup>
+        
+    </workground> 
+
+
+</desktop>

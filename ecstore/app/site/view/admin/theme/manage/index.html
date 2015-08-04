@@ -1,0 +1,284 @@
+<h2 class="head-title"><{t}>模板管理<{/t}></h2>
+<div class="vis-box"><a href="index.php?app=site&ctl=admin_theme_manage&act=swf_upload&_finder[finder_id]=<{$env.get.finder_id}>&finder_id=<{$env.get.finder_id}>" target="dialog::{title:'上传模板',width:400,height:280}" type="button" id="update_template" class="btn btn-primary"><span><span><{t}>上传模板<{/t}></span></span></a><!-- <a href="index.php?app=site&ctl=admin_theme_manage&act=maintenance" class="btn btn-secondary"><span><span>全部维护</span></span></a>--></div>
+<h5 style="margin-bottom:10px;">当前使用的模板：</h5>
+<div class="clearfix">
+  <{if $current_theme}>
+  <div class="current-theme fl item">
+    <div class="prev fl">
+      <div class="theme-preview"><b></b><img src="<{$current_theme_preview_img}>" /></div>
+      <{assign var=theme value=$current_theme.theme}>
+      <{assign var=active_color value=$current.active_color}>
+      <{include file="admin/theme/manage/style.html"}>
+    </div>
+    <div class="info fl">
+      <ul>
+        <li><em><{$current_theme.info}></em></li>
+        <li><{$current_theme.name}></li>
+        <li>版本号: <em><{$current_theme.version}></em></li>
+        <li>开发者: <em><{$current_theme.author}></em></li>
+        <li>网　址: <a href="<{$current_theme.site}>" target="_blank" title="website"><{$current_theme.site}></a></li>
+        <li><a href="index.php?app=site&ctl=admin_theme_manage&act=detail&id=<{$current_theme.theme}>&finderview=detail_tmpl&action=detail&finderview=detail_tmpl" target="_blank" class="btn btn-tempmanage"><span><span>页面管理</span></span></a><a href="index.php?app=site&ctl=admin_explorer_theme&act=directory&theme=<{$current_theme.theme}>" target="_blank" class="btn"><span><span>源文件管理</span></span></a></li>
+        <li><a href="javascript:void(0);" dropmenu="x-drop-menu" class="btn btn-tempmanage"><span><span>更多 <i class="arrowdown">&nbsp;</i></span></span></a>
+        <ul class="x-drop-menu">
+          <li><a href="javascript:void(0);" class="download-temp" rel="<{$current_theme.theme}>"><{t}>下载<{/t}></a></li>
+          <li><a href="javascript:void(0);" class="note-temp" rel="<{$current_theme.theme}>"><{t}>设置备注名称<{/t}></a></li>
+          <li><a href="javascript:void(0);" class="backup-temp" rel="<{$current_theme.theme}>"><{t}>备份模板<{/t}></a></li>
+          <li><a href="javascript:void(0);" class="reset-theme" rel="<{$current_theme.theme}>" data-bak="<{if $is_themme_bk=='false'}>theme.xml<{else}>theme_bak.xml<{/if}>"><{t}>还原至<{/t}><i><{t}><{if $is_themme_bk=='false'}>默认<{else}>上一个版本<{/if}><{/t}></i></a></li>
+          <{if !$env.const.ECAE_MODE}>
+          <li><a href="index.php?app=site&ctl=admin_theme_manage&act=maintenance&theme=<{$current_theme.theme}>" target="command::{title:'维护'}">维护</a></li>
+          <{/if}>
+          <li><a href="javascript:void(0);" class="clean-cache">清除模板缓存</a></li>
+        </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <{else}>
+  <div class="current-theme fl">
+  <{t}>暂无使用的模版<{/t}>
+  </div>
+  <{/if}>
+  <iframe class="fl" style="margin:0 0 0 25px;" frameborder="0" width="500" height="200" allowtransparent="true" src="http://mb.shopex.cn/article-xitongneituijian-89.html"></iframe>
+</div>
+<div class="switch-head">
+  <ul class="clearfix">
+    <li><em>我的模板</em></li>
+    <li><em>获取更多商业模板</em></li>
+  </ul>
+</div>
+<div class="switch-content">
+  <{if !$all_themes}>
+  <div class="box-gray" align="center"><{t}>暂无模版<{/t}></div>
+  <{else}>
+  <ul class="clearfix">
+    <{foreach from=$all_themes item=themes}>
+    <li class="item">
+    <div class="prev">
+      <div class="relative">
+        <div class="theme-preview"><b></b><img src="<{$themes.preview}>" class="previmg" /></div>
+        <ul class="info">
+          <{if $themes.info}><li><{$themes.info}></li><{/if}>
+          <li><i>(<{$themes.name}>)</i></li>
+          <li><{$themes.version}></li>
+        </ul>
+      </div>
+      <{*assign var=styles value=$themes.styles}>
+      <{assign var=preview_prefix value=$themes.preview_prefix}>
+      <{assign var=theme value=$themes.theme}>
+      <{assign var=active_color value=$themes.active_color}>
+      <{include file="admin/theme/manage/style.html"*}>
+    </div>
+    <div class="action clearfix">
+      <{button type="button" label="使用" class="fl btn-green use-theme" data-theme="{$themes.theme}"}>
+      <a href="javascript:void(0);" dropmenu="x-drop-menu" class="btn fr btn-more"><span><span><{t}>更多<{/t}> <i class="arrowdown">&nbsp;</i></span></span></a>
+      <ul class="x-drop-menu">
+        <li><a href="<{$site_url}>?theme=<{$themes.theme}>" target="_blank" class="preview-temp" rel="<{$themes.theme}>"><{t}>预览模板<{/t}></a></li>
+        <li><a href="javascript:void(0);" class="note-temp" rel="<{$themes.theme}>"><{t}>设置备注名称<{/t}></a></li>
+        <li><a href="javascript:void(0);" class="backup-temp" rel="<{$themes.theme}>"><{t}>备份模板<{/t}></a></li>
+        <li><a href="javascript:void(0);" class="delete-temp" rel="<{$themes.theme}>"><{t}>删除模板<{/t}></a></li>
+        <li><a href="javascript:void(0);" class="reset-theme" rel="<{$themes.theme}>" data-bak="<{if $themes.is_themme_bk=='false'}>theme.xml<{else}>theme_bak.xml<{/if}>"><{t}>还原至<i><{if $themes.is_themme_bk=='false'}><{t}>默认<{/t}><{else}><{t}>上一个版本<{/t}><{/if}></i><{/t}></a></li>
+        <li><a href="index.php?app=site&ctl=admin_theme_manage&act=maintenance&theme=<{$themes.theme}>" target="command::{title:'<{t}>维护<{/t}>'}"><{t}>维护<{/t}></a></li>
+      </ul>
+    </div>
+    </li>
+    <{/foreach}>
+  </ul>
+  <{/if}>
+</div>
+<div class="switch-content">
+  <iframe style="padding:0;margin:0;" id="themes_frame" frameborder="0" width="100%" height="1005" allowtransparent="true" src="http://addons.shopex.cn/templates/ecstore.html" scrolling="no"></iframe>
+</div>
+<script>
+(function(){
+  $$('[dropmenu]').each(function(item){
+    new DropMenu(item,{eventType:'mouse',offset:{x:0,y:21},relative:$('main')});
+  });
+  new ItemAgg($$('.switch-head li'), $$('.switch-content'), {activeName:'act'});
+  autoSize('.switch-content .item');
+
+  $$('.switch-content .relative').addEvents({
+    'mouseenter': function(e){
+      this.getElement('.info').set('opacity',0.9).set('morph', {duration: 100, transition: 'quad:out'}).morph({'height':this.getElement('li').getSize().y * this.getElements('li').length});
+    },
+    'mouseleave': function(e){
+      (function(){this.getElement('.info').morph({'height':0});}).delay(100,this);
+    }
+  });
+
+/*跨域iframe自适应高度*/
+// http://mb.shopex.cn/article-xitongneituijian-95.html?data-frameid=themes_frame&data-timer=2000&data-proxy=proxy
+var Loader = new function(){
+    var doc = document,body = doc.body,
+        self = this,
+        getRequest = function(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)","i"),
+                r = window.location.search.substr(1).match(reg);
+            return (r!=null)?  unescape(r[2]) : null;
+        },
+        getConfig = function(){
+            var scripts = doc.getElementsByTagName('script'),
+                script = scripts[scripts.length - 1];
+            return function(param){
+                var p = script.getAttribute(param);
+                return p ? p : getRequest(param);
+            };
+        }(),
+        proxyheight = 0,
+        frameid = getConfig("data-frameid"),
+        timer = getConfig("data-timer"),
+        getProxyuUrl = location.protocol + location.host + location.port ? ':' + location.port : '' + location.pathname + '#app=site&ctl=admin_theme_manage&act=' + getConfig("data-proxy"),
+        proxyframe = function(){
+            var el = doc.createElement("iframe");
+            el.style.display = "none";
+            el.name="proxy";
+            return el;
+        }();
+
+    this.resize = function(){
+        proxyheight = body.offsetHeight;
+        proxyframe.src =  getProxyuUrl + "?data-frameid=" + frameid+ "&data-frameheight=" + (proxyheight+40);
+    }
+ 
+    this.init = function(){
+        var init = function(){
+            body.appendChild(proxyframe);
+            self.resize();
+            
+            if(!isNaN(timer)){
+                timer = timer<500?500:timer;
+                window.setInterval(function(){
+                    if(body.offsetHeight != proxyheight){
+                        self.resize();
+                    }
+                },timer);
+            };
+        };
+        window.addEvent("domready",init);
+    }
+};
+Loader.init();
+
+  $$('.use-theme').addEvent('click',function(e){
+     W.page('index.php?app=site&ctl=admin_theme_manage&act=set_default&theme=' +this.get('data-theme'),{onComplete:function(){
+         new Request.HTML({url:'index.php?app=site&ctl=admin_theme_manage',update:$('main')}).send();
+     }});
+  });
+
+  $$('.download-temp').addEvent('click', function(e){
+         location.href='index.php?app=site&ctl=admin_theme_manage&act=download&theme='+this.rel;
+  });
+
+  $$('.note-temp').addEvent('click', function(e){
+      e.stop();
+      new Dialog('index.php?app=site&ctl=admin_theme_manage&act=note&theme='+this.rel,{title:'设置备注名称',width:270,height:85});
+  });
+
+  $$('.backup-temp').addEvent('click', function(e){
+      e.stop();
+      confirmDialog('<{t}>确定要备份当前模板吗？<{/t}>', function(){
+          W.page('index.php?app=site&ctl=admin_theme_manage&act=bak&theme='+this.rel,{onComplete:function(){
+              var rst = this.getParent('ul').getElement('.reset-theme');
+              if(rst.href=='theme_bak.xml')return;
+              rst.set('data-bak','theme_bak.xml').getElement('i').set('text','<{t}>上一次备份<{/t}>');
+          }.bind(this)});
+      }.bind(this));
+  });
+
+  $$('.delete-temp').addEvent('click', function(e){
+      e.stop();
+      confirmDialog('<{t}>此操作不可恢复！确定要删除当前模板吗？<{/t}>', function(){
+          W.page('index.php?app=site&ctl=admin_theme_manage&act=delete&theme='+this.rel);
+      }.bind(this));
+  });
+
+  $$('.reset-theme').addEvent('click',function(e){
+      e.stop();
+      confirmDialog('<{t}>确定还原至<{/t}><{t}>' + this.getElement('i').get('text') + '<{/t}><{t}>吗？<{/t}>', function(){
+          W.page('index.php?app=site&ctl=admin_theme_manage&act=reset&theme='+this.rel+'&rid=' + this.get('data-bak'));
+      }.bind(this));
+  });
+
+  $$('.clean-cache').addEvent('click',function(e){
+      W.page('index.php?app=site&ctl=admin_theme_manage&act=cache_version&theme=<{$current_theme.theme}>');
+  });
+
+  if($$('.theme-colors').length) {
+      $$('.theme-colors').each(function(item){
+          var ul = item.getElement('ul');
+          var ulW = 0;
+          var lis = item.getElements('li');
+          var prev_img = item.getParent('.item').getElement('.theme-preview img');
+          var act = item.getElement('li.act');
+          var pW = ul.getParent().getSize().x;
+          var liX = lis[0].getSize().x+lis[0].getPatch('margin').x;
+          var css = 'margin-left';
+          ulW += liX*lis.length;
+
+          if(act) {
+              var actX = (lis.indexOf(act) + 1) * liX;
+              if(actX > pW) ul.setStyle(css, pW - actX);
+          }
+
+          ul.addEvents({
+              'mouseover':function(e){
+                  e = $(e.target);
+                  var li = e.get('tag') == 'li' ? e : e.getParent('li');
+                  prev_img.set('src', li.getElement('a').get('rel'));
+              },
+              'mouseleave':function(e){
+                  var li = this.getElement('li.act');
+                  li && prev_img.set('src',li.getElement('a').get('rel'));
+              },
+              'click':function(e){
+                  e = $(e.target);
+                  var li = e.get('tag') == 'li' ? e : e.getParent('li');
+                  li.addClass('act').getSiblings('.act').removeClass('act');
+              }
+          }).setStyle('width',ulW);
+          item.getElements('.arr').addEvent('mousedown',function(e){
+              var where = this.get('rel');
+
+              if(pW >= ulW) return;
+              var ml = ul.getStyle(css).toInt();
+              var mlMin = pW - ulW;
+              if(where == 'left') ml += pW;
+              else if(where == 'right') ml -= pW;
+              ul.tween(css, ml.limit(mlMin, 0));
+          });
+      });
+  }
+
+  function confirmDialog(msg,fn){
+      new Dialog(new Element('div.dialog-confirm',{html:'<div class="content">' + msg + '</div><div class="action"><{button label="确定" type="button" class="btn-primary" return="true"}> &nbsp;&nbsp; <{button type="button" class="btn-secondary" label="取消" isCloseDialogBtn="true"}></div>'}),{title:'<{t}>提示<{/t}>',resizeable:false,width:250,height:110,onLoad:function(){
+          this.dialog.getElement('[return=true]').addEvent('click',function(e){
+              fn&&fn.call(this);
+              this.close();
+          }.bind(this));
+      }});
+  }
+
+  function autoSize(elements, hw) {
+      elements = $$(elements);
+      hw = hw || 'height';
+      if(!elements.length) return;
+      var max = 0,
+          prop = (!Browser.ie6 ? 'min-': '') + hw, //ie6 ftl
+          offset = 'offset' + hw.capitalize();
+      elements.each(function(element, i) {
+          var calc = element[offset];
+          if (calc > max) {
+              max = calc;
+          }
+      });
+      elements.each(function(element, i) {
+          element.setStyle(prop, max - (element[offset] - element.getStyle(hw).toInt()));
+      });
+      return max;
+  }
+
+  Browser.ie6 && $$('.theme-preview img').length && $$('.theme-preview img').addEvent('load',function(){
+      this.zoomImg(160,160);
+  });
+
+})();
+</script>

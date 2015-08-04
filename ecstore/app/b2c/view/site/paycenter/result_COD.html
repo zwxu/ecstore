@@ -1,0 +1,22 @@
+<div class="feed-back">
+<div class="success clearfix">
+  <div class="span-1 pic"></div>
+  <div class="span-auto ">
+    <{if $payment.status == 'ready'}>
+        <h1><{t}>感谢您的提交<{/t}></h1>
+        <p><{t}>订单<{/t}><{$payment.order_id}><{t}>: 货到付款（COD）支付成功，请等待我们处理。<{/t}></p>
+        <p><a href="<{link app=b2c ctl='site_order' act='index' arg0=$payment.order_id}>"><{t}>按此查看订单详细情况<{/t}></a></p>
+        <p class="customMessages"><{t}>订单付款成功返回页提示信息<{/t}></p>
+    <{else}>
+        <h1><{t}>支付已过期<{/t}></h1>
+        <p class="customMessages"><{t}>订单支付已过期，请勿重新操作！<{/t}></p>
+    <{/if}>
+  </div>
+</div>
+</div>
+<script>
+function jumpurl(){
+  location='<{link app="site" ctl="default" act="index"}>';
+}
+var SiteSplash = setTimeout('jumpurl()',3000);
+</script>

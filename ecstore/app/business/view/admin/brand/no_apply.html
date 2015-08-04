@@ -1,0 +1,51 @@
+<form method="GET" id='newmember-edit-form' action="index.php?app=business&ctl=admin_apply&act=verify" class="tableform">
+    <div class="division">
+        <table width="100%" >
+            <{input type="hidden" name="flag" value="nopass"}>
+            <{input type="hidden" name="id" value=$id}>
+            <tr>
+            <th><{t}>原因：<{/t}></th>
+            <td><{input type="textarea" cols="60" rows="5" name="fail_reason" value=$fail_reason}></td>
+            </tr>
+        </table>
+    </div>
+</form>
+<{area inject='.mainFoot'}>
+<div class="table-action"><{button type="submit"  label=$___b2c="保存"|t:'b2c' id='newmember-edit-form-submit'}></div>
+<{/area}>
+<script>
+(function(){
+        var _form = $('newmember-edit-form');
+        var btn =$('newmember-edit-form-submit');
+        var finder = finderGroup['<{$env.get.finder_id}>'];
+
+        _form.store('target',{
+            onComplete:function(){            
+
+            },
+            onSuccess:function(response){
+                var hash_res_obj = JSON.decode(response);
+                if (hash_res_obj.success != undefined && hash_res_obj.success != "")
+                {
+                    try{
+                        var _dialogIns = btn.getParent('.dialog').retrieve('instance');
+                    }catch(e){}
+
+                    if(_dialogIns)
+                    {
+                        _dialogIns.close();
+                        finder.refresh.delay(400,finder);
+                    }
+                }
+                else
+                {
+                }            
+            }
+        });
+
+        btn.addEvent('click',function(){
+            _form.fireEvent('submit',{stop:$empty});
+        });
+
+    })();
+</script>

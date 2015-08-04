@@ -1,0 +1,120 @@
+<h3><{t}>基本信息<{/t}></h3>
+<div id="x-g-basic" class="goods-detail tableform">
+
+        <div class="division">
+            <table border="0" cellpadding="0" cellspacing="0" class="rule_list">
+                <tr>
+                    <th style="width:10%"><{t}>规则名称<{/t}>：</th>
+                    <td style="width:90%"><{input type="text" class="inputstyle" name="rule[name]" required="true" vtype='required' value=$rule.name size=60 }><em><font color="red">*</font></em></td>
+                </tr>
+                <tr>
+                    <th><{t}>规则描述<{/t}>：</th>
+                    <td><{input type="textarea" style=" width:80%" class="inputstyle" value=$rule.description name="rule[description]" rows="10" }><div class="red"><{t}>该信息将在购物车<{/t}><{if ($perfilter)}><{t}>及商品详细页面<{/t}><{/if}><{t}>显示! 为空则系统自动生成！<{/t}></div></td>
+                </tr>
+                <tr>
+                    <th><{t}>启用状态<{/t}>：</th>
+                     <td>
+                     <label><input type="radio" name="rule[status]"<{if $rule.status != 'false' }> checked="checked"<{/if}> value="true" ><{t}>是<{/t}></label>
+                     <label><input type="radio" name="rule[status]"<{if $rule.status == "false"}> checked="checked"<{/if}> value="false" ><{t}>否<{/t}></label>
+                     </td>
+                </tr>
+                <tr>
+                    <th><{t}>优先级：<{/t}></th>
+                    <td><{input type="unsignedint" value=$rule.sort_order name="rule[sort_order]" maxlength="5" size="3"  }></td>
+                <tr>
+                    <th><{t}>是否排它<{/t}>：</th>
+                     <td>
+                     <label><input type="radio" name="rule[stop_rules_processing]"<{if $rule.stop_rules_processing != 'false' }> checked="checked"<{/if}> value="true" ><{t}>是<{/t}></label>
+                     <label><input type="radio" name="rule[stop_rules_processing]"<{if $rule.stop_rules_processing == "false"}> checked="checked"<{/if}> value="false" ><{t}>否<{/t}></label>
+
+                     <div class="tableform processing" style=" width:80%;<{if $rule.stop_rules_processing == "false"}>display:none<{/if}>" >
+                         <table>
+                             <thead>
+                                 <tr align="left">
+                                     <td><{t}>现有促销规则<{/t}></td>
+                                     <td><{t}>排序<{/t}></td>
+                                 </tr>
+                             </thead>
+                             <tbody>
+                        <{if $sales_list}>
+                             <{foreach from=$sales_list item=item}>
+                                 <tr>
+                                     <td> <{$item.name}></td>
+                                     <td> <{$item.sort_order}></td>
+                                 </tr>
+                            <{/foreach}>
+                        <{/if}>
+                             </tbody>
+                         </table>
+                     </div>
+                     </td>
+                </tr>
+
+
+                <!--
+                <{*
+                <{if $promotion_type == 'order'}>
+                <tr>
+                    <th><{t}>免运费<{/t}>：</th>
+                     <td>
+                          <label><input type="radio" name="rule[free_shipping]"<{if $rule.free_shipping == 0 }> checked="checked"<{/if}> value="0" ><{t}>不免运费<{/t}></label>
+                         <label><input type="radio" name="rule[free_shipping]"<{if $rule.free_shipping == 1}> checked="checked"<{/if}> value="1" ><{t}>满足过滤条件的商品免运费<{/t}></label>
+                         <label><input type="radio" name="rule[free_shipping]"<{if $rule.free_shipping == 2}> checked="checked"<{/if}> value="2" ><{t}>免运费<{/t}></label>
+                     </td>
+                </tr>
+                <{/if}>
+                *}>
+                -->
+                <!--
+                <tr>
+                    <th><{t}>优先级<{/t}>：</th>
+                    <td><{input type="digits" value=$rule.sort_order name="rule[sort_order]" maxlength="5" size="3" required="true" vtype='required' }></td>
+                </tr>
+                -->
+                <tr>
+                    <th><{t}>开始时间<{/t}>：</th>
+                    <td>
+                        <{input type="time" value=$rule.from_time vtype="required" name="from_time"}>
+                    </td>
+                </tr>
+                <tr>
+                    <th><{t}>结束时间<{/t}>：</th>
+                    <td>
+                        <{input type="time" value=$rule.to_time vtype="required" name="to_time"}>
+                    </td>
+                </tr>
+                <tr>
+                    <th><{t}>会员级别<{/t}>：</th>
+                    <td id="mLev">
+
+
+                      <{foreach from=$member_level item=ml}>
+                      <label><input type="checkbox" value="<{$ml.member_lv_id}>" name="rule[member_lv_ids][]" <{if ($rule.member_lv_ids != '') && in_array($ml.member_lv_id,$rule.member_lv_ids)}>checked<{/if}>/><{$ml.name}></label>
+                      <{/foreach}>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+</div>
+
+<script>
+validatorMap['requiredcheckbox'] = [LANG_Validate['requiredonly'], function(element) {
+    var parent =  element.getParent('td'),radio;
+    if(element.get('name')) radio = parent.getElements('input[type=checkbox][name="'+element.get('name')+'"]');
+    else radio = parent.getElements('input[type=checkbox]');
+    return radio.some(function(rd) {
+        return rd.checked == true;
+    });
+}];
+$ES('#x-g-basic input[name^=rule[stop_rules_processing]').addEvent('click',function(e){
+    var proc=$ES('#x-g-basic .processing'),check=this.value;
+    proc.each(function(el){
+        el[check=='true'?'show':'hide']();
+    });
+});
+
+</script>
+
+
+

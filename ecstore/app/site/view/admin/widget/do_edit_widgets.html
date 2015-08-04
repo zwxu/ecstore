@@ -1,0 +1,50 @@
+<form id="_<{$widgets_id}>_wg_cfg" action='index.php?app=site&ctl=admin_widget_proinstance&act=insert_widget' method='post'>
+
+<{include file="admin/theme/widget/widget_header.html"}>
+
+<div class="table-action">
+	<{button type="submit"  label=$___site="保存修改"|t:'site'}>
+</div>
+
+</form>
+<script>
+Ex_Loader('modedialog',function(){});
+
+$('_<{$widgets_id}>_wg_cfg').addEvent('submit',function(e){
+  e=new Event(e).stop();
+  //<{t}>指向框架内对象<{/t}>
+  //<{t}>验证输入<{/t}>
+
+
+  $ES('textarea[ishtml=true]',this).getValue();
+  var frameWin=$('themeFrame').contentWindow;
+  var shopWidgets=frameWin.shopWidgets;
+  var temId=$time()+$random(100,999);
+  var wg=frameWin.document.newElement('div');
+
+
+  //var remoteUrl=this.action+="&p[0]=<{$widgets_type}>&p[1]=<{$widgets_id}>&p[2]=<{$theme}>&p[3]="+temId;
+  var remoteUrl = this.action += "&widgets_id=<{$widgets_id}>&widgets=<{$widgets_type}>&widgets_app=<{$widgets_app}>&widgets_theme=<{$widgets_theme}>&theme=<{$theme}>&domid=" + temId;
+
+  new Request({
+  url:remoteUrl,
+  evalScript:false,
+  onRequest:function(){
+
+  },
+  onSuccess:function(re){
+
+        $(wg).set('html',re);
+        wg= wg.getFirst();
+        wg.setProperty('id',temId);
+		var drag=wg.replaces(shopWidgets.curWidget);
+        shopWidgets.initDrags([drag]);//<{t}>使新版块可拖动摆放<{/t}>
+		shopWidgets.drag_operate_box.store('drag',drag);
+
+        shopWidgets.drag_operate_box.setStyle('visibility','hidden');
+		frameWin.Switchable.autoRender();
+        shopWidgets.curdialog.close();
+  }}).post($('_<{$widgets_id}>_wg_cfg'));
+
+});
+</script>

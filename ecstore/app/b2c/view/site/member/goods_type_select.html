@@ -1,0 +1,12 @@
+<div id="member-main" class="member-main">
+    <h1 class="title title2"><{t}>商品种类选择<{/t}></h1>
+	<div style=" border:1px solid #eee; padding:10px; margin:0 auto">
+    <form action="<{link app=business ctl=site_member act=goods_add_go}>" enctype="multipart/form-data" encoding="multipart/form-data" method="post" name="goods_add_gogoods_add_go" id='x-return-form'>
+	<input type="radio" name="goods_kind" value="virtual" checked/>实体商品
+	<input type="radio" name="goods_kind" value="entity"/>虚拟商品</br>
+</div>
+<div class="table-action" style="margin-top:10px;">
+    <{button id="x-submit" type="submit"  label=$___aftersales="下一步"|t:'aftersales'}>
+</div>
+</form>
+</div>

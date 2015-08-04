@@ -1,0 +1,18 @@
+<app>
+    <name>用户认证系统</name>
+    <description>Pluggable Authentication Modules</description>
+
+    <author>
+        <name>BBC 开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>0.1</version>
+    <license>BBC license</license>
+
+	<depends>
+		<app>dbeav</app>
+	</depends>
+
+</app>

@@ -1,0 +1,18 @@
+<{if $aSpec.spec_type == 'text'}>
+
+<{foreach from=$aSpec.spec_value item=oItem}>
+  <li style='float:left' onmouseover="this.style.background='#ff9900';" onmouseout="this.style.background='#ffffff';" specValueId="<{$oItem.spec_value_id}>" specValue="<{$oItem.spec_value|escape:'html'}>" specImage=''>
+  <span><{$oItem.spec_value|htmlspecialchars}></span><span class="spec-add"><label><{t}>添加<{/t}></label></span>
+  <input type="hidden" name="spec_value_image[<{$oItem.spec_value_id}>]" id="spec_value_image_<{$oItem.spec_value_id}>" value="<{$oItem.spec_image}>" disabled/>
+  </li>
+  <{/foreach}>							  
+  <{else}>
+
+<{foreach from=$aSpec.spec_value item=oItem}>
+  <li style='float:left' onmouseover="this.style.background='#ff9900';" onmouseout="this.style.background='#ffffff';" specValueId="<{$oItem.spec_value_id}>" specValue="<{$oItem.spec_value|escape:'html'}>" specImage='<{if $oItem.spec_image}><{$oItem.spec_image}><{/if}>'>
+  <img src='<{if $oItem.spec_image}><{$oItem.spec_image|storager}><{else}><{$spec_default_pic|storager}><{/if}>' width=20 height=20 alt="<{$oItem.spec_value|htmlspecialchars}>"><span class="spec-add"><label><{t}>添加<{/t}></label></span>
+  <input type="hidden" name="spec_value_image[<{$oItem.spec_value_id}>]" id="spec_value_image_<{$oItem.spec_value_id}>" value="<{$oItem.spec_image|storager}>" disabled/>
+  </li>
+  <{/foreach}>
+
+  <{/if}>

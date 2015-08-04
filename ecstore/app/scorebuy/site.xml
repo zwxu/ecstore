@@ -1,0 +1,22 @@
+<site>
+    <module controller='site_activity' >
+        <name>score</name>
+        <title>积分换购活动</title>
+        <disable>false</disable>
+    </module>
+    <module controller='site_product' >
+        <name>scoreProduct</name>
+        <title>积分换购列表</title>
+        <disable>false</disable>
+    </module>
+    <module controller='site_cart' >
+        <name>scoreCart</name>
+        <title>积分换购购物车</title>
+        <disable>false</disable>
+    </module>
+    <module controller='site_order' >
+        <name>scoreOrder</name>
+        <title>积分换购订单</title>
+        <disable>false</disable>
+    </module>
+</site>

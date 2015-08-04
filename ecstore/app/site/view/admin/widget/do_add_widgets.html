@@ -1,0 +1,56 @@
+<form id="_new_wg_cfg" action='index.php?app=site&ctl=admin_widget_proinstance&act=insert_widget' method='post'>
+
+<{include file="admin/theme/widget/widget_header.html"}>
+
+<div class="table-action">
+	<{button type="submit" id="on_submit" label=$___a="添加"|t:'site'}>
+</div>
+
+</form>
+<script>
+  $('_new_wg_cfg').addEvent('submit',function(e){
+    e=new Event(e).stop();
+    //<{t}>指向框架内对象<{/t}>
+    //<{t}>验证输入<{/t}>
+	//<{t}>暂时不验证<{/t}>2010/5/14 edwin todo
+    //if(!this.bindValidator('_x_ipt'))return;
+
+
+    $ES('textarea[ishtml=true]',this).getValue();
+
+    var frameWin=$('themeFrame').contentWindow;
+
+    var shopWidgets=frameWin.shopWidgets;
+    //<{t}>临时容器<{/t}>
+
+    var wg=frameWin.document.newElement('div');
+
+
+    var temId=$time()+$random(100,999);
+	if(!wg)return;
+    $(wg).setProperty('id','wg'+$time());
+    this.action+='&widgets=<{$widgets_type}>&domid='+temId+'&widgets_app=<{$widgets_app}>&widgets_theme=<{$widgets_theme}>&theme=<{$theme}>';
+
+    new Request({url:this.action,data:this,method:this.get('method'),
+      onRequest:function(){
+        $('on_submit').set('disabled',true).getElement('span span').set('html','请稍等...');
+      },
+      onSuccess:function(re){
+        $('on_submit').set('disabled',false).getElement('span span').set('html','保存');
+        wg.set('html',re);
+        wg= wg.getFirst();
+        wg.setProperty('id',temId);
+
+        wg.setProperty('widgets_id', 'tmp_' + '<{$i}>');
+        var sw_curDrop=shopWidgets.curDrop;
+
+        wg.inject(sw_curDrop,'top');
+
+        shopWidgets.drags.include($(wg));
+        shopWidgets.initDrags([wg]);
+        shopWidgets.checkEmptyDropPanel(sw_curDrop);
+        shopWidgets.curdialog.close();
+    }}).send();
+
+  });
+</script>

@@ -1,0 +1,133 @@
+<div id="mainHead" style="display:none;">
+<{include file="admin/theme/tmpl/pagehead.html"}>
+<div class="box-gray clearfix">
+  <div class="fl"><{if $is_super}><{button type="button" label="添加新页面" icon="btn_add.gif" app="desktop" id="add_newpage"}><{/if}></div>
+    <div class="fr"><{button type="button" label=$___site="清除模板缓存"|t:'site' class="btn-primary" id="clean_cache"}></div>
+  </div>
+</div>
+
+<div class="page-edit-list">
+  <table class="gridlist" width="100%" cellpadding="0" cellspacing="0">
+    <thead>
+      <tr>
+        <th style="width:15%;" nowrap><{t}>页面类型<{/t}></th>
+        <th><{t}>页面名称<{/t}></th>
+        <th><{t}>文件名<{/t}></th>
+        <th width="10%"><{t}>设置默认<{/t}><{help}><p>什么是默认页面?<br/>当一个页面有多个模板文件时，我们的系统在输出时会用默认页面进行渲染。</p><{/help}></th>
+        <th><{t}>操作<{/t}></th>
+      </tr>
+    </thead>
+    <tbody>
+      <{if $list}>
+      <{assign var=index value=0}>
+      <{foreach from=$types item=titem key=basename name="tmpl_type"}>
+      <{if $list.$basename}>
+      <{assign var=index value=$index+1}>
+      <{foreach from=$list.$basename item=item key=key name=_list}>
+      <tr<{if $index%2==1}> class="odd"<{/if}>>
+        <{if $env.foreach._list.first}>
+        <td rowspan="<{$env.foreach._list.total}>" class="v-t"><{$titem}></td>
+        <{/if}>
+        <td class="t-l"><{$item.tmpl_name}></td>
+        <td class="t-l"><{$item.tmpl_path}><span class="def"<{if $item.default == 0}> style="display:none;"<{/if}>>(默认)</span></td>
+        <td>
+          <{if $basename != 'chanel'}>
+          <span class="<{if $item.default > 0}>gray<{else}>lnk<{/if}>" data-tid="<{$item.id}>" data-type="<{$basename}>">设为默认</span>
+          <{/if}>
+        </td>
+        <td>
+          <div class="span-auto">
+            <{img app='desktop' src="bundle/page_edit.gif"}>
+            <a href="index.php?app=site&ctl=admin_theme_widget&act=editor&theme=<{$item.theme}>&file=<{$item.tmpl_path}>" class="page_source_preview"><{t}>可视化编辑<{/t}></a>
+          </div>
+          <div class="span-auto">
+            <{img app='desktop' src="bundle/page_script.gif"}>
+            <a  href="index.php?app=site&ctl=admin_explorer_theme&act=detail&theme=<{$item.theme}>&open_path=&file_name=<{$item.tmpl_path}>" target="dialog::{'title':'<{t}>源码编辑<{/t}><{$item.name}>',width:0.7,height:0.8}"><{t}>源码编辑<{/t}></a>
+          </div>
+          <div class="span-auto">
+            <{img app='desktop' src="bundle/page_new.gif"}>
+            <a class="add-like" href="<{$this->_base_url}>?app=site&ctl=admin_theme_tmpl&act=copy_tmpl&theme=<{$item.theme}>&tmpl=<{$item.tmpl_path}>"><{t}>添加相似<{/t}></a>
+          </div>
+          <div class="span-auto">
+            <{if $item.tmpl_name != 'default.html'}>
+            <{img app='desktop' src='bundle/delete.gif'}>
+            <a class='del-theme' href="index.php?app=site&ctl=admin_theme_tmpl&act=delete_tmpl&theme=<{$item.theme}>&tmpl=<{$item.tmpl_path}>"><{t}>删除<{/t}></a>
+            <{/if}>
+          </div>
+        </td>
+      </tr>
+
+      <{/foreach}>
+      <{/if}>
+      <{/foreach}>
+      <{/if}>
+    </tbody>
+  </table>
+</div>
+<script>
+  //if(Browser.ie6 || Browser.ie7) {
+  //  $('main').setStyle('overflowX','hidden');
+  //}
+
+  $$('a.page_source_preview').addEvent('click',function(e){
+      e.stop();
+      location.href = this.href;
+  });
+
+  $$('.del-theme').addEvent('click',function(e){
+    e.stop();
+    confirmDialog('<{t}>确定要删除吗?<{/t}>', function(){
+      request(this.href,{onCallback:function(){
+          location.reload();
+      }});
+    }.bind(this));
+  });
+
+  $$('.add-like').addEvent('click',function(e){
+    e.stop();
+    confirmDialog('<{t}>确定要添加吗?<{/t}>', function(){
+      request(this.href,{onCallback:function(rs){
+          location.reload();
+      }});
+    }.bind(this));
+  });
+
+  $('clean_cache').addEvent('click',function(e){
+        W.page('index.php?app=site&ctl=admin_theme_manage&act=cache_version&theme=<{$theme}>');
+  });
+  $('add_newpage').addEvent('click',function(){
+      new Dialog('?app=site&ctl=admin_theme_tmpl&act=add&theme=<{$theme}>',{'title':'<{t}>添加新页面<{/t}>',width:0.7,height:0.8});
+  });
+  $$('.page-edit-list span').addEvent('click',function(e){
+    e = this;
+    if(e.hasClass('lnk') && e.get('data-tid')>0){
+        confirmDialog('<{t}>确定要将此页面设为默认？<{/t}>',function(){
+            request('<{$_base_url}>?app=site&ctl=admin_theme_tmpl&act=set_default&id='+e.get('data-tid'),{onCallback:function(){
+                  var g = $$('[data-type='+e.get('data-type')+'].gray')[0];
+                  g&&g.set('class','lnk').getParent('tr').getElement('.def').hide();
+                  e.className='gray';
+                  e.getParent('tr').getElement('.def').show();
+                }
+            });
+        });
+    }
+  });
+
+function request(url,options){
+    if(!url) return MessageBox.error('<{t}>请求错误<{/t}>');
+    options = Object.append({
+        url:url,
+        onRequest: function() {
+            new MessageBox('<{t}>正在加载...<{/t}>',{type:'notice',autohide:false});
+        },
+        onSuccess: function(rs) {
+            rs = JSON.decode(rs);
+            if(rs.error) return MessageBox.error(rs.error);
+            if(rs.success) new MessageBox(rs.success,{autohide:1000});
+            this.fireEvent('callback',this);
+        }
+    },options || {});
+
+    new Request(options).send();
+}
+</script>

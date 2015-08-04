@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+    <explorer id='notebook' path='view/site'>notebook</explorer>
+
+    <module controller='site_default' >
+        <name>default</name>
+        <title>notebook</title>
+        <disable>false</disable>
+        <allow_menu act='index'>留言板</allow_menu>
+        <default_menu>
+            <title>留言板</title>
+            <act>index</act>
+            <hidden>false</hidden>
+        </default_menu>
+    </module>
+</site>

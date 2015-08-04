@@ -1,0 +1,19 @@
+<app version="1.0">
+  <name>内容</name>
+
+  <description>BBC 文章系统</description>
+
+  <author>
+	  <name>BBC 开发团队</name>
+	  <email></email>
+	  <url></url>
+  </author>
+
+  <version>0.1</version>
+
+  <license>Commercial</license>
+  <depends>
+	<app>site</app>
+  </depends>
+
+</app>

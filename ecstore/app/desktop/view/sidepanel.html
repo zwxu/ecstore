@@ -1,0 +1,80 @@
+<{if $side == 'sidepanel'}>   
+
+
+<{*
+<div class="side-menu side-menu-list" >
+		<{foreach from=$actions item=action}>       
+           <div class="side-bx">
+           	<div class="side-bx-title"><div class="side-bx-title-inner"><h3><a href="index.php?<{$action.menu_path}>"><{$action.menu_title}></a></h3></div></div>
+           	<div class="side-bx-bd">
+           	</div>
+           </div>
+	   <{/foreach}> 
+
+
+
+
+
+</div> 
+       *}> 
+
+<{/if}>
+
+<{if $side == 'leftpanel'}>
+
+
+<{if count($nogroup.menu) > 0}>
+<div class="side-bx">
+    <div class="side-bx-bd">
+        <ul><{foreach from=$nogroup.menu item=menu}> 
+            <li><a target="<{$menu.target}>" href="index.php?<{$menu.menu_path}>" mid="<{$menu.menu_id}>"><{t}><{$menu.menu_title}><{/t}></a></li>
+            <{/foreach}>
+        </ul>
+    </div>
+</div>
+<{/if}>
+<{foreach from=$menus_data item=menus name=side_menus}>  
+<div class="side-bx<{if $smarty.foreach.side_menus.first}> first<{/if}>">
+    <div class="side-bx-title">
+        <h3><{t}><{$menus.menugroup}><{/t}></h3>
+    </div>
+    <div class="side-bx-bd">
+        <ul><{foreach from=$menus.menu item=menu}> 
+            <li><a target="<{$menu.target}>" href="index.php?<{$menu.menu_path}>" mid="<{$menu.menu_id}>"><{t}><{$menu.menu_title}><{/t}></a></li>
+            <{/foreach}>
+        </ul>
+    </div>
+</div>
+<{/foreach}>  
+
+
+
+<script>
+(function(){
+   /* var cur = '<{$workground.menu_title}>';
+	$$('.head-nav .wg').each(function(wg){
+				  
+		if(cur&&wg.getElement('span:contains("<{$workground.menu_title}>")')){
+			wg.addClass('current');
+		}else{
+			wg.removeClass('current');
+		}
+		
+	});  */
+	 
+	$$('.side-bx-title').addEvent('click', function(e){
+		e.stop();
+		var bx = this.getParent(),
+			bd = this.getNext('.side-bx-bd');
+		if(bx.hasClass('side-bx-toggled')){
+			bd.show();
+			bx.removeClass('side-bx-toggled');
+		}else{
+			bd.hide();
+			bx.addClass('side-bx-toggled');
+		}
+	});
+})();
+window.Breadcrumbs = "<{$dataid}>";
+</script>
+<{/if}>

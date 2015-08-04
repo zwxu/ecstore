@@ -1,0 +1,576 @@
+<{css src="ecmall.css" app="business"}>
+<{css src="style.css" app="business"}>
+<{script src="dialog.js" app="business" pdir="js"}>
+<{script src="modedialog.js" app="business" pdir="js"}>
+<{script src="load.js" app="business" pdir="js"}>
+<{script src="wpage.js" app="business" pdir="js"}>
+
+<script>
+  var W = new Wpage({});
+  var MODALPANEL = {
+    createModalPanel:function(){
+      var mp = new Element('div',{'id':'MODALPANEL'});
+      var mpStyles = {
+        'position': 'absolute',
+        'background': '#333333',
+        'width': '100%',
+        'display':'none',
+        'height': window.getScrollSize().y,
+        'top': 0,
+        'left': 0,
+        'zIndex': 65500,
+        'opacity': .4
+      };
+      this.element = mp.setStyles(mpStyles).inject(document.body);
+      return this.element;
+    },
+    show:function(){
+      var panel = this.element = this.element||this.createModalPanel();
+      panel.setStyles({
+        'width': '100%',
+        'height': window.getScrollSize().y
+      }).show();
+    },hide:function(){
+      if(this.element)this.element.hide();
+    }
+  };
+</script>
+<script>
+var BREADCRUMBS ='0:0';
+var LAYOUT = {
+  container: $('container'),
+  side: $('side'),
+  workground: $('workground'),
+  content_main: $('main'),
+  content_head: $E('#workground .content-head'),
+  content_foot: $E('#workground .content-foot'),
+  side_r: $('side-r'),
+  side_r_content:$('side-r-content')
+};
+
+    //验证电话号码
+    var isPhone=function (str) {
+        
+       //var reg =/^13[0-9]{1}[0-9]{8}$|15[0-9]{1}[0-9]{8}$|18[0-9]{1}[0-9]{8}|14[0-9]{1}[0-9]{8}$/;
+       var reg =/^(0\d{2,3}-)[23456789]\d{6,7}?$/;
+       return reg.test(str);
+    }
+
+    function checkphonenum(input){
+
+       
+       if( input.value!='' && !isPhone(input.value)){
+          
+           //MessageBox.error('号码格式错误！');
+           Message.error('号码格式错误！');
+           input.value='';
+           return false;
+       }
+       return true;
+    }
+
+</script>
+<div class="member-main">
+  <div class="title" ><{t}>店铺信息<{/t}></div>
+
+    <div class="FormWrap" style="background:none; border:none; padding:0; margin:0;">
+       <{ if($shopinfo.approved==0) }>
+           <div class="FormWrap" style="border:none;padding-top:0; border-bottom:1px dashed #ddd;color:red;">
+            <{t}>您提交的开店申请正在审核中....<{/t}> 
+           </div>
+      <{elseif ($shopinfo.approved==2)  }>
+           <{if $shopinfo.approvedremark }>
+                <div class="FormWrap" style="border:none;padding-top:0; border-bottom:1px dashed #ddd;color:red;">
+                <{t}>您提交的开店申请未通过审核:<{$shopinfo.approvedremark}>，请与平台管理员联系....<{/t}>
+                </div>
+           <{else}>
+                <div class="FormWrap" style="border:none;padding-top:0; border-bottom:1px dashed #ddd;color:red;">
+                <{t}>您提交的开店申请未通过审核，请与平台管理员联系....<{/t}>
+                </div>
+           <{/if}>
+      <{/if}>
+      <div class="division" style="border:none;margin-bottom:0">
+
+                <div class="info_shop">
+                        <form method="post"  id="apply_form"  action="<{link app=business ctl=site_store act=storeapplystep3 arg0='isedit'}>"  >
+                        <table>
+                            <tr>
+                            <{input type="hidden" name="shopinfo[account_id]"  value=$member_id}>
+                            <{input type="hidden" name="shopinfo[store_id]"  value=$shopinfo.store_id}>
+                                <th><{t}>店主姓名: <{/t}></th>
+                                <td class="width7">
+                                <{input  disabled='true' type="text" name="shopinfo[store_idcardname]" id="store_idcardname"  size="30" vtype="required" value=$shopinfo.store_idcardname}>
+                                </td>
+                                <td class="padding3"><span class="fontColor3">*</span> <span class="field_notice"><{t}>请填写真实姓名<{/t}></span></td>
+                            </tr>
+                            <tr>
+                                <th><{t}>身份证号: <{/t}></th>
+                                <td>
+                                <{input disabled='true'  type="alphaint" name="shopinfo[store_idcard]" id="store_idcard"  size="40" vtype="required" value=$shopinfo.store_idcard onblur="idcardCheck(this)"}><span></span></td>
+                                <td class="padding3"><span class="fontColor3">*</span><span class="field_notice"><{t}>请填写真实准确的身份证号<{/t}></span></td>
+                            </tr>
+                            <tr>
+                                <th><{t}>店铺名称: <{/t}></th>
+                                <td>
+                                  <{input type="text" disabled='true' maxlength=30 name="shopinfo[store_name]" id="store_name"  size="40" vtype="required" value=$shopinfo.store_name}>
+                                </td>
+                                <td class="padding3"><span class="fontColor3">*</span> <span class="field_notice"><{t}>请控制在60个字以内<{/t}></span></td>
+                            </tr>
+                                <{input type="hidden" name="shopinfo[store_grade]"  value=$shopinfo.store_grade}>
+                           <!--
+                            <tr>
+                                <th><{t}>所属分类: <{/t}></th>
+                                <td>
+                                <{ if($shopinfo.approved==1) }>
+                                <{input disabled='true' type="text" value=$shopinfo.store_catname name="shopinfo[store_catname]"}>
+                                <{else}>
+                                <{input  type="vstorecat" value=$shopinfo.store_cat name="shopinfo[store_cat]"}>
+                                <{/if}>
+                                </td>
+                                <td></td>
+                            </tr>
+                            -->
+                             <tr>
+                                <th><{t}>经营范围: <{/t}></th>
+                                <td>
+                                 <{ if($shopinfo.approved==1) }>
+                                      <{input disabled='true' type="text" name="shopinfo[storeregion_name]" id="storeregion_name"  size="40"  value=$shopinfo.store_regionname}>
+                                 <{else}>
+                                   <{if $shopinfo.issue_type!=2}>
+                                        <{input  type="vobject"  vtype="required" object="goods_cat@b2c" filter=$storetype value=$shopinfo.store_region  name="shopinfo[store_region]"  multiple="true" select="checkbox"}> &nbsp;
+                                   <{else}>
+                                         <{input  type="vobject"  vtype="required" object="goods_cat@b2c" filter=$storetype value=$shopinfo.store_region  name="shopinfo[store_region]" }> &nbsp;
+                                   <{/if}>
+                                 <{/if}>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th><{t}>所在地区: <{/t}></th>
+                                <td><{input app=ectools id="area" type="region"  name="shopinfo[area]" vtype='area' value=$shopinfo.area}>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><{t}>详细地址: <{/t}> </th>
+                                <td><{input type="text" id=addr name="shopinfo[addr]" size="60" vtype="required"   value=$shopinfo.addr}></td>
+                                <td></td>
+                            </tr>
+                             <{if ! $shopinfo.zip}>
+                                <tr>
+                            <{else}>
+                                <tr style='display:none'>
+                             <{/if}>
+                                <th><{t}>邮箱: <{/t}></th>
+                                <td><{input type="text" id=zip name="shopinfo[zip]" size="20"  value=$shopinfo.zip vtype='required&&email'}></td>
+                                <td></td>
+                            </tr>
+                             <{if ! $shopinfo.tel}>
+                                <tr>
+                             <{else}>
+                                <tr style='display:none'>
+                             <{/if}>
+                                <th><{t}>手机号码: <{/t}></th>
+                                <td>
+                                   <{input  type='text' vtype="required&&mobile" id=tel name="shopinfo[tel]" value=$shopinfo.tel}>
+                                </td>
+                                <td class="padding3"><span class="fontColor3">*</span> <span class="field_notice"><{t}>请输入联系电话<{/t}></span></td>
+                            </tr>
+
+                            </tr>
+                                <tr>
+                                <th>店铺标志: </th>
+                                <td>
+                                 <{input type='vimage' name='shopinfo[image]' width=315 height=150 value=$shopinfo.image}>
+
+                                </td>
+                                <td class="padding3"><span class="field_notice">支持格式jpg,jpeg,png,gif，请保证图片清晰<br/>&nbsp;为取得较好的显示效果，最好为1:1的正方形图片</span></td>
+                            </tr>
+                            <tr>
+                                <th><{t}>申请公司信息: <{/t}></th>
+                            </tr>
+                            <tr>
+                                <th><{t}>企业名称: <{/t}></th>
+                                <td class="width7">
+                                <{ if($shopinfo.approved==1) }>
+                                <{input disabled='true' type="text" name="shopinfo[company_name]" id="company_name"  size="30" vtype="required" value=$shopinfo.company_name}>
+                                <{else}>
+                                <{input  type="alphaint" name="shopinfo[company_name]" id="company_name"  size="30" vtype="required" value=$shopinfo.company_name}>
+                                <{/if}>
+                                </td>
+                                <td class="padding3"><span class="fontColor3">*</span> <span class="field_notice"><{t}>请填写企业名称<{/t}></span></td>
+
+                            </tr>
+                            
+                            <tr>
+                                <th><{t}>营业执照号: <{/t}></th>
+                                <td class="width7">
+                                <{ if($shopinfo.approved==1) }>
+                                <{input disabled='true' type="text" name="shopinfo[company_no]" id="company_no"  size="30" vtype="required" value=$shopinfo.company_no}>
+                                <{else}>
+                                <{input  type="alphaint" name="shopinfo[company_no]" id="company_no"  size="30" vtype="required" value=$shopinfo.company_no}>
+                                <{/if}>
+                                </td>
+                                <td class="padding3"><span class="fontColor3">*</span> <span class="field_notice"><{t}>营业执照号<{/t}></span></td>
+                            </tr>
+
+                            <tr>
+                                <th><{t}>税务登记证号: <{/t}></th>
+                                <td class="width7">
+                                <{ if($shopinfo.approved==1) }>
+                                <{input  disabled='true' type="text" name="shopinfo[company_taxno]" id="company_taxno"  size="30" vtype="required" value=$shopinfo.company_taxno}>
+                                <{else}>
+                                <{input  type="alphaint" name="shopinfo[company_taxno]" id="company_taxno"  size="30" vtype="required" value=$shopinfo.company_taxno}>
+                                <{/if}>
+                                </td>
+                                <td class="padding3"><span class="fontColor3">*</span> <span class="field_notice"><{t}>税务登记证号<{/t}></span></td>
+                            </tr>
+
+                              <tr>
+                                <th><{t}>企业组织机构代码: <{/t}></th>
+                                <td class="width7">
+                                <{ if($shopinfo.approved==1) }>
+                                <{input disabled='true' type="text" name="shopinfo[company_codename]" id="company_codename"  size="30" vtype="required" value=$shopinfo.company_codename}>
+                                <{else}>
+                                <{input type="alphaint" name="shopinfo[company_codename]" id="company_codename"  size="30" vtype="required" value=$shopinfo.company_codename}>
+                                <{/if}>
+                                </td>
+                                <td class="padding3"><span class="fontColor3">*</span> <span class="field_notice"><{t}>税务登记证号<{/t}></span></td>
+                            </tr>
+                            <tr>
+                                <th><{t}>法定代表人: <{/t}></th>
+                                <td class="width7">
+                                <{ if($shopinfo.approved==1) }>
+                                <{input  disabled='true' type="text" name="shopinfo[company_idname]" id="company_idname"  size="30" vtype="required" value=$shopinfo.company_idname}>
+                                <{else}>
+                                <{input type="text" name="shopinfo[company_idname]" id="company_idname"  size="30" vtype="required" value=$shopinfo.company_idname}>
+                                <{/if}>
+                                </td>
+                                <td class="padding3"><span class="fontColor3">*</span> <span class="field_notice"><{t}>请填写法人真实姓名<{/t}></span></td>
+                            </tr>
+
+                            <tr>
+                                <th><{t}>法人身份证号: <{/t}></th>
+                                <td class="width7">
+                                <{ if($shopinfo.approved==1) }>
+                                <{input disabled='true' type="alphaint" name="shopinfo[company_idcard]" id="company_idcard"  size="30" vtype="required" onchange="idcard(this)" value=$shopinfo.company_idcard}>
+                                <{else}>
+                                <{input  type="alphaint" name="shopinfo[company_idcard]" id="company_idcard"  size="30" vtype="required" value=$shopinfo.company_idcard}>
+                                <{/if}>
+                                </td>
+                                <td class="padding3"><span class="fontColor3">*</span> <span class="field_notice"><{t}>请填写真实法人身份证号<{/t}></span></td>
+                            </tr>
+                             <tr>
+                                <th><{t}>公司负责人: <{/t}> </th>
+                                <td class="width7">
+                                <{input  type="text" name="shopinfo[company_cname]" id="company_cname"  size="30" vtype="required" value=$shopinfo.company_cname}>
+                                </td>
+                                <td class="padding3"><span class="fontColor3">*</span> <span class="field_notice"><{t}>请填写真实姓名<{/t}></span></td>
+                            </tr>
+
+                             <tr>
+                                <th><{t}>负责人身份证号: <{/t}> </th>
+                                <td class="width7">
+                                <{input type="alphaint" name="shopinfo[company_cidcard]" id="company_cidcard"  size="30" vtype="required" onchange="idcard(this)" value=$shopinfo.company_cidcard}>
+                                </td>
+                                <td class="padding3"><span class="fontColor3">*</span> <span class="field_notice"><{t}>请填写负责人身份证号<{/t}></span></td>
+                             </tr>
+
+                            <tr>
+                                <th><{t}>企业联系电话: <{/t}> </th>
+                                <td class="width7">
+                                <{input type="text" maxlength='13' name="shopinfo[company_ctel]" id="company_ctel"  size="30" vtype="required&&tel" value=$shopinfo.company_ctel onblur='checkphonenum(this);'}>
+                                </td>
+                                <td class="padding3"><span class="fontColor3">*</span> <span class="field_notice"><{t}>此处填写企业联系电话，格式：021-87654321。<{/t}></span></td>
+                            </tr>
+
+							 <tr>
+                                <th><{t}>银行名称: <{/t}></th>
+                                <td class="width7">
+                                <{ if($shopinfo.approved==1) }>
+                                <{input  disabled='true' type="text" name="shopinfo[bank_name]" id="company_idname"  size="30" vtype="required" value=$shopinfo.bank_name}>
+                                <{else}>
+                                <{input type="text" name="shopinfo[bank_name]" id="bank_name"  size="30" vtype="required" value=$shopinfo.bank_name}>
+                                <{/if}>
+                                </td>
+                                <td class="padding3"><span class="fontColor3">*</span> <span class="field_notice"><{t}>请填写银行名称<{/t}></span></td>
+                            </tr>
+
+							 <tr>
+                                <th><{t}>银行卡号: <{/t}></th>
+                                <td class="width7">
+                                <{ if($shopinfo.approved==1) }>
+                                <{input  disabled='true' type="text" name="shopinfo[bank_cardid]" id="company_idname"  size="30" vtype="required" value=$shopinfo.bank_cardid}>
+                                <{else}>
+                                <{input type="text" name="shopinfo[bank_cardid]" id="bank_name"  size="30" vtype="required" value=$shopinfo.bank_cardid}>
+                                <{/if}>
+                                </td>
+                                <td class="padding3"><span class="fontColor3">*</span> <span class="field_notice"><{t}>请填写银行卡号<{/t}></span></td>
+                            </tr>
+
+                             <tr>
+                                <th><{t}>公司注册地址: <{/t}></th>
+                                <td>
+                                <{ if($shopinfo.approved==1) }>
+                                <{input disabled='true'  type="text"  size="40"  value=$shopinfo.company_areaname name="shopinfo[company_areaname]"}>
+                                <{else}>
+                                <{input  app=ectools id="company_area" type="region"  name="shopinfo[company_area]" vtype='area' value=$shopinfo.company_area}>
+                                <{/if}>
+                                </td>
+                                <td class="padding3"><span class="fontColor3">*</span> <span class="field_notice"><{t}>请选择公司注册省市地区<{/t}></span></td>
+                            </tr>
+
+                            <tr>
+                                <th><{t}>&nbsp;&nbsp;&nbsp;&nbsp; <{/t}> </th>
+                                <td>
+                                <{ if($shopinfo.approved==1) }>
+                                <{input disabled='true'  type="text" id=company_addr name="shopinfo[company_addr]" size="60" vtype="required"   value=$shopinfo.company_addr}>
+                                <{else}>
+                                <{input  type="text" id=company_addr name="shopinfo[company_addr]" size="60" vtype="required"   value=$shopinfo.company_addr}>
+                                <{/if}>
+                                </td>
+                                <td class="padding3"><span class="fontColor3">*</span> <span class="field_notice"><{t}>请填写详细地址<{/t}></span></td>
+                            </tr>
+
+                             <tr>
+                                <th><{t}>公司注册资金: <{/t}> </th>
+                                <td class="width7">
+                                <{ if($shopinfo.approved==1) }>
+                                <{input disabled='true' type="number" name="shopinfo[company_earnest]" id="company_earnest"  size="15" vtype="required" value=$shopinfo.company_earnest}>
+                                <{else}>
+                                <{input  type="number" name="shopinfo[company_earnest]" id="company_earnest"  size="15" vtype="required" value=$shopinfo.company_earnest}>
+                                <{/if}>
+                                <{t}>万元<{/t}>
+                                </td>
+                                <td class="padding3"><span class="fontColor3">*</span> <span class="field_notice"><{t}>请填写公司注册资金<{/t}></span></td>
+                            </tr>
+
+                             <tr>
+                                <th><{t}>公司成立时间: <{/t}> </th>
+                                <td class="width7">
+                                <{ if($shopinfo.approved==1) }>
+                                <{input disabled='true' type="date" name="shopinfo[company_time]" id="company_time"  size="30" vtype="required" value=$shopinfo.company_time}>
+                                <{else}>
+                                <{input class="cal x-input" type="date" name="shopinfo[company_time]" id="company_time"  size="30" vtype="required&&checkcompanytime" value=$shopinfo.company_time}>
+                                <{/if}>
+                                </td>
+                                <td class="padding3"><span class="fontColor3">*</span> <span class="field_notice"><{t}>请填写公司成立时间<{/t}></span></td>
+                            </tr>
+
+                             <tr>
+                                <th><{t}>公司官网地址: <{/t}> </th>
+                                <td class="width7">
+                                <{input type="text" name="shopinfo[company_url]" id="company_url"  size="30" vtype="url" value=$shopinfo.company_url}>
+                                </td>
+                                <td class="padding3"><span class="field_notice"><{t}>请填写公司官网地址,格式：http://www.google.com<{/t}></span></td>
+                            </tr>
+
+                            
+                             <tr>
+                                <th><{t}>营业执照有效期: <{/t}> </th>
+                                 <td>
+                                 <{ if($shopinfo.approved==1) }>
+                                     <{input class="cal x-input" disabled='false' type="date" id=company_timestart name="shopinfo[company_timestart]" size="30"  value=$shopinfo.company_timestart vtype="required"}>
+                                         &nbsp;&nbsp;~&nbsp;&nbsp;
+                                     <{input class="cal x-input" disabled='false'  type="date" id=company_timeend name="shopinfo[company_timeend]" size="30"  value=$shopinfo.company_timeend vtype="required"}>
+                                 <{else}>
+                                     <{input class="cal x-input" type="date" id=company_timestart name="shopinfo[company_timestart]" size="30"  value=$shopinfo.company_timestart vtype="required&&checktime"}>
+                                         &nbsp;&nbsp;~&nbsp;&nbsp;
+                                     <{input class="cal x-input"  type="date" vtype="date" id=company_timeend name="shopinfo[company_timeend]" size="30"  value=$shopinfo.company_timeend vtype="required&&checktime"}>
+                                 <{/if}>
+                                 </td>
+
+                             </tr>
+                              <tr>
+                                <th><{t}>营业执照经营范围: <{/t}> </th>
+                                <td class="width7">
+                                <{ if($shopinfo.approved==1) }>
+                                <{input  type="textarea" name="shopinfo[company_remark]" cols="50" rows="5" id="company_remark"  size="30" vtype="required" value=$shopinfo.company_remark}>
+                                <{else}>
+                                <{input type="textarea" name="shopinfo[company_remark]" cols="50" rows="5" id="company_remark"  size="30" vtype="required" value=$shopinfo.company_remark}>
+                                <{/if}>
+                                </td>
+                                <td class="padding3"><span class="fontColor3">*</span> <span class="field_notice"><{t}>请填写营业执照经营范围<{/t}></span></td>
+                            </tr>
+                           
+                            <tr>
+                                <td colspan="3">
+                                <span class="float-span" style="padding-left:142px;margin-top:10px;">
+                                  <{button class="btn submit-btn" id="btn_new" type='submit' label=$___b2c="保存设置"|t:'b2c' rel="_request"}>
+                                </span>
+                                </td>
+                             
+                            </tr>
+                        </table>
+                        </form>
+           </div>       
+
+
+      </div>
+     </div>
+ </div>
+
+
+<script>
+
+ (function(){
+
+      $('btn_new').addEvent('click',function(e){
+
+            var _form=$('apply_form');
+
+             if (_form){
+                
+                var  _return = validate(_form);
+                if( _return){
+                    $("btn_new").style.display="none"; 
+                }else {
+                    e.stop();
+                }
+
+            } 
+          
+    });
+    
+})();
+
+//验证身份证号方法 
+var test=function(idcard){ 
+    var Errors=new Array("true","身份证号码位数不对!","身份证号码出生日期超出范围或含有非法字符!","身份证号码校验错误!","身份证地区非法!"); 
+    var area={11:"北京",12:"天津",13:"河北",14:"山西",15:"内蒙古",21:"辽宁",22:"吉林",23:"黑龙江",31:"上海",32:"江苏",33:"浙江",34:"安徽",35:"福建",36:"江西",37:"山东",41:"河南",42:"湖北",43:"湖南",44:"广东",45:"广西",46:"海南",50:"重庆",51:"四川",52:"贵州",53:"云南",54:"西藏",61:"陕西",62:"甘肃",63:"青海",64:"宁夏",65:"xinjiang",71:"台湾",81:"香港",82:"澳门",91:"国外"} 
+    var idcard,Y,JYM; 
+    var S,M; 
+    var idcard_array = new Array(); 
+    idcard_array = idcard.split(""); 
+    if(area[parseInt(idcard.substr(0,2))]==null) return Errors[4]; 
+    switch(idcard.length){ 
+    case 15: 
+    if ((parseInt(idcard.substr(6,2))+1900) % 4 == 0 || ((parseInt(idcard.substr(6,2))+1900) % 100 == 0 && (parseInt(idcard.substr(6,2))+1900) % 4 == 0 )){ 
+    ereg = /^[1-9][0-9]{5}[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}$/;//测试出生日期的合法性 
+    } 
+    else{ 
+    ereg = /^[1-9][0-9]{5}[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|1[0-9]|2[0-8]))[0-9]{3}$/;//测试出生日期的合法性 
+    } 
+    if(ereg.test(idcard)) 
+    return Errors[0]; 
+    else 
+    return Errors[2]; 
+    break; 
+    case 18: 
+    if( parseInt(idcard.substr(6,4)) % 4 == 0 || ( parseInt(idcard.substr(6,4)) % 100 == 0 && parseInt(idcard.substr(6,4))%4 == 0 )){ 
+    ereg = /^[1-9][0-9]{5}19[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|[1-2][0-9]))[0-9]{3}[0-9Xx]$/;//闰年出生日期的合法性正则表达式 
+    } 
+    else{ 
+    ereg = /^[1-9][0-9]{5}19[0-9]{2}((01|03|05|07|08|10|12)(0[1-9]|[1-2][0-9]|3[0-1])|(04|06|09|11)(0[1-9]|[1-2][0-9]|30)|02(0[1-9]|1[0-9]|2[0-8]))[0-9]{3}[0-9Xx]$/;//平年出生日期的合法性正则表达式 
+    } 
+    if(ereg.test(idcard)){ 
+    S = (parseInt(idcard_array[0]) + parseInt(idcard_array[10])) * 7 + (parseInt(idcard_array[1]) + parseInt(idcard_array[11])) * 9 + (parseInt(idcard_array[2]) + parseInt(idcard_array[12])) * 10 + (parseInt(idcard_array[3]) + parseInt(idcard_array[13])) * 5 + (parseInt(idcard_array[4]) + parseInt(idcard_array[14])) * 8 + (parseInt(idcard_array[5]) + parseInt(idcard_array[15])) * 4 + (parseInt(idcard_array[6]) + parseInt(idcard_array[16])) * 2 + parseInt(idcard_array[7]) * 1 + parseInt(idcard_array[8]) * 6 + parseInt(idcard_array[9]) * 3 ; 
+    Y = S % 11; 
+    M = "F"; 
+    JYM = "10X98765432"; 
+    M = JYM.substr(Y,1); 
+    if(M == idcard_array[17]) 
+    return Errors[0]; 
+    else 
+    return Errors[3]; 
+    } 
+    else 
+    return Errors[2]; 
+    break; 
+    default: 
+    return Errors[1]; 
+    break; 
+    } 
+}
+
+function idcard(input){
+     input.value=input.value.trim();
+
+     /*
+    var  _is_validate = false;
+    var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;  
+    if(reg.test(input.value) === false)  
+    {  
+       Message.error('请填写正确的身份证号码');
+       input.value = '';
+       input.focus();
+       return  false;  
+    }
+    */
+    var errmsg = test(input.value);
+    if(  errmsg !='true')
+    {
+       Message.error(errmsg);
+       input.value = '';
+       input.focus();
+       return false;
+    }
+}
+
+
+
+function idcardCheck(input){
+    input.value=input.value.trim();
+
+    idcard(input);
+
+
+    var  _is_validate = false;
+
+     new Request.JSON({
+                   url:'<{link app=business ctl=site_store act=idcardcheck }>',
+                    method:'post',
+                    data:'idcard='+encodeURIComponent(input.value),
+                    async:false,
+                    onComplete:function(res){
+
+                       if (res.status =='success' ) 
+                       {
+                           _is_validate = true;
+
+                       } else {
+                            Message.error(res.message);
+                       }
+
+                    }
+                }).send();
+
+     return  _is_validate;
+ 
+}
+
+
+validatorMap['checkcompanytime']= ['<{t}>请输入正确的日期！<{/t}>', function(element, v) {
+        var _is_validate = false;
+
+            
+        var date2 = new Date();
+        var date1= new Date(Date.parse($('company_time').value.replace(/-/g,   "/")));
+
+        if(date1 > date2){ 
+            _is_validate = false;
+        } else {
+            _is_validate = true;
+        }
+
+        return _is_validate;
+    }];
+
+validatorMap['checktime']= ['<{t}>请起始日期不能大于结束日期！<{/t}>', function(element, v) {
+        var _is_validate = false;
+        
+        var date1= new Date(Date.parse($('company_timestart').value.replace(/-/g,   "/")));
+        var date2= new Date(Date.parse($('company_timeend').value.replace(/-/g,   "/")));
+
+        if(date1 > date2){ 
+            _is_validate = false;
+        } else {
+            _is_validate = true;
+        }
+
+        return _is_validate;
+    }];
+
+
+
+</script>
+

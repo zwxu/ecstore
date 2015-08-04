@@ -1,0 +1,113 @@
+<div class="tableform">
+<h4>活动信息</h4>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+  <col class="Colgoodsid"></col>
+  <col class="Colgoodsid"></col>
+  <col class="Colgoodsid"></col>
+  <col class="textleft"></col>     
+    <thead>
+      <th><{t}>活动名称<{/t}></th>
+      <th><{t}>开始时间<{/t}></th>
+      <th><{t}>结束时间<{/t}></th>
+      <th><{t}>状态<{/t}></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><{$activity.name}></td>
+      <td class="textleft"><{$activity.start_time}></td>
+      <td class="textleft"><{$activity.end_time}></td>
+      <td><{if $activity.act_open == 'true'}>开启<{else}>关闭<{/if}></td>
+    </tr>
+  </tbody>
+  </table>
+</div>
+
+<div class="tableform">
+<h4>申请信息</h4>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+  <col class="Colgoodsid"></col>
+  <col class="Colgoodsid"></col>
+  <col class="Colgoodsid"></col>
+  <col class="textleft"></col>     
+    <thead>
+      <th><{t}>商品名称<{/t}></th>
+      <th><{t}>参加活动的商品数量<{/t}></th>
+      <th><{t}>申请商家<{/t}></th>
+      <th><{t}>每人限购<{/t}></th>
+      <th><{t}>包邮<{/t}></th>
+      <th><{t}>状态<{/t}></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="<{$activity.goodsLink}>" target="_blank"><{$goods.name}></a></td>
+      <td class="textleft"><{$business.nums}></td>
+      <td class="textleft"><{$member.login_name}></td>
+      <td><{$business.personlimit}></td>
+      <td><{if $goods.freight_bear == 'business'}>是<{else}>否<{/if}></td>
+      <td><{if $business.status==1}>待审核<{elseif $business.status==2}>审核通过<{else}>审核不通过<{/if}></td>
+    </tr>
+  </tbody>
+  </table>
+</div>
+
+<form method="POST" action="<{$from_submit_url}>" id="groupactivity-from">
+    <input type="hidden" value="<{$business.id}>" name="id">
+    <input type="hidden" value="<{$business.isMemLv}>" name="isMemLv">
+
+    <{if $memberLv}>
+    <div class="tableform">
+    <h4>会员积分信息</h4>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+        <thead>
+          <th><{t}>会员等级名称<{/t}></th>
+          <th><{t}>参与积分<{/t}></th>
+          <th><{t}>参与价格<{/t}></th>
+          <th><{t}>最终活动会员价格<{/t}></th>
+        </tr>
+      </thead>
+      <tbody>
+       <{foreach from=$memberLv item=item key=key}>
+        <tr>
+            <td><{$item.name}></td>
+            <td><{input type="text" name="memLvScore[{$item.member_lv_id}]" value="{$item.info.score}" vtype="number"}></td>
+            <td><{input type="text" name="memLvPrice[{$item.member_lv_id}]" value="{$item.info.price}"}></td>
+            <td><{input type="text" name="memLvLastPrice[{$item.member_lv_id}]" value="{$item.info.price}"}></td>
+        </tr>
+       <{/foreach}>
+      </tbody>
+      </table>
+    </div>
+    <{/if}>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+        <tr>
+          <th>最终活动积分：</th>
+          <td><input name='score' type="text" value="<{$business.score}>"></td>
+        </tr>
+        <tr>
+          <th>最终活动价：</th>
+          <td><input name='last_price' type="text" value="<{if $business.last_price==0}><{$business.price}><{else}><{$business.last_price}><{/if}>"></td>
+        </tr>
+        <tr>
+          <th>备注：</th>
+          <td><input name='remark' type="text" value="<{$business.remark}>"></td>
+        </tr>
+    </table>
+    <{if $business.status==1}>
+    <div class="table-action">
+      <{button label="审核通过" type="button" id="groupactivity-btn" }>
+      <{button label="审核不通过" type="button" id="groupactivity-cancel"}>
+    </div>
+    <script>
+        $('groupactivity-btn').removeEvent('click').addEvent('click',function(){
+            $('groupactivity-from').fireEvent('submit',new Event(this));  
+        });
+        $('groupactivity-cancel').removeEvent('click').addEvent('click',function(){
+            $('groupactivity-from').action = "<{$from_cancle_url}>";
+            $('groupactivity-from').fireEvent('submit',new Event(this));  
+        });
+    </script>
+    <{/if}>
+</form>

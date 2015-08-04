@@ -1,0 +1,10 @@
+<{if $data.top_html}><{$data.top_html}><{/if}>
+<div style="padding-top:30px;padding-left:300px;height:60px;line-height:90px;background-color: #f9f9f9;">
+<form action="<{link app=b2c ctl=site_search act=result }>"  class="SearchBar  searchBar_<{$widgets_id}>" >
+     <input type="hidden" name='view' value='grid'>
+     <input type="hidden" name='st' value='g'>
+     <input type="text" name="name[]" style='color:#666666;border:1px solid #674a44;' value="<{$data.search_key}>" autocompleter="associate_autocomplete_goods:name,goods_id" ac_options="{}" class="keywords head_search le_zhi"  />
+     <input type="submit"  class="btn_search head_search_on le_zhi" onfocus='this.blur();'/>
+</form>
+</div>
+<{if $data.bottom_html}><{$data.bottom_html|regex_replace:'/widgets_id/':$widgets_id}><{/if}>

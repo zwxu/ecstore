@@ -1,0 +1,94 @@
+<!-- right-->
+  <div class="member-main">
+<div id="tab-discus" class="section switch">
+    <ul class="switchable-triggerBox clearfix">
+        <li><a href="<{link app=b2c ctl='site_member' act='comment'}>"><{t}>我的评论<{/t}></a></li>
+        <li><a href="<{link app=b2c ctl='site_member' act='ask'}>"><{t}>我的咨询<{/t}></a></li>
+        <li class="active" ><a href="#"><{t}>站内信<{/t}></a></li>
+    </ul>
+  <div class="switchable-content" >
+     <div class="switchable-panel">
+            <!--<textarea class="textarea-lazyload">-->
+              <div id="message-tab" class="switch" style="padding-top:0">
+                <div class="site-mail">
+                <ul class="switchable-triggerBox2 clearfix">
+                  <li class="active"><{t}>发送消息<{/t}></li>
+                  <li><a href="<{link app=b2c ctl='site_member' act='inbox'}>"><{t}>收件箱<{/t}></a><{if $inbox_num}><span>(<{$inbox_num}>)</span><{/if}></li>
+                  <li><a href="<{link app=b2c ctl='site_member' act='track'}>"><{t}>发件箱<{/t}></a></li>
+                  <li><a href="<{link app=b2c ctl='site_member' act='outbox'}>"><{t}>草稿箱<{/t}></a><{if $outbox_num}><span>(<{$outbox_num}>)</span><{/if}></li>
+                  <li style="border:none"><a href="<{link app=b2c ctl='site_member' act='message'}>"><{t}>给管理员发站内信<{/t}></a></li>
+                </ul>
+              </div>
+              </div>
+    </div>
+
+
+<h4 class="title"><{t}>发送短消息<{/t}></h4>
+<form name="comment" action="<{link app=b2c ctl='site_member'  full='1' act='send_msg'}> " method="post" class="section" <!--onSubmit="return Form_Validator(this)"-->
+
+<{if $is_reply != true}>
+<{input type="hidden" name="comment_id" value=$init.comment_id }>
+ <{/if}>
+
+
+  <div class="FormWrap" style="background:none; border:none; padding:0; margin:0;">
+  <div class="division" style="border:none;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="forform">
+  <tr>
+    <th><em>*</em><{t}>发送给：<{/t}></th>
+    <td><{input class="inputstyle _x_ipt" name="msg_to"  vtype=required id="msg_to" size="30" value=$init.to_uname|escape:'html'  }></td>
+    </tr>
+    <tr>
+     <th><em>*</em><{t}>标题：<{/t}></th>
+    <td><{input class="inputstyle" name="subject" type="text"  vtype=required id="subject" size="30" value=$init.subject|escape:'html'}></td>
+  </tr>
+</table>
+</div>
+
+
+<div style="border-top:1px solid #f1f1f1;"></div>
+
+  <div class="division" style="border:none;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="forform">
+  <tr>
+    <th><{t}>内容：<{/t}></th>
+    <td><{input class="inputstyle font12px" type="textarea" name="comment" vtype=required cols="50" rows="5" id="commenttitle" value=$init.comment|escape:'html'}></td>
+
+  </tr>
+  <tr>
+    <th></th>
+    <td><{button id="Submit" onclick="send_outbox(this);return true;" class="submit-btn" type="submit" label=$___b2c="发送"|t:'b2c'}>&nbsp;&nbsp;&nbsp;&nbsp;<input id="outbox_btn" name="has_sent" type="hidden" value="true">
+    <{button id="Submit_outbox" onclick="send_outbox(this);return true;" type="submit" label=$___b2c="保存到草稿箱"|t:'b2c'}></td>
+
+  </tr>
+</table>
+
+</div>
+
+
+
+
+  </div>
+</form>
+
+  </div>
+  </div></div>
+<!-- right-->
+<{if $is_reply == true}>
+<script>
+    $('msg_to').onfocus=function() {
+        this.blur();
+    }
+    $('subject').onfocus=function() {
+        this.blur();
+    }
+</script>
+<{/if}>
+<script>
+function send_outbox(obj)
+	{
+		if(obj.id == 'Submit')
+		$('outbox_btn').value = 'true';
+		else $('outbox_btn').value = 'false';
+	}
+</script>

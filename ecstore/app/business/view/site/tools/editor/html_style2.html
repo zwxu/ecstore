@@ -1,0 +1,25 @@
+
+        <div id='mce_handle_htmledit_<{$id}>' style='display:none' class='mce_style_1'>
+			<ul>
+				<li class='returnwyswyg' style="cursor:pointer"><span>&laquo;<{t}>返回可视化编辑模式<{/t}></span></li>
+			</ul>
+        </div>
+<div id="mce_body_<{$id}>" class='wysiwyg_body' style="height:300px;">
+    <textarea name="<{$params.name}>" style="display:none" style="height:300px;"><{$params.value|htmlspecialchars}></textarea>
+    <div id='mce_body_<{$id}>_frm_container' style="height:100%;"></div>
+</div>
+<div align='left' style='font-size:14px;font-weight:bold;padding:2px;'>
+  <script>
+  var mce_body_<{$id}>_Height=function(v){
+     v=v?$('mce_body_<{$id}>').getStyle('height').toInt()+100:$('mce_body_<{$id}>').getStyle('height').toInt()-100;
+     if(v<100)return ;
+     $('mce_body_<{$id}>').setStyle('height',(v));
+     if($E('iframe','mce_body_<{$id}>'))
+     $E('iframe','mce_body_<{$id}>').setProperty('height',v);
+     if($E('textarea','mce_body_<{$id}>'))
+     $E('textarea','mce_body_<{$id}>').setStyle('height',v);
+  };
+  </script>
+  <{button label=$___desktop="更大" icon='arrow-down.gif' type="button" onclick="mce_body_{$id}_Height(true);this.blur();"}>
+  <{button label=$___desktop="更小" icon='arrow-up.gif' type="button" onclick="mce_body_{$id}_Height(false);this.blur();"}>
+</div>

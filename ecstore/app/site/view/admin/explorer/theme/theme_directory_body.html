@@ -1,0 +1,26 @@
+<{if $file}>
+<{foreach from=$file item=item name="item"}>
+<tr<{if $open_path}> data-open_path="<{$open_path}>"<{/if}><{*if $smarty.foreach.item.iteration %2 == 1}> class="odd"<{/if*}><{if $smarty.foreach.item.first}> data-parent="<{$last_path}>"<{/if}>>
+  <td valign="middle" class="t-l">
+    <span class="name<{if $item.filetype eq 'Folder'}> lnk btn-enter<{/if}>">
+        <{if $item.filetype eq "jpg" || $item.filetype eq "gif" || $item.filetype eq "bmp" || $item.filetype eq "jpeg" || $item.filetype eq "png"}>
+        <{img app="desktop" src="bundle/t_img.gif" border="0" alt=$___a="图标"|t:"site"}>
+        <{else}>
+        <{img app="desktop" src="bundle/t_{$item.filetype}.gif" border="0" alt=$___a="图标"|t:"site"}>
+        <{/if}>
+        <{$item.name}>
+    </span>
+  </td>
+  <td><{$item.filetype}></td>
+  <td><{$item.memo}></td>
+  <td>
+    <{if $item.filetype neq "Folder"}>
+    <span class="btn-edit lnk"><{img app=desktop src="bundle/btn_edit.gif" border="0" alt=$___a="编辑"|t:"site"}> 编辑</span>
+    <span class="btn-delete lnk"><{img app=desktop src="bundle/delecate.gif" border="0" alt=$___a="删除"|t:"site"}> 删除</span>
+    <{/if}>
+  </td>
+</tr>
+<{/foreach}>
+<{else}>
+<tr data-parent="<{$last_path}>"><td colspan="4" style="background-color:#eeeeee;color:#999;">暂无文件</td></tr>
+<{/if}>

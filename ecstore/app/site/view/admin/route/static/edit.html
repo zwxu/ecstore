@@ -1,0 +1,33 @@
+<form id="route_static_edit<{$close_win}>" action='index.php?app=site&ctl=admin_route_static&act=save' method='POST' class="tableform">
+<input type="hidden" name="statics[id]" value="<{$data.id}>" />
+<div class="division">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+  <th><{t}>原链接 (例 cart.html)：<{/t}></th>
+  <td><{input type="text" name="statics[url]" value=$data.url vtype='required' size="40" }></td>
+</tr>
+<tr>
+  <th><{t}>新链接 (例 购物车)：<{/t}></th>
+  <td><{input type="text" name="statics[static]" value=$data.static vtype='required' size="40" }></td>
+</tr>
+<tr>
+  <th><{t}>启用：<{/t}></th>
+  <td><label><input type='radio' name='statics[enable]' value='true' <{if $data.enable!='false'}>checked<{/if}>> <{t}>是<{/t}></label> <label><input type='radio' name='statics[enable]' value='false' <{if $data.enable=='false'}>checked<{/if}> > <{t}>否<{/t}></label></td>
+</tr>
+</table>
+</div>
+<div class="table-action">
+<{button type='submit' label=$___a='保存'|t:'site' }>
+</div>
+
+</form>
+<script>
+$('route_static_edit<{$close_win}>').store('target',{
+	onComplete:function(){
+		if($('route_static_edit<{$close_win}>').getParent('.dialog')){
+			$('route_static_edit<{$close_win}>').getParent('.dialog').retrieve('instance').close();
+		}
+		window.finderGroup['<{$env.get.finder_id}>'].refresh();
+	}
+});
+</script>

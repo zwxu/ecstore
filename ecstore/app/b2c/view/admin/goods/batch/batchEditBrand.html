@@ -1,0 +1,48 @@
+<form action="index.php?app=b2c&ctl=admin_goods&act=saveBatchEdit" method="post" id="form01">
+<textarea name="filter" style="display:none"><{$filter}></textarea>
+<div class="division">
+<div class="notice"><{t}>正在编辑<{/t}><strong><{$editInfo.count}></strong><{t}>条数据。<{/t}>
+
+<br/>警告：本操作可强制修改所选商品的所属品牌，请谨慎操作。
+</div>
+<table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <th style="width:20px">
+      </th>
+      <th><label for="bated_ipt_brand"><{t}>统一修改品牌<{/t}></label>
+      </th>
+      <td><{input id="bated_ipt_brand" type="select" options=$brand name="set[brand]" }></td>  
+    </tr>
+    
+</table>
+<input type="hidden" name="updateAct" value="brand"/>
+</div>
+<div class="mainFoot">
+<table cellspacing="0" cellpadding="0" border="0" align="center" class="table-action">
+  <tr>
+  <td> 
+    </td>
+  </tr>
+</table></div>
+
+</form>
+<{area inject=".mainFoot"}>
+   <div class="table-action">
+        <{button label=$___b2c="保存"|t:'b2c' type="button" id="btn01" class="btn-primary"}>
+        <{button label=$___b2c="取消"|t:'b2c' isCloseDialogBtn="true"}>
+   </div>
+<{/area}>
+
+<script>
+  $('btn01').addEvent('click',function(){
+
+      $('form01').store('target',{onComplete:function(re){
+           re = JSON.decode(re);
+
+           if(re.error)return;
+           $('form01').getParent('.dialog').retrieve('instance').close();
+      }});
+      $('form01').fireEvent('submit',{stop:$empty});
+  
+  });
+</script>

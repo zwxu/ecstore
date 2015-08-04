@@ -1,0 +1,6 @@
+<SCRIPT>
+var hs=window.location.href;
+var a=(decodeURIComponent(location.hash).substr(1)+'#'+encodeURIComponent(hs));
+window.top.close();
+window.top.opener.location='<{$base_url}>'+a;
+</SCRIPT>

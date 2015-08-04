@@ -1,0 +1,16 @@
+<div class="member-main">
+<div class="title"><{t}>物流工具<{/t}></div>
+  <div id="tab-dlyaddress" class="section switch">
+    <ul class="switchable-triggerBox clearfix">
+      <li class="active"><a href="#"><{t}>地址信息<{/t}></a></li>
+      <li><a href="<{link app=business ctl='site_member' act='dlycorp'}>"><{t}>默认物流公司<{/t}></a></li>
+      <li><a href="<{link app=business ctl='site_member' act='dlytype'}>"><{t}>运费模板<{/t}></a></li>
+    </ul>
+    <div class="switchable-content" >
+      <div class="switchable-panel">
+        <{include file="site/member/dlyaddress_form.html" app="business"}>
+      </div>
+    </div>
+	<{include file="site/member/dlyaddress_list.html" app="business"}>
+  </div>
+</div>

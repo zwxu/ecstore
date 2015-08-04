@@ -1,0 +1,102 @@
+<{if $isTimedbuy}>
+    <{if $goods.nostore_sell ||count($goods.products)>0 || $goods.store>0 || $goods.store==='' || $goods.store===null }>
+       <{if $isEnd}>
+        <span class="btn-hui" style="line-height:38px">立即抢购</span>
+       <{else}>
+       <input class="actbtn btn-fastbuy" id="btn_lj" value="<{t}>立即购买<{/t}>" type="button" />
+       <{/if}>
+    <{/if}>
+<{else}>
+    <{if $goods.nostore_sell ||count($goods.products)>0 || $goods.store-$goods.product_freez>0 || $goods.store==='' || $goods.store===null }>
+        <input class="actbtn btn-fastbuy" id="btn_lj" value="<{t}>立即购买<{/t}>" type="button" />
+    <{/if}>
+<{/if}>
+<script>
+     window.addEvent('domready', function() {
+        buyljBtn=$('btn_lj');
+		if (buyljBtn) buyljBtn.store('tip:text','');
+		if (buyljBtn) new Tips(buyljBtn, {
+            showDelay: 0,
+            hideDelay: 0,
+            className: 'cantbuy',
+            onShow: function(tip) {
+                if (!tip.getElement('.tip-text') || ! tip.getElement('.tip-text').get('text')) {
+                    buyljBtn.setStyle('cursor', 'pointer');
+                    return tip.setStyle('visibility', 'hidden');
+                } else {
+                    buyljBtn.setStyle('cursor', 'not-allowed');
+                }
+
+                tip.setStyle('visibility', 'visible');
+            }
+        });
+		
+        if (buyljBtn){
+				buyljBtn.removeEvent('click');
+				buyljBtn.addEvent('click', function(e) {
+				var msg = '请选择规格：';
+				var specCheck = false;
+				if($$('.spec-item.specItem')){
+					$$('.spec-item.specItem').each(function(item,index){
+						var spec_label = item.getChildren('div.spec-label');
+						label = spec_label[0].getChildren('span');
+						//console.log(aa);
+						var specName = label[0].firstChild.innerHTML;
+						var spec_values = item.getChildren('div.spec-values');
+						var specValue = spec_values[0].getChildren('ul');
+						var specOne  = false;
+						specValue[0].getChildren('li').each(function(el){
+							if(el.getChildren('a.selected').length!=0){
+								specOne = true;
+							}
+						});
+						if(!specOne){
+							if(msg=='请选择规格：'){
+								msg = msg + specName;
+							}else{
+								msg = msg + ','+specName;
+							}
+							specCheck = true;
+						}
+						
+					});
+				}
+				if(specCheck){
+					Message.error(msg);
+				}else{
+					msg = '';
+					e.stop();
+					this.blur();
+					if (this.retrieve('tip:text')) return false;
+					var form=buyljBtn.getParent('form');
+					var backup =form.action;
+					var sign = false;
+					new Request({
+						url:"<{link app=fastbuy ctl='site_cart' act='addCheck' arg0='goods' arg1='fastbuy'}>",
+						async:false,
+						method:'post',
+						data:form,
+						onSuccess:function(re){
+							re = JSON.decode(re);
+							if(re.status=='succ'){
+								sign = true;
+							}else if(re.status=='nologin'){
+								window.location = '<{link app=b2c ctl=site_passport act=login}>';
+							}else{
+								msg = re.error;
+							}
+						}
+					}).send();
+					if(sign){
+						form.action="<{link app=fastbuy ctl='site_cart' act='add' arg0='goods' arg1='fastbuy'}>";
+						form.target = '_blank';
+						form.submit();
+						form.action=backup;
+					}else{
+						 Message.error(msg);
+					}
+				}
+				});
+		}
+     });
+</script>

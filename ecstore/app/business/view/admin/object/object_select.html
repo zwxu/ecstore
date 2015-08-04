@@ -1,0 +1,187 @@
+<link rel="stylesheet" href="<{$res_url}>/css/brands.css" type="text/css" media="screen, projection"/>
+<div class="brands js_select_body">
+  <input type="hidden" id="object_id_ipt" class="object-id" value="<{$product_ids}>"/>
+	<div class="brands_abc">
+    <ul>
+      <{foreach from=$voclist item=item}>
+      <li <{if $item==$tab}>class="abc_on"<{/if}>><a href=""><{t}><{if $item=='0'}>它<{else}><{$item}><{/if}><{/t}></a></li>
+      <{/foreach}>
+     </ul>
+  </div>
+    <div class="brands_namel">
+      <{include file="admin/object/object_select_items.html"}>
+    </div>
+    <div class="brands_btn">
+   	  <div><input class="add adddisablel js_add" type="button" name="button" value="" rel="addObject" /></div>
+        <div><input class="del deldisablel js_del" type="button" name="button" value="" rel="removeObject"/></div>
+        <!--<div><input class="del adddisablel" type="button" name="button" value="" /></div>
+        <div><input class="del deldisablel" type="button" name="button" value="" /></div>-->
+    </div>
+    <div class="brands_namer">
+      <{include file="admin/object/object_selected_items.html"}>
+    </div>
+</div>
+<div class="table-action" style="border-top:0;padding:15px 0 0 0;margin-bottom:0;">
+  <{button class="btn-primary save-btn" label=$___b2c="确定"|t:'b2c'  type="submit"}>
+  <{button label=$___b2c="取消"|t:'b2c' isclosedialogbtn="true"}>
+</div>
+<script>
+(function(){
+  var dialog = $('object_id_ipt').getParent('.dialog').retrieve('instance'),
+      body = dialog.dialog;
+  var onlyone = <{$onlyone}> || 0;
+  var SelectPro = {
+    select_content:$E('.brands_namel',body),
+    selected_content:$E('.brands_namer',body),
+    tab_abc:$E('.brands_abc',body),
+    add_btn:$E('.js_add',body),
+    remove_btn:$E('.js_del',body),
+    numEl:$E('.num',body),
+    init:function(){
+      this.addEvent();
+      this.complete();
+    },
+    addEvent:function(){
+      var _this = this;
+      $E('.js_select_body',body).addEvent('click',function(e){
+        var target = $(e.target),
+            el = target.get('rel')? target:target.getParent('[rel]');
+        el && SelectPro[el.get('rel')](el,e);
+      }.bind(this));
+
+      $E('.save-btn',body).addEvent('click',function(e){
+        this.setValue();
+        dialog.options._callback();
+        dialog.close();
+      }.bind(this));
+    },
+    select:function(el){
+      var active = el.hasClass('namez_on');
+      if(el){
+        if(active) el.removeClass('namez_on').getElement('input').set('checked',false);
+        else el.addClass('namez_on').getElement('input').set('checked',true);
+      }
+      this.disabled();
+    },
+    chkbox:function(el){
+      var obj_div = el.getParent('div');
+      if(obj_div){
+        var active = obj_div.hasClass('namez_on');
+        if(active) obj_div.removeClass('namez_on').getElement('input').set('checked',false);
+        else obj_div.addClass('namez_on').getElement('input').set('checked',true);
+      }
+      this.disabled();
+    },
+    disabled:function(){
+      var items = $ES('.namez_on.js_object_item',this.select_content),isSelected;
+      items.length && items.each(function(elem){
+        if(!this.test(elem))isSelected =true;
+      },this);
+      this.add_btn[!isSelected ? 'addClass':'removeClass']('adddisablel');
+
+      var list = $ES('.namez_on.js_object_item',this.selected_content);
+      this.remove_btn[!list.length ? 'addClass':'removeClass']('deldisablel');
+    },
+    setValue:function(){
+      var ipt = $E('.object-ids',dialog.options.handle),
+          ids = $E('.object-id',body).value;
+      this.set();
+      ipt.value = ids;
+    },
+    test:function(el){
+      var val = $E('.object-id',body).value,
+          id = el.get('data_id'), str = ','+val+',',
+          sid = ','+id+',';
+      return str.test(sid);
+    },
+    set:function(item){
+      var item = item || $ES('.js_object_item',this.selected_content), arr=[];
+      item.each(function(el){arr.push(el.get('data_id'));});
+      $E('.object-id',body).set('value',arr.join(','));
+      return this;
+    },
+    complete:function(){
+      this.countNum().set().selected();
+      this.disabled();
+    },
+    countNum:function(){
+      var item = $ES('.js_object_item',this.selected_content);
+      this.length = item.length||0;
+      this.numEl.set('text',this.length);
+      return this;
+    },
+    selected:function(){
+      $ES('.js_object_item',this.select_content).each(function(el){
+        if((obj_chk = el.getElement('input')) && this.test(el))obj_chk.set('checked',true);
+        else{el.removeClass('namez_on');obj_chk.set('checked',false);}
+      },this);
+    },
+    addObject:function(btn){
+      if(onlyone && this.length && this.length>=1){
+         return alert('最多选择1件');
+      }
+      if(btn.hasClass('adddisablel'))return this;
+      var selected_body=$E('.object_body',this.selected_content),
+          proEls = $ES('.js_object_item.namez_on',this.select_content);
+      if(onlyone) proEls = [proEls[0]];
+      proEls.each(function(el){
+        el.removeClass('namez_on').getElement('input').set('checked',false).getParent('div').clone().inject(selected_body);
+        el.destroy();
+      });
+      this.complete();
+    },
+    removeObject:function(btn){
+      if(btn.hasClass('deldisablel'))return this;
+      var select_body=$E('.object_body',this.select_content),
+          proEls = $ES('.js_object_item.namez_on',this.selected_content);
+
+      proEls.each(function(el){
+        if(el.get('data_tab') == $E('.brands_abc',body).getElement('li[class^=abc_on]').getElement('a').get('text')) el.setStyle('display','block');
+        else el.setStyle('display','none');
+        el.getElement('input').set('checked',false).getParent('div').clone().inject(select_body);
+        el.destroy();
+      });
+      $ES('.sel',body).set('checked',false);
+      this.complete();
+    },
+    selectAll:function(el){
+        var body = el.getParent('.brands_namer') ||el.getParent('.brands_namel') ,
+            item = $ES('.js_object_item',body),
+            isAll= el.hasClass('all'),isCheck= el.checked;
+
+        var checkEl = el.getParent('.sel-opt').getElement(isAll?'.other':'.all');
+        if(checkEl) checkEl.checked=false;
+
+        item.each(function(elem){
+            if(isAll){
+                elem[isCheck ?'addClass':'removeClass']('namez_on');
+                if(isCheck)elem.getElement('input').set('checked',true);
+                else elem.getElement('input').set('checked',false);
+                this.disabled();
+            } else this.select(elem);
+        },this);
+        return this;
+    }
+  }
+  SelectPro.init();
+})();
+window.addEvent('domready',function(e){
+  var dialog = $('object_id_ipt').getParent('.dialog').retrieve('instance'),
+      body = dialog.dialog,
+      tab_abc = $E('.brands_abc',body);
+  if(tab_abc) var obj_a = tab_abc.getElements('a')||[];
+  if(obj_a.length>0)obj_a.removeEvents('click').addEvent('click',function(e){
+    _this = this;
+    var obj_li = _this.getParent('li');
+    var obj_lis = _this.getParent('ul').getElements('li');
+    obj_lis.removeClass('abc_on');
+    obj_li.addClass('abc_on');
+    kwords = _this.get('text').trim(),
+    $E('.js_select_object')&&(item=$E('.js_select_object').getElement('.object_body').getElements('div'));
+    if(item) item.each(function(opt){
+      opt[opt.get('data_tab').test(kwords,'i')?'show':'hide']();
+    });
+    return false;
+  });
+});
+</script>

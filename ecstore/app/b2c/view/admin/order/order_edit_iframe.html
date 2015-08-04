@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title></title>
+<link rel="shortcut icon" href="../favicon.gif" type="image/gif" />
+
+
+<link rel="stylesheet" href="<{$res_url}>/css/default/style_min.css" type="text/css" media="screen, projection"/>
+<link rel="stylesheet" href="<{$res_url}>/css/default/singlepage_min.css" type="text/css" media="screen, projection"/>
+
+<!-- 引进app的singlepage页面自定义css-@lujy -->
+<script type="text/javascript" src="/app/desktop/lang/zh-cn/js/lang.js?static"></script><script type="text/javascript" src="<{$res_url}>/js/loader.js?static"></script>
+
+	<script src="<{$res_url}>/js_mini/moo_min.js" ></script>
+	<script src="<{$res_url}>/js_mini/tools_min.js"></script>
+
+
+
+<script>
+
+(function(){
+
+	
+		var js_path='js_mini';
+	
+
+	var	hs = {
+			'autocompleter': {path:'<{$res_url}>/'+js_path+'/coms/autocompleter.js',type:'js'},
+			'finder': {path:'<{$res_url}>/'+js_path+'/coms/finder.js',type:'js'},
+			'uploader': {path:'<{$res_url}>/'+js_path+'/coms/uploader.js',type:'js'},
+			'modedialog': {path:'<{$res_url}>/'+js_path+'/coms/modedialog.js',type:'js'},
+			'pager':{path:'<{$res_url}>/'+js_path+'/coms/pager.js',type:'js'},
+			
+
+			'picker': {path:'<{$res_url}>/'+js_path+'/coms/datapicker.js',type:'js',requires:['colorpicker']},
+			'editor': {path:'<{$res_url}>/'+js_path+'/coms/editor.js',type:'js',requires:['editor_style_1']}
+		};
+
+	Object.each(hs,function(v,k){
+		Ex_Loader.add(k,v);
+	});
+
+	if(window.ie6)Ex_Loader('<{$res_url}>/js/fixie6.js');
+
+})();
+
+var startTime = (new Date).getTime();
+var SHOPADMINDIR='<{$base_url}>/edit/tid/';
+var SHOPBASE='/index.php/test/';
+var DESKTOPRESURL='<{$res_url}>';
+var DESKTOPRESFULLURL='<{$res_url}>';
+var DEBUG_JS=false;
+var Setting = {};
+var Menus = "json from=$mlist";
+var sess_id = 'edf313a88f066297b5c88ea332240940';
+var BREADCRUMBS ='0:0';
+window.loadedPart = [1,0,(new Date).getTime()];
+
+</script>
+
+</head>
+<body class="single-page ">
+<noscript>
+  <div class='noscript error'>
+     您好，要正常运行BBC后台，浏览器必须支持Javascript  </div>
+</noscript>
+<div style="display:none;height:0;overflow:hidden;">
+<iframe src='<{$res_url}>/tpl.html' id='tplframe' tabindex=-1 ></iframe>
+<iframe src='<{$res_url}>/about.html' name='download' tabindex=-2  id='downloadframe'></iframe>
+<iframe src='<{$res_url}>/about.html' name='upload' tabindex=-2  id='uploadframe'></iframe>
+</div>
+<div class='body' id='body'>
+	<div class='msgbox' id='messagebox'></div>
+    <div class='container clearfix' id='container'>
+        <div class='side span-auto side-close' id='side' style="display:none;width:0">
+            <div class='side-menu mlist'  id="menu-desktop">
+							</div>
+		</div>
+        <div class='workground' style="width:100%" id='workground'>
+			<div class="toggler-left flt hide" id='leftToggler'>
+	            <div class="toggler-left-inner">&nbsp;</div>
+	        </div>
+			 <div class='content-head' style="font-size:0;height:0;"></div>
+            <div class='content-main' id='main'>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="spage-main-box">
+
+
+<script>
+function delgoods(obj){
+if(!confirm('<{t}>确定删除?<{/t}>'))return false;
+ for(obj=obj.parentNode; obj.tagName!='TR'; obj=obj.parentNode);
+ obj.parentNode.removeChild(obj);
+}
+
+function calculate(){
+ var iList = document.getElementsByName('aPrice[]');
+}
+</script>
+
+<form method='post' action='<{$base_url}>/save'  id="orderEdit" extra="subOrder" >
+<input type="hidden" name="secret_key" value="<{$secret_key}>" />
+<div class="tableform">
+  <h3><{t}>商品信息<{/t}></h3>
+ <div class="division" id="orderItemList">
+ <{include file="admin/order/detail/edit_items_iframe.html"}>
+ </div>
+
+ <h3 ><{t}>订单信息<{/t}></h3>
+ <div class="division">
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th><{t}>订单号：<{/t}></th>
+    <td><{$order.order_id}></td>
+    <th><{t}>下单日期：<{/t}></th>
+    <td><{$order.createtime|cdate:'SDATE_STIME'}></td>
+  </tr>
+   <tr>
+    <th><{t}>商品总金额：<{/t}></th>
+    <td><input id="iditem_amount" TYPE="text" name="cost_item" value="<{$order.cost_item}>" size=10 disabled="disabled"></td>
+    <th><{t}>配送方式：<{/t}></th>
+    <td><select name=shipping_id><{html_options options=$order.selectDelivery selected=$order.shipping.shipping_id}></select></td>
+  </tr>
+   <tr>
+    <th><{t}>配送费用：<{/t}></th>
+    <td><{input id="idcost_freight" class='item itemrow' name="cost_freight" value=$order.shipping.cost_shipping type="unsigned" size=10 readonly=""}></td>
+    <th><{t}>支付方式：<{/t}></th>
+    <td>
+        <select name=payment><{html_options options=$order.selectPayment selected=$order.payinfo.pay_app_id}></select>
+        &nbsp;&nbsp;
+        <{foreach from=$order.extendCon item=item key=key}>
+            <{$item}>&nbsp;&nbsp;
+        <{/foreach}></td>
+  </tr>
+  <tr>
+    <th><{t}>保价：<{/t}></th>
+    <td><{input id="idcost_protect" class="item itemrow" type="unsigned" name="cost_protect" size=10 value=$order.shipping.cost_protect }><{t}> 是否要保价<{/t}><input id="idis_protect" name="is_protect" type='checkbox' value='true' <{if $order.shipping.is_protect == 'true'}>checked="checked"<{/if}>></td>
+    <th><{t}>商品重量：<{/t}></th>
+    <td><{input name=weight type="unsigned" readonly="" class=inputstyle size=10 value=$order.weight }></td>
+  </tr>
+  <{if $site_trigger_tax == 'true'}>
+  <tr>
+    <th><{t}>支付手续费：<{/t}></th>
+    <td><{input id="idcost_payment" class='item itemrow' name=cost_payment type="unsigned" size=10 value=$order.payinfo.cost_payment }></td>
+    <th><{t}>发票抬头：<{/t}></th>
+    <td><{input id="idtax_company" name="tax_company" value=$order.tax_title}></td>
+  </tr>
+   <tr>
+    <th><{t}>税金：<{/t}></th>
+    <td><{input id="idcost_tax" class='item itemrow' name="cost_tax" type="unsigned" size=10 value=$order.cost_tax }><{t}> 是否开发票<{/t}><input id="idis_tax" name="is_tax" type='checkbox' value='true' <{if $order.is_tax == 'true'}>checked="checked"<{/if}>></td>
+    <th><{t}>支付币别：<{/t}></th>
+    <td><{if $order.order_id == ''}><{html_options options=$order.curList selected=$order.currency}><{else}><{$order.cur_name}><{if $order.cur_rate != 1}>(<{$order.cur_rate}>)<{/if}><{/if}></td>
+  </tr>
+   <tr>
+    <th><{t}>促销优惠金额：<{/t}></th>
+    <td><input id="idpmt_order" class='item itemrow' name="pmt_order" value="<{$order.pmt_order}>" size=10></td>
+    <th><{t}>订单折扣或涨价：<{/t}></th>
+    <td><input id="iddiscount" class='item itemrow' name="discount" value="<{$order.discount}>" size=10><br><{t}>要给顾客便宜100元，则输入"-100";要提高订单价格100元，则输入"100".<{/t}>
+  </tr>
+   <tr>
+    <th><{t}>订单总金额：<{/t}></th>
+    <td><input id="idtotal_amount" name=total_amount value="<{$order.total_amount}>" disabled="disabled"></td>
+
+</td>
+  </tr>
+  <{else}>
+  <tr>
+    <th><{t}>支付手续费：<{/t}></th>
+    <td><{input id="idcost_payment" class='item itemrow' name=cost_payment type="unsigned" size=10 value=$order.payinfo.cost_payment }></td>
+    <th><{t}>支付币别：<{/t}></th>
+    <td><{if $order.order_id == ''}><{html_options options=$order.curList selected=$order.currency}><{else}><{$order.cur_name}><{if $order.cur_rate != 1}>(<{$order.cur_rate}>)<{/if}><{/if}></td>
+  </tr>
+   <tr>
+    <th><{t}>促销优惠金额：<{/t}></th>
+    <td><input id="idpmt_order" class='item itemrow' name="pmt_order" value="<{$order.pmt_order}>" size=10></td>
+    <th><{t}>订单折扣或涨价：<{/t}></th>
+    <td><input id="iddiscount" class='item itemrow' name="discount" value="<{$order.discount}>" size=10><br><{t}>要给顾客便宜100元，则输入"-100";要提高订单价格100元，则输入"100".<{/t}>
+  </tr>
+   <tr>
+    <th><{t}>订单总金额：<{/t}></th>
+    <td>
+      <input id="idtotal_amount" name=total_amount value="<{$order.total_amount}>" disabled="disabled">
+      <input name="total_amount_original" value="<{$order.total_amount}>" type="hidden" />
+    </td>
+
+</td>
+  </tr>
+  <{/if}>
+
+</table>
+</div>
+
+<h3><{t}>购买人信息<{/t}></h3>
+<div class="division">
+
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+   <tr>
+    <th><{t}>会员用户名：<{/t}></th>
+    <td><{$order.member.pam_account.login_name}></td>
+    <th><{t}>姓名：<{/t}></th>
+    <td><{$order.member.contact.name}></td>
+  </tr>
+   <tr>
+    <th><{t}>固定电话：<{/t}></th>
+    <td><{$order.member.contact.phone.telephone}></td>
+    <th><{t}>Email地址：<{/t}></th>
+    <td><{$order.member.contact.email}></td>
+  </tr>
+  <tr>
+    <th><{t}>移动电话：<{/t}></th>
+    <td><{$order.member.contact.phone.mobile}></td>
+    <th></th>
+    <td></td>
+  </tr>
+   <tr>
+    <th><{t}>地区：<{/t}></th>
+    <td><{$order.member.contact.area|region}></td>
+    <th><{t}>邮政编码：<{/t}></th>
+    <td><{$order.member.contact.zipcode}></td>
+  </tr>
+   <tr>
+    <th><{t}>地址：<{/t}></th>
+    <td><{$order.member.contact.addr}></td>
+    <th></th>
+    <td></td>
+  </tr>
+</table>
+</div>
+
+
+<{if $order.is_delivery == 'Y'}>
+ <h3><{t}>收货人信息<{/t}></h3>
+ <div class="division" id="order_edit_receiver">
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+    <th><em class="red">*</em><{t}>收货人姓名：<{/t}></th>
+    <td><{input type="text" NAME="receiver_name" required="true" value=$order.consignee.name }></td>
+    <th><{t}>联系手机：<{/t}></th>
+    <td><input type="text" NAME="ship_mobile" value="<{$order.consignee.mobile}>" class=inputstyle></td>
+  </tr>
+   <tr>
+    <th><{t}>联系电话：<{/t}></th>
+    <td><{input type="order_tel" NAME="ship_tel" class=inputstyle value=$order.consignee.telephone}></td>
+    <th><{t}>Email地址：<{/t}></th>
+    <td><{if $order.member.contact.email}><{$order.member.contact.email}><{else}><input vtype="email" name="ship_email" value="<{$order.consignee.email}>"/><{/if}></td>
+  </tr>
+   <tr>
+    <th><{t}>送货时间：<{/t}></th>
+    <td><input type="text" NAME="ship_time" value="<{$order.consignee.r_time}>" class=inputstyle></td>
+    <th><{t}>邮政编码：<{/t}></th>
+    <td><{input  NAME="ship_zip"  class=inputstyle value=$order.consignee.zip}></td>
+  </tr>
+   <tr>
+    <th><em class="red">*</em><{t}>收货地区：<{/t}></th>
+    <td colspan="3"><{input type="region" name="ship_area" required="true" value=$order.consignee.area app="ectools"}></td>
+  </tr>
+  <tr>
+    <th><em class="red">*</em><{t}>收货地址：<{/t}></th>
+    <td colspan="3"><{input type="text" NAME="ship_addr" required="true" class=inputstyle value=$order.consignee.addr}></td>
+  </td>
+</table>
+</div>
+</div>
+<!--tag_foreign_xaddress-->
+ <{/if}>
+<!--
+<div class="table-action">
+    <{button label="提交" type="submit" name='butsubmit'}>
+</div>-->
+
+
+</form>
+<script>
+
+
+	 $ES(".itemrow","moneyItems").each(function(item, index){
+		item.addEvent('change',function(e){count_change(this);});
+	  });
+
+
+ function count_change(ipt){
+ if(ipt.className.split('_').length > 1){
+
+	   var key=(ipt.className.split('_')[1]);
+	   var key = key.split(' ')[0];
+	   var item_unit_price = $E('.itemPrice_'+key,'moneyItems').getValue();
+	   var item_unit_quantity = $E('.itemNum_'+key,'moneyItems').getValue();
+
+	   var json_arr = '{"unit_price":'+item_unit_price+', "item_quantity":'+item_unit_quantity+'}';
+	   new Request({
+	   url:'<{$base_url}>/caculate_item_total',method:'post',
+			   data:"json_arr="+json_arr+"&operaction=multiple",
+		onSuccess:function(response){
+		   $E('.itemSub_'+key).setText(response);
+		   countF();
+		}
+	   }).send();
+	   //var result=$E('.itemPrice_'+key,'moneyItems').getValue().toFloat()*$E('.itemNum_'+key,'moneyItems').getValue().toInt();
+	   //$E('.itemSub_'+key).setText(result);
+	  }
+	  //countF();
+
+ }
+
+function countF()
+{
+	var count=0;
+	var json_arr='{';
+	var index = 0;
+	var item_total = 0;
+	// item total
+	$ES(".itemCount","moneyItems").each(function(item){
+	 //count += item.getText().toFloat()*1;
+	 	if (index == 0)
+	 		json_arr += '"'+index.toString()+'":'+item.getText();
+		else
+			json_arr += ','+'"'+index.toString()+'":'+item.getText();
+
+		index++;
+	});
+
+	json_arr += '}';
+
+   	// subitemtotal.
+	new Request({
+			url:'<{$base_url}>/caculate_item_total',
+	   	
+			onSuccess:function(response){
+				$('iditem_amount').set('value',response);
+
+				json_arr='{';
+				json_arr += '"item_subtotal":'+response+'';
+				// cost protect fee.
+			   	var cost_protect = 0;
+				if($('idis_protect').checked){
+				    cost_protect = $('idcost_protect').value;
+				    json_arr += ',"cost_protect":'+cost_protect;
+				}
+				// cost tax fee.
+				var cost_tax = 0;
+				if($('idis_tax')&&$('idis_tax').checked){
+				    cost_tax = $('idcost_tax').value;
+				    json_arr += ',"cost_tax":'+cost_tax;
+				}
+
+				json_arr += ',"cost_freight":'+$('idcost_freight').value;
+				json_arr += ',"cost_payment":'+$('idcost_payment').value;
+				json_arr += ',"discount":'+$('iddiscount').value;
+				json_arr += ',"pmt_order":-'+$('idpmt_order').value;
+				/*var count = 0;
+				 count = Number($('iditem_amount').value) + cost_protect + $('idcost_freight').value.toFloat() + Number($('idcost_payment').value) + cost_tax + Number($('iddiscount').value) - Number($('idpmt_order').value);*/
+				json_arr += '}';
+
+				new Request({
+					url:'<{$base_url}>/caculate_item_total',
+					onSuccess:function(res)
+					{
+						$('idtotal_amount').value = res;
+					}
+				}).post("json_arr="+json_arr+"&operaction=plus");
+		}
+	}).post("json_arr="+json_arr+"&operaction=plus");
+}
+
+ $('idis_protect').addEvent('click',function(e){
+  $('idcost_protect').disabled = !$('idis_protect').checked;
+  countF();
+ });
+
+ if($('idis_tax'))
+ $('idis_tax').addEvent('click',function(e){
+  $('idcost_tax').disabled = !$('idis_tax').checked;
+  countF();
+
+ });
+
+ if($('idis_tax'))
+$('idcost_tax').disabled = !$('idis_tax').checked;
+
+ if(!$('idis_protect').checked){
+  $('idcost_protect').disabled = true;
+ }
+
+</script>
+
+
+</div>
+
+<script>
+
+var order_sync_flag = '';
+
+subOrderForm = function (event){ 
+	   var target={};
+       var _target=$('subBtn'); 
+       _target.disabled = true;
+
+				$extend(target,{
+					onComplete:function(e){
+order_sync_flag = JSON.decode(e).synced;
+if( !order_sync_flag )
+    order_sync_flag = '';
+
+var resp_error = JSON.decode(e).error;
+parent.location.href = "<{$notify_url}>#rsp=" + order_sync_flag + "&msg=" + resp_error;
+
+if(resp_error) {
+    if( order_sync_flag == 'fail' ) {
+        document.getElementById('resyncBtn').style.display = '';
+    }
+    else {
+        document.getElementById('resyncBtn').style.display = 'none';
+    }
+    _target.disabled = false;
+}
+else {
+    window.close();
+}
+					}}
+				);
+
+	    var _form=$('orderEdit');
+		if(!_form)return;
+		var _formActionURL=_form.get('action'); 
+		
+		_form.store('target',target);
+        _form.set('action',_formActionURL+'/but/'+Math.random()).fireEvent('submit',new Event(event));
+    };
+
+resyncOrderForm = function(event){
+     var _target=$('resyncBtn'); 
+     _target.disabled = true;
+
+    new Request({
+					url:'<{$base_url}>/do_sync',
+					onSuccess:function(res)
+					{
+
+order_sync_flag = JSON.decode(res).synced;
+if( !order_sync_flag )
+    order_sync_flag = '';
+var resp_error = JSON.decode(res).error;
+parent.location.href = "<{$notify_url}>#rsp=" + order_sync_flag + "&msg=" + resp_error;
+
+      if( resp_error ) {
+        MessageBox.error(resp_error);
+        _target.disabled = false;
+      }
+      else {
+        MessageBox.error('同步成功！');
+        window.close();
+      }
+
+					}
+				}).post("order_id=<{$order.order_id}>&secret_key=<{$secret_key}>");
+}
+</script>
+ 
+
+<table cellspacing="0" cellpadding="0" style="margin:0 auto; width:100%" class="table-action">
+      <tbody><tr valign="middle">
+        <td>
+              <{button label=$___b2c='保存'|t:'b2c' id='subBtn' class="btn-primary" onclick="subOrderForm(event)"}>
+              <{button label=$___b2c='重新同步'|t:'b2c' id='resyncBtn' style="display:none;" class="btn-primary" onclick="resyncOrderForm(event)"}>              
+        </td>
+        </tr>
+        </tbody></table>
+
+
+
+
+
+
+</div>
+        </div>
+		<div class="side-r hide" id="side-r">
+			<div class="side-r-resize" id="side-r-resize">&nbsp;</div>
+		  <div class="side-r-top clearfix">
+	        <b class="side-r-title flt f-14"></b>
+	        <span class="frt side-r-close pointer"><img src="<{$res_url}>/bundle/finder_drop_arrow_close.gif" app="desktop" /></span>
+	      </div>
+		  <div class="side-r-head" style="border-bottom:1px #999 solid;padding:2px 0 2px 0;font-size:0;height:0;"></div>
+	      <div id="side-r-content" class="side-r-content" conatainer="true" style="overflow:auto"></div>
+		  <div class="side-r-foot" style="font-size:0;height:0;"></div>
+        </div>
+    </div>
+</div>
+
+<script hold="true">
+
+var LAYOUT = {
+	    container: $('container'),
+	    side: $('side'),
+	    workground: $('workground'),
+	    content_main: $('main'),
+	    content_head: $E('#workground .content-head'),
+	    content_foot: $E('#workground .content-foot'),
+	    side_r: $('side-r'),
+		side_r_content:$('side-r-content')
+
+	};
+
+var initDefaultPart = function(){
+           //fixSideLeft = $empty;
+           window.resizeLayout = fixLayout = fixSideLeft =function(){
+
+				var winSize = window.getSize();
+			 	var _NUM = function(num){
+				   num =  isNaN(num)?0:num;
+				   if(num<0)num=0;
+				   return num;
+				}
+
+		        var containerHeight = winSize.y;
+				var mw=0,mh=0;
+
+				LAYOUT.container.setStyle('height',_NUM(containerHeight-LAYOUT.container.getPatch().y));
+		        LAYOUT.container.setStyle('width',_NUM(winSize.x.limit(960, 2000)));
+
+
+				if(!LAYOUT.side.hasClass('hide')){
+		        	LAYOUT.side.setStyle('width',_NUM( (winSize.x * 0.12).limit(150,winSize.x)));
+				}
+
+				LAYOUT.workground.setStyle('width',_NUM(
+			 		(winSize.x - LAYOUT.workground.getPatch().x)
+					-LAYOUT.side.getSize().x
+					-LAYOUT.side_r.getSize().x)
+				).setStyle('left',LAYOUT.side.offsetWidth);
+
+				LAYOUT.content_main.setStyles({'height':
+						(mh=_NUM(containerHeight -
+						LAYOUT.content_head.getSize().y  -
+						LAYOUT.content_foot.getSize().y -
+						LAYOUT.workground.getPatch().y
+						)),
+						'width':(mw=_NUM(LAYOUT.workground.getSize().x-LAYOUT.workground.getPatch().x))
+					}).fireEvent('resizelayout',[mw,mh]);
+
+				if(!LAYOUT.side_r.hasClass('hide')){
+			    	if(!LAYOUT.side_r.get('widthset'))
+	           		LAYOUT.side_r.setStyle('width',_NUM((winSize.x*0.15).limit(150,winSize.x)));
+					LAYOUT.side_r_content.setStyle('height',_NUM(
+						containerHeight
+					-LAYOUT.side_r.getElement('.side-r-top').getSize().y
+					-LAYOUT.side_r.getElement('.side-r-head').getSize().y
+					-LAYOUT.side_r.getElement('.side-r-foot').getSize().y
+					-LAYOUT.side_r_content.getPatch().y-LAYOUT.side_r.getPatch().y));
+					LAYOUT.side_r.setStyle('left',winSize.x - LAYOUT.side_r.offsetWidth);
+				}
+
+
+
+
+           };
+
+
+	    /*MODAL PANEL*/
+		MODALPANEL = {
+			createModalPanel:function(){
+				var mp = new Element('div',{'id':'MODALPANEL'});
+		        var mpStyles = {
+		            'position': 'absolute',
+		            'background': '#333333',
+		            'width': '100%',
+					'display':'none',
+		            'height': window.getScrollSize().y,
+		            'top': 0,
+		            'left': 0,
+		            'zIndex': 65500,
+		            'opacity': .4
+		        };
+				this.element = mp.setStyles(mpStyles).inject(document.body);
+				return this.element;
+			},
+			show:function(){
+				var panel = this.element = this.element||this.createModalPanel();
+				panel.setStyles({
+					'width': '100%',
+	                'height': window.getScrollSize().y
+				}).show();
+			},hide:function(){
+				if(this.element)this.element.hide();
+			}
+		};
+
+
+
+
+
+		  var windowResizeTimer = 0;
+		  window.addEvent('resize',function(){
+			 $clear(windowResizeTimer);
+			 windowResizeTimer = window.resizeLayout.delay(200);
+
+			 if(MODALPANEL.element&&MODALPANEL.element.style.display!='none'){
+						MODALPANEL.element.setStyles({
+							   'height':window.getScrollSize().y
+						});
+				}
+	   	 }).fireEvent('resize');
+
+		   EventsRemote = new Request({url:'<{$base_url}>'});
+
+
+           W = new Wpage({update:document.body,'singlepage':true});
+           W.render(document.body);
+		   W.onComplete();
+		   Xtip = new Tips({tip:'tip_Xtip',fixed:true,offset: {x: 24, y: -15},onBound:function(bound){
+              if(bound.x2){
+                  this.tip.getElement('.tip-top').addClass('tip-top-right');
+                  this.tip.getElement('.tip-bottom').addClass('tip-bottom-right');
+              }else {
+                  this.tip.getElement('.tip-top').removeClass('tip-top-right');
+                  this.tip.getElement('.tip-bottom').removeClass('tip-bottom-right');
+              }
+           }});
+
+
+		Side_R = new Class({
+		    Implements: [Options, Events],
+		    options: {
+
+		        onShow: $empty,
+		        onHide: $empty,
+		        onReady: $empty,
+				isClear:true,
+				width:false
+
+		    },
+		    initialize: function(url, opts) {
+		        this.setOptions(opts);
+		       	this.panel = $('side-r');
+		        this.container = $('side-r-content');
+				var trigger = this.options.trigger;
+
+				if(trigger&&!trigger.retrieve('events',{})['dispose']){
+				            trigger.addEvent('dispose',function(){
+
+								 $('side-r').addClass('hide');
+								 $('side-r-content').empty();
+								 $('side-r').removeProperty('widthset').store('url','');
+
+							});
+				}
+
+				if(this.panel.retrieve('url','') == url)return;
+
+				if (url) {
+		            this.showSide(url);
+		        } else {
+		            throw Exception('NO TARGET URL');
+		            return;
+		        }
+
+		       var btn_close = this.panel.getElement('.side-r-close');
+			   var _title = this.panel.getElement('.side-r-title');
+
+				   _title.set('text',this.options.title||"")
+
+				  if(btn_close){
+	                btn_close.removeEvents('click').addEvent('click', this.hideSide.bind(this));
+	            }
+
+		    },
+		    showSide: function(url) {
+		        this.cleanContainer();
+
+		        var _this = this;
+				if(_this.options.width&&!_this.panel.get('widthset')){
+				    _this.panel.set({'widthset':_this.options.width,styles:{width:_this.options.width}});
+				 }
+				_this.panel.removeClass('hide');
+				 _this.fireEvent('show');
+				window.resizeLayout();
+
+				if(this.cache)return;
+	            W.page(url,{
+	                update:_this.container,
+				    render:false,
+	                onRequest: function() {
+	                    _this.panel.addClass('loading');
+	                },
+
+	                onComplete: function() {
+	                    _this.panel.removeClass('loading');
+	                    _this.fireEvent('ready', $splat(arguments));
+	                    _this.panel.store('url',url);
+						_this.container.style.height = (_this.container.style.height.toInt()-_this.container.getPrevious().getSize().y-_this.container.getNext().getSize().y)+'px';
+	                }
+	            });
+
+		    },
+		    hideSide: function() {
+
+		        this.panel.addClass('hide');
+		        window.resizeLayout();
+		        this.cleanContainer();
+		        this.fireEvent('hide');
+
+		    },
+		    cleanContainer: function() {
+		        this.panel.store('url','');
+		        if(this.options.isClear)this.container.empty();
+		    }
+
+		});
+
+		new Drag($('side-r-resize'), {
+			modifiers: {
+				'x': 'left',
+				'y':false
+			},
+			onBefore:function(el){
+				el.addClass('side-r-resize-ing');
+			},
+			onDrag: function(el) {
+
+				el.addClass('side-r-resize-ing');
+
+			},
+			onComplete: function(el) {
+				el.removeClass('side-r-resize-ing');
+
+				var left = el.getStyle('left');
+					left = left.toInt();
+				var _w =  LAYOUT.side_r.style.width.toInt()-(left-(-5));
+				LAYOUT.side_r.style.width = _w+'px';
+				LAYOUT.side_r.set('widthset',_w);
+				el.style.left = '-5px';
+				resizeLayout();
+			}
+		});
+
+		$exec($("__eval_scripts__").get("html"));
+   };
+
+	window.addEvent('domready',initDefaultPart);
+</script>
+</body>
+</html>

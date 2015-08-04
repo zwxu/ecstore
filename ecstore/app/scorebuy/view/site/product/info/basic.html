@@ -1,0 +1,206 @@
+<ul class="goods-info-list">
+    <{if $goodsbndisplay eq 'true'}><li><span><{t}>商品编号：<{/t}></span><em><{$goods.bn}></em>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <span><{t}>商品货号：<{/t}></span><em id="goodsBn" updatespec="text_bn"><{assign var=apro value=$goods.product|current}><{$apro.bn}><{assign var=apro value=null}></em></li><{/if}>
+    <li style="display:none">
+    <span><em class='font-red font24px fix-price'>
+    <{if $goods.minprice && $goods.maxprice}>
+    <{$goods.minprice|cur_odr}>&nbsp;-&nbsp;<{$goods.maxprice|cur_odr:$order.currency}>
+    <{else}>
+    <{$goods.price|cur_odr}>
+    <{/if}>
+    </em></span>
+    </li>
+    <{if $env.conf.b2c.site.show_mark_price != 'false'}>
+    <li class="list-item"><span><{t}>市 场 价：</span><{/t}>
+    <del class="mktprice1"><em updatespec="mktprice"><{if $goods.minmktprice && $goods.maxmktprice}>
+    <{$goods.minmktprice|cur_odr}>&nbsp;-&nbsp;<{$goods.maxmktprice|cur_odr}>
+    <{else}>
+    <{$goods.mktprice|cur_odr}>
+    <{/if}></em></del></li>
+    <{/if}>
+    <li class="list-item">
+    <span><{t}>积分：<{/t}></span>
+    <em class="current_score">
+    <{$goods.current_score}>
+    </em>
+    <{if $goods.current_price >0}>
+    <span><{t}>价格：<{/t}></span>
+    <em class="goodsprice" updatespec="updateprice">
+    <{$goods.current_price|cur_odr}>
+    </em>
+    <{/if}>
+    <{if false && $goods.mktprice >= $goods.price && $goods.setting.mktprice && $goods.setting.saveprice > 0}>
+    <{if $goods.setting.saveprice == 1}> &nbsp;&nbsp;&nbsp; <span class="discount"><{t}>节省了<{/t}><em updatespec="discountprice"><{$goods.mktprice-$goods.current_price|cur}></em></span>
+    <{elseif $goods.setting.saveprice == 2}><span><{t}>优惠:<{/t}></span><em class="discount"><{$goods.current_price/$goods.mktprice*100|number:'2'}>%</em>
+    <{elseif $goods.setting.saveprice == 3}><span><{t}>折扣:<{/t}></span><em class="discount"><{$goods.current_price/$goods.mktprice*10|number:'1'}><{t}>折<{/t}></em>
+    <{/if}>
+    </li>
+    <{/if}>
+    <{if $env.conf.b2c.site.member_price_display != 2}>
+    <{$goodshtml.mlv_price}>
+    <{/if}>
+    <{if $goods.setting.score == '3'&& $goods.gain_score}><li><span><{t}>所得积分：<{/t}></span><em id="goodsScore"><{$goods.gain_score}></em></li><{/if}>
+      
+    <{if !!$gpromotion_info.promotionMsg.0.0.gid}>
+    <li class="list-item"><span><{t}>促销：</span><{/t}>
+      <div id="J_PromoBox" class="mall_pro_shop_activity">
+        <em class="tb-promo-price-type">今日促销</em>
+        <strong><{$gpromotion_info.promotionMsg.0.0.price|cur_odr}></strong>
+        <{if false}>
+        <span class="tb-arrow tm-promoMore J_PromArrow" data-type="promolist"></span>
+        <ul id="J_MorePromoSlider" class="tm-promo-slider tm-clear" style="display: none;">
+          <li class="post-script">以上价格可在付款时选择享用</li>
+        </ul>
+        <{/if}>
+        <span class="tm-mjsTarget J_PromArrow" data-type="mjslist">店铺活动
+        <span class="tb-arrow"></span>
+        </span>
+        <div id="J_MoreMjsSlider" class="tm-promo-slider" style="display: none;">
+        <p> <{$gpromotion_info.promotionMsg.0.0.description}> </p>
+        <{if false}>
+        <a class="ui-more-nbg" href="" data-spm-anchor-id="a220o.1000855.0.88">
+        更多
+        <i class="ui-more-nbg-arrow"></i>
+        </a>
+        <{/if}>
+        </div>
+      </div>
+    </li>
+    <{/if}>
+    <{if $dlytype_info}>
+    <li class="list-item"><span><{t}>配送：</span><{/t}>
+    <div class="tb-postAge">
+      <{if $goods.freight_bear == 'business'}>
+      <div class="tb-postAge-info"><span>商家包邮</span></div>
+      <{else}>
+      <div id="J_PostageToggleCont" class="tb-postAge-info">
+      <span><{foreach from=$dlytype_info.dlytype item=item}> <{$item.dt_name}>：<{$item.money}><{/foreach}></span>
+      </div>
+      <{/if}>
+      <span id="J_deliveryAdd" class="tb-deliveryAdd"><{$area_from}></span>
+      至
+      <a id="J_dqPostAgeCont" class="tb-postAgeCont" code="<{$dlytype_info.area}>" parent="<{$dlytype_info.parent}>" href="#"><{$dlytype_info.localname}></a>
+    </div></li><{/if}>
+    <li class="list-item"><span><{t}>月销量：</span><{/t}><em class="mon_sell "><em class="color_3355aa"><{$goods.buy_m_count|default:0}></em>件</em>
+    <{if $setting.acomment.switch.discuss == 'on'}>
+    <div class="star-div goods-point clearfix" id="goods-point"><span class="flt font-black"><{t}>评价：<{/t}></span>
+      <ul class="fl">
+        <li class="star<{$goods_point.avg|default:0}>"> </li>
+      </ul>
+      <em class="fl color_3355aa"><{$goods_point.avg_num|default:'0'}>分(累计评价<a href="#consult" onclick="new Fx.Scroll(document,{onComplete:function(){$$('li[data-tab-type=goodsdiscuss]')[0]&&$$('li[data-tab-type=goodsdiscuss]')[0].fireEvent('click');}}).toElement('goodsDetailMain');return false;"><{$total_discuss_nums|default:0}></a>)</em>
+    </div>
+    <{/if}></li>
+
+    <li class="list-item">
+      <div class="time">
+        <span>剩余：</span>
+        <span class="day">0</span><span>天</span>
+        <span class="hour">0</span><span>小时</span>
+        <span class="minute">0</span><span>分</span>
+        <span class="second">0</span><span>秒</span>
+      </div>
+    </li>
+</ul>
+<script type="text/javascript">
+//new AutoSize('.goods-info-list .list-item');
+window.addEvent('domready', function(){
+  var obj = $E('#J_PromoBox .tb-arrow')||'';
+  if(obj)
+  obj.addEvents({
+  mouseover:function(){
+  var p_obj = $('J_MoreMjsSlider')||'';
+  if(p_obj)p_obj.setStyle('display','block');
+  },
+  mouseleave:function(){
+  var p_obj = $('J_MoreMjsSlider')||'';
+  if(p_obj)p_obj.setStyle('display','none');
+  }
+  });
+});
+</script>
+
+<script>
+    (function() {
+        var timestamp_statues = (new Date()).valueOf();
+        var timeCount=timestamp_statues;
+        var timeCount = this.timeCount = {
+            init:function(nowtime,endtime,dom){
+                var diff = Math.abs((nowtime.getTime() - endtime.getTime())/1000);
+                var secondDiff = diff % 60;
+                var minuteDiff = ((diff - secondDiff)/60) % 60;
+                var hourDiff = ((diff - secondDiff  - minuteDiff*60)/3600) % 24;
+                var dayDiff = (diff - secondDiff  - minuteDiff*60 - hourDiff*3600) / 86400;
+                var timeDiff = [dayDiff,hourDiff,minuteDiff,parseInt(secondDiff)];
+                this.s = (function(){this.calcTime.periodical(1000,this,{
+                        time:timeDiff,
+                        dom:dom
+                    })}).delay(100,this);
+            },
+            //addZero:function(timeDiff){
+                //for(var i=0;i<timeDiff.length;i++){
+                    //if(timeDiff[i].toString().length<2){
+                        //timeDiff[i] = "0" + timeDiff[i].toString();
+                        //return timeDiff;
+                    //}
+                //}
+            //},
+            formatToInt : function(timeDiff){
+                for(var i=0;i<timeDiff.length;i++){
+                    parseInt(timeDiff[i]);
+                };
+                return timeDiff;
+            },
+            judgeTime : function(timeDiff){
+                if(timeDiff[3]< 0  && timeDiff[2]>0){
+                    timeDiff[3] = 59;
+                    timeDiff[2]--;
+                    return timeDiff;
+                }else if(timeDiff[3] <0 && timeDiff[2]==0 && timeDiff[1]>0){
+                    timeDiff[3] = 59
+                    timeDiff[2] = 59;
+                    timeDiff[1]--;
+                    return timeDiff;
+                }else if(timeDiff[3] <0 && timeDiff[2]==0 && timeDiff[1]==0 && timeDiff[0]>0){
+                    timeDiff[3] = 59
+                    timeDiff[2] = 59;
+                    timeDiff[1] = 23;
+                    timeDiff[0]--;
+                    return timeDiff;
+                }else if(timeDiff[3]==0 && timeDiff[2]==0 && timeDiff[1]==0 && timeDiff[0]==0){
+                    location.reload();
+                    $clear(this.s);
+                    return;
+                }
+            },
+            calcTime : function (obj){
+                if(!obj.dom) return;
+                var _timeDiff = obj.time;
+                //this.addZero(_timeDiff);
+                this.formatToInt(_timeDiff);
+                _timeDiff[3]--;
+                this.judgeTime(_timeDiff);
+                //this.addZero(_timeDiff);
+                var dom = obj.dom;
+                dom.second.innerHTML = _timeDiff[3];
+                dom.minute.innerHTML = _timeDiff[2];
+                dom.hour.innerHTML = _timeDiff[1];
+                dom.day.innerHTML = _timeDiff[0];
+            }
+        }
+    })();
+    (function(){
+        var timeNow=new Date();
+        var timeEnd= new Date(<{$activity.end_time * 1000}>);
+        var timeStart= new Date(<{$activity.start_time * 1000}>);
+        var dom = {
+            second: $E('.second'),
+            minute:$E('.minute'),
+            hour:$E('.hour'),
+            day:$E('.day')
+        };
+        if(timeStart > timeNow){
+            timeCount.init(timeStart,timeNow,dom);
+        }else if(timeNow >= timeStart && timeNow <timeEnd){
+            timeCount.init(timeNow,timeEnd,dom);
+        }
+    })();
+ </script>

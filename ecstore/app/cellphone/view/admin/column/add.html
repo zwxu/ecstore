@@ -1,0 +1,106 @@
+<form method="POST" action="<{link app=cellphone ctl=admin_column act=toAdd }>" id="groupactivity-from">
+<div class="goods-detail tableform">
+    <h3><{t}>基本信息<{/t}></h3>
+	<input type="hidden" name="column_id" value="<{$column.column_id}>"
+    <div class="division">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" >
+          <tr>
+          <th><{t}>专栏类型：<{/t}></th>
+                <td>
+                  <select class=" x-input-select inputstyle"  name="columntype_id" id="ot" >
+				   <{foreach from=$columntype item=item}>
+        <option value='<{$item.columntype_id}>' <{if $item.columntype_id==$column.columntype_id}>selected<{/if}>><{$item.columntype_name}>
+         </option>
+         <{/foreach}>
+		   </select>
+                </td>
+            </tr>
+		<tr>
+          <th><{t}>请选择商品：<{/t}></th>
+         <td >
+			<div>
+     <{input type="object" object="goods@b2c" vtype="required" name="goods_id" filter=""  multiple="" select="radio" value=$column.goods_id}>
+       		
+			<div>
+           </td>
+				
+            </tr>
+          <tr>
+                <th><{t}>开始时间：<{/t}></th>
+                <td><{input type="time"  value="{$column.start_time}" name="start_time"}></td>
+            </tr>
+            <tr>
+                <th><{t}>结束时间：<{/t}></th>
+                <td><{input type="time" value="{$column.end_time}" name="end_time"}></td>
+            </tr> 
+			<tr>
+                <th><{t}>启用：<{/t}></th>
+                <td>
+                    <input type="radio" value="true" <{if $column.is_active=='true'}>checked<{/if}> name="is_active" >开启
+                    <input type="radio" value="false" <{if $column.is_active!='true'}>checked<{/if}> name="is_active" >关闭
+                </td>
+            </tr>
+			<tr>
+    <th>上传图片：</th>
+       <td>
+       <{input type="image" name="image_id" vtype="require" value=$column.image_id width=160 height=90}>
+       <{t}><em><font color="red">为取得最佳显示效果广告图片尺寸比例为640*200</font></em><{/t}>
+       </td> 
+			</tr>
+        </table>
+    </div>
+   
+</div>
+<div class="table-action">
+   <{button label="保存" type="submit" id="groupactivity-btn" }>
+    <{button label="取消" id="groupactivity-cancel" href=$reUrl}>
+</div>
+<form>
+<script>
+ 
+
+  $ES("input[name^=associate]").each(function(item){
+    
+  item.addEvent('change',function(){
+      
+   $ES("input[name^=associate]:checked").each(function(v,k){
+ 
+    var select_type = '';
+	select_type=v.get('typevalue');
+	$('associate_type').set('value',select_type);
+	//alert($('associate_type').get('value'));
+	type = $('select_type');
+    var request = new Request.HTML({
+                    url:'<{link app="cellphone" ctl="admin_banner" act="changeType" }>',
+                    update:type,
+                    onComplete:function(res){
+                       type.show();
+                    }
+         }).post('select_type='+select_type);
+	
+       });
+
+          
+    });
+});
+function check(obj){
+if(obj.value!="all"){
+//confirm("你确定吗？");
+var select_activity=obj.value;
+var activity=$('activity');
+var request = new Request.HTML({
+                    url:'<{link app="cellphone" ctl="admin_banner" act="changeActivity" }>',
+                    update:activity,
+                    onComplete:function(res){
+                       activity.show();
+                    }
+         }).post('select_activity='+select_activity);
+
+}
+else{
+$('activity').style.display="none";
+}
+
+}
+
+</script>

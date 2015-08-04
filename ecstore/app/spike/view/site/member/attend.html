@@ -1,0 +1,68 @@
+<div class="member-main">
+<form action="<{$submit_url}>" method="post">
+    <div >
+    <div class="title"><{t}>活动信息<{/t}></div>
+    <table border="0" width="100%" cellpadding="0" cellspacing="0" class="order-info" style="margin:10px 0 20px 0">
+        <tr>
+        <input type="hidden" name="aid" value="<{$actInfo.act_id}>">
+        <{if $businessAct.id}>
+        <input type="hidden" name="id" value="<{$businessAct.id}>">
+        <{/if}>
+      <!-- order status -->
+        <td width="30%" valign="top"><ul>
+            <li><{t}>活动名称：<{/t}><span class="price-normal"><{$actInfo.name}></span></li>
+            <li><{t}>开始时间：<{/t}><span class="point"><{$actInfo.start_time}></span></li>
+            <li><{t}>结束时间：<{/t}><span class="point"><{$actInfo.end_time}></span></li>
+          </ul>
+        </td>
+        <tr>
+    </table>
+    <h4><{t}>申请信息<{/t}></h4>
+    <{script src="modedialog.js" app="spike"}>
+     <{script src="loader.js" app="spike"}>
+    <table width="100%" cellspacing="1" cellpadding="0" border='0'  bgcolor="#f9f9f9" class="takegoods" >
+        <tr>
+            <th style="width:20%;">参加活动的商品：</th>
+            <td><{input breakpoint="0" type="goods" object=goods name="gid" app=b2c cols="name" return_url="{$return_url}" filter=$filter callback='_callback' cols="name,spec_info" value="{$businessAct.gid}" textcol="name" vtype="required"}>
+            <span> &nbsp;&nbsp;&nbsp;&nbsp;是否包邮：</span>
+            <span id="freight_bear"><{if $goods.freight_bear == 'business'}>是<{else}>否<{/if}></span></td>
+        </tr>
+        <script>
+            function _callback(rs){
+                if(rs){
+                    var _rs = JSON.decode(rs);
+                    $('store').set('html',_rs.store);
+                    $('price').set('html',_rs.price);
+                    if(_rs.freight_bear == 'business'){
+                        $('freight_bear').set('html','是');
+                    }else{
+                        $('freight_bear').set('html','否');
+                    }
+                }
+            }
+        </script>
+        <tr>
+            <th>价格：</th>
+            <td><{input type="text" name="price" id="act_price" value="{$businessAct.price}" vtype="required"}><span style="color:red;">原始价格：<span id="price"><{$goods.price}></span></span></td>
+        </tr>
+        <tr>
+            <th>参加活动商品的数量：</th>
+            <td><{input type="text" name="nums" value="{$businessAct.nums}" id="nums"}><span id="numsError" class="error caution notice-inline" style="display:none">参加活动的商品数量不能大于库存</span><span>不填代表不做限制 &nbsp;&nbsp;&nbsp;&nbsp;商品库存：<span id="store"><{$goods.store}></span></span></td>
+        </tr>
+        <tr>  
+            <th>每人限购数量：</th>
+            <td><{input type="text" value="{$businessAct.personlimit}" name="personlimit"}><span>不填代表不做限制</span></td>
+        </tr>
+        <tr>  
+            <th>店铺活动：</th>
+            <td><{input type="textarea" name="act_desc" rows="3" cols="20" value=$businessAct.act_desc}></td>
+        </tr>
+        <tr>  
+            <th>活动广告图：</th>
+            <td><{input type='vimage'  name='image_codeid' width=300 height=150 value=$businessAct.image_codeid}></td>
+        </tr>
+    </table>
+    <div style=" margin-top:10px; padding-left:173px;">
+    <{button class="submit-btn" rel="_request" type="submit" label=$___b2c="确定"|t:'spike'}>
+    </form>
+</div>

@@ -1,0 +1,64 @@
+<!-- right-->
+  <div class="member-main">
+  <div>
+ <div class="title title2"><{t}>我的积分<{/t}></div>
+ 
+<div >
+  <p class="admin-title textright">
+ <span class="flt"><{t}>积分使用记录：<{/t}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<{t}>您当前的有效积分：<em class="font-orange fontbold font14px"><{/t}><{$member.point}></em>&nbsp;<{t}>分<{/t}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<{if $extend_point_html}><{$extend_point_html}>&nbsp;分<{/if}></span>
+ </p>
+ <table class="gridlist border-all gridlist_member" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <th class="first"><{t}>来源/用途<{/t}></th>
+		<th><{t}>日期<{/t}></th>
+        <th><{t}>获得的积分<{/t}></th>
+		<th><{t}>使用的积分<{/t}></th>
+		<th><{t}>剩余的积分<{/t}></th>
+		<th><{t}>积分有效期<{/t}></th>
+		<th><{t}>备注<{/t}></th>
+    </tr>
+    <tbody>
+    <{if count($historys)>0}>
+    <{foreach from=$historys item="logs"}>
+    <tr>
+	  <td ><{$logs.related_id}></td>
+       <td ><{$logs.addtime|cdate:FDATE_FTIME}></td>
+	   <td align="center" <{if $logs.score_g != 0}>style="color:#F60"<{/if}>><{$logs.score_g}></td>
+	   <td align="center" <{if $logs.score_u != 0}>style="color:#F60"<{/if}>><{$logs.score_u}></td>
+       <td align="center"><{$logs.point}></td>
+	   <td align="center"><{if $logs.expiretime==0 }><{t}>无过期<{/t}><{else}><{$logs.expiretime|cdate:FDATE_STIME}><{/if}></td>
+	   <td align="center"><{$logs.reason|escape:'html'}></td>
+    </tr>
+    <{/foreach}>
+ <{pagers data=$pager}>
+    <{else}>
+    <tr>
+      <td height="60" colspan="3"><{t}>尚无积分历史<{/t}></td>
+    </tr>
+    <{/if}>
+    </tbody>
+</table>
+ </div>
+<p class="admin-title textright">温馨提示：
+
+1:订单状态变为“交易成功”后系统自动将积分发放到账户。
+2:查看《<a href="javascript:void(0);" onclick=" if($('point_use_rules').style.display == 'none'){ $('point_use_rules').style.display = 'block';}else if($('point_use_rules').style.display == 'block'){$('point_use_rules').style.display = 'none';}"><font color="blue">积分规则及使用方法</font></a>》
+ </p>
+ <span id="point_use_rules" style="display:none">
+ <h5><{t}>平台积分规则：<{/t}></h5>
+<p><strong>1.</strong><{t}> 积分专属平台商城，仅限平台商城内使用。<{/t}></p>
+
+<p><strong>2. </strong><{t}>100积分=1元现金。<{/t}></p>
+
+<p><strong>3. </strong><{t}>买家在付款时，在完成该笔交易后（支付系统显示该交易状态为“交易成功”），才能得到此次交易的相应积分。<{/t}></p>
+
+<p><strong>4. </strong><{t}>商家派送的积分由商家自行决定，但不能超过其拥有的全部积分。<{/t}></p>
+
+<p><strong>5.</strong><{t}> B2B2C平台卖家出售商品自愿选择是否可用积分抵部分现金，消费者最高消耗积分不能高于商品的10%售价；卖家得到消费者所用的积分（对于技术开发需求，平台管理可以根据发展需求，可调整这个最高值）。<{/t}></p>
+<p><strong>6. </strong><{t}>消费者的积分不能兑现，不可转让。<{/t}></p>
+<p><strong>7. </strong><{t}>积分有效期即从获得开始至次年年底（12月31日），逾期自动作废。以公历的年、北京时间为准，如若交易在使用的积分有效期之外发生退款，该部分积分不予退还<{/t}></p>
+</span>
+ </div>
+  </div>
+
+<!-- right-->

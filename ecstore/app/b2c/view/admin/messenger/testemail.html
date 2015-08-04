@@ -1,0 +1,21 @@
+<form action="index.php?ctl=member/messenger&act=doTestemail" method="POST" id="MailTestForm">
+    <{foreach from=$options item=item key=key}>
+         <{input type='hidden' name=$key value=$item}>
+    <{/foreach}>
+    <table>
+      <tr><td width='260px;'><{t}>测试接收邮箱:<{/t}><input type="text" name="acceptor" value="<{$acceptor}>" size=30></td><td>
+      	<{button label=$___b2c="测试"|t:'b2c' type="submit"}> </td></tr>
+    </table>
+</form>
+<script>
+$('MailTestForm').addEvent('submit',function(e){
+   e.stop();
+   var action = this.action;
+   if(!($E('input[name=acceptor]',this).value).test(/\S+@\S+/))return MessageBox.error('<{t}>邮箱格式错误!<{/t}>');
+   new Request({url:action,method:'post',data:$('MailTestForm'),onRequest:function(){$('mailloginfo').setHTML('Loading....');},onComplete:function(re){
+      $('mailloginfo').setHTML(re);
+   }}).send();   
+});    
+</script>
+<div id="mailloginfo">
+</div>

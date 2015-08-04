@@ -1,0 +1,56 @@
+<{capture name="headbar"}>
+<div current="1743cd-0" _i="3" _tabid="1743cd" class="tabs-wrap">
+	<ul>
+  <li id="_1743cd-0" onclick="setTab(['1743cd-0',['1743cd-1','1743cd-2']],['current','tab'])" class="tab current "><span><{t}>购物清单<{/t}></span></li>
+	 <li id="_1743cd-1" onclick="setTab(['1743cd-1',['1743cd-0','1743cd-2']],['current','tab'])" class="tab "><span><{t}>配货单<{/t}></span></li> <li id="_1743cd-2" onclick="setTab(['1743cd-2',['1743cd-0','1743cd-1']],['current','tab'])" class="tab "><span><{t}>旧版订单打印单<{/t}></span></li>
+	</ul>
+</div>
+<{/capture}>
+<form id="print_style_form" method='post' action='index.php?app=b2c&ctl=admin_order&act=savePrintStyle' style="height:100%">
+<div class="tabs">
+	<div id="1743cd-0">
+		<{input type="soucecode" name="txtcontentcart" class="info-text" width='100%' height='100%'  value=$styleContentCart }>
+	</div>
+	<div id="1743cd-1" style="display:none;">
+	<{input type="soucecode" name="txtcontentsheet" class="info-text" width='100%' height='100%'  value=$styleContentSheet }>
+	</div>
+	<div id="1743cd-2" style="display:none;">
+	<{input type="soucecode" name="txtcontent" class="info-text" width='100%' height='100%'  value=$styleContent }>
+	</div>
+</div>
+</form>
+<{capture name="footbar"}>
+<div class="table-action">
+	<{button label=$___b2c="保存"|t:'b2c' type="button" id="idsave"}>
+	<{button label=$___b2c="恢复初始样式"|t:'b2c' type="button" class="btn btn-secondary" id="idresume"}>
+	<{button label=$___b2c="关闭"|t:'b2c' class="btn btn-secondary" type="button" onclick="opener=null;window.close();"}>    
+</div> 
+<{/capture}>
+<script>    
+$$('#print_style_form .tabs-wrap').inject($('main').getPrevious());
+$$('#print_style_form .tabs').setStyle('height','100%');
+$$('#print_style_form .tabs div').setStyle('height','100%');
+                  
+  $('idresume').addEvent('click',function(e){
+	if (confirm('<{t}>恢复后将覆盖现有样式，确定要恢复吗？<{/t}>')){ 
+    
+new Request.JSON({url:'index.php?app=b2c&ctl=admin_order&act=rebackPrintStyle',onComplete:function(re){
+		 
+		if('success' in re){
+			alert(re.success);
+			window.location.href=window.location.href;
+		}else{
+		    MessageBox.error(re.error); 
+		}       
+		
+	}}).post($('print_style_form'));
+	   
+	}
+    
+  });
+
+$('idsave').addEvent('click',function(){ 
+	    $('print_style_form').fireEvent('submit',{stop:$empty});
+	
+});
+</script>

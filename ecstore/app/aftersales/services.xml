@@ -1,0 +1,19 @@
+<services>
+ 
+    <service id="aftersales.return_policy">
+        <class>aftersales_data_return_policy</class>
+    </service>
+	
+	<service id="desktop_finder.aftersales_mdl_return_product">
+        <class>aftersales_finder_return_product</class>
+    </service>
+	
+	<service id="b2c.member_menu_extends">
+		<class>aftersales_member_menuextends</class>
+	</service>
+
+	<service id="ectools_refund.ectools_mdl_special_refund">
+		<class>aftersales_finder_return_refund</class>
+	</service>
+	
+</services>

@@ -1,0 +1,18 @@
+<div class="feed-back">
+<div class="error clearfix">
+  <div class="span-1 pic"></div>
+  <div class="span-auto ">
+  <h1><{t}>对不起，本页面需要会员身份，您未登录或登录已超时<{/t}></h1>
+      <p class="jumpurl">
+        <a href="<{$nexturl}>"><{t}>3秒后系统会自动跳转，也可点击本处直接跳转<{/t}></a>
+        </p>
+  </div>
+</div>
+</div>
+<script>
+function jumpurl(){
+  location='<{$nexturl}>';
+}
+setTimeout('jumpurl()',3000);
+
+</script>

@@ -1,0 +1,77 @@
+
+<form action="<{link app=b2c ctl=site_search act=result full=1}>" method="post">
+  <div class="SearchMoreWrap">
+  <div class="FormWrap clearfix">
+  <div class="division">
+
+    <table border="0" cellspacing="0" cellpadding="0" class="forform">
+      <tr>
+        <th style="width:auto;"><{t}>关键字：<{/t}></th>
+        <td><input value="" name="name[]" size="20" class="inputstyle"/></td>
+    </tr>
+      <tr>
+        <th style="width:auto;"><{t}>货号：<{/t}></th>
+        <td><input value="" name="bn[]" size="10" class="inputstyle"/></td>
+      </tr>
+      <tr>
+        <th style="width:auto;"><{t}>价格区间：<{/t}></th>
+        <td><!--<{t}>从<{/t}>&nbsp;--><{input value="" name="price[0]" size="8" class="inputstyle" type="text" }>&nbsp;&nbsp;-&nbsp;&nbsp;<!--<{t}>到<{/t}>&nbsp;--><{input value="" name="price[1]" size="8" class="inputstyle" type="text" }></td>
+      </tr>
+    </table>
+  </div>
+  <div class="division">
+    <table border="0" cellspacing="0" cellpadding="0" class="forform">
+      <tr>
+        <th style=" width:auto;"><{t}>商品分类：<{/t}></th>
+        <td><select name="cat_id" style="font-size:12px;" id="bind_cat_id" class="inputstyle" size="1">
+            <option selected="" value=""><{t}>- 所有分类 -<{/t}></option>
+            <{foreach from=$categorys item=cat}>
+            <option value="<{$cat.cat_id}>"><{$space|paddingleft:$cat.step*4-4:'&nbsp;'}><{if $cat.pid }>└<{/if}><{$cat.cat_name}></option>
+            <{/foreach}>
+          </select></td>
+      </tr>
+      <{if $cat.setting.use_props eq 1}>
+      <tr><td colspan="2"><a href="#" id="m_search_cat_view" class="lnk" onclick="m_toggleOpts(this); return false;"><{t}>显示高级选项<{/t}></a></td></tr>
+      <{/if}>
+    </table>
+  </div>
+
+<div id="search_cat_view" class="clearfix" style="display:none;">
+  <h4><{t}>选择品牌：<{/t}></h4>
+  <div class="division clearfix" >
+          <{foreach from=$brand item=aItems}>
+              <span style=" display:block; float:left; width:30%;">
+              <input type="checkbox" name="brand_id[]" value="<{$aItems.brand_id}>" id="ipt_brand_<{$aItems.brand_id}>"><label for="ipt_brand_<{$aItems.brand_id}>"><{$aItems.brand_name}></label>
+              </span>
+          <{/foreach}>
+  </div>
+  </div>
+<div class="division textcenter">
+  <{button type="submit" class="order-btn" isDisabled=true label=$___b2c="立即查询"|t:'b2c'}>
+</div>
+</form>
+</div>
+</div>
+<script>
+  var catid = $('bind_cat_id');
+  catid.addEvent('change',function(e){
+    new Request.HTML({
+      url:'<{link app="b2c" ctl="site_search" full=1 act="showCat"}>',
+      update:'search_cat_view',
+      data:'cat_id='+escape(this.value)
+    }).send();
+    m_toggleOpts('m_search_cat_view', true);
+  });
+  window.addEvent('domready',function(){catid.value && catid.fireEvent('change');});
+function m_toggleOpts(el, st){
+  el = $(el);
+  var opts = $('search_cat_view');
+  if(opts.getStyle('display') == 'none' || st){
+    opts.show();
+    if(el)el.set('html', '<{t}>隐藏高级选项<{/t}>');
+  }else{
+    opts.hide();
+    if(el)el.set('html', '<{t}>显示高级选项<{/t}>');
+  }
+}
+</script>

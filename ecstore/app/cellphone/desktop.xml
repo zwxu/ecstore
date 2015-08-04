@@ -1,0 +1,35 @@
+﻿<desktop>
+	<permissions>
+		<permission id="cellphonebanner" display='true'>轮播区</permission>
+        <permission id="cellphonecolumn" display='true'>专栏</permission>
+        <permission id="mobileimage" display='true'>图片管理</permission>
+        <permission id="mobilevirtual" display='true'>类目管理</permission>
+        <permission id="mobileactivity" display='true'>活动管理</permission>
+        <permission id="feedback" display='true'>反馈</permission>
+		<permission id="mobilephone" display='true'>客服管理</permission> 
+        <permission id="aboutus" display='true'>关于我们</permission>
+    </permissions>
+
+    <workground name="移动天下" id="cellphone.wrokground.mobile" controller="admin_basic" action="index" order='70'>
+        <menugroup name="基本设置">
+            <menu controller='admin_image' action='index' permission='mobileimage' display='true' order='10'>图片管理</menu>
+            <menu controller='admin_category' action='index' permission='mobilevirtual' display='true' order='20'>类目管理</menu>
+            <menu controller='admin_activity' action='index' permission='mobileactivity' display='true' order='30'>活动管理</menu>
+			<menu controller='admin_phone' action='index' permission='mobilephone' display='true' order='40'>客服管理</menu>
+        </menugroup>
+		<menugroup name="首页设置">
+          <menu controller='admin_banner' action='index' permission='cellphonebanner' display='true' order='10'>轮播区</menu>
+          <menu controller='admin_columntype' action='index' permission='cellphonecolumn' display='true' order='20'>专栏类型</menu>
+          <menu controller='admin_column' action='index' permission='cellphonecolumn' display='true' order='30'>专栏</menu>
+        </menugroup>
+        <menugroup name="反馈">
+            <menu controller='admin_feedback' action='index' permission='feedback' display='true' order='11'>反馈信息</menu>
+        </menugroup>
+        <menugroup name="关于我们">
+            <menu controller='admin_aboutus' action='getcopyright' permission='aboutus' display='true' order='12'> 版权信息</menu>
+			<menu controller='admin_aboutus' action='getlicense' permission='aboutus' display='true' order='13'>软件许可协议</menu>
+			<menu controller='admin_aboutus' action='getdescription' permission='aboutus' display='true' order='14'>说明</menu>
+		</menugroup>
+
+	</workground>
+</desktop>

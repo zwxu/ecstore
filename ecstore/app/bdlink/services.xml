@@ -1,0 +1,32 @@
+<services>
+    
+    <service id="b2c_save_post_om">
+		<class>bdlink_link</class>
+	</service>
+	
+	<service id="html_input">   
+        <class>bdlink_input_helper</class> 
+    </service>
+    
+    <service id="desktop_finder.bdlink_mdl_list">
+        <class>bdlink_finder_list</class>
+    </service>
+	
+	<!-- 注册到member里的finder -->
+	<service id="desktop_finder.b2c_mdl_members">
+        <class>bdlink_finder_members</class>
+    </service>
+
+	<service id="desktop_finder.b2c_mdl_orders">
+        <class>bdlink_finder_orders</class>
+    </service>
+	
+	<service id="b2c_mdl_members.filter">
+		<class>bdlink_service_member_filter</class>
+    </service>
+	
+	<service id="b2c_mdl_orders.filter">
+		<class>bdlink_service_order_filter</class>
+    </service>
+    
+</services>

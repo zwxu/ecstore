@@ -1,0 +1,289 @@
+<script>
+  $('gEditor').retrieve('setTabs',function(){
+    var gtabs=$ES('#menu-desktop .spage-side-nav li.l-handle');
+    new ItemAgg(gtabs,$ES('#gEditor .spage-main-box'),{
+      activeName:'cur',
+      onActive:function(tab,item){
+        var anotherItems=$$($A(this.items).remove(item));
+        if(tab.hasClass('all')){
+          $E('.std-upload-txt').fade('show');
+          anotherItems.show();
+          }else{
+          $E('.std-upload-txt').fade('hide');
+          anotherItems.hide();
+        }
+      }
+    });
+  }());
+</script>
+
+<h3 ><{t}>基本信息<{/t}></h3>
+<div id="x-g-basic" class="goods-detail">
+  <div class="tableform" >
+    <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <th><{t}>分类：<{/t}></th>
+        <td>
+          <{input type="category" value="{$goods.category.cat_id}" name="goods[category][cat_id]"}>
+        </td>
+      </tr>
+      <!--tag_foreign_extcat-->
+	  <{if $extends_goods_edit_html}>
+		<{$extends_goods_edit_html}>
+	  <{/if}>
+      <tr>
+        <th><{t}>类型：<{/t}></th>
+        <td><select name="goods[type][type_id]" id="gEditor-GType-input">
+            <!--<option value='1'><{t}>通用商品类型<{/t}></option>-->
+            <{foreach from=$gtype item=type}>
+            <option class="optionlevels" value='<{$type.type_id}>' <{if $type.type_id==$goods.type.type_id}>selected<{/if}>><{$type.name}>
+            </option>
+            <{/foreach}>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th><{t}>商品名称：<{/t}></th>
+        <td><{input type="text" id="id_gname" name="goods[name]" required="true" vtype='required' value=$goods.name style="width:60%"}><em><font color="red">*</font></em></td>
+      </tr>
+      <{if $goodsbn_display_switch}>
+      <tr>
+        <th><{t}>商品编号：<{/t}></th>
+        <td><{input type="text" name="goods[bn]" value=$goods.bn }></td>
+      </tr>
+      <{else}>
+      <input type='hidden' name="goods[bn]" value="<{$goods.bn}>">
+      <{/if}>
+
+      <tr>
+        <th><{t}>商品关键词：<{/t}></th>
+        <td><{foreach from=$goods.keywords item=keywords}><{assign var='keyword' value="{$keyword}|{$keywords.keyword}"}><{/foreach}><input type="text" name="keywords" value="<{$keyword|trim:'|'}>" class="inputstyle" maxlength="100"/><span class="notice-inline "><{t}>仅用于在前台、后台筛选商品，多个关键词用半角竖线"|"分开<{/t}></span></td>
+      </tr>
+      <tr>
+        <th><{t}>品牌：<{/t}></th>
+        <td><{input type="select" name="goods[brand][brand_id]" nulloption="1" rows=$brandList valueColumn="brand_id" labelColumn="brand_name" value=$goods.brand.brand_id}></td>
+      </tr>
+
+
+
+      <tr>
+        <th><{t}>商品简介：<{/t}></th>
+        <td><{input type="textarea" class="x-input" value=$goods.brief name="goods[brief]" style="resize:none;" cols="50" rows="5" maxth="255" }>
+          <div class="notice-inline"><{t}>简短的商品介绍,请不要超过70个字<{/t}></div></td>
+      </tr>
+
+      <tr>
+        <th><{t}>模板：<{/t}></th>
+        <td>
+          <{template_filter type="product" class="inputstyle" selected=$goods.goods_setting.goods_template name="goods[goods_setting][goods_template]"}></td>
+      </tr>
+      
+      <tr>
+        <th><{t}>商品权值：<{/t}></th>
+        <td><{input type="text" vtype="unsigned" value="{$goods.goods_order_down}" name="goods[goods_order_down]" id="downlimit"}><span>%</span></td>
+      </tr>
+
+	 <tr>
+        <th>
+          <{t}>商品相册：<{/t}>
+        </th>
+
+        <td>
+          <div class="division pic-main" style="margin:0;position:relative">
+            <div class="clearfix">
+              <span class="pic-uploader">
+                <{button app="desktop" class="btn-upload" label=$___b2c="添加商品图片"|t:'b2c' icon="image_new.gif"}>
+              </span>
+            </div>
+
+            <div class="pic-area">
+              <input type="hidden" name="image_default" value="<{$goods.image_default_id}>" />
+              <{include file="admin/goods/detail/img/gimage_goods.html"}>
+            </div>
+
+          </div>
+        </td>
+      </tr>
+      <th>
+        <{t}>列表页图片：<{/t}>
+      </th>
+      <td>
+        <input id="udfimg-false" type="radio" name="goods[udfimg]" value=false <{if $goods.udfimg != 'true'}>checked<{/if}> />
+        <label for="udfimg-false" ><{t}>用商品相册默认图<{/t}></label>
+        <input id="udfimg-true" type="radio" name="goods[udfimg]" value=true <{if $goods.udfimg == 'true'}>checked<{/if}> />
+        <label for="udfimg-true" ><{t}>自定义商品列表页图片<{/t}></label>
+
+
+        <div id="imageuparea" style="display:<{if $goods.udfimg=='true'}>block<{else}>none<{/if}>">
+          <h4 style="margin:0"><{t}>商品在列表页显示的图片<{/t}></h4>
+          <{input name="goods[thumbnail_pic]" type="image" value=$goods.thumbnail_pic width="120" height="90"}>
+        </div>
+
+		<script>
+          $$('#x-g-basic input[name^=goods[udfimg]').addEvent('click',function(){
+
+            if($('udfimg-true').checked){
+              $('imageuparea').show();
+              }else{
+              $('imageuparea').hide();
+            }
+
+          });
+        </script>
+      </td>
+
+      <{if $env.conf.b2c.goods.package_use.switch}>
+      <tr>
+        <th><{t}>开启打包：<{/t}></th>
+        <td>
+          <input type="radio"  name="goods[package_use]"<{if $goods.package_use eq 1 }> checked="checked"<{/if}> value="1" ><{t}>是<{/t}>
+          <input type="radio"  name="goods[package_use]"<{if $goods.package_use eq 0}> checked="checked"<{/if}> value="0" ><{t}>否<{/t}>
+        </td>
+      </tr>
+      <tr class="package_use" <{if $goods.package_use eq 0 }>style="display:none"<{/if}>>
+        <th><{t}>打包数量：<{/t}></th>
+        <td><{input type="unsigned" value=$goods.package_scale name="goods[package_scale]" style="width:60px" maxlength="25" }><{t}>（多少个一包）<{/t}></td>
+      </tr>
+      <tr class="package_use" <{if $goods.package_use eq 0 }>style="display:none"<{/if}>>
+        <th><{t}>打包单位：<{/t}></th>
+        <td><{input type="text" value=$goods.package_unit name="goods[package_unit]" style="width:60px" maxlength="25" }>（即每包的英文单位，如lot, box, carton等）<{t}><{/t}></td>
+      </tr>
+      <{/if}>
+    </table>
+  </div>
+
+  <div class="tableform" id="goods-spec">
+    <{if $goods.spec }>
+    <{if count($goods.product)>100 }>
+    <input type="hidden" name="spec_load">
+    <div class="loading"></div>
+    <script>
+      new Request.HTML({url:'index.php?app=b2c&ctl=admin_goods_editor&act=getSpecHtml&p[0]=<{$goods.goods_id}>',onRequest:function(){
+      $E('#goods-spec .loading').innerHTML='正在加载规格.......';
+      },update:'goods-spec'}).send();
+    </script>
+    <{else}>
+    <{include file="admin/goods/detail/spec/spec.html"}>
+    <{/if}>
+
+    <{else}>
+    <{include file="admin/goods/detail/spec/nospec.html"}>
+    <{/if}>
+
+  </div>
+
+
+
+  <{if $goods.type.setting.use_props}>
+  <div class="tableform">
+    <{*<h4>扩展属性：</h4>  *}>
+    <table border="0" cellpadding="0" cellspacing="0">
+      <{if $goods.type.setting.use_props}>
+      <{foreach from=$goods.type.props key=key item=aProp}>
+      <tr class="prop">
+        <th><{$aProp.name}>：</th>
+        <td><{assign var="p_col" value="p_{$key}"}>
+          <{if $aProp.type eq 'select'}>
+          <{input name="goods[props][p_{$key}][value]" type="select" nulloption="1" options=$aProp.options value="{$goods.props[$p_col].value}" }>
+          <{else}>
+          <{input type="text" name="goods[props][p_{$key}][value]" maxlength="25" value="{$goods.props[$p_col].value}"}>
+          <{/if}></td>
+      </tr>
+      <{/foreach}>
+      <{/if}>
+    </table>
+  </div>
+  <{/if}>
+
+
+
+  <div class="tableform">
+    <table border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <th ><{t}>运费模板：<{/t}></th>
+        <td>
+          <{input type="object" object="dlytype" multiple="true" rowselect="true" textcol="dt_name" name="dlytypes" value=$goods.gdlytype}>
+        </td>
+      </tr>          
+      <tr>
+        <th ><{t}>是否包邮：<{/t}></th>
+        <td>
+          <input type="radio" name="goods[freight_bear]"<{if $goods.freight_bear != 'business' }> checked="checked"<{/if}> value="member" ><{t}>否<{/t}>
+          <input type="radio" name="goods[freight_bear]"<{if $goods.freight_bear == "business"}> checked="checked"<{/if}> value="business" ><{t}>是<{/t}>
+        </td>
+      </tr>
+      <!--tag_foreign_freeshipping-->
+      <{if $site_min_order == 'true'}>
+      <tr>
+        <th><{t}>起定量：<{/t}></th>
+        <td><{input type="unsigned" value=$goods.min_buy name="goods[min_buy]" style="width:60px" maxlength="25" }></td>
+      </tr>
+      <{/if}>
+      <{if $goods.type.is_physical}>
+      <tr>
+        <th><{t}>计量单位：<{/t}></th>
+        <td><{input type="text" value=$goods.unit name="goods[unit]" maxlength="25" style="width:60px"}></td>
+      </tr>
+      <{/if}>
+
+
+
+      <tr>
+        <th><{t}>立即上架：<{/t}></th>
+        <td>
+          <{permission perm_id='editmarketable'}>
+          <input type="radio" name="goods[status]"<{if $goods.status != 'false' }> checked="checked"<{/if}> value="true" ><{t}>是<{/t}>
+          <input type="radio" name="goods[status]"<{if $goods.status == "false"}> checked="checked"<{/if}> value="false" ><{t}>否<{/t}>
+          <{if $goods.marketable_allow != 'true'}><{t}>　不允许前台上架<{/t}><{else}><{t}>　允许前台上架<{/t}><{/if}>
+          <br><{input type="textarea" class="x-input" value=$goods.marketable_content name="goods[marketable_content]" required="true" vtype="required" style="resize:none;" cols="50" rows="5" maxth="255" }>
+          <{/permission}>
+        </td>
+      </tr>
+      <tr>
+        <th><{t}>无库存也可销售：<{/t}></th>
+        <td>
+          <{permission perm_id='nostore_sell'}>
+          <input type="radio"  name="goods[nostore_sell]"<{if $goods.nostore_sell eq 1 }> checked="checked"<{/if}> value="1" ><{t}>是<{/t}>
+          <input type="radio"  name="goods[nostore_sell]"<{if $goods.nostore_sell eq 0}> checked="checked"<{/if}> value="0" ><{t}>否<{/t}>
+          <{/permission}>
+        </td>
+      </tr>
+
+      <{if $env.conf.b2c.site.get_policy.method ==3}>
+      <tr>
+        <th><{t}>积分：<{/t}></th>
+        <td><{input type="digits" vtype="score" value=$goods.gain_score name="goods[gain_score]" maxlength="25" }><input type='hidden' name='goods[score_setting]' value='percent'/></td>
+      </tr>
+      <{/if}>
+    </table>
+  </div>
+
+
+
+
+</div>
+<script>
+  (function(){
+
+    $ES('#x-g-basic input[name^=goods[package_use]').addEvent('click',function(e){
+
+      var v=this.checked&&this.value=="1"?[false,'']:[true,'none'];
+
+      $$('.package_use').each(function(el){
+        el.setStyle('display',v[1]).getElement('input').set('disabled',v[0]);
+      });
+    });
+
+  })();
+
+  /*tag_foreign_js_extcat*/
+  
+  if($('downlimit'))$('downlimit').getParent('td').getElement('input').addEvent('change',function(e){
+    var num = isNaN(this.value)?100:this.value;
+    this.value = (num.toInt()+0).limit(0,100);
+  });
+</script>
+
+
+
+

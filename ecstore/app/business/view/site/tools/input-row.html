@@ -1,0 +1,30 @@
+<{foreach from=$_input.items item=item key=key}>
+<div class="row">
+  <div class="row-line">
+    <div class="span-auto row-h">
+      <span class="opt">
+      		<img src="<{$desktop_res_url}>/bundle/delecate.gif" onclick="deleteRow(this,<{$domid}>)">
+      <!-- <{img app="desktop" src="bundle/delecate.gif" onclick="$('list_datas').value = $('list_datas').value.split(',').erase(this.getParent('.row').getElement('input[type=hidden]').value).join();this.getParent('.row').destroy();" }> -->
+      </span>
+    </div>
+    <div class="span-auto row-h">
+      <{assign var="id" value=$item[$_input.idcol]}>
+      <input type="hidden" name="<{$_input.name}>[]" item_id="<{$item[$_input.idcol]}>" value="<{$item[$_input.idcol]}>" />
+      <{foreach from=$_input._textcol item=_key}>
+      <{$item[$_key]|cut:120}>
+      <{/foreach}>
+    </div>
+    <{if $_input.view}>
+    <{include file=$_input.view app=$_input.view_app}>
+    <{$env.capture.listBody}>
+    <{/if}>
+  </div>
+</div>
+<{/foreach}>
+<script>
+	function deleteRow(ele,id){
+		var list_datas_id = id;
+		$(list_datas_id).value = $(list_datas_id).value.split(',').erase(ele.getParent('.row').getElement('input[type=hidden]').value).join();
+		ele.getParent('.row').destroy();
+	}
+</script>

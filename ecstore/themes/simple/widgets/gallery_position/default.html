@@ -1,0 +1,164 @@
+<div id="J_crumbs" class="crumb" >
+ <div class="crumbCon">
+ <div id="J_CrumbSlide" class="crumbSlide">
+ <a id="J_CrumbSlidePrev" class="crumbSlide-prev" title="上一页" style="visibility: hidden;" data-spm-anchor-id="a220m.1000858.0.28">&lt;</a>
+ <i class="crumbSlide-prev-shadow"></i>
+ <div class="crumbClip">
+ <form id="J_CrumbSearchForm" action="<{link ctl=site_search act=result app=b2c}>" method="POST">
+ <ul id="J_CrumbSlideCon" class="crumbSlide-con clearfix" style="left: 0px;">
+   <{foreach from=$data.path item=item name="nav"}>
+   <li>
+      <{if $item.title && $item.link}>
+        <{if $smarty.foreach.nav.last}>
+          <span><{$item.title}></span>
+           <i class="crumbArrow">&gt;</i>
+          <{assign var="lastUrl" value=$item.link}>
+        <{else}>
+          <a alt="<{$item.tips}>" href="<{$item.link}>" class="crumbStrong"><{$item.title}></a>
+          <{if $setting.split}>
+          <{$setting.split}>
+          <{else}>
+            <i class="crumbArrow">&gt;</i>
+          <{/if}>
+        <{/if}>
+      <{/if}>
+  </li>
+  <{/foreach}>
+  <{if $data.brand}>
+  <li title="<{$data.brand.name}>:<{$data.brand.brand_name}>" class="crumbAttr">
+  <a href="javascript:;" ><{$data.brand.name}>:<{$data.brand.brand_name|cut:30}></a>
+  
+    <{foreach from=$data.brand.options item=p key=pk name="ppp"}>
+       <input type="hidden" value='<{$pk}>' name="brand_id[]">
+    <{/foreach}>
+  <a href="javascript:;" class="crumbDelete"></a>
+  </li>
+  <{/if}>
+   <{if $data.props.0}>
+    <{foreach from=$data.props item=prop name="pp"}>
+    <li title="<{$prop.name}>:<{$prop.prop_name}>" class="crumbAttr">
+    <a href="javascript:;"><{$prop.name}>:<{$prop.prop_name|cut:30}></a>
+    <{foreach from=$prop.options item=p key=pk name="ppp"}>
+     <input type="hidden" value='<{$pk}>' name="p_<{$prop.goods_p}>[]">
+    <{/foreach}>
+    <a class="crumbDelete" href="javascript:;"></a>
+    </span></li>
+    <{/foreach}>
+    <{/if}>
+
+   <{if $data.brand && $data.props.0}>
+   <li>
+  <i class="crumbArrow">&gt;</i>
+ </li>
+ <{/if}>
+ <li class="crumbSearch">
+ 
+ <label for="J_CrumbSearchInuput" class="crumbSearch-label">
+     <input type="text" id="J_CrumbSearchInuput" placeholder="<{$env.conf.b2c.search.position.tip}>" class="crumbSearch-input" value="<{$data.search_key}>" name="name">
+      </label>
+     <input type="hidden" name='st' value="<{if $data.st=='s'}>s<{else}>g<{/if}>">
+     <{if $data.cat.0}>
+     <input type="hidden" value=<{$data.cat.0}> name="cat_id">
+     <{/if}>
+     <{if $data.store_id}>
+     <input type="hidden" value=<{$data.store_id}> name="sid">
+     <{/if}>
+ <input type="button" class="crumbSearch-btn" id="J_CrumbSearchBtn" value="">
+ </li>
+ </ul>
+ </form>
+ </div>
+ <i class="crumbSlide-next-shadow"></i>
+ <a id="J_CrumbSlideNext" class="crumbSlide-next" title="下一页" style="visibility: hidden;">&gt;</a>
+ </div>
+  <{if $data.goods_count}>
+   <p class="crumbTitle">共<span><{$data.goods_count}></span>个<{if $data.view=='index'}>店铺<{else}>商品<{/if}></p>
+   <{/if}>
+     </div>
+</div>
+<script>
+(function(){
+   var isNotSupportHtml5=this.isNotSupportHtml5=!('placeholder' in new Element('input'));
+//如果浏览器不支持html5  hxh
+  
+    if (isNotSupportHtml5) {
+        var hinput=$('J_CrumbSearchInuput');
+        if(hinput){
+            if(hinput.value==''){
+                hinput.value=hinput.get('placeholder');
+            }
+            hinput.addEvents({
+                'focus':function(e){
+                    if($(this).value==$(this).get('placeholder')){
+                    $(this).value='';
+                    }
+                    $(this).toggleClass('focus');
+                },
+                'blur':function(e){
+                    $(this).toggleClass('focus');
+                    if($(this).value==''){
+                    $(this).value=$(this).get('placeholder');
+                    }
+                }
+            });
+        }
+    }
+
+  if($('J_CrumbSearchBtn')){
+      $('J_CrumbSearchBtn').addEvent('click',function(e){
+          //不支持html5
+          if(isNotSupportHtml5){              
+              if($('J_CrumbSearchInuput').get('placeholder')!=''){
+                  if($('J_CrumbSearchInuput').get('placeholder')==$('J_CrumbSearchInuput').get('value')){
+                    return;
+                  }
+              }              
+          }
+          $('J_CrumbSearchForm').submit();
+      });
+  }
+  if($('J_CrumbSearchInuput')){
+     $('J_CrumbSearchInuput').addEvents({
+       focus:function(e){$(this).toggleClass('focus');$(this).getParent('.crumbSearch-label').toggleClass('focus');},
+       blur:function(e){$(this).toggleClass('focus');$(this).getParent('.crumbSearch-label').toggleClass('focus');}
+     });
+  }
+  var  del= document.getElements('.crumbAttr');
+     del.each(function(el){
+         
+         el.addEvent('click',function(e){
+           e.stop();
+           $(this).destroy();
+           //删除智能提醒。
+           var hinput=$('J_CrumbSearchInuput');
+           if(hinput.value==hinput.get('placeholder')){
+               hinput.value='';
+           }
+           $('J_CrumbSearchForm').submit();
+         });
+        
+     });
+     var jcsPx=$('J_CrumbSlide').getPosition().x;
+     var w=$('J_CrumbSlide').getElement('.crumbClip').getSize().x;
+     var jcsr=jcsPx+w;
+     var jcsiPx=$('J_CrumbSearchInuput').getPosition().x;
+     var jcsir=jcsiPx+150;
+     if(jcsir>jcsr){
+         var move=jcsr-jcsir
+         $('J_CrumbSlidePrev').setStyle('visibility','visible');
+         $('J_CrumbSlideCon').setStyle('left',move+'px');
+         
+         $('J_CrumbSlidePrev').addEvent('click',function(e){
+             $('J_CrumbSlideCon').setStyle('left','0px');
+             $('J_CrumbSlideNext').setStyle('visibility','visible');
+             $(this).setStyle('visibility','hidden');
+         });//J_CrumbSlide
+         $('J_CrumbSlideNext').addEvent('click',function(e){
+             $('J_CrumbSlideCon').setStyle('left',move+'px');
+             $('J_CrumbSlidePrev').setStyle('visibility','visible');
+             $(this).setStyle('visibility','hidden');
+         });
+         
+     }
+})();
+</script>

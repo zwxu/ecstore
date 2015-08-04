@@ -1,0 +1,4 @@
+a:8:{s:7:"spec_id";s:1:"1";s:9:"spec_name";s:6:"颜色";s:14:"spec_show_type";s:4:"flat";s:9:"spec_type";s:5:"image";s:9:"spec_memo";s:0:"";s:7:"p_order";s:1:"0";s:8:"disabled";s:5:"false";s:5:"alias";s:0:"";}
+a:8:{s:7:"spec_id";s:1:"2";s:9:"spec_name";s:6:"尺码";s:14:"spec_show_type";s:4:"flat";s:9:"spec_type";s:4:"text";s:9:"spec_memo";s:0:"";s:7:"p_order";s:1:"0";s:8:"disabled";s:5:"false";s:5:"alias";s:0:"";}
+a:8:{s:7:"spec_id";s:1:"3";s:9:"spec_name";s:6:"尺码";s:14:"spec_show_type";s:4:"flat";s:9:"spec_type";s:4:"text";s:9:"spec_memo";s:6:"鞋码";s:7:"p_order";s:1:"0";s:8:"disabled";s:5:"false";s:5:"alias";s:0:"";}
+a:8:{s:7:"spec_id";s:1:"4";s:9:"spec_name";s:6:"尺码";s:14:"spec_show_type";s:4:"flat";s:9:"spec_type";s:4:"text";s:9:"spec_memo";s:0:"";s:7:"p_order";s:1:"0";s:8:"disabled";s:5:"false";s:5:"alias";s:0:"";}

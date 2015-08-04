@@ -1,0 +1,63 @@
+<div class="title" id='gallerybar'>
+</div>
+<div class="GoodsSearchWrap">
+<{if $searchtotal}>
+    <p class="search_total"><{t}>共有<{/t}><span class="font-orange"><{$searchtotal}></span><{t}>个赠品<{/t}></p>
+<{/if}>
+
+<{if !count($products)}>
+    <h1 class="error" style=""><{t}>非常抱歉，没有任何可兑换赠品<{/t}></h1>
+    <div style="width:170px;margin:0 auto" class="clearfix"><a href="javascript:history.back(1)" class="btn-a"><span><{t}>返回上一页<{/t}></span></a><a href="./" style="margin-left:20px" class="btn-a"><span><{t}>返回首页<{/t}></span></a></div>
+<{/if}>
+  <{include file="site/gallery/type/list.html"}>
+  <{pagers data=$pager}>
+</div>
+
+<script>
+window.addEvent('domready', function(){
+try{
+/*关键字高亮*/
+(function(replace_str){
+    var replace=replace_str.split("+");
+    if(replace.length){
+      $$('.entry-title').each(function(r){
+        for(i=0;i<replace.length;i++){
+          if(replace[i]){
+            var reg=new RegExp("("+replace[i].escapeRegExp()+")","gi");
+            r.setText(r.get('text').replace(reg,function(){
+              return "{0}"+arguments[1]+"{1}";
+            }));
+          }
+        }
+        r.set('html',r.get('text').format("<font color=red>","</font>"));
+      });
+    }
+  })('<{$search_array}>');
+}catch(e){}
+if(window.ie6)return;
+var gallerybar = $('gallerybar');
+var gallerybarSize = gallerybar.getSize();
+var gallerybarPos  = gallerybar.getPosition();
+var fixedStart = gallerybarSize.y+gallerybarPos.y;
+
+var fixGalleryBar = function(){
+    if(fixedStart<this.getScrollTop()){
+         gallerybar.addClass('fixed').setStyles({'width':gallerybarSize.x});
+    }else{
+         gallerybar.removeClass('fixed').setStyles({'width':'auto'});
+    }
+};
+
+window.addEvents({
+   'resize':fixGalleryBar,
+   'scroll':fixGalleryBar
+});
+
+
+});
+
+var Shop = {
+    url:{diff:''}
+}
+
+</script>

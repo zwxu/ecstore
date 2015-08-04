@@ -1,0 +1,9 @@
+<site>
+    
+    <module controller='clink' >
+        <name>bdlink</name>
+        <title>推广链接</title>
+        <disable>false</disable>
+    </module>
+    
+</site>

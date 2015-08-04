@@ -1,0 +1,8 @@
+<{capture name="listHeader"}>
+  <div class="span-2"><{t}>关联方式<{/t}></div>
+<{/capture}>
+<{capture name="listBody"}>
+  <div class="span-5">
+    <input type="radio" name="linktype[<{$item.goods_id}>]" value="left" <{if $goods.glink.moreinfo[$item.goods_id].manual=='left' || $goods.glink.moreinfo[$id].manual==''}>checked="checked"<{/if}>><{t}>单向相关<{/t}>
+    <input type="radio" name="linktype[<{$item.goods_id}>]" value="both" <{if $goods.glink.moreinfo[$item.goods_id].manual=='both'}>checked="checked"<{/if}>><{t}>双向相关<{/t}></div>
+<{/capture}>

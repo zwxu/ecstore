@@ -1,0 +1,46 @@
+<div class="member-main" id="dltype-info-<{$dt_id}>">
+  <div id="tab-dlycorp" class="section switch">
+    <{if $old_customer_service}>
+        <{if $type == 'qq'}>
+            <div class="title"><{t}>修改联系QQ<{/t}></div>
+        <{else}>
+            <div class="title"><{t}>修改联系旺旺<{/t}></div>
+        <{/if}>
+        <form action="<{link app=business ctl=site_webcall act=toEditservice}>" id="dtypeForm" method="post" class="tableform mbblock">
+    <{else}>
+        <{if $type == 'qq'}>
+            <div class="title"><{t}>新增联系QQ<{/t}></div>
+        <{else}>
+            <div class="title"><{t}>新增联系旺旺<{/t}></div>
+        <{/if}>
+        <form action="<{link app=business ctl=site_webcall act=toAddservice}>" id="dtypeForm" method="post" class="tableform mbblock">
+    <{/if}>
+    <div class="division">
+      <table>
+        <tr>
+            <{if $type == 'qq'}>
+              <th><{t}>QQ号<{/t}>:</th>
+              <td><input  type="text" vtype="number" name="customer_service" id="customer_service" value="<{$customer_service}>" size=25 caution="<{t}>请输入正确的QQ号<{/t}>" class="_x_ipt"/></td>
+            <{else}>
+              <th><{t}>旺旺号<{/t}>:</th>
+              <td><input  type="text" name="customer_wangwang" id="customer_wangwang" value="<{$customer_service}>" size=25 class="_x_ipt"/></td>
+            <{/if}>
+          <{if $old_customer_service}>
+            <input type="hidden" name="old_customer_service" id="old_customer_service" value="<{$old_customer_service}>">
+          <{/if}>
+          <input type="hidden" name="type" id="type" value="<{$type}>">
+        </tr>
+      </table>
+      <{button class="submit-btn" type="submit" label=$___b2c="保存"|t:'b2c'}>
+      <{button class="btn btn-quit" type="button" label=$___b2c="退出"|t:'b2c' onclick=""}>
+    </div>
+    </form>
+  </div>
+</div>
+<script>
+var panel = $('dltype-info-<{$dt_id}>');
+var quit = panel.getElement('.btn-quit')||'';
+if(quit) quit.removeEvents('click').addEvent('click',function(e){
+    if(confirm('确定退出?'))window.location='<{link app=business ctl=site_webcall act=manage}>';
+});
+</script>

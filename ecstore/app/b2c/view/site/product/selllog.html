@@ -1,0 +1,24 @@
+<div class="Comments"> 
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" class="gridlist table-goods-list">
+        <tr>
+            <th width="20%" class="first"><{t}>买家<{/t}></th>
+            <th width="20%"><{t}>购买价<{/t}></th>
+            <th width="30%"><{t}>购买数量<{/t}></th>
+            <th width="30%"><{t}>购买时间<{/t}></th>
+        </tr>
+        <{foreach from=$sellLogList.data item=sellLogListData key=key}>
+        <tr>
+            <td align="center"><{$sellLogListData.name|cut:3:''}>***</td>
+            <td align="center"><{$sellLogListData.price|cur_odr}></td> 
+            <td align="center"><{$sellLogListData.number}> <{if $sellLogListData.pdt_desc}>( <{$sellLogListData.pdt_desc}> )<{/if}></td>
+            <td align="center"><{$sellLogListData.createtime|userdate}></td>
+        </tr>
+        <{/foreach}>
+    </table>
+
+    <div class="p5">
+        <{t}>截至今日， 累计销售<{/t}><{$sellLogList.total}><{t}>件<{/t}>
+    </div>
+    <{pagers data=$pager}>
+</div>
+

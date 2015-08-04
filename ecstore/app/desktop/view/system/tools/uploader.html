@@ -1,0 +1,14 @@
+<span id="fix_fl10upload_panel"  style="float:left;padding:3px 4px 2px 20px;" <{if $mousemove}>$mousemove<{/if}>></span>
+<script>
+new Swiff('statics/fcore_player10.swf'+'?'+$time(),{
+                          id:'fix_fl10upload',
+                          container:$('fix_fl10upload_panel'),
+                          width:108,
+                          height:24,
+						  vars:{
+							button_text:"<{$button_text|default:$___desktop='上传图片'|t:'destop'}>",
+							taskCallBack:'Uploader.taskCallBack'
+						  }
+                      });
+
+</script>

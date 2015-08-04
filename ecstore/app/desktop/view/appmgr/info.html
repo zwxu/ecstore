@@ -1,0 +1,35 @@
+<h3><{$appinfo.name}> <sup><{$appinfo.version}></sup></h3>
+<div class="tableform">
+    <h4><{t}>应用信息<{/t}></h4>
+    <div class="division">
+        <table>
+            <tr>
+                <th><{t}>简介:<{/t}></th>
+                <td><{$appinfo.description}></td>
+            </tr>
+            <tr>
+                <th><{t}>证书:<{/t}></th>
+                <td><{$appinfo.license}></td>
+            </tr>
+        </table>
+    </div>
+    <h4><{t}>开发者信息<{/t}></h4>
+    <div class="division">
+        <table>
+            <tr><th><{t}>开发者:<{/t}></th><td><{$appinfo.author.name}></td></tr>
+            <tr><th><{t}>Email:<{/t}></th><td><{$appinfo.author.email}></td></tr>
+            <tr><th><{t}>www:<{/t}></th><td><{$appinfo.author.url}></td></tr>
+        </table>
+    </div>
+
+    <{if $docs}>
+    <h4><{t}>文档<{/t}></h4>
+    <div class="division">
+        <table>
+    <{foreach from=$docs item=doc key=file}>
+        <tr><th></th><td><a href="<{$env.base_url}>/index.php/app-doc/<{$env.get.id}>/<{$file}>" target="_blank"><{$doc}></a><td>
+    <{/foreach}>
+        </table>
+    </div>
+    <{/if}>
+</div>

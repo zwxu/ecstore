@@ -1,0 +1,47 @@
+<div class="clearfix carlogin-wrap shoppingcart">
+        <{include file="site/passport/login.html"}>
+    <!-- <div class="frt" style="width:32%;">
+        <input type='hidden' name='from_minipassport' value='1' >
+        <div class="carlogin-singup">
+            <h4 class='row-span'><{t}>还不是会员?<{/t}></h4>
+            <ul class="fast-login clearfix">
+                <li>
+                <p class="guide-title"><{t}>没有账号？<{/t}></p>
+                <a href='<{link app=b2c ctl="site_passport" act="signup"}>' style="padding-left:30px" class="btn-a">
+                    <span style="padding-right:36px" ><{t}>注册一个新账号<{/t}></span>
+                </a>
+                </li>
+                <{if $guest_enabled=='true'}>
+                <li>
+                <p class="guide-title"><{t}>您还可以...<{/t}></p>
+                <a class="orangebtn" href="<{link app=b2c ctl=site_cart act=checkout}>" onclick="Cookie.write('S[ST_ShopEx-Anonymity-Buy]','true',{path:'<{$base_path}>/'});if ($(this).getParent('.dialog')){$(this).getParent('.dialog').retrieve('chain',$empty)();return false;}" >
+                    <span><{t}>无需注册直接快速购买<{/t}></span>
+                </a>
+                </li>
+                <{/if}>
+            </ul>
+        </div>
+    </div> -->
+</div>
+<script>
+    var isDebug = '<{if defined("DEBUG_CSS") && DEBUG_CSS}>css<{else}>css_mini<{/if}>';
+    Asset.css('<{$env.app.res_url}>/'+isDebug+'/passport.css');
+    <{if $env.conf.b2c.site.register_valide eq 'true'}>
+    /*void function(formclz){
+        var vcodeBox = document.getElement('.'+formclz+' .verifyCodebox');
+        var vcodeImg  =vcodeBox.getElement('img');
+        var refreshVcodeBtn  = vcodeBox.getElement('a').addEvent('click',function(e){
+            e.stop();
+            vcodeImg.src = vcodeImg.get('src')+'?'+(+new Date());
+        });
+        $$('.'+formclz+' input').addEvent('focus',function(){
+            if (this.form.retrieve('showvcode',false))return;
+            vcodeBox.show();
+            refreshVcodeBtn.fireEvent('click',{stop:function(){}});
+            this.form.store('showvcode',true);
+        });
+
+    }('register-wrap');*/
+    <{/if}>
+</script>
+

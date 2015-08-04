@@ -1,0 +1,171 @@
+<div id="dly_printer_editor" style="height:<{$tmpl.prt_tmpl_height*$dpi/25.4}>px;width:<{$tmpl.prt_tmpl_width*$dpi/25.4}>px;border-right:1px #ccc solid;border-bottom:1px #ccc solid;"></div>
+<script>
+
+/*添加SWF到页面*/
+var fpath = "<{$res_url}>/images/printload.swf?<{$smarty.now}>"; //载入容器SWF //printload
+var fid = "printflash"; // 设置flash id
+this.swf = new Swiff(fpath, {
+            width:  1024,
+            height: 600,
+            id:fid,
+            container: $('dly_printer_editor'),
+            params:{
+                wMode:'opaque'
+            },
+            vars:{url:"<{$env.app.res_url}>/images/printeditor.swf?<{$smarty.now}>"}
+        });
+
+
+/*var Print = new Class({
+    Extends:Options,
+    initialize:function(){}
+});*/
+var Print = function(id){this.initialize(id)};
+Print.prototype = {
+    templateId:'<{$tmpl.prt_tmpl_id}>',
+    initialize: function(id){
+        this.flash = $(id);
+    },
+    addBackground:function(){
+        var url = 'index.php?app=express&ctl=admin_delivery_printer&act=upload_bg';
+        if(this.templateId){
+            url += '&p[0]='+this.templateId;
+        }
+        this.dlg=new Dialog(url,{model:true,title:'上传物流单据（快递单）扫描图',height:340,width:480});
+    },
+    setBgID:function(tmp_bg){
+        this.tmp_bg = tmp_bg;
+    },
+    /*添加背景图片 打开选择框*/
+    replaceBackground :function(url){
+        this.flash["pt.replaceBackground"](url);
+    },
+    /*打印全部*/
+    doPrintAll:function(){
+        this.flash["pt.doPrintAll"]();
+    },
+    /*打印当前*/
+    doPrintCurrent:function(){
+        this.flash["pt.doPrintCurrent"]();
+    },
+    /*打印选段*/
+    doPrintSelected:function(){
+        this.flash["pt.doPrintSelected"]();
+    },
+    /*改变舞台尺寸*/
+    resizeCanvas:function(obj){
+        this.flash.style.width = obj.width + "px";
+        this.flash.style.height = obj.height + "px";
+    },
+    /*保存模板*/
+    saveTemplate: function(temp){
+        if(!temp.name){
+            alert('<{t}>请填写单据名称<{/t}>');
+            return;
+        }
+        if(!temp.size.width){
+            alert('<{t}>请填写快递单模版宽度<{/t}>');
+            return;
+        }else if(temp.size.width < 0 || temp.size.width >255){
+            alert('<{t}>模板宽度只能是0-255数值范围之内<{/t}>');
+            return;
+        }
+        if(!temp.size.height){
+            alert('<{t}>请填写快递单模版高度<{/t}>');
+            return;
+        }else if(temp.size.height < 0 || temp.size.height > 255){
+            alert('<{t}>模板高度只能是0-255数值范围之内<{/t}>');
+            return;
+        }
+        if(!temp.offset.x || isNaN(temp.offset.x)){
+            alert('<{t}>模板横向偏移数只能是数字<{/t}>');
+            return;
+        }
+        else if(temp.offset.x < -127 || temp.offset.x > 128){
+            temp.offset.x = 0;
+            alert('<{t}>模板横向偏移数只能"-127 和 128"数值范围之内<{/t}>');
+            return;
+        }
+        if(!temp.offset.y || isNaN(temp.offset.y)){
+            alert('<{t}>模板纵向偏移数只能是数字<{/t}>');
+            return;
+        }
+        else if(temp.offset.y < -127 || temp.offset.y > 128){
+            temp.offset.y = 0;
+            alert('<{t}>模板纵向偏移数只能"-127 和 128"数值范围之内<{/t}>');
+            return;
+        }
+        temp.prt_tmpl_id = '<{$tmpl.prt_tmpl_id}>';
+        temp.tmp_bg = this.tmp_bg;
+        W.page('index.php?app=express&ctl=admin_delivery_printer&act=<{$save_action}>',{method:'post',data:temp});
+    },
+    /*#####################
+    *   set || get
+    **####################*/
+    /* 设置初始打印数据*/
+    setPrintData    :   function(obj){
+        this.printData = obj
+    },
+    /*返回初始打印数据*/
+    getPrintData    :   function(){
+        return this.printData;
+    },
+
+    /*设置打印模板列表*/
+    setTemplateData :   function(obj){
+        this.templateData = obj;
+    },
+    /*返回打印模板列表*/
+    getTemplateData :   function(){
+        return this.templateData;
+    },
+
+    /*设置测试模板数据*/
+    setTestTemplateData :   function(obj){
+        this.testTemplateData = obj;
+    },
+    /*返回测试模板数据*/
+    getTestTemplateData :   function(){
+        return this.testTemplateData;
+    }
+}
+
+/*打印程序AS+JS交互接口*/
+var pt = new Print(fid);
+/* 设置初始打印数据*/
+var printData = <{$printData}>;
+
+pt.setPrintData(printData);
+
+var templateData = <{$templateData}>;
+/*设置打印模板列表*/
+pt.setTemplateData(templateData);
+
+var testTemplateData = [{ label: "YOUR COMPANY NAME", data:"shop_name" },
+                        { label: "√", data:"tick" },
+                        { label: "收货人姓名", data:"ship_name" },
+                        { label: "上海市徐汇区虹桥路333号", data:"ship_addr" },
+                        { label: "021-51086858", data:"ship_tel" },
+                        { label: "13800138000", data:"ship_mobile" },
+                        { label: "200021", data:"ship_zip" },
+                        { label: "上海", data:"ship_area_0" },
+                        { label: "上海市", data:"ship_area_1" },
+                        { label: "徐汇区", data:"ship_area_2" },
+                        { label: "上海市徐汇区桂林路396号2号楼", data:"ship_addr" },
+                        { label: "7", data:"order_count" },
+                        { label: "订单备注内容", data:"order_memo" },
+                        { label: "2012", data:"date_y" },
+                        { label: "02", data:"date_m" },
+                        { label: "08", data:"date_d" },
+                        { label: "发货人姓名", data:"dly_name" },
+                        { label: "上海", data:"dly_area_0" },
+                        { label: "上海市", data:"dly_area_1" },
+                        { label: "徐汇区", data:"dly_area_2" },
+                        { label: "上海市徐汇区桂林路396号3号楼3-7层", data:"dly_address" },
+                        { label: "021-51086858", data:"dly_tel" },
+                        { label: "13800138000", data:"dly_mobile" },
+                        { label: "200021", data:"dly_zip" },
+                        { label: "自定义的内容", data:"text" }];
+/*设置测试模板数据*/
+pt.setTestTemplateData(testTemplateData);
+</script>

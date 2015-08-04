@@ -1,0 +1,41 @@
+<ul class="fr" id="head_activity_<{$widgets_id}>">
+<{if !$data.pic_1 && !$data.pic_2 && !$data.pic_3 && !$data.pic_4}>
+<li>没有数据</li>
+<{else}>
+    <{if $data.pic_1}>
+    <li>
+        <{if $data.link_1}><a href="<{$data.link_1}>"><{/if}>
+            <img src="images/transparent.gif" lazyload="<{$data.pic_1}>" class="img-lazyload"/>
+        <{if $data.link_1}></a><{/if}>
+    </li>
+    <{/if}>
+    <{if $data.pic_2}>
+    <li>
+        <{if $data.link_2}><a href="<{$data.link_2}>"><{/if}>
+            <img src="images/transparent.gif" lazyload="<{$data.pic_2}>" class="img-lazyload"/>
+        <{if $data.link_2}></a><{/if}>
+    </li>
+    <{/if}>
+    <{if $data.pic_3}>
+    <li>
+        <{if $data.link_3}><a href="<{$data.link_3}>"><{/if}>
+            <img src="images/transparent.gif" lazyload="<{$data.pic_3}>" class="img-lazyload"/>
+        <{if $data.link_3}></a><{/if}>
+    </li>
+    <{/if}>
+    <{if $data.pic_4}>
+    <li>
+        <{if $data.link_4}><a href="<{$data.link_4}>"><{/if}>
+            <img src="images/transparent.gif" lazyload="<{$data.pic_4}>" class="img-lazyload"/>
+        <{if $data.link_4}></a><{/if}>
+    </li>
+    <{/if}>
+<{/if}>
+</ul>
+<script>
+window.addEvent('domready',function(){
+    if($('head_activity_<{$widgets_id}>').getElements('li').length == 0){
+        var ActiveLi = new Element('li',{'html':'没有数据'}).inject('head_activity_<{$widgets_id}>');
+    }
+});
+</script>

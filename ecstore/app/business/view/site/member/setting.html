@@ -1,0 +1,128 @@
+<div class="member-main">
+  <div class="title"><{t}>个人信息<{/t}><span class="disc"><{t}>| 请尽量完整填写您的个人信息。<{/t}></span></div>
+  <form method="post" action="<{link app=business ctl='site_member'  full='1' act='save_setting'}> " id='form_saveMember' class="section">
+    <div class="FormWrap" style="background:none; border:none; padding:0; margin:0;">
+      <div class="division" style="border:none;margin-bottom:0">
+        <table class="forform" width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <th><{t}>货币：<{/t}></th>
+            <td>
+              <{input type=select name="currency" options=$currency.options value=$currency.value required=true}>
+            </td>
+          </tr>
+          <{if (!($email && $mobile))}>
+          <tr>
+            <th><em>*</em> 密 码：</th>
+            <td>
+              <{input type="password" name="contact[passwd]" vtype="required"}>
+            </td>
+          </tr>
+          <{/if}>
+          <tr>
+            <th><em>*</em> E-mail：</th>
+            <td>
+			  <{if !$email}>
+              <{input type="text" name="contact[email]" value=$email vtype="required&&email"}>
+			  <{else}>
+              <{input type="text" name="contact[email]" value=$email vtype="required&&email" disabled="disabled"}>
+			  <{/if}>
+            </td>
+          </tr>
+		  <!--添加手机号码---->
+		   <tr>
+            <th><em>*</em> 手机号码：</th>
+            <td>
+			  <{if !$mobile}>
+              <{input type="text" name="contact[phone][mobile]" value=$mobile vtype="required"}>
+			  <{else}>
+              <{input type="text" name="'contact[phone][mobile]" value=$mobile vtype="required" disabled="disabled"}>
+			  <{/if}>   
+            </td>
+          </tr>
+		  <!-- end -->
+        </table>
+      </div>
+      <div class="division" style="border:none;padding-top:0; border-bottom:1px dashed #ddd">
+        <table class="forform" width="100%" border="0" cellspacing="0" cellpadding="0">
+          <{foreach from=$attr item=item name="item" key='row'}>
+          <tr>
+            <th><{if $item.attr_required eq 'true'}><em>*</em><{/if}><{$item.attr_name}>：</th>
+            <td>
+              <{if $item.attr_type =='date'}>
+              <{if $item.attr_value != '0-0-0' && $item.attr_value != '--'}>
+              <{if $item.attr_required eq 'true'}>
+              <{input class="cal" type='date' class="inputstyle" vtype="required" name=$item.attr_column value=$item.attr_value}>
+              <{else}>
+              <{input class="cal" type='date' class="inputstyle" name=$item.attr_column value=$item.attr_value}>
+              <{/if}>
+              <{else}>
+              <{if $item.attr_required eq 'true'}>
+              <{input class="cal" type="date" class="inputstyle" vtype="required" name=$item.attr_column}>
+              <{else}>
+              <{input class="cal" type="date" class="inputstyle" name=$item.attr_column}>
+              <{/if}>
+              <{/if}>
+              <{/if}>
+              <{if $item.attr_type =='region'}>
+              <{input app=ectools type="region" class="inputstyle" name=$item.attr_column value=$item.attr_value }>
+              <{/if}>
+              <{if $item.attr_type =='gender'}>
+              <{input type='gender'  name=$item.attr_column value=$item.attr_value }>
+              <{/if}>
+              <{if $item.attr_type =='select'}>
+              <select name='<{$item.attr_column}>' <{if $item.attr_required eq 'true'}>vtype='required'<{/if}>>
+                <option value='' <{if $item.attr_value == ''}>selected='true'<{/if}>><{t}>请选择<{/t}></option>
+                <{foreach from=$item.attr_option item=option name="option"}>
+                <option value='<{$option}>' <{if $item.attr_value == $option}>selected='true'<{/if}>><{$option}></option>
+                <{/foreach}>
+              </select>
+              <{/if}>
+              <{if $item.attr_type =='checkbox'}>
+              <{foreach from=$item.attr_option item=checkbox name="checkbox" }>
+              <input type="checkbox" name="box:<{$item.attr_column}>[]" value="<{$checkbox}>" <{foreach from=$item.attr_value item=checkboxvalue name="checkboxvalue" }><{if $checkboxvalue==$checkbox}>checked="checked"<{/if}><{/foreach}> <{if $item.attr_required eq 'true'}>vtype="requiredcheckbox"<{/if}>><label><{$checkbox}></label><br/>
+              <{/foreach}><input type="hidden" name="<{$item.attr_column}>[]" value="%no%">
+              <{/if}>
+              <{if $item.attr_type == 'text'}>
+              <input type='text' class="inputstyle" name=<{$item.attr_column}> value='<{$item.attr_value}>' vtype='<{if $item.attr_required eq 'true'}>required&&<{/if}><{if $item.attr_valtype=='number'}>check_overflow&&<{/if}><{$item.attr_valtype}>' />
+              <{/if}>
+              <{if $item.attr_type == 'number'}>
+              <input type='text' class="inputstyle" name=<{$item.attr_column}> value='<{$item.attr_value}>' vtype='<{if $item.attr_required eq 'true'}>required&&<{/if}><{$item.attr_valtype}>' />
+              <{/if}>
+              <{if $item.attr_type == 'alpha'}>
+              <input type='text' class="inputstyle" name=<{$item.attr_column}> value='<{$item.attr_value}>' vtype='<{if $item.attr_required eq 'true'}>required&&<{/if}><{$item.attr_valtype}>' />
+              <{/if}>
+            </td>
+          </tr>
+          <{/foreach}>
+        </table>
+      </div>
+      <div style="padding-left:142px"><{button class="btn submit-btn" type="submit" label=$___b2c="保存"|t:'b2c' rel="_request"}></div>
+    </div>
+  </div>
+</form>
+<script>
+  window.addEvent('domready',function(){
+    validatorMap['check_overflow']= ['<{t}>取值范围-2147483648~2147483647！<{/t}>', function(element, v) {
+      var value = v.toInt();
+      var _is_validate = true;
+      if(element.name=='contact[phone][mobile]'){
+        return true;
+      }
+      if(value>2147483647 || value<-2147483648){
+        _is_validate = false;
+      }
+      return _is_validate;
+    }];
+    var input = document.getElement('input[name="contact[area]"]');
+    if(!input) return;
+    var select = input.getNext('select');
+    select.addEvent('change',function(e){
+      if($(e.target).value !='_NULL_'){
+        input.getParent('span').set('vtype','area');
+      }
+      else{
+        input.getParent('span').set('vtype','');
+      }
+    });
+  });
+</script>

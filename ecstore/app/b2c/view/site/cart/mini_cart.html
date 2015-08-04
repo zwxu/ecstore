@@ -1,0 +1,8 @@
+<div class="CartInfoItems textcenter clearfix">
+  <p class="p10"><{t}>目前选购商品共 <{/t}><span class="font-red"><{$cartCount}></span><{t}> 种 <{/t}><span class="font-red"><{$cartNumber}></span><{t}> 件<{/t}>&nbsp;&nbsp;<{t}>合计:<{/t}> <span class="font-red"><{if $cartTotalPrice < 0}><{0|cur_odr}><{else}><{$cartTotalPrice|cur_odr}><{/if}></span></p>
+  <div class="btnBar clearfix min-btn">
+    <a class="popup-btn-close btn-a"><span><{t}>继续购物<{/t}></span></a>
+
+    <a class="rela_addcart buy-select hasSpec min-mal fr"  href="<{link app=b2c ctl='site_cart' act='index'}>" ><!--<i class="has-icon"> <img src='<{$env.app.res_url}>/bundle/shop_icon.gif' /></i>--><{t}>进入购物车<{/t}></a>
+  </div>
+</div>

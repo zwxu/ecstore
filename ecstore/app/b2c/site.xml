@@ -1,0 +1,194 @@
+<site>
+    <explorer id='b2c' path='view/site'>网店前台模版</explorer>
+
+    <module controller='site_gallery' >
+        <name>gallery</name>
+        <title>全部商品</title>
+        <disable>false</disable>
+        <allow_menu act='index'>全部商品</allow_menu>
+        <default_menu>
+            <title>全部商品</title>
+            <act>index</act>
+            <hidden>true</hidden>
+        </default_menu>
+		<allow_seo act="index">
+            <title>商品列表页</title>
+            <config id="{ENV_shop_name}">商店名称</config>
+            <config id="{ENV_search_num}">搜索到的商品个数</config>
+            <config id="{ENV_goods_cat}">商品分类</config>
+            <config id="{ENV_goods_cat_p}">商品分类路径</config>
+            <config id="{ENV_goods_type}">商品类型</config>
+            <param>
+                <seo_title>{ENV_shop_name}_{ENV_goods_cat}</seo_title>
+                <seo_keywords>{ENV_goods_cat}</seo_keywords>
+                <seo_content>{ENV_goods_cat}</seo_content>
+                <seo_nofollow>否</seo_nofollow>
+                <seo_noindex>否</seo_noindex>
+            </param>
+            <hidden>true</hidden>
+        </allow_seo>
+    </module>
+    
+    <module controller='site_product' >
+        <name>product</name>
+        <title>商品详细页</title>
+        <disable>false</disable>
+        <allow_seo act="index">
+            <title>商品详细页</title>
+            <config id="{ENV_goods_name}">商品名</config>
+            <config id="{ENV_goods_brand}">商品品牌</config>
+            <config id="{ENV_goods_bn}">商品编号</config>
+            <config id="{ENV_goods_cat}">商品分类</config>
+            <config id="{ENV_goods_brief}">商品简介</config>
+            <config id="{ENV_goods_price}">商品价格</config>
+            <param>
+                <seo_title>{ENV_goods_name}_{ENV_goods_brand}</seo_title>
+                <seo_keywords>{ENV_goods_name}</seo_keywords>
+                <seo_content>{ENV_goods_intro}</seo_content>
+                <seo_nofollow>否</seo_nofollow>
+                <seo_noindex>否</seo_noindex>
+            </param>
+            <hidden>true</hidden>
+        </allow_seo>
+    </module>
+    
+    <module controller='site_member' >
+        <name>member</name>
+        <title>会员中心</title>
+        <disable>false</disable>
+        <allow_menu act='index'>会员中心</allow_menu>
+        <allow_menu act='member'>会员/卖家中心</allow_menu>
+        <default_menu>
+            <title>会员中心</title>
+            <act>index</act>
+            <hidden>false</hidden>
+        </default_menu>
+    </module>
+    
+    <module id='b2c' controller='site_brand' >
+        <name>brand</name>
+        <title>品牌区</title>
+        <disable>false</disable>
+        <allow_menu act='showlist'>品牌区</allow_menu>
+        <default_menu>
+            <title>品牌区</title>
+            <act>showlist</act>
+            <hidden>false</hidden>
+        </default_menu>
+        <allow_seo act="index">
+            <title>品牌详细页</title>
+            <config id="{ENV_shop_name}">商店名称</config>
+            <config id="{ENV_brand_name}">品牌名</config>
+            <config id="{ENV_brand_url}">品牌连接</config>
+            <config id="{ENV_brand_intro}">品牌介绍</config>
+            <config id="{ENV_goods_amount}">品牌商品数</config>
+            <param>
+                <seo_title>{ENV_brand_name}_{ENV_brand_url}</seo_title>
+                <seo_keywords>{ENV_brand_name}</seo_keywords>
+                <seo_content>{ENV_brand_url}</seo_content>
+                <seo_nofollow>否</seo_nofollow>
+                <seo_noindex>否</seo_noindex>
+            </param>
+            <hidden>true</hidden>
+       </allow_seo>
+	   <allow_seo act="showlist">
+            <title>品牌列表页</title>
+			<config id="{ENV_shop_name}">商店名称</config>
+            <config id="{ENV_brand_name}">品牌</config>
+            <param>
+                <seo_title>{ENV_brand_name}_{ENV_brand_url}</seo_title>
+                <seo_keywords>{ENV_brand_name}</seo_keywords>
+                <seo_content>{ENV_brand_url}</seo_content>
+                <seo_nofollow>否</seo_nofollow>
+                <seo_noindex>否</seo_noindex>
+            </param>
+            <hidden>true</hidden>
+       </allow_seo>
+    </module>
+    
+    <module id='b2c' controller='site_message' >
+        <name>message</name>
+        <title>商店留言</title>
+        <disable>false</disable>
+        <allow_menu act='index'>商店留言</allow_menu>
+		 <allow_seo act="index">
+            <title>商店留言页</title>
+			<config id="{ENV_shop_name}">商店名称</config>
+            <param>
+                <seo_title>{ENV_shop_name}</seo_title>
+            </param>
+            <hidden>true</hidden>
+       </allow_seo>
+    </module>
+    
+    <module id='b2c' controller='site_comment' >
+        <name>comment</name>
+        <title>评论咨询</title>
+        <disable>false</disable>
+    </module>
+    
+    <module id='b2c' controller='site_passport' >
+        <name>passport</name>
+        <title>会员登录</title>
+        <disable>false</disable>
+    </module>
+    
+    <module id='b2c' controller='site_cart' >
+        <name>cart</name>
+        <title>购物车</title>
+        <disable>false</disable>
+    </module>
+
+    <module id='b2c' controller='site_tools' >
+        <name>tools</name>
+        <title>工具</title>
+        <disable>false</disable>
+    </module>
+
+	<module id='b2c' controller='site_associate' >
+        <name>associate</name>
+        <title>联想搜索</title>
+        <disable>false</disable>
+    </module>
+
+    <module id='b2c' controller='site_order' >
+        <name>order</name>
+        <title>订单</title>
+        <disable>false</disable>
+    </module>
+    <module id='b2c' controller='site_search' >
+        <name>search</name>
+        <title>搜索</title>
+        <disable>false</disable>
+    </module>
+    
+    <module id='b2c' controller='site_paycenter' >
+        <name>paycenter</name>
+        <title>支付中心</title>
+        <disable>false</disable>
+    </module>
+
+	<module id='b2c' controller='site_merchandise' >
+        <name>merchandise</name>
+        <title>日用百货</title>
+        <disable>false</disable>
+    </module>
+
+	<module id='b2c' controller='site_mptimedbuy' >
+        <name>mptimedbuy</name>
+        <title>名品特卖</title>
+        <disable>false</disable>
+		<allow_seo act="index">
+            <title>名品特卖页</title>
+            <param>
+                <seo_title></seo_title>
+                <seo_keywords></seo_keywords>
+                <seo_content></seo_content>
+                <seo_nofollow>否</seo_nofollow>
+                <seo_noindex>否</seo_noindex>
+            </param>
+            <hidden>true</hidden>
+        </allow_seo>
+    </module>
+    
+</site>

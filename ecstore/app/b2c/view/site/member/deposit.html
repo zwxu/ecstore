@@ -1,0 +1,40 @@
+<!-- right-->
+  <div class="member-main">
+  <div>
+
+<div class="title title2"><{t}>充值到预存款<{/t}></div>
+
+<form action="<{link app=b2c ctl="site_paycenter" act="dopayment" arg0="recharge"}>" method="post"  id="deposit" class="section" extra="subOrder">
+  <input type="hidden" name="payment[member_id]" value="<{$member_id}>" />
+  <input type="hidden" name="payment[return_url]" value="<{$return_url}>" />
+  <div style="display:none"><{input type="checkForm" }></div>
+    <p class="admin-title admin-title2"><{t}>您当前的预存款余额为：<{/t}><span class="point"><{$total|cur_odr}></span></p>
+  <div class="FormWrap bn zffs" >
+    <div class="p10" >
+   <ul>
+  <li>
+    <label><{t}>输入充值金额：<{/t}></label>
+    <{input class="inputstyle" type="unsigned" name="payment[money]" vtype="positive&&required" id='deposit'}>
+  </li>
+<!--    <tr>
+    <th><{t}>选择支付币别：<{/t}></th>
+    <td><{$currencys.cur_name}></td>
+  </tr>
+-->  <li class="fontbold"><{t}>选择支付方式：<{/t}></li>
+    <li>
+    <div id="paymentlist"><{include file="admin/order/paymethod.html"}></div>
+  </li>
+</ul>
+<div class="pl150 m10" >
+<{button class="btn" type="submit" isDisabled="true" label=$___b2c="去充值"|t:'b2c'}>
+<!-- <input class="btnstyle pay-btn" type="submit" value="<{t}>点击立刻付款<{/t}>" /> --></div>
+</div>
+
+</div>
+
+</form>
+
+
+  </div>
+  </div>
+<!-- right-->

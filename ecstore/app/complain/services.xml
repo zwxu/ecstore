@@ -1,0 +1,18 @@
+<services>
+    <service id="business_menu_extends">
+        <class>complain_seller_menuextends</class>
+    </service>
+   <service id="business.member_orders">
+	    <class>complain_buyer_orders</class>
+   </service>
+   
+   <service id="b2c.member_menu_extends">
+	    <class>complain_buyer_menuextends</class>
+   </service>
+   <service id="desktop_finder.complain_mdl_complain">
+        <class>complain_finder_complain</class>
+    </service>
+    <service id="desktop_finder.complain_mdl_reports">
+        <class>complain_finder_reports</class>
+    </service>
+</services>

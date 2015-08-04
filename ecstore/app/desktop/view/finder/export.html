@@ -1,0 +1,13 @@
+<div>
+    <input type="radio" onclick="$('x-form-exporter').action='index.php?ctl=<{$env.get.ctl}>&act=do_export&p[0]=csv'" checked="checked" id="finder-exporter-0" name="_exporter"> <label for="finder-exporter-0"><{t}>csv-逗号分隔的文本文件<{/t}></label> 
+</div>
+<iframe name="_export_frm" style="border:none;display:none"></iframe>
+
+<{area inject=".mainFoot"}>
+<form action="index.php?ctl=<{$env.get.ctl}>&act=do_export" method="post" id="x-form-exporter" target="_export_frm">
+<{toinput from=$env.post}>
+<div class="table-action">
+    <{button label=$___desktop="导出"|t:'desktop' type="submit" icon="visible.gif" class="btn-primary"}>
+</div>
+</form>
+<{/area}>

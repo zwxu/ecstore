@@ -1,0 +1,19 @@
+<app version="1.0">
+  <name>商品雷达</name>
+
+  <description>商品雷达</description>
+
+  <author>
+      <name>BBC 开发团队</name>
+      <email></email>
+      <url></url>
+  </author>
+
+  <version>1.0</version>
+
+  <license>license</license>
+  <depends>
+    <app>b2c</app>
+  </depends>
+
+</app>

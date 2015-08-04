@@ -1,0 +1,15 @@
+<root>
+	
+	<register ctl="admin_returnproduct" act="save">
+		<operate>售后申请单状态修改</operate>
+	</register>
+	
+	<register ctl="admin_returnproduct" act="send_comment">
+		<operate>售后单添加说明</operate>
+	</register>
+	
+	<register ctl="admin_returnproduct" act="settings">
+		<operate>售后申请配置</operate>
+	</register>
+		
+</root>

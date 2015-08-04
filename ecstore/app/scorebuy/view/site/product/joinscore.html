@@ -1,0 +1,96 @@
+<{if defined("DEBUG_JS") && DEBUG_JS}>
+  <{script src="mootools.js" app="site"}>
+<{else}>
+  <{script src="moo_min.js" app="site" pdir="js_mini"}>
+<{/if}>
+<div>
+<p class="moth_Remaining_time">
+    <ul class="je_ac_limtime_1">
+        <li><strong>剩余时间：</strong></li>
+        <li><span class="minute_1">00</span>分</li>
+        <li><span class="second_1">00</span>秒</li>
+    <div class="cl_zhi"></div>
+    </ul>
+</p>
+<{button id="scorebuy_btn" type="button" class="btn-secondary-1" label=$___a="立即购买"|t:'site'}>
+</div>
+
+<script>
+(function() {
+    var flag = true;
+    var timestamp_statues = (new Date()).valueOf();
+    var timeCount=timestamp_statues;
+    var timeCount = this.timeCount = {
+        init:function(nowtime,endtime,dom){
+            var diff = Math.abs((nowtime - endtime)/1000);
+            var secondDiff = diff % 60;
+            var minuteDiff = ((diff - secondDiff)/60) % 60;
+            var timeDiff = [minuteDiff,secondDiff];
+            this.s = (function(){
+                    this.calcTime.periodical(1000,this,{
+                    time:timeDiff,
+                    dom:dom
+                })}).delay(10,this);
+        },
+        addZero:function(timeDiff){
+            for(var i=0;i<timeDiff.length;i++){
+                if(timeDiff[i].toString().length<2){
+                    timeDiff[i] = "0" + timeDiff[i].toString();
+                    return timeDiff;
+                }
+            }
+        },
+        formatToInt : function(timeDiff){
+            for(var i=0;i<timeDiff.length;i++){
+                parseInt(timeDiff[i]);
+            };
+            return timeDiff;
+        },
+        judgeTime : function(timeDiff){
+            if(timeDiff[0]> 0  && timeDiff[1]<0){
+                timeDiff[1] = 59;
+                timeDiff[0]--;
+                return timeDiff;
+            }else if(timeDiff[1]==0 && timeDiff[0]==0){
+                $('scorebuy_btn').set('disabled','true');
+                $('scorebuy_btn').set('class','btn-secondary-2');
+                flag = false;
+                return;
+            }else if(timeDiff[0]<= 0  && timeDiff[1]<0){
+                flag = false;
+                return;
+            }
+        },
+        calcTime : function (obj){
+            if(!flag) return;
+            var _timeDiff = obj.time;
+            this.addZero(_timeDiff);
+            this.formatToInt(_timeDiff);
+            _timeDiff[1]--;
+            this.judgeTime(_timeDiff);
+            this.addZero(_timeDiff);
+            var dom = obj.dom;
+            dom.second.innerHTML = _timeDiff[1];
+            dom.minute.innerHTML = _timeDiff[0];
+        },
+    }
+})();
+(function(){
+    var timeNow =  Date.parse(new Date());
+    var timeEnd= timeNow + 15*60*1000;
+    var dom = {
+          minute:$E('.minute_1'),
+          second:$E('.second_1')
+    };
+    if(timeEnd > timeNow){
+        timeCount.init(timeEnd,timeNow,dom);
+    }
+})();
+
+
+$('scorebuy_btn').addEvent('click',function(e){
+    var dialog = this.getParent('.dialog');
+    dialog.retrieve('instance').options._callback();
+    dialog.retrieve('instance').close();
+});
+ </script>

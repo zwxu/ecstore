@@ -1,0 +1,41 @@
+<div class="finder-title">
+
+
+
+    <h2 class="head-title span-auto"><{$title}><span class="num"><{t}>(共<{/t}><em class="count2"><{$pinfo.count}></em><{t}>条)<{/t}></span>
+    </h2>
+    <div class="span-auto sift" id="filter-tip-<{$finder_name}>" style="visibility:hidden;margin-top:2px;">
+
+    	 当前<em class="count"></em><{t}>条<{/t}>筛选结果
+	<{if $use_save_filter == true}>
+		 <{if $env.get.act=='finder_common'}>
+		 <a href="<{$url}>"><{t}>返回全部列表<{/t}></a>
+		 <{else}>
+		 <a href="javascript:void(0);" onclick="<{$var_name}>.filter2packet()"  class=""><{t}>保存筛选条件<{/t}></a>
+		 <a href="<{$url}>"><{t}>返回全部列表<{/t}></a>
+		 <{/if}>
+	<{*	<span class="lnk f-10" onclick="<{$var_name}>.filter2packet()">[ <{t}>另存当前筛选条件<{/t}> ]</span>
+		&nbsp;&nbsp;<span class="lnk f-10" onclick="<{$var_name}>.clearfilter()">[ <{t}>清除当前搜索条件<{/t}> ]</span>*}>
+		<{/if}>
+    </div>
+	<{if $top_extra}>
+	<div class="top_extra clear" >
+		<{$top_extra}>
+	</div>
+	<{/if}>
+
+    <div class="frt finder-options">
+    	<div class="span-auto">
+    	     <a class="lnk-refresh" title="<{t}>刷新当前列表<{/t}>" onclick="<{$var_name}>.refresh();return false;" href="javascript:void(0)">
+				<span><{t}>刷新当前列表<{/t}></span>
+    	     </a>
+    	</div>
+		<{if $use_buildin_setcol}>
+		<div class='span-auto'>
+				<a class="lnk-operation" title="<{t}>列表项配置<{/t}>" id="finder-col-option-<{$finder_name}>" href="<{$url}>&action=column&finder_aliasname=<{$finder_aliasname}>" target="dialog::{width:300,title:'<{t}>配置列表项<{/t}>'}"><span><{t}>列表项配置<{/t}></span></a>
+		</div>
+		<{/if}>
+    </div>
+
+
+</div>

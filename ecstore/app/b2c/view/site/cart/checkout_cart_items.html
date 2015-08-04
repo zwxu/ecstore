@@ -1,0 +1,11 @@
+<!-- 购物车页面结构开始 -->
+<!-- <div class="mtb_20 price_all_cart">商品总价（不含运费）：<span>2619.00</span>元 <input type="button"  value="结算"/></div> -->
+<div id="goodsbody">
+    <{include file='site/cart/checkout_goodsbody.html' app=b2c }>
+</div>
+<{if $aCart.cart_status=='false'}>
+<div id="error_str" style="display:none;">
+    <{$aCart.cart_error_html}>
+</div>
+<{/if}>
+<!-- 购物车页面结构结束 -->

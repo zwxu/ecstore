@@ -1,0 +1,59 @@
+<div class="finder-detail">
+	<div class="tableform">
+	<h4><{t}>请输入出货点信息<{/t}></h4>
+	<div class="division" id='delivery_create'>
+	<form action="index.php?app=express&ctl=admin_delivery_center&act=create" method="post" id="delivery_detail">
+		<div class="box-form" url='member'>
+			<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tbody>
+			  <tr>
+				<th width="18%"><{t}>请输入出货点名称：<{/t}></th>
+				<td width="82%"><input type="text" class="x-input" vtype="required" maxlength="50" size="30" name="delivery_center[name]" autocomplete="off" /></td>
+			  </tr>
+			  <tr>
+				<th><{t}>请输入出货点地址：<{/t}></th>
+				<td><input type="text" class="x-input" vtype="required" size="30" maxlength="200" name="delivery_center[address]" autocomplete="off" /></td>
+			  </tr>
+			  <tr>
+				<th><{t}>请输入出货点所在地区：<{/t}></th>
+				<td><input type="text" class="x-input" vtype="required" size="30" maxlength="100" name="delivery_center[region]" autocomplete="off" /></td>
+			  </tr>
+			  <tr>
+				<th><{t}>请输入出货点邮编：<{/t}></th>
+				<td><input type="text" class="x-input" vtype="number" size="30" maxlength="20" name="delivery_center[zip]" autocomplete="off" /></td>
+			  </tr>
+			  <tr>
+				<th><{t}>请输入出货点电话：<{/t}></th>
+				<td><input type="text" class="x-input" vtype="number" size="30" maxlength="100" name="delivery_center[phone]" autocomplete="off" /></td>
+			  </tr>
+			  <tr>
+				<th><{t}>请输入姓名：<{/t}></th>
+				<td><input type="text" class="x-input" size="30" maxlength="100" name="delivery_center[uname]" autocomplete="off" /></td>
+			  </tr>
+			  <tr>
+				<th><{t}>请输入手机号码：<{/t}></th>
+				<td><input type="text" class="x-input" vtype="number" size="30" maxlength="100" name="delivery_center[cellphone]" autocomplete="off" /></td>
+			  </tr>
+			  <tr>
+				<th><{t}>请选择您性别：<{/t}></th>
+				<td>
+					<select class=" x-input-select inputstyle" name="delivery_center[sex]" style="width:222px;">
+						<option value=""><{t}>请选择<{/t}></option>
+						<option value="female"><{t}>女性<{/t}></option>
+						<option value="male"><{t}>男性<{/t}></option>
+					</select>
+				</td>
+			  </tr>
+			  <tr>
+				<th><{t}>请输入备注：<{/t}></th>
+				<td>
+					<{input type='html' id='dom_el_041f7f7' value='' name='delivery_center[memo]' includeBase='true'}>
+				</td>
+			  </tr>
+			  </tbody>
+			</table>
+		</div>
+	</form>
+	</div>
+	</div>
+</div>

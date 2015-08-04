@@ -1,0 +1,158 @@
+<div class="tableform">
+<{tabber}>
+	 <{tab name=$___desktop="数据备份"|t:'desktop'}>
+		<div class="division">
+		<div style="text-align:right;"><{help docid="99" type="link"}><{t}>点击查看帮助<{/t}><{/help}></div>
+    <{if !$last_backup_time}>
+    	<div class="notice"><{t}>您还未做过备份操作.<{/t}></div>
+    <{/if}>
+    	<div class="note"><{t}>如需上传备份文件，请使用ftp上传到指定目录（/data/backup）<{/t}></div>
+	     <div class="table-action">
+		<{button type="button" id="btn_data_dobackup" class="btn-primary" label=$___desktop="立即备份"|t:'desktop'}>
+		<span class="font-blue"></span>
+		</div>
+</div>
+	<{/tab}>
+
+
+
+	<{if $last_backup_time}>
+		<{tab name=$___desktop="备份历史"|t:'desktop'}>
+			<div class="division">
+
+				<caption><{t}>最近一次备份发生在：<{/t}><{$last_backup_time}></caption>
+				 <table class="gridlist" width="100%" cellspacing="0" cellpadding="0" border="0">
+				<thead>
+				<tr>
+				<th><{t}>备份文件名<{/t}></th>
+				<th><{t}>备份类型<{/t}></th>
+				<th><{t}>大小<{/t}></th>
+				<th><{t}>备份时间<{/t}></th>
+				<th><{t}>操作<{/t}></th>
+				</tr>
+				</thead>
+				<tbody>
+				  <{foreach from=$archive key=id item=tgz}>
+				  <tr>
+				    <td>
+				        <a href='index.php?app=desktop&ctl=backup&act=getFile&file=<{$tgz.name|regex_replace:'/^(.*)[\\\|\/]/':''}>' target="download"><{$tgz.name|regex_replace:'/^(.*)[\\\|\/]/':''}></a>
+				    </td>
+				    <td><{$tgz.app}></td>
+				    <td><{$tgz.size/1024|round}>&nbsp;<b class="font-gray">KB</b></td>
+				    <td><{$tgz.time|cdate:'FDATE_FTIME'}></td>
+				    <td>
+					<div class="clearfix">
+						<div class="span-auto">&nbsp;</div>
+						<div class="span-auto">&nbsp;</div>
+						<div class="span-auto">&nbsp;</div>
+						<div class="span-auto">
+				    <{if $appver.rev!=$tgz.backup.rev}>
+				         <a href="javascript:void(0)" onclick="alert('<{t}>因版本不符，无法恢复此备份<{/t}>')"><{t}>恢复<{/t}></a>
+				    <{else}>
+
+				        <span class="lnk backup_data_otps" _p="<{$tgz.name|regex_replace:'/^(.*)[\\\|\/]/':''}>|<{$tgz.time}>" _t="1" ><{t}>恢复<{/t}></span>
+				    <{/if}>
+						</div>
+						<div class="span-auto">
+						  <a  href="index.php?app=desktop&ctl=backup&act=getFile&file=<{$tgz.name|regex_replace:'/^(.*)[\\\|\/]/':''}>" target="download" class="lnk backup_data_otps"  _t="2" ><{t}>下载<{/t}></a>
+						</div>
+						<div class="span-auto">
+						   <a href="index.php?app=desktop&ctl=comeback&act=removeTgz&tgz=<{$tgz.name|regex_replace:'/^(.*)[\\\|\/]/':''}>" class="lnk backup_data_otps"  _t="3" ><{t}>删除<{/t}></a>
+						</div>
+				</div>
+				    </td>
+				  </tr>
+				  <{/foreach}>
+
+				    </tbody>
+				</table>
+				</div>
+				<{/tab}>
+				<script>
+					$$('.backup_data_otps').addEvent('click',function(){
+
+						var _type = this.get('_t');
+						var _param = this.get('_p')?this.get('_p').split('|'):['',''];
+						switch(_type){
+							case '1':
+								return new Dialog('index.php?app=desktop&ctl=comeback&act=comeback&filename='+_param[0]+'&mtime='+_param[1],{title:'<{t}>数据恢复<{/t}>',width:300,height:200});
+							case '2':return;
+							case '3':
+							if( !confirm('确定删除吗?') ) return false;
+						}
+
+
+
+					});
+				</script>
+	<{/if}>
+
+
+	<{tab name=$___desktop="体验数据清除"|t:'desktop'}>
+   	  <div class="division">
+
+		<form action="index.php?app=desktop&ctl=debug&act=cleardata" method="post" >
+	     <table>
+	      <tr>
+	        <th><{t}>管理员用户名：<{/t}></th>
+	        <td><{input type='text' name='uname' value=""  vtype="required" size=20}>
+	      </tr>
+	      <tr>
+	        <th><{t}>管理员密码：<{/t}></th>
+	        <td><{input type='password' name='password' value=""  size=20}>
+	      </tr>
+	    </table>
+		</form>
+		<div class="table-action">
+			<{button id="btn_clear_default_data" type="button" class="btn-primary" label=$___desktop="清除体验数据"|t:'desktop'}>
+		</div>
+  </div>
+	<{/tab}>
+ <{/tabber}>
+
+
+<script>
+
+
+
+   $('btn_data_dobackup').addEvent('click',function(){
+	  if(!confirm("<{t}>确定备份么？<{/t}>"))return;
+	  var _this = this;
+
+	  var req = new Request({
+			url:'index.php?app=desktop&ctl=backup&act=backup_sdf',
+			onRequest:function(){
+			  _this.set('disabled',true);
+			},
+			onComplete:function(re){
+			   _this.removeProperty('disabled');
+			   try{re = JSON.decode(re);}catch(e){}
+			   if(!re)return MessageBox.error('ERROR'+re);
+			    if(!re.success){
+				  _this.getNext().set('text',re.message);
+                  req.initialize();
+				  req.send({url:re.nexturl});
+				}else{
+				_this.getNext().set('html',re.success+"<a href='"+re.nexturl+"' target='download'  class='fontcolorGreen'><{t}>&raquo;下载备份好的文件<{/t}></a>");
+
+				}
+
+			}
+	 	}).send();
+   });
+   $('btn_clear_default_data').addEvent('click',function(){
+			if(!confirm("<{t}>清除体验数据操作将会清除的数据包括商品分类、商品类型、商品品牌、商品等相关数据\n也包括您近期添加的数据，确认么？<{/t}>"))return;
+			var _form = this.getParent('.division').getElement('form');
+			var _this = this;
+			_form.store('target',{
+				onRequest:function(){
+				  _this.set('disabled',true);
+				},
+				onComplete:function(){
+				  _this.removeProperty('disabled');
+				}
+			});
+			_form.fireEvent('submit',{stop:$empty});
+	});
+
+</script>

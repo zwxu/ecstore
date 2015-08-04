@@ -1,0 +1,62 @@
+<div class="ItemsWarp items-text clearfix border-top">
+  <table width="100%" border="0" cellspacing="0"  cellpadding="0" class="gridlist horizontal-m" style="border:none">
+  <col class="span-7"></col>
+    <col class="span-4"></col>
+    <col class="span-3" ></col>
+    <col class="span-3" > </col>
+    <col class="span-2 "></col>
+
+    <{if count($products) > 0}>
+    <thead>
+    <th class="first"><{t}>商品名称<{/t}></th>
+      <th><{t}>商品价格<{/t}></th>
+      <th><{t}>查看大图<{/t}></th>
+      <th><{t}>商品对比<{/t}></th>
+      <th><{t}>操作<{/t}></th>
+      </thead>
+    <tbody>
+    <{foreach from=$products item=product}>
+    <tr product="<{$product.goods_id}>" valign="top" class="<{$mask_webslice}>" id="pdt-<{$product.goods_id}>">
+      <td class="goodinfo">
+       <h3><a target="_blank" href="<{link app=b2c ctl=site_product act=index arg=$product.goods_id}>" title="<{$product.name|escape:html}>" class="entry-title"><{$product.name|escape:"html"}><span style="display:none"><img src="<{$product.thumbnail_pic|default:$env.conf.site.default_thumbnail_pic|storager}>"></span></a></h3>
+	  	<{if $product.tags}>
+	        <{foreach from=$product.tags item=tags}>
+	        <{if $tags.params.tag_showOnIndex}>
+	        &nbsp;<span class="tag-label" style="background-color:<{$tags.tag_bgcolor}>;color:<{$tags.tag_fgcolor}>"><{$tags.tag_name}></span>
+	        <{/if}>
+	        <{/foreach}>
+	    <{/if}>
+      </td>
+
+      <td>
+      <{*<span class="sell-t">销售价:</span><em class="sell-price"><{$product.price|cur_odr}></em>*}>
+      <span class="sell-t">销售价:</span>
+        <em class="sell-price">
+          <{if $product.minprice && $product.maxprice}>
+            <{$product.minprice|cur_odr}>-<{$product.maxprice|cur_odr}>
+          <{else}>
+            <{$product.price|cur_odr}>
+          <{/if}>
+        </em>
+
+
+      <{if $product.timebuyprice}>
+      <br>
+      <span class="rush-t">抢购价:</span><em class="rush-price"><{$product.timebuyprice|cur_odr}></em>
+      <{/if}>
+
+      </td>
+      <td><a  href="<{link app=b2c ctl=site_product act=viewpic arg0=$product.goods_id arg1=$product.image_default_id}>" target="_blank" title="<{t}>查看图片<{/t}>" class="btn-bj-hover"><i class="has-icon"> <img src='<{$env.app.res_url}>/bundle/zoo_pic1.gif' /></i><span><{t}>查看大图<{/t}></span></a></td>
+      <td><a href="javascript:void(0);" rel="_gcomp_" data-gcomp="{gid:'<{$product.goods_id}>',gname:'<{$product.name|addslashes|escape:html}>',gtype:'<{$product.type_id}>',url:'<{link app=b2c ctl=site_product act=index arg=$product.goods_id}>'}" class="btncmp btn-bj-hover" title="<{t}>商品对比<{/t}>"> <i class="has-icon"> <img src='<{$env.app.res_url}>/bundle/contrast_icon.gif' /></i><span><{t}>商品对比<{/t}></span> </a></td>
+      <td>
+	  <ul class="cart-coll-ul">
+	    <li class="star-off btn-bj-hover" <{if $login!="nologin"}>star="<{$product.goods_id}>" data-type="on"<{/if}> class="star-off" title="<{$product.obj_items.products.0.name|escape:"html"}>"> <a <{if $login=="nologin"}> href="<{link app=b2c ctl="site_passport" act="login"}>" <{else}>href="###" rel="_fav_"<{/if}> class="btn-fav collect-cart">
+	      <span><div class="fav"><{t}>收 藏<{/t}></div> <div class="nofav"><{t}>已收藏<{/t}></div></span> </a>
+        </li></ul></td>
+    </tr>
+    <{/foreach}>
+    </tbody>
+
+    <{/if}>
+  </table>
+</div>

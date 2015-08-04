@@ -1,0 +1,521 @@
+<{css src="shop.css" app='b2c'}>
+<{$searchInfo}>
+<{if $tabs}>
+<ul class="GoodsSearchTabs">
+  <li<{if $args.3 eq ''}> class="current"<{/if}>><a href="<{link args=$args arg3=''}>"><span><{t}>全部商品<{/t}></span></a>
+  </li>
+  <{section name=tabs loop=$tabs}> <li<{if is_numeric($args.3) && $args.3 eq $smarty.section.tabs.index}> class="current"<{/if}>><a href="<{link args=$args arg3=$smarty.section.tabs.index}>"><span><{$tabs[tabs].label}></span></a>
+  </li>
+  <{/section}>
+    <li></li>
+</ul>
+<{/if}>
+<div class="clear"></div>
+<div class="GoodsSearchWrap">
+    <form action="<{link ctl=site_search act=result app=b2c}>" id='selector-form'>
+      <input type="hidden" name="filter" value="<{$args[1]}>" />
+      <input type="hidden" name="st" value="<{$args[7]}>" />
+        <{if $cat_id}>
+        <input type="hidden" name="cat_id" value="<{$cat_id}>">
+        <{/if}>
+        <{include file="site/gallery/selector/tmall.html"}>
+    </form>
+    
+    <script type='text/javascript'>
+        var fixEmpeyPanel = (function(el){
+                el.setStyle('display',el.get('text').clean().trim()?'block':'none');
+                return arguments.callee;
+                })($('selector-form'));
+        if($('selector-form').style.display!='none'){
+            $$('#selector-form .division').each(fixEmpeyPanel);
+        }
+    </script>
+    <fieldset class="gallery-bar-box">
+        <legend>商品排序</legend>
+        <div class="clearfix filter" id='gallerybar' >
+            <{if $show_filter=='true'}>
+            <div class='fArea fOriginArea' id='J_FOriginArea' style="">
+            <b class="fA-text"><{if $scon.loc}><{$scon.loc}><{else}> 发货地<{/if}> </b>
+            <i class="f-ico-triangle-rb"></i>
+            <div id='fA-list' class="fA-list">
+              <div class="fAl-hd clearfix">
+              <a href="" class="fAl-all" data-val="ALL">所有地区</a>
+               <!--<span class="fAl-curLoc">
+              <a href="">江苏</a>
+              <a href="">无锡</a>
+               </span>-->
+                 <form action="<{link ctl=site_search act=result app=b2c}>" method="POST" class="fAl-custom">
+                     <input type="hidden" name="filter" value="<{$args[1]}>" />
+                     <input type="hidden" name="cat_type" value="<{$args[5]}>" />
+                     <input type="hidden" name="st" value="<{$args[7]}>" />
+                     <input type="hidden" name="orderby"value="<{$args[2]}>" >
+                     <input type="hidden" name="view" value="<{$curView}>" >
+                     <input type="hidden" name="page" value="1">
+                     <{if $filter.price}>
+                     <input type="hidden" value="<{$filter.price.0}>"name="price[0]">
+                     <input type="hidden" value="<{$filter.price.1}>"name="price[1]">
+                     <{/if}>
+                     <{if $filter.freight_bear.0=='business'}>
+                     <input type="hidden" value="business" name="freight_bear">
+                     <{/if}>
+                     <{if $filter.goods_state.0=='used'}>
+                     <input type="hidden" value="used" name="goods_state">
+                     <{/if}>
+                     <input type="text" name="loc" id="J_FOAInput" data-val="输入城市名">
+                    <button class="ui-btn-s-primary fAlc-btn" type="submit">确定</button>
+               </form>
+               </div><!--style="padding-right:100px;width:auto" --> 
+               <ul data-atp=",{text}" class="fAl-loc">
+               <li><a data-val="江苏,浙江,上海" href="" atpanel=",江浙沪">江浙沪</a></li>
+               <li><a data-val="广州,深圳,中山,珠海,佛山,东莞,惠州" href="" atpanel=",珠三角">珠三角</a></li>
+               <li><a data-val="香港,澳门,台湾" href="" atpanel=",港澳台">港澳台</a></li>
+               <!--<li><a data-val="美国,英国,法国,瑞士,澳洲,新西兰,加拿大,奥地利,韩国,日本,德国,意大利,西班牙,俄罗斯,泰国,印度,荷兰,新加坡,其它国家" href="" atpanel=",海外">海外</a></li>-->
+                 <li><a href="" atpanel=",北京">北京</a></li>
+                 <li><a href="" atpanel=",上海">上海</a></li>
+                 <li><a href="" atpanel=",广州">广州</a></li>
+                 <li><a href="" atpanel=",深圳">深圳</a></li>
+                 </ul>
+
+               <ul data-atp=",{text}" class="fAl-loc">
+                 <li><a href="" atpanel=",杭州">杭州</a></li>
+                 <li><a href="" atpanel=",温州">温州</a></li>
+                 <li><a href="" atpanel=",宁波">宁波</a></li>
+                 <li><a href="" atpanel=",南京">南京</a></li>
+                 <li><a href="" atpanel=",苏州">苏州</a></li>
+                 <li><a href="" atpanel=",济南">济南</a></li>
+                 <li><a href="" atpanel=",青岛">青岛</a></li>
+                 <li><a href="" atpanel=",大连">大连</a></li>
+                 <li><a href="" atpanel=",无锡">无锡</a></li>
+                 <li><a href="" atpanel=",合肥">合肥</a></li>
+                 <li><a href="" atpanel=",天津">天津</a></li>
+                 <li><a href="" atpanel=",长沙">长沙</a></li>
+                 <li><a href="" atpanel=",武汉">武汉</a></li>
+                 <li><a href="" atpanel=",郑州">郑州</a></li>
+                 <li><a href="" atpanel=",石家庄">石家庄</a></li>
+                 <li><a href="" atpanel=",成都">成都</a></li>
+                 <li><a href="" atpanel=",重庆">重庆</a></li>
+                 <li><a href="" atpanel=",西安">西安</a></li>
+                 <li><a href="" atpanel=",昆明">昆明</a></li>
+                 <li><a href="" atpanel=",南宁">南宁</a></li>
+                 <li><a href="" atpanel=",福州">福州</a></li>
+                 <li><a href="" atpanel=",厦门">厦门</a></li>
+                 <li><a href="" atpanel=",南昌">南昌</a></li>
+                 <li><a href="" atpanel=",东莞">东莞</a></li>
+                 <li><a href="" atpanel=",沈阳">沈阳</a></li>
+                 <li><a href="" atpanel=",长春">长春</a></li>
+                 <li><a href="" atpanel=",哈尔滨">哈尔滨</a></li>
+                 </ul>
+
+               <ul data-atp=",{text}" class="fAl-loc">
+                 <li><a href="" atpanel=",安徽">安徽</a></li>
+                 <li><a href="" atpanel=",福建">福建</a></li>
+                 <li><a href="" atpanel=",甘肃">甘肃</a></li>
+                 <li><a href="" atpanel=",广东">广东</a></li>
+                 <li><a href="" atpanel=",广西">广西</a></li>
+                 <li><a href="" atpanel=",贵州">贵州</a></li>
+                 <li><a href="" atpanel=",海南">海南</a></li>
+                 <li><a href="" atpanel=",河北">河北</a></li>
+                 <li><a href="" atpanel=",河南">河南</a></li>
+                 <li><a href="" atpanel=",湖北">湖北</a></li>
+                 <li><a href="" atpanel=",湖南">湖南</a></li>
+                 <li><a href="" atpanel=",江苏">江苏</a></li>
+                 <li><a href="" atpanel=",黑龙江">黑龙江</a></li>
+                 <li><a href="" atpanel=",江西">江西</a></li>
+                 <li><a href="" atpanel=",吉林">吉林</a></li>
+                 <li><a href="" atpanel=",辽宁">辽宁</a></li>
+                 <li><a href="" atpanel=",内蒙古">内蒙古</a></li>
+                 <li><a href="" atpanel=",宁夏">宁夏</a></li>
+                 <li><a href="" atpanel=",青海">青海</a></li>
+                 <li><a href="" atpanel=",山东">山东</a></li>
+                 <li><a href="" atpanel=",山西">山西</a></li>
+                 <li><a href="" atpanel=",陕西">陕西</a></li>
+                 <li><a href="" atpanel=",四川">四川</a></li>
+                 <li><a href="" atpanel=",西藏">西藏</a></li>
+                 <li><a href="" atpanel=",新疆">新疆</a></li>
+                 <li><a href="" atpanel=",云南">云南</a></li>
+                 <li><a href="" atpanel=",浙江">浙江</a></li>
+                 <li><a href="" atpanel=",香港">香港</a></li>
+                 <li><a href="" atpanel=",澳门">澳门</a></li>
+                 <li><a href="" atpanel=",台湾">台湾</a></li>
+                 </ul>
+
+               </div>
+        </div>
+        <{/if}>
+        <form action="<{link ctl=site_search act=result app=b2c}>"  method ="POST" id="J_FForm">
+        <div id="J_fRange" class="fRange">
+           <{if $args.2 ==4}>           
+            <b class="fR-cur">             
+               <i class="fRl-ico-pd"></i>价格从高到低
+           </b>
+           <{elseif $args.2 == 5}>
+                <b class="fR-cur">
+                <i class="fRl-ico-pu"></i>价格从低到高
+               </b>
+           <{elseif $args.2 == 9}>
+                <b class="fR-cur">
+                <i class="fRl-ico-sd"></i>总销量从高到低
+               </b>
+           <{elseif $args.2 == 11}>
+                <b class="fR-cur">
+                <i class="fRl-ico-sd"></i>月销量从高到低
+               </b>
+           <{elseif $args.2 == 2}>
+             <b class="fR-cur">
+                <i class="fRl-ico-td"></i>按发布时间排序
+              </b>
+           <{else}>
+           <b class="fR-text">
+           默认排序
+           </b>
+           <{/if}>
+           <i class="f-ico-triangle-rb"></i>
+           <ul class="fR-list">
+           <li>
+           <a   action="orderby" avalue="4" href="<{link app=b2c ctl=site_gallery act=index args=$args arg2=4 arg4=1}>"><i class="fRl-ico-pd"></i>价格从高到低</a>
+           </li>
+           <li>
+           <a action="orderby" avalue="5" href="<{link app=b2c ctl=site_gallery act=index args=$args arg2=5 arg4=1}>"><i class="fRl-ico-pu"></i>价格从低到高</a>
+           </li>
+           <li>
+           <a action="orderby" avalue="9" href="<{link app=b2c ctl=site_gallery act=index args=$args arg2=9 arg4=1}>"><i class="fRl-ico-sd"></i>总销量从高到低</a>
+           </li>
+           <li>
+           <a action="orderby" avalue="11" href="<{link app=b2c ctl=site_gallery act=index args=$args arg2=11 arg4=1}>"><i class="fRl-ico-msd"></i>月销量从高到低</a>
+           </li>
+           <{if $env.conf.b2c.gallery.deliver.time=='true'}>
+           <li>
+           <a action="orderby" avalue="2" href="<{link app=b2c ctl=site_gallery act=index args=$args arg2=2 arg4=1}>"><i class="fRl-ico-td"></i>按发布时间排序</a>
+           </li>
+           <{/if}>
+           <li>
+           <a action="orderby" avalue="1" href="<{link app=b2c ctl=site_gallery act=index args=$args2 arg2=1 arg4=1}>?scontent=<{$args1}>">恢复默认排序</a>
+           </li>
+           </ul>
+        </div>
+        <a action="orderby" avalue="<{if $args.2 != 11}>11<{else}>1<{/if}>"  title="<{if $args.2 == 11}>点击后恢复默认排序<{else}>点击后按月销量从高到低<{/if}>" <{if $args.2 != 11}>href="<{link app=b2c ctl=site_gallery act=index args=$args arg2=11 arg4=1}>"<{else}> href="<{link app=b2c ctl=site_gallery act=index args=$args2 arg2=1  arg4=1}>?scontent=<{$args1}>"<{/if}> class="fSort <{if $args.2 == 11}>fSort-cur<{/if}>">
+            销量
+        <i class="f-ico-arrow-d"></i>
+        </a>
+        <a action="orderby" avalue="<{if $args.2 == 4 ||$args.2 == 5}><{if $args.2 == 5}>4<{else}>1<{/if}><{else}>5<{/if}>"  title="<{if $args.2 == 4 ||$args.2 == 5}><{if $args.2 == 5}>点击后按价格从高到低<{else}>点击后恢复排序<{/if}><{else}>点击后按价格从低到高<{/if}>" 
+           href=" <{if $args.2 == 4 ||$args.2 == 5}><{if $args.2 == 5}><{link app=b2c ctl=site_gallery act=index args=$args arg2=4}><{else}><{link app=b2c ctl=site_gallery act=index args=$args2 arg2=1 arg4=1}>?scontent=<{$args1}><{/if}><{else}><{link app=b2c ctl=site_gallery act=index args=$args arg2=5 arg4=1}><{/if}>" class="fSort <{if $args.2 == 4 || $args.2 == 5}>fSort-cur<{/if}>">
+            价格
+           <i class="f-ico-triangle-mt <{if $args.2 == 5}>f-ico-triangle-mt-slctd<{/if}>"></i>
+            <i class="f-ico-triangle-mb <{if $args.2 == 4}>f-ico-triangle-mb-slctd<{/if}>" ></i>
+        </a>
+        <div id="J_FPrice" class="fPrice">
+             <div class="fP-box">
+             <b class="fPb-item">
+             <i class="ui-price-plain">¥</i>
+             <input type="text" class="j_FPInput" value="<{$filter.price.0}>" maxlength="8" autocomplete="off" name="price[0]">
+             </b>
+             <i class="fPb-split"></i>
+             <b class="fPb-item">
+             <i class="ui-price-plain">¥</i>
+             <input type="text" class="j_FPInput" maxlength="8" value="<{$filter.price.1}>" autocomplete="off" name="price[1]">
+             </b>
+             </div>
+
+             <div class="fP-expand">
+             <a id="J_FPCancel" class="ui-btn-s">清空</a>
+                     
+             <a atpanel=",,,,shop-fprice,20,fprice," id="J_FPEnter" class="ui-btn-s-primary">确定</a>
+             </div>
+         </div>
+        <{if $show_filter=='true'}>
+         <div id="J_FMenu" class="fMenu">
+         <div class="fM-con">
+         <!--<a class="j_FMcExpand ui-more-drop-l" hidefocus="true" href="javascript:;" data-spm-anchor-id="a220m.1000858.1000724.9" data-status="drop">更多<i class="ui-more-drop-l-arrow"></i></a>-->
+         
+          <label><input name="freight_bear" <{if $filter.freight_bear.0=='business'}>checked<{/if}> value="business" type="checkbox">包邮</label>
+          <!--<label><input name="goods_state" <{if $filter.goods_state.0=='used'}>checked<{/if}> value="used" type="checkbox">二手</label>-->
+        
+         </div>
+        </div>           
+            <!--展现类型-->
+            <{if count($views)>1}>
+            <{foreach from=$views key=label item=view}>
+            <{if $view.6=='index'}>
+                 <a  action='view' avalue="<{$view.6}>"  class="fType-w <{if $curView==$view.6}>fType-cur<{/if}>" <{if $curView !=$view.6}> href="<{link app=b2c ctl=site_gallery act=index args=$view  arg1=$args1}>" <{/if}>><{$label}><i class="fTw-ico"></i></a>
+            <{else if $view.6=='grid'}>
+                 <a action='view' avalue="<{$view.6}>" class="fType-g <{if $curView==$view.6}>fType-cur<{/if}>" <{if $curView !=$view.6}> href="<{link app=b2c ctl=site_gallery act=index args=$view arg1=$args1}>" <{/if}>><{$label}><i class="fTg-ico"></i></a>
+            <{else if $view.6=='sgrid'}>
+                 <a action='view' avalue="<{$view.6}>" class="fType-l <{if $curView==$view.6}>fType-cur<{/if}>" <{if $curView !=$view.6}> href="<{link app=b2c ctl=site_gallery act=index args=$view arg1=$args1}>" <{/if}>><{$label}><i class="fTl-ico"></i></a>
+            <{/if}>
+            <{/foreach}>           
+            <{/if}>          
+      <{/if}>
+            <{if $scon.scontent}>
+           <input type=hidden value="<{$scon.scontent}>" name="scontent">
+           <{/if}>
+            <{if $scon.loc}>
+           <input type=hidden value="<{$scon.loc}>" name="loc"> 
+           <{/if}>
+           <{if $cat_id}>
+              <input type="hidden" name="cat_id" value="<{$cat_id}>">
+          <{/if}>
+           <input type="hidden" name="st" value="<{$args[7]}>" />
+           <input type="hidden" name="filter" value="<{$args[1]}>" />
+           <input type="hidden" name="cat_type" value="<{$args[5]}>" />
+           <input type="hidden" name="orderby"value="<{$args[2]}>" >
+           <input type="hidden" name="view" value="<{$curView}>" >
+           <input type="hidden" name="page" value="1">
+         </form>
+            <{gpagers data=$pager type=mini}> 
+        </div>
+    </fieldset>
+    <{if !count($products)}>
+    <div class="feed-back m30" >
+        <{if $emtpy_info}>
+        <div class="lineheight-free"><{$emtpy_info}></div>
+        <{else}>
+        <h1 class="error" style=""><{t}>非常抱歉，没有找到相关<{if $curView=='index'}>店铺<{else}>商品<{/if}><{/t}></h1>
+        <p style="margin:15px 1em;">
+        <strong><{t}>建议：<{/t}></strong>
+        <br />
+        <{t}>适当缩短您的关键词或更改关键词后重新搜索。<{/t}>
+        </p>
+        <div class="w200 ma">
+            <a href="javascript:history.back(1)" class="btn-a">
+                <span><{t}>返回上一页<{/t}></span>
+            </a>
+            <a href="./" class="btn-a pl20 ml10">
+                <span><{t}>返回首页<{/t}></span>
+            </a>
+        </div>
+        <{/if}>
+    </div>
+    <{/if}>
+    <{include file=$_PDT_LST_TPL}>
+    <{gpagers data=$pager}>
+</div>
+
+
+
+
+<script>
+window.addEvent('domready', function(){
+  
+
+$('J_fRange').addEvents({
+     mouseover:function(){
+       $(this).getElement('ul').setStyle('display','block');
+     },
+     mouseleave:function(){
+       $(this).getElement('ul').setStyle('display','none');
+    }
+});
+if($('J_FOriginArea')){
+$('J_FOriginArea').addEvents({
+     mouseover:function(){
+       $(this).getElement('.fA-list').setStyle('display','block');
+     },
+     mouseleave:function(){
+       $(this).getElement('.fA-list').setStyle('display','none');
+    },
+    click:function(e){
+         var el=e.target;
+         if(el.get('tag')=='a'){
+            e.stop();
+            var input=$('J_FOAInput');
+            var data_val=el.get('data-val');
+            if(data_val){              
+               input.value=data_val=='ALL'?'':data_val;
+            }else{
+              input.value=el.get('html');
+            }
+            input.getParent('.fAl-custom').submit();
+         }
+    }
+});
+}
+if($('J_FMenu')){
+var j_FMcExpand=$('J_FMenu').getElement('.j_FMcExpand');
+if(j_FMcExpand){
+j_FMcExpand.addEvent('click',function(e){
+    e.stop();
+    var div=$(this).getParent('.fMenu');
+    div.toggleClass('fMenu-expand');
+    $(this).toggleClass('ui-more-expand-l');
+    $(this).toggleClass('ui-more-drop-l');
+    if(div.hasClass('fMenu-expand')){
+        $(this).set('html','收起<i class="ui-more-expand-l-arrow"></i>');
+    }else{
+        $(this).set('html','更多<i class="ui-more-drop-l-arrow"></i>');
+    }
+});
+}
+$('J_FMenu').getElements('input[type=checkbox]').addEvent('click',function(e){
+    $('J_FForm').submit();
+});
+}
+var jprice=$('J_FPrice');
+jprice.getElements('input').each(function(el){
+    el.addEvents({
+      focus:function(){
+       jprice.addClass('fPrice-hover');
+      },
+      blur:function(){
+       //jprice.removeClass('fPrice-hover');
+      }
+    });
+});
+//jprice.addEvent('mouseleave',function(){jprice.removeClass('fPrice-hover');});
+document.body.addEvent('click',function(e){
+  var el=e.target;
+  if(el.getParent('.fPrice')){
+     return;
+  }
+  jprice.removeClass('fPrice-hover');
+});
+
+$('J_FForm').addEvent('click',function(e){
+  var el=e.target;
+  if(el.get('tag')=='a'){
+    e.stop();
+    if(el.get('action')){
+        $('J_FForm').getElement('input[name="'+el.get('action')+'"]').value=el.get('avalue');
+        $('J_FForm').submit();
+    }
+    if(el.get('id')=='J_FPCancel'){
+      jprice.getElements('input').map(function(el,index,arr){ el.value='';arr[0].focus()});
+      $('J_FForm').submit();
+    }
+    if(el.get('id')=='J_FPEnter'){
+      $('J_FForm').submit();
+    }
+    
+  }
+  
+});
+
+    new DataLazyLoad({lazyDataType:'img',img:'lazyload'});
+    try{
+        /*关键字高亮*/
+        (function(replace_str){
+            var replace=replace_str.split("+");
+            if(replace.length){
+                $$('.entry-title, .productShop-name, .shop-header-title').each(function(r){
+                    for(i=0;i<replace.length;i++){
+                        if(replace[i]){
+                            var reg=new RegExp("("+replace[i].escapeRegExp()+")","gi");
+                            r.set('text',r.get('text').replace(reg,function(){
+                                return "{0}"+arguments[1]+"{1}";
+                            }));
+                        }
+                    }
+                    r.set('html',r.get('text').substitute({0:"<font color=red>",1:"</font>"}));//原来的增加样式有问题
+                });
+            }
+        })('<{$search_array}>');
+    }catch(e){}
+
+
+
+
+
+
+
+    //Gallery bar 滚动定位 -- by Tyler Chao
+    var gallerybar = $('gallerybar');
+    var gallerybarSize = {
+        x:gallerybar.outerSize().x - gallerybar.getPatch().x,
+        y:gallerybar.outerSize().y - gallerybar.getPatch().y
+    };
+    var gallerybarPos  = gallerybar.getPosition();
+    var fixedStart = gallerybarPos.y;
+
+    var fixGalleryBar = function(){
+        if(fixedStart<this.getScrollTop()){
+            if(Browser.ie6) {
+                gallerybar.setStyles({'width':gallerybarSize.x - gallerybar.getPatch().x,'position':'absolute','top':this.getScrollTop()})}
+            else{
+                gallerybar.addClass('fixed').setStyles({'width':gallerybarSize.x - gallerybar.getPatch().x});
+            }
+            }else{
+            if(Browser.ie6) {
+                gallerybar.setStyles({'position':'','top':'','width':''});
+            };
+            gallerybar.removeClass('fixed').setStyle('width','');
+        }
+    };
+
+    window.addEvents({
+        'resize':fixGalleryBar,
+        'scroll':fixGalleryBar
+    });
+});
+
+/*
+*商品标签定位
+*/
+window.addEvent('domready', function() {
+    var tips = $$('.goods-tip');
+    //var opacity = tips.getElement('img').get('op')[0];
+    //tips.getElement('img').setStyle('opacity',opacity);
+    if (tips.length > 0) {
+        var parSize = {
+            x: tips.getParent('.goodpic')[0].getSize().x,
+            y: tips.getParent('.goodpic')[0].getSize().y
+        };
+
+        var GoodsTipPos = {
+            tl: {
+                left: 0,
+                top: 0
+            },
+            tc: {
+                left: (parSize.x) / 2 - 25,
+                top: 0
+            },
+            tr: {
+                top: 0,
+                right: 0
+            },
+            ml: {
+                left: 0,
+                top: (parSize.y) / 2 - 25
+            },
+            mc: {
+                left: (parSize.x) / 2 - 25,
+                top: (parSize.y) / 2 - 25
+            },
+            mr: {
+                top: (parSize.y) / 2 - 25,
+                right: 0
+            },
+            bl: {
+                bottom: 0,
+                left: 0
+            },
+            bc: {
+                bottom: 0,
+                left: (parSize.x) / 2 - 25
+            },
+            br: {
+                bottom: 0,
+                right: 0
+            }
+        };
+
+        tips.each(function(v) {
+            v.getElement('img').addEvent('load', function(){
+                this.zoomImg(30, 30);
+            });
+            var ImgSrc = v.getElement('img').get('src');
+            if (Browser.ie6) v.getElement('img').setStyle('filter', "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + ImgSrc + "')");
+            var proPos = v.getElement('img').get('pos');
+            var Pos = GoodsTipPos[proPos];
+            v.setStyles({
+                'top': Pos.top,
+                'left': Pos.left,
+                'right': Pos.right,
+                'bottom': Pos.bottom
+            });
+        });
+    }
+});
+
+</script>
+
+

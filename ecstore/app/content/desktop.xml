@@ -1,0 +1,18 @@
+<desktop>
+	
+	 <permissions>
+        <permission id="page" display='true' workground='site.wrokground.theme'>页面管理</permission>
+    </permissions>
+    
+    <workground name="站点" id="site.wrokground.theme" controller="admin_module" action="index">
+        <menugroup name="页面管理">
+		    <menu controller='admin_node' action='index' permission='page' display='true' order="60">文章栏目</menu>
+            <menu controller='admin_article' action='index' permission='page' display='true' order="70">文章列表</menu>
+            <menu controller='admin_node' action='add' permission='page' display='false' order="100">添加节点</menu>
+            <menu controller='admin_node' action='edit' permission='page' display='false' order="110">编辑节点</menu>
+            <!-- <menu controller='admin_base_setting' action='index' permission='site' display='true' order="80">文章配置</menu> -->
+        </menugroup>
+    </workground>
+    
+</desktop>
+

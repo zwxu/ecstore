@@ -1,0 +1,30 @@
+<div class="member-main tk" id="member-main">
+<h1 class="title"><{t}>上传打款凭证<{/t}></h1>
+<form action="<{link app=business ctl=site_member act=do_upload}>" enctype="multipart/form-data" encoding="multipart/form-data" method="post" name="return_save" id='x-return-form'>
+    <div class="FormWrap">
+        <div class="division">
+            请输入退款交易流水账号以及打款成功截图，以便财务核实。
+            <h4 class="fontnormal"><{t}>打款流水账号：<{/t}></h4>
+            <input type="text" id="return_money_id" name="return_money_id" class="x-input">
+            <h4 class="fontnormal"><{t}>打款截图：<{/t}></h4>
+            <input type="file" class="x-input x-inputs" name="file" id="fileField" />
+        </div>
+</div>
+<input type="hidden" name="return_id" value="<{$return_id}>">
+<{button class="" type="submit" label=$___b2c="提交"|t:'b2c'}>
+</form>
+</div>
+<script>
+$('x-return-form').getElement('button[type=submit]').addEvent('click',function(e){
+    var reason = $('return_money_id').value;
+    var fileField = $('fileField').value;
+    if(reason ==''){
+        Message.error('请填写流水账号');
+        return false;
+    }
+    if(!fileField){
+        Message.error('请上传截图');
+        return false;
+    }
+});
+</script>

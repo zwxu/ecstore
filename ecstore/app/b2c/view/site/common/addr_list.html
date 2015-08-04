@@ -1,0 +1,72 @@
+<{if $default_addr}>
+	<li class="J_Addr J_MakePoint selected" >
+	<input type="hidden" value="<{$default_addr.addr_id}>">
+	<input type="hidden" id="default_addr" value="<{$default_addr._area}>">
+		<div class="addr_hd" style="display: block;">
+			<span class="addrinfo-province"><{$default_addr.area_arr.0}></span>
+			<span title="城市" class="addrinfo-city"><{$default_addr.area_arr.1}></span>
+			<span title="收货人" class="addrinfo-name">(<{$default_addr.name}> 收)</span>
+		</div>
+		<div class="addr_bd" style="display: block;">
+			<span class="addrinfo-dist"><{$default_addr.area_arr.2}></span>
+			<span title="收货地区" class="addrinfo-street"><{$default_addr.addr}></span>
+			<span class="addrinfo-tel"><{$default_addr.mobile}> </span>
+		</div>
+		<span class="select_addr_cart">默认地址</span>
+   </li>
+<{/if}>
+<{if $addrlist}>
+<{foreach from=$addrlist item=item key=key name="addrlist"}>
+  <{if !$item.def_addr}>
+	<li class="J_Addr J_MakePoint" >
+	<input type="hidden" value="<{$item.addr_id}>">
+	<input type="hidden" value="<{$item._area}>">
+		<div class="addr_hd" style="display: block;">
+			<span class="addrinfo-province"><{$item.area_arr.0}></span>
+			<span title="城市" class="addrinfo-city"><{$item.area_arr.1}></span>
+			<span title="收货人" class="addrinfo-name">(<{$item.name}> 收)</span>
+		</div>
+		<div class="addr_bd" style="display: block;">
+			<span class="addrinfo-dist"><{$item.area_arr.2}></span>
+			<span title="收货地区" class="addrinfo-street"><{$item.addr}></span>
+			<span class="addrinfo-tel"><{$item.mobile}> </span>
+		</div>
+		<span class="select_addr_cart">默认地址</span>
+     </li>
+  <{/if}>
+<{/foreach}>
+<{/if}>
+<input type="hidden" id="addr_id" name="delivery[addr_id]" value="<{$default_addr.addr_id}>">
+<script>
+	window.addEvent('domready',function(){
+		$$('.J_MakePoint').each(function(item){
+			item.addEvent('click',function(){
+				var input = item.getChildren('input');
+				input_addrId = input[0];
+                //如果点击的是当先选中的地址，则返回。
+                if(input_addrId.value==$('addr_id').value){
+                    return;
+                }
+                if(!confirm('更换地址后，您需要重新确认订单信息')){
+                    return;
+                }
+				$('addr_id').value = input_addrId.value;
+				updateNewAddr(input_addrId.value,'');
+				$$('.selected').removeClass('selected');
+				item.addClass('selected');
+				$('newAddr').setStyle('display','none');
+				$('addrArea_id').value = input[1].value;
+				setUpShipping(input[1].value);
+				 //Order.setShippingFromArea(input[1]);
+			});
+
+			item.addEvent('mouseenter',function(){
+				//this.addClass('selected');
+			});
+
+			item.addEvent('mouseenter',function(){
+				//this.removeClass('selected');
+			});
+		});
+	});
+</script>

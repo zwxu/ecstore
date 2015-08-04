@@ -1,0 +1,71 @@
+<{area inject='.mainHead'}>
+<div class="notice">
+域名设定主要是用于店铺装修中，允许列表中出现的域名下的图片链接到本站。<br>
+为了更好的兼容地址中的二级域名，请不要在输入时填写二级域名。
+</div>
+
+<div class="gridlist-action mainHead">
+<div style="padding:0 1px; float:left; ">
+<{button type="button" class="btn-has-icon" label=$___b2c="新增图片域名"|t:'b2c' app="desktop"  icon="btn_add.gif" onclick="addNewRow();"}>
+</div>
+</div>
+<div class='headBox mainHead' style="clear:both">
+ <div class='headContent'>
+   <div class='gridlist-head' style="border-bottom:1px solid #ddd">
+        <div class='span-9' style='text-align:center'><{t}>域名<{/t}></div>
+        <div  class='span-1'><{t}>删除<{/t}></div>
+   </div>
+ </div>
+</div>
+<{/area}>
+<form action="index.php?app=business&ctl=admin_default&act=img_save" id="attrEditor" method="post" >
+<div class='finder' id='website_url' >
+    <{if $website_url}>
+    <{foreach from=$website_url item=url}>
+    <div class="row">
+        <div class="row-line">
+            <div style="margin-top:5px;margin-bottom:5px; height:25px; line-height:25px" class="span-9">
+                <input style='margin-left:50px;width:250px;' type="text" required="true"  name="url[]" value="<{$url}>" class="x-input inputstyle" autocomplete="off">
+            </div>
+            <div style="text-align:center; margin-top:6px" class="span-1 "><span style="cursor:pointer" onclick="deleteRow(this);">
+            <img border="0" alt="删除" src="<{$env.BASE_URL}>/app/b2c/statics/bundle/delecate.gif"></span>
+            </div>
+        </div>
+    </div>
+    <{/foreach}>
+    <{else}>
+    <div class="row">
+        <div class="row-line">
+            <div style="margin-top:5px;margin-bottom:5px; height:25px; line-height:25px" class="span-9">
+                <input style='margin-left:50px;' type="text" required="true"  name="url[]" class="x-input inputstyle" autocomplete="off">
+            </div>
+            <div style="text-align:center; margin-top:6px" class="span-1 "><span style="cursor:pointer" onclick="deleteRow(this);">
+            <img border="0" alt="删除" src="<{$env.BASE_URL}>/app/b2c/statics/bundle/delecate.gif"></span>
+            </div>
+        </div>
+    </div>
+    <{/if}>
+</div>
+</form>
+
+<{area inject='.mainFoot'}>
+  <div class="mainFoot">
+    <div class="footer">
+
+    <div class="table-action" style="margin-top:10px; background:none">
+	<{button label=$___b2c="保存"|t:'b2c' type="button" onclick="$('attrEditor').fireEvent('submit',new Event(event))"}>
+   </div>
+
+    </div>
+  </div>
+<{/area}>
+
+<script>
+  function addNewRow(){
+      var $html='<div class=""><div class="row-line"><div style="margin-top:5px;margin-bottom:5px; height:25px; line-height:25px" class="span-9"><input style="margin-left:50px;width:250px;" type="text" required="true"  name="url[]" class="x-input inputstyle" autocomplete="off"></div><div style="text-align:center; margin-top:6px" class="span-1 "><span style="cursor:pointer" onclick="deleteRow(this);"><img border="0" alt="删除" src="<{$env.BASE_URL}>/app/b2c/statics/bundle/delecate.gif"></span></div></div></div>';
+      new Element('div').addClass('row member_reg_attr').set('html',$html).inject($('website_url'));
+  }
+  function deleteRow(obj){
+      if(confirm('确认要删除吗？')){$(obj).getParent('.row').destroy();}return false;
+  }
+</script>

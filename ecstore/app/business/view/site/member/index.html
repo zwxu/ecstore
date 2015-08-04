@@ -1,0 +1,248 @@
+<!-- right--> 
+<{css src="sell.css" app="business"}>
+<div class="sell_ri ri_zhi">
+    <div class="member_center_nav">当前位置：<a href="#">首页</a> > <a href="#" class="current">卖家中心</a></div>
+    <div class="Plate">
+       <h4>
+        <a href="#" class="current">我的专营店</a>
+        <a href="#" class="">管理店铺动态</a>
+        </h4>
+    </div>
+    <div class="sell_ri_top">
+	    <div class="sell_ri_top_le le_zhi">
+			<a href="#"><img src="<{$member.storeinfo.image|default:$defaultImage|storager:'s'}>" alt=""/></a>
+	    	<p><{$member.storeinfo.store_name}></p>
+		</div>
+	    <div class="sell_ri_top_ri ri_zhi">
+           <div class="order_info">
+		        <div class="order_info_le le_zhi">
+			        <ul>
+				      	<li>
+				      		<strong><b class="icon01"></b><{t}>订单<{/t}></strong>
+				      		<{if $ship_order_num}>
+				      		<span><a href="<{link app=business ctl=site_member act=seller_order args0='ship' args1=' ' args2=' ' args3=' ' args4='all'}>"><{t}>待发货订单<{/t}><font>（<{$ship_order_num}>）</font></a></span>
+				      		<{else}>
+				      		<span><{t}>待发货订单（0）<{/t}></span>
+				      		<{/if}>
+
+				      		<{if $refunded_order_num}>
+				      		<span><a href="<{link app=business ctl=site_member act=seller_order args0='refunded' args1=' ' args2=' ' args3=' ' args4='all'}>"><{t}>退款中的订单<{/t}><font>（<{$refunded_order_num}>）</font></a></span>
+				      		<{else}>
+				      		<span><{t}>退款中的订单<font>（0）</font><{/t}></span>
+				      		<{/if}>
+
+				      	</li>
+
+				      	<li>
+				      		<strong><b class="icon02"></b><{t}>提醒<{/t}></strong>
+
+				      		<{if $wait_marketable_num}>
+				      		<span><a href="<{link app=business ctl=site_member act=goods_instock}>"><{t}>等待上架的宝贝<font>（<{/t}><{$wait_marketable_num}>）</font></a></span>
+				      		<{else}>
+				      		<span><{t}>等待上架的宝贝<font>（0）</font><{/t}></span>
+				      		<{/if}>
+                  
+                  <{if $alert_goods_num}>
+				      		<span><a href="<{link app=business ctl=site_member act=goods_alert}>"><{t}>需要优化的宝贝（<{$alert_goods_num|default:0}>）<{/t}></a></span>
+                  <{else}>
+				      		<span><{t}>需要优化的宝贝（0）<{/t}></span>
+				      		<{/if}>
+						</li>
+
+						<li>
+							<strong><b class="icon03"></b><{t}>违规<{/t}></strong>
+					      	<span><{t}>一般违规累计<{/t}>（<{$storeviolation.total0}>）</span>
+					      	<span><{t}>严重违规累计<{/t}>（<{$storeviolation.total1}>）</span>
+						</li>
+
+						<li class="none">
+							<strong><b class="icon04"></b>宝贝</strong>
+
+				      		<{if $onsell_goods_num}>
+				      		<span class="color_1"><a href="<{link app=business ctl=site_member act=goods_onsell}>">出售中的宝贝（<{$onsell_goods_num}>）</a></span>
+				      		<{else}>
+				      		<span class="color_1">出售中的宝贝（0）</span>
+				      		<{/if}>
+
+				      		<span class="color_1">待评论宝贝（<{$ncomment_goods_num}>）</span>
+				    	</li>
+			        </ul>
+			  
+			    </div>
+		        <table class="order_info_ri ri_zhi" cellpadding="0" cellspacing="0">
+					<tr>
+						<th><{t}>店铺动态评分<{/t}></th>
+						<th><{t}>与同行业相比<{/t}></th>
+					</tr>
+	                <{foreach from=$store_info.store_point key=key item=item}>
+					<tr>
+						<td class="color_1"><{$item.name}>：<{$item.avg_point}></td>
+						<td class="red">
+	                    <{if $item.avg_percent > 0}>低于<{elseif $item.avg_percent < 0}>高于<{else}>持平<{/if}>
+	                    <{math equation="abs(x)" x=$item.avg_percent}>%
+	                    </td>
+					</tr>
+	                <{/foreach}>
+			    </table>
+		    </div>
+		</div>
+		
+	    <div class="cl_zhi"></div>
+	</div>
+	<div class="Plate width_472 fl">
+		<h4><a href="#" class="current">营销推广活动</a></h4>
+		<div class="Plate_info">
+			<div class="Plate_info_table_div">
+				<ul class="Plate_info_table">
+					<{foreach from=$activityinfo key=key item=item}>
+					<{if $key<5}>
+					<li><span>[<{$item.start_time}>]</span><a href="<{link app=business ctl='site_activity' act='attend'}>"><{$item.name}></a></li>
+					<{/if}>
+					<{/foreach}>
+
+				</ul>
+		  </div><!--
+            <div style='float:right;'><a href="<{link app=content ctl='site_article' act='promotions' arg0='1' arg1='12'}>">更多活动》</a></div>-->
+			<div class="cl_zhi"></div>
+		</div>
+
+	</div>
+	<div class="Plate width_472 fr">
+		<h4><a href="#" class="current">官方活动信息</a></h4>
+		<div class="Plate_info">
+			<ul class="Plate_info_ul">
+				<{foreach from=$contents key=key item=item}>
+				<li><a href="<{link app=content ctl='site_article' act='news' arg0=$item.article_id}>">
+				<strong>▪ <{$item.title}></strong><span class="ri_zhi"><{$item.pubtime|cdate:'SDATE'}></span>
+				<span class="cl_zhi"></span>
+				</a></li>
+				<{/foreach}>
+
+			</ul>
+		</div>
+
+	</div>
+	<div class="cl_zhi"></div>
+	<div class="Plate width_960">
+		<h4><a href="#" class="current"><{t}>近期服务情况<{/t}></a></h4>
+		<div class="Plate_info" style="position:relative;">
+        <div class="Yellow_bg">服务月</div>
+        <div class="Plate_info_table_2">
+			<table width="938" border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<th class="width_95"><{t}>服务月<{/t}></th>
+					<th><{t}>退款<{/t}></th> 
+					<th><{t}>退款率<{/t}></th>
+					<th><{t}>纠纷退款<{/t}></th>
+					<th><{t}>纠纷退款率<{/t}></th>
+					<th colspan=2><{t}>平均退款速度<{/t}></th>
+					<th ><{t}>投诉<{/t}></th>
+				</tr>
+				<tr>
+					<td><{t}>最近30天<{/t}></td>
+					<td><{$refunds_count1}>&nbsp;<{t}>笔<{/t}></td>
+					<td><{$refunds_lv1}>%</td>
+					<td><{$refunds_icount1}>&nbsp;<{t}>笔<{/t}></td>
+					<td><{$refunds_ilv1}>% </td>
+					<td style='text-align:right;'> <{$refunds_days1}>&nbsp;<{t}>天<{/t}> </td>
+                   
+                    <{if $refunds_days1 > $counter_refunds_days1 }>
+                     <td class="td_color_1" style='text-align:left;width:200px;'>
+                    <{t}>&nbsp;&nbsp;&nbsp;比平均行业慢<{/t}><span class="td_color_1"><{$refunds_days1 - $counter_refunds_days1}></span><{t}>天<{/t}>
+                    <{else}>
+                     <{if $refunds_days1}>
+                     <td class="td_color_2" style='text-align:left;width:200px;'>
+                     <{t}>&nbsp;&nbsp;&nbsp;比平均行业快<{/t}><span class="td_color_1"><{ $counter_refunds_days1-$refunds_days1}></span><{t}>天<{/t}>
+                     <{else}>
+                       <td class="td_color_2" style='text-align:left;width:200px;'>
+                       <{t}>&nbsp;&nbsp;&nbsp;-<{/t}>
+                     <{/if}>
+                    <{/if}>
+                    </td>
+					<td><{$complains_count1}>&nbsp;<{t}>笔<{/t}></td>
+				</tr>
+				<tr>
+					<td><{$lasttime}> </td>
+					<td><{$refunds_count2}>&nbsp;<{t}>笔<{/t}></td>
+					<td><{$refunds_lv2}>%</td>
+					<td><{$refunds_icount2}>&nbsp;<{t}>笔<{/t}></td>
+					<td><{$refunds_ilv2}>%  </td>
+					<td style='text-align:right;'><{$refunds_days2}>&nbsp;<{t}>天<{/t}> </td>
+                   
+                    <{if $refunds_days2 > $counter_refunds_days2 }>
+                     <td class="td_color_1" style='text-align:left;width:200px;'>
+                    <{t}>&nbsp;&nbsp;&nbsp;比平均行业慢<{/t}><span class="td_color_1"><{$refunds_days2 - $counter_refunds_days2}></span><{t}>天<{/t}>
+                    <{else}>
+                     <{if $refunds_days2}>
+                     <td class="td_color_2" style='text-align:left;width:200px;'>
+                     <{t}>&nbsp;&nbsp;&nbsp;比平均行业快<{/t}><span class="td_color_1"><{ $counter_refunds_days2-$refunds_days2}></span><{t}>天<{/t}>
+                     <{else}>
+                       <td class="td_color_2" style='text-align:left;width:200px;'>
+                       <{t}>&nbsp;&nbsp;&nbsp;-<{/t}>
+                    <{/if}>
+                   
+                     
+                    <{/if}>
+                    </td>
+					<td><{$complains_count2}>&nbsp;<{t}>笔<{/t}></td>
+				</tr>
+			</table>
+            </div>
+		</div>
+
+	</div>
+	 
+	 
+	<div class="Plate2 width_472 f14 fl">
+		<h4><a href="#" class="current2">平台服务专区</a></h4>
+		<div class="Plate_info tac">
+			<p class="Plate_info_p" style='margin:25px auto;'> 
+				<strong>需缴纳保证金额：</strong><span class="font-red"><{$member.storeinfo.store_gradeinfo.issue_money|cur}></span>元
+			</p>
+			<p class="Plate_info_p" style='margin:25px auto;'> 
+				<strong>已缴纳保证金额：</strong><span class="font-blue"><{$member.storeinfo.earnest|cur}></span>元
+			</p>
+			
+			<div style="margin-left:140px;">
+            <p class="button_1" style='float:left;margin-right:10px;'> <a href="<{link app=business ctl='site_store'  full='1' act='storeapplystep4' arg0=$member.storeinfo.account_id arg1='isedit'}>"><{t}>资质认证<{/t}></a></p>
+            <{if ($member.storeinfo.store_gradeinfo.issue_money-$member.storeinfo.earnest) > 0 }>
+			<p class="button_2" style='float:left;'> <a href="<{link app=business ctl='site_store' act='earnestdeposit' }>"><{t}>缴纳保证金<{/t}></a></p>
+            <{else}>
+            <p class="button_2" style='float:left;'> <a href=""><{t}>开店续费<{/t}></a></p>
+			<{/if}>
+				<span class="cl_zhi"></span>
+			</div>
+		</div>
+
+	</div>
+	<div class="Plate width_472 fr">
+		<h4><a href="#" class="current"><{t}>评价信息<{/t}></a></h4>
+		<div class="Plate_info">
+			<div class="Plate_info_table_2_div">
+            <div class="Plate_info_table_2">
+				<table width="100%">
+					<tr>
+						<th class="width_95"><{t}>服务月<{/t}></th>
+						<th class="width_70"><{t}>评价总数<{/t}></th> 
+						<th class="width_110"><{t}>原始中差评数<{/t}></th>
+						<th class="width_110"><{t}>删除中差评数<{/t}></th>
+					</tr>
+					<tr>
+						<td><{t}>最近30天<{/t}> </td>
+						<td><{$member_comments_count1}>&nbsp;<{t}>笔<{/t}></td>
+						<td><{$comments_count1}>&nbsp;<{t}>笔<{/t}></td>
+						<td><{$member_comments_num1}>&nbsp;<{t}>笔<{/t}></td>
+
+					</tr>
+					<tr>
+						<td> <{$lasttime}> </td>
+						<td><{$member_comments_count2}>&nbsp;<{t}>笔<{/t}></td>
+						<td><{$comments_count2}>&nbsp;<{t}>笔<{/t}></td>
+						<td><{$member_comments_num2}>&nbsp;<{t}>笔<{/t}></td>
+					</tr>
+				</table>
+                </div>
+			</div>
+		</div>
+	</div>
+</div>  

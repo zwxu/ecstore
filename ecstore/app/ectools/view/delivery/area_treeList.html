@@ -1,0 +1,66 @@
+<form action="index.php?app=ectools&ctl=regions&act=updateOrderNum" id="catEditor" method="post" target="{update:'messagebox'}">
+  <div class="gridlist-action">
+    <{button label=$___ectools="添加地区"|t:'ectools' app="desktop" onclick="new Dialog('index.php?app=ectools&ctl=regions&act=showNewArea',{height:260,title:'添加地区'})" icon="btn_add.gif"}>
+  </div>
+  <table cellspacing="0" cellpadding="0" class="gridlist">
+    <col class="Colauto"></col>
+    <col class="Coloption_1b"></col>
+    <col class="Coloption_1b" ></col>
+    <col class="Coloption_1b"></col>
+    <col class="Coloption_1b"></col>
+    <col></col>
+    <thead>
+      <th><{t}>地区名称<{/t}></th>
+      <th><{t}>排序<{/t}></th>
+      <th><{t}>添加子地区<{/t}></th>
+      <th><{t}>编辑<{/t}></th>
+      <th><{t}>删除<{/t}></th>
+      <th></th>
+    </thead>
+    <tbody>
+      <{foreach from=$area item=item key=iLoop name="item"}>
+      <tr parentid="<{$item.region_id}>" class="provice-bg">
+        <td style="text-align:left; width:320px;">
+          <div style="padding-left:<{$item.step*25}>px">
+            <{if $item.child_count>0}>
+            <span class="imgTree" onclick="clickTree(this);" id="<{$item.region_id}>"> &nbsp;&nbsp; </span>
+            <{else}>
+            <span class="imgTree tree_open" id="<{$item.region_id}>"> &nbsp;&nbsp; </span>
+            <{/if}>
+
+            <a style="font-weight:700; color:#000; text-decoration:none;padding-right:15px;" href='index.php?app=ectools&ctl=regions&act=detailDlArea&p[0]=<{$item.region_id}>' target="dialog::{title:'<{t}>编辑地区<{/t}>',height:260}"><{$item.local_name}></a></div>
+        </th>
+        <td style="width:80px;"><input class="_x_ipt" vtype="digits" type="number" size="2" style="width:40px;" name="p_order[<{$item.region_id}>]" value="<{$item.ordernum|default:0}>" /></td>
+        <td style="width:100px;"><{assign var="region_id" value=$item.region_id}>
+          <a href='index.php?app=ectools&ctl=regions&act=showNewArea&p[0]=<{$region_id}>' target="dialog::{title:'<{t}>添加子地区<{/t}>',height:260}"><{img app="desktop" src="bundle/addcate.gif" border="0" alt=$___ectools="添加子地区"|t:'ectools'}></a>
+        </td>
+        <td style="width:60px;"><a class="i" href='index.php?app=ectools&ctl=regions&act=detailDlArea&p[0]=<{$item.region_id}>' target="dialog::{title:'<{t}>编辑地区<{/t}>',height:260}"><{img app="desktop" src="bundle/editcate.gif" border="0" alt=$___ectools="编辑"|t:'ectools'}></a></td>
+        <td style="width:60px;"><span onclick="javascript: if(confirm('<{t}>您确定要删除<{/t}>&nbsp;[<{$item.local_name|replace:'\'':'\\\''}>]&nbsp;？')){ W.page('index.php?app=ectools&ctl=regions&act=toRemoveArea&p[0]=<{$item.region_id}>',{method:'get'});}" style="cursor:pointer"><{img app="desktop" src="bundle/delecate.gif" border="0" alt=$___ectools="删除"|t:'ectools'}></span></Td>
+        <td></td>
+      </tr>
+      <{/foreach}>
+    </tbody>
+  </table>
+</form>
+
+<{area inject=".mainFoot"}>
+<div class="table-action">
+  <{button label=$___ectools="保存"|t:'ectools' onclick="$('catEditor').fireEvent('submit',{stop:function(){}})"}>
+</div>
+<{/area}>
+<script>
+function clickTree(el){
+    var el=$(el), obj = el.getParent('[parentid]');
+    if(!el.hasClass("tree_open")){
+        if(!obj.getNext() || !obj.getNext().get('readstatus')){
+            var tr=new Element('tr[readstatus=1]').injectAfter(obj).setHTML('<td colspan="6" style="border:0;padding:0;"></td>');
+            W.page('index.php?app=ectools&ctl=regions&act=getChildNode',{update:tr.firstChild,method:'post',data:'regionId='+el.id});
+        }
+        obj.getNext().show();
+        el.addClass("tree_open");
+    }else{
+        obj.getNext().hide();
+        el.removeClass("tree_open");
+    }
+}
+</script>

@@ -1,0 +1,20 @@
+<h3><{t}>异常页面提示信息管理<{/t}></h3>
+
+
+<div class="admin-panel">
+	 <{foreach from=$list item=item name="item"}>
+	<div class="group flt">
+		<h4 class="c-blue"><{$item.title|t:"site"}></h4>
+		<p class="m5"><{$item.desc|t:"site"}></p>
+		
+			<a class="btn" target="open::{width:750,height:450,top:100,left:100}" href="<{link app=site ctl=admin_errorpage act=edit key=$item.key }>">
+				<span>
+					<span><{t}>修改<{/t}></span>
+				</span>
+			</a>
+	</div>
+	<{/foreach}>	
+</div>
+
+
+

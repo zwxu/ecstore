@@ -1,0 +1,47 @@
+<{capture name="sidebar"}>
+<div class="side-bx spage-side">
+    <div class="spage-side-nav">        <ul>
+            <li class="l-handle all" ><span><{t}>基本信息<{/t}></span></li>
+            <{foreach from=$sections item=section name="sec"}>
+                <{if $env.foreach.sec.iteration neq 1}>
+                <li class="l-handle" ><span><{$section.label}></span></li>
+                <{/if}>
+            <{/foreach}>
+        </ul>
+    </div>
+</div>
+
+<div class="side-bx spage-side" style="display:none">
+    <div class="side-bx-title"><h3><{t}>文章标签<{/t}></h3></div>
+    <div class="side-bx-bd">
+        <div style="overflow: hidden;" class="tag-editor" id="finder-tag">
+            <ul class="tag-editor-group" style="overflow: hidden;">
+            <{foreach from=$taglist item=aTag}>
+                <li><input type='checkbox' name='goods[tag][<{$aTag.tag_id}>][tag][tag_id]' value='<{$aTag.tag_id}>' <{if $goods.tag[$aTag.tag_id]}>checked<{/if}> /><img style="width: 9px; height: 9px; background-position: 0pt -2252px;" class="imgbundle" src="images/transparent.gif"><{$aTag.tag_name}></li>
+            <{/foreach}>
+            </ul>
+        </div>
+    </div>
+</div>
+<{/capture}>
+
+<{foreach from=$sections item=section}>
+<div class="spage-main-box">
+  <{include file=$section.file}>
+</div>
+<{/foreach}>
+
+<{capture name='footbar'}>
+<table cellspacing="0" cellpadding="0" class="table-action">
+      <tbody><tr valign="middle">
+        <td>
+        
+        <{assign var="message" value=$___content="确定退出?"|t:'content'}>
+        <{assign var="message_close" value="关    闭"}>
+            <{button label=$___content="保存并关闭窗口"|t:'content' class="btn-primary" onclick="subArticleForm(event,1)"}>
+            <{button label=$___content="保存当前"|t:'content' class="btn-primary" onclick="subArticleForm(event,2)"}>
+            <{button label=$message_close|t:'content' class="btn-secondary" onclick="if(confirm('{$message}'))window.close()"}>
+        </td>
+        </tr>
+        </tbody></table>
+<{/capture}>

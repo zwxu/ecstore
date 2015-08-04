@@ -1,0 +1,27 @@
+<{if count($queue)>0}>
+<div class="finder-list table-grid">
+<table width="100%" class="gridlist" cellpadding="0" cellspacing="0">
+<thead>
+  <tr>
+    <th><{t}>目标<{/t}></th>
+    <th><{t}>事件类型<{/t}></th>
+    <{if $sender.hasTitle}><th><{t}>标题<{/t}></th><{/if}>
+    <th><{t}>发送优先级[越大越优先]<{/t}></th>
+  </tr>
+</thead>
+<tbody>
+  <{foreach from=$queue item=aList}>
+  <tr>
+    <td><{$aList.target}></td>
+    <td><{if MANUAL_SEND eq $aList.event_name}><{t}>自写<{/t}><{else}><{$aList.event_name}><{/if}></td>
+    <{if $sender.hasTitle}><td><{$aList.title}></td><{/if}>
+    <td><{$aList.level}></td>
+  </tr>
+  <{/foreach}></tbody>
+</table>
+<{pagers data=$pageData}>
+</div>
+<{else}>
+<div class="notice"><{t}>队列为空,没有积压的未发送信息<{/t}></div>.
+
+<{/if}>

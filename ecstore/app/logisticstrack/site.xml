@@ -1,0 +1,8 @@
+<site>
+    <module id='logisticstrack' controller='site_tracker' >
+        <name>logistic</name>
+        <title>物流单状态跟踪</title>
+        <disable>false</disable>
+    </module>
+    
+</site>

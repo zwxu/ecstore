@@ -1,0 +1,34 @@
+<site>
+    <module controller='site_gift' >
+        <name>gift</name>
+        <title>赠品</title>
+        <disable>false</disable>
+        <allow_menu act='lists'>赠品列表页</allow_menu>
+		 <allow_seo act="lists">
+            <title>赠品列表页</title>
+			<config id="{ENV_shop_name}">商店名称</config>
+            <param>
+                <seo_title>{ENV_shop_name}</seo_title>
+				<seo_keywords>{ENV_shop_name}</seo_keywords>
+                <seo_content>{ENV_shop_name}</seo_content>
+                <seo_nofollow>否</seo_nofollow>
+                <seo_noindex>否</seo_noindex>
+            </param>
+            <hidden>true</hidden>
+       </allow_seo>
+	   <allow_seo act="index">
+            <title>赠品详细页</title>
+			<config id="{ENV_shop_name}">商店名称</config>
+			<config id="{ENV_goods_name}">商品名称</config>
+            <param>
+                <seo_title>{ENV_shop_name}_{ENV_goods_name}</seo_title>
+				<seo_keywords>{ENV_shop_name}_{ENV_goods_name}</seo_keywords>
+                <seo_content>{ENV_shop_name}_{ENV_goods_name}</seo_content>
+                <seo_nofollow>否</seo_nofollow>
+                <seo_noindex>否</seo_noindex>
+            </param>
+            <hidden>true</hidden>
+       </allow_seo>
+    </module>
+    
+</site>

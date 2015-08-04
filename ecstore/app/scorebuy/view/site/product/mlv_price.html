@@ -1,0 +1,20 @@
+<{if $actapply.isMemLv == '1'}>
+<li>
+  <div class='mprice' updatespec="mprice">
+    <span class="member-price"><{t}>会 员 价：<{/t}></span>
+    <table class="mprice-tab">
+      <tr>
+        <{if $env.conf.b2c.site.member_price_display == 1}>
+        <{foreach from=$mlvPrice item=lItem name=mlv}>
+        <{if $smarty.foreach.mlv.iteration %2 == 1}></tr><tr><{/if}>
+        <th nowrap><{$lItem.name}></th>
+        <td>
+        <em class='mlvprice font-black lv-<{$lItem.level_id}>' mlv='<{$lItem.level_id}>'><{$lItem.score}></em> <span class="discount"><{if $lItem.price && $lItem.price>0}>(价格：<em class="discountprice" mlv='<{$lItem.level_id}>'><{$lItem.price|cur_odr}></em>)<{/if}></span>
+        </td>
+        <{/foreach}>
+        <{/if}>
+      </tr>
+    </table>
+  </div>
+</li>
+<{/if}>

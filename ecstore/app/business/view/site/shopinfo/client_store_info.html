@@ -1,0 +1,122 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>平台</title>
+<style>
+body, h2, h3, span, a, p, table {
+	margin: 0;
+	padding: 0;
+	font-size: 12px;
+}
+a{
+    text-decoration:none;
+}
+img{
+    border:none;
+}
+h3 {
+	font-style: normal;
+	line-height: normal;
+	font-weight: 800;
+	font-variant: normal;
+	color: #395469;
+	text-decoration: none;
+	line-height: 24px;
+	/*height: 24px;*/
+	padding: 0;
+	margin: 0;
+}
+
+.shopInfo {
+	background:#F0FAFF;
+	color: #39556A;
+    line-height: 20px;
+    padding: 10px;
+	}
+.shopInfo p {
+	line-height:20px; 
+	height:20px;
+	}
+
+#leftarea {
+	width:159px;
+	}
+.area_top{
+	border:#FFF solid 1px;
+	}
+.area_bottom{
+	background:#D7ECF5;
+	padding:0px 1px 2px 5px;
+	height:1000px;
+	}
+.recent_goods{
+    background:#F0FAFF;
+    padding-top:4px;
+    border: 1px solid #FFFFFF;
+    }
+.area_bottom h2{
+	color:#5b86ac;
+	font-size:13px;
+	font-weight:normal;
+	height: 33px;
+    line-height: 38px;
+	}
+.recent_goods img{
+    width:42px;
+    border:#CCD1D4 solid 1px;
+}	
+.gd_left{
+    width:45px;
+    float:left;
+}
+.gd_right{
+    width:102px;
+    float:left;
+}
+.botton{
+    text-align:center;
+    padding-top:10px;
+    padding-bottom:5px;
+}
+.vert *{
+    vertical-align:top;
+}		    	
+}
+</style>
+
+<div id="leftarea">
+ <div class="area_top">
+  <div class="shopInfo decmit">
+    <h3><{$view_data.store_title}></h3>
+    <p>注册时间：<{$view_data.register_time}></p>
+    <p class="vert">认证店铺等级：<img src="http://image8.szmall.com/public/images/public/78/5a/36/41b73a60390df224de8037399ce6482d.png" title="认证商家" /></p>
+    <p><{$view_data.point.0.lable}>：<b><{$view_data.point.0.avg}>分</b></p>
+    <p><{$view_data.point.1.lable}>：<b><{$view_data.point.1.avg}>分</b></p>
+    <p><{$view_data.point.2.lable}>：<b><{$view_data.point.2.avg}>分</b></p>
+   
+  </div>
+   <div style="background:#F0FAFF;height:2px;"><div style="background:#FFF;width:140px;height:1px;margin:0 auto;">&nbsp;</div></div>
+  <div class="shopInfo">
+    <p>店铺名称：</p>
+    <p style="height:25px;line-height:20px;"><{$view_data.store_name}></p>
+    <p>所在地区：<{$view_data.area}></p>
+    <p>创店时间：<{$view_data.store_create}></p>
+    <p class="botton"><a href="<{$view_data.url}>" target="_blank"><img src="http://image6.szmall.com/public/images/public/a5/9b/b3/e3e4ad0e9c08e0385025e35e7aa1d452.png" style="width:85px;height:29px;" /></a></p>
+  </div>
+ </div>
+
+  <div class="area_bottom">
+  	<h2>最近浏览宝贝</h2>
+    <div class="recent_goods">
+         <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                 <tr>
+                       <td width="55" height="50" rowspan="2" align="center" valign="middle"><a href="<{$view_data.view_goods.0.url}>" target="_blank" alt="<{$view_data.view_goods.0.name}>"  title="<{$view_data.view_goods.0.name}>"><img src="<{$view_data.view_goods.0.image}>"></a>&nbsp;</td>
+                         <td style="color:#496493;"><a href="<{$view_data.view_goods.0.url}>" target="_blank" alt="<{$view_data.view_goods.0.name}>" title="<{$view_data.view_goods.0.name}>"><{$view_data.view_goods.0.name|cut:35}></a></td>
+                  </tr>
+                   <tr>
+                        <td style="color:#757c82"><font style="color:#bd7038">&nbsp;<{$view_data.view_goods.0.price|cur_odr}></font></td>
+                  </tr>
+                  
+          </table>
+
+    </div>
+  </div>
+</div>

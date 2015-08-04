@@ -1,0 +1,17 @@
+   <div class="tableform">
+    <div class="notice">
+        <strong><{t}>注意：<{/t}></strong><{t}>扫描图片分辨率请调整为 96 dpi，图片格式 jpg<{/t}>
+     </div>
+
+    <form name="upload_files" id="upload_files" action="index.php?app=express&ctl=admin_delivery_printer&act=do_upload_bg" method="post">
+        <{input type="image" name="background" width="400" height="200" }>
+        <input name="dly_printer_id" type="hidden" value="<{$dly_printer_id}>" />
+
+        <br/>
+        <{button type="submit" label="确认" class="btn-primary"}>
+
+    </form>
+</div>
+<script>
+  $('upload_files').store({onComplete:function(){$('upload_files').getParent('.dialog').retrieve('instance').close();}});
+</script>

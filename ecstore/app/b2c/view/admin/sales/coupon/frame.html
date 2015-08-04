@@ -1,0 +1,284 @@
+
+<div class="tableform">
+    
+<form name="coupon_form" id="coupon_form"  method='post' action='index.php?app=b2c&ctl=admin_sales_coupon&act=toAdd'>
+    <h3 id="coupon_title"><{t}>优惠劵类型<{/t}></h3>
+    
+    <div id="coupon_basic">
+       <{include file="admin/sales/coupon/basic.html" app=b2c}>
+    </div>
+
+    <div id="coupon_conditions" style="display:none;">
+       <{include file="admin/sales/coupon/conditions.html" app=b2c}>
+    </div>
+
+    <div id="coupon_solution" style="display:none;">
+       <{include file="admin/sales/coupon/solution.html" app=b2c}>
+    </div>
+
+
+
+    <div class="table-action">
+    <{assign var=___d value=$___b2c='确定退出?'|t:'b2c'}>
+        <{button class="btn-primary" type="button"  label=$___b2c="上一步"|t:'b2c' id="btn_coupon_prev" style="display:none"}>
+        <{button class="btn-primary" type="button"  label=$___b2c="下一步"|t:'b2c' id="btn_coupon_next"}>
+        <{button class="btn-primary" type="button"  label=$___b2c="保存并关闭"|t:'b2c' id="btn_coupon_submit" onclick="submitForm(event,2)" style="display:none"}>
+        <{button class="btn-secondary" type="button"  label=$___b2c="取消"|t:'b2c' onclick="if(confirm('{$___d}'))window.close()"}>
+    </div>
+</form>
+</div>
+
+<script>
+
+
+
+(function(){
+    var coupon = {
+        step_list:['basic','conditions','solution'],
+        step_name:['<{t}>优惠劵类型<{/t}>','<{t}>优惠条件<{/t}>','<{t}>优惠方案<{/t}>'],
+        getCurrent: function(){
+            for(var i = 0; i < this.step_list.length; i++) {
+                if(this.getDiv(this.step_list[i]).getStyle('display') == 'block') return i;
+            }
+        },
+        getDiv:function(str){
+            return $('coupon_' + str);
+        },
+        showPrev: function(){
+            var setp = coupon.getCurrent();
+            
+            /* */
+            if(setp == 1) {
+                $('btn_coupon_prev').setStyle('display','none');
+            }
+            /* */
+            if(setp == (this.step_list.length - 1)) {
+                $('btn_coupon_next').setStyle('display','inline');
+                $('btn_coupon_submit').setStyle('display','none');
+            }
+            for(var i = 0; i < this.step_list.length; i++) {
+                if((setp - 1) == i) {
+                    this.getDiv(this.step_list[i]).setStyle('display','block');
+                    $('coupon_title').innerHTML = this.step_name[i];
+                } else {
+                    this.getDiv(this.step_list[i]).setStyle('display','none');
+                }
+            }
+        },
+        showNext: function() {
+            var setp = coupon.getCurrent();
+            if(!this.validate(this.getDiv(this.step_list[setp]))) return false;
+            if(setp >= (this.step_list.length - 1)) return false;
+
+            for(var i = 0; i < this.step_list.length; i++) {
+                if(i == (setp + 1)) {
+                    this.getDiv(this.step_list[i]).setStyle('display','block');
+                    $('coupon_title').innerHTML = this.step_name[i];
+                } else {
+                    this.getDiv(this.step_list[i]).setStyle('display','none');
+                }
+            }
+         
+            /* 第一次next */
+            if(setp == 0) {
+               $('btn_coupon_prev').setStyle('display','inline');
+            }
+            /* 最后一步 */
+            if(setp == (this.step_list.length - 2)) {
+                $('btn_coupon_next').setStyle('display','none');
+                $('btn_coupon_submit').setStyle('display','inline');
+            }
+        },
+        specialValidate:function(){
+            switch(this.getCurrent()) {
+                case 0: // basic
+                    return this.validateBasicTemplate();
+                    break;
+                case 1: // conditions
+                    return this.validateConditionsTemplate();
+                    break;
+                case 2: // solution
+                    return this.validateSolutionTemplate();
+                    break;
+                default:
+                    alert('<{t}>没有这个的哈<{/t}>');
+                    return false;
+            }
+        },
+        validateBasicTemplate:function(){
+            //验证开始时间和结束时间
+            var from_time = $$('input[name=from_time]')[0].get('value')+ " " +$$('select[name="_DTIME_[H][from_time]"]')[0].get('value') + ":" +$$('select[name="_DTIME_[M][from_time]"]')[0].get('value');
+            var to_time = $$('input[name=to_time]')[0].get('value')+ " " +$$('select[name="_DTIME_[H][to_time]"]')[0].get('value') + ":" +$$('select[name="_DTIME_[M][to_time]"]')[0].get('value');
+            if(Date.parse(from_time.replace(/-/gi,"/")) > Date.parse(to_time.replace(/-/gi,"/"))) {
+                MessageBox.error('<{t}>开始时间不能大于结束时间<{/t}>');
+                return false;
+            }
+            
+           
+
+            return this.validateMemberLv();
+        },
+        validateConditionsTemplate:function(){
+            var flag = false;
+            $ES('input[type=radio]','ctpl_list').each(function(el){
+                if(el.checked) flag = el.checked;
+            });
+            if(!flag) MessageBox.error('<{t}>请选择过滤条件<{/t}>');/*alert('<{t}>请选择过滤条件<{/t}>');*/
+            return flag;
+        },
+        validateMemberLv:function(){
+            var flag = false;
+            $ES('input[type=checkbox]', '#mLev').each(function(item){
+                if(item.checked) {
+                    flag = true;
+                }
+            });
+            if(!flag) {
+                $('mleverror').set('html', '<div class="x-vali-error" name="validationMsgBox"><{t}>必须选择一项<{/t}></div>');
+                //MessageBox.error('<{t}>必须选择一项<{/t}>');
+                return false;
+            }else{
+                $('mleverror').set('html', '');
+            }
+
+            
+             if( $$('input[name="rule[store_id][]"]').length > 0){
+                 $('xmleverror').set('html', '');
+             }else{
+                 $('xmleverror').set('html', '<div class="x-vali-error" name="validationMsgBox"><{t}>请选择店铺<{/t}></div>');
+                //MessageBox.error('<{t}>请选择店铺。<{/t}>');
+                return false;
+             }
+
+
+            return true;
+
+        },
+        validateSolutionTemplate:function(){
+           var flag = false;
+           
+           $ES('input[type=radio]','stpl_list').each(function(el){
+                if( el.get('disabled')!=true ) {
+                    if(el.checked) flag = el.checked;
+                }
+            });
+            
+            if(!flag) {
+                MessageBox.error('<{t}>请选择过滤条件<{/t}>');/*alert('<{t}>请选择过滤条件<{/t}>');*/
+                return false;
+            }
+            return true;
+        },
+        validate:function(obj){
+            /* 验证 */
+            //if(!this.specialValidate(obj)) return false;
+           
+            if(!obj) return true;
+            var div_els = obj.getElements('[vtype]')
+            var _return = div_els.every(function(el){
+                var vtype = el.get('vtype');
+                if(!$chk(vtype))return true;
+                /*if(!el.isDisplay()&&(el.getAttribute('type')!='hidden'))return true;*/
+                if((el.getAttribute('type')=='hidden')) return true; /* 跳过隐藏项 */
+                var valiteArr  = vtype.split('&&');
+                if(el.get('required')) valiteArr = ['required'].combine(valiteArr.clean());
+
+                return valiteArr.every(function(key){
+                            if(!validatorMap[key])return true;
+                            var _caution = el.getNext();
+                            var cautionInnerHTML = el.get('caution')|| validatorMap[key][0];
+
+                            if(validatorMap[key][1](el,el.getValue())){
+                                    if(_caution&&_caution.hasClass('error')){_caution.remove();};
+                                    return true;
+                            }
+
+                            if(!_caution||!_caution.hasClass('caution')){
+                                 new Element('span',{'class':'error caution notice-inline','html':cautionInnerHTML}).injectAfter(el);
+                                 el.removeEvents('blur').addEvent('blur',function(){
+                                                                         if(validate(el)){
+                                                                               if(_caution&&_caution.hasClass('error')){_caution.remove()};
+                                                                               el.removeEvent('blur',arguments.callee);
+                                                                         }
+                                });
+                            }else if(_caution&&_caution.hasClass('caution')&&_caution.get('html')!=cautionInnerHTML){
+                                _caution.set('html',cautionInnerHTML);
+                            }
+                            return false;
+                     });
+            });
+            if(_return){
+                _return = this.specialValidate(obj);
+            }
+            
+            return _return;
+        },
+        init:function(){
+            for(var i = 0; i < this.step_list.length; i++) {
+                alert(this.step_list[i]+i);
+            }
+        }
+
+    };
+
+    $('btn_coupon_next').addEvent('click',function(e){
+        //del by PanF 2013-07-09 解决后退后不能点击下一次无效
+       //if(validate(this.getParent('form')))
+        coupon.showNext();
+       
+    });
+    $('btn_coupon_prev').addEvent('click',function(e){
+        coupon.showPrev();
+    });
+    
+    
+    
+    
+})();
+
+    var submitForm = function (event,sign){
+       var _form=$('coupon_form');
+       
+       var flag = false;
+       
+       $ES('input[type=radio]','stpl_list').each(function(el){
+            if( el.get('disabled')!=true ) {
+                if(el.checked) flag = el.checked;
+            }
+        });
+        
+        
+        if(!flag) {
+            return MessageBox.error('<{t}>请选择优惠方案<{/t}>');/*alert('<{t}>请选择过滤条件<{/t}>');*/
+        }
+        
+
+    
+        switch (sign){
+            case 1:
+            var target={
+                    onComplete:function(){
+                        location.reload();
+                }};
+            break;
+            case 2:
+            $ES("input", '#coupon_form').each(function(e){
+                e.set('disabled','');
+            });
+            
+            var target={
+                    onComplete:function(rs){
+                        if(rs&&!!JSON.decode(rs).success){
+                            if(window.opener.finderGroup&&window.opener.finderGroup['<{$env.get.finder_id}>']){
+                                window.opener.finderGroup['<{$env.get.finder_id}>'].refresh();
+                            }
+                            window.close();
+                        }
+                    }};
+            break;
+       }
+       _form.store('target',target);
+       _form.fireEvent('submit',new Event(event));
+    };
+    
+</script>

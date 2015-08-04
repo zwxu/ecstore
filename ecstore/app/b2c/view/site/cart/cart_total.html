@@ -1,0 +1,51 @@
+<div class="clearfix">
+  <!-- 订单总计 -->
+<div>
+    <!-- <div class="cart-pricelist">
+      <ul class="clearfix">
+          <li><label><{t}>商品金额：<{/t}></label><span id="cart-subtotal" class="price-normal"><{$aCart.subtotal_prefilter_after|cur_odr}></span> </li>
+          <{if $aCart.discount_amount_order > 0}><li><label><{t}>优惠金额 ：<{/t}></label><span id="cart-promotion_discount_price">-<{$aCart.discount_amount_order|cur_odr}></span></li><{/if}>
+          <li><label><{t}><span>总金额</span>（不含运费）：<{/t}></label><span id="cart-promotion-subtotal" class="totalprice price1"><{$aCart.promotion_subtotal|cur_odr}></span></li>
+      </ul>
+    </div> -->
+  <!-- end -->
+
+  <!-- 订单结算按钮 -->
+  <div id="cart-return-btn" class="return-cart clearfix">
+   <!--  <{button type="submit" class="cart_order order-btn btn-has-icon" tyle="margin-top:10px" label=$___b2c="下单结算"|t:'b2c' icon="set-arrow.gif"}> -->
+  <div id="cart-return-btn" class="return-cart clearfix">
+    <div class="del-cart">
+    <label class="f16"><{t}><span>总金额</span>（不含运费）：<{/t}></label><span id="cart-promotion-subtotal" class="totalprice price1"><{$aCart.promotion_subtotal|cur_odr}></span>
+    </div>
+    <div class="return_settlement dis_bl">
+    <div class="fl"><a href="<{$go_back_link}>" class="cart_return">返回继续购物</a>
+    </div>
+    <div class="fr"><{button type="submit" class="cart_settlement" tyle="margin-top:10px" label=$___b2c="去结算"|t:'b2c' }></div>
+    </div>
+    </div>
+    <div class="crl"></div>
+    <!-- <a href="<{$go_back_link}>" class=" btn-a " style="margin-top:13px;margin-right:8px;float:right"> <i class="has-icon"> <img src='<{$res_url}>/bundle/contin-shop_icon.gif' /></i><span><{t}>继续购物<{/t}></span></a> -->
+</div>
+</div> 
+  <!-- end -->
+
+  <!-- 马上要生效，但是没有生效的优惠规则 -->
+<div class="le_zhi" style="display:none">
+<{if $unuse_rule && !$checkout}>
+  <div id="cart-will-get-sales-promotion" class="sales-promotion clearfix">
+  <h4><{t}>赶快行动得促销优惠<{/t}></h4>
+  <table width="100%" cellpadding="3" cellspacing="0" >
+    <{foreach from=$unuse_rule item=item}>
+    <tr>
+      <td class="span-2 "><{$item.name}></td>
+      <td class="span-6" style="text-align:left"><{$item.desc}> </td>
+      <td class="span-6" style="text-align:left"><{$item.solution}></td>
+    </tr>
+    <{/foreach}>
+  </table>
+</div>
+<{/if}>
+</div>  
+  <!-- end -->
+<div class="cl_zhi"></div>
+</div>

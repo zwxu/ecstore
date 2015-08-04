@@ -1,0 +1,54 @@
+<h4><{$data.title}></h4>
+<ul class="Ranking_ul">
+    <li><a id="a_ranking_buy" href="javascript:void(0);" class="hover">本月热销排行</a></li>
+    <li><a id="a_ranking_fav" href="javascript:void(0);">热门收藏排行</a></li>
+    <div class="cl_zhi"></div>
+</ul>
+<div id="ranking_buys">
+<{foreach from=$data.buys item=good}>
+<div class="ranking_info">
+    <div class="ranking_info_le le_zhi"><a target="_blank" href="<{link app=b2c ctl="site_product" act="index" arg0=$good.goods_id}>"><img class="img-lazyload" src="images/transparent.gif" lazyload="<{$good.image_default_id|default:$data.defaultImage|storager:'s'}>" alt="" /></a></div>          
+     <div class="ranking_info_ri ri_zhi">
+        <p><a target="_blank" href="<{link app=b2c ctl="site_product" act="index" arg0=$good.goods_id}>"><{$good.name|cut:48}></a></p>
+        <p class="price">￥<span><{$good.price}></span></p>
+        <p><span class="sell">已售出<{$good.buy_m_count}>件</span></p>
+     </div>
+     <div class="cl_zhi"></div>
+</div>
+<{/foreach}>
+</div>
+<div id="ranking_favs" style="display:none">
+<{foreach from=$data.favs item=good}>
+<div class="ranking_info">
+    <div class="ranking_info_le le_zhi"><a target="_blank" href="<{link app=b2c ctl="site_product" act="index" arg0=$good.goods_id}>"><img class="img-lazyload" src="images/transparent.gif" lazyload="<{$good.image_default_id|default:$data.defaultImage|storager:'s'}>" alt="" /></a></div>          
+     <div class="ranking_info_ri ri_zhi">
+        <p><a target="_blank" href="<{link app=b2c ctl="site_product" act="index" arg0=$good.goods_id}>"><{$good.name|cut:48}></a></p>
+        <p class="price">￥<span><{$good.price}></span></p>
+        <p><span class="sell">收藏人气<{$good.fav_count}></span></p>
+     </div>
+     <div class="cl_zhi"></div>
+</div>
+<{/foreach}>
+</div>
+<{if false}>
+<a href="<{link app=business ctl="site_shop" act="gallery" arg0=$data.store.store_id}>"><input type="button" class="view_other" value="查看其它宝贝" /><a/>
+<{/if}>
+<script>
+    (function(){
+        $('a_ranking_buy').addEvent('click',function(){
+            this.addClass('hover');
+            $('a_ranking_fav').removeClass('hover');
+            $('ranking_buys').setStyle('display', ''); 
+            $('ranking_favs').setStyle('display', 'none'); 
+            return false;
+        });
+        $('a_ranking_fav').addEvent('click',function(){
+            this.addClass('hover');
+            $('a_ranking_buy').removeClass('hover');
+            $('ranking_buys').setStyle('display', 'none'); 
+            $('ranking_favs').setStyle('display', ''); 
+            return false;
+        });
+
+    })();
+</script>   

@@ -1,0 +1,25 @@
+<li>
+  <div class='mprice' updatespec="mprice">
+    <span class="member-price"><{t}>会 员 价：<{/t}></span>
+    <table class="mprice-tab">
+      <tr>
+        <{assign var=aProduct value=$goods[product]|current}>
+        <{if $env.conf.b2c.site.member_price_display == 1}>
+        <{foreach from=$aProduct.price.member_lv_price item=lItem name=mlv}>
+        <{if $smarty.foreach.mlv.iteration %2 == 1}></tr><tr><{/if}>
+        <th nowrap><{$lItem.title}></th>
+        <td>
+        <em class='mlvprice font-black lv-<{$lItem.level_id}>' mlv='<{$lItem.level_id}>'><{$lItem.price|cur_odr}></em> <span class="discount">(省<em class="discountprice" mlv='<{$lItem.level_id}>'><{($goods.mktprice-$lItem.price)|cur_odr}></em>)</span>
+        </td>
+        <{/foreach}>
+     <{*   <{elseif $env.conf.b2c.site.member_price_display == 0}>
+        <{assign var=aProductPrice value=$aProduct[price][member_lv_price]}>
+        <th><{$aProductPrice[$this_member_lv_id][title]}></th>
+        <td>
+          <em class='fontbold mlvprice font-red lv-<{$aProductPrice[$this_member_lv_id][level_id]}>' mlv='<{$aProductPrice[$this_member_lv_id][level_id]}>' updatespec="updateprice"><{$aProductPrice[$this_member_lv_id][price]|cur}></em>
+        </td>  *}>
+        <{/if}>
+      </tr>
+    </table>
+  </div>
+</li>

@@ -1,0 +1,37 @@
+<table cellspacing="0" cellpadding="3" width="100%" class="gridlist border-all gridlist_member">
+  <col class="span-1"/>
+  <col class="span-2"/>
+  <col class="span-5"/>
+  <col class="span-2"/>
+  <col class="span-1"/>
+  <thead>
+	<tr>
+	  <th class="first">&nbsp;</th>
+	  <th><{t}>货号<{/t}></th>
+	  <th><{t}>商品名称<{/t}></th>
+	  <th><{t}>单价<{/t}></th>
+	  <th><{t}>数量<{/t}></th>
+	</tr>
+  </thead>
+  <tbody>
+	<{foreach from=$order.items item=item key=key}>
+	<input type="hidden" name="product_item_nums[<{$item.products.product_id}>]" value="<{$item.quantity}>">
+	<tr>
+	  <td><input class="x-pdt-chk-<{$item.products.product_id}>" type="checkbox" value="<{$item.products.product_id}>" <{if $item.sendnum < 1}>disabled<{/if}>/></td>
+	  <td class="x-pdt-bn"><{$item.bn}></td>
+	  <td class="x-pdt-name textcenter"><{$item.name}></td>
+	  <td class="textcenter price-normal"><{$item.price|cur_odr:$order.currency}></td>
+	  <td class="x-pdt-num textcenter"><{$item.sendnum}></td>
+	  <input type="hidden" id="product_info[<{$item.products.product_id}>][price]" value="<{$item.price}>">
+      <input type="hidden" id="product_info[<{$item.products.product_id}>][num]" value="<{$item.sendnum}>">
+	</tr>
+	<{/foreach}>
+  </tbody>
+    <tfoot>
+	<tr>
+	  <td colspan="5">
+		<{pagers data=$pager}>
+	  </td>
+	</tr>
+  </tfoot>
+</table>

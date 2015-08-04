@@ -1,0 +1,127 @@
+<!-- right-->
+<{css src="member.css" app='b2c'}>
+<{include file="site/common/header.html" app="b2c"}>
+ <!-- right-->
+<div class="member-main">
+<div class="title title2"><{t}>我的浏览历史<{/t}></div>
+
+<div id="tab-favorite" class="section switch">
+    <ul class="switchable-triggerBox tab_member clearfix">
+      <li><a href="<{link app=b2c ctl='site_member' act='view_history'}>"><{t}>宝贝历史<{/t}></a></li>
+      <li class="active"><a href="#"><{t}>店铺历史<{/t}></a></li>
+      
+    </ul>
+
+<{if !$view_history}>
+<div class="noinfo"><{t}>您还没有浏览任何的店铺，赶快去逛逛店铺吧<{/t}></div>
+<{else}>
+<div class="storesSearchWrap" id="mbc-my-fav">
+<div class="ItemsWarp clearfix">
+  <div id="b2c-member-fav-list">
+    <table class="gridlist gridlist_member border-left border-right" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <th class="bln" width="65">&nbsp;</th>
+      <th ><{t}>店铺<{/t}></th>
+      <th><{t}>卖家<{/t}></th>
+      <th><{t}>浏览时间<{/t}></th>
+      <th><{t}>操作<{/t}></th>
+    </tr>
+    <{foreach from=$view_history item="store"}>
+    <tr id="store_<{$store.store_id}>" class="itemsList">
+      <td><input type="checkbox" name="sid[]" value="<{$store.store_id}>"/></td>
+      <td style="white-space:normal" class="horizontal-m">
+        <{assign var="simage" value=$store.image_default_id|default:$defaultImage}>
+        <div class="storepic"><a target="_blank" style='<{if $env.conf.site.thumbnail_pic_width !=0 && $env.conf.site.thumbnail_pic_height !=0}> width:<{$env.conf.site.thumbnail_pic_width}>px;height:<{$env.conf.site.thumbnail_pic_height}>px;<{/if}>' href="<{link app=business ctl=site_shop act=view  arg=$store.store_id}>">
+        <img  style="width:50px; height:58px;" src="<{$simage|storager:'s'}>"  alt="<{$store.name|escape:html}>"/></a></div>
+        <div class="stores-main">
+        <div class="storeinfo" >
+        <h6><a target="_blank" href="<{link app=business ctl=site_shop act=view  arg=$store.store_id}>" title="<{$store.store_name}>"><{$store.store_name}></a></h6>
+        </div>
+        </div>
+      </td>
+      <td>
+        <a target="_blank" href="<{link app=business ctl=site_shop act=view  arg=$store.store_id}>" title="<{$store.shop_name}>"><{$store.shop_name}></a>
+      </td>
+      <td><{$store.last_modify|cdate:FDATE_FTIME}></td>
+      <td align="left" style="vertical-align:middle" class="member-fav">
+        <ul class="fav-Operator">
+       <li class="icon2" style="clear:both"><a class="btn-bj-hover operate-btn" sid="<{$store.store_id}>" onclick="ajax_del_fav($(this),event);"><span><{t}>删除<{/t}></span></a></li>
+        </ul>
+      </td>
+    </tr>
+    <{/foreach}>
+    </table>
+   <div  style="padding-left:28px;background:#f9f9f9;height:31px;line-height:31px;">
+   <label><input type="checkbox" id='all'/>&nbsp;&nbsp;<{t}>全选<{/t}></label>&nbsp;&nbsp;<a href="javascript:removeSel();"><{t}>删除<{/t}></a></div>
+  </div>
+</div>
+<input type="hidden" id="b2c-fav-current-page" value="<{$current_page}>" />
+</div>
+<{pagers data=$pager}>
+<{/if}>
+<!--<{script src='storescupcake.js' app='b2c'}>-->
+<script>
+var ajax_del_fav = function(el,e){
+    var sid = el.get('sid');
+    Ex_Dialog.confirm('<{t}>确定删除?<{/t}>',function(e){
+        if(!e) return false;
+        new Request({
+            url:'<{link app=b2c ctl=site_member act=del_store_view_history}>',
+            method:'post',
+            data:{sid:sid},
+            onComplete:function(res){
+                res = JSON.decode(res);
+                if (res.error){
+                    Message.error(res.error);
+                }else{
+                    location.reload();
+                }
+            }
+        }).send();
+        $('store_'+sid).setOpacity(.5);        
+        return false;
+    });
+};
+
+var removeSel = function(){
+     var reqs = $$('input[name^=sid]:checked').length;
+		 if(reqs == 0){
+            Ex_Dialog.alert('<{t}>请选择要删除的选项！<{/t}>');
+		 }else{
+		    Ex_Dialog.confirm('<{t}>确定要删除所选项吗？<{/t}>', function(e){
+				if(!e) return;
+        new Request({
+            url:'<{link app=b2c ctl=site_member act=del_store_view_history}>',
+            method:'post',
+            data:$('b2c-member-fav-list'),
+            onComplete:function(res){
+                res = JSON.decode(res);
+                if (res.error){
+                    Message.error(res.error);
+                }else{
+                    location.reload();
+                }
+            }
+        }).send();
+			});
+		 }
+}
+
+window.addEvent('domready',function() {
+  var obj = $('all')||'';
+  if(obj)
+  $('all').addEvent('click',function(){
+	  $$('input[name^=sid]').each(function(item){
+      if($('all').checked == true){
+        item.checked = true;
+      }else{
+		    item.checked = false;
+      }
+		});
+  })
+});
+</script>
+
+</div>
+</div>
+<!-- right-->

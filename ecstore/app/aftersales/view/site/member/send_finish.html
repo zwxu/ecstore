@@ -1,0 +1,23 @@
+<div class="member-main tk" id="member-main">
+<h1 class="title"><{t}>申请退款<{/t}></h1>
+<form action="<{link app=aftersales ctl=site_member act=refuse}>" enctype="multipart/form-data" encoding="multipart/form-data" method="post" name="return_save" id='x-return-form'>
+    <div class="FormWrap">
+        <div class="division">
+            <h4 class="fontnormal"><{t}>退款金额：<{$money}><{/t}></h4>
+            <h4 class="fontnormal"><{t}>拒绝原因：<{/t}></h4>
+            <{input type="textarea" id="x-return-content" name="seller_reason" class='x-inputs x-input' cols="80" rows="5" style="width:98%"}>
+        </div>
+</div>
+<input type="hidden" name="return_id" value="<{$return_id}>">
+<{button class="" type="submit" label=$___b2c="拒绝退款"|t:'b2c'}>
+</form>
+</div>
+<script>
+$('x-return-form').getElement('button[type=submit]').addEvent('click',function(e){
+    var reason = $('x-return-content').value;
+    if(reason ==''){
+        Message.error('请填写拒绝原因！');
+        return false;
+    }
+});
+</script>

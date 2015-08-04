@@ -1,0 +1,31 @@
+<div id="head_my_order">
+    <a href="<{link app=b2c ctl=site_member act=orders}>" class="h_expa">我的订单</a>
+    <div id='head_my_order_list' class="head_my_order_list" style="display:none;">
+      <{if $data.seller && $data.seller == 1}>
+            <{if $data.ship_order_num}>
+            <a href="<{link app=business ctl=site_member act=seller_order args0='ship' args1=' ' args2=' ' args3=' ' args4='all'}>"><p>待发货订单（<{$data.ship_order_num}>）</p></a>
+            <{else}>
+            <a href="<{link app=business ctl=site_member act=seller_order args0='ship' args1=' ' args2=' ' args3=' ' args4='all'}>"><p>待发货订单（0）</p></a>
+            <{/if}>
+
+            <{if $data.refunded_order_num}>
+            <a href="<{link app=business ctl=site_member act=seller_order args0='refunded' args1=' ' args2=' ' args3=' ' args4='all'}>"><p>退款中的订单（<{$data.refunded_order_num}>）</p></a>
+            <{else}>
+            <a href="<{link app=business ctl=site_member act=seller_order args0='ship' args1=' ' args2=' ' args3=' ' args4='all'}>"><p>退款中的订单（0）</p></a>
+            <{/if}>
+      <{else}>
+        <a href="<{link app=b2c ctl=site_member act=orders arg0='nopayed'}>"><p>待付款：(<{$data.no_pay}>)</p></a>
+        <a href="<{link app=b2c ctl=site_member act=orders arg0='comment'}>"><p>待评价：(<{$data.is_comment}>)</p></a>
+        <a href="<{link app=b2c ctl=site_member act=orders arg0='shiped'}>"><p>待收货确认：(<{$data.ship}>)</p></a>
+      <{/if}>
+    </div>
+</div>
+
+<script>
+$('head_my_order').addEvent('mouseenter',function(){
+    $('head_my_order_list').setStyle('display','');
+});
+$('head_my_order').addEvent('mouseleave',function(){
+    $('head_my_order_list').setStyle('display','none');
+});
+</script>

@@ -1,0 +1,41 @@
+<div class="member-main">
+<div>
+<h1 class="title"><{t}>新增退货申请<{/t}></h1>
+<h4 class="fontnormal pl10"><{t}>请选择需要售后服务的订单号<{/t}></h4>
+<form action="<{link app=aftersales ctl=site_member act=return_order_list}>" method="post" name="return_order_list" id="return_order_list">
+<div class="division clearfix" style="line-height:25px;">
+    <span class="flt"><{t}>请选择订单号：<{/t}></span><span class="flt"><input name="order_id" type="text" size="30" class="x-input"/></span><span class="flt forforma-btn"><{button class="submit-btn" type="submit" label=$___b2c="搜索订单"|t:'b2c'}></span>
+</div>
+</form>
+<h4><{t}>订单列表<{/t}></h4>
+<table cellspacing="0" cellpadding="3" width="100%" class="gridlist border-all">
+  <col class="span-2 "/>
+  <col class="span-3"/>
+  <col class="span-2" />
+  <col class="span-3"/>
+  <thead>
+    <tr>
+      <th class="first"><{t}>订单号<{/t}></th>
+      <th><{t}>下单日期<{/t}></th>
+      <th><{t}>总金额<{/t}></th>
+      <th><{t}>操作<{/t}></th>
+    </tr>
+  </thead>
+  <tbody>
+    <{foreach from=$orders item="order" name=orders}>
+        <tr>
+          <td class="textcenter"><{$order.order_id}></td>
+          <td class="textcenter"><{$order.createtime|cdate:FDATE_STIME}></td>
+          <td class="textcenter point"><{$order.final_amount|cur_odr:$order.currency:false:true}></td>
+          <td class="textcenter">
+              <div style="width:86px;margin:0 auto;">
+                  <a class="btn-a listact" href="<{link app=aftersales ctl=site_member act=return_add arg0=$order.order_id}>"><span>申请售后服务</span></a>
+              </div>
+          </td>
+        </tr>
+    <{/foreach}>
+    </tbody>
+</table>
+<{pagers data=$pager}>
+</div>
+</div>

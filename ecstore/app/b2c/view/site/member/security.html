@@ -1,0 +1,62 @@
+<!-- right-->
+<div class="member-main">
+  <div>
+    <form method="post" action="<{link app=b2c ctl='site_member'  full='1' act='save_security'}>" class="section">
+      <div class="FormWrap" style="background:none; border:none; padding:0; margin:0;">
+        <div class="title title2"><{t}>修改密码<{/t}></div>
+        <div class="division" style="border:none; border-bottom:1px dashed #ddd;">
+          <table class="forform" width="100%" border="0" cellspacing="0" cellpadding="0" class="forform">
+            <tr>
+              <th><{t}>当前密码：<{/t}></th>
+              <td>
+                <{input class="inputstyle" type="password" vtype=required name="old_passwd" onblur="checkOldPwd(this);"}><span></span>
+              </td>
+            </tr>
+            <tr>
+              <th><{t}>新密码：<{/t}></th>
+              <td>
+                <{input class="inputstyle" id="newPass" type="password" vtype=required name="passwd" maxlength="20" onfocus="this.getNext().setStyle('display', '');" onblur="this.getNext().setStyle('display', 'none');"}>
+                <span style="display:none;">6~20位字符，请牢记您的密码。</span>
+              </td>
+            </tr>
+            <tr>
+              <th><{t}>确认新密码：<{/t}></th>
+              <td>
+                <{input class="inputstyle" type="password" id="rePass" vtype="required&&change_password" name="passwd_re"}>
+                <input type="hidden" vtype="change_password" />
+              </td>
+	            <input type="hidden" vtype="change_password" />
+            </tr>
+          </table>
+        </div>
+        <div style="padding-left:140px">
+          <{button class="submit-btn" rel="_request" type="submit" label=$___b2c="保存"|t:'b2c'}>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  validatorMap['change_password']= ['<{t}>两次输入的密码不一致！<{/t}>', function(element, v) {
+    var passwd_re = $('rePass');
+    var passwd = $('newPass');
+    var _is_validate = false;
+			if (passwd_re.value == passwd.value) _is_validate = true||_is_validate;
+    return _is_validate;
+  }];
+
+  /* 验证旧密码是否正确  */
+  function checkOldPwd(input){
+      var pwd = input.value.trim();
+      if(pwd != ''){
+          new Request.HTML({
+              url:'<{link app=b2c ctl=site_member act=checkOldPwd}>',
+              method:'post',
+              data:'old_pwd='+pwd,
+              update:$(input).getNext('span'),
+          }).send();
+      }
+  }
+ 
+</script>
+<!-- right-->

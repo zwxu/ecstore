@@ -1,0 +1,42 @@
+<h2 class="head-title"><{t}>规格<{/t}></h2>
+<div class="goods-spec-cell" id='goods-spec-product'>
+    <table cellspacing="0" cellpadding="0" border="0" class="gridlist">
+        <thead id="productNodeTitle">
+            <tr>
+                <th><{t}>是否作为赠品<{/t}></th>
+                <th><{t}>配额<{/t}></th>
+                <th orderkey="bn"><{t}>货号<{/t}></th>
+                <th orderkey="product_id"><{t}>规格<{/t}></th>
+                <th orderkey="store"><{t}>库存<{/t}></th>
+                <th orderkey="cost"><{t}>成本价<{/t}></th>
+                <th orderkey="mktprice"><{t}>市场价<{/t}></th>
+                <th orderkey="weight"><{t}>重量<{/t}></th>
+                <th ><{t}>上架<{/t}></th>
+                
+            </tr>
+        </thead>
+        <tbody id='productNode'>
+            <{foreach from=$specs item=spec key=specid}>
+              <tr>
+                <td>
+                    <input type="hidden" name="goods[product][<{$specid}>][product_id]" value="<{$spec.product_id}>" /> 
+                    <input type="checkbox" name="to_gift[]" value="<{$spec.product_id}>" <{if ($default_in_gift && in_array($spec.product_id,$default_in_gift)) || $is_only_spec=='true' }> checked="checked" <{/if}> /> 
+                </td>
+                <td><input type="text" name="goods[product][<{$specid}>][max_limit]" size=4 value="<{$goods.product[$spec.product_id][gift][max_limit]|default:$spec.store}>" > </td>
+                <td orderkey="bn"><input type="text" name="goods[product][<{$specid}>][bn]" value="<{$spec.bn}>"  class="class-bn" <{if $goods.goods_type!='gift' && !empty($goods.goods_type) }> disabled="disabled" <{/if}> /></td>
+                <td orderkey="product_id"><{$spec.spec_info}></td>
+                <td orderkey="store">
+                    <{$spec.store}>
+                    <input type="hidden" name="goods[product][<{$specid}>][product_store]" value="<{$spec.store}>" />
+                </td>
+                <td orderkey="cost"><{t}><{$spec.cost}><{/t}></td>
+                <td orderkey="price"><{t}><{$spec.mktprice}><{/t}></td>
+                <td orderkey="weight"><{t}><{$spec.weight}><{/t}></td>
+                <td ><{t}><{if $spec.marketable=='true'}><{t}>是<{/t}><{else}><{t}>否<{/t}><{/if}><{/t}></td>
+              </tr>
+            <{/foreach}>
+        </tbody>
+        
+    </table>
+</div>
+<input type='hidden' name='goods[spec]' id='goods_spec' value='<{$goods.spec|serialize}>'/>

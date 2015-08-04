@@ -1,0 +1,69 @@
+<div class="success clearfix">
+  <div class="span-1 pic"/></div>
+  <div class="span-10"><h3><{t}>恭喜您已注册本店会员<{/t}></h3></div>
+</div>
+<div class="FormWrap">
+  <div class="customMessages"></div>
+  <form method="post" action="<{link app=b2c ctl="site_member" act="save_attr"}>" id='form_saveMember_info' class="section">
+    <input type="hidden" name="is_register" value=1>
+    <div class="division" id='crateAdmin'>
+      <table class="forform" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <{foreach from=$attr item=item name="item" key='row'}>
+        <tr>
+          <th><{if $item.attr_required eq 'true'}><em>*</em><{/if}><{$item.attr_name}></th>
+          <td>
+            <{if $item.attr_type =='date'}>
+            <{input class="cal" type='date' name=$item.attr_column value=$item.attr_value required=$item.attr_required }>
+            <{/if}>
+
+            <{if $item.attr_type =='region'}>
+            <{input app=ectools type="region" name=$item.attr_column vtype="area"}>
+            <{/if}>
+
+            <{if $item.attr_type =='gender'}>
+            <{input type='gender' name=$item.attr_column value=$item.attr_value }>
+            <{/if}>
+
+            <{if $item.attr_type =='select'}>
+            <select name='<{$item.attr_column}>' <{if $item.attr_required eq 'true'}>vtype='required'<{/if}>>
+              <option value='' <{if $item.attr_value == ''}>selected='true'<{/if}>><{t}>- 请选择 -<{/t}></option>
+              <{foreach from=$item.attr_option item=option name="option"}>
+              <option value='<{$option}>' <{if $item.attr_value == $option}>selected='true'<{/if}>><{$option}></option>
+              <{/foreach}>
+            </select>
+            <{/if}>
+
+            <{if $item.attr_type =='checkbox'}>
+
+            <{foreach from=$item.attr_option item=checkbox name="checkbox" }>
+            <input type='checkbox' name=box:<{$item.attr_column}>[] value='<{$checkbox}>'><label><{$checkbox}></label><br/>
+            <{/foreach}>
+            <input type='hidden' name='<{$item.attr_column}>[]' value='%no%'>
+            <{if $item.attr_required eq 'true'}>
+            <input type='hidden' vtype='selectc'/>
+            <{/if}>
+            <{/if}>
+
+            <{if $item.attr_type == 'text'}>
+            <{input type='text' name=$item.attr_column value=$item.attr_value vtype=$item.attr_valtype required=$item.attr_required }>
+            <{/if}>
+
+            <{if $item.attr_type == 'number'}>
+            <{input type='text' name=$item.attr_column value=$item.attr_value  vtype=$item.attr_type required=$item.attr_required }>
+            <{/if}>
+
+            <{if $item.attr_type == 'alpha'}>
+            <{input type='text' name=$item.attr_column value=$item.attr_value vtype=$item.attr_type required=$item.attr_required }>
+            <{/if}>
+
+          </td>
+        </tr>
+        <{/foreach}>
+        <tr>
+          <th></th>
+          <td><input class="actbtn btn-save" type="submit" value="<{t}>保存<{/t}>" /></td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>

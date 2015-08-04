@@ -1,0 +1,16 @@
+<div id="picAddress" class="tableform">
+  <div class="division widgetconfig">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th width="20%"><{t}>数量：<{/t}></th>
+        <td width="80%" ><{input name="width" style="width:50px" value=$setting.num|default:'12' required="true" type="digits"}></td>   
+      </tr>
+      <tr>
+        <th width="20%"><{t}>选择商家：<{/t}></th>
+        <td width="80%" >
+			<{input  type='object' name="store"  multiple="true" filter='' rowselect="true"  object="storemanger@business" textcol="store_name" name="storemanger" cols="store_name,image"  value=$setting.storemanger}>
+        </td>    
+      </tr>
+    </table>
+  </div>
+ 

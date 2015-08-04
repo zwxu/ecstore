@@ -1,0 +1,284 @@
+<{script src="goodseditor.js" app="business" pdir="js"}>
+<{script src="uploader.js" app="business" pdir="js"}>
+<{script src="modedialog.js" app="business" pdir="js"}>
+<script>
+  window.addEvent('domready',function(){
+    goodsEditFrame({'path':'<{$current_url}>/uploader.swf','IMAGE_MAX_SIZE':'<{$IMAGE_MAX_SIZE}>','url':'<{link app=business ctl=site_mimages act=gimage_swf_remote arg=$store_id}>','imgsize':'<{$img_size}>'});
+  });
+</script>
+<div id="main" class="member-main" action="">
+<div class="title "><{t}>发布宝贝<{/t}></div>
+  <form method="post" action="<{link app=business ctl='site_member' full='1' act='toAdd_entity'}> " id='form_saveGoods' class="section">
+  <div id="gEditor-Body">
+    <div class="title_fb "><{t}>1. 宝贝基本信息<{/t}></div>
+    <div class="FormWrap" style="background:none">
+      <input id="gEditor-GId-input" type="hidden" value="<{$goods.goods_id}>" name="goods[goods_id]">
+      <input id="gEditor-GKind-input" type="hidden" value="entity" name="goods[goods_kind]">
+      <input type="hidden" name="productkey" value="<{$productkey}>"/>
+      <input type="hidden" name="is_entity" value="1"/>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="liststyle data width1" style="border:none">
+        <col class="bg-gray"/>
+        <col class="span-auto"/>
+        <{if false}>
+        <tr>
+          <th><{t}>宝贝新旧：<{/t}></th>
+          <td>
+            <input type="radio" name="goods[goods_state]"<{if $goods.goods_state != 'used' }> checked="checked"<{/if}> value="new" ><{t}>全新<{/t}>
+            <input type="radio" name="goods[goods_state]"<{if $goods.goods_state == "used"}> checked="checked"<{/if}> value="used" ><{t}>二手<{/t}>
+          </td>
+        </tr>
+        <{/if}>
+        <input type="hidden" name="goods[goods_state]" value="new" >
+        <tr>
+          <th><em><font color="red">*</font></em><{t}>宝贝分类：<{/t}></th>
+          <td>
+            <{input type="vg2cat" value="" name="goods[category][cat_id]"}>
+          </td>
+        </tr>
+        <tr style="display:none;">
+          <th><{t}>宝贝类型：<{/t}></th>
+          <td>
+            <select name="goods[type][type_id]" id="gEditor-GType-input" readyonly=readyonly>
+              <!--<option value='1'><{t}>通用商品类型<{/t}></option>-->
+              <{foreach from=$gtype item=type}>
+                <option class="optionlevels" value='<{$type.type_id}>' <{if $type.type_id==$goods.type.type_id}>selected<{/if}>><{$type.name}>
+                </option>
+              <{/foreach}>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th><em><font color="red">*</font></em><{t}>商品名称：<{/t}></th>
+          <td><{input type="text" id="id_gname" name="goods[name]" required="true" maxlength="100" vtype='required' value=$goods.name style="width:60%"}></td>
+        </tr>
+        <tr>
+          <th><{t}><{/t}></th>
+          <td></td>
+        </tr>
+        <{if $goodsbn_display_switch}>
+          <tr>
+            <th><{t}>商品编号：<{/t}></th>
+            <td><{input type="text" name="goods[bn]" value=$goods.bn }></td>
+          </tr>
+        <{else}>
+          <input type='hidden' name="goods[bn]" value="<{$goods.bn}>">
+        <{/if}>
+        <tr>
+          <th><{t}>商品关键词：<{/t}></th>
+          <td>
+            <{foreach from=$goods.keywords item=keywords}><{assign var='keyword' value="{$keyword}|{$keywords.keyword}"}><{/foreach}>
+            <input type="text" name="keywords" value="<{$keyword|trim:'|'}>" class="inputstyle" maxlength="100"/>
+            <span class="notice-inline "><{t}>用于筛选商品，多个关键词用半角竖线"|"分开<{/t}></span>
+          </td>
+        </tr>
+            
+        <tr>
+          <th><{t}>商品简介：<{/t}></th>
+          <td>
+            <{input type="textarea" class="x-input" value=$goods.brief name="goods[brief]" style="resize:none;" cols="50" rows="5" maxth="255" }>
+            <div class="notice-inline"><{t}>简短的商品介绍,请不要超过70个字<{/t}></div>
+          </td>
+        </tr>
+        <{if false}>
+        <tr>
+          <th><{t}>模板：<{/t}></th>
+          <td><{template_filter type="product" class="inputstyle" selected=$goods.goods_setting.goods_template name="goods[goods_setting][goods_template]"}></td>
+        </tr>
+        <{/if}>
+        <tr>
+          <th><{t}>商品相册：<{/t}></th>
+          <td>
+            <div class="division pic-main" >
+              <div class="clearfix">
+                <span class="pic-uploader">
+                  <{button app="desktop" class="btn-upload" label=$___b2c="添加商品图片"|t:'b2c' icon="image_new.gif"}>
+                </span>
+                <{help}><{t}>提示：上传图片需为<{$img_size}>以上正方形图片，大小不能超过1M<{/t}><{/help}>
+              </div>
+              <div class="pic-area">
+                <input type="hidden" name="image_default" value="<{$goods.image_default_id}>" />
+                <{include file="site/goods/gimage_goods.html" app="business"}>
+              </div>
+            </div>
+          </td>
+        </tr>  
+      </table>
+      <div id="gEditor-ginfo">
+        <{include file="site/goods/ginfo_entity.html" app="business"}>
+      </div>
+    </div>
+    <div class="FormWrap  " style="background:none">
+      <table border="0" cellpadding="0" cellspacing="0" class="liststyle tdright" style="border:none">
+        <tr>
+          <th ><{t}>录入方式：<{/t}></th>
+          <td>
+            <input type="radio" name="goods[create]" value="member" onclick="member_create();" checked="checked"><{t}>手动输入<{/t}>
+            <input type="radio" name="goods[create]" value="auto" onclick="auto_create();"><{t}>自动生成<{/t}>
+          </td>
+        </tr>
+        
+      </table>
+      
+      <table cellpadding="0" id="FormWrap_table" class="liststyle tdright" style="border:none;">
+        <tr><td><a href="javascript:void(0);" class="addimage" id="FormWrap_table_a">添加一组</a></td></tr>
+      </table>
+      <table border="0" cellpadding="0" style="display:none;border:none;" id="FormWrap_table_2" class="liststyle tdright">
+        <tr><td>亲，您选择了自动生成卡号密码，我们将会根据库存生成相应的卡号和密码供您使用。</td></tr>
+      </table>
+    </div>
+    <div class="FormWrap  " style="background:none">
+      <table border="0" cellpadding="0" cellspacing="0" class="liststyle tdright" style="border:none">
+        <{if false}>
+        <tr>
+          <th ><{t}>运费模板：<{/t}></th>
+          <td>
+            <{input type="vobject" object="dlytype" filter=$gdlytype_filter multiple="true" rowselect="true" textcol="dt_name" name="gdlytype" value=$goods.gdlytype}>
+          </td>
+        </tr>
+        <{/if}>
+        <tr>
+          <th ><{t}>是否包邮：<{/t}></th>
+          <td>
+            <input type="radio" name="goods[freight_bear]"<{if $goods.freight_bear != 'business' }> checked="checked"<{/if}> value="member" ><{t}>否<{/t}>
+            <input type="radio" name="goods[freight_bear]"<{if $goods.freight_bear == "business"}> checked="checked"<{/if}> value="business" ><{t}>是<{/t}>
+          </td>
+        </tr>
+        <!--tag_foreign_freeshipping-->
+        <{if $site_min_order == 'true'}>
+        <tr>
+          <th><{t}>起定量：<{/t}></th>
+          <td><{input type="unsigned" value=$goods.min_buy name="goods[min_buy]" style="width:60px" maxlength="25" }></td>
+        </tr>
+        <{/if}>
+        <{if $goods.type.is_physical}>
+        <tr>
+          <th><{t}>计量单位：<{/t}></th>
+          <td><{input type="text" value=$goods.unit name="goods[unit]" maxlength="25" style="width:60px"}></td>
+        </tr>
+        <{/if}>
+        <tr>
+          <th><{t}>立即上架：<{/t}></th>
+          <td>
+            <input type="radio" name="goods[status]"<{if $goods.status != 'false' }> checked="checked"<{/if}> value="true" ><{t}>是<{/t}>
+            <input type="radio" name="goods[status]"<{if $goods.status == "false"}> checked="checked"<{/if}> value="false" ><{t}>否<{/t}>
+          </td>
+        </tr>
+        <{if false}>
+        <tr>
+          <th><{t}>无库存也可销售：<{/t}></th>
+          <td>
+            <input type="radio"  name="goods[nostore_sell]"<{if $goods.nostore_sell eq 1 }> checked="checked"<{/if}> value="1" ><{t}>是<{/t}>
+            <input type="radio"  name="goods[nostore_sell]"<{if $goods.nostore_sell eq 0}> checked="checked"<{/if}> value="0" ><{t}>否<{/t}>
+          </td>
+        </tr>
+        <{/if}>
+        <{if $env.conf.b2c.site.get_policy.method ==3}>
+        <tr>
+          <th><{t}>积分：<{/t}></th>
+          <td>
+            <{input type="digits" value=$goods.gain_score|default:$point_mim_get_value name="goods[gain_score]" maxlength="25" vtype="score" id="gain_score"}>%
+            <input type='hidden' name='goods[score_setting]' value='percent'/>
+            <span>（请填写与商品销售价的比例，运营商设置范围为<{$point_mim_get_value}>%~<{$point_max_get_value}>%）</span>
+        </td>
+        </tr>
+        <{/if}>
+        <tr>
+          <th><{t}>自定义分类：<{/t}></th>
+          <td>
+            <{input type="vobject" object="goods_cat@business" filter=$catlink_filter multiple="true" rowselect="true" textcol="cat_name" name="customcatid" value=$goods.customcat}>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div>
+    <div class="title_fb"><{t}>3. <em><font color="red">*</font></em>详细介绍<{/t}></div>
+    <div class="tableform">
+    <{input type="vhtml" name="goods[description]" value=$goods.description includeBase=true}>
+    </div>
+  </div>
+  <div>
+    <div class="title_fb"><{t}>4. 相关商品<{/t}></div>
+    <div class="tableform">
+    <{input type="vobject" object="goods" return_url="{$return_url}" filter=$goodslink_filter multiple="true" rowselect="true" textcol="name" name="linkid" value=$goods.glink.items view="b2c:admin/goods/detail/rel_items.html"}>
+    </div>
+  </div>
+  <div>
+    <div class="title_fb"><{t}>5. SEO设置<{/t}></div>
+      <{assign var=seo_info value=$goods.seo_info}>
+      <div class="tableform" >
+       <table border="0" cellpadding="0" cellspacing="0" class="liststyle tdright">
+       <!-- <tr>
+          <th> Page Title</th>
+          <td><input type='text' class="inputstyle" name='goods[seo_info][seo_title]' value='<{$seo_info.seo_title}>'/></td>
+       </tr> -->
+       <tr>
+          <th>Meta Keyword</th>
+          <td><input type='text' class="inputstyle" name='goods[seo_info][seo_keywords]' value='<{$seo_info.seo_keywords}>'/></td>
+       </tr>
+        <tr>
+          <th>Meta Description</th>
+          <td><input type='text' class="inputstyle" name='goods[seo_info][seo_description]' value='<{$seo_info.seo_description}>'/></td>
+       </tr>
+        <!-- <tr>
+          <th><{t}>自定义url<{/t}></th>
+          <td><input type='text'class="inputstyle" name='goods_static' value='<{$goods_static}>'/></td>
+       </tr> -->
+       </table>
+    </div>
+  </div>
+  <div style="padding-left:142px; margin-top:10px;"><{button class="submit-btn" type="submit" label=$___b2c="保存"|t:'b2c' onclick="subsub()" rel="_request"}></div>
+  </form>
+</div>            
+
+<script>
+validatorMap['score']= ['<{t}>积分填写不正确<{/t}>', function() {
+    var gain_score = $('gain_score');
+    var _is_validate = false;
+			if (gain_score.value >= <{$point_mim_get_value}> && gain_score.value <= <{$point_max_get_value}>) _is_validate = true||_is_validate;
+    return _is_validate;
+  }];
+var subsub = function(){
+  $ES('textarea[ishtml=true]', '#gEditor-Body').getValue();
+}
+
+function member_create(){
+    $('FormWrap_table').setStyle('display','');
+    $('FormWrap_table_a').setStyle('display',''); 
+    $('FormWrap_table_2').setStyle('display','none');
+    $('p_store').setAttribute('readonly',true);
+}
+
+function auto_create(){
+    $('FormWrap_table_2').setStyle('display','');
+    $('FormWrap_table').setStyle('display','none');
+    $('FormWrap_table_a').setStyle('display','');  
+    $('p_store').readOnly=false;
+}
+
+document.getElement(".addimage").addEvent('click',function(){
+      var i=new Date().getTime();
+
+      var tpl='\
+        <tr><th><{t app="b2c"}>卡号:<{/t}></th>\
+        <td><input type="text" name="goods[product][0][card]['+i+'][card_id]" maxlength="25" vtype="required">\</td>\
+        <th><{t app="b2c"}>密码:<{/t}></th>\
+        <td><input type="text" name="goods[product][0][card]['+i+'][card_psw]" maxlength="25"></td></tr>\
+        <th><{t app="b2c"}>删除该组:<{/t}></th>\
+        <td><span onclick="del($(this));"><{img src="bundle/delecate.gif" style="cursor:pointer;" alt=$___b2c="删除"|t:'b2c' title=$___b2c="删除"|t:'b2c'}></span></td>\
+      ';
+      
+      var store = parseInt($('p_store_real').value);
+      $('p_store_real').value = parseInt(store+1);
+      $('p_store').value = parseInt(store+1);
+
+      $('FormWrap_table').adopt(new Element('tr',{'html':tpl,'width':'100%'}));
+});
+
+function del(tr){
+    var store = parseInt($('p_store_real').value);
+    $('p_store_real').value = parseInt(store-1);
+    $('p_store').value = parseInt(store-1);
+    $(tr).getParent('tr').destroy();
+}
+</script>

@@ -1,0 +1,5 @@
+<div class="clearfix">
+  <{if $data.more}><a href="<{$data.more_link}>" class="floor_more">更多</a><{/if}>
+	<{foreach from=$data.href item=toplink key=top_key}><a href="<{$toplink.top_link_url}>"><{$toplink.top_link_title}></a><{/foreach}>
+  
+</div>

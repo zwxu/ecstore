@@ -1,0 +1,33 @@
+<div class="member-main">
+  <{include file="site/member/activity_tab.html" app=business }>
+  <div class="orderlist-warp">
+        <div class="title"><{t}>申请列表<{/t}></div>
+        <table class="gridlist table-goods-list" style="border-bottom:none" width="100%" border="0" cellspacing="0"  cellpadding="0">
+            <tr>
+                <th class="first"><{t}>活动名称<{/t}></th>
+                <th><{t}>商品名称<{/t}></th>
+                <th><{t}>活动价格<{/t}></th>
+                <th><{t}>申请状态<{/t}></th>
+                <th><{t}>详情<{/t}></th>
+                <th><{t}>活动状态<{/t}></th>
+				<th><{t}>备注<{/t}></th>
+                <th><{t}>操作<{/t}></th>
+            </tr>
+            <tbody>
+                <{foreach from=$busiAct item=item name="busiAct" key=key}>
+                    <tr style="text-align:center;">
+                        <td class="horizontal-m"><{t}><{$item.actInfo.name}><{/t}></td>
+                        <td><a href="<{link app=b2c ctl=site_product act =index arg0=$item.good.goods_id}>"><{t}><{$item.good.name}><{/t}></a></td>
+                        <td><{t}><{if $item.price}><{$item.price}><{else}><{$item.actInfo.price}><{/if}><{/t}></td>
+                        <td><{t}><{if $item.status==1}>待审核<{elseif $item.status==2}>审核通过<{else}>审核不通过<{/if}><{/t}></td>
+                        <td><{t}><a href="<{link app=timedbuy ctl='site_activity' act='showDetail' arg0=$item.id}>">查看</a><{/t}></td>
+                        <td><{t}><{if $item.actInfo.act_open=='true'}>开启<{else}>未开启<{/if}><{/t}></td>
+						<td><{t}><{$item.remark}><{/t}></td>
+                        <td><{t}><{if $item.status==3&&$item.actInfo.act_open=='true'}><a  href="<{link app=timedbuy ctl='site_activity' act='editAttend' arg0=$item.id}>">编辑</a><{/if}>
+						<{if $item.status!=2}><a href="<{link app=timedbuy ctl=site_activity act=quitActivity arg0=$item.id}>">退出活动</a><{/if}><{/t}></td>
+                    </tr>
+                <{/foreach}>
+            </tbody>
+        </table>
+  </div>
+</div>

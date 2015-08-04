@@ -1,0 +1,43 @@
+    <{if  count($trading.pmt_o.list)>0 || count($trading.gift_p)>0 || count($trading.coupon_p)>0}>
+    <div class="division">
+        <table width="100%" cellpadding="0" cellspacing="0"class="liststyle data">
+            <colgroup class="span-4 bg-gray"></colgroup>
+                <colgroup class="span-auto"></colgroup>
+            <{if count($trading.pmt_o.list)>0}>
+            <tr>
+            <th><{t}>享受的优惠：<{/t}></th>
+                    <td>
+                         <ol>
+                        <{foreach from=$trading.pmt_o.list item=item}>
+                        <li><{$item.pmt_describe}></li>
+                        <{/foreach}>
+                        </ol>
+            </td>
+            </tr>
+                <{/if}>
+                <{if count($trading.gift_p)>0}>
+                <tr>
+                  <th><{t}>获得赠品：<{/t}></th>
+                  <td>
+                  <ol>
+                  <{foreach from=$trading.gift_p item="item" key="key"}>
+              <li><{$item.name}> <{$item.nums}><{t}> 件<{/t}>&nbsp;&nbsp;</li>
+            <{/foreach}>
+                    </ol>
+                    </td>
+                </tr>
+                <{/if}>
+                <{if count($trading.coupon_p)>0}>
+                <tr>
+                  <th><{t}>获得优惠券：<{/t}></th>
+                  <td>
+                  <ol>
+                      <{foreach from=$trading.coupon_p item="item" key="key"}>
+                      <li><{$item.cpns_name}> <{$item.nums}><{t}> 张<{/t}></li>
+                      <{/foreach}>
+                  </ol></td>
+                </tr>
+                <{/if}>
+      </table>
+        </div>
+    <{/if}>

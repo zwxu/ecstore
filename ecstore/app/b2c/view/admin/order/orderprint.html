@@ -1,0 +1,232 @@
+<{$order.page1}>
+<table width="100%" border="0" cellpadding="2" cellspacing="0" class="p12black">
+  <tr> 
+    <td width="3%" height="59" valign="middle"><strong><br>
+      </strong></td>
+    <td width="40%" valign="middle" class="p12black"><strong><{t}>订单信息<{/t}><br>
+      </strong></td>
+    <td width="47%" align="right" valign="bottom" class="p9black"><strong><span class="p12black"><{$order.shopname}></span></strong><br>
+     <{t}> 地址：<{/t}><{$order.shopaddress}><br>
+      <span class="p9black"><{t}>电话：<{/t}><{$order.shoptelphone}></span><{t}>邮编：<{/t}><{$order.shopzip}></td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<{if count($order.goodsItems) > 0}>
+<table width="100%" border="0" cellpadding="2" cellspacing="0" class="p12white">
+  <tr> 
+    <td class="p12black"><strong><{t}>商品信息<{/t}></strong><hr size="1" noshade></td>
+  </tr>
+</table>
+<table width="98%" border="0" cellpadding="2" cellspacing="0" bgcolor="#F7F7F7" class="p9black">
+  <tr>
+    <td width="64" height="26" align="center" class="p9black"><{t}>货号<{/t}></td>
+    <td width="325" height="26" align="center" class="p9black"><{t}>商品名称<{/t}><br>
+    </td>
+    <td width="120" height="26" align="center"><{t}>商品分类<{/t}><br>
+    </td>
+    <td width="90" height="26" align="center"><{t}>价格<{/t}><br>
+    </td>
+    <td width="90" height="26" align="center" class="p9black"><{t}>数量<{/t}></td>
+    <td width="90" height="26" align="center" class="p9black"><{t}>小计<{/t}></td>
+  </tr>
+  <{foreach from=$order.goodsItems item=item}>
+  <tr class="row0"> 
+    <td width="64" align="center" height="20"><{$item.bn}></td>
+    <td width="325" align="center" height="20"><{$item.name}></td>
+    <td width="120" align="center" height="20"><{$item.catname}></td>
+    <td width="90" align="center" height="20"><{$item.price|cur}></td>
+    <td width="90" align="center" height="20"><{$item.quantity}></td>
+    <td width="90" align="center" height="20"><{$item.price*$item.quantity|cur}></td>
+  </tr>
+  <{/foreach}>
+  <tr> 
+    <td width="60" align="center">&nbsp;</td>
+    <td width="64" align="center">&nbsp;</td>
+    <td width="325">&nbsp;</td>
+    <td width="120">&nbsp;</td>
+    <td width="90">&nbsp;</td>
+    <td width="90">&nbsp;</td>
+    <td width="90">&nbsp;</td>
+    <td width="100">&nbsp;</td>
+  </tr>
+</table>
+<{/if}>
+<{if count($order.giftItems) > 0}>
+<table width="100%" border="0" cellpadding="2" cellspacing="0" class="p12white">
+  <tr> 
+    <td class="p12black"><strong><{t}>赠品信息<{/t}></strong><hr size="1" noshade></td>
+  </tr>
+</table>
+<table width="98%" border="0" cellpadding="2" cellspacing="0" bgcolor="#F7F7F7" class="p9black">
+  <tr> 
+    <td width="325" height="26" align="center" class="p9black"><{t}>赠品名称<{/t}><br>
+    </td>
+    <td width="120" height="26" align="center"><{t}>所需积分<{/t}><br>
+    </td>
+    <td width="120" height="26" align="center" class="p9black"><{t}>购买量<{/t}></td>
+    </td>
+  </tr>
+  <{foreach from=$order.giftItems item=gftitem}>
+  <tr class="row0"> 
+    <td width="325" align="center" height="20"><{$gftitem.name}></td>
+    <td width="120" align="center" height="20"><{$gftitem.point}></td>
+    <td width="120" align="center" height="20"><{$gftitem.quantity}></td>
+  </tr>
+  <{/foreach}>
+  <tr> 
+    <td width="325">&nbsp;</td>
+    <td width="120">&nbsp;</td>
+    <td width="120">&nbsp;</td>
+  </tr>
+</table>
+<{/if}>
+<table width="100%" border="0" cellpadding="2" cellspacing="0" class="p12white">
+  <tr> 
+    <td class="p12black"><strong><{t}>订单信息<{/t}></strong><hr size="1" noshade></td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="4"   class="p9black" bgcolor="#F7F7F7">
+  <tr> 
+    <td width="18%" align="right" nowrap class="p9orange"><{t}>订单号：<{/t}></td>
+    <td width="27%" nowrap><{$order.order_id}></td>
+    <td width="16%" align="right" nowrap class="p9orange"><{t}>状态：<{/t}></td>
+    <td width="39%" nowrap><{if $order.pay_status == 0}><{t}>未支付<{/t}><{elseif $order.pay_status == 1}><{t}>已支付<{/t}><{elseif $order.pay_status == 2}><{t}>处理中<{/t}><{elseif $order.pay_status == 3}><{t}>部分付款<{/t}><{elseif $order.pay_status == 4}><{t}>部分退款<{/t}><{elseif $order.pay_status == 5}><{t}>已退款<{/t}><{/if}>
+      [<{if $order.ship_status == 0}><{t}>未发货<{/t}><{elseif $order.ship_status == 1}><{t}>已发货<{/t}><{elseif $order.ship_status == 2}><{t}>部分发货<{/t}><{elseif $order.ship_status == 3}><{t}>部分退货<{/t}><{elseif $order.ship_status == 4}><{t}>已退货<{/t}><{/if}>]</td>
+  </tr>
+  <tr> 
+    <td width="18%" align="right" valign="top" nowrap class="p9orange"><{t}>下单日期：<{/t}></td>
+    <td width="27%" nowrap><{$order.createtime|cdate:'SDATE_STIME'}></td>
+    <td width="16%" align="right" valign="top" nowrap class="p9orange"><{t}>商品总额：<{/t}></td>
+    <td width="39%" nowrap><{$order.cost_item|cur_odr:$order.currency:false:true}></td>
+  </tr>
+  <{if $order.is_delivery == 'Y'}>
+  <tr> 
+    <td width="18%" align="right" valign="top" nowrap class="p9orange"><{t}>配送方式：<{/t}></td>
+    <td width="27%" nowrap><{$order.shipping.shipping_name}></td>
+    <td width="16%" align="right" valign="top" nowrap class="p9orange"><{t}>配送费用：<{/t}></td>
+    <td width="39%" nowrap><{$order.shipping.cost_shipping|cur_odr:$order.currency:false:true}></td>
+  </tr>
+  <tr>
+    <td align="right" valign="top" nowrap class="p9orange"><{t}>是否保价：<{/t}></td>
+    <td nowrap><{if $order.is_protect == true}><{t}>是<{/t}><{else}><{t}>否<{/t}><{/if}></td>
+    <td align="right" valign="top" nowrap class="p9orange"><{t}>保价费用：<{/t}></td>
+    <td nowrap><{$order.cost_protect|cur_odr:$order.currency:false:true}></td>
+  </tr>
+  <{/if}>
+  <tr> 
+    <td align="right" valign="top" nowrap class="p9orange"><{t}>商品重量：<{/t}></td>
+    <td nowrap><{$order.weight}></td>
+    <td align="right" valign="top" nowrap class="p9orange"><{t}>订单总金额：<{/t}></td>
+    <td nowrap><{$order.total_amount|cur_odr:$order.currency:false:true}></td>
+  </tr>
+  <tr> 
+    <td align="right" valign="top" nowrap class="p9orange"><{t}>支付方式：<{/t}></td>
+    <td nowrap><{$order.payment}></td>
+    <td align="right" valign="top" nowrap class="p9orange"><{t}>支付手续费：<{/t}></td>
+    <td nowrap><{$order.payinfo.cost_payment|cur_odr:$order.currency:false:true}></td>
+  </tr>
+  <tr class="allborder"> 
+    <td align="right" valign="top" nowrap class="p9orange"><{t}>货币：<{/t}></td>
+    <td nowrap><{$order.cur_name}></td>
+    <td align="right" valign="top" nowrap class="p9orange"><{t}>支付总金额：<{/t}></td>
+    <td nowrap><{$order.total_amount|cur_odr:$order.currency:false:true}></td>
+  </tr>
+  <{if $order.is_tax == 'true'}>
+  <tr class="allborder"> 
+    <td align="right" valign="top" nowrap class="p9orange"><{t}>发票税额：<{/t}></td>
+    <td nowrap><{$order.cost_tax|cur_odr:$order.currency:false:true}></td>
+    <{if !$invoice_detail}>
+    <td align="right" valign="top" nowrap class="p9orange"><{t}>发票抬头：<{/t}></td>
+    <td nowrap><{$order.tax_company}></td>
+  </tr>
+  <{/if}>
+  <{/if}>
+  <{$invoice_data}>
+</table>
+<br>
+<table width="100%" border="0" cellpadding="2" cellspacing="0" class="p12white">
+  <tr> 
+    <td class="p12black"><strong><{t}>购货人<{/t}></strong><hr size="1" noshade></td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="4"   class="p9black" bgcolor="#F7F7F7">
+  <tr> 
+    <td width="18%" align="right" valign="top" nowrap class="p9orange"><{t}>姓名：<{/t}></td>
+    <td width="27%" nowrap><{$order.member.contact.name}></td>
+    <td width="16%" align="right" valign="top" nowrap class="p9orange"><{t}>用户名：<{/t}></td>
+    <td width="39%" nowrap><{$order.member.pam_account.login_name}></td>
+  </tr>
+  <tr> 
+    <td width="18%" align="right" valign="top" nowrap class="p9orange"><{t}>电话：<{/t}></td>
+    <td width="27%" nowrap><{$order.member.contact.phone.telephone}></td>
+    <td width="16%" align="right" valign="top" nowrap class="p9orange">Email：</td>
+    <td width="39%" nowrap><{$order.member.contact.email}></td>
+  </tr>
+  <tr> 
+    <td align="right" valign="top" nowrap class="p9orange"><{t}>邮编：<{/t}></td>
+    <td colspan="3" nowrap><{$order.member.contact.zipcode}></td>
+  </tr>
+  <tr> 
+    <td width="18%" align="right" valign="top" nowrap class="p9orange"><{t}>地址：<{/t}></td>
+    <td colspan="3" nowrap><{$order.member.contact.addr}></td>
+  </tr>
+  <tr> 
+    <td align="right" valign="top" nowrap class="p9orange"><{t}>附言：<{/t}></td>
+    <td colspan="3" nowrap><{$order.memo}></td>
+  </tr>
+</table>
+<{if $order.is_delivery == 'Y'}>
+<br>
+<table width="100%" border="0" cellpadding="2" cellspacing="0" class="p12white">
+  <tr> 
+    <td class="p12black"><strong><{t}>收货人<{/t}></strong><hr size="1" noshade></td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="4"   class="p9black" bgcolor="#F7F7F7">
+  <tr> 
+    <td width="18%" align="right" valign="top" nowrap class="p9orange"><{t}>姓名：<{/t}></td>
+    <td width="27%" nowrap><{$order.consignee.name}></td>
+    <td width="16%" align="right" valign="top" nowrap class="p9orange">Email：</td>
+    <td width="39%" nowrap><{$order.consignee.email}></td>
+  </tr>
+  <tr> 
+    <td width="18%" align="right" valign="top" nowrap class="p9orange"><{t}>电话：<{/t}></td>
+    <td width="27%" nowrap><{$order.consignee.telephone}></td>
+    <td width="16%" align="right" valign="top" nowrap class="p9orange"><{t}>手机：<{/t}></td>
+    <td width="39%" align="right" nowrap class="allborder"> 
+      <div align="left"><{$order.consignee.mobile}></div>
+    </td>
+  </tr>
+  <tr> 
+    <td align="right" valign="top" nowrap class="p9orange"><{t}>邮编：<{/t}></td>
+    <td nowrap><{$order.consignee.zip}></td>
+    <td width="16%" align="right" valign="top" nowrap class="p9orange"><{t}>送货时间：<{/t}></td>
+    <td width="39%" align="right" nowrap class="allborder"> 
+      <div align="left"><{$order.consignee.r_time}></div>
+    </td>
+  </tr>
+  <tr> 
+    <td align="right" valign="top" nowrap class="p9orange"><{t}>送货地址：<{/t}></td>
+    <td colspan="3" nowrap><{$order.consignee.addr}></td>
+  </tr>
+</table>
+<{/if}>
+<table width="100%" border="0" cellpadding="2" cellspacing="0" class="p12white">
+  <tr> 
+    <td class="p12black">&nbsp;</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td><hr size="1" noshade></td>
+  </tr>
+</table>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="p9black">
+  <tr> 
+    <td align="center">&nbsp;</td>
+  </tr>
+</table>

@@ -1,0 +1,59 @@
+<form action="index.php?app=business&ctl=admin_storemanger&act=saveBatchEdit" method="post" id="form01">
+<textarea name="filter" style="display:none"><{$filter}></textarea>
+<div class="division">
+<div class="notice"><{t}>正在编辑<{/t}><strong><{$editInfo.count}></strong><{t}>条数据。<{/t}>
+<br/>
+<{t}>说明：根据违规处理中设定的措施对店铺进行处罚(可以多选)，分数累计。<{/t}>
+</div>
+<table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <th style="width:20px">
+      </th>
+      <th><label for="bated_ipt_dorder"><{t}>选择违规类型<{/t}></label>
+      </th>
+      <td>
+      <{input  type="object" vtype="required" filter=$catfilter  object="violationcat@business"  name="set[violationcat]" cols="cat_id,cat_name,score" multiple="true"    textcol="cat_name" view="business:admin/store/violation/items.html" }>
+      </td>  
+    </tr>
+
+    <tr>
+      <th style="width:20px">
+      </th>
+      <th><label for="bated_ipt_remark"><{t}>备注<{/t}></label>
+      </th>
+      <td>
+      <{input id="bated_ipt_remark" type="textarea" vtype="required"  name="set[remark]" cols=80 rows=4 value=$remark  }>
+      </td>  
+    </tr>
+    
+</table>
+<input type="hidden" name="updateAct" value="violationed"/>
+</div>
+<div class="mainFoot">
+<table cellspacing="0" cellpadding="0" border="0" align="center" class="table-action">
+  <tr>
+  <td>
+    </td>
+  </tr>
+</table></div>
+
+</form>
+<{area inject=".mainFoot"}>
+   <div class="table-action">
+        <{button label="保存" type="button" id="btn01" class="btn-primary"}>
+   </div>
+<{/area}>
+
+<script>
+  $('btn01').addEvent('click',function(){
+
+      $('form01').store('target',{onComplete:function(re){
+           re = JSON.decode(re);
+
+           if(re.error)return;
+           $('form01').getParent('.dialog').retrieve('instance').close();
+      }});
+      $('form01').fireEvent('submit',{stop:$empty});
+  
+  });
+</script>

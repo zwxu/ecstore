@@ -1,0 +1,19 @@
+<app version="1.0">
+  <name>积分换购活动</name>
+
+  <description>积分换购活动</description>
+
+  <author>
+      <name>ql</name>
+      <email></email>
+      <url></url>
+  </author>
+
+  <version>0.1</version>
+  <parent_model_class>dbeav_model</parent_model_class>
+  <license>license</license>
+  <depends>
+    <app>b2c</app>
+  </depends>
+
+</app>

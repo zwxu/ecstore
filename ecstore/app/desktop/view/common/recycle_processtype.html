@@ -1,0 +1,23 @@
+<form method="post" id="recycle_restore_form" action="index.php?app=desktop&ctl=recycle&act=recycle_restore&finder_id=<{$env.get.finder_id}>&_finder[finder_id]=<{$env.get.finder_id}>">
+  <div style="margin: 5px;" class="notice">
+	  <{t}>如果选中的要恢复的记录，在原表已被占用，请选择下面的方式处理<{/t}>
+  </div>
+<{input type=radio options=$options name="restore_type" value="none"}>
+<{foreach from=$env.post.item_id item=item key=key}>
+<input type="hidden" name="item_id[]" value="<{$item}>"/>
+<{/foreach}>
+
+<input type="hidden" name="isSelectedAll" value="<{$env.post.isSelectedAll}>"/>
+
+</form>
+<{area inject=".mainFoot"}>
+<div class="table-action">
+    <{button label=$___desktop="保存"|t:'desktop' class="btn-primary" onclick="$('recycle_restore_form').fireEvent('submit',new Event(event))" }>
+</div>
+<{/area}>
+<script>
+$('recycle_restore_form').store('target',{onComplete:function(){
+        var winObj = $('recycle_restore_form').getParent('.dialog').retrieve('instance');
+        winObj.close.delay(1000,winObj);
+}});
+</script>

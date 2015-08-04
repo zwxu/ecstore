@@ -1,0 +1,26 @@
+<site>
+
+	<module controller='site_article' >
+		<name>article</name>
+		<title>文章</title>
+		<disable>false</disable>
+		<allow_menu act='l'>列表页</allow_menu>
+		<allow_menu act='index'>文章页</allow_menu>
+		<allow_menu act='i'>节点首页</allow_menu>
+        <default_menu>
+            <title>帮助中心</title>
+            <act>l</act>
+			<params id="node_id">1</params>
+			<display_order>2</display_order>
+            <hidden>false</hidden>
+        </default_menu>
+        <default_menu>
+            <title>关于我们</title>
+            <act>l</act>
+			<params id="node_id">17</params>
+			<display_order>2</display_order>
+            <hidden>false</hidden>
+        </default_menu>
+	</module>
+
+</site>

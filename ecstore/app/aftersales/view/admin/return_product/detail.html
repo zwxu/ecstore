@@ -1,0 +1,364 @@
+<div id="return_detail">
+<div class="tableform">
+
+  <div class="division">
+  <table cellpadding="0" cellspacing="0" border="0">
+  <tr>
+  <th> <{t}>订单编号：<{/t}></th><td><span class="font-orange"><{$info.order_id}></span></td></tr>
+  <tr><th> <{t}>状态：<{/t}></th><td> <span id="x-return_item_status-<{$info.return_id}>" class="font-orange"><{$info.status}></span></td></tr>
+  <tr><th><{t}>提出申请的时间：<{/t}></th><td> <span class="font-orange"><{$info.add_time|cdate:FDATE_STIME}></span></td></tr>
+  <tr><th><{t}>申请原因：<{/t}></th><td> <span class="font-orange"><{$info.comment}></span></td></tr>
+  <tr><th><{t}>退款金额：<{/t}></th><td> <span class="font-orange"><{$info.amount}></span></td></tr>
+  <{if $info.intervene_phone}>
+    <tr><th><{t}>买家电话：<{/t}></th><td> <span class="font-orange"><{$info.intervene_phone}></span></td></tr>
+  <{/if}>
+  <{if $info.intervene_mail}>
+    <tr><th><{t}>买家邮箱：<{/t}></th><td> <span class="font-orange"><{$info.intervene_mail}></span></td></tr>
+  <{/if}>
+  <{if $info.store_phone}>
+    <tr><th><{t}>卖家电话：<{/t}></th><td> <span class="font-orange"><{$info.store_phone}></span></td></tr>
+  <{/if}>
+  <{if $info.seller_amount > 0}>
+    <tr><th><{t}>卖家承担金额：<{/t}></th><td> <span class="font-orange"><{$info.seller_amount}></span></td></tr>
+  <{/if}>
+  <{if $info.return_money_id}>
+    <tr><th><{t}>卖家打款流水号：<{/t}></th><td> <span class="font-orange"><{$info.return_money_id}></span></td></tr>
+  <{/if}>
+  <{if $info.image_upload}>
+    <tr><th><{t}>卖家打款凭证：<{/t}></th><td><a class="margin10" href="javascript:file_download_upload();"><{t}>请点击下载该附件<{/t}></a>	</td></tr>
+  <{/if}>
+  </td>
+  </tr>
+  </table>
+   </div>
+
+    <{if $info.product_data}>
+    <h5><{t}>申请售后服务的商品<{/t}></h5>
+    <div class="division">
+      <table cellspacing="0" cellpadding="3" width="100%" class="gridlist">
+        <col class="span-3"/>
+        <col class="span-auto"/>
+        <col class="span-2"/>
+        <thead>
+          <tr>
+            <th style="width:20%"><{t}>货号<{/t}></th>
+            <th><{t}>商品名称<{/t}></th>
+            <th><{t}>数量<{/t}></th>
+          </tr>
+        </thead>
+        <tbody>
+          <{foreach from=$info.product_data item=item}>
+          <tr>
+            <td><{$item.bn}></td>
+            <td><a href="<{$item.url}>" target="_blank"><{$item.name|escape:"html"}></a></td>
+            <td><{$item.num}></td>
+          </tr>
+          <{/foreach}>
+        </tbody>
+      </table>
+    </div>
+    <{/if}>
+    <{if $info.image_file || $info.image_file1 || $info.image_file2}>
+        <h5><{t}>附件下载<{/t}></h5>
+        <{if $info.image_file}>		
+                <div class=" clearfix division thumbnailPic">
+                <a class="margin10" href="javascript:file_download();"><{t}>请点击下载该附件<{/t}></a>	
+                </div>
+        <{/if}>
+        <{if $info.image_file1}>
+                <div class=" clearfix division thumbnailPic">
+                <a class="margin10" href="javascript:file_download1();"><{t}>请点击下载该附件<{/t}></a>
+                </div>
+        <{/if}>
+        <{if $info.image_file2}>
+                <div class=" clearfix division thumbnailPic">
+                <a class="margin10" href="javascript:file_download2();"><{t}>请点击下载该附件<{/t}></a>
+                </div>
+        <{/if}>
+    <{/if}>
+    <{if $info.content}>
+        <h5><{t}>详细说明<{/t}></h5>
+        <div class="division">
+            <{$info.content|escape:"html"}>
+        </div>
+    <{/if}>
+    <{if $info.seller_reason}>
+        <h5><{t}>卖家拒绝原因<{/t}></h5>
+        <div class="division">
+            <{$info.seller_reason|escape:"html"}>
+        </div>
+    <{/if}>
+    <{if $info.seller_comment}>
+        <h5><{t}>退货备注<{/t}></h5>
+        <div class="division">
+            <{$info.seller_comment|escape:"html"}>
+        </div>
+    <{/if}>
+    <h5><{t}>退货日志<{/t}></h5>
+    <div container='true'>
+    <div class="tableform">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="gridlist">
+    <col class="Coldate"></col>
+    <col class="Coldetails"></col>
+    <col class="Colamount"></col>
+    <thead>
+    <tr>
+      <th><{t}>日期<{/t}></th>
+      <th><{t}>操作<{/t}></th>
+      <th><{t}>图片<{/t}></th>
+      <th><{t}>操作员<{/t}></th>
+      <!--<th><{t}>过期<{/t}></th> -->
+    </tr></thead><tbody>
+
+    <{foreach from=$return_logs item="log_info_item"}>
+    <tr>
+       <td><{$log_info_item.alttime|cdate:'FDATE_FTIME'}></td>
+       <td class="Coldetails"><{$log_info_item.log_text}></td>
+       <td class="Coldetails"><{foreach from=$log_info_item.images item="image"}>
+                    <{if $image}>
+                        <a href="<{$image}>" class='img-tip pointer' target='_blank' onmouseover='bindFinderColTip(event);'><span>&nbsp;pic</span></a>
+                    <{/if}>
+                <{/foreach}></td>
+       <td class="Colamount"><{if $log_info_item.role == 'member'}>买家<{elseif $log_info_item.role == 'seller'}>卖家<{else}>管理员<{/if}></td>
+     <!-- <td class="Colamount"><{$event.expiretime|cdate:SDATE_STIME}></td> -->
+    </tr>
+    <{/foreach}>
+    </tbody>
+    </table>
+    
+        <input type="hidden" name="return_id" value="<{$info.return_id}>">
+        <{if $info.is_intervene == '3'}>
+            <{if $info.status == '卖家不同意协议，等待买家修改' && $info.refund_type == '2'}>
+                <div class="table-action">
+                <form action="index.php?app=aftersales&ctl=admin_returnproduct&act=return_agree" id="return-agree" method="post">
+                    <input type="text" id="amount" name="amount" size="10">（请手动输入退款金额）
+                    <input type="hidden" name="return_id" value="<{$info.return_id}>">
+                    <{button type="submit" label=$___b2c="强制同意申请"|t:'b2c'}>
+                </form>
+                </div>
+                <div class="table-action">
+                <form action="index.php?app=aftersales&ctl=admin_returnproduct&act=return_refuse" id="return-refuse" method="post">
+                    <input type="hidden" name="return_id" value="<{$info.return_id}>">
+                    <{button type="submit" label=$___b2c="强制拒绝申请"|t:'b2c'}>
+                </form>
+                </div>
+            <{else}>
+                <div class="table-action">
+                <form action="index.php?app=aftersales&ctl=admin_returnproduct&act=return_refund" id="return-refund" method="post">
+                    <input type="text" id="amount" name="amount" size="10">（如需要退款给买家，请手动输入退款金额）
+                    <input type="hidden" name="return_id" value="<{$info.return_id}>">
+                    <{button type="submit" label=$___b2c="退款给买家"|t:'b2c'}>
+                </form>
+                </div>
+                <div class="table-action">
+                <{if $info.is_safeguard == '1'}>
+                <form action="index.php?app=aftersales&ctl=admin_returnproduct&act=return_blance" id="return-blance" method="post">
+                    <input type="hidden" name="return_id" value="<{$info.return_id}>">  
+                    <{button type="submit" label=$___b2c="打款给卖家"|t:'b2c'}>
+                </form>
+                <{else}>
+                <form action="index.php?app=aftersales&ctl=admin_returnproduct&act=return_refuse" id="return-refuse" method="post">
+                    <input type="hidden" name="return_id" value="<{$info.return_id}>">
+                    <{button type="submit" label=$___b2c="强制拒绝申请"|t:'b2c'}>
+                </form>
+                <{/if}>
+                </div>
+            <{/if}>
+        <{/if}>
+    </div>
+    </div>
+<div id='x-send_comment-<{$info.return_id}>' style='display:<{if $info.return_status >= 3 && $info.return_status <= 5}>block<{else}>none<{/if}>;'>
+<form action="index.php?app=aftersales&ctl=admin_returnproduct&act=send_comment" id="return-product-send-comment" method="post">
+<input type="hidden" name="return_id" value="<{$info.return_id}>">
+<h5 style="border:none"><{t}>给用户留言<{/t}></h5>
+<div class="p10">
+  <textarea style="width:100%; height:150px;" class="x-input" name="comment"></textarea>
+
+</div>
+<table cellspacing="0" cellpadding="0" border="0" align="center">
+    <tbody>
+      <tr>
+        <td align="center">
+        <{button label=$___aftersales="发送"|t:'aftersales' type="submit" name="butsubmit"}>
+
+        </td>
+      </tr>
+    </tbody>
+</table>
+
+</form>
+</div>
+
+
+
+<!--<div id="aftersales-basic-action-btns" class="table-action" <{if $showBtn==false}>style='display:none;'<{/if}>>
+	
+	
+	
+	<{if $info.status_code == '5'}>
+		<{assign var="class_btn4" value='btn btn-secondary'}>
+		<{assign var="class_style4" value='cursor: not-allowed;'}>
+	<{else}>
+		<{assign var="class_btn4" value='btn'}>
+		<{assign var="class_style4" value=''}>
+	<{/if}>
+	<{if $info.status_code == '2'}>
+	<{button label=$___aftersales="审核中"|t:'aftersales' class="btn btn-secondary" style="cursor: not-allowed;" disabled="true" type="submit" name="butsubmit" id="x-return-status_{$info.return_id}_2"}>
+	<{else}>
+	<{button label=$___aftersales="审核中"|t:'aftersales' type="submit" name="butsubmit" id="x-return-status_{$info.return_id}_2"}>
+	<{/if}>
+	<{if $info.status_code == '3'}>
+		<{button label=$___aftersales="接受申请"|t:'aftersales' class="btn btn-secondary" style="cursor: not-allowed;" disabled="true" type="submit" name="butsubmit" id="x-return-status_{$info.return_id}_3"}>
+	<{else}>
+		<{button label=$___aftersales="接受申请"|t:'aftersales' type="submit" name="butsubmit" id="x-return-status_{$info.return_id}_3"}>
+	<{/if}>
+	<{if $info.status_code == '4'}>
+		<{button label=$___aftersales="完成"|t:'aftersales' class="btn btn-secondary" style="cursor: not-allowed;" disabled="true" type="submit" name="butsubmit" id="x-return-status_{$info.return_id}_4"}>
+	<{else}>
+		<{button label=$___aftersales="完成"|t:'aftersales' type="submit" name="butsubmit" id="x-return-status_{$info.return_id}_4"}>
+	<{/if}>
+	<{if $info.status_code == '5'}>
+		<{button label=$___aftersales="拒绝"|t:'aftersales' class="btn btn-secondar" style="cursor: not-allowed;" disabled="true" type="submit" name="butsubmit" id="x-return-status_{$info.return_id}_5"}>
+	<{else}>
+		<{button label=$___aftersales="拒绝"|t:'aftersales' type="submit" name="butsubmit" id="x-return-status_{$info.return_id}_5"}>
+	<{/if}>
+</div>-->
+
+
+
+</table>
+
+</div>
+<script>
+
+(function(){
+	var _form = $('return-product-send-comment');
+	var finder = finderGroup['<{$env.get.finder_id}>'];
+
+	_form.store('target',{
+		onComplete:function(){
+		    finder.refresh.delay(400,finder);
+		}
+
+	});
+
+	$ES('#aftersales-basic-action-btns button').addEvent('click',function(e){
+		var _target = this;
+		var _target_id = _target.id;
+		var _status = '';
+		var _return_id = '';
+		if (_target_id){
+			var _arr_return_id = _target_id.split('_');
+			_status = _arr_return_id[2];
+			_return_id = _arr_return_id[1];
+			init_button(_status,_return_id);
+			if( _status >= 3 && _status<=5 ){
+				$('x-send_comment-<{$info.return_id}>').style.display = 'block';
+			}else{
+				$('x-send_comment-<{$info.return_id}>').style.display = 'none';
+			}
+			new Request.HTML({url:"index.php?app=aftersales&ctl=admin_returnproduct&act=save",method:"post",update:$("x-return_item_status-<{$info.return_id}>"),data:"return_id="+_return_id+"&status="+_status}).send();
+		}
+	});
+
+})();
+
+function init_button(status,return_id){
+
+	var el = $('x-return-status_<{$info.return_id}>_'+status);
+
+	if( el )
+	{
+		el.disabled = true;
+		var el_b = el.getParents('b');
+		el_b.removeClass('submitBtn');
+		el_b.addClass('submitBtnoff');
+	}
+
+	if(status == 1 || status == 2 )
+	{
+		$('x-return-status_<{$info.return_id}>_3').disabled = false;
+		var el_b = $('x-return-status_<{$info.return_id}>_3');
+		el_b.removeClass('submitBtnoff');
+		el_b.addClass('submitBtn');
+
+		$('x-return-status_<{$info.return_id}>_4').disabled = false;
+		var el_b = $('x-return-status_<{$info.return_id}>_4');
+		el_b.removeClass('submitBtnoff');
+		el_b.addClass('submitBtn');
+
+		$('x-return-status_<{$info.return_id}>_5').disabled = false;
+		var el_b = $('x-return-status_<{$info.return_id}>_5');
+		el_b.removeClass('submitBtnoff');
+		el_b.addClass('submitBtn');
+	}
+	else if( status == 3 )
+	{
+		$('x-return-status_<{$info.return_id}>_2').disabled = false;
+		var el_b = $('x-return-status_<{$info.return_id}>_2');
+		el_b.removeClass('submitBtnoff');
+		el_b.addClass('submitBtn');
+
+		$('x-return-status_<{$info.return_id}>_4').disabled = false;
+		var el_b = $('x-return-status_<{$info.return_id}>_4');
+		el_b.removeClass('submitBtnoff');
+		el_b.addClass('submitBtn');
+
+		$('x-return-status_<{$info.return_id}>_5').disabled = false;
+		var el_b = $('x-return-status_<{$info.return_id}>_5');
+		el_b.removeClass('submitBtnoff');
+		el_b.addClass('submitBtn');
+	}
+	else if( status == 4 )
+	{
+		$('x-return-status_<{$info.return_id}>_2').disabled = false;
+		var el_b = $('x-return-status_<{$info.return_id}>_2');
+		el_b.removeClass('submitBtnoff');
+		el_b.addClass('submitBtn');
+
+		$('x-return-status_<{$info.return_id}>_3').disabled = false;
+		var el_b = $('x-return-status_<{$info.return_id}>_3');
+		el_b.removeClass('submitBtnoff');
+		el_b.addClass('submitBtn');
+
+		$('x-return-status_<{$info.return_id}>_5').disabled = false;
+		var el_b = $('x-return-status_<{$info.return_id}>_5');
+		el_b.removeClass('submitBtnoff');
+		el_b.addClass('submitBtn');
+	}
+	else if( status == 5 )
+	{
+		$('x-return-status_<{$info.return_id}>_2').disabled = false;
+		var el_b = $('x-return-status_<{$info.return_id}>_2');
+		el_b.removeClass('submitBtnoff');
+		el_b.addClass('submitBtn');
+
+		$('x-return-status_<{$info.return_id}>_3').disabled = false;
+		var el_b = $('x-return-status_<{$info.return_id}>_3');
+		el_b.removeClass('submitBtnoff');
+		el_b.addClass('submitBtn');
+
+		$('x-return-status_<{$info.return_id}>_4').disabled = false;
+		var el_b = $('x-return-status_<{$info.return_id}>_4');
+		el_b.removeClass('submitBtnoff');
+		el_b.addClass('submitBtn');
+	}
+}
+
+function file_download(){
+    var ifm=new IFrame({src:'index.php?app=aftersales&ctl=admin_returnproduct&act=file_download&p[0]=<{$info.return_id}>&p[1]=image_file'});
+    ifm.inject(document.body);
+}
+function file_download1(){
+    var ifm=new IFrame({src:'index.php?app=aftersales&ctl=admin_returnproduct&act=file_download&p[0]=<{$info.return_id}>&p[1]=image_file1'});
+    ifm.inject(document.body);
+}
+function file_download2(){
+    var ifm=new IFrame({src:'index.php?app=aftersales&ctl=admin_returnproduct&act=file_download&p[0]=<{$info.return_id}>&p[1]=image_file2'});
+    ifm.inject(document.body);
+}
+function file_download_upload(){
+    var ifm=new IFrame({src:'index.php?app=aftersales&ctl=admin_returnproduct&act=file_download&p[0]=<{$info.return_id}>&p[1]=image_upload'});
+    ifm.inject(document.body);
+}
+</script>

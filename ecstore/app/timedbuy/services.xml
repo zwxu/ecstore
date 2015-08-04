@@ -1,0 +1,36 @@
+<services> 
+    <service id="desktop_finder.timedbuy_mdl_activity">
+        <class>timedbuy_finder_activity</class>
+    </service>
+     <service id="desktop_finder.timedbuy_mdl_businessactivity">
+        <class>timedbuy_finder_businessactivity</class>
+    </service>
+    <service id="html_input">
+        <class>timedbuy_view_input</class>
+    </service>
+    <service id="business_menu_extends">
+      <class>timedbuy_member_menuextends</class>
+    </service>
+    <service id="business_activity">
+      <class>timedbuy_business_activity</class>
+    </service>
+     <service id="b2c_cart_process_apps">
+        <class>timedbuy_cart_process_goods</class>
+    </service>
+
+      <service id="b2c_addtocart_check">
+        <class>timedbuy_cart_object_goods</class>
+    </service>
+
+     <service id="b2c_order.create">
+        <class>timedbuy_order_create_after</class>
+    </service>
+
+	<service id="b2c_order_check_products">
+        <class>timedbuy_order_create_checkOrder</class>
+    </service>
+	<service id="timedbuy_check_goods_isTimedbuy">
+        <class>timedbuy_cart_goods_check</class>
+    </service>
+	
+</services>

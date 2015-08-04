@@ -1,0 +1,15 @@
+<div class="tableform">
+<div class="widgetconfig">
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+  <tbody>
+    <tr>
+        <th><{t app='b2c'}>商品：<{/t}></th>
+        <td>
+            <{input type="goods_select" object="goods@b2c" multiple="true" rowselect="true"  textcol="name" name="goods[linkid]" linkid=$setting.goods.linkid obj_name='goods[goods]' value=$setting.goods.goods view="b2c:admin/goods/detail/rel_items.html"}>
+        </td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+</div>

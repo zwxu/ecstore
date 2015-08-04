@@ -1,0 +1,74 @@
+<form action="index.php?app=ectools&amp;ctl=currency&amp;act=edit_save&action=edit" id='newcurrency-edit-form' method="POST">
+	<div class="tableform">    
+		<div class="division">
+			<table width="100%" cellspacing="0" cellpadding="0">
+				<tbody>
+					<tr>
+						<th><em class="red">*</em><label for="dom_el_2a317d0"><{t}>货币:<{/t}></label></th>
+						<td>
+							<{if $curs}>
+							<select id="dom_el_2a317d0" name="cur_code" required="1" onchange="var str=this.options[this.selectedIndex].innerHTML;$('cur_sign').value=str.substring(0,str.indexOf(' '));if(str.indexOf('，')!=-1){$('cur_name').value=str.substring(str.indexOf('，')+1);}else{ $('cur_name').value='';}" vtype="required" type="select" title="<{t}>货币:<{/t}>" class="x-input-select inputstyle">
+								<{foreach from=$curs item=cur key=key}>
+								<option value="<{$key}>"<{if $cur_code == $key}> selected="selected"<{/if}>><{$cur}></option>
+								<{/foreach}>
+							</select>
+							<{/if}>
+						</td>
+					</tr>
+					<tr>
+						<th><em class="red">*</em><label for="cur_name"><{t}>货币名称:<{/t}></label></th>
+						<td><input type="text" name="cur_name" id="cur_name" required="1" vtype="required" title="<{t}>货币名称:<{/t}>" class="x-input " autocomplete="off" value="<{$cur_name}>"></td>
+					</tr>
+					<tr>
+						<th><em class="red">*</em><label for="cur_sign"><{t}>货币符号:<{/t}></label></th>
+						<td><input type="text" vtype="required" name="cur_sign" id="cur_sign" required="1" size="3" style="font-size: 18px; width: 50px; text-align: center; padding: 0pt;" title="<{t}>货币符号:<{/t}>" class="x-input " autocomplete="off" value="<{$cur_sign}>"></td>
+					</tr>
+					<tr>
+						<th><em class="red">*</em><label for="dom_el_2a317d1"><{t}>汇率:<{/t}></label></th>
+						<td><input type="text" id="dom_el_2a317d1" name="cur_rate" required="1" vtype="required&amp;&amp;number" title="<{t}>汇率:<{/t}>" class="x-input " autocomplete="off" value="<{$cur_rate}>"></td>
+					</tr>
+					<tr>
+						<th><em class="red">*</em><label for="dom_el_2a317d2"><{t}>默认货币:<{/t}></label></th>
+						<td><input type="radio"<{if $cur_default == 'false' or $cur_default == ''}> checked="checked"<{/if}> value="false" id="dom_el_2a317d2" name="cur_default" required="1" title="<{t}>默认货币:<{/t}>"><label for="dom_el_2a317d2"><{t}>不是默认<{/t}></label><br><input type="radio"<{if $cur_default == 'true'}> checked="checked"<{/if}> value="true" id="dom_el_2a317d2" name="cur_default" required="1" title="<{t}>默认货币:<{/t}>"><label for="dom_el_2a317d21"><{t}>默认<{/t}></label><br></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<input type="hidden" name="cur_id" value="<{$cur_id}>" />
+</form>
+
+<div class="table-action">
+	<{button label=$___ectools="确定"|t:'ectools' class="btn-primary" id="newcurrency-edit-form-submit" type="submit" }>
+</div>
+
+<script>
+(function(){
+	var _form = $('newcurrency-edit-form');
+	var btn =$('newcurrency-edit-form-submit');
+	var finder = finderGroup['<{$env.get.finder_id}>'];
+	
+	_form.store('target',{
+		onComplete:function(){			
+			try{
+				var _dialogIns = btn.getParent('.dialog').retrieve('instance');
+		     }catch(e){}
+		    if(_dialogIns){
+			    _dialogIns.close();
+			    finder.refresh.delay(400,finder);
+			}				
+		}
+		
+	});
+
+	    btn.addEvent('click',function(){
+		
+		    _form.fireEvent('submit',{stop:$empty});		
+		
+		
+		});
+	
+})();
+	
+	
+</script>

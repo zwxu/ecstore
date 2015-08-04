@@ -1,0 +1,98 @@
+<div class="member-main">
+<form action="<{$submit_url}>" method="post">
+    <div >
+    <div class="title"><{t}>活动信息<{/t}></div>
+    <table border="0" width="100%" cellpadding="0" cellspacing="0" class="order-info" style="margin:10px 0 20px 0">
+        <tr>
+        <input type="hidden" name="aid" value="<{$actInfo.act_id}>">
+        <{if $businessAct.id}>
+        <input type="hidden" name="id" value="<{$businessAct.id}>">
+        <{/if}>
+      <!-- order status -->
+        <td width="30%" valign="top"><ul>
+            <li><{t}>活动名称：<{/t}><span class="price-normal"><{$actInfo.name}></span></li>
+            <li><{t}>开始时间：<{/t}><span class="point"><{$actInfo.start_time}></span></li>
+            <li><{t}>结束时间：<{/t}><span class="point"><{$actInfo.end_time}></span></li>
+          </ul>
+        </td>
+        <tr>
+    </table>
+    <div class="title"><{t}>申请信息<{/t}></div>
+    <{script src="modedialog.js" app="scorebuy"}>
+     <{script src="loader.js" app="scorebuy"}>
+    <table width="100%" cellspacing="1" cellpadding="0" border='0'  bgcolor="#f9f9f9" class="takegoods" >
+        <tr>
+            <th style="width:20%;">参加活动的商品：</th>
+            <td><{input breakpoint="0" type="goods" object=goods name="gid" app=b2c cols="name" return_url="{$return_url}" filter=$filter callback='_callback' cols="name,spec_info" value="{$businessAct.gid}" textcol="name" vtype="required"}>
+            <span> &nbsp;&nbsp;&nbsp;&nbsp;是否包邮：</span>
+            <span id="freight_bear"><{if $goods.freight_bear == 'business'}>是<{else}>否<{/if}></span></td>
+        </tr>
+        <tr>
+            <th>积分：</th>
+            <td><{input type="text" name="score" value="{$businessAct.score}" vtype="required&&number"}></td>
+        </tr>
+        <tr>
+            <th>价格：</th>
+            <td><{input type="text" name="price" id="act_price" value="{$businessAct.price}"}><span>不填代表全积分换购&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color:red;">原始价格：<span id="price"><{$goods.price}></span></span></td>
+        </tr>
+        <tr>
+            <th>是否开启会员等级积分：</th>
+            <td><{input name="isMemLv" type="radio" options=array('否','是') value="{$businessAct.isMemLv}" vtype="required"}></td>
+        </tr>
+        <tr id="memberLvScoreTr" style="display:none">
+            <th>会员等级积分：</th>
+            <td>
+              <{foreach from=$memberLv item=item key=key}>
+              <span><{$item.name}>:&nbsp;&nbsp;</span>
+              积分：&nbsp;&nbsp;<{input type="text" name="memLvScore[{$item.member_lv_id}]" value="{$item.info.score}" vtype="number"}>
+              价格：&nbsp;&nbsp;<{input type="text" name="memLvPrice[{$item.member_lv_id}]" value="{$item.info.price}"}>
+              <br>
+              <{/foreach}>
+            </td>
+        </tr>
+        <tr>
+            <th>参加活动商品的数量：</th>
+            <td><{input type="text" name="nums" value="{$businessAct.nums}" id="nums"}><span id="numsError" class="error caution notice-inline" style="display:none">参加活动的商品数量不能大于库存</span><span>不填代表不做限制 &nbsp;&nbsp;&nbsp;&nbsp;商品库存：<span id="store"><{$goods.store}></span></span><input type="hidden" value="<{$goods.store}>" name="store" id="inputStore"></td>
+        </tr>
+        <tr>  
+            <th>每人限购数量：</th>
+            <td><{input type="text" value="{$businessAct.personlimit}" name="personlimit"}><span>不填代表不做限制</span></td>
+        </tr>
+        <tr>  
+            <th>活动广告图：</th>
+            <td><{input type='vimage'  name='image_codeid' width=300 height=150 value=$businessAct.image_codeid}></td>
+        </tr>
+    </table>
+    <div style=" margin-top:10px; padding-left:173px;">
+    <{button class="submit-btn" rel="_request" type="submit" label=$___b2c="确定"|t:'scorebuy'}>
+    </form>
+</div>
+<script>
+window.addEvent('domready',function(){
+    if($E('input[name=isMemLv]:checked').get('value') == '1'){
+        $('memberLvScoreTr').setStyle('display','');
+    }
+});
+$ES('input[name=isMemLv]').each(function(item,index){
+    item.addEvent('change',function(){
+        if($E('input[name=isMemLv]:checked').get('value') == '1'){
+            $('memberLvScoreTr').setStyle('display','');
+        }else{
+            $('memberLvScoreTr').setStyle('display','none');
+        }
+    });
+});
+function _callback(rs){
+    if(rs){
+        var _rs = JSON.decode(rs);
+        $('store').set('html',_rs.store);
+        $('price').set('html',_rs.price);
+        $('inputStore').value = _rs.store;
+        if(_rs.freight_bear == 'business'){
+            $('freight_bear').set('html','是');
+        }else{
+            $('freight_bear').set('html','否');
+        }
+    }
+}
+</script>

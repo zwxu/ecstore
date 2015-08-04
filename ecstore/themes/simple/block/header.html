@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+<{header}>
+<{if $theme}>
+<{else}>
+<script type='text/javascript'>
+   <!--
+   if (top.location != self.location)
+      top.location=self.location;
+   -->
+</script>
+<{/if}>
+<link rel="stylesheet" type="text/css" href="images/css.css"/>
+<link rel="stylesheet" type="text/css" href="images/basic.css"/>
+
+</head>
+<body>
+<div class="toolbar clb">
+    <div class="w1200">
+        <div class="mobile fl"><a href="#">手机版</a></div>
+        <div><{widgets id="head_login"}></div><!--登陆-->
+        <div><{widgets id="head_local"}></div><!--本地化服务-->
+        <div class="tool_link fr">
+            <ul>
+                <li><{widgets id="head_href_3"}></li>
+                <li><{widgets id="head_href_4"}></li>
+                <li><{widgets id="head_href_5"}></li>
+                <li><{widgets id="head_href_6"}></li>
+                <li><{widgets id="head_href_7"}></li>
+                <!-- <li><a href="<{link app=business ctl=site_member act=index}>">卖家中心</a></li>
+                <li><a href="<{link app=b2c ctl=site_member act=index}>">我的账户</a></li>
+                <li><a href="<{link app=b2c ctl=site_member act=orders}>">我的订单</a></li> -->
+                <li class="tool_cart"><{widgets id="head_cart"}></li><!--mini购物车-->
+                <li class="tool_arrow">
+                    <{widgets id="head_href_1"}>
+                </li>
+                <li class="tool_arrow">
+                    <{widgets id="head_href_2"}>
+                </li>
+          </ul>
+        </div>
+    </div>
+</div>
+<div class="header clb">
+	<div class="w1200">
+    <div class="logo fl"><{widgets id="head_shoplogo"}></div><!--logo-->
+    <div class="search fl">
+        <div class="search_wrap">
+            <{widgets id="head_search"}><!--搜索-->
+        </div>
+    </div>
+    <div class="tel400 fr"><{widgets id="head_pic_2"}></div>
+    </div>
+</div>

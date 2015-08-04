@@ -1,0 +1,85 @@
+<{if !$base_setting}>
+<div class="tabs-wrap">
+<ul>
+<li class="tab current"><span><{t}>基本设置<{/t}></span>
+<input type= "hidden" value="index.php?app=b2c&ctl=admin_member_disask&act=basic_setting"></input>
+</li>
+ <li class="tab"><span><{t}>咨询设置<{/t}></span>
+ <input type="hidden" value="index.php?app=b2c&ctl=admin_member_gask&act=setting"></input>
+ </li>
+ <li class="tab"><span><{t}>评论设置<{/t}></span>
+ <input type="hidden" value="index.php?app=b2c&ctl=admin_member_discuss&act=setting"></input>
+ </li>
+ <li class="tab"><span><{t}>留言设置<{/t}></span>
+ <input type="hidden" value="index.php?app=b2c&ctl=admin_member_shopbbs&act=setting"></input>
+ </li>
+  </ul>
+  </div>
+  <{/if}>
+<div id="comment_setting">
+<form method="post" action="index.php?app=b2c&ctl=admin_member_disask&act=to_setting&" method="post">
+  <div class="tableform">
+    <div class="division">
+      <table>
+        <tr>
+          <th ><{t}>评论、咨询初始显示数量：<{/t}></th>
+          <td><{input type="digits" maxlength="3" size=5 required="true" style="width:50px" name="indexnum" value=$setting.index}> <{t}>条<{/t}>   <{t}>顾客点击“查看全部”时会展开显示所有评论或咨询<{/t}></td>
+        </tr>
+        <tr>
+          <th ><{t}>评论、咨询显示会员等级：<{/t}></th>
+      <td><input type="radio" name="display_lv"<{if $setting.display_lv == 'on'}> checked=checked<{/if}> value="on"><{t}>是<{/t}>  
+        <input type="radio" name="display_lv"<{if $setting.display_lv == 'off'}> checked=checked<{/if}> value="off"><{t}>否<{/t}></td>
+      	</tr>
+    	 <tr>
+          <th ><{t}>评论、咨询开启回复功能：<{/t}></th>
+           <td><input type="radio" name="switch_reply"<{if $setting.switch_reply == 'on'}> checked=checked<{/if}> value="on"><{t}>是<{/t}> 
+         <input type="radio" name="switch_reply"<{if $setting.switch_reply == 'off'}> checked=checked<{/if}> value="off"><{t}>否<{/t}></td>
+         </tr>
+         <tr>
+          <th ><{t}>发表时需输入验证码：<{/t}></th>
+          <td><input type="radio" name="verifyCode"<{if $setting.verifyCode == 'on'}> checked=checked<{/if}> value="on"><{t}>是<{/t}>  
+          <input type="radio" name="verifyCode"<{if $setting.verifyCode == 'off'}> checked=checked<{/if}> value="off"><{t}>否<{/t}></td>
+          </tr>
+          <tr>
+          <th><{t}>审核设置：<{/t}></th>
+          <td><input type="radio" name="display"<{if $setting.display == 'reply'}> checked=checked<{/if}> value="reply"><{t}>管理员审核后显示<{/t}></td>
+        </tr>
+        <tr>
+          <th></th>
+          <td><input type="radio" name="display"<{if $setting.display == 'soon'}> checked=checked<{/if}> value="soon"><{t}>用户发表后立即显示<{/t}></td>
+        </tr>
+        
+      </table>
+    </div>
+ 
+    
+        <div class="table-action">
+	<{button type="submit"  label=$___b2c="保存"|t:'b2c'}>
+</div>
+
+  </div>
+  
+
+</form>
+</div>
+
+<script>
+(function(){
+$$('.tab').addEvent('click',function(){
+if(this.hasClass('current')) return ;
+if($$('.tabs-wrap .current')[0]) $$('.tabs-wrap .current')[0].removeClass('current');
+this.addClass('current');
+var url = this.getFirst('input').value;
+var  base_setting = true;
+new Request.HTML({
+	url:url,
+	update:$('comment_setting'),
+	medthod:'post',
+	data:'base_setting='+base_setting,
+	onSuccess:function(){W.render($('comment_setting'));}
+	
+}).send();
+
+});
+})();
+</script>

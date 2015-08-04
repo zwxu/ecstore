@@ -1,0 +1,29 @@
+<form id="module_edit" action='index.php?app=sphinx&ctl=default&act=save_search_config' method='POST' class="tableform">
+<div class="division">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+  <th><{t}>sphinx服务：<{/t}></th>
+  <td><{input type="text" name="sphinx_server" value=$config.sphinx_server vtype='required' size="40" }>（多个配置请用;隔开）</td>
+</tr>
+<tr>
+  <th><{t}>sphinx索引表：<{/t}></th>
+  <td><{input type="text" name="sphinx_index" value=$config.sphinx_index vtype='required' vtype='path' size="15" }></td>
+</tr>
+<tr>
+  <th><{t}>延迟时间：<{/t}></th>
+  <td><{input type="text" name="sphinx_time" value=$config.sphinx_time  size="10" }><{t}>（留空则应用默认设置）<{/t}><br/><{t}><{/t}></td>
+</tr>
+<tr>
+  <th><{t}>结果最大匹配数：<{/t}></th>
+  <td><{input type="text" name="sphinx_max_limit" value=$config.sphinx_max_limit  size="10" }><{t}>（留空则应用默认设置）<{/t}><br/><{t}><{/t}></td>
+</tr>
+</table>
+</div>
+<div class="table-action">
+<{button type='submit' label=$___a='保存'|t:'sphinx' }>
+</div>
+
+</form>
+
+
+

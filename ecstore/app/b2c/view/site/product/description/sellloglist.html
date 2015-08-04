@@ -1,0 +1,9 @@
+<div class="commentTabLeft floatLeft"><strong><{t}>销售记录<{/t}></strong></div>
+<div style="clear:both;"></div>
+<div><{t}>本商品累计售出<{/t}><em class="count"><{$sellLog.all}></em><{t}>件<{/t}><{if false}> ，最近一个月成交<em><{$sellLogList.total}></em><{t}>件<{/t}><{/if}></div>
+<div class="body" id="selllog_content">
+  <{include file="site/product/selllog_content.html" app="b2c"}>
+<{if false}>
+<div class="tips"><{t}>截至今日， 累计成交<{/t}><span class="font14px fontbold fontcolorOrange"><{$sellLogList.total}></span><{t}>笔<{/t}><{if $sellLogList.total > $sellLogList.data|@count}><a href="<{link app=b2c ctl=site_product act=selllog arg0=$goods.goods_id}>" target="_blank"><{t}>，查看更多...<{/t}></a><{/if}></div>
+<{/if}>
+</div>

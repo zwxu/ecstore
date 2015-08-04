@@ -1,0 +1,40 @@
+<div class="tableform">
+  <{if count($logs.data) > 0}>
+  <div class="division">
+    <div  class="table-grid">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+        <thead>
+        <tr>
+          <th><{t}>序号<{/t}></th>
+          <th><{t}>时间<{/t}></th>
+          <th><{t}>操作人<{/t}></th>
+          <th><{t}>行为<{/t}></th>
+          <th><{t}>结果<{/t}></th>
+          <th><{t}>备注<{/t}></th>
+        </tr>
+      </thead>
+      <tbody>
+        <{foreach from=$logs.data item=log name="item"}>
+        <tr>
+          <td><{$pagestart+$smarty.foreach.item.iteration }></td>
+          <td ><{$log.acttime|usertime}></td>
+          <td><{if $log.op_name}><{$log.op_name}><{else}><{t}>顾客<{/t}><{/if}></td>
+          <td ><{$log.behavior}></td>
+          <td ><{$result[$log.result]}></td>
+          <td ><{$log.log_text}></td>
+        </tr>
+        <{/foreach}>
+      </tbody>
+      </table>
+    </div>
+ <{pagers data=$pager}>
+  </div>
+  <{/if}>
+</div>
+<script>
+window.addEvent('domready',function(){
+    $$('a[name=show_delv_item]').each(function(item){
+        item.dispose();
+    });
+});
+</script>

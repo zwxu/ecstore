@@ -1,0 +1,38 @@
+<form method="POST" action="index.php?app=desktop&ctl=dashboard&act=application" class="tableform" id="app_license">
+<div class="table-action">
+    <{button id='license_btn' label=$___b2c="立即申请"|t:'desktop' type="submit"}>
+    <{button class="btn-secondary"  type="button" label=$___b2c="取消"|t:'desktop' isCloseDialogBtn="true"}>
+</div>
+
+
+</form>
+
+
+<script>
+(function(){
+	var _form = $('app_license');
+	var btn = $('license_btn');
+	//var finder = finderGroup['<{$env.get._finder.finder_id}>'];
+	
+	_form.store('target',{
+		onComplete:function(response){
+			var hash_res_obj = JSON.decode(response);
+		
+			if (hash_res_obj.success != undefined && hash_res_obj.success != "")
+			{
+				try{
+					var _dialogIns = btn.getParent('.dialog').retrieve('instance');
+				}catch(e){}
+				
+				if(_dialogIns)
+				{	
+					_dialogIns.close();
+				}
+			}
+			
+		}
+	});	
+})();
+	
+</script>
+

@@ -1,0 +1,18 @@
+<app>
+    <name>企业版商品评论和咨询</name>
+    <description>基于b2c的企业版商品评论和咨询</description>
+
+    <author>
+        <name>BBC 开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>0.1</version>
+    <license>BBC license</license>
+
+	<depends>
+		<app>b2c</app>
+	</depends>
+
+</app>

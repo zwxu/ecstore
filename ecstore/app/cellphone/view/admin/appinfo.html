@@ -1,0 +1,11 @@
+<form id="form1" method="post" action="<{link app=cellphone ctl=admin_aboutus act=toAdd}>" >
+<h3><{t}>内容信息<{/t}></h3>
+<input type="hidden" name="infotype" value="<{$item.infotype}>">
+<div class="division tableform division-skin">
+<{input type="html" name="content" class="textarea-auto" value=$item.content  includeBase=true}>
+</div>
+<div class="table-action">
+    <{button label="保存" type="submit" id="groupactivity-btn" }>
+	  <{button label="取消" type="button" id="groupactivity-btn" href=$reUrl}>
+</div>
+</form>

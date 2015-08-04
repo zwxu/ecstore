@@ -1,0 +1,41 @@
+<div class="clearfix">
+<div class="span-auto" style="width:60%">
+<div class="tableform">
+	<h3>图片地址</h3>  
+	  <table>
+		<tr>
+			<th><b><{t}>原图<{/t}></b></th><td class="font-green"><{$image.url}></td>
+		</tr>
+		<{if $image.l_url}>
+		<tr>
+			<th><b><{t}>大图<{/t}></b></th><td class="font-gray"><{$image.l_url}></td>
+		</tr>
+		<{/if}>
+		<{if $image.m_url}>
+		<tr>
+			<th><b><{t}>中图<{/t}></b></th><td class="font-gray"><{$image.m_url}></td>
+		</tr>
+		<{/if}>
+		<{if $image.s_url}>
+		<tr>
+			<th><b><{t}>小图<{/t}></b></th><td class="font-gray"><{$image.s_url}></td>
+		</tr>
+		<{/if}>
+		</table>
+</div>
+</div>
+
+<div class="span-auto last">
+	<div class="tableform">
+		<h3><{t}>图片信息<{/t}></h3>  
+		  <table>
+			 <tr><th><{t}>原始尺寸<{/t}></th>
+				<td><{$image.width}> x <{$image.height}></td></tr>
+				<tr><th><{t}>更新时间<{/t}></th>
+				<td><{$image.last_modified|cdate}></td></tr>
+				<tr><th><{t}>存储引擎<{/t}></th>
+				<td><{$image.storage}></td></tr>
+			</table>
+	</div>
+</div> 
+</div>

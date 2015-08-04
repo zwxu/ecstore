@@ -1,0 +1,235 @@
+<div id="printbox"></div>
+<script type="text/javascript">
+var testTemplateData = [{ label: "YOUR COMPANY NAME", data:"shop_name" },
+                        { label: "√", data:"tick" },
+                        { label: "收货人姓名", data:"ship_name" },
+                        { label: "上海市徐汇区虹桥路333号", data:"ship_addr" },
+                        { label: "021-51086858", data:"ship_tel" },
+                        { label: "13800138000", data:"ship_mobile" },
+                        { label: "200021", data:"ship_zip" },
+                        { label: "上海", data:"ship_area_0" },
+                        { label: "上海市", data:"ship_area_1" },
+                        { label: "徐汇区", data:"ship_area_2" },
+                        { label: "上海市徐汇区桂林路396号2号楼", data:"ship_addr" },
+                        { label: "7", data:"order_count" },
+                        { label: "订单备注内容", data:"order_memo" },
+                        { label: "2012", data:"date_y" },
+                        { label: "02", data:"date_m" },
+                        { label: "08", data:"date_d" },
+                        { label: "发货人姓名", data:"dly_name" },
+                        { label: "上海", data:"dly_area_0" },
+                        { label: "上海市", data:"dly_area_1" },
+                        { label: "徐汇区", data:"dly_area_2" },
+                        { label: "上海市徐汇区桂林路396号3号楼3-7层", data:"dly_address" },
+                        { label: "021-51086858", data:"dly_tel" },
+                        { label: "13800138000", data:"dly_mobile" },
+                        { label: "200021", data:"dly_zip" },
+                        { label: "自定义的内容", data:"text" }]
+
+var templateData = {
+    name    :   "申通快递",
+    enable  :   "1",
+    imgUrl  :   "http://pic.shopex.cn/pictures/eimages/34f2a976a6b347608b6adf5a41cda3ea3e24c87826.jpg?1288257528#w",
+    size    :   { width:"240", height:"158" },
+    offset  :   { x:"0", y:"0" },
+    dpi     :   96,
+    ptItem  :   [{font:'宋体',size:'14',align:'left',bold:true,tilt:false,space:0,keyword:'shop_name',content:'',x:89,y:183,width:217,height:24},
+                {font:'宋体',size:'14',align:'left',bold:true,tilt:false,space:0,keyword:'tick',content:'',x:148,y:351,width:28,height:21},
+                {font:'宋体',size:'20',align:'left',bold:true,tilt:false,space:0,keyword:'ship_name',content:'',x:392,y:213,width:136,height:21},
+                {font:'宋体',size:'12',align:'left',bold:false,tilt:false,space:0,keyword:'ship_area_1',content:'',x:465,y:121,width:54,height:22},
+                {font:'宋体',size:'12',align:'left',bold:false,tilt:false,space:0,keyword:'ship_area_0',content:'',x:412,y:121,width:49,height:22},
+                {font:'宋体',size:'13',align:'left',bold:true,tilt:true,space:0,keyword:'ship_addr',content:'',x:384,y:151,width:291,height:31},
+                {font:'宋体',size:'12',align:'left',bold:false,tilt:false,space:0,keyword:'ship_tel',content:'',x:393,y:245,width:105,height:23},
+                {font:'宋体',size:'12',align:'left',bold:false,tilt:false,space:8,keyword:'ship_zip',content:'',x:520,y:252,width:99,height:21},
+                {font:'宋体',size:'12',align:'left',bold:false,tilt:false,space:0,keyword:'dly_area_0',content:'',x:112,y:118,width:54,height:21},
+                {font:'宋体',size:'12',align:'left',bold:false,tilt:false,space:0,keyword:'dly_area_1',content:'',x:167,y:118,width:98,height:21},
+                {font:'宋体',size:'13',align:'left',bold:true,tilt:false,space:0,keyword:'dly_address',content:'',x:89,y:150,width:259,height:26},
+                {font:'宋体',size:'12',align:'left',bold:true,tilt:false,space:0,keyword:'dly_name',content:'',x:89,y:214,width:105,height:25},
+                {font:'宋体',size:'12',align:'left',bold:false,tilt:false,space:0,keyword:'dly_tel',content:'',x:93,y:243,width:107,height:23},
+                {font:'宋体',size:'12',align:'left',bold:false,tilt:false,space:8,keyword:'dly_zip',content:'',x:218,y:252,width:98,height:21},
+                {font:'宋体',size:'14',align:'left',bold:true,tilt:false,space:0,keyword:'tick',content:'',x:354,y:346,width:26,height:21},
+                {font:'宋体',size:'12',align:'left',bold:false,tilt:false,space:0,keyword:'text',content:"自定义内容aaa",x:510,y:49,width:230,height:22},
+                {font:'宋体',size:'12',align:'left',bold:false,tilt:false,space:0,keyword:'text',content:"自定义内容bbb",x:262,y:12,width:120,height:40}]
+}
+
+var printData = {
+    printItem   :   [{ label: "收货人-姓名", data:"ship_name" },
+                    { label: "收货人-地区1级", data:"ship_area_0" },
+                    { label: "收货人-地区2级", data:"ship_area_1"},
+                    { label: "收货人-地区3级", data:"ship_area_2" },
+                    { label: "收货人-地址", data:"ship_addr" },
+                    { label: "收货人-电话", data:"ship_tel" },
+                    { label: "收货人-手机", data:"ship_mobile" },
+                    { label: "收货人-邮编", data:"ship_zip" },
+                    { label: "发货人-姓名", data:"dly_name" },
+                    { label: "收货人-地区+详细地址", data:"ship_detail_addr" },
+                    { label: "发货人-地区1级", data:"dly_area_0" },
+                    { label: "发货人-地区2级", data:"dly_area_1" },
+                    { label: "发货人-地区3级", data:"dly_area_2" },
+                    { label: "发货人-地址", data:"dly_address" },
+                    { label: "发货人-电话", data:"dly_tel" },
+                    { label: "发货人-手机", data:"dly_mobile" },
+                    { label: "发货人-邮编", data:"dly_zip" },
+                    { label: "当日日期-年", data:"date_y" },
+                    { label: "当日日期-月", data:"date_m" },
+                    { label: "当日日期-日", data:"date_d" },
+                    { label: "订单条码", data:"order_print" },
+                    { label: "订单-订单号", data:"order_id" },
+                    { label: "订单总金额", data:"order_price" },
+                    { label: "订单物品总重量", data:"order_weight" },
+                    { label: "订单-物品数量", data:"order_count" },
+                    { label: "订单-备注", data:"order_memo" },
+                    { label: "订单-送货时间", data:"ship_time" },
+                    { label: "网店名称", data:"shop_name" },
+                    { label: "√", data:"tick" },
+                    { label: "自定义内容", data:"text" },
+                    { label: "会员用户名", data:"member_name" },
+                    { label: "订单商品名称", data:"order_name" },
+                    { label: "订单商品名称+数量", data:"order_name_a" },
+                    { label: "订单商品名称+规格+数量", data:"order_name_as" },
+                    { label: "订单商品名称+货号+数量", data:"order_name_ab" }],
+    fontItem    :   [{ label: "宋体", data:"宋体" },
+                    { label: "黑体", data:"黑体" },
+                    { label: "Arial", data:"Arial" },
+                    { label: "Tahoma", data:"Tahoma" },
+                    { label: "Times New Roman", data:"Times New Roman" },
+                    { label: "Vrinda", data:"Vrinda" },
+                    { label: "Verdana", data:"Verdana" },
+                    { label: "Serif", data:"Serif" },
+                    { label: "Cursive", data:"Cursive" },
+                    { label: "Fantasy", data:"Fantasy" },
+                    { label: "Sans-Serif", data:"Sans-Serif" }]
+}
+
+/*添加SWF到页面*/
+var fpath = "<{$res_url}>/images/printload.swf?<{$smarty.now}>"; //载入容器SWF //printload
+var fid = "printflash"; // 设置flash id
+this.swf = new Swiff(fpath, {
+            width:  1024,
+            height: 600,
+            id:fid,
+            container: $('printbox'),
+            params:{
+                wMode:'opaque'
+            },
+            vars:{url:"<{$env.app.res_url}>/images/printeditor.swf?<{$smarty.now}>"}
+        });
+
+
+/*var Print = new Class({
+    Extends:Options,
+    initialize:function(){}
+});*/
+var Print = function(id){this.initialize(id)};
+Print.prototype = {
+    templateId:'<{$tmpl.prt_tmpl_id}>',
+    initialize: function(id){
+        this.flash = $(id);
+    },
+    addBackground:function(){
+        var url = 'index.php?app=express&ctl=admin_delivery_printer&act=upload_bg';
+        if(this.templateId){
+            url += '&p[0]='+this.templateId;
+        }
+        this.dlg=new Dialog(url,{model:true,title:'上传物流单据（快递单）扫描图',height:340,width:480});
+    },
+    /*添加背景图片 打开选择框*/
+    replaceBackground :function(url){
+        this.flash["pt.replaceBackground"](url);
+    },
+    /*打印全部*/
+    doPrintAll:function(){
+        this.flash["pt.doPrintAll"]();
+    },
+    /*打印当前*/
+    doPrintCurrent:function(){
+        this.flash["pt.doPrintCurrent"]();
+    },
+    /*打印选段*/
+    doPrintSelected:function(){
+        this.flash["pt.doPrintSelected"]();
+    },
+    /*改变舞台尺寸*/
+    resizeCanvas:function(obj){
+        this.flash.style.width = obj.width + "px";
+        this.flash.style.height = obj.height + "px";
+    },
+    /*保存模板*/
+    saveTemplate: function(temp){
+        if(!temp.name){
+            alert('<{t}>请填写单据名称<{/t}>');
+            return;
+        }
+        if(!temp.size.width){
+            alert('<{t}>请填写快递单模版宽度<{/t}>');
+            return;
+        }else if(temp.size.width < 0 || temp.size.width >255){
+            alert('<{t}>模板宽度只能是0-255数值范围之内<{/t}>');
+            return;
+        }
+        if(!temp.size.height){
+            alert('<{t}>请填写快递单模版高度<{/t}>');
+            return;
+        }else if(temp.size.height < 0 || temp.size.height > 255){
+            alert('<{t}>模板高度只能是0-255数值范围之内<{/t}>');
+            return;
+        }
+        if(!temp.offset.x || temp.offset.x < -127 || temp.offset.x > 128){
+            temp.offset.x = 0;
+            alert('<{t}>模板横向偏移数只能"-127 和 128"数值范围之内<{/t}>');
+            return;
+        }else if(isNaN(temp.offset.x)){
+            alert('<{t}>模板横向偏移数只能是数字<{/t}>');
+            return;
+        }
+        if(!temp.offset.y || temp.offset.y < -127 || temp.offset.y > 128){
+            temp.offset.y = 0;
+            alert('<{t}>模板纵向偏移数只能"-127 和 128"数值范围之内<{/t}>');
+            return;
+        }else if(isNaN(temp.offset.y)){
+            alert('<{t}>模板纵向偏移数只能是数字<{/t}>');
+            return;
+        }
+        W.page('index.php?app=express&ctl=admin_delivery_printer&act=<{$save_action}>',{method:'post',data:temp});
+    },
+    /*#####################
+    *   set || get
+    **####################*/
+    /* 设置初始打印数据*/
+    setPrintData    :   function(obj){
+        this.printData = obj
+    },
+    /*返回初始打印数据*/
+    getPrintData    :   function(){
+        return this.printData;
+    },
+
+    /*设置打印模板列表*/
+    setTemplateData :   function(obj){
+        this.templateData = obj;
+    },
+    /*返回打印模板列表*/
+    getTemplateData :   function(){
+        return this.templateData;
+    },
+
+    /*设置测试模板数据*/
+    setTestTemplateData :   function(obj){
+        this.testTemplateData = obj;
+    },
+    /*返回测试模板数据*/
+    getTestTemplateData :   function(){
+        return this.testTemplateData;
+    }
+}
+
+/*打印程序AS+JS交互接口*/
+var pt = new Print(fid);
+/* 设置初始打印数据*/
+pt.setPrintData(printData);
+/*设置打印模板列表*/
+pt.setTemplateData(templateData);
+/*设置测试模板数据*/
+pt.setTestTemplateData(testTemplateData);
+</script>
+</html>

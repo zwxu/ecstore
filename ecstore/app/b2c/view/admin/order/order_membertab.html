@@ -1,0 +1,12 @@
+<div class='infoPanel' style='display:block;background:none;padding:1px'>
+<div container="true" class="infoContent" id='dialog_member_info_<{$member_id}>'>
+   Loading...
+</div>
+</div>
+<script>
+    new Request.HTML({
+		url:'index.php?ctl=member/member&act=detail&p[0]=<{$member_id}>',
+		update:$('dialog_member_info_<{$member_id}>'),evalScript:true,onComplete:function(){
+          $ES('.t-handle','dialog_member_info_<{$member_id}>').setStyles({'padding-left':3,'padding-right':3})
+    }}).get();
+</script>

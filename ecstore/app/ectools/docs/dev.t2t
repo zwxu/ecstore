@@ -1,0 +1,307 @@
+ectools开发手册
+
+since   :   %%date(%Y-%m-%d)  $Rev$
+
+%!target:html
+%!postproc(tex): '\.gif' '.eps'
+%!preproc(html): '\.dot' '.gif'
+%!preproc(tex): '\.dot' '.pdf'
+%!encoding:utf-8
+=ectools简介=
+ectools是集支付，货币，数据精度和地区包为一体的电子商务通用功能。可以灵活配置支付功能和数据精度管理，方便其他应用使用。
+ectools作为ecos的一个基础app一般不单独存在，是其他app操作流程的载体。BBC是基于ecos的开源商城系统，亦依赖ectools。
+=此手册目标人群=
+开发者：开发基于ecos的新应用或扩展已有支付方式的扩展都会用到此应用。
+
+
+=ectools提供了下列功能：=
+- 支付方式管理
+- 支付和退款单管理
+- 货币管理
+- 数据精度配置
+- 地区包管理
+
+
+==支付方式管理与配置==
+
+BBC是基于ecos的开源商城系统需要用到默认支付方式就是由此应用来管理，我们可以管理已有的支付方式，也可以新建支付方式。
+
+现已支付宝支付方式为例：
+
+- 支付方式接口ectools_interface_payment_app
+- 支付方式父类ectools_payment_app
+
+
+1. 接口方法介绍：
+
+``admin_intro:``显示支付接口后台的信息
+
+``setting:``设置后台的显示项目（表单项目）
+
+``intro:``前台在线支付列表相应项目的说明
+
+``dopay:``支付表单的提交方式
+
+``is_fields_valiad:``验证提交表单数据的正确性
+
+``callback:``支付后返回后处理的事件的动作
+
+``gen_form:``生成支付表单 - 自动提交(点击链接提交的那种方式，通常用于支付方式列表)
+
+
+2. 具体介绍下setting里面的数据结构（以aplipay的参数配置为准）
+```
+'pay_name'=>array(
+	'title'=>app::get('ectools')->_('支付方式名称'),
+	'type'=>'string',
+	'validate_type' => 'required',
+),
+'mer_id'=>array(
+	'title'=>app::get('ectools')->_('合作者身份(parterID)'),
+	'type'=>'string',
+	'validate_type' => 'required',
+),
+'mer_key'=>array(
+	'title'=>app::get('ectools')->_('交易安全校验码(key)'),
+	'type'=>'string',
+	'validate_type' => 'required',
+),
+'support_cur'=>array(
+	'title'=>app::get('ectools')->_('支持币种'),
+	'type'=>'text hidden',
+	'options'=>array('1'=>app::get('ectools')->_('人民币'),'2'=>app::get('ectools')->_('其他'),'3'=>app::get('ectools')->_('商店默认货币'))
+),
+'real_method'=>array(
+	'title'=>app::get('ectools')->_('选择接口类型'),
+	'type'=>'select',
+	'options'=>array('0'=>app::get('ectools')->_('使用标准双接口'),'2'=>app::get('ectools')->_('使用担保交易接口'),'1'=>app::get('ectools')->_('使用即时到帐交易接口'))
+),
+'pay_fee'=>array(
+	'title'=>app::get('ectools')->_('交易费率'),
+	'type'=>'pecentage',
+	'validate_type' => 'number',
+),
+'pay_desc'=>array(
+	'title'=>app::get('ectools')->_('描述'),
+	'type'=>'html',
+	'includeBase' => true,
+),
+'pay_type'=>array(
+	 'title'=>app::get('ectools')->_('支付类型(是否在线支付)'),
+	 'type'=>'hidden',
+	 'name' => 'pay_type',
+),
+'status'=>array(
+	'title'=>app::get('ectools')->_('是否开启此支付方式'),
+	'type'=>'radio',
+	'options'=>array('false'=>app::get('ectools')->_('否'),'true'=>app::get('ectools')->_('是')),
+	'name' => 'status',
+),
+```
+
+``title:``参数的标题
+
+``type:``参数的标题（string，text hidden，select，pecentage，html和radio）
+
+``options:``只有type=radio，type=checkbox和type=select才需要填写
+
+``validate_type:``需要验证的方式（类型可以参考desktop下面的validate.js）
+
+
+
+3. 支付方式父类方法介绍：
+
+``add_field:``设置提交表单的元素属性
+
+``getConf:``得到支付方式配置参数
+
+``get_html:``支付方式提交表单的html内容
+
+
+
+4. 本类的属性说明
+```
+public $name = '支付宝支付';
+public $app_name = '支付宝支付接口';
+public $app_key = 'alipay';
+public $display_name = '支付宝';
+public $curname = 'CNY';
+public $ver = '1.0';
+```
+
+``name:``支付接口名称，一般不被前台或者后台显示使用，仅仅只是说明（目前）
+
+``app_name:``支付接口应用名称，一般不被前台或者后台显示使用，仅仅只是说明（目前）
+
+``app_key:``支付接口的唯一标示，用于数据对应取值，一般用英文表示
+
+``display_name:``用于前后台显示在页面上的名称
+
+
+
+5. 下面我来实现一个例子（新建一个支付方式）：
+
+- ``首先拷贝一个支付方式的文件ectools/lib/payment/plugin/yunchoubao.php``
+
+	(1). 首先配置service.xml，因为支付方式本来就是一种服务
+	
+	```
+	<service id="ectools_payment.ectools_mdl_payment_cfgs" optname="支付插件列表">
+		<class>ectools_payment_plugin_alipay</class>
+		<class>ectools_payment_plugin_99bill</class>
+		<class>ectools_payment_plugin_paypal</class>
+		<class>ectools_payment_plugin_tenpay</class>
+		<class>ectools_payment_plugin_offline</class>
+		<class>ectools_payment_plugin_deposit</class>
+		<class>ectools_payment_plugin_yunchoubao</class>
+	</service>
+	```
+	增加了一行<class>ectools_payment_plugin_yunchoubao</class>
+	
+	然后安装开发者中心，然后在“应用中心”维护下即可，如果不安装开发者中心的话，也可以选择重现安装。
+	
+	(2). 首先打开这个文件
+
+	(2). 修改类名，将原来的类名修改为ectools_payment_plugin_yunchoubao
+
+	(3). 修改构造方法中的“$this->callback_url”变量的值，将ectools_payment_plugin_alipay=>ectools_payment_plugin_yunchoubao
+	
+	(4). 修改setting方法中的表单元素，修改成你自己支付网关中需要用户配置的参数，具体配置的方法详见第二节（setting里面的数据结构）
+	
+	(5). 然后修改支付网关中的dopay()和callback()，按照网管规定的接口来修改。
+
+- ``这样一个网管支付方式也就修改完毕了。``
+
+- ``然后进行相应的配置``
+
+
+如图：
+[images/alipayConf.png]
+
+- ``对相应的内容进行配置即可。``
+
+
+
+==ectools的其他功能简介==
+
+1. 支付与退款单管理
+
+如图：
+
+支付单[images/payments.png]
+
+退款单[images/refunds.png]
+
+支付与退款单据的finder上面与其他的有所不同，需要顶一个关联搜索的字段（rel_id - 对象外键），下面已支付单为例：
+
+- ``先打开代码文件app/ectools/model/payments.php，增加此外键在搜索下拉框中的显示。``
+
+```
+/**
+ * 重写搜索的下拉选项方法
+ * @param null
+ * @return null
+ */
+public function searchOptions(){
+	$columns = array();
+	foreach($this->_columns() as $k=>$v){
+		if(isset($v['searchtype']) && $v['searchtype']){
+			$columns[$k] = $v['label'];
+		}
+	}
+	
+	// 添加额外的
+	$ext_columns = array('rel_id'=>$this->app->_('对象ID'));
+	
+	return array_merge($columns, $ext_columns);
+}
+```
+
+- ``修改finder搜索相关数据支持的方法的重写``
+
+```
+/**
+ * 重写去除所要查询的列表的数据数量
+ * @param null
+ * @return null
+ */
+public function count($filter=null)
+{
+	if (!array_key_exists('rel_id', $filter))
+		$row = $this->db->select('SELECT count(*) as _count FROM '.$this->table_name(1).' WHERE '.$this->_filter($filter));
+	else
+	{
+		$row = $this->db->select('SELECT count(payments.payment_id) as _count 
+					FROM '.$this->table_name(1).' AS payments 
+					INNER JOIN ' . kernel::database()->prefix.$this->app->app_id . '_order_bills AS bills ON bills.bill_id=payments.payment_id 
+					WHERE bills.rel_id=' . $filter['rel_id']);
+	}
+	
+	return intval($row[0]['_count']);
+}
+
+/**
+ * 重载getList方法
+ * @params string - 特殊的列名
+ * @params array - 限制条件
+ * @params 偏移量起始值
+ * @params 偏移位移值
+ * @params 排序条件
+ */
+public function getList($cols='*', $filter=array('disabled' => 'false'), $offset=0, $limit=-1, $orderby=null)
+{
+	if ($filter)
+	{
+		if (!array_key_exists('rel_id', $filter))
+			return parent::getList($cols, $filter, $offset, $limit, $orderby);
+		else
+		{
+			$arr_cols = explode(',', $cols);
+			if ($arr_cols)
+			{
+				foreach ($arr_cols as $key=>&$str_cols)
+				{
+					if ($key == 0) continue;
+					
+					$str_cols = $this->table_name(1) . '.' . $str_cols;
+				}
+				
+				$cols = implode(',', $arr_cols);
+			}
+			
+			$rows = $this->db->selectLimit('SELECT '.$cols.' 
+							FROM '. $this->table_name(1) .' 
+							INNER JOIN ' . kernel::database()->prefix.$this->app->app_id . '_order_bills ON ' . kernel::database()->prefix.$this->app->app_id . '_order_bills.bill_id=' . $this->table_name(1) . '.payment_id 
+							WHERE ' . kernel::database()->prefix.$this->app->app_id . '_order_bills.rel_id=' . $filter['rel_id'],$limit,$offset);
+			$this->tidy_data($rows, $cols);
+			return $rows;
+		}
+	}
+	else
+		return parent::getList($cols, array('disabled' => 'false'), $offset, $limit, $orderby);
+}
+```
+
+2. 货币管理
+
+- ``列表页面：``
+
+[images/currency.png]
+
+- ``新建：``
+
+[images/currency_create.png]
+
+
+3. 数据精度配置
+
+系统数据计算和显示设定，可用系统应用其他数据的计算和现实。
+
+[images/accuracy.png]
+
+
+3. 地区包管理
+
+可以自由管理地区，可以导入，或者自己定义与新建
+
+[images/regions.png]

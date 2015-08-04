@@ -1,0 +1,96 @@
+<h3><{t}>扩展属性<{/t}></h3>
+<div id="x-g-basic" class="goods-detail tableform">
+
+		<div class="division">
+			<table border="0" cellpadding="0"  cellspacing="0">
+				<tr>
+					<th><{t}>设置：<{/t}></th>
+					<td>
+					<!--
+					<label<input type="checkbox" id="enable_goods_info" name="article[ext][enable_goods_info]" value=1 <{if $article.bodys.goods_info neq  ''}>checked<{/if}>> 启用相关产品</label>
+					-->
+					<label><input type="checkbox" id="enable_hot_link" name="article[ext][enable_hot_link]" value=1 <{if $article.bodys.hot_link neq  ''}>checked<{/if}>> <{t}>启用热点链接<{/t}></label>
+					<span class="notice-inline">为此文章中部分名词增加链接，使消费者通过名词链接清晰明白该词的意义</span>
+					</td>
+				</tr>
+				<tr id="goodsinfolabel" style="display:none">
+					<th><{t}>相关商品：<{/t}></th>
+					<td><p style="margin:0 0 0.5em;"><{t}>匹&nbsp;&nbsp;配&nbsp;&nbsp;词：<{/t}>
+					<{input name="article[ext][goods][goodskeywords]" type="text" id="goodskeywords" value=$article.ext.goods.goodskeywords class="x-input" vtype="required"}>
+					<span class="info"><{t}>多个匹配词用半角竖线&quot;|&quot;分开<{/t}></span> <{help}><{t}>系统会根据您输入的匹配词搜索相关的商品，商品名称中包含该词，或者商品关键词中存在该词都会被搜索到<{/t}><{/help}>
+					</p>
+					<{t}>显示数量：<{/t}>
+					<select name="article[ext][goods][goodsnums]" id="goodsnums">
+					  <option value="5" <{if $article.ext.goods.goodsnums==5}>selected<{/if}>>5</option>
+					  <option value="10" <{if $article.ext.goods.goodsnums==10}>selected<{/if}>>10</option>
+					  <option value="20" <{if $article.ext.goods.goodsnums==20}>selected<{/if}>>20</option>
+					</select>
+					<!-- 这里要等goods都好才能最后使用 2010/5/28 lvzhihao -->
+					<{button type="button" onclick="new Dialog('index.php?ctl=content/articles&act=getGoods&p[0]='+$('goodsnums').value+'&p[1]='+$('goodsid').value,{title:'{t}商品选择器{/t}',ajaxoptions:{method:'post',data:$H({'keywords':$('goodskeywords').value})}})" label="搜索"}>
+					</td>
+				</tr>
+				<tr id="hotlinklabel" style="display:none">
+				<th><{t}>热点链接：<{/t}></th>
+				<td>
+				<{if $article.ext.hot}>
+					<{foreach from=$article.ext.hot item=item key=key}>
+						<div class="label3"><{t}>热&nbsp;&nbsp;点&nbsp;&nbsp;词：<{/t}>
+						<{input name="article[ext][hot][linkwords][]" style="width:70px;" type="text" id="linkwords" value=$item.linkwords class="x-input" vtype="required&&morelength"}>
+						&nbsp;&nbsp;&nbsp;&nbsp;<{t}>链接URL：<{/t}>
+						<{input name="article[ext][hot][linkurl][]" type="text" id="linkurl" value=$item.linkurl class="x-input" vtype="required"}><{img src="bundle/delecate.gif" app='desktop' onclick="del_el(this)"}></div>
+					<{/foreach}>
+				<{else}>
+					<div class="label3" style="padding:5px 0;"><{t}>热&nbsp;&nbsp;点&nbsp;&nbsp;词：<{/t}>
+					<{input name="article[ext][hot][linkwords][]" style="width:70px;" type="text" id="linkwords" class="x-input" vtype="required&&morelength"}>
+					&nbsp;&nbsp;&nbsp;&nbsp;<{t}>链接URL：<{/t}>
+					<{input name="article[ext][hot][linkurl][]" type="text" id="linkurl" value="http://" class="x-input" vtype="required"}><{img src="bundle/delecate.gif" app='desktop' onclick="del_el(this)" width="16" height="16" align="absmiddle"}></div>
+				<{/if}>
+                <{button label=$___b2c="添加热点词"|t:'b2c' app="desktop" icon="btn_add.gif" id="add_hotdot"}>
+				<script>
+				   (function(){
+						var tmp=$$('.label3')[0].clone();
+						$("add_hotdot").addEvent("click",function(){
+							if(tmp)tmp.clone().injectBefore(this);
+						});
+					})();
+				</script>
+				</td>
+				</tr>
+
+			</table>
+
+		</div>
+</div>
+
+<script>
+	function del_el(el){
+		if(confirm('<{t}>确定要删除吗？<{/t}>'))
+		if($$(".label3").length>1)
+		  el.parentNode.destroy();
+		else
+		  alert("<{t}>不能删除全部输入项，如果不想使用热点链接，请取消上方的启用选项！<{/t}>");
+	}
+
+   /*
+   if($('enable_goods_info').checked){
+		$('goodsinfolabel').show();
+   }
+   $('enable_goods_info').addEvent('click',function(){
+		if(this.checked){
+			$('goodsinfolabel').show();
+		}else{
+			$('goodsinfolabel').hide();
+		}
+   });
+   */
+   if($('enable_hot_link').checked){
+		$('hotlinklabel').show();
+   }
+   $('enable_hot_link').addEvent('click',function(){
+		if(this.checked){
+			$('hotlinklabel').show();
+		}else{
+			$('hotlinklabel').hide();
+		}
+   });
+</script>

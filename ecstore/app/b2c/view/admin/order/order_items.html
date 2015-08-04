@@ -1,0 +1,126 @@
+<div class="division">
+  <div  class="table-grid">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+	<col style="width:19%"/>
+	<col style="width:45%"/>
+	<col style="width:10%"/>
+	<col style="width:10%"/>
+	<col style="width:10%"/>
+	<col style="width:10%"/>
+      <thead>
+        <th><{t}>货号<{/t}></th>
+        <th><{t}>商品名称<{/t}></th>
+		<th><{t}>已发货量<{/t}></th>
+        <th><{t}>单价<{/t}></th>
+        <th><{t}>合计金额<{/t}></th>
+        <th><{t}>购买量<{/t}></th>
+        
+      </tr>
+      </thead>
+      <{if count($goodsItems) > 0}>
+      <{foreach from=$goodsItems item=aGoods name="item"}>
+		<{if $aGoods.product}>
+        <tr>
+          <td width="19%"><{$aGoods.product.bn}></td>
+
+          <td class="textleft" width="30%"><{if $aGoods.product.link}><a href="<{$aGoods.product.link}>" target="_blank"><{/if}><{$aGoods.product.name}>
+
+            <{if $aGoods.product.minfo && is_array($aGoods.product.minfo)}>
+            <{foreach from=$aGoods.product.minfo item=minfo key=name}> <br>
+            <{$minfo.label}>：<{$minfo.value}>
+            <{/foreach}>
+
+            <{/if}><{if $aGoods.product.link}></a><{/if}><{if $aGoods.product.is_type == 'goods' && $aGoods.product.small_pic}> <a style='text-decoration:none;' class='x-view-img' href='javascript:void(0);' imgsrc='<{$aGoods.product.small_pic|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>'  title='<{$aGoods.product.name}>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> <{/if}> </td>
+
+          <td class="Colamount" ><{$aGoods.product.sendnum}></td>
+          <td width="12%"><{$aGoods.product.price|cur_odr:$order.currency}></td>
+          <td class="Colamount" width="15%"><{$aGoods.product.total_amount|cur_odr:$order.currency}></td>
+          <td class="Colamount"><{$aGoods.product.quantity}></td>
+        </tr>
+	  <{/if}>
+      <{if $aGoods.adjunct}>
+      <tr>
+        <td colspan="6" style="padding:0 0 0 20px;  background:#F7FAFB"><div style="padding-left:40px; border-bottom:1px solid #E8E8E8;  font-weight:bold; text-align:left"><{t}>商品配件<{/t}></div>
+          <table  border="0" align="center"cellpadding="0" cellspacing="0" style=" background:#F7FAFB" >
+            <{foreach from=$aGoods.adjunct item=ajuncts name="ajunctsItem"}>
+            <tr>
+              <td width="19%" style="border:none;"><{$ajuncts.bn}></td>
+              <td class="textleft" width="30%" style="border:none;"><{if $ajuncts.link}><a href="<{$ajuncts.link}>" target="_blank"><{/if}><{$ajuncts.name}>
+                <{if $ajuncts.minfo && is_array($ajuncts.minfo)}>
+                <{foreach from=$ajuncts.minfo item=minfo key=name}> <br>
+                <{$minfo.label}>：<{$minfo.value}>
+                <{/foreach}>
+                <{/if}><{if $ajuncts.link}></a><{/if}><{if $ajuncts.is_type == 'goods' && $ajuncts.small_pic}> <a style='text-decoration:none;' class='x-view-img' href='javascript:void(0);' imgsrc='<{$ajuncts.small_pic|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>'  title='<{$ajuncts.name}>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> <{/if}> </td>
+              <td class="Colamount" style="border:none;" ><{$ajuncts.sendnum}></td>
+              <td width="12%" style="border:none;"><{$ajuncts.price|cur_odr:$order.currency}></td>
+              <td class="Colamount" width="15%" style="border:none;"><{$ajuncts.total_amount|cur_odr:$order.currency}></td>
+              <td class="Colamount" style="border:none;"><{$ajuncts.quantity}></td>
+            </tr>
+            <{/foreach}>
+          </table></td>
+      </tr>
+      <{/if}>
+      <{if $aGoods.gifts}>
+      <tr>
+        <td colspan="6" style="padding:0 0 0 0;" ><div style=" border-bottom:1px solid #ddd;padding-left:40px;font-weight:bold; background:#F4F4F4;text-align:left"><{t}>商品赠品<{/t}></div>
+        <table cellpadding="0" cellspacing="0" border="0">
+      <{foreach from=$aGoods.gifts item=gifts name="giftsItem"}>
+      <tr>
+        <td width="19%" ><{$gifts.bn}></td>
+        <td class="textleft" width="30%"><{if $gifts.link}><a href="<{$gifts.link}>" target="_blank"><{/if}><{$gifts.name}>
+          <{if $gifts.minfo && is_array($gifts.minfo)}>
+          <{foreach from=$gifts.minfo item=minfo key=name}> <br>
+          <{$minfo.label}>：<{$minfo.value}>
+          <{/foreach}>
+
+          <{/if}><{if $gifts.link}></a><{/if}><{if $gifts.small_pic}> <a style='text-decoration:none;' class='x-view-img' href='javascript:void(0);' imgsrc='<{$gifts.small_pic|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>'  title='<{$gifts.name}>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> <{/if}> </td>
+
+        <td class="Colamount"><{$gifts.sendnum}></td>
+        <td width="12%" style="border:none;"><{$gifts.price|cur_odr:$order.currency}></td>
+        <td class="Colamount" width="15%" style="border:none;"><{$gifts.total_amount|cur_odr:$order.currency}></td>
+        <td class="Colamount" style="border:none;"><{$gifts.quantity}></td></tr>
+      
+      <{/foreach}>
+     </table></td></tr> 
+      <{/if}>
+      <{/foreach}>
+	  <{/if}>
+	  
+      <{if $giftItems}>
+      <tr>
+        <td colspan="6" style="border:none;padding:0" ><div style=" border-bottom:1px solid #ddd;font-weight:bold;background:#F4F4F4;  padding-left:50px; text-align:left"><{t}>优惠赠品<{/t}></div></td>
+      </tr>
+      <{foreach from=$giftItems item=aGoods name="item"}>
+      <tr>
+        <td width="19%"><{$aGoods.bn}></td>
+
+        <td class="textleft"><{if $aGoods.link}><a href="<{$aGoods.link}>" target="_blank"><{/if}><{$aGoods.name}><{if $aGoods.link}></a><{/if}> <{if $aGoods.small_pic}> <a style='text-decoration:none;' class='x-view-img' href='javascript:void(0);' imgsrc='<{$aGoods.small_pic|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>'  title='<{$aGoods.name}>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> <{/if}> </td>
+
+
+        <td class="Colamount"><{$aGoods.sendnum}></td>
+        <td width="12%"><{$aGoods.price|cur_odr:$order.currency}></td>
+        <td class="Colamount" width="15%"><{$aGoods.total_amount|cur_odr:$order.currency}></td>
+        <td class="Colamount"><{$aGoods.quantity}></td>
+      </tr>
+      <{/foreach}>
+	  <{/if}>
+	  
+	  <!-- 扩展的商品区域 -->
+	  <{if $extends_items}>
+	  <{foreach from=$extends_items item=aExtends name="item"}>
+        <{$aExtends}>
+	  <{/foreach}>
+	  <{/if}>
+	  <!-- end -->
+	  
+    </table>
+
+    </div>
+</div> 
+
+<script> 
+$$('.x-view-img').each(function(item){
+		 item.store('tip:text','<div style="width:220px;height:220px;overflow:hidden;"><img  src="'+item.get('imgsrc')+'" onload="$(this).zoomImg(220,220);" /></div>');
+	     Xtip.attach(item);
+});
+</script>

@@ -1,0 +1,15 @@
+<div  class="notice splash clearfix textcenter" id='noticeSplash'>
+  <h4><{$msg}></h4>
+    <{assign var="id" value=$smarty.now}>
+    <p>
+      <{if $allreoad}>  	
+        <a id="splash-<{$id}>" onclick="location.reload()" >
+      <{else}>
+        <a id="splash-<{$id}>" href="<{$jumpto}>" target="{method:'post',data:'a=b'}">
+      <{/if}>  
+    <{if $wait>1}><{$wait}><{t}>秒后系统会自动跳转，也可点击本处<{/t}><{else}><{t}>正在跳转...<{/t}><{/if}></a>
+    </p>
+</div>
+<script>
+top.Splash.go("<{$jumpto}>",<{$wait}>*1000,{method:'post',data:'a=b'});
+</script>

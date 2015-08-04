@@ -1,0 +1,87 @@
+     <h3><{t}>角色拥有的权限<{/t}></h3> 
+<div style="padding:15px"> 
+ 
+	 
+		    <{foreach from=$workgrounds item=workground name=d }> 
+                   <{if $workground.checked}> 
+					<div class="clearfix" style="padding:5px;border-bottom:1px #e9e9e9 solid;">
+                    <div class="span-2"><strong><{$workground.menu_title}></strong></div> 
+					<div class="span-12"> 
+					 <div class="clearfix">
+                    <{foreach from=$workground.permissions item=permission key=key}> 
+					<{if $permission.checked}>  
+                     <div class="span-auto"> 
+						<label>
+                     <input type="checkbox" onclick="new Event(event).stop()" name="workground[]" value="<{$permission.menu_id}>" <{if $permission.checked}>checked=checked<{/if}>/>
+                     <{$permission.menu_title}>  
+						</label>
+                      </div>   
+					<{/if}>
+                    <{/foreach}>  
+						</div>
+					</div>
+				   </div>
+				 <{/if}>
+            <{/foreach}>  
+			   
+		      <{if $flg}>  
+				<div class="clearfix" style="padding:5px;"> 
+					      <div class="span-2"><strong><{t}>控制面板<{/t}></strong></div>
+						  <div class="span-12">
+							<div class="clearfix">
+					<{foreach from=$adminpanels item=adminpanel key=key}>  
+						<{if $adminpanel.checked}> 
+	                        <div class="span-auto">
+								<label>
+	                        <input  type="checkbox" name="workground[]" value="<{$adminpanel.menu_id}>" <{if $adminpanel.checked}>checked=checked<{/if}> onclick="new Event(event).stop()"/>
+							<{$adminpanel.menu_title}>
+								</label>
+                             </div>
+							   <{/if}>
+	                        <{/foreach}>  
+							</div>
+						  </div>
+					</div>    
+					
+		        <{/if}>
+		       
+		    <{if $widgets}> 
+		    <div class="row clearfix clear" style="padding:5px;"> 
+						      <div class="span-2"><strong><{t}>桌面挂件<{/t}></strong></div>
+							  <div class="span-13" style="width:528px;">
+								<div class="clearfix">
+						<{foreach from=$widgets item=widget key=key}>
+		                        <div class="span-auto">
+									<label>
+		                        <input  type="checkbox" onclick="new Event(event).stop()" name="workground[]" value="<{$widget.addon}>" checked=checked/>
+								<{$widget.menu_title}>
+									</label>
+                                 </div>
+		                        <{/foreach}>  
+								</div>
+							  </div>
+						</div>
+			<{/if}>
+			
+			 <{if $othersflg}> 
+		    <div class="row clearfix clear" style="padding:5px;"> 
+						      <div class="span-2"><strong><{t}>其他<{/t}></strong></div>
+							  <div class="span-13" style="width:528px;">
+								<div class="clearfix">
+						<{foreach from=$others item=other key=key}>
+						<{if $other.checked}> 
+		                        <div class="span-auto">
+									<label>
+		                        <input  type="checkbox" onclick="new Event(event).stop()" name="workground[]" value="<{$other.addon}>" checked=checked/>
+								<{$other.menu_title}>
+									</label>
+                                 </div>
+                                <{/if}>
+		                        <{/foreach}>  
+								</div>
+							  </div>
+						</div>
+			<{/if}>
+
+   </div>
+                  

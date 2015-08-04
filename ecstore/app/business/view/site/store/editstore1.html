@@ -1,0 +1,130 @@
+<{css src="ecmall.css" app="business"}>
+<{css src="style.css" app="business"}>
+<{script src="dialog.js" app="business" pdir="js"}>
+<{script src="modedialog.js" app="business" pdir="js"}>
+<{script src="load.js" app="business" pdir="js"}>
+<{script src="wpage.js" app="business" pdir="js"}>
+<script>
+  var W = new Wpage({});
+</script>
+<script>
+var LAYOUT = {
+  container: $('container'),
+  side: $('side'),
+  workground: $('workground'),
+  content_main: $('main'),
+  content_head: $E('#workground .content-head'),
+  content_foot: $E('#workground .content-foot'),
+  side_r: $('side-r'),
+  side_r_content:$('side-r-content')
+};
+</script>
+
+<div class="member-main">
+  <div class="title" style="border-bottom:1px solid #ddd"><{t}>上传资料<{/t}><span class="disc"><{t}>| 可上传相关资料图片。<{/t}></span></div>
+
+    <div class="FormWrap" style="background:none; border:none; padding:0; margin:0;">
+      <div class="division" style="border:none;margin-bottom:0">
+
+            <div class="info_shop">
+                        <form method="post"  id="apply_form"  action="<{link app=business ctl=site_store act=storeapplyend arg0='isedit'}>"  >
+                        <table>
+                          <tr>
+                           <{input class="inputstyle" name="shopinfo[store_id]" type="hidden"  id="member_id" size="30"  value=$shopinfo.store_id}>
+                                <th>上传证件:  </th>
+                                <td>
+                                 <{input type='vimage' name='shopinfo[image_id]' width=300 height=150 value=$shopinfo.image_id}>
+                                </td>
+                                <td class="padding3"><span class="field_notice">支持格式jpg,jpeg,png,gif,bmp，请保证图片清晰</span></td>
+                            </tr>
+                            <tr>
+                                <th>上传执照:  </th>
+                                <td>
+                                 <{input type='vimage' name='shopinfo[image_cid]' width=300 height=150 value=$shopinfo.image_cid}>
+
+                                </td>
+                                <td class="padding3"><span class="field_notice">支持格式jpg,jpeg,png,gif,bmp，请保证图片清晰</span></td>
+                            </tr>
+
+                              <tr>
+                                <th>上传组织机构代码:  </th>
+                                <td>
+                                 <{input type='vimage' name='shopinfo[image_codeid]' width=300 height=150 value=$shopinfo.image_codeid}>
+
+                                </td>
+                                <td class="padding3"><span class="field_notice">支持格式jpg,jpeg,png,gif,bmp，请保证图片清晰</span></td>
+                            </tr>
+                                <tr>
+                                <th>上传税务登记证:  </th>
+                                <td>
+                                 <{input type='vimage' name='shopinfo[image_taxid]' width=300 height=150 value=$shopinfo.image_taxid}>
+
+                                </td>
+                                <td class="padding3"><span class="field_notice">支持格式jpg,jpeg,png,gif,bmp，请保证图片清晰</span></td>
+                            </tr>
+                           
+                            <tr>
+                                <td colspan="3">
+                                
+                                <span class="float-span" style="padding-left:142px;margin-top:10px;">
+                            
+                                <{button class="btn submit-btn" id="btn_new"   type='submit' label=$___b2c="保存设置"|t:'b2c' rel="_request"}>
+                                </span>
+                                
+                                </td>
+                            </tr>
+                        </table>
+                        </form>
+                    </div>
+     </div>
+     </div>
+ </div>
+</div>
+
+<script>
+
+$('btn_new').addEvent('click',function(e){
+  var _form=$('apply_form');
+  if (_form){
+        if($$('input[name=shopinfo[image_id]]')[0].value){     
+        } else {
+           e.stop();
+           Message.error('请上传证件图片！');
+           return ;
+        }
+
+
+        if($$('input[name=shopinfo[image_cid]]')[0].value){
+
+        } else {
+              e.stop();
+             Message.error('请上传执照图片！');
+
+           return ;
+        }
+
+
+         if($$('input[name=shopinfo[image_codeid]]')[0].value){
+
+        } else {
+            e.stop();
+             Message.error('请上传组织机构代码图片！');
+
+           return ;
+        }
+
+          if($$('input[name=shopinfo[image_taxid]]')[0].value){
+
+        } else {
+                e.stop();
+              Message.error('请上传税务登记证图片！');
+
+           return ;
+        }
+
+       // _form.submit();
+  }
+});
+
+
+</script>

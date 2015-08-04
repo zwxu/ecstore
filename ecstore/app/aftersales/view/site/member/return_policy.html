@@ -1,0 +1,17 @@
+<style>
+.division { padding-left:20px;}
+.division li{list-style-type:disc;}
+</style>
+<div class="member-main">
+<div>
+<{if $is_open_return_product }>
+<h1 class="title"><{t}>售后服务须知<{/t}></h1>
+<div class="division uarea-output clearfix">
+<{$comment}>
+</div>
+<div class="textcenter mt5"><div style="width:100px; margin:0 auto"><a href="<{link app=aftersales ctl=site_member act=return_list}>"class='btn-a listact'><span><{t}>下一步<{/t}></span></a></div></div>
+<{else}>
+<h1 class="title"><{t}>本站没有启用退货功能<{/t}></h1>
+<{/if}>
+</div>
+</div>

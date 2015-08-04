@@ -1,0 +1,6 @@
+<select <{$ext}> >
+<option value=0><{t}>默认模板<{/t}></option>
+<{foreach from=$list key=key item=item}>
+<option value="<{$item.tmpl_path}>" <{if $selected==$item.tmpl_path}>selected<{/if}> ><{$item.tmpl_name}></option>
+<{/foreach}>
+</select>

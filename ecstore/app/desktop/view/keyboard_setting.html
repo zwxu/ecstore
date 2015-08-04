@@ -1,0 +1,62 @@
+  <form action="<{$form_action_url}>" method="POST" id="desktop_keyboard_setting_form" >
+  <{foreach from=$setting item=row key=key}>
+    <div class='gridlist-action'>
+        <strong class="span-auto c-black"><{$key}></strong>
+    </div>
+    <table cellspacing="0" cellpadding="0" border="0" class="gridlist">
+        <col style="width:50%"></col><col style="width:50%"></col>
+        <thead id="productNodeTitle">
+            <tr><th >功能</th><th >快捷键</th></tr>
+        </thead>
+        <tbody>
+          <{foreach from=$row item=item key=_key}>
+          <{if !$item.title}><{continue;}><{/if}>
+            <tr>
+                <td>
+                    <label style="float:left;margin-left:1em"><input type="checkbox" name="keyboard_setting[<{$key}>][<{$_key}>][use]" value="true" <{if $item.use=='true'}>checked="checked"<{/if}> />
+                    <{$item.title}></label>
+                    </td>
+                <td>
+                  <{foreach from=$item.params.control key=control item=flag}>
+                    <input type="checkbox" name="keyboard_setting[<{$key}>][<{$_key}>][params][control][<{$control}>]" value="true" <{if $flag=='true'}>checked="checked"<{/if}> /><{$control|ucfirst}> +
+                  <{/foreach}>
+                    <{input type="select" options=$keyword value="{$item.params.keyword}" name="keyboard_setting[{$key}][{$_key}][params][keyword]" required="true" }>
+                </td>
+            </tr>
+          <{/foreach}>
+        </tbody>
+    </table>
+  <{/foreach}>
+ </form>
+
+
+
+
+<{area inject='.mainFoot'}>
+<div class="table-action">
+    <{button  label=$___a="保存设置"|t:'image' type="button" id="desktop_keyboard_setting_button"}>
+</div>
+<{/area}>
+
+
+<script>
+
+$('desktop_keyboard_setting_button').addEvent('click',function(){
+    var _form=$('desktop_keyboard_setting_form');
+    if(_form)new Request({url:_form.action,data:_form,method:'post',onComplete:function(keyObj){
+	    keyObj = JSON.decode(keyObj);
+		if( keyObj.error ) { // set shutcut keyboard error,eg occur conflict.. Zhang Junhua
+			MessageBox.error( keyObj.error ); return;
+		}
+		
+        _form.getParent('.dialog').retrieve('instance').close();
+        $(window.gecko?document.documentElement:document.body).removeEvents('keydown').addEvent('keydown',function(e){
+            if(e.target==this){
+                if(e.code==32)e.stop();
+                Hotkey.init(e,keyObj);
+            }
+        });
+    }}).send();
+});
+
+</script>

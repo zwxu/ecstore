@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><{$page_title}></title>
+<{css src="print.css" app="desktop" media="print"}>
+<{script src="moo.js" app="desktop"}>
+
+<style type="text/css" media="print">
+.noprint{ display : none; width:100%}
+</style>
+
+<style media="print">
+table td{font-size:9pt; padding:2px 0}
+</style>
+<style media="screen">
+table td{font-size:12px; padding:2px 0}
+</style>
+
+<style>
+.x-barcode{padding:0;margin:0}
+body { margin:0; font-family:Arial, Helvetica, sans-serif; font-size:12px;}
+.td_frame { padding:5px 0 5px 0; border-bottom:2px solid #000000; }
+img { padding:2px; border:0;}
+.table-border{ margin:10px 0; border-top:2px solid #333;border-bottom:2px solid #333}
+p { margin:8px 0 8px 0;}
+h1 { font-size:13px; font-weight:bold; margin:0;}
+h2 { font-size:13px; font-weight:bold; margin:0;}
+.table_data_title {font-weight:bold; height:25px; }
+.table_data_content { height:20px; line-height:20px;}
+.oder-printbox{ padding:10px 10px 0 10px; margin:5px 10px 0 10px}
+.oder-print_title{ height:28px; border-bottom:2px solid #333;font-weight:bold; line-height:28px}
+#print_confirm { width:100%;  height:30px;  border-top:1px solid #999999; padding-top:4px;   background-color:#5473ae; position:absolute; }
+#btn_print { width:71px; height:24px; background-image:url(<{$res_url}>/btn_print.gif); cursor:pointer; margin-left:auto; margin-right:auto;}
+#barcode { width:150px; height:50px; background:url(<{$res_url}>/bar_code.gif) no-repeat;}
+</style>
+
+<script type="text/javascript">
+window.addEvents({
+	"domready":function() {
+		if($("chk_pic_print")){
+			if(Browser.Engine.trident){
+			  $("chk_pic_print").addEvent('click',function(){this.fireEvent('change');});
+              $("chk_pic_print").addEvent('focus',function(){this.blur();})
+			}
+			$("chk_pic_print").addEvent("change",function(e){
+				$$("#print1 img").setStyle("display",(this.checked == false?"none":'inline'));
+			});
+		}
+		if ($("chk_pic_print1")){
+			if(Browser.Engine.trident){
+			  $("chk_pic_print1").addEvent('click',function(){this.fireEvent('change');});
+              $("chk_pic_print1").addEvent('focus',function(){this.blur();})
+			  $("chk_address").addEvent('click',function(){this.fireEvent('change');});
+              $("chk_address").addEvent('focus',function(){this.blur();})			  
+			}
+			$("chk_pic_print1").addEvent("change",function(){
+				$$("#print2 img").filter(function(e){return e.className!='x-barcode'}).setStyle("display",(this.checked == false?"none":'inline'));
+			   $("print_confirm").setStyle("top",document.documentElement.scrollTop + window.getHeight() - 35);
+			});
+			$("chk_address").addEvent("change",function(){
+				$("print_address").setStyle("display",(this.checked == false?"none":'inline'));
+			});
+		}
+		$("print_confirm").setStyle("top",window.getHeight() - 35);
+	
+		$("btn_print").addEvent("click",function(){window.print()});
+	},
+	"scroll":function() {  
+		$("print_confirm").setStyle("top",window.getSize().y+window.getScrollTop() - 35);},
+	"resize":function() {
+		$("print_confirm").setStyle("top",window.getSize().y+window.getScrollTop() - 35);
+	}
+});
+window.addEvent('load',function(){
+	    if(!$$("img.product").length)return;
+		Element.implement({
+			zoomImg:function(maxwidth,maxheight,v){
+			   if(this.tagName.toLowerCase()!='img')return;
+			   var thisSize={'width':this.width,'height':this.height};
+				   if (thisSize.width>maxwidth){
+					  var overSize=thisSize.width-maxwidth;
+					  var zoomSizeW=thisSize.width-overSize;
+					  var zommC=(zoomSizeW/thisSize.width).toFloat();
+					  var zoomSizeH=(thisSize.height*zommC).toInt();
+					  $extend(thisSize,{'width':zoomSizeW,'height':zoomSizeH});
+				   }
+				   if (thisSize.height>maxheight){
+					  var overSize=thisSize.height-maxheight;
+					  var zoomSizeH=thisSize.height-overSize;
+					  var zommC=(zoomSizeH/thisSize.height).toFloat();
+					  var zoomSizeW=(thisSize.width*zommC).toInt();
+					  $extend(thisSize,{'width':zoomSizeW,'height':zoomSizeH});
+				   }
+			   if(!v)return this.set(thisSize);
+			   return thisSize;
+			 }
+		});
+		var Asset = new Hash({
+			image: function(source, properties){
+				properties = $merge({
+					'onload': $empty,
+					'onabort': $empty,
+					'onerror': $empty
+				}, properties);
+				var image = new Image();
+				var element = $(image) || new Element('img');
+				['load', 'abort', 'error'].each(function(name){
+					var type = 'on' + name;
+					var event = properties[type];
+					delete properties[type];
+					image[type] = function(){
+						if (!image) return;
+						if (!element.parentNode){
+							element.width = image.width;
+							element.height = image.height;
+						}
+						image = image.onload = image.onabort = image.onerror = null;
+						event.delay(1, element, element);
+						element.fireEvent(name, element, 1);
+					};
+				});
+				image.src = element.src = source;
+				if (image && image.complete) image.onload.delay(1);
+				return element.setProperties(properties);
+			}
+		});
+
+	 
+		 $$("img.product").each(function(img){
+			 var _imgsrc=img.src;
+			 new Asset.image(_imgsrc,{
+			  onload:function(){
+					img.set(this.zoomImg(60,60,1)).set('align','absmiddle');
+			 }});
+		 });
+});
+
+
+
+</script>
+ </head> 
+<body>
+
+<{if $printContent.cart}>
+<div id="print1">
+<!--<{include file="admin/order/print_cart.html"}> -->
+<{$content_cart}>
+</div>
+<{/if}>
+<{if $printContent.sheet}>
+<div id="print2">
+<!--<{include file="admin/order/print_sheet.html"}> -->
+<{$content_sheet}>
+</div>
+<{/if}>
+
+<{if $printContent.express}>
+<div id="print2">
+<{include file="admin/order/print_dly.html"}>
+</div>
+<{/if}>
+
+<div id="print_confirm" class="noprint"><div id="btn_print"></div></div>
+</body>
+</html>

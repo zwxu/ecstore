@@ -1,0 +1,15 @@
+<tr product_id="{product_id}">\
+    <td><input type="text" size=15 tname="goods[product][_PRIMARY_][bn]" key="bn" value="{bn}"/><input type="hidden" tname="goods[product][_PRIMARY_][product_id]" key="product_id" value="{product_id}"/></td>\
+        {spec_html}\
+	<td><input type="text" size=4 tname="goods[product][_PRIMARY_][store]" key="store" value="{store}" /></td>\
+	<td><input type="text" size=8 tname="goods[product][_PRIMARY_][price][price][price]" key="price" value="{price}" vtype="unsigned"/>\
+	<{button class="edit" style="" label=$___b2c="会员价"|t:'b2c' icon="btn_edit.gif" app="desktop"}><!--tag_foreign_spec_price--><br></td>\
+	<td><input type="text" size=4  tname="goods[product][_PRIMARY_][price][cost][price]" key="cost" value="{cost}" vtype="unsigned"/></td>\
+	<td><input type="text" size=4  tname="goods[product][_PRIMARY_][price][mktprice][price]" key="mktprice" value="{mktprice}" vtype="unsigned"/></td>\
+	<td><input type="text" size=2  tname="goods[product][_PRIMARY_][weight]" key="weight" value="{weight}" vtype="unsigned"/></td>\
+	<{if $env.conf.b2c.storeplace.display.switch == 'true'}>
+		<td><input type="text" size=4  tname="goods[product][_PRIMARY_][store_place]" key="store_place" value="{store_place}" /></td>\
+	  <{/if}>
+	<td><input type="checkbox" tname="goods[product][_PRIMARY_][status]" key="status" state="{status}" class="pro-marketable-check" checked  /></td>\
+	<td><{img class="operater" src="icons/icon_delete.gif" alt=$___b2c="删除"|t:'b2c'}></td>\
+</tr>

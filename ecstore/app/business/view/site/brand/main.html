@@ -1,0 +1,70 @@
+<div class="memberwrap">
+  <!-- title-->
+  <div class="site-part-title clearfix">
+<!--    <{if $member.sex == "male"}>
+        <div class="gender"></div>
+    <{else}>
+        <div class="female"></div>
+    <{/if}>-->
+    <div class="info ">
+     <span class="flt font-black"><{t}>您好：<{/t}><em class="font-orange"><{$member.uname}></em></span><a class="btn-a" href="<{link app=$top_menu.member_center.app ctl=$top_menu.member_center.ctl act=$top_menu.member_center.link args=$top_menu.member_center.args}>"><span><{t}>会员首页<{/t}></span></a><a class="btn-a" href="<{link app=$top_menu.logout.app ctl=$top_menu.logout.ctl act=$top_menu.logout.link args=$top_menu.logout.args}>"><span><{t}>退出<{/t}></span></a>
+	 </div>
+     <{foreach from=$get_member_html item=get_member_html}>
+     <{$get_member_html}>
+     <{/foreach}>
+
+    <div class="time"><span class="siteparttitle-black flt"><{t}>提醒：<{/t}></span><a href="<{link app=$top_menu.orders_nopayed.app ctl=$top_menu.orders_nopayed.ctl act=$top_menu.orders_nopayed.link args=$top_menu.orders_nopayed.args}>" class="font-blue btn-a
+	"><span><{t}>待付款订单<{/t}><em class="font-orange">[<{$member.un_pay_orders}>]</em></span></a> <a href='<{link app=$top_menu.member_notify.app ctl=$top_menu.member_notify.ctl act=$top_menu.member_notify.link args=$top_menu.member_notify.args}>' class="font-blue btn-a"><span><{t}>到货通知<{/t}><em class="font-orange">[<{$sto_goods_num}>]</em></span></a><a href='<{link app=$top_menu.member_comment.app ctl=$top_menu.member_comment.ctl act=$top_menu.member_comment.link args=$top_menu.member_comment.args}>' class="font-blue btn-a"><span><{t}>新消息<{/t}><em class="font-orange">[<{$member.un_readmsg}>]</em></span></a>
+	</div>
+  </div>
+  <!-- title-->
+<div class="clearfix">
+  <!-- left-->
+  <div class="member-sidebar">
+    <div class="member-menu">
+    <!--  <div class="title"></div>-->
+        <ul class="body">
+          <{foreach from=$cpmenu item=menus}>
+          <input type="hidden" value=<{$counti++}>>
+          <li class="member-menu-list">
+          <{if $counti eq '1'}>
+          <div class="list-title-bg noborder">
+          <{else}>
+          <div class="list-title-bg">
+          <{/if}>
+          <h2 class="list-title-icon m-<{$menus.mid}>" ><{$menus.label}></h2></div>
+            <ul>
+              <{foreach from=$menus.items item=items}>
+			  <{if $items}>
+              <li <{if $current == $items.link || $items.link == $controller}> class="current"<{/if}>>
+			  <{if $items.href}>
+			   <a href="<{$items.href}>" target="_balnk"><{$items.label}></a>
+			  <{else}>
+			  <a href="<{if $items.args ne null}><{link app=$items.app ctl=$items.ctl act=$items.link args=$items.args}><{else}><{link app=$items.app ctl=$items.ctl act=$items.link}><{/if}>"><{if $items.label==$___b2c='我的订单'|t:'b2c'}><{/if}><{$items.label}><{if $items.label==$___b2c='我的订单'|t:'b2c'}><{/if}></a>
+			  <{/if}></li>
+			  <{/if}>
+              <{/foreach}>
+            </ul>
+          </li>
+          <{/foreach}>
+        </ul>
+    </div>
+  </div>
+  <!-- left-->
+
+  <{include file=$_PAGE_ app=$app_id}>
+
+  </div>
+</div>
+</div>
+
+
+
+<div style="display:none;">
+<div class="gridlist-tip">
+    <div class="tip">
+        <div class="tip-title"></div>
+        <div class="tip-text"></div>
+    </div>
+</div>
+</div>

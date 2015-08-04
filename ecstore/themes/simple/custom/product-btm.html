@@ -1,0 +1,297 @@
+<div class="app-area" id="app_area">
+      </div>
+<div id="goodsDetailMain">
+  <h4 class="clearfix goods-detail-tab" ></h4>
+  <{foreach from=$addons item=tmpl}>
+  <{require file=$tmpl}>
+  <{/foreach}>
+  <div class="goodsDetailContent"> </div>
+  <{foreach from=$addons item=tmpl}>
+  <{require file=$tmpl}>
+  <{/foreach}>
+  <div id="intro_basic_info" style="display:none">
+    <{if $goodsbndisplay eq 'true'}>
+    <li title="" ><{t}>编号：<{/t}><{$goods.bn}></li>
+    <{/if}>
+    <li title="" ><{t}>货号：<{/t}><{if $goods.product_bn}><{$goods.product_bn}><{else}><{assign var="product0bn" value=$goods.product|current}><{$product0bn.bn}><{/if}></li>
+    <{if $goods.brand.brand_name}>
+    <li title=""><{t}>品牌：<{/t}><{$goods.brand.brand_name}></li>
+    <{/if}>
+    <li title=""><{t}>价格区间：
+    <{if $goods.minmktprice && $goods.maxmktprice}>
+    <{$goods.minmktprice|cur_odr:$order.currency}>&nbsp;-&nbsp;<{$goods.maxmktprice|cur_odr:$order.currency}>
+    <{else}>
+    <{$goods.mktprice|cur_odr:$order.currency}>
+    <{/if}>
+    <{/t}>
+    </li>
+    <{if $env.conf.b2c.goodsprop.display.position != 1}>
+    <{foreach from=$goods.type.props item=propord key=key}>
+    <{if $propord.show}>
+    <{assign var="pkey" value="p_{$key}"}>
+    <{assign var="pcol" value=$goods.props.$pkey.value}>
+    <{if trim($pcol) !== ''}>
+    <li> <span><{$propord.name}>：</span> <{if $propord.type == 'select'}>
+    <{if $env.conf.b2c.goodsprop.display.switch == 'true'}><a href="<{selector args=array("{$goods[category][cat_id]}") value="{$goods[category][cat_id]}" filter=array('cat_id'=>array("{$goods[category][cat_id]}"),"p_{$key}"=>array($pcol))}>" target="_blank"><{$propord.options.$pcol}></a><{else}><{$propord.options.$pcol}><{/if}>
+    <{else}>
+    <{$pcol}>
+    <{/if}> </li>
+    <{/if}>
+    <{/if}>
+  <{/foreach}>
+  <{/if}>
+  </div>
+  <img src="<{link app=b2c ctl=site_product act=cron arg=$goods.goods_id }>" width="10" border="none" height="1">
+  <!--页面body page end -->
+</div>
+</div>
+<script>
+var isDebug = '<{if defined("DEBUG_JS") && DEBUG_JS}>js<{else}>js_mini<{/if}>/',
+    path ='<{$env.base_url}>/app/b2c/statics/' + isDebug;
+
+
+$LAB.setOptions({BasePath:path}).script('browserstore.js').wait(function(){
+withBrowserStore(function(browserStore){
+    browserStore.get('history',function(history){
+        history=JSON.decode(history);
+        if(!history||typeOf(history)!=='array')history=[];
+        if(history.length==40){history.pop()};
+        var newhis={
+            'goodsId':<{$goods.goods_id}>,
+            'goodsName':'<{$goods.name|replace:"'":"\'"}>',
+            'goodsImg':'<{$images.gimages[$goods.image_default].small|storager}>',
+            'sortTime':+new Date(),
+            'viewTime':+new Date()
+        };
+        if(!history.some(function(i,index){
+            if(i['goodsId']==newhis['goodsId']){
+                 history.erase(i);
+                 history.include(newhis);
+                 return true;
+            }
+            return false;
+        })){history.include(newhis);}
+
+        browserStore.set('history',JSON.encode(history));
+    });
+});
+});
+</script>
+
+
+
+
+
+
+<script>
+		 // 可提取脚本文件 gezhi  2012-0416  start
+  (function(){
+    var LayoutRquest = this.LayoutRquest = new Class({
+      Implements: [Events,Options],
+      options:{
+        threshold:50,
+        loadCls:'loading',
+        errorCls:'error',
+        completeCls:'',
+        onRequest:function(item){
+          var el, loadCls=this.options.loadCls;
+          if(el = item.update) el.addClass(loadCls);
+          if(el = item.append) new Element('div',{'data-load':item.name,'class':loadCls}).inject(el);
+        },
+        onFailure:function(queue){
+          var el,loadCls=this.options.loadCls, errorCls=this.options.errorCls;
+          if(el = queue.append) el= el.getElement('div[data-load='+queue.name+']');
+          if(queue.update) el= queue.update;
+          el.removeClass(loadCls);
+          //new Element('div',{'data-load':queue.name,'class':errorCls}).inject(el).set('html','请求出错');
+        },
+        onComplete:function(queue){
+          var el,loadCls=this.options.loadCls,errorCls= this.options.errorCls;
+          if(el = queue.append) el= el.getElement('div[data-load='+queue.name+']');
+          if(el)el.dispose();
+          if(el = queue.update)el.removeClass(loadCls).removeClass(errorCls);
+        },
+        onSuccess:function(){}
+      },
+      initialize:function(ajax_queue,options){
+        if(!ajax_queue.length)return;
+        this.sync_queue = ajax_queue;
+
+        this.setOptions(options).fireEvent('load');
+        this.initEvent();
+      },
+      initEvent:function(){
+        var timer , self = this; this.cur_sync = {},win = window;
+        //win.addEvent('domready',this.progress.bind(this,this.sync_queue));
+		win.addEvent('domready',function(){
+			self.progress.call(self,self.sync_queue);
+		});
+
+        if(!this.sync_queue.length)return;
+        win.addEvents({'scroll':loader,'resize':loader});
+
+        function loader(){
+          if(timer) return;
+          timer = function(){
+            self.progress.call(self,self.sync_queue);
+            if(!self.sync_queue.length)
+            win.removeEvent('scroll',loader).removeEvent('resize',loader);
+            timer = null;
+          }.delay(200);
+        }
+      },
+      progress :function(queue){
+        if(!queue.length)return this;
+        var no_require_queue=[],require_queue = [];
+
+        queue.each(function(q){
+          if(!q.require)return no_require_queue.push(q);
+          require_queue.push(q);
+        });
+
+        !!no_require_queue.length && no_require_queue.each(this.filterSync,this);
+        !!require_queue.length && this.require(require_queue,queue);
+      },
+      filterItems:function(queue){
+
+        var offsetY = (queue.update || queue.append).getOffsets().y, appendEl,
+        win = window ,top = win.getScroll(), threshold, vh=win.getSize().y ;
+
+        if(appendEl = queue.append) offsetY += appendEl.getSize().y;
+        if(threshold = this.options.threshold)  offsetY -= threshold;
+        return offsetY <= top.y + vh ? true : false;
+      },
+      filterSync :function(q){
+        if(!q.update && !q.append) return this.sync_queue.erase(q);
+        this.filterItems(q) && this.request(q);
+      },
+      require :function(cur_queue,queue){
+        cur_queue.each(function(q){
+          var cur_sync=this.cur_sync[q.require];
+
+          if(cur_sync && cur_sync.running)
+          return cur_sync.ajaxCb=function(){return this.filterSync(q);};
+
+          if(cur_sync=='complete')this.filterSync(q);
+
+        },this);
+      },
+      request:function(item){
+        if(!item)return;
+        var _onSuccess= item.onSuccess || function(){}, _onFailure= item.onFailure|| function(){},
+        _onRequest= item.onRequest || function(){}, self = this,
+        count = 2 , sync =self.cur_sync[item.name];
+
+        var ele = document.getElement('div[data-sync-type='+item.name+']');
+        if(ele){
+          if(item.update) item.update = ele;
+          else item.append = ele;
+        }
+        if(!ele && this.detail)return this.sync_queue.erase(item);
+
+		var view = item.view? '&view='+item.view:'';
+        if(sync && sync.running)return this;
+        return this.cur_sync[item.name]= new Request.HTML(
+        Object.append(item,{
+          timeout:30000,
+          data:'invalid_post_data=1'+view,
+          onTimeout:function(async){
+            this.cancel();
+            if(!count)
+            return self.fireEvent('failure',item).complete(item);
+            count -= 1; this.send();
+          },
+          onRequest:function(){
+            self.fireEvent('request',item);
+            _onRequest.apply(self, arguments);
+          },
+          onFailure:function(){
+            self.fireEvent('failure',item);
+            _onFailure.apply(self, arguments);
+            self.failure.call(self,item);
+          },
+          onSuccess:function(rs){
+            self.fireEvent('complete',item);
+            _onSuccess.apply(self, arguments);
+            self.complete.call(self,item);
+            if(this.ajaxCb)this.ajaxCb.call(self);
+          }
+        })).send();
+      },
+      complete:function(queue){
+        this.cur_sync[queue.name] ='complete';
+        this.sync_queue.erase(queue);
+        if(!this.sync_queue.length)this.success();
+      },
+      failure:function(queue){
+        this.cur_sync[queue.name]='failure';
+        this.sync_queue.erase(queue).each(function(q){
+          if(q.require==queue.name){
+            delete q.require;
+            this.filterSync(q);
+          }
+        },this);
+      },
+      success:function(){this.fireEvent('success');}
+    });
+    //   可提取脚本文件 gezhi  2012-0416
+
+
+
+
+
+
+    //规格事先加载
+	<{if $goods.spec }>
+    new Request.HTML({url:'<{link app="b2c" ctl="site_product" act="goodsSpec" arg=$goods.goods_id}>',update:$('spec_area'),name:'goodsSpec',timeout:30000,data:'invalid_post_data=1'}).send();
+	<{/if}>
+
+    var param = {
+      <{if $goods.adjunct && count($goods.adjunct)>0}>
+      goodsAdjunct:{append:$$('.goods-action')[0],name:'goodsAdjunct'},
+      <{/if}>
+      <{if $goods.goodslink && $goods.goodslink>0}>
+      goodsLink:{append:$('app_area'),name:'goodsLink',view:'custom/product-xg.html'},
+      <{/if}>
+      goodsBodyContent:{update:$$('.goodsDetailContent')[0],name:'goodsBodyContent',
+        onSuccess:function(){
+          this.detail = true;
+          $$('#goodsDetailMain ul.goods-intro-list').set('html',$('intro_basic_info').get('html'));
+          new DataLazyLoad();
+          var self = this;
+          $$('.goodsDetailTab').addEvent('click',function(e){
+              var elem = this.hasClass('goodsDetailTab') ? this : this.getParent('.goodsDetailTab'),
+                  type = elem.get('data-tab-type'),
+                  queue = self.sync_queue.filter(function(r){
+                      return r.name == type;
+                  });
+              if(queue[0]){
+                  queue[0]['onComplete']=function(){$$('.pdtdetail[data-sync-type='+type+'] .displaydiv').show();};
+                  self.request(queue[0]);
+              }
+              this.removeEvent('click',arguments.callee);
+          });
+        }
+      },
+      goodsDiscuss:{append:$$('.goodsDetailContent')[0],name:'goodsDiscuss',require:'goodsBodyContent'},
+      goodsConsult:{append:$$('.goodsDetailContent')[0],name:'goodsConsult',require:'goodsDiscuss'},
+      goodsSellLoglist:{append:$$('.goodsDetailContent')[0],name:'goodsSellLoglist',require:'goodsConsult'}
+
+    },queue_items = [];
+
+    Object.each(param,function(v,k){
+    queue_items.push(Object.append({
+        url:'<{link app="b2c" ctl="site_product" act="'+k+'" arg=$goods.goods_id}>'
+    },v));
+    });
+
+    if(<{$async_request_list}>) {
+        Object.each(<{$async_request_list}>,function(v,k){
+            queue_items.push({name:k,url:v,append:$('app_area')});
+        });
+    }
+
+
+    new LayoutRquest(queue_items);
+    })();
+  </script>

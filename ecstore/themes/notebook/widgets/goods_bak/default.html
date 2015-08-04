@@ -1,0 +1,102 @@
+<link rel="stylesheet" type="text/css" href="images/widgets.css" />
+<div class="view">
+	<div class="viewed-top"><{t}>浏览过的商品<{/t}></div>
+	<div class="GoodsBrowsed" id="box_<{$widgets_id}>" >
+	</div>
+
+	<script>
+	  withBrowserStore(function(browserStore){
+		var box=$('box_<{$widgets_id}>');
+		browserStore.get('history',function(v){
+		  v=JSON.decode(v);
+		  if(!v||!v.length)return;
+		  var html='';
+		  var template = '<div class="clearfix">';
+		  template+='<div class="span-2 goodpic">';
+		  template+= '<a href="<{link app=b2c ctl='site_product' act='index' arg0='{goodsId}'}>" target="_blank" title="{goodsName}" inner_img="{goodsImg}" gid="{goodsId}">'.replace('index-','');
+		  template+= '</a>';
+		  template+= '</div><div class="pl80 goodsName">';
+		  template+= '<div class="view-time">{viewTime}</div>';
+		  template+='<a href="<{link app=b2c ctl='site_product' act='index' arg0='{goodsId}'}>" target="_blank" title="{goodsName}">{goodsName}</a></div></div><hr/>'.replace('index-','');
+
+		  var max=Math.min(v.length,<{$setting.max|default:3}>);
+
+		  if(v.length>1)
+		  v.sort(function(a, b){
+			return b['sortTime']-a['sortTime'];
+		  });
+
+		  v.each(function(goods,index){
+			var vt = (+new Date() - goods['sortTime']);
+			vt = Math.round(vt/(60*1000))+'<{t app="b2c"}>分钟前浏览过:<{/t}>';
+			if(vt.toInt()>=60){
+			  vt = Math.round(vt.toInt()/60)+'<{t app="b2c"}>小时前浏览过:<{/t}>';
+			  if(vt.toInt()>23){
+				vt = Math.round(vt.toInt()/24)+'<{t app="b2c"}>天前浏览过:<{/t}>';
+				if(vt.toInt()>3){
+				  vt = new Date(goods['viewTime']).toLocaleString()+'<{t app="b2c"}>浏览过:<{/t}>';
+				}
+			  }
+			};
+			if(!vt.toInt()){vt='<{t app="b2c"}>刚才浏览了:<{/t}>'}
+			goods['viewTime'] = vt;
+			if(index<max)
+			html += template.substitute(goods);
+		  });
+
+		  $('box_<{$widgets_id}>').set('html',html);
+
+		  box.getElements('.goodpic').each(function(i){
+			var imga=i.getElement('a').set('text','loading...');
+			var imgsrc=imga.get('inner_img');
+			new Asset.image(imgsrc,{
+			  onload:function(){
+				var img=$(this);
+				if(!img.get('src')){
+				  loadImg(imga,img,v,max);
+				}else{
+				  if(img.$e)return;
+				  img.zoomImg(70,70);
+				  img.inject(imga.empty());
+				  img.$e=true;
+				}
+			  },
+			  onerror:function(){
+				var img=$(this);
+				loadImg(imga,img,v,max);
+			  }
+			});
+		  });
+
+		});
+
+		function loadImg(imga,img,v,max){
+		  imga.set('text','update...');
+		  var gid = imga.get('gid');
+		  new Request.JSON({url:"<{link app=b2c ctl=site_product act=picsJson}>",
+			onComplete:function(data){
+			  new Asset.image(data,{onload:function(){
+				  var img=$(this);
+				  if(img.$e)return;
+				  img.zoomImg(70,70);
+				  img.inject(imga.empty());
+				  img.$e=true;
+				},onerror:function(){
+				  imga.destroy();
+			  }});
+
+			  v.map(function(goods,index){
+				if(index<max&&goods['goodsId']==gid)
+				return goods['goodsImg']=data;
+			  });
+
+			  browserStore.set('history',JSON.encode(v));
+		  }}).get({'gids':gid});
+		}
+
+	  });
+	</script>
+	<div class="textright">
+		<a class="lnk clearAll" onclick="if(browserStore){browserStore.remove('history');$('box_<{$widgets_id}>').empty()}"><{t app="b2c"}>清除<{/t}></a>
+	</div>
+</div>

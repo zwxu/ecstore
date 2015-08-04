@@ -1,0 +1,463 @@
+<!-- right-->
+
+<div class="member-main" id="J_DataTable">
+    <div class="orderlist-warp">
+        <div class="title title2"><{t}>我的订单<{/t}></div>
+    <div class="Plate">
+                   <h4>
+                     <a  href="javascript:void(0);" args='nopayed' search_type='type' onclick="tosearch(this)" <{if $type == 'nopayed'}> class="current" <{/if}>>待付款</a>
+                       <a  href="javascript:void(0);" args='ship'  search_type='type' onclick="tosearch(this)" <{if $type == 'ship'}> class="current" <{/if}>>待发货</a>
+                       <a  href="javascript:void(0);" args='shiped' search_type='type' onclick="tosearch(this)" <{if $type == 'shiped'}> class="current" <{/if}>>待确认</a>
+                       <a  href="javascript:void(0);" args='finish' search_type='type' onclick="tosearch(this)" <{if $type == 'finish'}> class="current" <{/if}>>已完成</a>
+                       <a  href="javascript:void(0);"  args='dead' search_type='type' onclick="tosearch(this)" <{if $type == 'dead'}> class="current" <{/if}>>已关闭</a>
+                   </h4>
+        </div>  
+     <div class="lineh b4">
+     <span>
+      订&nbsp;单&nbsp;号：<{input type="text" name="" value=$order_id size="10" id="search_order_id"}>
+      商品名称:<{input type="text" name="" value=$goods_name size="10" id="search_goods_name"}>
+      商品编号:<{input type="text" name="" value=$goods_bn size="10" id="search_goods_bn"}>
+            <{input type=select id='ot' name="order_time" options=$select.time.options value=$time  required=true}>
+      <{button type="button" class="btn-secondary" label="搜索" id="btnsearch"}>
+      <form action="<{link app=b2c ctl='site_member' act='orders'}>" method="post" id="frm">
+        <{input type="hidden" name="type" value=$type|default:''}>
+        <{input type="hidden" name="order_id" value=$order_id|default:''}>
+        <{input type="hidden" name="goods_name" value=$goods_name|default:''}>
+        <{input type="hidden" name="goods_bn" value=$goods_bn|default:''}>
+        <{input type="hidden" name="time" value=$time|default:''}>
+      </form>
+            <form action="<{link app=b2c ctl='site_member' act='orderPayments'}>" method="post" id="frm_pay">
+
+      </form>
+      
+     </span>
+     </div>
+
+         <div class="lineh b4">
+     <span>
+      <span class="lineall" ><input class="all-selector" type="checkbox" style="margin-left:0"><label>全选</label></span>
+            <{button class="btn-secondary" onclick="all_pay();" type="button" label="合并付款"}>
+      
+     </span>
+     </div>
+    
+    
+        <table class="gridlist table-goods-list gridlist_member " style="border-bottom:none" width="100%" border="0" cellspacing="0"  cellpadding="0">
+     <{if !$msg}>
+            <tr>
+                <th class="first"><{t}>订单号<{/t}></th>
+                <th><{t}>订单商品<{/t}></th>
+        <th><{t}>订单金额<{/t}></th>
+                <th><{t}>下单日期<{/t}></th>
+        <th><{t}>卖家<{/t}></th>
+                <th><{t}>状态<{/t}></th>
+                <th><{t}>操作<{/t}></th>
+            </tr>
+            <tbody>
+                <{foreach from=$orders item="order" name=orders key="key"}>
+                <tr
+                    <{if ($key+1)%2 == 0}>class="order-list-tr"<{/if}>>
+                    <td class="vt" >
+                    <{if $order.status == 'active' && ($order.pay_status=='0' || $order.pay_status=='3') && $order.payinfo.pay_app_id != '-1'}>
+                    <input class="selector" type="checkbox" value="<{$order.order_id}>" name="order[]" >
+                    <{/if}>
+                    
+                    <a href="<{link app=b2c ctl="site_member" act="orderdetail" arg0=$order.order_id}>" class="operate-btn"><{t}><{$order.order_id}><{/t}></a>
+                    </td>
+                    <td class="horizontal-m">
+                        <{if $order.goods_items}>
+                        <{foreach from=$order.goods_items item=item_goods name=goods_item}>
+                        <div class="clearfix" <{if $item_goods.product}><{if count($order.goods_items)>1&&end($order.goods_items)!=$item_goods}>class="bottomboder clearfix"<{/if}>>
+                            <div class='product-list-img member-gift-pic goodpic' isrc="<{$item_goods.product.thumbnail_pic|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" 
+                            <{if $order.order_type == 'group'}>
+                            ghref='<{link app=groupbuy ctl=site_product act=index args=$item_goods.product.args}>'
+                            <{elseif $order.order_type == 'spike'}>
+                            ghref='<{link app=spike ctl=site_product act=index args=$item_goods.product.args }>'
+                            <{elseif $order.order_type == 'score'}>
+                            ghref='<{link app=scorebuy ctl=site_product act=index args=$item_goods.product.args }>'
+                            <{else}>
+                            ghref='<{link app=b2c ctl=site_product act=index arg0=$item_goods.product.goods_id}>' 
+                            <{/if}>
+                            > <img src='<{$res_url}>/images/loading.gif'/> </div>
+                            <div class="goods-main clearfix">
+                                <div class="goodinfo" >
+                                    <h3><{if $item_goods.product.goods_id==0}>
+                                          <{$item_goods.product.name}>
+                                        <{else}>
+                                          <a target="_blank" class="font-blue" 
+                                          <{if $order.order_type == 'group'}>
+                                            href='<{link app=groupbuy ctl=site_product act=index args=$item_goods.product.args}>'
+                                            <{elseif $order.order_type == 'spike'}>
+                                            href='<{link app=spike ctl=site_product act=index args=$item_goods.product.args}>'
+                                            <{elseif $order.order_type == 'score'}>
+                                            href='<{link app=scorebuy ctl=site_product act=index args=$item_goods.product.args}>'
+                                            <{else}>
+                                            href='<{link app=b2c ctl=site_product act=index arg0=$item_goods.product.goods_id}>' 
+                                            <{/if}>>
+                                            <{$item_goods.product.name}> </a>
+                                     <{/if}>
+                                     </h3>
+                                     <{if $item_goods.product.attr}><span><{$item_goods.product.attr}></span><{/if}>
+                                </div>
+                                <div class="member-gift-price price-wrap clearfix">
+                                    <ul>
+                                        <li><{$item_goods.product.price|cur_odr:$order.currency}></li>
+                                        <li>×<{$item_goods.product.quantity}></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <{/if}>
+
+                        <!-- adjunct -->
+                        <{if $item_goods.adjunct_items}>
+                        <{foreach from=$item_goods.adjunct_items item=item_adjunct name=adjunct_item}>
+                        <div class="<{if $item_goods.product}>topborder <{/if}>clearfix ml20 pr">
+                            <span class="gift-f">赠</span>
+                            <div class='product-list-img member-gift-pic goodpic' isrc="<{$item_adjunct.thumbnail_pic|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" ghref='<{$item_adjunct.link_url}>' > <img src='<{$res_url}>/images/loading.gif'/> </div>
+                            <div class="goods-main clearfix">
+                                <div class="goodinfo" >
+                                    <h3><a target="_blank" href="<{$item_adjunct.link_url}>"> <{$item_adjunct.name}> </a></h3>
+                                    <{if $item_adjunct.attr}><br/>
+                                    <span><{$item_adjunct.attr}></span> <{/if}> </div>
+                                <div class="member-gift-price price-wrap clearfix">
+                                    <ul>
+                                        <li class="point"><{$item_adjunct.price|cur_odr:$order.currency}></li>
+                                        <li>×<{$item_adjunct.quantity}></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <{/foreach}>
+                        <{/if}>
+                        <{if $item_goods.gift_items}>
+                        <{foreach from=$item_goods.gift_items item=item_gift name=gift_item}>
+                        <div class="<{if $item_goods.product}>topborder <{/if}>clearfix">
+
+                            <div class='product-list-img member-gift-pic goodpic' isrc="<{$item_gift.thumbnail_pic|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" ghref='<{$item_gift.link_url}>' > <img src='<{$res_url}>/images/loading.gif'/> </div>
+                            <div class="goods-main clearfix">
+                                <div class="goodinfo">
+                                    <h3><a target="_blank" href="<{$item_gift.link_url}>"> <{$item_gift.name}> </a>
+                                        <input type="button" name="button" id="button" value="<{t}>赠<{/t}>" class="present-btn" />
+                                    </h3>
+                                    <{if $item_gift.attr}><br/>
+                                    <span class="font-gray"><{$item_gift.attr}></span> <{/if}> </div>
+                                <div class="member-gift-price pirce-wrap clearfix">
+                                    <ul>
+                                        <li class="point"><{$item_gift.price|cur_odr:$order.currency}></li>
+                                        <li>×<{$item_gift.quantity}></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <{/foreach}>
+                        <{/if}>
+                        <{/foreach}>
+                        <{/if}>
+                        <!-- gift -->
+                        <{if $order.gift_items}>
+                        <{foreach from=$order.gift_items item=item_gift name=gift_item}> <div <{if count($order.gift_items)>1&&end($order.gift_items)!=$item_gift}>class="bottomboder clearfix"<{/if}>>
+                            <div class="topborder clearfix">
+                                <div class='product-list-img member-gift-pic goodpic' isrc="<{$item_gift.thumbnail_pic|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" ghref='<{$item_gift.link_url}>' > <img src='<{$res_url}>/images/loading.gif'/> </div>
+                                <div class="goods-main clearfix">
+                                    <div style=" width:55%" class="goodinfo">
+                                        <h3><a target="_blank" href="<{$item_gift.link_url}>"> <{$item_gift.name}> </a>
+                                            <input type="button" name="button" id="button" value="<{t}>赠<{/t}>" class="present-btn" /></h3>
+                                        <{if $item_gift.attr}>
+                                        <span><{$item_gift.attr}></span> <{/if}> </div>
+                                    <div class="member-gift-price pirce-wrap clearfix">
+                                        <ul>
+                                            <li class="point"><{$item_gift.price|cur_odr:$order.currency}></li>
+                                            <li>×<{$item_gift.quantity}></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <{/foreach}>
+                            <{/if}>
+
+                            <!-- extends -->
+                            <{if $order.extends_items}>
+                            <{foreach from=$order.extends_items item=item_extends name=item_extends}>
+                            <{$item_extends}>
+                            <{/foreach}>
+                            <{/if}> </td>
+                        <!--<td  class="textwrap"><{$order.tostr}></td> -->
+                    <td  class="point textcenter"><{$order.cur_amount|cur_odr:$order.currency:false:true}></td>
+                    <td ><{$order.createtime|cdate:FDATE_STIME}></td>
+                    <td ><{$order.seller_name}></td>
+                    <td class="textcenter">
+                    <div style="width:100px;display:block;margin:0 auto;">
+                        <{$order.status_html}>
+                    </div></td>
+                    <td><{if $order.status == 'active' && ($order.pay_status=='0' || $order.pay_status=='3')}><{if $order.payinfo.pay_app_id != '-1'}><a href="<{link app=b2c ctl="site_member" act="orderPayments" arg0=$order.order_id}>" class="paymoney_btn operate-btn" ><{t}>立即支付<{/t}></a><{/if}><{/if}>
+                    <a href="<{link app=b2c ctl="site_member" act="orderdetail" arg0=$order.order_id}>" class="font-blue operate-btn"><{t}>查看订单<{/t}></a>
+					<!--订单的取消-->
+					<{$order.html}></td>
+                </tr>
+                <{/foreach}>
+
+            </tbody>
+<{else}><tr><td><{$msg}></td></tr><{/if}>
+        </table>
+        <{pagers data=$pager}>
+</div>
+<!-- right-->
+
+<script>
+    /*小图mouseenter效果*/
+    window.addEvent('domready',function(){
+
+        var cart_product_img_viewer=new Element('div',{styles:{'position':'absolute','zIndex':500,'opacity':0,'border':'1px #666 solid'}}).inject(document.body);
+
+        var cpiv_show=function(img,event){
+
+            if(!img)return;
+            cart_product_img_viewer.empty().adopt($(img).clone().removeProperties('width','height').setStyle('border','1px #fff solid')).fade(1);
+
+            var size = window.getSize(), scroll = window.getScroll();
+            var tip = {x: cart_product_img_viewer.offsetWidth, y: cart_product_img_viewer.offsetHeight};
+            var props = {x: 'left', y: 'top'};
+            for (var z in props){
+                var pos = event.page[z] + 10;
+                if ((pos + tip[z] - scroll[z]) > size[z]) pos = event.page[z] - 10 - tip[z];
+                cart_product_img_viewer.setStyle(props[z], pos);
+            }
+
+        };
+
+        $$('.gridlist .product-list-img').each(function(i){
+
+            new Asset.image(i.get('isrc'),{onload:function(img){
+                    if(!img)return;
+                    var _img=img.zoomImg(70,70);
+                    if(!_img)return;
+                    _img.setStyle('cursor','pointer').addEvents({
+                        'mouseenter':function(e){
+                            cpiv_show(_img,e);
+                        },
+                        'mouseleave':function(e){
+                            cart_product_img_viewer.fade(0);
+                        }
+                    });
+                    i.empty().adopt(new Element('a',{href:i.get('ghref'),target:'_blank',styles:{border:0}}).adopt(_img));
+                    },onerror:function(){
+                    i.empty();
+
+            }});
+
+        });
+
+    });
+
+
+
+$('btnsearch').addEvent('click',function(){
+               go_url();
+});
+
+function go_url(){
+	
+        $('btnsearch').disabled = true;
+		set_value();
+
+}
+
+ $('ot').addEvent('change',function(){
+	set_value();
+ });
+
+function tosearch(a){
+	var form=$('frm');
+	var args=a.getAttribute('args');
+	var search_type=a.getAttribute('search_type');
+	
+	var search_order_id = $('search_order_id').value.trim();
+	var search_goods_name = $('search_goods_name').value.trim();
+	var search_goods_bn = $('search_goods_bn').value.trim();
+	if(!search_order_id){
+		search_order_id = '';
+	}
+
+	if(!search_goods_name){
+		search_goods_name = '';
+	}
+
+	if(!search_goods_bn){
+		search_goods_bn = '';
+	}
+
+	var p1 =  $('ot').value;
+	var url="<{link app=b2c ctl=site_member act=orders arg0='"+args+"' arg1='"+search_order_id+"' arg2='"+search_goods_name+"' arg3='"+search_goods_bn+"' arg4='"+p1+"'}>";
+	form.action=url;
+	form.submit();
+
+}
+
+function set_value(){
+			var form=$('frm');
+			var type=form.getElement('input[name=type]').value;
+			var search_order_id = $('search_order_id').value.trim();
+			var search_goods_name = $('search_goods_name').value.trim();
+			var search_goods_bn = $('search_goods_bn').value.trim();
+			if(!search_order_id){
+				search_order_id = '';
+			}
+
+			if(!search_goods_name){
+				search_goods_name = '';
+			}
+
+			if(!search_goods_bn){
+				search_goods_bn = '';
+			}
+			var p1 =  $('ot').value;
+			var url="<{link app=b2c ctl=site_member act=orders arg0='"+type+"' arg1='"+search_order_id+"' arg2='"+search_goods_name+"' arg3='"+search_goods_bn+"' arg4='"+p1+"'}>";
+			form.action=url;
+			form.submit();
+	
+}
+function cancel(order_id){
+     Ex_Dialog.confirm('<{t}>确定要取消该订单吗？<{/t}>', function(e){
+		if(!e) return;
+		new Request.JSON({
+			url:"<{link app=b2c ctl='site_member' act='docancel'}>",
+			data:'order_id='+order_id,
+			method:'POST',
+			onSuccess:function(rs){
+			
+			  Ex_Dialog.alert(rs);
+			
+			  window.location.reload();
+			}
+		  }).send();
+	});
+
+}
+
+function remind(order_id){
+     Ex_Dialog.confirm('<{t}>卖家将会收到发货提醒，确定发送提醒吗？<{/t}>', function(e){
+		if(!e) return;
+		new Request.JSON({
+			url:"<{link app=b2c ctl='site_member' act='remind'}>",
+			data:'order_id='+order_id,
+			method:'POST',
+			onSuccess:function(rs){
+			
+			  Ex_Dialog.alert(rs);
+			
+			  window.location.reload();
+			}
+		  }).send();
+	});
+
+}
+</script>
+
+
+<script>
+  var item = $$('#J_DataTable input[name^=order[]')||[];
+  var all = $$('#J_DataTable .all-selector')||[];
+  window.addEvent('domready', function(){
+    if(item){
+      item.set('checked', !!$ES('#J_DataTable .all-selector').checked);
+      item.removeEvents('click').addEvent('click',function(e){
+        var target=$(e.target);
+        if(!target.checked && all)
+        all.set('checked', false);
+        $ES('#switchable input[name^=operate]').set('value', false);
+      });
+    }
+    if(all)
+      all.removeEvents('click').addEvent('click',function(e){
+        var target=$(e.target);
+        all.set('checked', !!target.checked);
+        if(item) item.set('checked', !!target.checked);
+        $ES('#switchable input[name^=operate]').set('value', !!target.checked);
+      });
+  });
+  function isSelected(){
+    if(!item) return false;
+    for(i=0;i<item.length;i++){
+      if(item[i].checked){
+        return true;
+      }
+    }
+    if(!all) return false;
+    for(i=0;i<all.length;i++){
+      if(all[i].checked){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function isPayment(){
+    var order_ids = '';
+    $$('#J_DataTable input[name^="order[]"]:checked').each(function(item,index){
+        if(index == 0){
+            order_ids = order_ids+item.value;
+        }else{
+            order_ids = order_ids+','+item.value;
+        }
+    })
+    var tag;
+    new Request.JSON({
+      url:'<{link app=b2c ctl=site_member act=check_payments}>',
+      method:'post',
+      secure:false,
+      async:false,
+      data:'order_id='+order_ids,
+      onComplete:function(res,text){
+        if(res == '1'){
+            tag = '1';
+        }else{
+            tag = '0';
+        }
+      }
+    }).send();
+    if(tag == '1'){
+        return true;
+    }else{
+        return false;
+    }
+  }
+  
+  function all_pay(){
+    if(!isSelected()){
+      Ex_Dialog.alert('请选中需要合并付款的订单！');
+      return false;
+    }
+    if(!isPayment()){
+      Ex_Dialog.alert('合并支付订单中包含不一样的支付方式，或者包含已支付订单，无法合并支付！');
+      return false;
+    }
+    Ex_Dialog.confirm('确认合并付款？',function(e){
+      if(!e) return false;
+      new Request.JSON({
+        url:'<{link app=b2c ctl=site_member act=all_orderPayments}>',
+          method:'post',
+          secure:false,
+          data:$('J_DataTable'),
+          onComplete:function(res,text){
+            if (res.error){
+              Message.error(res.error);
+            }else{
+              if (!res.data&&res.reload != null){
+                location.href=res.reload;
+              }else{
+                var js='';
+                var html = res.data.stripScripts(function(script){
+                    js = script;
+                });
+
+                $E('.memberwrap .clearfix').innerHTML = html;
+                Browser.exec(js);
+                return;
+              }
+            }
+          }
+        }).send();
+    });
+  }
+</script>

@@ -1,0 +1,94 @@
+<!-- right-->
+<{css src="member.css" app='b2c'}>
+<{include file="site/common/header.html" app="b2c"}>
+ <!-- right-->
+<div class="member-main">
+<div class="title title2"><{t}>我的浏览历史<{/t}></div>
+<div id="tab-favorite" class="section switch">
+    <ul class="switchable-triggerBox tab_member clearfix">
+      <li class="active"><a href="#"><{t}>宝贝历史<{/t}></a></li>
+      <li><a href="<{link app=b2c ctl='site_member' act='store_view_history'}>"><{t}>店铺历史<{/t}></a></li>
+    </ul>
+<{if !$view_history}>
+<div class="noinfo"><{t}>您还没有浏览过任何商品，赶快去逛逛吧。<{/t}></div>
+<{else}>
+<form action="<{link app=b2c ctl=site_member act=del_view_history}>"  method="post" id='return-form'>
+<div class="GoodsSearchWrap" id="mbc-my-fav">
+<div class="ItemsWarp clearfix">
+      <div id="b2c-member-fav-list">
+        <{include file="site/member/view_history_items.html" app="business"}>
+  </div>
+  </div>
+    <input type="hidden" id="b2c-fav-current-page" value="<{$current_page}>" />
+  </div>
+ </form>
+<{pagers data=$pager}>
+<{/if}>
+<!--<{script src='goodscupcake.js' app='b2c'}>-->
+<script>
+function removeSel(){
+    var reqs = $$('input[name^=gid]:checked').length;
+        if(reqs == 0){
+        Ex_Dialog.alert('<{t}>请选择要删除的选项！<{/t}>');
+    }else{
+        Ex_Dialog.confirm('<{t}>确定要删除所选项吗？<{/t}>', function(e){
+            if(!e) return;
+            new Request({
+            url:'<{$fav_ajax_del_goods_url}>',
+            method:'post',
+            data:$('return-form'),
+            onComplete:function(res){
+                res = JSON.decode(res);
+                if (res.error){
+                    MessageBox.error(res.error);
+                    return;
+                }
+                location.reload();
+            }
+        }).send();
+        });
+    }
+}
+var ajax_del_fav = function(el,e){
+    var gid = el.get('gid');
+    Ex_Dialog.confirm('<{t}>确定删除?<{/t}>',function(e){
+        if(!e) return false;
+        new Request({
+            url:'<{$fav_ajax_del_goods_url}>',
+            method:'post',
+            data:'t='+(+new Date())+'&gid='+gid+'&current='+$('b2c-fav-current-page').value,
+            onComplete:function(res){
+                res = JSON.decode(res);
+                if (res.error){
+                    MessageBox.error(res.error);
+                    return;
+                }
+                location.reload();
+            }
+        }).send();
+        $('goods_'+gid).setOpacity(.5);
+        return false;
+    });
+};
+
+window.addEvent('domready',function() { 
+ $('all').addEvent('click',function(){
+     
+	     $$('input[name^=gid]').each(function(item){
+		 if($('all').checked == true){
+            item.checked = true;
+		 }else{
+		    item.checked = false;
+		 }
+		});
+
+ 
+ })
+
+});
+
+</script>
+
+</div>
+</div>
+<!-- right-->

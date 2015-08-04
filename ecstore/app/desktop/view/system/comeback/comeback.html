@@ -1,0 +1,53 @@
+<div class="notice"><{t}>数据将恢复至：<{/t}><{$env.get.mtime|cdate:'FDATE_FTIME'}></div>
+<div class="division" id="data_comeback_message">
+<{t}>准备就绪...<{/t}>
+</div>
+
+
+<{area inject=".mainFoot"}>
+<div class="table-action">
+   <{button type="button" label=$___desktop="开始恢复"|t:'desktop'  class="btn btn-primary" id="data_comeback_confirm_btn"}>
+</div>
+<{/area}>
+
+<script>
+
+$('data_comeback_confirm_btn').addEvent('click',function(){
+   if(!confirm('<{t}>注意：执行本恢复数据操作将导致<{/t}><{$env.get.mtime|cdate:'FDATE_FTIME'}><{t}>后录入或修改的数据丢失，确认吗？<{/t}>')){
+	  return;
+   }
+
+   var closeBtn=this.getParent('.dialog').getElement('.btn-close');
+
+    //EventsRemote.stop();  
+	var _this = this;
+	var _req =new Request({
+		 url:'index.php?app=desktop&ctl=comeback&act=recover&file=<{$env.get.filename}>',
+		 method:'get',
+		 onRequest:function(){
+			_this.setStyle('display','none');
+			closeBtn.setStyle('display','none');
+		 },
+		 onFailure:function(){
+			closeBtn.setStyle('display','');
+		 },
+		 onSuccess:function(re){
+			closeBtn.setStyle('display','');
+			try{re = JSON.decode(re);}catch(e){return MessageBox.error('ERROR'+re);}
+			if(re.success){
+				$('data_comeback_message').set('html',"<div class='success'>"+re.success+"</div>");
+			}else if(!!re.nexturl){
+				$('data_comeback_message').set('text',re.message);
+				_req.initialize();
+				_req.send({url:re.nexturl});
+			}
+		
+		}
+	}).send();
+	
+
+	
+	
+	
+});
+</script>

@@ -1,0 +1,41 @@
+<{if $shippings}>
+<div id="purchase_info_shown" style="display:none;"></div>
+<div  id="purchase_info_shippping">
+<table width="100%" cellpadding="0" cellspacing="0" >
+            <col class="span-5"></col>
+            <col class="span-auto textleft"></col>
+  <tbody>
+  <{foreach from=$shippings item="shipping" key="key" name="shippings"}>
+  <tr <{if $smarty.foreach.shippings.last}>class="last"<{/if}>>
+  <td colspan="2">
+   <label style="width:auto; margin-right:10px">
+    <input type="radio" name="delivery[shipping_id]" id='shipping_<{$shipping.dt_id}>' vtype="shppingradiorequired" value="<{$shipping.dt_id}>" class="toCheck shipping_radio_shipping_id"  has_cod="<{$shipping.has_cod}>"<{if $shipping_method.shipping_id == $shipping.dt_id}> checked="checked"<{/if}><{if $is_shipping_match == 0 && $smarty.foreach.shippings.first}> checked="checked"<{/if}> />
+	<input type="hidden" id="hid_shipping_<{$shipping.dt_id}>" vtype="shppingradiorequired" />
+      <{$shipping.dt_name}>
+    </label>
+      <span style="font-size:14px;" class="font-red">+<{$shipping.money|cur_odr}></span>
+      <{if $shipping.protect=='true'}>
+      <div style="padding: 0 0 0 10px;">
+      <input id="use_protect_<{$key}>"  type="checkbox" name="delivery[is_protect][<{$shipping.dt_id}>]" value="1" />
+      <label for="use_protect_<{$key}>"><{t}>保价费率<{/t}></label>
+      <{t}>(商品价格的<{/t}><{$shipping.protect_rate*100}>% ，<{t}>不足<{/t}><{$shipping.minprice|cur_odr}><{t}>按<{/t}><{$shipping.minprice|cur_odr}><{t}>计算<{/t}>)。</div>
+     <{/if}>
+            <{$shipping.detail}>	
+  </td>
+  </tr>
+  <{/foreach}>
+  </tbody>
+</table>
+<script>
+	validatorMap.set('shppingradiorequired', ['<{t}>配送方式不能为空！<{/t}>', function(element, v) {
+		var radio = element.getParent('table').getElements('input[type=radio]');
+		
+		return radio.some(function(ck) {
+			return ck.checked;
+	});
+}]);
+</script>
+</div>
+<{else}>
+<div class='notice'><{t}>不支持您当前所在地区的物流配送，请直接与我们联系<{/t}></div>
+<{/if}>

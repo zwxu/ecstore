@@ -1,0 +1,33 @@
+<div container='true'>
+<div class="tableform">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="gridlist">
+<col class="Coldate"></col>
+<col class="Coldetails"></col>
+<col class="Colamount"></col>
+<thead>
+<tr>
+  <th><{t}>日期<{/t}></th>
+  <th><{t}>摘要<{/t}></th>
+  <th><{t}>备注<{/t}></th>
+  <th><{t}>保证金<{/t}></th>
+  <th><{t}>订单<{/t}></th>
+  <th><{t}>操作员<{/t}></th>
+  <!--<th><{t}>过期<{/t}></th> -->
+</tr></thead><tbody>
+
+<{foreach from=$store.log item="event"}>
+<tr>
+   <td><{$event.last_modify|cdate:SDATE_STIME}></td>
+   <td class="Coldetails"><{$event.reason}></td>
+   <td class="Coldetails"><{$event.remark}></td>
+   <td class="Colamount"><{$event.earnest_value}>元</td>
+   <td class="Colamount"><{$event.orders}></td>
+   <td class="Colamount"><{$event.operator_name}></td>
+ <!-- <td class="Colamount"><{$event.expiretime|cdate:SDATE_STIME}></td> -->
+</tr>
+<{/foreach}>
+</tbody>
+</table>
+ <{$pager}>
+</div>
+</div>

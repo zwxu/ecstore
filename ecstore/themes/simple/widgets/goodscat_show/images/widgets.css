@@ -1,0 +1,9 @@
+/*normal*/
+
+
+/*Accordion*/
+.zd-cat1{text-align:left;padding:0 8px;width:192px;}
+.zd-cat1 .cat-h2{font-size:12px;color:#000;background:url("cate-arr.jpg") no-repeat left center;padding-left:10px;cursor:pointer;height:24px;line-height:24px;}
+.zd-cat1 .cat-ul li{height:20px;line-height:20px;border-bottom:1px solid #e5e5e5;padding-left:10px;}
+.zd-cat1 .cat-ul li a{color:#666666;}
+.zd-cat1 .cat-ul li a:hover{text-decoration:none;}

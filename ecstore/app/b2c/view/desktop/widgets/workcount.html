@@ -1,0 +1,55 @@
+
+	<div class="clearfix dashbd-row">
+
+		<h4><{t}>订单：<{/t}></h4>
+		<table cellpadding="0" cellspacing="0"><tr>
+			<td class="<{if $order_new==0}> figure-zero<{/if}>">
+				<a href="index.php?app=b2c&ctl=admin_order&act=index&view=1"><{t}>未处理<{/t}><span class="dashbd-figure">(<{$order_new}>)</span></a>
+			</td>
+			<td class="<{if $need_send==0}> figure-zero<{/if}>">
+				<a href="index.php?app=b2c&ctl=admin_order&act=index&view=2"><{t}>待发货<{/t}></a><span class="dashbd-figure">(<{$need_send}>)
+			</span></td>
+			<td class="<{if $new_order_msg==0}> figure-zero<{/if}>">
+				<a href="index.php?app=b2c&ctl=admin_order&act=index&view=8&view_from=dashboard"><{t}>新留言<{/t}><span class="dashbd-figure">(<{$new_order_msg}>)</span></a>
+			</td>
+		</tr></table>
+
+	</div>
+	<div class="clearfix dashbd-row">
+
+        <h4><{t}>会员：<{/t}></h4>
+		<table cellpadding="0" cellspacing="0"><tr>
+			<td class="<{if $new_gask==0}> figure-zero<{/if}>">
+				<a href="index.php?app=b2c&ctl=admin_member_gask&act=index&filter[adm_read_status]=false"><{t}>新咨询<{/t}><span class="dashbd-figure">(<{$new_gask}>)</span></a>
+			</td>
+			<td class="<{if $new_leave_message==0}> figure-zero<{/if}>">
+				<a href="index.php?app=b2c&ctl=admin_member_shopbbs&act=index&filter[adm_read_status]=false"><{t}>新留言<{/t}><span class="dashbd-figure">(<{$new_leave_message}>)</span></a>
+			</td>
+			<td class="<{if $new_discuss==0}> figure-zero<{/if}>">
+				<a href="index.php?app=b2c&ctl=admin_member_discuss&act=index&filter[adm_read_status]=false"><{t}>新评论<{/t}><span class="dashbd-figure">(<{$new_discuss}>)</span></a>
+			</td>
+			<td class="<{if $new_message==0}> figure-zero<{/if}>">
+				<a href="index.php?app=b2c&ctl=admin_member_msgbox&act=index&filter[adm_read_status]=false"><{t}>新消息<{/t}><span class="dashbd-figure">(<{$new_message}>)</span></a>
+			</td>
+		</tr></table>
+
+	</div>
+	<div class="clearfix dashbd-row last">
+
+        <h4><{t}>商品：<{/t}></h4>
+		<table cellpadding="0" cellspacing="0"><tr>
+			<td class="<{if $alert_num_count==0}> figure-zero<{/if}>">
+				<a href="index.php?app=b2c&ctl=admin_goods&act=index?app=b2c&ctl=admin_goods&act=index&view=3&view_from=dashboard"><{t}>库存报警<{/t}><span class="dashbd-figure">(<{$alert_num_count}>)</span></a>
+			</td>
+			<td class="<{if $goods_notice==0}> figure-zero<{/if}>">
+				<a href="index.php?app=b2c&ctl=admin_goods_sto&act=index&filter[status]=ready"><{t}>到货通知<{/t}><span class="dashbd-figure">(<{$goods_notice}>)</span></a>
+			</td>
+		</tr></table>
+
+	</div>
+
+<script>
+$$('div.figure-zero a').each(function(el){
+	el.set('href','javascript:void(0)');
+});
+</script>

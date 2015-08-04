@@ -1,0 +1,124 @@
+<form class="tableform" method='post' action="<{link app=aftersales ctl='site_member' act='edit_rp'}>" id="order-delivery-form">
+<div class="member-main tk2">
+<div class="title title2">退货申请修改</div>
+    <div class="note clearfix">
+        <h3><{$return_item.title}></h3>
+        <div class="clearfix">
+            <div class="span-auto colborder pl10"><{t}>订单编号：<{/t}><span ><{$return_item.order_id}></span></div>
+            <div class="span-auto colborder"><{t}>订单状态：<{/t}>
+                <span >
+                    <{$return_item.status}>
+            </span></div>
+            <div class="span-auto last"><{t}>退货时间：<{/t}><span ><{$return_item.add_time|cdate:'FDATE_FTIME'}></span></div></div>
+        <!--<{if $return_item.comment }>
+        <{foreach from=$return_item.comment item="comment_item" name=comment}>
+        <div class="division mt5 clearfix">
+            <div class="border-bottom fontbold p2 clearfix textright">
+                <span class="flt"><{t}>店主反馈<{/t}></span><span class="font12px font-gray fontnormal "><{$comment_item.time|cdate:'FDATE_FTIME'}></span></div>
+            <p class="p2"><{$comment_item.content}></p>
+        </div>
+        <{/foreach}>
+        <{/if}>-->
+    </div>
+    <div class="division">
+        <h4 class="fontnormal"><{t}>拒绝原因：<{$return_item.seller_reason}><{/t}></h4>
+    </div>
+    <h4 class="lineheight-30"><{t}>退款金额：<{/t}><span class="color1 font14px"><{input type="text" id="amount" name="amount" style="width:20%"}>(最多<{$return_item.amount}>)
+    </span></h4>
+	<{if $return_item.product_data}>
+    <h4 class="lineheight-30"><{t}>需要退货的商品<{/t}></h4>
+    <table cellspacing="0" cellpadding="3" width="100%" class="gridlist border-all gridlist_member">
+        <col class="span-4"></col>
+        <col class="span-auto"></col>
+        <col class="span-4"></col>
+        <thead>
+            <tr>
+                <th class="first"><{t}>货号<{/t}></th>
+                <th><{t}>商品名称<{/t}></th>
+                <th><{t}>退货数量<{/t}></th>
+            </tr>
+        </thead>
+        <tbody>
+            <{if $return_item.product_data }>
+            <{foreach from=$return_item.product_data item="product_item" name=product_data}>
+            <tr>
+                <td class="textcenter"><{$product_item.bn}></td>
+                <td class="textcenter"><{$product_item.name}></td>
+                <td class="textcenter"><{$product_item.num}></td>
+            </tr>
+            <{/foreach}>
+            <{/if}>
+        </tbody>
+    </table>
+    <{/if}>
+    <{if $return_item.image_file || $return_item.image_file1 || $return_item.image_file2}>
+    <h4><{t}>关于退货附件<{/t}></h4>
+	<div class="thumbnailPic clearfix division">
+	<{if $return_item.image_file}>		
+			<a class="margin10" href="javascript:file_download()"><{t}>请点击下载该附件<{/t}></a>		
+	<{/if}>
+	<{if $return_item.image_file1}>
+			<a class="margin10" href="javascript:file_download1()"><{t}>请点击下载该附件<{/t}></a>
+	<{/if}>
+	<{if $return_item.image_file2}>
+			<a class="margin10" href="javascript:file_download2()"><{t}>请点击下载该附件<{/t}></a>
+	<{/if}>
+	</div>
+    <{/if}>
+
+    <{if $return_item.content}>
+    <h4><{t}>详细说明<{/t}></h4>
+    <div class="division">
+        <{$return_item.content}>
+    </div>
+    <{/if}>
+
+	<{if $return_item.refund_address}>
+    <h4 class="lineheight-30"><{t}>退货地址<{/t}></h4>
+    <div class="division">
+        <{$address.region}>,<{$address.address}>,<{$address.uname}>,<{$address.phone}>,<{$address.mobile}>
+    </div>
+    <{/if}>
+</div>
+        <{button class="" type="submit" label=$___b2c="修改"|t:'b2c'}>
+        <{if $return_item.is_intervene == '1'}>
+            <{button class="" type="button" onclick="s_mall_intervene();" label=$___b2c="要求平台介入"|t:'b2c'}>
+        <{/if}>
+        <{input type="hidden" name="return_id" value=$return_item.return_id}>
+</form>
+<form action="<{link app=aftersales ctl=site_member act=s_mall_intervene}>" enctype="multipart/form-data" encoding="multipart/form-data" method="post" name="return_save" id='x-s_mall_intervene'>
+    <input type="hidden" name="return_id" value="<{$return_item.return_id}>">
+</form>
+<script>
+    function s_mall_intervene(){
+        $('x-s_mall_intervene').submit();
+    }
+    function file_download(){
+        var ifm=new IFrame({src:'<{link app=aftersales ctl=site_member act=file_download arg0=$return_id arg1=image_file}>'});
+        ifm.inject(document.body);
+    }
+	function file_download1(){
+        var ifm=new IFrame({src:'<{link app=aftersales ctl=site_member act=file_download arg0=$return_id arg1=image_file1}>'});
+        ifm.inject(document.body);
+    }
+	function file_download2(){
+        var ifm=new IFrame({src:'<{link app=aftersales ctl=site_member act=file_download arg0=$return_id arg1=image_file2}>'});
+        ifm.inject(document.body);
+    }
+
+    $('order-delivery-form').getElement('button[type=submit]').addEvent('click',function(e){
+        var _from = $('order-delivery-form');
+        var gorefund_price = $('amount').value;
+        var gorefund_price_big = '<{$return_item.amount}>';
+        if(parseFloat(gorefund_price_big) < parseFloat(gorefund_price)){
+            Message.error('所填退款金额大于可退款金额，请修改！');
+            return false;
+        }
+        if(parseFloat(gorefund_price)<0 || parseFloat(gorefund_price) == 0 || gorefund_price == ''){
+            Message.error('所填退款金额必须大于0，请修改！');
+            return false;
+        }else{
+            _form.submit();
+        }
+    });
+</script>

@@ -1,0 +1,43 @@
+.btn-buy            {background:url(../images/btn-bj.gif) 0 -334px no-repeat;height:34px}			/* 购买按钮  */
+.btn-buy:hover{background:url(../images/btn-bj.gif) 0 -405px no-repeat}
+.btn-fastbuy        {background:url(../images/btn-bj.gif) 0 -344px no-repeat}		/* 立即购买按钮  */
+.btn-register       {background:url(../images/btn-register.gif)}  /* 注册按钮 */
+/*.btn-login          {background:url(../images/btn-login.gif)}*/   /* 登录按钮 */
+.btn-forgetpass     {background:url(../images/btn-forgetpass.gif)}  /* 忘记密码 */
+.btn-newregister	{background:url(../images/btn-newregister.gif)}  /* 注册一个新帐号 */
+.btn-buynow			{background:url(../images/btn-buynow.gif)}  /* 无需注册立即购买 */
+.btn-advancesearch  {background:url(../images/btn-advancesearch.gif)}  /* 高级搜索按钮按钮 */
+.btn-gift           {background:url(../images/btn-gift.gif)}  /* 赠品兑换 */
+
+.btn-return         {background:url(../images/btn-return.gif) no-repeat;}  /* 购物车继续购物按钮*/
+.btn-next           {background:url(../images/btn-next.gif) no-repeat}  /* 购物下一步*/
+.btn-return-checkout{background:url(../images/btn-return-small.gif) no-repeat}
+.btn-confirm		{background:url(../images/btn-confirm.gif)}
+.btn-order          {background:url(../images/btn-order.gif)}  /* 确认以后下订单*/
+.btn-clearcat       {background:url(../images/btn-clearcat.gif)}  /* 清空购物车*/
+.btn-nogift         {background:url(../images/btn-nogift.gif)}/* 暂无赠品*/
+.btn-notify { background:url(../images/btn-bj.gif) no-repeat 0 -983px; float:left; width:112px}   /* 到货通知*/
+.btn-notify:hover { background:url(../images/btn-bj.gif) no-repeat 0 -1044px}
+.btn-viewcart		{background:url(../images/btn-viewcart.gif)}  /* mini-cart*/
+.btn-continue		{background:url(../images/btn-continue.gif)}
+.btn-pay            {background:url(../images/btn-pay.gif)}
+.btn-ok				{background:url(../images/btn-ok.gif)}
+.btn-pay-ok         {background:url(../images/btn-ok.gif)}
+.btn-save	{background:url(../images/btn-save.gif) no-repeat}/*个人信息保存*/
+.btn-cancel	{background:url(../images/btn-cancel.gif) no-repeat}/*取消个人信息保存*/
+.CartWrap .present-btn{background:url(../images/present_btn.gif)}/*购物车*/
+.putorder-btn{ background:url(../images/put-order.gif)}/*提交订单*/
+.siteparttitle .title {background:url(../images/siteparttitle.gif)}
+#siderIMchat-main .top{ background:url(../images/im/siderim_title.gif)}/*IM*/
+#siderIMchat_hiddenbar{background:url(../images/im/siderim_hiddenbar.gif)}/*IM*/
+
+.pager .prev,
+.pager .onprev,  
+.pager .unprev {background:url(../images/pager_pre.gif) no-repeat 0 0}
+.pager .unprev{background-position: 0 -42px;}
+.pager .prev:hover{background-position: 0 -21px;}
+.pager .next,
+.pager .onnext,
+.pager .unnext {background:url(../images/pager_next.gif) no-repeat 0 0}
+.pager .unnext{background-position: 0 -42px;}
+.pager .next:hover{background-position: 0 -21px;}

@@ -1,0 +1,621 @@
+<div class="action-bar">
+<!--
+  Order action-bar update 2010-11-16
+-->
+<!--<{if $order.status == 'dead'}>
+<div class="order-ctls clearfix" order_id="<{$order.order_id}>">
+<b class="font-red flt"> <{t}>订单已作废<{/t}></b>
+ <{if $action_buttons && array_key_exists('delete',$action_buttons.re_sequence)}>
+	<!-- 订单作废 
+	<div class="flt order-action">
+		<{if $action_buttons.re_sequence.delete.flow}><input type="hidden" name="flow"><{/if}>
+		<{if $action_buttons.re_sequence.delete.disable}><input type="hidden" name="disabled"><{/if}>
+		<{button type="button"
+			label=$action_buttons.re_sequence.delete.label
+			app=$action_buttons.re_sequence.delete.app
+			confirm=$action_buttons.re_sequence.delete.confirm
+			act=$action_buttons.re_sequence.delete.act
+
+		}>
+	</div>
+	<!-- 结束 
+ <{/if}>
+</div>
+<{elseif $order.status == 'finish'}>
+<b class="font-green"> <{t}>已完成订单<{/t}> </b>
+<{else}>
+	  <div class="order-ctls clearfix" order_id="<{$order.order_id}>">
+			<!-- 标准按钮 
+			<{if $action_buttons}>
+				<{foreach from=$action_buttons key=key item=item}>
+					<{if $key=='sequence'}><div class="span-auto"><b><{t}>( 订 )单操作：<{/t}></b></div><{else}><div class="span-auto"><b><{t}>( 退 )单操作：<{/t}></b></div><{/if}>
+					<{foreach from=$item key=subkey item=subitem}>
+						<div class="<{if $smarty.foreach.payments.last}>span-auto<{else}>flt<{/if}> order-action">
+							<{if $subitem.flow}><input type="hidden" name="flow"><{/if}>
+							<{if $subitem.disable}><input type="hidden" name="disabled"><{/if}>
+							<{button type="button"
+							   label=$subitem.label
+							   app=$subitem.app
+							   confirm=$subitem.confirm
+							   act=$subitem.act
+
+							}>&nbsp;
+						</div>
+					<{/foreach}>
+				<{/foreach}>
+			<{/if}>
+			<!-- 结束 
+			<!-- 订单扩展动作 
+			<{if $ext_action_buttons}>
+			<div class="span-auto">&nbsp;</div>
+			<{foreach from=$ext_action_buttons key=key item=item}>
+			<div class="flt order-action">
+				<{if $item.disabled == 'true'}>
+				<input type="hidden" name="disabled">
+				<{/if}>
+				<{if $item.app}>
+					<{assign var="appli" value=$item.app}>
+				<{else}>
+					<{assign var="appli" value="b2c"}>
+				<{/if}>
+				<{button type="button"
+					label=$item.text
+					app=$appli
+                    confirm=$item.confirm
+				    act=$item.act
+
+				}>&nbsp;
+			</div>
+			<{/foreach}>
+			<{/if}>
+			<!-- 结束 
+		</div>
+<{/if}>-->
+<script>
+$$('.order-ctls button[act]').each(function(btn){
+
+	   var flow = btn.getPrevious('input[name="flow"]'),
+		disabled = btn.getPrevious('input[name="disabled"]'),
+		cfm_str = btn.get('confirm'),
+		_dialog = null,
+		_app	= btn.get('app'),
+		act_url = "index.php?app="+_app+"&ctl=admin_order&act={action}&p[0]=<{$order.order_id}>";
+
+	   if(disabled){
+		   return btn.set({'opacity':.5,styles:{'cursor':'not-allowed'}});
+	   }
+
+	   btn.addEvent('click',function(){
+
+		   if(cfm_str&&!confirm(cfm_str)){ return;  }
+		   if(flow){
+
+			 _dialog = new Dialog( act_url.substitute({'action':'go'+btn.get('act')}),
+			{title:btn.get('text')+":<{$order.order_id}>",width:.7,height:.8,onLoad:function(){
+
+					  var _dialog_form = this.dialog;
+					  this.dialog.getElement('form').store('target',{
+					  onRequest:function(){
+						_dialog_form.getElement('.table-action .order-action').set('disabled','disabled');
+					  },
+					  onComplete:function(){
+
+						 <{if !$env.get.singlepage}>
+								<{if $env.get.finder_id}>
+									finderGroup['<{$env.get.finder_id}>'].request({
+										method:'post',
+										onComplete:function(){
+										   _dialog.close();
+										   this.loadPacket();//refersh finder packet(tabs);
+										}});
+								<{/if}>
+						  <{else}>
+								_dialog.close();
+								if (opener.finderGroup&&opener.finderGroup['<{$env.get.finder_id}>'])
+									opener.finderGroup['<{$env.get.finder_id}>'].refresh();
+								 location.reload();
+						  <{/if}>
+					  }});
+
+
+			 }});
+
+		   }else{
+			  W.page( act_url.substitute({'action':'do'+btn.get('act')}),{onComplete:function(re){
+					try{re = JSON.decode(re)}catch(e){}
+					if(re&&re.error){return;}
+					<{if !$env.get.singlepage}>
+					   <{if $env.get.finder_id}>
+							finderGroup['<{$env.get.finder_id}>'].refresh();
+					   <{/if}>
+					<{else}>
+						if (opener.finderGroup&&opener.finderGroup['<{$env.get.finder_id}>'])
+							opener.finderGroup['<{$env.get.finder_id}>'].refresh();
+						location.reload();
+					<{/if}>
+
+				}});
+		   }
+
+	   });
+
+  });
+</script>
+</div>
+
+
+
+<{assign var="order_id" value=$order.order_id}>
+<{if $is_bklinks == 'true'}>
+<{input type='refer' id=$order.order_id ident='order' name='order' show='refer_id,refer_url'}>
+<{/if}>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td style="vertical-align:top">
+        <div>
+  <{if count($giftItems) > 0}>
+  <div class="tableform gridlist">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <thead>
+          <tr>
+            <th><{t}>赠品名称与购买量<{/t}></th>
+          </tr>
+        </thead>
+        <tbody>        <{foreach from=$giftItems item=aGift}>
+        <tr>
+          <td style="white-space:normal; text-align:left;"><{$aGift.name}><sup>x <{$aGift.nums}></sup></td>
+        </tr>
+        <{/foreach}>
+        </tbody>
+      </table>
+    </div>
+    <{/if}></div>
+
+        <div class="tableform">
+        <table border="0" cellpadding="0" style="margin-top:10px" cellspacing="0" class="orderdetails_basic">
+  <tr>
+    <td style=" padding:0;" >
+<h5 align="center" style=" margin-top:10px;"><{t}>商品价格<{/t}></h5>
+    <table class="multi-cols" border="0" cellpadding="0" cellspacing="0" >
+
+      <tr>
+        <th ><{t}>商品总额：<{/t}></th>
+        <td><{$order.cost_item|cur_odr:$order.currency}></td>
+      </tr>
+      <tr>
+        <th ><{t}>配送费用：<{/t}></th>
+        <td><{$order.shipping.cost_shipping|cur_odr:$order.currency}></td>
+      </tr>
+      <{if $order.shipping.is_protect == 'true'}>
+      <tr>
+        <th ><{t}>保价费用：<{/t}></th>
+        <td><{$order.shipping.cost_protect|cur_odr:$order.currency}></td>
+      </tr>
+      <{/if}>
+      <{if $order.payinfo.cost_payment > 0}>
+          <tr>
+            <th ><{t}>支付手续费：<{/t}></th>
+            <td><{$order.payinfo.cost_payment|cur_odr:$order.currency}></td>
+          </tr>
+      <{/if}>
+      <{if $order.is_tax == 'true'}>
+          <tr>
+            <th ><{t}>税金：<{/t}></th>
+            <td><{$order.cost_tax|cur_odr:$order.currency}></td>
+          </tr>
+      <{/if}>
+      <{if $order.pmt_order > 0}>
+          <tr>
+            <th ><{t}>使用优惠方案名称：<{/t}></th>
+            <td><{$order.use_pmt}></td>
+          </tr>
+          <tr>
+            <th ><{t}>优惠抵扣金额：<{/t}></th>
+            <td><{$order.pmt_order|cur_odr:$order.currency}></td>
+          </tr>
+      <{/if}>
+      <{if $order.discount != 0}>
+          <tr>
+            <th ><{t}>订单减免：<{/t}></th>
+            <td><{$order.discount|cur_odr:$order.currency}></td>
+          </tr>
+      <{/if}>
+      <{if $order.discount_value != 0}>
+          <tr>
+            <th ><{t}>积分减免：<{/t}></th>
+            <td><span style="color:#F90000">-<{$order.discount_value|cur_odr:$order.currency}></span></td>
+          </tr>
+      <{/if}>
+      <tr>
+        <th ><{t}>订单总额：<{/t}></th>
+        <td><span class="price0"><{$order.total_amount|cur_odr:$order.currency}></span></td>
+      </tr>
+      <tr>
+        <th ><{t}>已支付金额：<{/t}></th>
+        <td><{$order.payed|cur_odr:$order.currency:false:true}></td>
+      </tr>
+      <{if $order.cur_rate != 1}>
+      <tr>
+        <th ><{t}>货币：<{/t}></th>
+        <td><{$order.currency}></td>
+      </tr>
+      <tr>
+        <th ><{t}>汇率：<{/t}></th>
+        <td><{$order.cur_rate}></td>
+      </tr>
+      <tr>
+        <th ><{t}>结算货币金额：<{/t}></th>
+        <td><{$order.cur_amount|cur_odr:$order.currency:false:true}></td>
+      </tr>
+      <{/if}>
+    </table>
+    </td>
+    <td style=" padding:0" >
+<h5 align="center" style=" margin-top:10px"><{t}>订单其他信息<{/t}></h5>
+    <table class="multi-cols" border="0" cellpadding="0" cellspacing="0" >
+
+      <tr>
+        <th ><{t}>配送方式：<{/t}></th>
+        <td><{$order.shipping.shipping_name}></td>
+      </tr>
+      <tr>
+        <th ><{t}>配送保价：<{/t}></th>
+        <td><{if $order.shipping.is_protect == 'true'}><{t}>是<{/t}><{else}><{t}>否<{/t}><{/if}></td>
+      </tr>
+      <tr>
+        <th ><{t}>商品重量：<{/t}></th>
+        <td><{$order.weight+0}> g</td>
+      </tr>
+      <tr>
+        <th ><{t}>支付方式：<{/t}></th>
+        <td>
+			<{$order.payinfo.pay_app_id}>
+			&nbsp;
+			<{foreach from=$order.extendCon item=item key=key}>
+				<{$item}>&nbsp;&nbsp;
+			<{/foreach}>
+		</td>
+      </tr>
+      <tr>
+        <th ><{t}>是否开票：<{/t}></th>
+        <td><{if $order.is_tax == 'true'}><{t}>是<{/t}><{else}><{t}>否<{/t}><{/if}></td>
+      </tr>
+      <{if $order.is_tax == 'true' && !$invoice_detail}>
+      <tr>
+        <th ><{t}>发票抬头：<{/t}></th>
+        <td><{$order.tax_title}></td>
+      </tr>
+      <{/if}>
+      <{$invoice_data}>
+      <tr>
+        <th ><{t}>可得积分：<{/t}></th>
+        <td><{$order.score_g+0}></td>
+      </tr>
+      <!--判断是否按照了物流跟踪服务-->
+      <{if $services.logisticstrack}>
+      <tr>
+        <th><{t}>快递单跟踪：<{/t}></th>
+        <td><a href="<{$services.logisticstrack_url}>" style="color:red"><{t}>去查看<{/t}></a></td>
+      </tr>
+	  <{/if}>
+    </table>
+    </td>
+    <td style=" padding:0" >
+    <h5 align="center" style=" margin-top:10px"><{t}>购买人信息<{/t}></h5>
+    <table class="multi-cols" border="0" cellpadding="0" cellspacing="0" >
+
+      <{if $order.member_id > 0}>
+      <tr>
+        <th ><{t}>用户名：<{/t}></th>
+        <td>
+        <a href="index.php?app=b2c&ctl=admin_member&act=index&action=detail&id=<{$order.member_id}>&singlepage=true&target=_blank" target="_blank"><{$order.member.pam_account.login_name}></a></td>
+      </tr>
+      <tr>
+        <th ><{t}>姓名：<{/t}></th>
+        <td><{$order.member.contact.name|escape:'html'}></td>
+      </tr>
+      <tr>
+        <th ><{t}>电话：<{/t}></th>
+        <td><{$order.member.contact.phone.telephone}></td>
+      </tr>
+      <tr>
+        <th ><{t}>地区：<{/t}></th>
+        <td ><{$order.member.contact.area}></td>
+      </tr>
+      <!--            <tr>
+              <td>Email：</td><td><{$order.member.email}>
+            </td></tr>
+            <tr>
+              <td><{t}>省份：<{/t}></td><td><{$order.member.province}>
+            </td></tr>
+            <tr>
+              <td><{t}>邮编：<{/t}></td><td><{$order.member.zip}>
+            </td></tr> -->
+      <!--<tr>
+        <th ><{t}>地址：<{/t}></th>
+        <td><{$order.member.addr|escape:'html'}></td>
+      </tr>-->
+      <tr>
+        <th >Email：</th>
+        <td><a  target="_self" href="mailto:<{$order.member.contact.email}>"><{$order.member.contact.email}></a></td>
+      </tr>
+	  <{if $tree}>
+      <{foreach from=$tree item=contact name=contact}>
+
+        <tr>
+        <th ><{$contact.attr_name}>:</th>
+      <td><{if $contact.attr_tyname eq 'QQ' && $contact.value !=''}>
+     <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=<{$contact.value}>&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:<{$contact.value}>:51" alt="点击这里给我发消息" title="点击这里给我发消息"/></a>
+
+
+      <{/if}><{if $contact.attr_tyname eq 'MSN' && $contact.value !=''}>
+      <a  target="_self" href="msnim:chat?contact=<{$contact.value}>"><img width="16" height="16" border="0" src="http://www.wlmessenger.net/static/img/presence/Online.gif" title='<{$contact.value}>'/></a>
+
+
+      <{/if}>
+      <{if $contact.attr_tyname eq $___b2c='旺旺'|t:'b2c' && $contact.value !=''}>
+     <a target="_blank" href="http://amos1.taobao.com/msg.ww?v=2&uid=<{$contact.value}>&s=1" ><img border="0" src="http://amos1.taobao.com/online.ww?v=2&uid=<{$contact.value}>&s=1"  title='<{$contact.value}>'/></a>
+
+      <{/if}>
+
+      <{if $contact.attr_tyname eq 'Skype' && $contact.value !=''}>
+  <a href="skype:<{$contact.value}>?call"  target="_self"onclick="return skypeCheck();"><img src="http://mystatus.skype.com/smallclassic/<{$contact.value}>" style="border: none;" alt="Call me!" title='<{$contact.value}>'/></a>
+
+      <{/if}>
+
+
+      </td>
+
+      </tr>
+
+        <{/foreach}>
+	<{/if}>
+
+
+      <{else}>
+      <tr>
+        <th ><{t}>非会员顾客<{/t}></th>
+        <td></td>
+      </tr>
+      <{/if}>
+    </table>
+    </td>
+    <td style=" padding:0;" >
+    <{if $order.is_delivery == 'Y'}>
+        <h5 align="center" style=" margin-top:9px;*margin-top:10px;_margin-top:9px;line-height:19px"><{t}>收货人信息<{/t}>
+        <button class="btn" style="margin-top:-8px" id="order_receiver_copy" receiver_copy_status="Y" info="<{$order.consignee.area}>,<{$order.consignee.addr|escape:'html'}>,<{$order.consignee.name|escape:'html'}><{if $order.consignee.telephone}>,<{$order.consignee.telephone}><{/if}><{if $order.consignee.mobile}>,<{$order.consignee.mobile}><{/if}>,<{$order.consignee.zip|escape:'html'}>"><span><span><{t}>复制收货人信息<{/t}></span></span></button>&nbsp; <{help}><{t}>此功能按照将收货人信息整合后复制到剪贴板，方便店主粘贴至目标位置，如：给顾客确认地址的邮件<{/t}><br /><br /><{t}>复制格式：<{/t}><br /><{t}>地区,地址,姓名,电话,手机,邮编<{/t}><{/help}></h5>
+        <table class="multi-cols" border="0" cellpadding="0" cellspacing="0" >
+
+          <{if $site_checkout_receivermore_open != 'true'}>
+          <tr>
+            <th ><{t}>发货日期：<{/t}></th>
+            <td><{$order.consignee.r_time}></td>
+          </tr>
+          <{/if}>
+
+          <tr>
+            <th ><{t}>姓名：<{/t}></th>
+            <td><{$order.consignee.name|escape:'html'}></td>
+          </tr>
+          <tr>
+            <th ><{t}>电话：<{/t}></th>
+            <td><{$order.consignee.telephone}></td>
+          </tr>
+          <tr>
+            <th ><{t}>手机：<{/t}></th>
+            <td><{$order.consignee.mobile}></td>
+          </tr>
+          <tr>
+            <th ><{t}>地区：<{/t}></th>
+            <td><{$order.consignee.area}></td>
+          </tr>
+          <tr>
+            <th ><{t}>地址：<{/t}></th>
+            <td style="white-space:normal; line-height:18px;"><{$order.consignee.addr|escape:'html'}></td>
+          </tr>
+          <tr>
+            <th ><{t}>邮编：<{/t}></th>
+            <td><{$order.consignee.zip|escape:'html'}></td>
+          </tr>
+          <{if !$order.member_id}>
+          <tr>
+            <th >Email：</th>
+            <td><{$order.consignee.email}></td>
+          </tr>
+          <{/if}>
+        </table>
+     <{/if}>
+     </td>
+  </tr>
+</table></div></td>
+      </tr>
+            <tr>
+      <td>
+
+
+      <div class="tableform">
+      <h3><{t}>商品信息<{/t}></h3>
+      <table cellpadding="0" class="gridlist" cellspacing="0" width="100%" border="0">
+	  <col style="width:19.5%"/>
+	<col style="width:45%"/>
+	<col style="width:10%"/>
+	<col style="width:10%"/>
+	<col style="width:10%"/>
+	<col style="width:10%"/>
+      <thead>
+
+      <tr><th><{t}>货品编号<{/t}></th><th><{t}>货品名称<{/t}></th><th><{t}>已发货量<{/t}></th><th><{t}>单价<{/t}></th><th><{t}>合计金额<{/t}></th><th><{t}>购买数量<{/t}></th></tr>
+
+      </thead>
+      <tbody>
+	<{if count($goodsItems) > 0}>
+	  <{foreach from=$goodsItems item=aGoods name="item"}>
+		<{if $aGoods.product}>
+		<tr>
+          <td width="19%"><{$aGoods.product.bn}></td>
+          <td class="textleft" width="30%"><{if $aGoods.product.link}><a href="<{$aGoods.product.link}>" target="_blank"><{/if}><{$aGoods.product.name}>
+            <{if $aGoods.product.minfo && is_array($aGoods.product.minfo)}>
+            <{foreach from=$aGoods.product.minfo item=minfo key=name}> <br>
+            <{$minfo.label}>：<{$minfo.value}>
+            <{/foreach}>
+            <{/if}><{if $aGoods.product.link}></a><{/if}><{if $aGoods.product.is_type == 'goods' && $aGoods.product.small_pic}> <a style='text-decoration:none;' class='x-view-img' href='javascript:void(0);' imgsrc='<{$aGoods.product.small_pic|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>'  title='<{$aGoods.product.name}>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> <{/if}> </td>
+          <td class="Colamount"><{$aGoods.product.sendnum}></td>
+          <td width="12%" ><{$aGoods.product.price|cur_odr}></td>
+          <td class="Colamount" width="15%"><{$aGoods.product.total_amount|cur_odr}></td>
+          <td class="Colamount" width="15%"><{$aGoods.product.quantity}></td>
+        </tr>
+		<{/if}>
+		<{if $aGoods.adjunct}>
+      <tr>
+        <td colspan="6" style="padding:0 0 0 20px;  background:#F7FAFB"><div style="padding-left:32px; border-bottom:1px solid #E8E8E8;  font-weight:bold; text-align:left"><{t}>商品配件<{/t}></div>
+          <table  border="0" align="center"cellpadding="0" cellspacing="0" style=" background:#F7FAFB" >
+		  <colgroup><col style="width:17%">
+	<col style="width:43%">
+	<col style="width:10%">
+	<col style="width:10%">
+	<col style="width:10%">
+	<col style="width:10%">
+      </colgroup>
+            <{foreach from=$aGoods.adjunct item=ajuncts name="ajunctsItem"}>
+            <tr>
+              <td  style="border:none;"><{$ajuncts.bn}></td>
+              <td class="textleft" width="30%" style="border:none;"><{if $ajuncts.link}><a href="<{$ajuncts.link}>" target="_blank"><{/if}><{$ajuncts.name}>
+                <{if $ajuncts.minfo && is_array($ajuncts.minfo)}>
+                <{foreach from=$ajuncts.minfo item=minfo key=name}> <br>
+                <{$minfo.label}>：<{$minfo.value}>
+                <{/foreach}>
+                <{/if}><{if $ajuncts.link}></a><{/if}><{if $ajuncts.is_type == 'goods' && $ajuncts.small_pic}> <a style='text-decoration:none;' class='x-view-img' href='javascript:void(0);' imgsrc='<{$ajuncts.small_pic|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>'  title='<{$ajuncts.name}>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> <{/if}> </td>
+              <td class="Colamount" style="border:none;"><{$ajuncts.sendnum}></td>
+              <td width="12%" style="border:none;" ><{$ajuncts.price|cur_odr}></td>
+              <td class="Colamount" width="13%" style="border:none;"><{$ajuncts.total_amount|cur_odr}></td>
+              <td class="Colamount" width="10%" style="border:none;"><{$ajuncts.quantity}></td>
+            </tr>
+            <{/foreach}>
+          </table></td>
+      </tr>
+      <{/if}>
+	  <{if $aGoods.gifts}>
+      <tr>
+        <td colspan="6" style="border:none;padding:0" ><div style=" border-bottom:1px solid #ddd;font-weight:bold; background:#F4F4F4; padding-left:50px;text-align:left"><{t}>商品赠品<{/t}></div></td>
+      </tr>
+      <{foreach from=$aGoods.gifts item=gifts name="giftsItem"}>
+      <tr>
+        <td width="19%" ><{$gifts.bn}></td>
+        <td class="textleft" width="30%"><{if $gifts.link}><a href="<{$gifts.link}>" target="_blank"><{/if}><{$gifts.name}>
+          <{if $gifts.minfo && is_array($gifts.minfo)}>
+          <{foreach from=$gifts.minfo item=minfo key=name}> <br>
+          <{$minfo.label}>：<{$minfo.value}>
+          <{/foreach}>
+          <{/if}><{if $gifts.link}></a><{/if}><{if $gifts.small_pic}> <a style='text-decoration:none;' class='x-view-img' href='javascript:void(0);' imgsrc='<{$gifts.small_pic|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>'  title='<{$gifts.name}>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> <{/if}> </td>
+        <td class="Colamount" ><{$gifts.sendnum}></td>
+        <td width="12%" ><{$gifts.price|cur_odr}></td>
+        <td class="Colamount" width="15%" ><{$gifts.total_amount|cur_odr}></td>
+        <td class="Colamount" width="15%" ><{$gifts.quantity}></td>
+      </tr>
+      <{/foreach}>
+
+      <{/if}>
+	 <{/foreach}>
+	 <{/if}>
+
+	 <{if $giftItems}>
+      <tr>
+        <td colspan="6" style="border:none;padding:0" ><div style=" border-bottom:1px solid #ddd;font-weight:bold;background:#F4F4F4;  padding-left:50px; text-align:left"><{t}>优惠赠品<{/t}></div></td>
+      </tr>
+      <{foreach from=$giftItems item=aGoods name="item"}>
+      <tr>
+        <td width="19%"><{$aGoods.bn}></td>
+        <td class="textleft"><{if $aGoods.link}><a href="<{$aGoods.link}>" target="_blank"><{/if}><{$aGoods.name}><{if $aGoods.link}></a><{/if}> <{if $aGoods.small_pic}> <a style='text-decoration:none;' class='x-view-img' href='javascript:void(0);' imgsrc='<{$aGoods.small_pic|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>'  title='<{$aGoods.name}>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> <{/if}> </td>
+        <td class="Colamount"><{$aGoods.sendnum}></td>
+        <td width="12%"><{$aGoods.price|cur_odr}></td>
+        <td class="Colamount"><{$aGoods.total_amount|cur_odr}></td>
+        <td class="Colamount"><{$aGoods.quantity}></td>
+      </tr>
+      <{/foreach}>
+	  <{/if}>
+
+	  <!-- 扩展的显示信息 -->
+	  <{if $arr_extends_items}>
+	  <{foreach from=$arr_extends_items item=aExtends name="extend_item"}>
+	    <{$aExtends}>
+      <{/foreach}>
+	  <{/if}>
+	  <!-- end -->
+		</td>
+      </tr>
+      </tbody>
+      </table>
+
+
+
+	  <{if $order.pmt_list}>
+       <h3><{t}>优惠方案<{/t}></h3>
+
+        <table cellpadding="0" class="gridlist" cellspacing="0" width="100%" border="0">
+        <col style="width:80%">
+        <col style="width:20%">
+      <thead>
+      <tr><th><{t}>优惠方案<{/t}></th><th><{t}>优惠金额<{/t}></th></tr>
+      </thead>
+      <tbody>
+	  <{foreach from=$order.pmt_list item=aBill}>
+     <tr>
+
+       <td><{$aBill.pmt_describe}></td>
+       <td><{$aBill.pmt_amount|cur_odr:$order.currency}></td>
+
+     </tr>
+	 <{/foreach}>
+      </tbody>
+       </table>
+	   <{/if}>
+      </div>
+      </td>
+      </tr>
+      <tr><td>
+    <div class="tableform">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tbody>
+       <tr><td style="text-align:left;"><strong><{t}>会员备注：<{/t}></strong><{$order.member.remark|escape:'html'}></td></tr>
+        <tr><td style="text-align:left;"><div style="float:left"><strong><{t}>订单备注：<{/t}></div></strong><div style="float:left"><{assign var="arr_remark" value=$order.mark_text|order_remark}><{foreach from=$arr_remark key=key item=item}><p style="padding:0 2px;;margin:2px 0"><{$item}></p><{/foreach}></div></td></tr>
+         <tr><td style="text-align:left;"><strong><{t}>订单附言：<{/t}></strong><{$order.memo|escape:'html'}></td></tr>
+        </tbody>
+      </table>
+  </div>
+      </td></tr>
+    </table>
+
+<script>
+
+
+if($('order_receiver_copy')){
+$('order_receiver_copy').addEvent('click',function(e){
+    if($('order_receiver_copy').get('receiver_copy_status') == "Y"){
+        copy_code($('order_receiver_copy').get('info'));
+        $('order_receiver_copy').set('receiver_copy_status','N');
+    }
+});
+}
+
+function copy_code(copyText){
+    if (window.clipboardData){
+        window.clipboardData.setData("Text", copyText);
+    }else{
+        prompt('<{t}>请复制收货人信息：<{/t}>',copyText);
+    }
+    $$('#order_receiver_copy span')[1].setText('<{t}>信息已经复制到剪切板中<{/t}>');
+    (function(){
+        if(!$('order_receiver_copy'))return;
+        $$('#order_receiver_copy span')[1].setText('<{t}>复制收货人信息<{/t}>');
+        $('order_receiver_copy').set('receiver_copy_status','Y');
+    }).delay(2000);
+}
+
+
+$$('.x-view-img').each(function(item){
+		 item.store('tip:text','<div style="width:220px;height:220px;overflow:hidden;"><img  src="'+item.get('imgsrc')+'" onload="$(this).zoomImg(220,220);" /></div>');
+	     Xtip.attach(item);
+});
+
+
+</script>

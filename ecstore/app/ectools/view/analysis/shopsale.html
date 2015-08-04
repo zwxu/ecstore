@@ -1,0 +1,27 @@
+<{include file="analysis/time_header.html" app="ectools"}>
+
+<table class="chart-view">
+	 <tr>
+		<td width="38%" valign="top" class="shopsale">
+            <{if $detail_hidden < 1}>
+                <div class="ColColorOrange clearfix">
+					<{foreach from=$detail key=key item=item name="info"}>
+					 <div class="span-auto" title="<{$key}>" info="<{$item.memo}>"> 	
+						<a class="flt" ><{img src="bundle/{$item.icon}" app='desktop'}></a> 
+						<div class="flt" style="width:75px">
+							<span class="f-12"><{$key}>:</span><strong class="f-18"><{$item.value}></strong>
+						</div>
+					 </div>
+					<{/foreach}>
+				</div>
+            <{/if}>
+		</td>
+		<td width="2%">&nbsp;</td>
+		<td width="60%" valign="top">
+            <{if $graph_hidden < 1}>
+		        <{include file="analysis/graph.html" app="ectools"}>
+            <{/if}>
+		</td>
+	 </tr>
+</table>
+

@@ -1,0 +1,24 @@
+<span class="action-bar-info"><{t}>订单状态操作:<{/t}></span>
+<!--<input type="button" onclick="OrderMgr.act.confirm(this)" value="确认"<{if $order.confirm == 'Y' OR $order.status != 'active'}>class="btndisabled" disabled="disabled" class="inactive"<{/if}> />-->
+<span class="action-bar-btns"><span>
+<ul>
+	<li class="first"><input type="button" value="<{t}>支付<{/t}><{if $env.conf.order.flow.payed}>...<{/if}>" <{if ($order.pay_status==1 || $order.pay_status==2 || $order.pay_status==4 || $order.pay_status==5) or $order.status != 'active'}> disabled="disabled" class="inactive"<{/if}> onclick="OrderMgr.act.run('<{if $env.conf.order.flow.payed}>showPayed<{else}>toPayed<{/if}>', this, '<{if $env.conf.order.flow.payed}>1<{else}>0<{/if}>')" /> </li>
+
+
+
+
+
+	<li> <input type="button"  value="<{t}>发货<{/t}><{if $env.conf.order.flow.consign}>...<{/if}>" <{if $order._is_all_ship==1 || $order.ship_status == 1 || $order.status != 'active'}> disabled="disabled" class="inactive"<{/if}> onclick="OrderMgr.act.run('<{if $env.conf.order.flow.consign}>showConsignFlow<{else}>toDelivery<{/if}>', this, '<{if $env.conf.order.flow.consign}>1<{else}>0<{/if}>')" /> </li>
+	<li> <input type="button"   value="<{t}>完成<{/t}>" <{if $order.status != 'active'}> disabled="disabled" class="inactive"  <{else}> onclick="if(confirm('<{t}>完成操作 会将该订单归档并且不允许再做任何操作，确认要执行吗？<{/t}>')) OrderMgr.act.run('archive', this);"<{/if}> /> </li>
+</ul>
+</span></span> <span class="action-bar-btns"><span>
+<ul>
+	<li class="first"> <input type="button"  value="<{t}>退款<{/t}><{if $env.conf.order.flow.refund}>...<{/if}>" <{if ($order.pay_status==0 || $order.pay_status==5) or $order.status != 'active'}> disabled="disabled" class="inactive"<{/if}> onclick="OrderMgr.act.run('<{if $env.conf.order.flow.refund}>showRefund<{else}>toRefund<{/if}>', this, '<{if $env.conf.order.flow.refund}>1<{else}>0<{/if}>')" /> </li>
+	<li> <input type="button"  value="<{t}>退货<{/t}><{if $env.conf.order.flow.reship}>...<{/if}>" <{if ($order.ship_status==4 || $order.ship_status==0) or $order.status != 'active'}> disabled="disabled" class="inactive"<{/if}> onclick="OrderMgr.act.run('<{if $env.conf.order.flow.reship}>showReturn<{else}>toReturn<{/if}>', this, '<{if $env.conf.order.flow.reship}>1<{else}>0<{/if}>')" /> </li>
+</ul>
+</span></span> <span class="action-bar-btns"><span>
+<ul>
+	<li class="first"> <input type="button"  value="<{t}>作废<{/t}>" <{if $order.pay_status > 0 || $order.ship_status > 0 || $order.status != 'active'}> disabled="disabled" class="inactive" <{else}> onclick="if(confirm('<{t}>作废后该订单何将不允许再做任何操作，确认要执行吗？<{/t}>'))  OrderMgr.act.run('cancel', this)" <{/if}> /> </li>
+</ul>
+</span></span>
+<label><{if $order.status == 'dead'}><{t}>[已作废]<{/t}><{elseif $order.status == 'finish'}><{t}>[已完成]<{/t}><{/if}></label>

@@ -1,0 +1,19 @@
+<div id="cat-config" style="display:none;"></div>
+	<div class="tableform widgetconfig">
+	  <div class="division">
+	  <table width="100%" border="0" cellspacing="0" cellpadding="0" id="showChange">
+			<tr>
+			<th width="10%">显示标题：</th>
+			<td width="90%">  
+				<input name="title" class="inputstyle" value="<{$setting.title|default:用户评论}>" />
+			</td>
+		  </tr>
+		  <tr>
+			<th width="10%">显示评论：</th>
+			<td width="90%">  
+                <{input name="limit" value=$setting.limit|default:5 required="true" type="digits"}>&nbsp;&nbsp;条
+			</td>
+		  </tr>
+	  </table>
+	</div>
+</div>

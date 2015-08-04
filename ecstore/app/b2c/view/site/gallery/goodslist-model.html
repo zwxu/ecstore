@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="utf-8">
+ </head>
+
+ <body>
+ <!-- 须知一，如果商品展示是横向排列的，在父级结构上额外加class=“horizontal-m clearfix”，如果是竖向排列则省略。
+  须知二，如果class=“goodpic”、“goods-main”所在的标签已经被外面的结构包含着，(诸如：td,div,li)那么按第一条规律把class=“horizontal-m clearfix”加在外面的一层结构上，那样就不用再重复给它们包一层div了,直接从class="goodpic"所在的标签开始。-->
+
+  <div class="horizontal-m clearfix">
+    <div class="goodpic">
+        <a> <!-- 商品图片 --></a>
+   </div>
+    <div class="goods-main">
+      <div class="goodinfo">
+        <h6>
+          <a> <!-- 商品的名称 --></a>
+        </h6>
+        <p><!-- 商品介绍或者规格文字显示区域 --></p>
+      </div>
+      <div class="price-wrap">
+        <p>
+          现价：<span class="font-red">￥:175.00</span><br/>
+          原价：<del>￥:165.00</del>
+        </p>
+      <!-- 此处包含价格以及购买按钮区域 -->
+      </div>
+    </div>
+  </div>
+</body>
+</html>

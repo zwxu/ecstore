@@ -1,0 +1,112 @@
+<services>
+    <service id="openapi.goodsapi">
+        <class>goodsapi_goodsapi</class>
+    </service>
+
+    <service id="openapi.goodsapi.shopex_shop_add">
+        <class>goodsapi_shopex_shop_add</class>
+    </service>
+    <service id="openapi.goodsapi.shopex_shop_login">
+        <class>goodsapi_shopex_shop_login</class>
+    </service>
+
+    <service id="openapi.goodsapi.shopex_shop_check">
+        <class>goodsapi_shopex_shop_check</class>
+    </service>
+
+    <service id="openapi.goodsapi.shopex_goods_cat_list">
+        <class>goodsapi_shopex_goods_cat_list</class>
+    </service>
+    <service id="openapi.goodsapi.shopex_goods_cat_add">
+        <class>goodsapi_shopex_goods_cat_add</class>
+    </service>
+    <service id="openapi.goodsapi.shopex_goods_cat_update">
+        <class>goodsapi_shopex_goods_cat_update</class>
+    </service>
+    <service id="openapi.goodsapi.shopex_goods_cat_delete">
+        <class>goodsapi_shopex_goods_cat_delete</class>
+    </service>
+
+    <service id="openapi.goodsapi.shopex_type_list">
+        <class>goodsapi_shopex_type_list</class>
+    </service>
+    <service id="openapi.goodsapi.shopex_type_add">
+        <class>goodsapi_shopex_type_add</class>
+    </service>
+    <service id="openapi.goodsapi.shopex_type_update">
+        <class>goodsapi_shopex_type_update</class>
+    </service>
+    <service id="openapi.goodsapi.shopex_type_delete">
+        <class>goodsapi_shopex_type_delete</class>
+    </service>
+
+    <service id="openapi.goodsapi.shopex_spec_list">
+        <class>goodsapi_shopex_spec_list</class>
+    </service>
+    <service id="openapi.goodsapi.shopex_spec_add">
+        <class>goodsapi_shopex_spec_add</class>
+    </service>
+    <service id="openapi.goodsapi.shopex_spec_update">
+        <class>goodsapi_shopex_spec_update</class>
+    </service>
+    <service id="openapi.goodsapi.shopex_spec_delete">
+        <class>goodsapi_shopex_spec_delete</class>
+    </service>
+
+    <service id="openapi.goodsapi.shopex_brand_list">
+        <class>goodsapi_shopex_brand_list</class>
+    </service>
+    <service id="openapi.goodsapi.shopex_brand_add">
+        <class>goodsapi_shopex_brand_add</class>
+    </service>
+
+     <service id="openapi.goodsapi.shopex_brand_update">
+        <class>goodsapi_shopex_brand_update</class>
+    </service>
+
+    <service id="openapi.goodsapi.shopex_brand_delete">
+        <class>goodsapi_shopex_brand_delete</class>
+    </service>
+
+    <service id="openapi.goodsapi.shopex_goods_search">
+        <class>goodsapi_shopex_goods_search</class>
+    </service>
+    <service id="openapi.goodsapi.shopex_goods_list">
+        <class>goodsapi_shopex_goods_list</class>
+    </service>
+    <service id="openapi.goodsapi.shopex_goods_add">
+        <class>goodsapi_shopex_goods_add</class>
+    </service>
+    <service id="openapi.goodsapi.shopex_goods_update">
+        <class>goodsapi_shopex_goods_update</class>
+    </service>
+    <service id="openapi.goodsapi.shopex_goods_delete">
+        <class>goodsapi_shopex_goods_delete</class>
+    </service>
+    <service id="openapi.goodsapi.shopex_goods_recover">
+        <class>goodsapi_shopex_goods_recover</class>
+    </service>
+    <service id="openapi.goodsapi.shopex_goods_listing">
+        <class>goodsapi_shopex_goods_listing</class>
+    </service>
+    <service id="openapi.goodsapi.shopex_goods_products_update">
+        <class>goodsapi_shopex_goods_products_update</class>
+    </service>
+
+    <service id="openapi.goodsapi.shopex_goods_image_upload">
+        <class>goodsapi_shopex_goods_image_upload</class>
+    </service>
+
+    <service id="openapi.goodsapi.shopex_member_level_list">
+        <class>goodsapi_shopex_member_level_list</class>
+    </service>
+    <service id="openapi.goodsapi.shopex_member_level_price_list">
+        <class>goodsapi_shopex_member_level_price_list</class>
+    </service>
+
+    <service id="openapi.goodsapi.shopex_tags_list">
+        <class>goodsapi_shopex_tags_list</class>
+    </service>
+
+
+</services>

@@ -1,0 +1,79 @@
+<div class="division">
+<table>
+  <tr>
+    <th><{t}>支付方式：<{/t}></th>
+    <td>
+<table id="_pay_cod" width="100%" cellpadding="0" cellspacing="0"  style="display:<{if $delivery.has_cod == 1}>block<{else}>none<{/if}>">
+            <col class="span-5"></col>
+            <col class="span-auto"></col>
+            <tbody>
+  <tr>
+    <th style="text-align:left;"><input type="radio" name="payment[pay_app_id]" value="-1" paytype="offline" id="payment_bank" class="x-payMethod" <{if $order.payment==-1}> checked="checked"<{/if}> /><strong><{t}>货到付款<{/t}></strong></th>
+    <td><{t}>由我们的快递人员在将货物送到时收取货款。<{/t}></td>
+  </tr>
+  </tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0"  id="_normal_payment">
+        <col class="span-5"></col>
+        <col class="span-auto"></col>
+        <{foreach from=$payments item="payment" key="key" name="payments"}>
+            <tr <{if $smarty.foreach.payments.last}>class="last"<{/if}>>
+                <th style="text-align:left;" >
+                    <label <{if $payment.extend}>class="ExtendCon"<{/if}>>
+                        <input class="x-payMethod" type="radio" name="payment[pay_app_id]" paytype="<{$payment.pay_type}>" value="<{$payment.app_id}>"<{if $order.payment==$payment.app_id}> checked="checked"<{/if}> moneyamount="<{$payment.money}>" formatmoney ="<{$payment.money|cur_odr:$order.currency}>" />
+                        <{$payment.name}><{if $payment.config.method=="1" || $payment.config.method==" "}><{if $payment.fee>0}><{t}> (支付费率: +<{/t}><{$payment.fee*100}>%)<{/if}><{else}><{if $payment.config.fee>0}><{t}> (支付费用: +<{/t}><{$payment.config.fee}>)<{/if}><{/if}></label>
+                </th>
+                <td>
+                    <{$payment.intro|default:'&nbsp;'}>
+                     <{if $payment.extend}>
+                        <{foreach from=$payment.extend item="extvalue" key="extkey"}>
+                          <div class="division paymentextend <{$extvalue.extconId}> clearfix">
+                            <hr />
+                            <{if $extvalue.fronttype<>'select'}>
+                            <ul>
+                              <{foreach from=$extvalue.value name="bank" item=extsval key=extskey}>
+                              <li style='float:left;'>
+                                <{if $extvalue.fronttype=="radio"}>
+                                  <input <{$extsval.checked}> type=<{$extvalue.fronttype}> name=<{$extvalue.name}> value=<{$extsval.value}>>
+                                  <{if $extsval.imgurl}><{$extsval.imgurl}><{else}><{$extsval.name}><{/if}>
+                                <{else if $extvalue.fronttype=="checkbox"}>
+                                  <input <{$extsval.checked}> type="<{$extvalue.fronttype}>" name="<{$extvalue.name}>[]" value="<{$extsval.value}>">
+                                  <{if $extsval.imgurl}><{$extsval.imgurl}><{else}><{$extsval.name}><{/if}>
+                                <{/if}>
+                              </li>
+                              <{/foreach}>
+                            </ul>
+                            <{else}>
+                              <select name=$extvalue.name>
+                              <{foreach from=$extvalue.value item=extsval key=extskey}>
+                                <option value=<{$extsval.value}> <{if $extsval.checked}>selected<{/if}>><{$extsval.name}></option>
+                              <{/foreach}>
+                              <select>
+                          <{/if}>
+                          </div>
+                        <{/foreach}>
+                    <{/if}>
+                </td>
+            </tr>
+        <{/foreach}>
+
+</table>
+</div>
+</select>
+
+<script>
+
+  if((_checked =$$('#_normal_payment th input[checked]')[0])){
+     _checked.fireEvent('click');
+  }
+
+</script>
+
+
+    </td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+    <td><input type='button' value='<{t}>保存<{/t}>' class='box-submit'/></td>
+  </tr>
+</table></div>

@@ -1,0 +1,87 @@
+<div class="division">
+   <span><strong><{t}>模板列表<{/t}></strong></span><span style="margin-left:5px;font-size:12px;cursor:pointer;"><span class="lnk" id="btn_pt"><{t}>隐藏<{/t}></span></span>
+</div>
+<{input  id='storeid' type="hidden"  value=$rule.store_id name="rule[store_id]"}> &nbsp;
+
+
+<!-- 模板选择区域 -->
+<div class="can" id="ctpl_list">
+   <{if $pt_list }>
+       <ul>
+       <{foreach from=$pt_list item=item key=key}>
+           <li><input name="rule[c_template]" type="radio" vtype="requiredradio"  value="<{$key}>" <{if ($key == $rule.c_template)}>checked<{/if}> alt="<{$item.type}>" /><{$item.name}>
+           <div class="tableform" <{if ($key != $rule.c_template)}>style="display:none" <{else}> aaa=true <{/if}> >
+                <{if ($key == $rule.c_template)}><{include file="site/store/promotion/{$promotion_type}_rule.html" app=business}> <{/if}>
+           </div>
+           </li>
+       <{/foreach}>
+       </ul>
+   <{else}>
+       <div><{t}>没有添加可用的促销规则模板app<{/t}></div>
+   <{/if}>
+</div>
+<script>
+
+
+<{if $rule.c_template}>
+	var _a =$E('.tableform[aaa]');
+    $('ctpl_list').store('rule:cache',_a)
+<{/if}>
+
+
+ $ES('input[type=radio]','ctpl_list').each(function(el,i){
+    el.addEvent('click',function(e){
+
+         //取到选择的店铺ID
+         var store_id =$('storeid').value;
+
+       
+        //取到选择的店铺ID
+
+         var update=this.getParent('li').getElement('div');
+         if(request)request.cancel();
+      
+         var request = new Request.HTML({
+                    url:'<{link app="business" ctl="site_coupon_{$promotion_type}" act="template" }>',
+                    update:update,
+                    onComplete:function(res){
+                        var rule=$('ctpl_list').retrieve('rule:cache',false);
+
+                        if(rule&&rule!=update){
+                        	rule.empty().hide();
+                        }
+                        $('ctpl_list').store('rule:cache',update)
+                        update.show();
+                    }                                        
+         }).post($H({template:$(this).value,storeid:store_id}));
+   
+
+
+
+
+
+        var _alt = $(this).get('alt');
+        $ES('input[type=radio]', 'stpl_list').each(function(r) {
+            if(_alt){
+                if(r.alt != _alt) {
+                    r.set('disabled', true).getParent('li').hide();
+                }
+            }else{
+                r.set('disabled', false).getParent('li').show();
+            }
+        });
+    });
+ });
+
+$('btn_pt').addEvent('click',function(e){
+    var dp = $('ctpl_list').getStyle('display');
+    if(dp == 'none') {
+        $(this).innerHTML = '<{t}>隐藏<{/t}>';
+        $('ctpl_list').setStyle('display','block');
+    } else {
+        $(this).innerHTML = '<{t}>显示<{/t}>';
+        $('ctpl_list').setStyle('display','none');
+    }
+});
+
+</script>

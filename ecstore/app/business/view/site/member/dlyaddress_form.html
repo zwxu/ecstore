@@ -1,0 +1,71 @@
+<div class="FormWrap" style="background:none; border:none; padding:0; margin:0;">
+  <form method="post" action="<{link app=business ctl='site_member'  full='1' act='toAdddlyaddress'}> " id='form_saveMember' class="section">
+    <div class="division" style="border:none;margin-bottom:0">
+      <input type="hidden" name="da_id" value="<{$dlyaddress.da_id}>">
+      <table class="forform" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <th><em>*</em><{t}>联系人：<{/t}></th>
+          <td><{input class="inputstyle" type="text" name="uname" vtype="required" value=$dlyaddress.uname}></td>
+        </tr>
+        <tr>
+          <th><em>*</em><{t}>所在地区：<{/t}></th>
+          <td><span id="checkout-select-area">
+            <{input type="region" name="region" vtype="area" app="ectools" value=$dlyaddress.region callback="selectArea"}></span></td>
+        </tr>
+        <tr>
+          <th><em>*</em><{t}>街道地址：<{/t}></th>
+          <td><{input id="addr" class="inputstyle" type="textarea" vtype="required" name="address" cols="30" rows="3" value=$dlyaddress.address}></td>
+        </tr>
+        <tr>
+          <th><em>*</em><{t}>邮编：<{/t}></th>
+          <td><{input class="inputstyle" name="zip"  vtype="required&&zip" value=$dlyaddress.zip}></td>
+        </tr>
+        <tr>
+          <th><{t}>手机：<{/t}></th>
+          <td><{input class="inputstyle" name="mobile" vtype="mobile" value=$dlyaddress.mobile}></td>
+        </tr>          
+        <tr>
+          <th><{t}>电话：<{/t}></th>
+          <td><{input class="inputstyle" name="phone" type="order_tel" vtype="order_tel&&tel" value=$dlyaddress.phone}><span class="infotips"><{t}>其中联系电话和联系手机必须填写一项<{/t}></span></td>
+        </tr>
+        <tr>
+          <th><{t}>公司名：<{/t}></th>
+          <td><{input class="inputstyle" type="text" name="company" value=$dlyaddress.company}></td>
+        </tr>
+        <tr>
+          <th><{t}>备注：<{/t}></th>
+          <td><{input class="inputstyle" type="textarea" name="memo" cols="30" rows="3" value=$dlyaddress.memo}></td>
+        </tr>
+      </table>
+    </div>   
+    <div style="padding-left:142px; margin-bottom:20px;">
+      <{button class="submit-btn" type="submit" label=$___b2c="保存"|t:'b2c' rel="_request"}></div>
+  </form>
+  
+</div>
+
+<script>
+(function(){
+  selectArea = function(sels) {
+		var selected = [];
+		sels.each(function(s){
+		   if(s.getStyle('display') != 'none') {
+			   var text = s[s.selectedIndex].text.trim().clean();
+			   if(['<{t}>北京<{/t}>','<{t}>天津<{/t}>','<{t}>上海<{/t}>','<{t}>重庆<{/t}>'].indexOf(text)>-1)return;
+			   selected.push(text);
+			}
+		});
+		var selectedV = selected.join('');
+		//$('addr').value = selectedV;
+	};
+})();
+  validatorMap['order_tel'] =['<{t}>请至少输入联系电话和联系手机中的一项<{/t}>',function(f,i){
+    var tel = $('form_saveMember').getElement('input[name^=phone]').getProperty('value');
+    var mob = $('form_saveMember').getElement('input[name^=mobile]').getProperty('value');
+    if(tel.trim() == '' && mob.trim() == ''){
+        return false;
+    }else{
+        return true;
+    }
+  }];
+</script>

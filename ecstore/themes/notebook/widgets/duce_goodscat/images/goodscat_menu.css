@@ -1,0 +1,48 @@
+.ducegMenu-3 .dmg3-depth-1 table.depth-2 td{padding-right:8px;border-collapse:collapse;}
+.ducegMenu-3 .dmg3-depth-1 table.depth-2 a{color:#858283;} 
+.ducegMenu-3 .dmg3-depth-1 table.depth-2{border-collapse:collapse;}
+
+.ducegMenu-3 {width:190px;,Arial,Lucida,Verdana,Helvetica,sans-serif;font-size:12px;}
+.dmg3-depth-0 {width:190px;margin:0;overflow:hidden;}
+.dmg3-depth-0 a.depth-0 {width:190px;color:#00559b;height:35px;line-height:35px;display:block;padding:0;}
+.dmg3-depth-0 a.depth-0:hover {text-decoration:none;color:#00559b;}
+.ducegMenu-3 .onDmg3 {background-position:0 0;}
+.dmg3-depth-0 ul.c {*float:left;width:184px;padding:0px;overflow:hidden; border-left:3px solid #ed5d7c;border-right:3px solid #ed5d7c;background:#FFF0F5; border-bottom:3px solid #ed5d7c;}
+.dmg3-depth-1 {*float:left;margin:0;width:186px;background:#fff0f5;padding:3px 0 3px 5px;border-bottom:1px solid #f0dce3;border-top:1px solid #fefdfd;}
+.dmg3-depth-1 .depth-1{display:block;height:28px;overflow:hidden;color:#fff;}
+.dmg3-depth-1 .depth-1 a{color:#fff;}
+.dmg3-depth-1 .depth-1 em{display:block;height:23px;padding-top:5px;cursor:pointer;font-weight:bold;color:#646365;}
+.dmg3-depth-1 .depth-1 em.nosub{background-position:right -207px;}
+.dmg3-depth-1 .depth-1:hover {text-decoration:underline;}
+.ducegMenu-3 .hover{width:175px;background:#736867;display:block;border-top:1px solid #736867;}
+.ducegMenu-3 .hover .depth-1 em{font-weight:700;}
+
+.dmg3-popup {position:absolute;z-index:999;padding:0;left:180px;top:30px;background:#736867}
+.dmg3-drop-3 {float:left;padding:4px 10px 6px;}
+.dmg3-drop-3 dl.sub {float:left;width:400px; background:url(tm_menulistbg_line.png) repeat-x bottom left;padding:4px 0 6px;line-height:22px;}
+.dmg3-drop-3 .last{border-bottom:none;}
+.dmg3-drop-3 dl.sub dt {float:left;text-align:right;width:70px;font-weight:700;padding:3px 6px 0 0;overflow:hidden;}
+.dmg3-drop-3 dl.sub dt a{white-space:nowrap;color:#fff;font-weight:700;}
+.dmg3-drop-3 dl.sub dd{float:left;width:450px;padding:3px 6px 0 0;}
+.dmg3-drop-3 dl.sub dd a{color:#fff;}
+.dmg3-drop-3 dl.sub dd em{float:left;padding-left:6px;border-left:1px solid #665D5C;height:14px;line-height:14px;margin:4px 6px 4px 0;white-space:nowrap;}
+
+.dmg3-drop-b {float:left;padding:12px 10px 10px;width:180px;}
+.dmg3-drop-b a {display:block;white-space:nowrap;height:21px;line-height:20px;*line-height:24px; _line-height:21px; color:#333;overflow:hidden;}
+.dmg3-drop-b .depth-2 {font-weight:700;border-bottom:1px solid #f2eae3;padding-bottom:6px;margin-bottom:6px;width:500px;}
+.dmg3-drop-b ul.sub {position:relative;z-index:198;}
+.dmg3-drop-b ul.sub .depth-2,
+.dmg3-drop-b ul.sub .depth-2:hover {border-color:#d7e1ea;}
+.dmg3-drop-b ul.sub .all{display:inline;position:absolute;right:0;top:-1px;font-weight:700;}
+.dmg3-drop-b ul.sub {padding:2px 0 6px;}
+.dmg3-drop-b ul.sub li a {display:block;height:22px;color:#666;padding-left:5px;font-family:Verdana,Tahoma,Geneva,Helvetica,Arial,sans-serif;overflow:hidden; font-size:12px;}
+.dmg3-drop-b ul.sub li a:hover {text-decoration:none;}
+.dmg3-drop-b ul.sub li .depth-2:hover {}
+.dmg3-drop-b .tagtree {border-top:1px solid #d7e1ea;padding:8px 0;margin-top:3px;}
+.dmg3-drop-b .tagtree a {color:#c00;}
+.ducegMenu-3 .cat-custom,
+.ducegMenu-3 .cat-custom a,
+.ducegMenu-3 .cat-custom a em,
+.ducegMenu-3 .cat-custom a.depth-1 em.nosub{background:#fdf1de;height:28px;font-size:12px;border:none;}
+
+.dmg3-drop-3 dl.sub dd{width:212px;}

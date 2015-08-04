@@ -1,0 +1,27 @@
+<{if  !$goods.nostore_sell}>
+    
+        <input  class="btn-hui btnhuiModi activityIcon" updatespec="notify" value="<{t}>已售罄<{/t}>" type="button" <{if  count($goods.products)>0 || ($goods.store>0 || $goods.store==='' || $goods.store===null) }>style="display: none;"<{/if}> />
+    
+        <input id="notice" class="actbtn btn-notify" updatespec="notify" value="<{t}>缺货登记<{/t}>" type="submit" data-tip="<{t}>您当前要购买的商品暂时缺货,点击进入缺货登记页.<{/t}>" <{if  count($goods.products)>0 || ($goods.store-$goods.product_freez>0 || $goods.store==='' || $goods.store===null) }>style="display: none;"<{/if}> />
+    
+<{/if}>
+
+<script>
+(function(){
+    var url ="<{link app=b2c ctl=site_product act=gnotify}>",
+    notifyBtn=$('goods-viewer').getElement('.btn-notify');
+    if(!notifyBtn)return;
+    <{if  count($goods.products)>0 || ($goods.store-$goods.product_freez>0 || $goods.store==='' || $goods.store===null) }>
+    <{else}>
+    notifyBtn.show();
+    <{/if}>
+    notifyBtn.addEvent('click',function(e){
+        var _tmpFormAction  = this.form.action;
+        e.stop();
+        this.blur();
+        this.form.action=url;
+        this.form.submit();
+        this.form.action = _tmpFormAction;
+    });
+})();
+</script>

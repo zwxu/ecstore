@@ -1,0 +1,84 @@
+<div class="personal-rating" style="padding:10px;line-height:20px;margin-top:10px;margin-bottom:10px;">
+    <h3>CSV模板导出：</h3>
+    <span style="padding-left:30px;display:block;padding-top:10px;">
+    <p>1.请根据需要正确选择分类，如果宝贝挂错分类，将会被平台下架。</p>
+    <p>2.请在分类选择好后根据提示进入下一步。</p>
+    <p>3.请在导出CSV文件前，仔细查看提示。根据提示中给出的<em style='color:#FF0000;'>规格、属性、运费、品牌</em>等的可选值填写CSV文件。</p>
+    <p>4.导出的CSV文件会根据您选择的分类和在该分类下导出的次数生成不同的文件名（文件名为：<em style='color:#FF0000;'>goods_模板编号_验证码.csv</em>），请在导入时根据提示导入。</p>
+    </span>
+</div>
+<form enctype="multipart/form-data" class="tableform" action="<{link app='business' ctl='site_member' act='goods_export_csv'}>" method="post" target="uploadframe" id="export_form">
+    <input type='hidden' value='' name='cat_id' id="selectCat"/>
+    <input type='hidden' value='' name='cat_name' id="selectCatName"/>
+    <div class="cate-container" id='j_cate_container'>
+        <div class="cate-main">
+            <div id="cate-cascading">
+                <a id="J_LinkPrev" title="上一级" class="cc-prev cc-nav" href="#" style="visibility: hidden;"><span>上一级</span></a>
+                <div class="cc-listwrap">
+                   <ol class="cc-list" id="J_OlCascadingList">
+                       <li class="cc-list-item" tabindex="-1">
+                        <div class="cc-cbox-filter">
+                            <label for="cc-cbox-filter248">
+                                输入名称查找
+                            </label>
+                            <input role="textbox" autocomplete="off" id="cc-cbox-filter248" style="width: 176px;">
+                        </div>
+                        <div role="tree" class="cc-tree">
+                            <ul role="listbox" tabindex="-1" hidefocus="-1" unselectable="on" class="cc-tree-cont">
+                            <{foreach from=$pcat item=pitem name=pname}>
+                            <li class="cc-tree-group <{if $smarty.foreach.pname.iteration<3}>cc-tree-expanded<{/if}> " aria-expanded="<{if $smarty.foreach.pname.iteration<3}>true<{else}>false<{/if}>" role="treeitem" cat_id=<{$pitem.cat_id}>>
+                                <div id="cc-tree-gname251" class="cc-tree-gname"><{$pitem.cat_name}></div>
+                                <ul class="cc-tree-gcont" role="group">
+                                <{foreach from=$pitem.child item=citem}>
+                                    <li title="<{$pitem.cat_name}>" role="treeitem" id="cc-tree-item<{$citem.cat_id}>" cat_id="<{$citem.cat_id}>"  class="cc-tree-item <{if $citem.child_count}>cc-hasChild-item<{/if}>"><{$citem.cat_name}></li>
+                                <{/foreach}>
+                                </ul>
+                            </li>
+                            <{/foreach}>
+                            </ul>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+                <a id="J_LinkNext" title="下一级" class="cc-next cc-nav" href="#" style="visibility: hidden;"><span>下一级</span></a>
+            </div>
+            <div class="cc-loading">
+                <div class="cc-loading-content">
+                    <div class="cc-loading-icon"><img src="<{$env.BASE_URL}>/app/business/statics/images/gimport_loading.gif"></div>
+                    <span class="cc-loading-text">加载中，请稍候...</span>
+                </div>
+            </div>
+        </div>
+        <div class="cate-aside">
+            <h3 style="display:none;" class="caption">该类目下宝贝示例：</h3>
+            <div id="J_GuidWrap" class="guid-wrap figure-empty">
+                <p class="hint-content">亲，再往下选择试试 宝贝是挂在最终分类的！</p>
+                
+                <i class="figure"></i>
+            </div>
+        </div>
+    </div>
+    <div class="cate-path">
+        <dl>
+            <div class="clearfix">
+                <dt>您当前选择的是：</dt>
+                <dd>
+                    <ol id="J_OlCatePath" class="category-path"><li>无</li></ol>
+                    
+                </dd>
+            </div>
+        </dl>
+        <span class="arrow up" id="J_SpanPointer"></span>
+    </div>
+    <div class="cate-container" id='j_cate_container_2' >
+        
+    </div>
+</form>
+<div style='padding:10px 10px 20px 300px;'>
+    <button rel="_request" id="btn_next_step" type="button" class="btn submit-btn" next='true'>
+    <span><span class='btn-title'>我确定选择该类目，下一步</span></span>
+    </button>
+    <button  id="btn_submit" rel="_request" type="button" class="btn submit-btn" onclick="$(this).set('disabled',true);$('export_form').submit();">
+    <span><span>导出CSV模板</span></span>
+    </button>
+</div>

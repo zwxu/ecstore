@@ -1,0 +1,61 @@
+<div class="tableform">
+    <h3>基本信息</h3>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+        <thead>
+            <tr>
+              <th><{t}>活动名称<{/t}></th>
+              <th><{t}>活动标签<{/t}></th>
+              <th><{t}>价格标签<{/t}></th>
+              <th><{t}>活动描述<{/t}></th>
+              <th><{t}>状态<{/t}></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><{$activity.name}></td>
+                <td><{$activity.activity_tag}></td>
+                <td><{$activity.price_tag}></td>
+                <td><{$activity.description}></td>
+                <td><{$activity.act_open}></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>限制信息</h3>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+    <thead>
+        <tr>
+            <th><{t}>经营范围<{/t}></th>
+            <th><{t}>店铺等级<{/t}></th>
+            <th><{t}>店铺类型<{/t}></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><{$activity.business_type}></td>
+            <td><{$activity.store_lv}></td>
+            <td><{$activity.store_type}></td>
+        </tr>
+    </tbody>
+    </table>
+
+    <h3>活动时间</h3>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+        <thead>
+            <tr>
+                <th><{t}>活动开始时间<{/t}></th>
+                <th><{t}>活动结束时间<{/t}></th>
+                <th><{t}>申请开始时间<{/t}></th>
+                <th><{t}>申请结束时间<{/t}></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                  <td><{$activity.start_time}></td>
+                  <td><{$activity.end_time}></td>
+                  <td><{$activity.apply_start_time}></td>
+                  <td><{$activity.apply_end_time}></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

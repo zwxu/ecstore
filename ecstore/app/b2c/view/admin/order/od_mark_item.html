@@ -1,0 +1,1 @@
+<{if $mark_text}><ul><{foreach from=$mark_text item=mark_info name=mark}><li>Marked by <{$mark_info.op_name}>,&nbsp;<{$mark_info.mark_text}>,&nbsp;<{$mark_info.add_time|cdate}></li><{/foreach}></ul><{/if}>

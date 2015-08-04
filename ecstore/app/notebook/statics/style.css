@@ -1,0 +1,10 @@
+html{background:#A4C5FF}
+body{width:380px;margin:auto;background:#fff;padding:20px}
+dd{padding:10px}
+dt{border-bottom:1px solid #ccc;margin:10px 0;
+	font-weight:bold;color:#42597B;font-size:20px;}
+#writer{background:#E8EEF7;padding:10px;border:1px solid #E1ECFE}
+#writer-email,#writer-subject{display:block;margin-bottom:10px;width:300px}
+#writer textarea{width:300px;margin-bottom:10px;display:block;height:80px}
+#writer-submit{padding:2px 18px;font-weight:bold;}
+h1{text-align:center;padding:20px;text-shadow: 2px 2px 2px #999;}

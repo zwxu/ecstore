@@ -1,0 +1,78 @@
+<div class="i_floor_title">
+    <{if $data.floor_suspended_goods.goods_info}>
+    <div class="floor_pop" style="display:none;background:<{if $data.bg_color}><{$data.bg_color}><{else}>#87DE6C<{/if}>;" id="floor_suspended_goods_<{$widgets_id}>">
+    <!-- 悬浮商品 -->
+        <ul>
+        <{foreach from=$data.floor_suspended_goods.goods_info item=goods key=key name=floor_suspended_goods}>
+            <li>
+                <div class="f_img">
+                <a href="<{$goods.goods_info.goodsLink}>"><img src="images/transparent.gif" lazyload="<{if $goods.pic}><{$goods.pic}><{else}><{$goods.goods_info.goodsPicM}><{/if}>" class="img-lazyload"/></a>
+                <div class="f_price"><{$goods.goods_info.goodsSalePrice|cur}></div>
+                </div>
+                <div class="f_name"><a href="<{$goods.goods_info.goodsLink}>"><{if $goods.nice}><{$goods.nice}><{else}><{$goods.goods_info.goodsName}><{/if}></a></div>
+            </li>
+        <{/foreach}>
+        </ul>
+    </div>
+    <{/if}>
+    <div class="floor_title"><a href="<{if $data.floor_pic_link}><{$data.floor_pic_link}><{else}>javascript:void(0);<{/if}>" id="fool_pic_<{$widgets_id}>"><img src="images/transparent.gif" lazyload="<{$data.floor_pic}>" class="img-lazyload"/></a></div>
+
+    <{if $data.top_link_title}>
+    <div class="floor_link"><!-- 副标题文字链接 -->
+        <ul>
+        <{foreach from=$data.top_link_title item=title key=key name=top_link_title}>
+        <li><a href="<{$data.top_link_url.$key}>"><{$title}></a></li>
+        <{if $smarty.foreach.top_link_title.last}>
+        <{else}>
+            <li class="site_line">|</li>
+        <{/if}>
+        <{/foreach}>
+        </ul>
+    </div>
+    <{/if}>
+</div>
+
+
+<{if $data.floor_goods.goods_info}>
+<div class="i_floor_pro clb">
+    <div class="i_floor_9pro">
+        <ul>
+            <{foreach from=$data.floor_goods.goods_info item=goods_info key=key}>
+                <li>
+                    <div class="pro2_rb_name">
+                        <a href="<{$goods_info.goods_info.goodsLink}>">
+                            <{if $goods_info.nice}>
+                                <{$goods_info.nice}>
+                            <{else}>
+                                <{$goods_info.goods_info.goodsName}>
+                            <{/if}>
+                        </a>
+                    </div>
+                    <div class="pro2_rb_price"><{$goods_info.goods_info.goodsSalePrice|cur}></div>
+                    <div class="pro2_rb_img"><a href="<{$goods_info.goods_info.goodsLink}>"><img src="images/transparent.gif" lazyload="<{if $goods_info.pic}><{$goods_info.pic}><{else}><{$goods_info.goods_info.goodsPicM}><{/if}>" class="img-lazyload"/></a></div>
+                </li>
+            <{/foreach}>
+        </ul>
+    </div>
+</div>
+<{/if}>
+
+<{if $data.floor_suspended_goods.goods_info}>
+<script>
+$('fool_pic_<{$widgets_id}>').addEvent('mouseenter',function(){
+    $('floor_suspended_goods_<{$widgets_id}>').setStyle('display','');
+});
+
+$('floor_suspended_goods_<{$widgets_id}>').addEvent('mouseenter',function(){
+    $('floor_suspended_goods_<{$widgets_id}>').setStyle('display','');
+});
+
+$('floor_suspended_goods_<{$widgets_id}>').addEvent('mouseleave',function(){
+    $('floor_suspended_goods_<{$widgets_id}>').setStyle('display','none');
+});
+
+$('fool_pic_<{$widgets_id}>').addEvent('mouseleave',function(){
+    $('floor_suspended_goods_<{$widgets_id}>').setStyle('display','none');
+});
+</script>
+<{/if}>

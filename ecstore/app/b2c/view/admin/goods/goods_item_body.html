@@ -1,0 +1,26 @@
+<li class="product-item clearfix" rel="select" data-id="<{$item.goods_id}>" data-alias="<{$item.alias}>" data-pic="<{$item.pic}>">
+  <a class="pic-info"><img src="<{if $item.udfimg == 'true'}><{$item.thumbnail_pic|storager:'s'}><{else}><{$item.image_default_id|default:$defaultImage|storager:'s'}><{/if}>"/></a>
+  <div class="product-info">
+    <div class="product-title"><{$item.name}></div>
+    <div class="product-nice"></div>
+    <div class="product-price"><{$item.price|cur:$item.currency}></div>
+    <div class="product-edit">
+      <div class="product-name edit-item"><label>新名称：</label><input class="select-obj" name="name" value="<{$item.alias}>" /></div>
+      <div class="product-pic edit-item"><label>新图片：</label><{input type="image_button" link_name="pic" link_value="{$item.pic}"}></div>
+      <div class="product-btn edit-item">
+        <span class="cancel" rel="edit">取消</span>
+        <{button class="save" icon="btn_add.gif" app="desktop" rel="save" label=$___b2c="保存"|t:'b2c' type="submit"}>
+      </div>
+    </div>
+  </div>
+  <div class="edit-opt">
+    <div class="move-opt clearfix">
+      <i class="up-btn" rel="move"></i>
+      <i class="down-btn" rel="move"></i>
+    </div>
+    <{button class="edit-btn" rel="edit" label=$___b2c="编辑"|t:'b2c' type="submit"}>
+  </div>
+  <div class="add-opt">
+    <span class="add-btn">已添加</span>
+  </div>
+</li>

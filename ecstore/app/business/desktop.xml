@@ -1,0 +1,53 @@
+<desktop>
+ <permissions>
+        <permission id='storegrade' display='true'>店铺类型</permission>
+        <permission id='violationcat' display='true'>违规类型</permission>
+        <permission id='violation' display='true'>违规处理</permission>
+        <permission id='storeregion' display='true'>经营范围</permission>
+        <permission id='storemanger' display='true'>店铺管理</permission>
+        <permission id='storebrand' display='true'>店铺品牌</permission>
+        <permission id='storemember' display='true'>店员列表</permission>
+        <permission id='storeroles' display='true'>店员角色</permission>
+        <permission id='storeapproved' display='true'>店铺审核</permission>
+        <permission id='storeviolation' display='true'>店铺违规</permission>
+        <permission id='storeviolationed' display='true'>店铺处理</permission>
+        <permission id="business" display='true' workground='b2c.wrokground.goods'>商品管理审核</permission>
+		<permission id="balance" display='true' workground='ectools.wrokground.order'>结算单</permission>
+</permissions>
+<workground name="店铺" id="shop.wrokground.store" app="business" controller="admin_storemanger" action="index" order='30'>
+        <menugroup name="基本设置">
+            <menu controller='admin_storegrade' action='index'  permission='storegrade' display='true' order='10'>店铺等级</menu>
+            <menu controller='admin_storeroles' action='index'  permission='storeroles' display='true' order='30'>店员角色</menu>
+            <menu controller='admin_violationcat' action='index'  permission='violationcat' display='true' order='30'>违规类型</menu>
+            <menu controller='admin_violation' action='index'  permission='violation' display='true' order='30'>违规处理</menu>
+        </menugroup>
+        <menugroup name="店铺管理">
+            <menu controller='admin_storemanger' action='index'  permission='storemanger' display='true' order='50'>店铺列表</menu>
+            <menu controller='admin_storemember' action='index'  permission='storemember' display='true' order='60'>店员列表</menu>
+            <menu controller='admin_storeviolation' action='index'  permission='storeviolation' display='true' order='70'>店铺违规</menu>
+            <menu controller='admin_storeviolation' action='indextotal'  permission='storeviolationed' display='true' order='80'>店铺处理</menu>
+            <menu controller='admin_storemanger' action='approveindex' permission='storeapproved' display='true' order='40'>店铺审核</menu>
+        </menugroup>
+</workground>
+
+ <workground name="商品" id="b2c.wrokground.goods">
+        <menugroup name="店铺品牌管理">
+		    <menu controller='admin_apply' action='apply' permission='business' display='true' order='80'>品牌审核列表</menu>
+        </menugroup>
+</workground>
+
+<workground name="订单" id="ectools.wrokground.order">
+	<menugroup name="单据管理">
+		<menu controller='admin_balance' action='index' permission='balance' display='true' order='40'>结算单</menu>
+	</menugroup>
+</workground>
+
+<workground name="站点" id="site.wrokground.theme" controller="admin_module" action="index" order="50">
+        <menugroup name="模板管理">
+            <menu controller='admin_theme' action='index' permission='theme' display='true' order="6">店铺模板</menu>
+        </menugroup>
+</workground>
+<adminpanel group="desktop_setting" controller="admin_default" action="index" permission="setting" display="true" order='600'>站内域名设定</adminpanel>
+    
+<adminpanel group="desktop_setting" controller="admin_default" action="img_index" permission="setting" display="true" order='700'>图片地址设定</adminpanel>
+</desktop>

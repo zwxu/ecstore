@@ -1,0 +1,17 @@
+<form action="index.php?app=b2c&ctl=admin_member_shopbbs&act=to_setting" method="post">
+<div class="tableform"> 
+<div class="division"> <table cellspacing="0" cellpadding="2" border="0" width="100%"> <tbody>
+<tr> <th><{t}>是否开启商店留言功能:<{/t}></th> <td><input type="radio" <{if $setting.open eq "on"}>checked="checked" <{/if}> value="on" id="el-8db2f-da688" separator=" " name="open"><label for="el-8db2f-da688"><{t}>开启<{/t}></label> <input type="radio" <{if $setting.open eq "off"}>checked="checked" <{/if}> value="off" id="el-8db2f-da6881" separator=" " name="open"><label for="el-8db2f-da6881"><{t}>关闭<{/t}></label> </td> 
+</tr>
+<tr> <th><{t}>发表留言权限:<{/t}></th> 
+	 <td><input type="radio" name="power"<{if $setting.power == 'all'}> checked=checked<{/if}> value="all"><{t}>允许所有顾客留言<{/t}></td>
+        </tr>
+        <tr>
+          <th></th>
+          <td><input type="radio" name="power"<{if $setting.power == 'member'}> checked=checked<{/if}> value="member"><{t}>仅注册会员可留言<{/t}></td>
+      
+</tr>
+</tbody>
+</table>   
+</div> <div class="table-action"> <button class="btn" type="submit"><span><span><{t}>保存<{/t}></span></span></button> </div> </div>
+</form>

@@ -1,0 +1,105 @@
+<h3><{t}>优惠方案<{/t}></h3>
+<div class="tableform">
+    <div class="division">
+        <div class="division">
+           <span><strong><{t}>模板列表<{/t}></strong></span><span style="margin-left:5px;font-size:12px;cursor:pointer;"><a id="btn_stpl"><{t}>隐藏<{/t}></a></span>
+        </div>
+        <!-- 模板选择区域 -->
+
+        <!-- 预过滤全部应用于商品 -->
+        <!--
+        <{*
+        <div class="division" id="stpl_list_div">
+        <{if (!$perfilter)}>
+            <ul>
+                <li>
+                    <input type="radio" name="action_solution[<{$action_solution_name}>][type]" value="order" <{if ($solution_type=='order')}>checked<{/if}> >订单
+                    <input type="radio" name="action_solution[<{$action_solution_name}>][type]" value="goods" <{if ($solution_type=='goods')}>checked<{/if}> >符合条件的商品
+                </li>
+            </ul>
+        <{/if}>
+        </div>
+        *}>
+        -->
+        <!-- 预过滤全部应用于商品 -->
+
+
+        <div class="can" id="stpl_list"  >
+            <{if (!$perfilter)}>
+            <input type="hidden" id="stpl_type_hidden" name="action_solution[<{$action_solution_name}>][type]" value="<{$solution_type}>" >
+            <{/if}>
+           <{if $stpl_list}>
+               <ul>
+               <{foreach from=$stpl_list item=list key=type}>
+                 <{foreach from=$list item=item key=key}>
+                   <li><label><input name="rule[s_template]" vtype="requiredradio" alt="<{$type}>" type="radio"  value="<{$key}>" <{if ($key == $rule.s_template) && $solution_type==$type}>checked<{/if}> /><{$item}></label></li>
+                 <{/foreach}>
+               <{/foreach}>
+               <!--
+               <{*
+               <{foreach from=$stpl_list item=item key=key}>
+                   <li><label><input name="rule[s_template]"  alt="order" type="radio"  value="<{$key}>" <{if ($key == $rule.s_template)}>checked<{/if}> /><{$item}></label></li>
+               <{/foreach}>
+               *}>
+               -->
+               </ul>
+           <{else}>
+               <div><{t}>没有添加可用的优惠方案模板app<{/t}></div>
+           <{/if}>
+        </div>
+    </div>
+
+
+    <div class="division b-tp">
+        <div id="stpl_sconditions"><{$action_solution}></div>
+    </div>
+
+
+</div>
+<script>
+void function(){
+    $ES('input[type=radio]','stpl_list').addEvent('click',function(e){
+        var t = $(this).value;
+        var _t_value = $(this).get('alt');
+        W.page('index.php?app=b2c&ctl=admin_sales_<{$promotion_type}>&act=solution',{update:$('stpl_sconditions'),data:'template='+$(this).value + '&type=' + _t_value,onComplete:function(res){
+            <{if (!$perfilter)}>
+            var _obj_hidden_solution_type = $('stpl_type_hidden');
+            _obj_hidden_solution_type.setProperty('name', 'action_solution[' + t + '][type]');
+            _obj_hidden_solution_type.setProperty('value', _t_value);
+            <{/if}>
+
+        }});
+    });
+
+    $('btn_stpl').addEvent('click',function(e){
+        var dp = $('stpl_list').getStyle('display');
+        if(dp == 'none') {
+            $(this).innerHTML = '<{t}>隐藏<{/t}>';
+            $('stpl_list').setStyle('display','block');
+        } else {
+            $(this).innerHTML = '<{t}>显示<{/t}>';
+            $('stpl_list').setStyle('display','none');
+        }
+    });
+
+    $ES('input[type=radio]', 'stpl_list_div').addEvent('click', function(e){
+        $('stpl_list').setStyle('display', 'block');
+    });
+
+    $ES('input[type=radio]','ctpl_list').each(function(e){
+        if( e.get('checked')==true ) {
+            var _alt = e.get('alt');
+            if( _alt ) {
+                $ES('input[type=radio]', 'stpl_list').each(function(r) {
+                    if(r.alt != _alt) {
+                        r.set('disabled', true);
+                        r.getParent('li').setStyle('display', 'none');
+                    }
+                });
+            }
+        }
+    });
+
+}();
+
+</script>

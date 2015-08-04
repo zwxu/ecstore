@@ -1,0 +1,11 @@
+<div class="tableform">
+    <table>
+        <tr>
+            <th><{t}>下载模板：<{/t}></th>
+		    <td>
+				<{assign var=___a value="下 载"}>
+                <{button type="button" label=$___a|t:'site' onClick="location.href='index.php?app=site&ctl=admin_theme_manage&act=download&theme={$theme}'"}>
+		    </td>
+        </tr>
+    </table>
+</div>

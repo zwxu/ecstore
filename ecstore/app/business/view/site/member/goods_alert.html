@@ -1,0 +1,72 @@
+<div class="member-main">
+  <div class="title">预警中的宝贝</div>
+  <div id="tab-obj" class="section switch">
+    <ul class="switchable-triggerBox clearfix">
+      <li><a href="<{link app=business ctl=site_member act=goods_instock}>"><{t}>等待上架的宝贝<{/t}></a></li>
+      <li class="active"><a href="#"><{t}>预警中的宝贝<{/t}></a></li>
+      <li><a href="<{link app=business ctl=site_member act=goods_violate}>"><{t}>违规下架的宝贝<{/t}></a></li>
+    </ul>
+    <div class="switchable-content" >
+      <div class="switchable-panel">
+        <{if !$goods}>
+        <div class="noinfo"><{t}>暂无商品<{/t}></div>
+        <{/if}>
+        <div class="search-form">
+          <div>
+            <form action="<{link app=business ctl=site_member act=change_alert_num}>" method="post">
+              <{t}>设置店铺预警库存：<{/t}>
+              <{input type="text" name="alert_num" vtype="required&&unsignedint" value=$alert_num}>
+              <{t}>平台设置默认预警库存<{$system_num}><{/t}>
+              <{button label=$___business="设置"|t:'business' type="submit" name="butsubmit" rel="_request"}>
+            </form>
+          </div>
+          <div>
+            <div class="colum">
+              <p class="row">
+                <label for="search-keyword"><{t}>宝贝名称：<{/t}></label>
+                <input id="search-keyword" type="text" name="content[name]" maxlength="64" value="">
+              </p>
+              <p class="row">
+                <label><{t}>价格：<{/t}></label>
+                <input id="search-price-from" type="text" name="content[price_from]" value="" vtype="number">
+                <{t}> 到 <{/t}>
+                <input id="search-price-to" type="text" name="content[price_to]" value="" vtype="number">
+              </p>
+            </div>
+            <div class="colum">
+              <p class="row">
+                <label for="outer-id"><{t}>商家编码：<{/t}></label>
+                <input id="outer-id" type="text" name="content[bn]" maxlength="64" value="">
+              </p>
+              <p class="row">
+                <label><{t}>总销量：<{/t}></label>
+                <input id="search-num-from" type="text" name="content[bcount_from]" value="" vtype="number">
+                <{t}> 到 <{/t}>
+                <input id="search-num-to" type="text" name="content[bcount_to]" value="" vtype="number">
+              </p>
+            </div>
+            <div class="colum">
+              <p class="row">
+                <label for="first-cate-id"><{t}>一级类目：<{/t}></label>
+                <{input id="first-cate-id" type="select" name="content[cat_id]" style="font-size:12px;" value="" rows=$catList valueColumn="cat_id" labelColumn="cat_name"}>
+              </p>             
+            </div>
+			<p class="submitArea" style="float:left;">
+            <button class="btn submit-btn" onclick="searchItems()" type="button"><{t}>搜索<{/t}></button>
+          </p>
+			<div class="crl"></div>
+			<div class="colum">
+				<p class="row">
+                <label for="simselect"><{t}>店铺中的分类：<{/t}></label>
+                <{input id="simselect" type="select" name="content[custom_cat_id]" value="" rows=$customcatList valueColumn="cat_id" labelColumn="cat_name"}>
+              </p>
+			</div>
+			<div class="crl"></div>
+          </div>          
+        </div>
+		<div class="clr"></div>
+        <{include file="site/member/goods_list.html" app="business"}>
+      </div>
+    </div>
+  </div>
+</div>

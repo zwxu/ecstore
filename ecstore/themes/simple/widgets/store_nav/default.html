@@ -1,0 +1,16 @@
+<style>
+.shop_nav_<{$widgets_id}> {background:#589887;  padding-left:165px; height:24px;}
+.shop_nav_<{$widgets_id}> li {float:left;list-style:none;}
+.shop_nav_<{$widgets_id}> li a{text-decoration:none;font-family:tahoma,"microsoft yahei","微软雅黑"; font-size:12px; color:#fff; margin:0 20px;height:24px; line-height:24px;}
+</style>
+<div class="shop_nav_<{$widgets_id}>">
+<ul>
+ <{if $data.nav}>
+      <{foreach from=$data.nav item=nav_s key=nav_k name=nav_n}>
+      <li><a href="<{$nav_s.link}>" target="_blank"><{$nav_s.title}></a></li>      
+      <{/foreach}>  
+  <{/if}>
+  <div class="cl_zhi"></div>
+</ul>
+</div>
+

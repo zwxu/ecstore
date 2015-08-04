@@ -1,0 +1,57 @@
+<div class="member-main">
+<div class="title"><{t}>物流工具<{/t}></div>
+  <div id="tab-dlycorp" class="section switch">
+    <ul class="switchable-triggerBox clearfix">
+      <li><a href="<{link app=business ctl='site_member' act='dlyaddress'}>"><{t}>地址信息<{/t}></a></li>
+      <li><a href="<{link app=business ctl='site_member' act='dlycorp'}>"><{t}>默认物流公司<{/t}></a></li>
+      <li class="active"><a href="#"><{t}>运费模板<{/t}></a></li>
+    </ul>
+    <div class="switchable-content" >
+      <p style="overflow:hidden;*zoom:1">
+      <span class="skin-gray">
+      <a class="long-btn" href="<{link app=business ctl=site_member act=dlytype_new}>">新增运费模板 </a>
+      </span>
+      </p>
+      <div class="switchable-panel">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" class="gridlist">
+          <thead>
+            <tr>
+              <th><{t}>运送方式<{/t}></th>
+              <th><{t}>状态<{/t}></th>
+              <th><{t}>物流保价<{/t}></th>
+              <th><{t}>操作<{/t}></th>
+            </tr>
+          </thead>
+          <tbody>
+            <{if $pager.current == 1}>
+            <tr>
+              <td class="no_bk textcenter">买家自提</td>
+              <td class="textcenter"><{if !$pickup}>不<{/if}>启用</td>
+              <td class="textcenter">-</td>
+              <td class="textcenter">
+                <a title="" href="<{link app=business ctl=site_member act=dlytype_pickup}>"><{if $pickup}>停用<{else}>启用<{/if}><a>
+              </td>
+              <td></td>
+            </tr>
+            <{/if}>
+            <{foreach from=$dt_info item="item" name="item"}>
+            <tr>
+              <td class="no_bk textcenter"><{$item.dt_name}></td>
+              <td class="textcenter"><{$item.dt_status}></td>
+              <td class="textcenter"><{$item.protect}></td>
+              <td class="textcenter">
+                <a title="" href="<{link app=business ctl=site_member act=dlytype_edit arg=$item.dt_id}>">编辑<a>
+                <a title="" href="<{link app=business ctl=site_member act=dlytype_delete arg=$item.dt_id}>">删除</a>
+              </td>
+              <td></td>
+            </tr>
+            <{/foreach}>
+          </tbody>
+        </table>
+        <{pagers data=$pager}>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+</script>

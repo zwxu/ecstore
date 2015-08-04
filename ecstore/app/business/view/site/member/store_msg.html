@@ -1,0 +1,158 @@
+<!-- right-->
+<{css src="member.css" app='b2c'}>
+<{include file="site/common/header.html" app="b2c"}>
+ <!-- right-->
+<div class="member-main">
+ <script>
+            var prediv = '';
+            function showMsg(obj,msgid,url) {
+                var currdiv = $('view_msg_pro_'+msgid);
+
+  if(!obj.parentNode.id){
+    if(typeof prediv == "object") {prediv.style.display='none'};
+    currdiv.style.display = '';
+	if($('view_msg_'+msgid))
+	new Request({
+		url:url,
+		method:'post',
+		data:'',
+		onComplete:function(res){
+			new Element('div',{'html':res,'style':'*zoom:1'}).inject($('view_msg_'+msgid));
+		}
+	}).send();
+
+                    obj.parentNode.id = 'span_'+msgid;
+                    if(prediv){
+                        var link = $('span_'+prediv.id.substr(13)).getElementsByTagName('a')[0];
+                        link.className = 'viewmsgoff';
+                        toggleBg(link, false);
+                    }
+                    prediv = $('view_msg_pro_'+msgid);
+                    obj.className = 'viewmsg';
+                    toggleBg(obj, true);
+                    }else{
+                    if(currdiv.style.display == 'none'){
+                        currdiv.style.display = '';
+                        obj.className = 'viewmsg';
+                        toggleBg(obj, true);
+                        if(prediv) {
+                            prediv.style.display = 'none';
+                            var link = $('span_'+prediv.id.substr(13)).getElementsByTagName('a')[0];
+                            link.className = 'viewmsgoff';
+                            toggleBg(link, false);
+                        }
+                        prediv = currdiv;
+                        }else{
+                        currdiv.style.display = 'none';
+                        obj.className = 'viewmsgoff';
+                        toggleBg(obj, false);
+                        prediv = '';
+                    }
+                }
+            }
+
+            function toggleBg(el, state){
+                while(el.tagName != 'TR'){
+                    el = el.parentNode;
+                }
+                if(!state) $(el).removeClass('msgon');
+                else $(el).addClass('msgon');
+            }
+
+            function checkAll(obj,box) {
+                var tag = obj.getElementsByTagName('input');
+                for(var i = 0;i < tag.length;i++){
+                    tag[i].checked = box.checked;
+                }
+            }
+        </script>
+<div class="title">站内信</div>
+    <div>
+        <div id="tab-discus" class="section switch">
+            <ul class="switchable-triggerBox clearfix">
+                <li class="active" ><a href="javascript:void(0);"><{t}>站内信<{/t}></a></li>
+            </ul>
+            <div class="switchable-content">
+                <div class="switchable-panel">
+                        <div id="message-tab" class="switch" style="padding-top:0">
+                            <div class="site-mail">
+                                <ul class="switchable-triggerBox2 clearfix" >
+                                    <li <{if !$type}>class="active"<{/if}>><a href="<{link app=business ctl='site_storemsg' act='store_msg'}>"><{t}>全部(<{$all}>)<{/t}></a></li>
+                                    <li <{if $type == 1}>class="active"<{/if}>><a href="<{link app=business ctl='site_storemsg' act='store_msg' arg0='1'}>"><{t}>未读(<{$no_read}>)<{/t}></a></li>
+                                    <li <{if $type == 2}>class="active"<{/if}>><a href="<{link app=business ctl='site_storemsg' act='store_msg' arg0='2'}>"><{t}>已读(<{$had_read}>)<{/t}></a><span></span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <form action="<{link app=business ctl='site_storemsg' act='del_in_box_msg'}>" method="post" id="form_id">
+                        <!--table width="100%" cellspacing="0" cellpadding="0" class="liststyle-option">
+							<col class="span-1 textcenter"></col>
+							<col class=" textleft"></col>
+                            <tr>
+                                <th class="textcenter"><input type="checkbox" onclick="checkAll(this.form,this)" name="chkall" id="chkall" title="<{t}>全选<{/t}>"></th>
+                                <td>
+                                    <{button type="submit" name="pmsend" label=$___b2c="删除"|t:'b2c' rel="_request"}>
+                                </td>
+                                <td style="padding-right:10px; text-align:right"><{t}>共有短消息:<{/t}>&nbsp;<em id="pmtotalnum" class="siteparttitle-orage"><{$total_msg}></em></td>
+                            </tr>
+                        </table-->
+                        <table width="100%" cellspacing="0" cellpadding="0"  summary="<{t}>收件箱<{/t}>" class="gridlist border-top">
+                            <col ></col>
+                            <col ></col>
+                            <col></col>
+                            <thead>
+                                <tr>
+                                    <th class="first">&nbsp;</th>
+                                    <th width="75%"><{t}>标题<{/t}></th>
+                                    <th ><{t}>时间<{/t}></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <{if count($message)>0}>
+                                <{foreach item=msg from=$message}>
+                                <tr class="msgon">
+                                    <td class="selector textcenter"><input type="checkbox" value=<{$msg.comment_id}> name="delete[]"></td>
+                                    <td class="textleft">
+                                        <span><a href="<{if $msg.unread}><{else}>javascript:void(0);<{/if}>" onclick="showMsg(this,<{$msg.comment_id}>,'<{link app=business ctl='site_storemsg' act='view_msg' arg0=$msg.comment_id }>');return false;" class="viewmsgoff"><font color='blue'><{$msg.title|nl2br}></font></a></span></td>
+                                    <td align="center"><{$msg.time|cdate:SDATE_STIME}></td>
+
+                                </tr>
+                                <tr id="view_msg_pro_<{$msg.comment_id}>" style="display:none; white-space:normal;">
+                                    <td class="memberviewinfo" colspan="6"><p id="view_msg_<{$msg.comment_id}>" class="pt10 pb10 pl10 pr10"></p></td>
+                                </tr>
+                                <tr><td colspan="6"  style="border:none; background:none; overflow:hidden">
+                                        <div id="reply_<{$msg.comment_id}>" style="display:none;">
+                                        </div>
+                                </td></tr>
+                                <{/foreach}>
+                                <{else}>
+                                <tr>
+                                    <td height="60" colspan="6" class="bg-white">
+                                        <{t}> 收件箱内没有短信息。<{/t}>
+                                    </td>
+                                </tr>
+                                <{/if}>
+                            </tbody>
+
+                        </table>
+                        <table width="100%" cellspacing="0" cellpadding="0" class="liststyle-option">
+						<col class="span-1 textcenter"></col>
+						<col class=" textleft"></col>
+
+                            <tr>
+                                <th class="textcenter"><input type="checkbox" onclick="checkAll(this.form,this)" name="chkall" id="chkall" title="<{t}>全选<{/t}>"></th>
+                                <td class="textleft">
+                                    <{button type="submit" name="pmsend" label=$___b2c="删除"|t:'b2c' rel="_request"}></td>
+                                <td style="padding-right:10px; text-align:right"><{t}>共有短消息:<{/t}>&nbsp;<em id="pmtotalnum" class="siteparttitle-orage"><{$total_msg}></em></td>
+                            </tr>
+
+                        </table>
+                        <{pagers data=$pager}>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- right-->

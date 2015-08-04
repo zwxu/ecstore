@@ -1,0 +1,63 @@
+﻿.mall_store_shop_img{height:28px;padding:6px 10px 0px 10px;background:#448CF2;}
+
+.mall_store_shop_img li{float:left;list-style:none;margin:0 5px;height:26px;}
+
+.mall_store_shop_img li img{width:24px;height:24px;}
+
+.mall_store_shop_info{width:254px;height:34px;color:#fff;padding-left:10px;position:relative;z-index:65535;background:#448CF2;}
+
+.mall_store_info_p span{margin-left:6px;margin-bottom:6px;}
+
+.height_to{display:inline-block;background:#a00000;width:33px;height:16px;line-height:18px;text-align:center;margin-top:5px;}
+	   
+.store_down{background:url(s6.gif) 6px center no-repeat;width:20px;height:5px;display:inline-block;margin-top:15px;}   
+.mall_store_shop_info_detail{display:none;position:absolute;top:36px;left:0px;width:262px;border:1px solid #448CF2;border-top:none;background:#fff;z-index:1000;}
+
+.mall_store_shop_info_addre{width:237px;margin:10px auto 0px;float:left;padding-left:20px;}
+	   
+.mall_store_shop_info_addre>p{clear:both;line-height:23px;height:23px;color:#959595;font-size:12px;}
+	   
+.mall_store_shop_info_addre>p>span{color:#666;}
+	   
+.mall_store_shop_info_addre>p>strong{font-weight:normal;}
+	   
+.mall_store_info_p{line-height:36px;}
+	   
+.mall_store_info_p>span,.mall_store_info_p>strong{float:left;}
+		
+.mall_store_shop_info_come{padding:10px 0px 10px 50px;}
+		
+.mall_store_shop_info_come a{float:left;display:block;width:60px;height:22px;line-height:22px;color:#888;text-align:center;background:#eee;text-decoration:none;margin-right:10px;font-size:12px;}
+		
+.mall_store_shop_info_come a.on{background:#a00000;color:#fff;}
+		
+		
+		
+.compare{width:225px;margin:10px auto;border-bottom:1px dotted #dbdbdb;padding-bottom:15px;}
+		
+.compare_le,.compare_ri{width:86px;}
+		
+.compare p,.compare p span{color:#999;}
+		
+.compare p span{float:left;}
+		
+.compare a.gao_di{background:#b31202;width:28px;height:14px;line-height:14px;*line-height:15px;text-align:center;text-decoration:none;color:#fff;display:block;float:left;margin-top:10px;}
+		
+.compare a{float:left;margin-right:3px;text-decoration:none;}
+		
+.modi_div{height:30px;line-height:30px;}
+		
+.compare_ri a{color:#b31202;}
+		
+.compare_le>p>a{color:#666;font-weight:bold;}
+.mall_store_shop_info:hover .mall_store_shop_info_detail{display:block;}
+.mall_store_shop_info:hover .store_down{background:url(sf_12.gif) 6px center no-repeat;}
+.mall_store_shop_info_detail .shopdsr-title{color:#999999;font-size:12px;height:20px;line-height:20px;}
+.mall_store_shop_info_detail .shopdsr-title span{padding-left:40px;}
+.mall_store_shop_info_detail .shopheader-dsr{margin-left:20px;margin-top:5px;width:200px;}
+.mall_store_shop_info_detail .shopheader-dsr .de_score{text-align:left;}
+.mall_store_shop_info_come .button{background:none;}
+.mall_store_shop_info_come .listact{color:#FFFFFF;background:none repeat scroll 0 0 #A00000;}
+.mall_store_shop_info_addre img{width:90px;height:22px;}
+.mall_store_info_p .point{margin-top:10px;background:none repeat scroll 0 0 #A1001A;height:15px;line-height:15px;border-radius:2px 2px 2px 2px;padding:1px 2px 1px 2px;color:#FFFFFF;}
+.mall_store_info_p .blow{background:none repeat scroll 0 0 #217311;}

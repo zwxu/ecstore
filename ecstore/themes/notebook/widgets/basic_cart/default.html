@@ -1,0 +1,19 @@
+<a href="<{link app="b2c" ctl="site_cart" act="index"}>">
+    <i></i>购物车
+        <script>
+        var _prefix_number = "";
+        var _subfix_number = "</span>";
+        <{if $setting.cart_show_type==1}>
+          _prefix_number = '<span id="cart_num" class="red">';
+            document.write(typeof(Cookie)=='undefined' ? (_prefix_number + '0' + _subfix_number) : _prefix_number + (Cookie.read('S[CART_NUMBER]')?Cookie.read('S[CART_NUMBER]'):'0') + _subfix_number);
+        <{else}>
+          _prefix_number = '<span id="cart_count" class="red">';
+            document.write(typeof(Cookie)=='undefined' ? (_prefix_number + '0' + _subfix_number):  _prefix_number + (Cookie.read('S[CART_COUNT]')?Cookie.read('S[CART_COUNT]'):'0') + _subfix_number);
+        <{/if}>
+    </script>
+    <{if $setting.cart_show_type==1}>
+      <{t app='b2c'}>件<{/t}>
+    <{else}>
+      <{t app='b2c'}>种<{/t}>
+    <{/if}>
+</a>

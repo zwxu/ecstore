@@ -1,0 +1,14 @@
+<div class="tableform widgetconfig">
+<div class="division">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th><{t app='business'}>标题：<{/t}></th>
+    <td><{input type="text" name="title" value=$setting.title|default:'宝贝排行'}></td>
+  </tr>
+  <tr>
+    <th><{t app='b2c'}>榜单显示商品数：<{/t}></th>
+    <td><{input name="limit" value=$setting.limit|default:'10' size=8 required="true" type="digits"}></td>
+  </tr>
+</table>
+</div>
+</div>

@@ -1,0 +1,28 @@
+
+<form name="orderpayany" action="<{link ctl=paycenter act=order}>" method="post">
+<input type="hidden" name="order_id" value="<{$payment.order_id}>">
+<input type="hidden" name="money" value="<{$payment.advance}>">
+<input type="hidden" name="cur_money" value="<{$payment.advance}>">
+<input type="hidden" name="currency" value="<{$payment.currency}>">
+<input type="hidden" name="payment[payment]" value="<{$payment.payment.payment}>">
+
+<div class="feed-back">
+<div class="error clearfix">
+  <div class="span-1 pic"></div>
+  <div class="span-auto ">
+    <h1><{t}>预存款余额不足<{/t}></h1>
+  <p><{t}>您的预存款余额为：<{/t}><{$payment.advance|cur}><{t}>，不足本次支付。您可以：<{/t}></p>
+        <ul style="border:1px solid #efefef; padding:5px;">
+        <li>1、<a class="lnk" href="<{link ctl=member act=deposit}>" target="_blank"><{t}>进入预存款充值。<{/t}></a>
+        <{if $payment.advance > 0}>
+        <li>2、<a class="lnk" href="#" onclick="javascript:orderpayany.submit();"><{t}>订单部分付款，先支付预存款剩余款项。<{/t}></a>
+        <{/if}>
+        </ul>
+  
+  
+  
+  </div>
+</div>
+</div>
+
+</form>

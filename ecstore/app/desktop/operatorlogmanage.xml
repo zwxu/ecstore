@@ -1,0 +1,19 @@
+<root>
+	
+	<register ctl="backup" act="backup_sdf">
+		<operate>数据备份</operate>
+	</register>
+	
+	<register ctl="comeback" act="comeback">
+		<operate>数据恢复</operate>
+	</register>
+	
+	<register ctl="comeback" act="removeTgz">
+		<operate>删除备份</operate>
+	</register>
+
+	<register ctl="debug" act="cleardata">
+		<operate>清除体验数据</operate>
+	</register>
+		
+</root>

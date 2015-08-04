@@ -1,0 +1,70 @@
+<div class="spec-menu handles" >
+<{if $spec}>
+    <{foreach from=$spec item=aSpec }>
+            <{if $aSpec.spec|is_array}>
+                <{assign var=aSpec value=$aSpec.spec}>
+            <{/if}>
+        <span class="t-handle" specid="<{$aSpec.spec_id}>">
+            <{$aSpec.spec_name|escape:'html'}>
+            <input type="hidden" name="spec[<{$aSpec.spec_id}>][spec_name]" value="<{$aSpec.spec_name|escape}>">
+            <input type="hidden" name="spec[<{$aSpec.spec_id}>][spec_id]" value="<{$aSpec.spec_id}>">
+            <input type="hidden" name="spec[<{$aSpec.spec_id}>][spec_type]" value="<{$aSpec.spec_type}>">
+            <label class="spec-sum-<{$aSpec.spec_id}>" ></label>
+            <span style="display:none;"class="t-del" style="width:15px; padding:0; display:inline-block">&nbsp;&nbsp;
+                <{img title=$___b2c="删除"|t:'b2c' class="delete" style=" margin:0" src="icons/icon_delete.gif" border='none'}>
+            </span>
+        </span> 
+    <{/foreach}>
+</div>
+    <div class='spec-items division' style='border:1px #ccc solid; margin:-1px 5px 0px 5px;*margin:-4px 5px 0px 5px;_margin:3px 5px 0px 5px;'>
+            <{if !$spec}>
+               <div class='notice'><{t}>当前商品类型没有绑定默认规格，请点击右上角增加规格项<{/t}></div>
+            <{/if}>
+			<{foreach from=$spec item=aSpec }>
+            <{if $aSpec.spec|is_array}>
+                <{assign var=aSpec value=$aSpec.spec}>
+            <{/if}>
+         <div class='item' style='display:none;' id="spec-tab-<{$aSpec.spec_id}>">
+             <table>
+                <tr>
+                   <td width='20%' style='vertical-align:middle;text-align:center'>
+                     <span class="font-gray" style="line-height:18px"><{t}>请点击右侧<{/t}><br /><{t}>添加本商品需要的<{/t}><{$aSpec.spec_name|escape:'html'}></span>
+                   </td>
+                   <td width='80%'>
+                           <div>&nbsp;<span class='lnk add-spec-all' specid="<{$aSpec.spec_id}>"><{t}>添加全部<{/t}><{$aSpec.spec_name|escape:'html'}></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="font-gray"><{t}>没有您需要的<{/t}><{$aSpec.spec_name|escape:'html'}><{t}>？立刻<{/t}></span><span class="lnk editspec" specid="<{$aSpec.spec_id}>"><{t}>编辑<{/t}><{$aSpec.spec_name|escape:'html'}></span></div>
+                           <ul class='goods-spec-box spec-name' specid="<{$aSpec.spec_id}>" specType="<{$aSpec.spec_type}>"> 
+                           <{include file='admin/goods/detail/spec/spec_value_tmpl.html'}>
+                           </ul>
+                   </td>
+                </tr>
+             </table>
+             
+             <div class='tableform'>
+             <div>
+                  <table class="gridlist"  cellspacing="0" cellpadding="0" border="0" width="100%">
+                     <thead>
+                      <tr>
+                        <th style="width:15%"><{t}>系统规格<{/t}></th>
+                        <th style="width:25%"><{t}>自定义规格值<{/t}></th>
+						   <{if $aSpec.spec_type == 'image'}>
+						<th style="width:25%"><{t}>自定义规格图片<{/t}></th>
+						<{/if}>
+                        <th style="width:25%"><{t}>关联商品相册图片<{/t}></th>
+                        <th style="width:10%"><{t}>操作<{/t}></th>
+                      </tr>
+                    </thead>
+					<tbody class='spec-body'>
+					<{foreach from=$goods_spec[$aSpec.spec_id].option item=specValue}>
+                       <{include file='admin/goods/detail/spec/spec_value.html'}>
+					<{/foreach}>
+                      
+                 </tbody>
+                  </table>
+              </div>
+             </div>
+             
+         </div>
+		 <{/foreach}>
+         <{/if}>
+         <div class="clearfix"></div>
+    </div>

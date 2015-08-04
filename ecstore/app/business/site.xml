@@ -1,0 +1,125 @@
+<site>
+    <module id='business_store' controller='site_store' >
+        <name>store</name>
+        <title>店铺</title>
+        <disable>false</disable>
+    </module>
+
+    <module id='business_storeapply' controller='site_storeapply' >
+        <name>storeapply</name>
+        <title>店铺申请</title>
+        <disable>false</disable>
+    </module>
+
+    <module id='business_shop' controller='site_shop' >
+        <name>shop</name>
+        <title>门店</title>
+        <disable>false</disable>
+    </module>
+    <module id='business_theme' controller='site_theme' >
+        <name>theme</name>
+        <title>店铺模版</title>
+        <disable>false</disable>
+    </module>
+    
+
+     <module controller='site_coupon_order' >
+        <name>coupon_order</name>
+        <title>店铺优惠券</title>
+        <disable>false</disable>
+    </module>
+	<module controller='site_order' >
+        <name>busorder</name>
+        <title>商户中心</title>
+        <disable>false</disable>
+    </module>      
+    <module id='business' controller='site_member' >
+      <name>business</name>
+      <title>供应商服务</title>
+      <disable>false</disable>
+    </module>
+    
+    <module id='bimages' controller='site_mimages' >
+      <name>bimages</name>
+      <title>商品相册图片</title>
+      <disable>false</disable>
+    </module>
+
+	<module id='business_goodcat' controller='site_goods_cat' >
+        <name>goods_cat</name>
+        <title>分类管理</title>
+        <disable>false</disable>
+    </module>
+
+	<module id='business_brand' controller='site_brand' >
+        <name>brands</name>
+        <title>品牌管理</title>
+        <disable>false</disable>
+    </module>
+	<module id='business_tools' controller='site_tools' >
+        <name>btools</name>
+        <title>工具</title>
+        <disable>false</disable>
+    </module>
+	<module id='business_partner' controller='site_partner' >
+        <name>partner</name>
+        <title>合作伙伴管理</title>
+        <disable>false</disable>
+    </module>
+	<module id='business_consult' controller='site_consult' >
+			<name>consult</name>
+			<title>咨询管理</title>
+			<disable>false</disable>
+	</module>
+	<module controller='site_favorite'>
+        <name>favorite</name>
+        <title>我的收藏</title>
+        <disable>false</disable>
+    </module>
+	<module controller='site_msg'>
+        <name>msg</name>
+        <title>站内信</title>
+        <disable>false</disable>
+    </module>
+  <module controller='site_comment'>
+        <name>bcomment</name>
+        <title>订单评论</title>
+        <disable>false</disable>
+    </module>
+	<module controller='site_storemsg'>
+        <name>storemsg</name>
+        <title>站内信</title>
+        <disable>false</disable>
+    </module>
+    <module controller='site_cart'>
+        <name>bcart</name>
+        <title>购物流程</title>
+        <disable>false</disable>
+    </module>
+    <module controller='site_activity'>
+        <name>promotions</name>
+        <title>活动</title>
+        <disable>false</disable>
+    </module>
+
+    <module controller='site_complain'>
+        <name>complain</name>
+        <title>投诉管理</title>
+        <disable>false</disable>
+    </module>
+    <module controller='site_accusation'>
+        <name>accusation</name>
+        <title>举报管理</title>
+        <disable>false</disable>
+    </module>
+    <module controller='site_shopinfo'>
+        <name>shopinfo</name>
+        <title>店铺信息</title>
+        <disable>false</disable>
+    </module>
+	<module controller='site_webcall'>
+        <name>webcall</name>
+        <title>在线客服管理</title>
+        <disable>false</disable>
+    </module>
+</site>

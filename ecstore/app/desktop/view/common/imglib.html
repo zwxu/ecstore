@@ -1,0 +1,12 @@
+<table style="height:100%"><tr><td rowspan="2" style="vertical-align:top;width:150px;border-right:5px solid #E0EDFE;padding-left:10px">
+<a style="font-weight:bold;padding:3px;display:block;font-wieght:bold;" href="index.php?ctl=editor&act=uploader&name=$params['name']&domid=$domid" 
+	target="dialog::{width:350,height:150,title:'<{t}>选择上传的文件<{/t}>',modal:true}"><{t}>上传新图片<{/t}></a>
+<{foreach from=$tags item=item key=key}>
+<a style="<{if !$item.tag_id}>font-weight:bold;<{/if}>padding:3px;display:block;<{if $env.get.tag eq $item.tag_id}>color:#fff;background:#4B6DAA<{/if}>" href="index.php?ctl=editor&act=imglib&tag=<{$item.tag_id}>"><{$item.tag_name}></a>
+<{/foreach}>
+</td><td style="vertical-align:top;height:330px">
+<{$image_list}>
+</td></tr>
+<tr><td style="background:#E0EDFE;">
+</td></tr>
+</table>

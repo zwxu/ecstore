@@ -1,0 +1,174 @@
+<div class="infoContent" container="true" id="contents" style="visibility: visible; opacity: 1;">
+	<div class="tabs">
+
+		<table cellspacing="0" cellpadding="0" style="margin:10px" border="0" width="100%">
+			<tbody>
+			<tr>
+				<td  valign="top" style="vertical-align: top;">
+					<div class="span-10">
+						<div class="division">
+							<div class="table-grid">
+							
+								<table cellspacing="0" cellpadding="0" border="0" width="100%" class="gridlist">
+									<thead>
+										<th><{t}>订单商品 (购买量)<{/t}></th>
+									</thead>
+
+									<tbody>
+										<{foreach from=$goodsItems item=aGoods}>
+											<{if $aGoods.product}>
+											<tr>
+												<td style=" white-space:normal; text-align:left;">
+													<a href="<{$aGoods.product.link}>" target="_blank"><{$aGoods.product.name}></a>
+													<span class="font-orange">×(<{$aGoods.product.quantity}>)</span>
+												</td>
+											</tr>
+											<{/if}>
+											<{if $aGoods.adjunct}>
+											<tr>
+												<td>
+													<table cellspacing="0" cellpadding="0" border="0" width="100%" class="gridlist">
+														<tbody>
+															<{foreach from=$aGoods.adjunct item=adjunctItem}>
+															<tr>
+																<td>
+																	<a href="<{$adjunctItem.link}>" target="_blank"><{$adjunctItem.name}></a>
+																	<span class="font-orange">×(<{$adjunctItem.quantity}>)</span>
+																</td>
+															</tr>        	
+															<{/foreach}>
+														</tbody>
+													</table>
+												</td>
+											</tr>
+											<{/if}>
+											<{if $aGoods.gifts}>
+											<tr>
+												<td>
+													<table cellspacing="0" cellpadding="0" border="0" width="100%" class="gridlist">
+														<tbody>
+															<{foreach from=$aGoods.gifts item=giftItem}>
+															<tr>
+																<td>
+																	<a href="<{$giftItem.link}>" target="_blank"><{$giftItem.name}></a>
+																	<span class="font-orange">×(<{$giftItem.quantity}>)</span>
+																</td>
+															</tr>        	
+															<{/foreach}>
+														</tbody>
+													</table>
+												</td>
+											</tr>
+											<{/if}>
+										<{/foreach}>
+									</tbody>
+								</table>
+								
+								<{if $giftsItems}>
+								<table cellspacing="0" cellpadding="0" border="0" width="100%" class="gridlist">
+									<thead>
+										<th><{t}>订单赠品 (购买量)<{/t}></th>
+									</thead>
+
+									<tbody>
+										<{foreach from=$giftsItems item=aGifts}>
+										<tr>
+											<td style=" white-space:normal; text-align:left;">
+												<a href="<{$aGifts.link}>" target="_blank"><{$aGifts.name}></a>
+												<span class="font-orange">×(<{$aGifts.quantity}>)</span>
+											</td>
+										</tr>
+										<{/foreach}>
+									</tbody>
+									
+								</table>
+								<{/if}>
+
+								<{if $extends_items}>
+								<table cellspacing="0" cellpadding="0" border="0" width="100%" class="gridlist">
+									<{foreach from=$extends_items item=aExtends}>
+									<{$aExtends}>
+									<{/foreach}>
+								</table>
+								<{/if}>
+
+							</div>
+						</div>
+					</div>
+				</td>
+				<td style="vertical-align: top;">
+
+					<table cellspacing="0" cellpadding="0" border="0" width="100%" id="order_form_msg_<{$orderid}>" style="display:none">
+						<tbody>
+							<tr>
+								<td width="40"><{t}>标题：<{/t}></td>
+								<td height="30">
+									<{foreach from=$ordermsg item=newmsg }>
+									<{if $newmsg.for_comment_id == '0'}>
+									<{assign var=reSubject value=$newmsg.title}>
+									<{assign var=msgid value=$newmsg.comment_id}>
+									<{break}>
+									<{/if}>
+									<{/foreach}>
+									<{input type="text" name="msg[subject]" required='true' maxlength=30 value="Re:{$reSubject}" }>
+									<input type="hidden" name="hid_res_subj" value="Re:<{$reSubject}>" />
+								</td>
+							</tr>
+							<tr>
+								<td style="vertical-align: top;"><{t}>内容：<{/t}></td>
+								<td><{input type="textarea" name="msg[message]" rows=3 style="width:40%" }><input type="hidden" name="msg[msg_id]" value="<{$msgid}>" /></td>
+							</tr>
+							<tr>
+								<td>&nbsp;<input type="hidden" name="msg[orderid]" value="<{$orderid}>"/></td>
+								<td style="padding:5px 0 0 0">
+									<{button label=$___b2c="提交留言"|t:'b2c' id="btn_msg_do_submit"}>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				
+					<{if $ordermsg}>
+						<div class="division" id="tab_odr_msg">
+							<{include file="admin/order/od_msg_item.html" app=b2c}>
+						</div>
+					<{else}>
+						<div class="division" id="tab_odr_msg"></div>
+					<{/if}>
+				</td>
+			</tr>
+			
+			<tr>
+			<td colspan="2">
+				<div class="table-action" style="text-align:center; padding:5px 25px 5px 0;">
+					<!--    <label>
+					<input type="button"  value="<{t}>给顾客留言<{/t}>" onclick="$('order_form_msg_<{$orderid}>').style.display=''"/>
+					</label>-->
+					<{button label=$___b2c="给顾客留言"|t:'b2c' onclick="$('order_form_msg_{$orderid}').style.display=''"}>
+				</div>
+			</td>
+			</tr>
+			</tbody>
+		</table>
+
+	</div>
+</div>
+<script>
+window.addEvent('domready', function(){
+	$('btn_msg_do_submit').addEvent('click', function(){
+	var message = $E("#order_form_msg_<{$orderid}> textarea[name^=msg[message]]").value ;
+	if(message == '') return;
+		new Request.HTML({
+			url:'index.php?app=b2c&ctl=admin_order&act=saveOrderMsgText',
+			update:'tab_odr_msg',
+			data:$('order_form_msg_<{$orderid}>'),
+			method:'post',
+			onSuccess:function(response){
+				$('order_form_msg_<{$orderid}>').style.display='none';
+				// 还原原来的input的值.
+				$E("#order_form_msg_<{$orderid}> input[name^=msg[subject]]").value = $E("#order_form_msg_<{$orderid}> input[name^=hid_res_subj]").value;
+				$E("#order_form_msg_<{$orderid}> textarea[name^=msg[message]]").value = '';
+			}
+        }).send();
+	});	
+});
+</script>

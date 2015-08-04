@@ -1,0 +1,31 @@
+<form id="phoneForm" action="<{link app=cellphone ctl=admin_phone act=toAdd }>"  method="POST" >
+  <div class="tableform">
+    <h3 align = "center"><{t}>基本信息<{/t}></h3>
+	<input type="hidden" name="phone_id" value="<{$item.phone_id}>">
+    <div class="division">
+      <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      
+      <tr>
+        <th><{t}>客服电话：<{/t}></th>
+        <td><{input type="text" name="phone_number" required="true" vtype='required' value=$item.phone_number }><em><font color="red">*</font></em></td>
+      </tr>
+      <tr>
+       <th><{t}>启用：<{/t}></th>
+        <td>
+         <input type="radio" value="true" <{if $item.is_active=='true'}>checked<{/if}> name="is_active" >开启
+         <input type="radio" value="false" <{if $item.is_active!='true'}>checked<{/if}> name="is_active" >关闭
+          </td>
+       </tr>
+     
+      <tr>
+        <th><{t}>备注：<{/t}></th>
+        <td><{input type="textarea" class="x-input" value=$item.remark   name="remark" style="resize:none;" cols="50" rows="5" maxth="255" }></td>
+      </tr>
+      </table>
+    </div>
+  </div>
+  <div class="table-action">
+    <{button label="保存" type="submit" id="groupactivity-btn" }>
+    <{button label="取消" id="groupactivity-cancel" href=$reUrl}>
+  </div>
+</form>

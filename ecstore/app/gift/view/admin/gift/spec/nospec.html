@@ -1,0 +1,42 @@
+<{if $goods.product}>
+<{assign var=product value=$goods.product|current}>
+<{/if}>
+<input type='hidden' name='goods[product][0][status]' value='true'/>
+<table border="0" cellpadding="0" cellspacing="0" id="nospec_body">
+<tbody>
+
+  <tr>
+    <th><{t}>销售价：<{/t}><input type='hidden' class="inputstyle" name='goods[product][0][product_id]' value='<{$product.product_id}>'></th>
+    <td>
+    <input type="text" vtype="unsigned" key="price" value=<{$product.price.price.price|default:0}> name="goods[product][0][price][price][price]" style="width:60px" maxlength="25" >
+      </td>
+  </tr>
+
+  <tr>
+    <th><{t}>货号：<{/t}></th>
+    <td>
+        <{input type="text" id="id_bn" class="inputstyle" value=$product.bn key="bn" name="goods[product][0][bn]" maxlength="25" }>
+    </td>
+  </tr>
+  <tr>
+    <th><{t}>重量：<{/t}></th>
+    <td><{input type="unsigned" key="weight" value=$product.weight name="goods[product][0][weight]" style="width:60px" maxlength="25" }><{t}>克(g)<{/t}></td>
+  </tr>
+  <tr>
+    <th><{t}>库存：<{/t}></th>
+    <td><{input type="unsigned" id="id_store" key="store" value=$product.store name="goods[product][0][store]" style="width:60px" maxlength="25"  vtype="unsigned" }></td>
+  </tr>
+</tbody>
+</table>
+<script>
+<{if $spec}>
+$('open_spec').addEvent('click',function(e){
+    var hsspec=new Hash();
+    $ES('#nospec_body input[key]').each(function(ipt){
+        if(ipt.value.trim().length)
+        hsspec.set(ipt.get('key'),ipt.value);
+    });
+    $('goods-spec').store('hsspec',hsspec);
+});
+<{/if}>
+</script>

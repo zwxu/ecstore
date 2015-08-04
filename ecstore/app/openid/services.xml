@@ -1,0 +1,18 @@
+<services>
+	<service id="passport">
+		<class>openid_passport_trust</class>
+	</service>
+
+	<service id="openid_imageurl">
+        <class>openid_imageurl</class>
+    </service>
+
+	 <service id="pam_account_login_name">
+        <class>openid_account_name</class>
+    </service>
+
+     <service id="base_render_pre_display">
+        <class>openid_render_href</class>
+    </service>
+
+</services>

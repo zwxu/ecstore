@@ -1,0 +1,196 @@
+<div id="member-main" class="member-main">
+<h1 class="title">退货给卖家</h1>
+<form class="tableform" method="post" action='<{link app=aftersales ctl=site_member act=reshipped}>' id="order-reship-form">
+  <input type='hidden' name='order_id' value='<{$order_id}>'>
+  <input type='hidden' name='return_id' value='<{$return_id}>'>
+
+<div class="division div-td">  
+<ul class="je_ac_limtime" id="timecount">
+ <li><strong>您还有</strong></li>
+ <li><a href="#" class="day">00</a>天</li>
+ <li><a href="#" class="hour">00</a>小时</li>
+ <li><a href="#" class="minute">00</a>分</li>
+ <li><a href="#" class="second">00</a>秒</li>
+ <li><strong>时间来处理本次退货！</strong></li>
+ <div class="cl_zhi"></div>
+</ul>
+<table width="100%" cellspacing="0" cellpadding="0">
+	<tr>
+    <th><{t}>退货地址:<{/t}></th>
+    <td><{$refund_address}></td>
+	<input type='hidden' name='refund_address' value='<{$refunds}>'>
+    </tr>
+    <{if $seller_comment}>
+        <tr>
+		<th><{t}>卖家留言:<{/t}></th>
+		<td>
+            <{$seller_comment}>
+		</td>
+    </tr>
+    <{/if}>
+	<tr>
+    <th><{t}>物流公司:<{/t}></th>
+    <td><{input type="select" name='logi_id' id="logi_id" rows=$corplist valueColumn="corp_id" labelColumn="name" value=$order.shipping.corp_id }>
+	</td>
+	</tr>
+	<tr>
+    <th><{t}>物流单号:<{/t}></th>
+    <td><{input type='text' name='logi_no' id='logi_no' width="150"}></td>
+    </tr>
+	<tr>
+    <th><{t}>配送费用:<{/t}></th>
+    <td><{input type='text' name='money' id='money' value=$order.shipping.cost_shipping width="50"}>
+	</td>
+	</tr>
+	<tr>
+    <th><{t}>发货说明:<{/t}></th>
+    <td><{input type="textarea" id="x-return-content" name="content" class='x-inputs x-input' cols="80" rows="5" style="width:50%"}></td>
+    </tr>
+	<tr>
+		<th><{t}>发货凭证:<{/t}></th>
+		<td><input type="hidden" name="MAX_FILE_SIZE" value="2097152" />
+			<input type="file" class="x-input x-inputs" name="file" id="fileField" />
+			<input type="file" class="x-input x-inputs" name="file1" id="fileField1" />
+			<input type="file" class="x-input x-inputs" name="file2" id="fileField2" />
+		</td>
+    </tr>
+    
+	
+</table>
+		<div style="padding-left:86px"><{button class="submit-btn" type="button"  onclick="do_del();" label=$___b2c="确定"|t:'b2c' rel="_request"}></div>
+</div>
+
+</form>
+</div>
+
+<script type="text/javascript">
+function do_del(){
+    var logi_id = $('logi_id').value;
+    var logi_no = $('logi_no').value;
+    var money = $('money').value;
+    var _form = $('order-reship-form');
+    if(logi_id == ''){
+        Message.error('请选择运送方式！');
+        return false;
+    }else if(logi_no == ''){
+        Message.error('请填写运单号！');
+        return false;
+    }else if(money == ''){
+        Message.error('请填写配送金额！');
+        return false;
+    }else{
+        _form.submit();
+    }
+}
+</script>
+
+<script>
+    (function() {
+        var timestamp_statues = (new Date()).valueOf();
+        var timeCount=timestamp_statues;
+        var timeCount = this.timeCount = {
+            init:function(nowtime,endtime,dom){
+                var diff = Math.abs((nowtime.getTime() - endtime.getTime())/1000);
+                var secondDiff = diff % 60;
+                var minuteDiff = ((diff - secondDiff)/60) % 60;
+                var hourDiff = ((diff - secondDiff  - minuteDiff*60)/3600) % 24;
+                var dayDiff = (diff - secondDiff  - minuteDiff*60 - hourDiff*3600) / 86400;
+                var timeDiff = [dayDiff,hourDiff,minuteDiff,secondDiff];
+                this.s = (function(){this.calcTime.periodical(1000,this,{
+                        time:timeDiff,
+                        dom:dom
+                    })}).delay(100,this);
+            },
+            addZero:function(timeDiff){
+                for(var i=0;i<timeDiff.length;i++){
+                    if(timeDiff[i].toString().length<2){
+                        timeDiff[i] = "0" + timeDiff[i].toString();
+                        return timeDiff;
+                    }
+                }
+            },
+            formatToInt : function(timeDiff){
+                for(var i=0;i<timeDiff.length;i++){
+                    parseInt(timeDiff[i]);
+                };
+                return timeDiff;
+            },
+            judgeTime : function(timeDiff){
+                if(timeDiff[3]< 0  && timeDiff[2]>0){
+                    timeDiff[3] = 59;
+                    timeDiff[2]--;
+                    return timeDiff;
+                }else if(timeDiff[3] <0 && timeDiff[2]==0 && timeDiff[1]>0){
+                    timeDiff[3] = 59
+                    timeDiff[2] = 59;
+                    timeDiff[1]--;
+                    return timeDiff;
+                }else if(timeDiff[3] <0 && timeDiff[2]==0 && timeDiff[1]==0 && timeDiff[0]>0){
+                    timeDiff[3] = 59
+                    timeDiff[2] = 59;
+                    timeDiff[1] = 23;
+                    timeDiff[0]--;
+                    return timeDiff;
+                }else if(timeDiff[3]==0 && timeDiff[2]==0 && timeDiff[1]==0 && timeDiff[0]==0){
+                    new Request.HTML({
+                            url:'<{link app=b2c ctl=site_member act=js_function_do_refund_cancel}>',
+                            method:'post',
+                            data:'return_id=<{$return_id}>'
+                    }).send();
+                    $clear(this.s);
+                    $('timecount').innerHTML='<p>申请自动关闭！</p>';
+                    $('scarebuyingprice').display='none';
+                    $('scarebuyingsucc').display='';
+                    return;
+                }
+            },
+            calcTime : function (obj){
+                if(!obj.dom) return;
+                var _timeDiff = obj.time;
+                this.addZero(_timeDiff);
+                this.formatToInt(_timeDiff);
+                _timeDiff[3]--;
+                this.judgeTime(_timeDiff);
+                this.addZero(_timeDiff);
+                var dom = obj.dom;
+                dom.second.innerHTML = _timeDiff[3];
+                dom.minute.innerHTML = _timeDiff[2];
+                dom.hour.innerHTML = _timeDiff[1];
+                dom.day.innerHTML = _timeDiff[0];
+            },
+            calcDesc:function(){
+                new Request.HTML({
+                        url:'<{link app=business ctl=site_member act=js_function_do_refund_cancel}>',
+                        method:'post',
+                        data:'return_id=<{$return_id}>'
+                }).send();
+                $clear(this.s);
+                $('timecount').innerHTML='<p>申请自动关闭！</p>';
+                $('scarebuyingprice').display='none';
+                $('scarebuyingsucc').display='';
+                return;
+            }
+        }
+    })();
+    (function(){
+        var timeNow;
+        var timeEnd= new Date(<{$time}>);
+        var dom = {
+            second: $E('.second'),
+            minute:$E('.minute'),
+            hour:$E('.hour'),
+            day:$E('.day')
+        };
+        new Request({
+            url:'<{$scarebuyings_data.js_url}>',
+            onComplete:function(re){
+                timeNow=new Date(<{$now_time}>); 
+                if(timeEnd.getTime() > timeNow.getTime()){
+                    timeCount.init(timeEnd,timeNow,dom);
+                }else{
+                    
+                }
+            }
+        }).send();
+    })();
+ </script>

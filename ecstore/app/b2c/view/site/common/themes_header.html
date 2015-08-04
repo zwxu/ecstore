@@ -1,0 +1,29 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><{$TITLE}></title>
+<{css src="b2c.css" app="b2c" pdir="css_mini"}>
+<{$extends_header}>
+<{*<{$headers|replace:"\n":' '}>
+<link rel="stylesheet" href="<{$base_url}>statics/framework.css" type="text/css" />
+<link rel="stylesheet" href="<{$base_url}>statics/css/b2c.css" type="text/css" />*}>
+
+<{lang_css src="lang.css" app="b2c"}>
+
+<{if defined("DEBUG_JS") && DEBUG_JS}>
+    <{script src="shoptools.js" app="b2c"}>
+    <{script src="browserstore.js" app="b2c"}>
+    <{script src="goodscupcake.js" app="b2c"}>
+<{else}>
+    <{script src="shoptools_min.js" app="b2c" pdir="js_mini"}>
+<{/if}>
+
+<script type="text/javascript">
+<{if $theme_color_href}>
+   window.addEvent('domready',function(){
+       new Element('link',{href:'<{$theme_color_href}>',type:'text/css',rel:'stylesheet'}).inject(document.head);
+   });
+<{/if}>
+/*for shopadmin loadingbar*/
+
+window.onload = function(){(parent.loadedPart[1])++};
+</script>
+

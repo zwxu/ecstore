@@ -1,0 +1,109 @@
+<div class="member-main">
+<div class="title">投诉管理</div>
+<div class="FormWrap" style="background-color:#FFFFFF;">
+		 <table>
+     <colgroup>
+       <col style="width:88px;">
+       <col style="width:170px;">
+       <col style="width:88px;">
+       <col style="width:240px;">
+       <col style="width:88px;">
+       <col style="width:170px;">
+     </colgroup>
+     <tbody>
+     <tr>
+     <td style='text-align:right;padding:8px 0;'>订单号:</td>
+     <td style='text-align:left;padding-left:10px;'><input type="text" vtype="text" id="search_order_id" size="20" value="" name="" class="x-input " autocomplete="off">			</td>
+     <td style='text-align:right;'>投诉编号:</td>
+     <td style='text-align:left;padding-left:10px;'><input type="text" vtype="text" id="search_goods_name" size="20" value="" name="" class="x-input " autocomplete="off">			</td>
+     <td style='text-align:right;'>投诉原因:</td>
+     <td style='text-align:left;padding-left:10px;'>
+     <select class=" x-input-select inputstyle" required="1" name="order_time" id="ot" type="select">
+        <option value="all">请选择</option>
+        <option value="afterseller">售后问题</option>
+        <option value="actionrule">行为违规</option>
+      </select>
+    </td>
+     </tr>
+     <tr>
+     <td style='text-align:right;'>投诉状态:</td>
+     <td style='text-align:left;padding-left:10px;'>
+ <select class=" x-input-select inputstyle" required="1" name="order_time" id="ot" type="select">
+        <option value="all">请选择</option>
+        <option value="3th">平台已经介入</option>
+        <option value="6th">投诉成立</option>
+        <option value="2013">投诉不成立</option>
+        <option value="1">投诉撤销</option>
+      </select>
+     </td>
+     <td style='text-align:right;'>申请时间:</td>
+     <td style='text-align:left;padding-left:10px;'>
+    <input type="text" vtype="text" id="search_order_id" size="10" value="" name="" class="x-input " autocomplete="off">到<input type="text" vtype="text" id="search_order_id" size="10" value="" name="" class="x-input " autocomplete="off">
+     </td>
+     <td colspan='2' style='padding-left:30px;'>
+     <button id="btnsearch" class="btn search1" type="button"><span><span>搜索</span></span></button>	
+     </td>
+     </tr>
+     </tbody>
+     </table>
+     
+		 </div>
+<div id="tab-sdiscus" class="section switch">
+<ul class="switchable-triggerBox clearfix">
+            <li class="active"><a href="#">我收到的投诉</a></li>
+            <li><a href="#">我发起的投诉</a></li>
+            
+            
+</ul>
+<div class="switchable-content">
+            <div class="switchable-panel">
+            <table width="100%" cellspacing="0" cellpadding="0" border="0" class="switchable gridlist">
+                  <colgroup>
+                    <col width="120px">
+                    <col width="120px">
+                    <col width="120px">
+                    <col width="150px">
+                    <col width="100px">
+                    <col width="150px">
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th class="comment first">投诉编号</th>
+                      <th class="ratee">订单编号</th>
+                      <th class="things">被投诉方</th>
+                      <th class="things">投诉原因</th>
+                      <th class="things">投诉状态</th>
+                      <th class="things">申请时间</th>
+                      <th class="operate">操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                      <input type="hidden" value="1" name="comment_id">
+                      <td valign="middle">
+                        2013070519527283
+                      </td>
+                      <td valign="middle">
+                        <a href='#' style="color:#0579C6">2013070519527283</a>
+                      </td><td valign="middle">
+                        <a target="_blank" href="#">test</a>
+                      </td>
+                      <td valign="middle">
+                        违背承诺
+                      </td>
+                      <td valign="middle" style='color:#FF3300;'>
+                        平台已介入
+                      </td>
+                      <td valign="middle">
+                        2013-07-10 16:14
+                      </td>
+                      <td valign="middle">
+                        <a class="btn-bj-hover operate-btn" href="/szmall/b2b2c/index.php/business-orderdetail-2013070519527283.html">查看详情</a>
+                      </td>
+                    </tr>                   
+                  </tbody>
+                </table>
+                            </div>
+        </div>
+</div>
+</div>

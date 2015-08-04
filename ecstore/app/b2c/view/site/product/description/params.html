@@ -1,0 +1,21 @@
+<h2><{t}>详细参数<{/t}></h2>
+<div class="body"  id="goods-params">
+  <table width="100%" cellpadding="0" cellspacing="0" class="liststyle data">
+	<col class="span-4 ColColorGray fontcolorBlack">
+	</col>
+	
+	<{foreach from=$goods.params item=params key=group}>
+	<tr>
+	  <td colspan="2" class="colspan ColColorGraydark"><{$group}><span class="gname"></span></td>
+	</tr>
+	<{foreach from=$params item=value key=key}>
+	<{if $value != ''}>
+	<tr>
+	  <th><{$key}></th>
+	  <td><{$value|default:'-'}></td>
+	</tr>
+	<{/if}>
+	<{/foreach}>
+	<{/foreach}>
+  </table>
+</div>

@@ -1,0 +1,60 @@
+<form id="_new_wg_cfg" action='theme-insertwidget.html' method='post'>
+<{include file="site/theme/widget/widget_header.html" app="business"}>
+<div class="table-action">
+    <{button type="submit" id="on_submit" label=$___a="添加"|t:'site'}>
+</div>
+</form>
+<script>
+$('_new_wg_cfg').addEvent('submit',function(e){
+    e=new Event(e).stop();
+    if(!validate(this))return;
+    //<{t}>指向框架内对象<{/t}>
+    //<{t}>验证输入<{/t}>
+    //<{t}>暂时不验证<{/t}>2010/5/14 edwin todo
+    //if(!this.bindValidator('_x_ipt'))return;
+    $ES('textarea[ishtml=true]',this).getValue();
+    var frameWin=$('themeFrame').contentWindow;
+    var shopWidgets=frameWin.shopWidgets;
+    var wg=frameWin.document.newElement('div');
+
+    var temId=$time()+$random(100,999);
+    if(!wg)return;
+    $(wg).setProperty('id','wg'+$time());
+    this.action='theme-insertwidget-<{$widgets_type}>-'+temId+'-<{$widgets_app}>-<{$widgets_theme}>-<{$theme}>.html';
+
+    new Request({
+      url:this.action,
+      data:this,
+      method:this.get('method'),
+      onRequest:function(){
+        $('on_submit').set('disabled',true).getElement('span span').set('html','请稍等...');
+      },
+      onSuccess:function(re){
+        $('on_submit').set('disabled',false).getElement('span span').set('html','保存');
+        try{
+            var json=JSON.decode(re);
+            if(json){
+               MessageBox.error(json.error);
+               alert(json.error);
+               return;
+            }
+        
+        }catch(e){}
+        wg.set('html',re);
+        wg= wg.getFirst();
+        wg.set('id',temId);
+
+        wg.set('widgets_id', 'tmp_' + '<{$i}>');
+        var sw_curDrop=$(shopWidgets.injectBox) || shopWidgets.curDrop;
+
+        wg.inject(sw_curDrop,shopWidgets.injectWhere);
+        shopWidgets.drags.include($(wg));
+        shopWidgets.initDrags([wg]);
+        shopWidgets.checkEmptyDropPanel(sw_curDrop);
+        frameWin.Switchable.autoRender();
+        shopWidgets.curdialog.close();
+        $('btn_save')&&($('btn_save').disabled = false);
+      }
+    }).send();
+});
+</script>

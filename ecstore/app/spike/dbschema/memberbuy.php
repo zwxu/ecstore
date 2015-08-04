@@ -1,0 +1,62 @@
+<?php 
+$db['memberbuy'] = array(
+    'columns'=>array(
+        'id'=>array(
+            'type'=>'mediumint(8)',
+            'extra'=>'auto_increment',
+            'pkey'=>'true',
+            'label'=>__('序号'),
+            'in_list'=>true,
+        ),
+        'gid'=>array(
+            'type'=>'table:goods@b2c',
+            'required'=>true,
+            'label'=>__('活动商品名称'),
+            'editable'=>false,
+            'locked' => 1,
+            'in_list'=>true,
+            'default_in_list'=>true,
+        ),
+        'aid'=>array(
+            'type'=>'table:activity@spike',
+            'required'=>true,
+            'label'=>__('所属活动'),
+            'editable'=>false,
+            'locked' => 1,
+            'in_list'=>true,
+            'default_in_list'=>true,
+        ),
+        'member_id'=>array(
+            'type'=>'table:account@pam',
+            'required'=>true,
+            'label'=>__('买家'),
+            'editable'=>false,
+            'locked' => 1,
+            'in_list'=>true,
+            'default_in_list'=>true,
+        ),
+        'nums' => array(
+            'type'=>'mediumint(8)',
+            'label'=>__('购买数量'),
+            'default'=>'0',
+            'editable'=>false,
+            'filtertype'=>'number',
+            'in_list'=>true,
+            'default_in_list'=>true,
+        ),
+        'order_id'=>array(
+            'type'=>'varchar(50)',
+            'required'=>true,
+            'label'=>__('所属订单'),
+            'editable'=>false,
+            'in_list'=>true,
+            'default_in_list'=>true,
+        ),
+        'effective' => array(
+            'type'=>'bool',
+            'label'=>__('是否有效'),
+            'default'=>'true',
+            'editable'=>false,
+        ),
+    ),
+);

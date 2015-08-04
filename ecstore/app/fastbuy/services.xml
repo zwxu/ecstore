@@ -1,0 +1,8 @@
+<services> 
+ <service id="b2c_products_index_btn">
+     <class>fastbuy_site_product_btn_fastbuy</class>
+ </service>
+  <service id="fastbuy_goods">
+     <class>fastbuy_site_product_btn_fastbuy</class>
+ </service>
+</services>

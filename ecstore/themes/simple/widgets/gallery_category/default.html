@@ -1,0 +1,54 @@
+<div class="refilter">
+    <h4>所有分类<{$cat_id}></h4>
+    <ul id="gallery_cat_<{$widgets_id}>" class="l_aone">
+        <{foreach from=$data item=cat key=catId}>
+            <li class="ahover <{if $cat.i >$setting.num}>js_gallery_category_<{$widgets_id}><{/if}>" <{if $cat.i > $setting.num}>style="display:none;"<{/if}>>
+                <i></i>
+                <a href="<{$cat.url}>"><{$cat.cat_name}></a>
+                <{if $cat.children}>
+                    <ul style="display:none;" class="l_btwo">
+                        <{foreach from=$cat.children item=child key=childId}>
+                        <li>
+                        <a href="<{$child.url}>"><{$child.cat_name}></a>
+                        </li>
+                        <{/foreach}>
+                    </ul>
+                <{/if}>
+            </li>
+        <{/foreach}>
+    </ul>
+    <h5 class="all_filter" id="gallery_<{$widgets_id}>_viewall"><a href="javascript:void(0);">显示全部分类</a><i></i></h5>
+</div>
+<script>
+$('gallery_cat_<{$widgets_id}>').getElements('li').each(function(item,index){
+    item.addEvent('mouseover',function(){
+        $('gallery_cat_<{$widgets_id}>').getElements('li').each(function(i,k){
+            if(k == index){
+                if(i.getElement('ul')){
+                    i.getElement('ul').setStyle('display','');
+                    i.removeClass('ahover');
+                }
+            }else{
+                if(i.getElement('ul')){
+                    i.getElement('ul').setStyle('display','none');
+                    i.addClass('ahover');
+                }
+            }
+
+        });
+    });
+
+});
+
+$('gallery_<{$widgets_id}>_viewall').addEvent('click',function(){
+    $ES('.js_gallery_category_<{$widgets_id}>').each(function(item,index){
+        if(item.getStyle('display')=='none'){
+            item.setStyle('display','');
+            $('gallery_<{$widgets_id}>_viewall').addClass('filter_close');
+        }else{
+            item.setStyle('display','none');
+            $('gallery_<{$widgets_id}>_viewall').removeClass('filter_close');
+        }
+    });
+});
+</script>

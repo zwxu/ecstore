@@ -1,0 +1,11 @@
+<{if $gimage.image_id }>
+<div class="gpic<{if $goods.image_default_id==$gimage.image_id}> current<{/if}>" image_id="<{$gimage.image_id}>" onclick="goodsEditor.pic.setDefault('<{$gimage.image_id}>',this)">
+	<img src="<{$gimage.image_id|storager:'s'}>" width="88" height="88" sn='_img_<{$gimage.image_id}>'/> 
+	<i><{t}>默认图<{/t}></i>
+</div>
+<input name="goods[images][]" value="<{$gimage.image_id}>" soucre="<{$gimage.image_id|storager:'b'}>" bigPic="<{$gimage.image_id|storager:'b'}>" type="hidden">
+<div class="gpic-btn-bar">
+<{assign var=gimageid value=$gimage.gimage_id}>
+<span class="gpic-btn-view" onclick="goodsEditor.pic.viewSource('index.php?app=image&ctl=admin_manage&act=view_gimage&p[0]=<{$gimage.image_id}>')" title="<{t}>查看路径<{/t}>"><i><{t}>查看路径<{/t}></i></span>|<span class="gpic-btn-delete" ident="<{$gimage.image_id}>" onclick="goodsEditor.pic.del(this)" title="<{t}>删除图片<{/t}>"><i><{t}>删除图片<{/t}></i></span>
+</div>
+<{/if}>

@@ -1,0 +1,68 @@
+<form id="theme_img" action="index.php?app=site&ctl=admin_explorer_theme&act=save_image" enctype="multipart/form-data" method="POST" >
+<{input type='hidden' name='theme' value=$theme }>
+<{input type='hidden' name='open_path' value=$open_path }>
+<{input type='hidden' name='file_name' value=$file_name }>
+
+<div class="division">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+  <th><{t}>图片显示：<{/t}></th>
+  <td id="imgshow-<{$smarty.now}>"><img src="<{$file_url}>?<{$smarty.now}>"></td>
+</tr>
+</table>
+</div>
+<table border="0" align="center" cellpadding="0" cellspacing="0" class="table-action">
+	<tr>
+	  <th><{t}>替换图片：<{/t}></th>
+	  <td><input type="file" name='upfile'></td>
+	</tr>
+    <tr>
+    <td><span><input type="checkbox" name="has_bak" value="1" checked="checked"><{t}>保留备份<{/t}></span></td>
+    <td>
+	<{button label=$___a="保存"|t:'site' type="submit" }>
+    </td>
+  </tr>
+</table>
+</form>
+<{if count($file_baklist) > 0}>
+<div class="division"><{t}>文件修改历史<{/t}>：
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<{foreach from=$file_baklist item=bakfile}>
+<tr>
+  <th><{$bakfile.name}></th>
+  <td><span style="cursor: pointer" onclick="recoverFile(this, 'index.php?app=site&ctl=admin_explorer_theme&act=recover_file&theme=<{$theme}>&open_path=<{$open_path}>&file_name=<{$bakfile.name}>');"><{t}>还原<{/t}></span>
+   <span style="cursor: pointer" onclick="deleteFile(this, 'index.php?app=site&ctl=admin_explorer_theme&act=delete_file&theme=<{$theme}>&open_path=<{$open_path}>&file_name=<{$bakfile.name}>');"><{t}>删除<{/t}></span></td>
+</tr>
+<{/foreach}>
+</table>
+</div>
+<{/if}>
+<script type='text/javascript'>		
+$('theme_img').store('target', {
+	onComplete:function(){
+		if($('theme_img').getParent('.dialog'))
+		$('theme_img').getParent('.dialog').retrieve('instance').close();
+		finderGroup['<{$env.get.finder_id}>'].refresh();
+	}
+});
+
+function deleteFile(event, path){
+    if(confirm('<{t}>您确定要删除该文件?(删除后将不可恢复)<{/t}>')){ 
+		new Request({url:path, onSuccess:function(){
+			event.getParent('tr').remove();
+		}}).send();
+    }
+}
+
+function recoverFile(event, path){
+    if(confirm('<{t}>您确定要恢复该文件?<{/t}>')){
+		new Request({url:path, onSuccess:function(){
+			var imgid = $('imgshow-<{$smarty.now}>');
+			var src = imgid.getElement('img').src;
+			src = src.indexOf('?')>0 ? src.split('?')[0] : src;
+			$(imgid).getElement('img').src = src + "?" + (new Date().getTime() + '');
+			//new Request.HTML({update:event.getParent('.dialog-content-body'), url:$('theme_img').getParent('.dialog').retrieve('instance').url}).send();
+		}}).send();
+    }
+}
+</script>

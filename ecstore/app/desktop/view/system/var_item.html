@@ -1,0 +1,50 @@
+<p class="notice" style="margin:10px"><{t}>全局变量使用方法：<{/t}>
+<{t}>复制“变量名”到希望出现自定义内容的地方，如：所有衬衣的商品详情中粘贴变量“{PRODUCT_SIZE}”（产品尺码表）,然后再自定义内容中填写尺码表内容，前台所有使用过该变量的商品介绍中都会显示自定义内容中填写的尺码表内容<{/t}>
+
+<{t}>注意：请使用标准格式 {XXXXX}<{/t}>
+</p>
+<form action='index.php?app=desktop&ctl=magicvars&act=magicvar_save' method='post' id="var_item_form">
+<div class="tableform">
+<div class="division">
+<{if $var.var_name}><input type="hidden" name="is_editing" value="1"><{/if}>
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+  <tbody>
+  <tr>
+    <th><{t}>名称：<{/t}></th>
+    <td><{input type='text' name='var_title' value=$var.var_title required='true'}></td>
+  </tr>
+  <tr>
+    <th><{t}>变量名：<{/t}></th>
+    <td><input type='text' class='x-input' name='var_name' value="<{$var.var_name}>" vtype='required' <{$readOnly}>/>
+    &nbsp;&nbsp;<span class="font-gray"><{t}>仅支持英文字母、下划线，格式：<{/t}>{user_name}</span>
+
+    </td>
+  </tr>
+  <tr>
+    <th><{t}>备注：<{/t}></th>
+    <td><{input type='text' name='var_remark' value=$var.var_remark}></td>
+  </tr>
+  </tbody>
+  </table>
+  </div>
+
+<div class="division">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th><{t}>全局变量内容：<{/t}></th>
+    <td><{input type='html' name='var_value' value=$var.var_value required='true'}></td>
+  </tr>
+</table>
+</div>
+
+<div class="table-action"> <button class="btn" id="on_submit" type="submit"><span><span><{t}>保存<{/t}></span></span></button> </div>
+</div></form>
+<script>
+$('var_item_form').store('target',{
+	onComplete:function(){
+		var finder_id=opener.window.finderGroup['<{$env.get._finder.finder_id}>'];
+		if(!!finder_id)finder_id.refresh();
+		window.close();
+	}
+});
+</script>

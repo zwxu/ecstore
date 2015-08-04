@@ -1,0 +1,12 @@
+<{css src="b2c.css" app="b2c" pdir="css_mini"}>
+
+<{lang_script src="lang.js" app="b2c"}>
+<{lang_css src="lang.css" app="b2c"}>
+
+<{if defined("DEBUG_JS") && DEBUG_JS}>
+    <{script src="browserstore.js" app="b2c"}>
+    <{script src="shoptools.js" app="b2c"}>
+<{else}>
+    <{script src="shoptools_min.js" app="b2c" pdir="js_mini"}>
+<{/if}>
+

@@ -1,0 +1,7 @@
+.pager .prev,
+.pager .onprev,  
+.pager .unprev {background:url(../images/pager_pre.gif) no-repeat 0 0}
+
+.pager .next,
+.pager .onnext,
+.pager .unnext   {background:url(../images/pager_next.gif) no-repeat 0 0}

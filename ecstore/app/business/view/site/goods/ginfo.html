@@ -1,0 +1,107 @@
+<table  class="liststyle2 width1" style="border:none">
+  <tr>
+    <th style="text-align:right;"><{t}>宝贝属性：<{/t}></th>
+    <td>
+      <table border="0" cellpadding="0" cellspacing="0" class="sx">
+        <{if $goods.type.setting.use_props}>
+        <{foreach from=$goods.type.props key=key item=aProp}>
+        <tr class="prop">
+          <th><{$aProp.name}>：</th>
+          <td><{assign var="p_col" value="p_{$key}"}>
+            <{if $aProp.type eq 'select'}>
+            <{input name="goods[props][p_{$key}][value]" type="select" nulloption="1" options=$aProp.options value="{$goods.props[$p_col].value}" }>
+            <{else}>
+            <{input type="text" name="goods[props][p_{$key}][value]" maxlength="25" value="{$goods.props[$p_col].value}"}>
+            <{/if}></td>
+        </tr>
+        <{/foreach}>
+        <{/if}>
+      </table>
+    </td>
+  </tr>
+  <tr id="gEd2itor-GBrand">
+    <th style="text-align:right;"><{t}>品牌：<{/t}></th>
+    <td><{input type="select" name="goods[brand][brand_id]" required="true" nulloption="1" rows=$brandList valueColumn="brand_id" labelColumn="brand_name" value=$goods.brand.brand_id}></td>
+  </tr>
+</table>
+<{if $spec}>
+  <script>
+    //Message.show('正在加载规格...',false);
+    MODALPANEL.show();
+  </script>
+<{/if}>
+<div id="spec_items">
+<{script src="exmvc.js" app="b2c"}>
+<{script src="mustache.js" app="b2c"}>
+<{if $spec }>
+  <{include file="site/goods/spec.html" app="business"}>
+<{else}>
+  <{include file="site/goods/nospec.html" app="business"}>
+  <script>
+    Message.show('成功加载规格',false);
+    MODALPANEL.hide();
+  </script>
+<{/if}>
+</div>
+<script>
+  var specclose=function(e){
+    var body = $('spec_items')||'';
+    Ex_Dialog.confirm('删除后货品数据将不能恢复，确认删除本行？',function(e){
+      if(!e) return false;
+      new Request.JSON({
+        url:'<{link app=business ctl=site_member act=set_nospec_index}>',
+        method:'post',
+        secure:false,
+        data:$('gEditor-Body'),
+        onComplete:function(res,text){
+          if (res.error){
+            Message.error(res.error);
+          }else{
+            if (!res.data&&res.reload != null){
+              location.href=res.reload;
+            }else{
+              var js='';
+              var html = res.data.stripScripts(function(script){
+                  js = script;
+              });
+              body.innerHTML = html;
+              Browser.exec(js);
+              return;
+            }
+          }
+        }
+      }).send();
+      return false;
+      body.innerHTML = '';
+    });
+  }
+  var specopen=function(e){
+    new Request.HTML({
+    url:'<{link app=business ctl=site_member act=set_spec_index }>?goods_info='+toJSON($('spec_items'),true)+'&ddd='+Date.now(),
+      method:'post',
+      update:'spec_items',
+      evalScripts:true,
+      //secure:false,
+      data:$('gEditor-Body'),
+      onComplete:function(p1,p2,re,js){
+        //$('spec_items').innerHTML = re;
+        //Browser.exec(js);
+      }
+    }).send();
+    return false;
+  }
+  function toJSON(element, string) {
+      var json = {};
+      element.getElements('input,select,textarea').each(function(el){
+          if((el.type == 'checkbox' || el.type=='radio') && !el.checked || !el.name || !el.value || el.disabled) return;
+          json[el.name] = el.value;
+      });
+      //console.log(json)
+      return string ? JSON.encode(json) : json;
+  }
+  
+  validatorMap['minpirce']=['<{t}>价格必须大于等于 0.10 元<{/t}>',function(e,v){
+    v = isNaN(v)?0:v.toFloat();
+    return !(v<0.1);
+  }];
+</script>

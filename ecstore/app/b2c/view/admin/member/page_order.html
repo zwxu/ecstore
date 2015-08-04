@@ -1,0 +1,15 @@
+<div container='true'>
+<div class="tableform">
+    <table class="gridlist" width="100%" border="0" cellspacing="0" cellpadding="0">
+	<thead>  <tr>  <th><{t}>订单号<{/t}></th><th><{t}>订单状态<{/t}></th><th><{t}>支付状态<{/t}></th><th><{t}>发货状态<{/t}></th><th><{t}>总金额<{/t}></th><th><{t}>下单日期<{/t}></th>      </tr>
+    </thead>
+	<tbody>
+		<{foreach from=$orders item=item key=key}>
+             <tr>  <th><a target='_blank' href="index.php?app=b2c&ctl=admin_order&act=index&action=detail&id=<{$item.order_id}>&singlepage=true&finderview=detail_basic"><{$item.order_id}></a></td><td><{$item.status}></td><td><{$item.pay_status}></td><td><{$item.ship_status}></td><td><{$item.total_amount|cur}></td><td><{$item.createtime|cdate:'FDATE_FTIME'}></td> </tr>
+        <{/foreach}>
+       
+	</tbody>
+    </table>
+     <{$pager}>
+</div>
+</div>

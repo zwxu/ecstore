@@ -1,0 +1,55 @@
+<div id="member-main" class="member-main">
+    <h1 class="title title2"><{t}>申请退款<{/t}></h1>
+    <form action="<{link app=aftersales ctl=site_member act=swith_refund}>" enctype="multipart/form-data" encoding="multipart/form-data" method="post" name="return_save" id='x-return-form'>
+	<div class="return_box">
+	<input type="hidden" id="is_need_refund" name="is_need_refund" value="">
+	<input type="hidden" id="order_id" name="order_id" value="<{$order_id}>">
+	<div class="return_boxon" id="require"><input type="radio" name="is_required" value="1" checked onclick="shoudao();"/>已收到货物</div>
+	<div class="return_boxn" id="norequire"><input type="radio" name="is_required" value="0" onclick="weishoudao();"/>没有收到货物</div>
+    <div class="clb"></div>
+	<div class="return_boxon" id="require1"><input type="radio" name="is_need_refund" value="1" checked onclick="shoudao1();"/ >需要退货</div>
+	<div class="return_boxn" id="norequire1"><input type="radio" name="is_need_refund" value="0" onclick="weishoudao1();"/ >不需要退货</div>
+    </div>
+    <div class="cl_zhi"></div>
+	<div class="table-action" style="margin-top:20px;">
+		<{button id="x-submit" type="submit"  label=$___aftersales="确认"|t:'aftersales'}>
+	</div>
+	</form>
+</div>
+<script>
+function shoudao(){
+    if($('require').className  == 'return_boxn'){
+        $('require').removeClass('return_boxn');
+        $('require').addClass('return_boxon');
+        $('norequire').removeClass('return_boxon');
+        $('norequire').addClass('return_boxn');
+    }
+}
+
+function weishoudao(){
+    if($('norequire').className  == 'return_boxn'){
+        $('require').removeClass('return_boxon');
+        $('require').addClass('return_boxn');
+        $('norequire').removeClass('return_boxn');
+        $('norequire').addClass('return_boxon');
+    }
+}
+
+function shoudao1(){
+    if($('require1').className  == 'return_boxn'){
+        $('require1').removeClass('return_boxn');
+        $('require1').addClass('return_boxon');
+        $('norequire1').removeClass('return_boxon');
+        $('norequire1').addClass('return_boxn');
+    }
+}
+
+function weishoudao1(){
+    if($('norequire1').className  == 'return_boxn'){
+        $('require1').removeClass('return_boxon');
+        $('require1').addClass('return_boxn');
+        $('norequire1').removeClass('return_boxn');
+        $('norequire1').addClass('return_boxon');
+    }
+}
+</script>

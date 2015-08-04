@@ -1,0 +1,40 @@
+<div class="register-wrap clearfix">
+  <h4><{t}>密码重设<{/t}></h4>
+  <div class="intro"><{t}>设置您的新密码<{/t}></div>
+  <div class="form">
+    <form name="FORM_TPL_FORGETQUESTION" method="post" action=<{link app="b2c" ctl="site_passport" act="dorepass"}>>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:20px;">
+        <tr>
+          <th><{t}>设置新密码：<{/t}></th>
+          <td><{input id="reg_passwd" type="password" name="password" class="inputstyle" vtype="required&&new_password"}><span></span></td>
+        </tr>
+        <tr>
+          <th><{t}>确认新密码：<{/t}></th>
+          <td><{input id="reg_passwd_r" type="password" name="repassword" class="inputstyle" vtype="required&&change_password"}><span></span></td>
+        </tr>
+        <input type="hidden" name="secret" value=<{$secret}>>
+        <tr>
+          <th>&nbsp;</th>
+          <td><{button type="submit" id="reg_btn" style="margin-left:13%; margin-top:3%;" class="common-btn" label=$___b2c="确认"|t:'b2c'}></td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>
+
+<script>
+    validatorMap['new_password']= ['<{t}>密码长度只能在6-20位字符之间！<{/t}>', function(element, v) {
+        var passwd_re = $('reg_passwd');
+        var _is_validate = false;
+        if (passwd_re.value.length <= 20 && passwd_re.value.length >= 6) _is_validate = true||_is_validate;
+        return _is_validate;
+    }];
+
+    validatorMap['change_password']= ['<{t}>两次输入的密码不一致！<{/t}>', function(element, v) {
+        var passwd_re = $('reg_passwd');
+        var passwd = $('reg_passwd_r');
+        var _is_validate = false;
+        if (passwd_re.value == passwd.value) _is_validate = true||_is_validate;
+        return _is_validate;
+    }];
+</script>

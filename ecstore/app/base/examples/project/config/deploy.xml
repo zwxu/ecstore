@@ -1,0 +1,30 @@
+<deploy>
+	
+<!--	<licence file="license.txt" /> -->
+
+	<installer>
+		
+		<title>Project installer</title>
+		
+		<banner><![CDATA[
+		<h1 id="Project-ver">Project</h1>
+		]]></banner>
+
+		<style><![CDATA[
+			body{
+				padding:20px;
+			}
+		]]></style>
+
+		<finish>
+			<message><![CDATA[
+			<h3>安装过程顺利完成.</h3>
+			]]></message>
+		</finish>
+	</installer>
+
+	<package hidden="false" collapse="false" search_online="false" search_filter="*">
+		<app id="b2c" default="true" locked="true" hidden="false" autostart="true" />
+	</package>
+
+</deploy>

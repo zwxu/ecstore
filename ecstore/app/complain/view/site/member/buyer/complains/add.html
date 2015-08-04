@@ -1,0 +1,213 @@
+<div class="member-main">
+    <div class="title title2">投诉管理</div>
+    <{assign var=progress_step value='0'}>
+    <{include file='site/common/progress.html' app='complain'}>
+    <div class="FormWrap" style="background-color:#FFFFFF;border:0 none;padding:0;">
+        <div class='col-main'>
+            <div class='main-wrap'>
+                <form class='boxbase J_BoxTab form-edit J_FormEdit' action="<{link app='complain' ctl='site_buyer_complain' act='addSave'}>" method='POST' enctype='multipart/form-data'>
+                    <input type='hidden' name='source' value='buyer'>
+                    <input type='hidden' name='from_member_id' value='<{$member_info.pam_account.account_id}>'>
+                    <input type='hidden' name='to_member_id' value='<{$store_info.account_id}>'>
+                    <input type='hidden' name='store_id' value='<{$store_info.store_id}>'>
+                    <input type='hidden' name='order_id' value='<{$order.order_id}>'>
+                    <input type='hidden' name='from_uname' value='<{$member_info.uname}>'>
+                    <input type='hidden' name='to_uname' value='<{$store_info.shop_name}>'>
+                    <input type='hidden' name='store_name' value='<{$store_info.store_name}>'>
+                    <div class="box-bd">
+                        <div class="row-item first-row-item">
+                            <div class="ctitle">
+                                <b>*</b><label>投诉类型：</label>
+                            </div>
+                            <div class="info J_ReasonBox">
+                            <label style="margin-right: 10px;"><input type="radio" value="after" checked=checked class="J_ReasonId" name="reason">售后问题</label>
+                            <label style="margin-right: 10px;"><input type="radio" value="action" class="J_ReasonId" name="reason">行为违规</label>
+                            </div>
+                        </div>
+                        <div class="row-item first-row-item">
+                            <div class="ctitle">
+                                <label>手机：</label>
+                            </div>
+                            <div class="info J_ReasonBox">
+                                <input style="height: 20px;" value="" name="mobile" class="J_Phone">
+                            </div>
+                            
+                        </div>
+                        <div class="row-item first-row-item clear-fix">
+                            <div class="ctitle">
+                                <b>*</b><label>补充留言：</label>
+                            </div>
+                            <div class="info">
+                                <textarea  class="introduction J_FormVerify_Textarea J_FormVerify" name="memo" placeholder="补充留言不能为空！"></textarea>
+                                <div style="padding-left:236px;" class="help-msg">
+                                <strong style="padding-left:115px;" class="text-count J_TextCount" style='font-weight:bold;'>300</strong>/300字
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-bd">
+                        <div class="row-item first-row-item clear-fix">
+                            <div class="ctitle">
+                                <b>*</b><label>上传凭证：</label>
+                            </div>
+                            <div class="info" id='J_WaitItems'>
+                              
+                            </div>
+                            <div class='info upload-image-wrap J_UploadWrap'>
+                            <a id='J_SelectFileLabel' class="select-file-label <{if $isIE}>select-file-label-ie<{/if}>" ><{if $isIE}>上传<{else}>选择要上传的凭证<{/if}></a>
+                            <div id='J_FileInputBox' maxIndex='1' class="select-file-wrap <{if $isIE}>select-file-wrap-ie <{/if}>">
+                                <input type="file" size="1" findex='1' class="select-file J_SelectFile1" name="image[]" accept="image/gif,image/jpeg,image/jpg,image/bmp,image/png">
+                            </div>
+                            </div>
+                            <div class="row-item help-msg-wrap">
+                                    <div class="info">
+                                        <div class="J_VadioHelpMsg help-msg  hidden">图片、音频文件不超过5M，图片支持GIF，JPG，JPEG，PNG，BMP格式；音频文件支持WAV，AMR，AIFF，WMA，M4R格式；凭证数量最多3张</div>
+                                        <div class="J_ImgHelpMsg help-msg">每张图片不超过5M，最多3张，支持GIF，JPG，JPEG，PNG，BMP格式</div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="box-bd">
+                    <div class="row-item first-row-item clear-fix">
+                    <div class='info'>
+                       <button id='J_Submit' type='button' class="btn">提交</button></div>
+                    </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class='col-sub'>   
+        <{include file='site/member/buyer/complains/order_info.html' app='complain'}>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+    
+    FileUpload=new Object();
+    Object.append(FileUpload,{
+        init:function(){
+           <{if $isIE}>
+              var arr_file=this.getFileInput();
+              var last=arr_file.getLast();
+              last.addEvent('change',this.fileChange.bind(this));
+           <{else}>
+           $('J_SelectFileLabel').addEvent('click',function(e){
+              e.stop();
+              var arr_file=this.getFileInput();
+              var last=arr_file.getLast();
+              if(!last.retrieve('add:change')){
+                    last.addEvent('change',this.fileChange.bind(this));
+                    last.store('add:change',true);
+              }
+              last.click();
+           }.bind(this));
+          
+           <{/if}>
+           if(document.getElement('.J_FormVerify_Textarea')){
+                document.getElement('.J_FormVerify_Textarea').addEvent('keyup',function(e){
+                    var length=300-this.value.length;
+                    document.getElement('.J_TextCount').set('html',length);
+                });
+            }
+           $('J_Submit').addEvent('click',function(e){
+                e.stop();
+                var form=e.target.getParent('form');
+                var J_FormVerify_Textarea=form.getElement('.J_FormVerify_Textarea');
+                if(J_FormVerify_Textarea.value.trim()==''){
+                    J_FormVerify_Textarea.focus();
+                    Message.error('请输入补充留言！');
+                    return;
+                }else{
+                   if(J_FormVerify_Textarea.value.trim().length>300){
+                       Message.error('留言字数不能大于300个！');
+                       return;
+                   }
+                }
+                
+                var items=$('J_WaitItems').getElements('.J_WaitItem');
+                if(items.length<=0){
+                    Message.error('请最少上传一张凭证！');
+                    return;
+                }
+                var inputFiles=$('J_FileInputBox').getElements('.select-file');
+                inputFiles.each(function(el){
+                  if(el.value.trim()==''){
+                     el.destroy();
+                  }
+                });
+                form.submit();
+           
+           }.bind(this));
+        },
+        getFileInput:function(){
+            return $('J_FileInputBox').getElements('.select-file');
+        },
+        fileChange:function(e){
+            var obj=e.target;
+            var v=obj.value;
+            var $arr=['JPG','JPEG','GIF','PNG','BMP'];
+               if(v){
+                   var ext=v.split('.').getLast();
+                   if($arr.contains(ext.toUpperCase())==false){
+                        obj.value='';
+                        Message.error('只能上传GIF，JPG，JPEG，PNG，BMP格式');
+                        return;
+                   }
+               }
+            $(obj).setStyle('display','none');
+            var item=this.newWaitItem(obj);
+            item.inject($('J_WaitItems'));
+            var hasfile=$('J_WaitItems').getElements('.J_WaitItem');
+            if(hasfile.length>=3){
+               $('J_SelectFileLabel').hide();
+               return;
+            }
+            
+            this.newFileInput();
+        },
+        newFileInput:function(){
+           var maxIndex=$('J_FileInputBox').get('maxIndex').toInt();
+            maxIndex++;
+            $('J_FileInputBox').set('maxIndex',maxIndex);
+           var inputFile=new Element('input');
+            inputFile.set('type','file').set('findex',maxIndex);
+            inputFile.addClass('select-file');
+            inputFile.addClass('J_SelectFile'+maxIndex);
+            inputFile.set('name','image[]');
+            inputFile.set('size','1');
+            inputFile.set('accept','image/gif,image/jpeg,image/jpg,image/bmp,image/png');
+            inputFile.addEvent('change',this.fileChange.bind(this));
+            inputFile.store('add:change',true);
+            inputFile.inject($('J_FileInputBox'));
+        },
+        newWaitItem:function(obj){
+            var el=new Element('div');
+            el.set('findex',$(obj).get('findex'));
+            el.addClass('J_WaitItem');
+            el.set('html','<span class="file-name">'+$(obj).value+'</span><span> <a class="J_Delete delete" href="#" onclick="FileUpload.deleteWaitItem(new Event(event));"  data-file-idx="1">删除</a></span>');
+            return el;
+        },
+        deleteWaitItem:function(e){
+            e.stop();
+            var obj=e.target;
+            var waitItem=$(obj).getParent('.J_WaitItem');
+            var findex=waitItem.get('findex');
+            var items=$('J_WaitItems').getElements('.J_WaitItem');
+            var ifiles=FileUpload.getFileInput();
+            var inputFile=$('J_FileInputBox').getElement('.J_SelectFile'+findex);
+            inputFile.destroy();
+            waitItem.destroy();
+            if(ifiles.length<=items.length){
+               this.newFileInput();
+            }
+            $('J_SelectFileLabel').show();
+        }
+        
+        
+    });
+    FileUpload.init();
+
+})();
+</script>

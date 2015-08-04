@@ -1,0 +1,182 @@
+<form action="index.php?app=complain&ctl=admin_reports_cat&act=update" id="catEditor" method="post">
+    <{area inject=".mainHead"}>
+		<h2 class="head-title"><{t}>商品分类<{/t}></h2>
+        <div class="gridlist-action">
+        <{assign var=addcat value=$___b2c="添加分类"|t:'b2c'}>
+		<{assign var=editsort value=$___b2c="编辑排序"|t:'b2c'}>
+		<{assign var=savesort value=$___b2c="保存排序"|t:'b2c'}>
+            <{button app="desktop" label=$addcat icon="btn_add.gif" onclick="new Dialog('index.php?app=complain&ctl=admin_reports_cat&act=addnew',{title:'{$addcat}',width:550,height:300})" }>
+            <{button app="desktop" tmplabel=$savesort label=$editsort  id="edit-catsort"}>
+
+<{if $tree_number<=1000}> <{button app="desktop" label=$___b2c="展开分类"|t:'b2c' id="showCat-handle"}> <{button app="desktop" label=$___b2c="收起分类"|t:'b2c'  id="hideCat-handle" }><{/if}>
+            &nbsp;
+        </div>
+        <div class="Node">
+        <div class='gridlist-head mainHead '>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+        <td width="30%"><{t}>分类名称<{/t}></td>
+		<td width="8%"><{t}>排序<{/t}></td>
+		<td width="35%"><{t}>操作<{/t}></td>
+        </tr></table>
+       </div>
+       </div>
+    <{/area}>
+    <div class="Node-body">
+    <div id="cat_tree" class='gridlist catlist'>
+    <{foreach from=$tree item=item name="item"}>
+        <div style="padding:0" depath="<{$item.step}>" class="clear_cat row" cid="<{$item.cat_id}>" pid="<{$item.pid}>">
+            <div class='row-line' style="padding:0">
+             <table cellpadding="0" cellspacing="0" border="0">
+            <tr>
+            <td width="30%" style="vertical-align:top">
+                <div style="padding-left:<{$item.step*15}>px;text-align:left"><{if $tree_number<=500}>
+                    <{if $item.cls=='true'}>  <span class="handle-icon" style='width:12px;line-height:12px; height:12px;overflow:hidden;display:inline-block;padding:0;cursor:pointer'>  <{img src="bundle/handle-hide.gif" alt=$___b2c="收起子分类"|t:'b2c' title=$___b2c="收起子分类"|t:'b2c' class="handle-hide" app='desktop'}>
+                    <{img src="bundle/handle-show.gif" alt=$___b2c="收起子分类"|t:'b2c' title=$___b2c="展开子分类"|t:'b2c' class="handle-show" app='desktop'}> </span>
+                    <{/if}>
+                    <{/if}>
+                    <a href="index.php?app=complain&ctl=admin_reports_cat&act=edit&p[0]=<{$item.cat_id}>" target="dialog::{title:'<{t}>编辑分类<{/t}>', width:500, height:300}">
+                        <{$item.cat_name}>
+                    </a>
+			   </div>
+
+               </td>
+                <td width="8%" align="center" style="vertical-align:top">
+                    <input class="_x_ipt" type="number" size="5"  name="p_order[<{$item.cat_id}>]" value="<{$item.p_order|default:0}>" vtype="unsigned" style="display:none"><b><{$item.p_order|default:0}></b>
+                </td>
+                <td width="35%" style="vertical-align:top">
+                  <div class="clearfix">
+                       <div class="span-auto">&nbsp;</div>
+                       <div class="span-auto">&nbsp;</div>
+                       <div class="span-auto">
+                        <{assign var="cat_id" value=$item.cat_id}>
+                        <span class="opt" onClick="new Dialog('index.php?app=complain&ctl=admin_reports_cat&act=addnew&p[0]=<{$item.cat_id}>', {title:'<{t}>添加子类<{/t}>', width:550, height:300})">
+                            <{img src="bundle/addcate.gif" border="0" alt=$___b2c="添加子分类"|t:'b2c' app='desktop'}>
+                            <{t}>增加子类<{/t}></span>
+                       </div>
+                       <div class="span-auto">
+                             <span class="opt" onClick="new Dialog('index.php?app=complain&ctl=admin_reports_cat&act=edit&p[0]=<{$item.cat_id}>',{title:'<{t}>编辑分类<{/t}>', width:580, height:300})"><{img src="bundle/editcate.gif" border="0" alt=$___b2c="编辑"|t:'b2c'  app='desktop'}><{t}>编辑<{/t}></span>
+                       </div>
+                       <div class="span-auto">
+                       <span class="opt" onclick="deleteRow('index.php?app=complain&ctl=admin_reports_cat&act=toRemove&p[0]=<{$item.cat_id}>',event)"><{img src="bundle/delecate.gif" border="0" alt=$___b2c="删除"|t:'b2c' app='desktop'}><{t}>删除<{/t}></span>
+                       </div>
+                  </div>
+	            </td>
+				</tr>
+                </table>
+            </div>
+        </div>
+        <{/foreach}> </div></div>
+</form>
+<script>
+
+function deleteRow(act,event){
+e=$(new Event(event).stop().target);
+     var row=e.getParent('.row');
+    if(confirm('<{t}>您确定要删除该分类？<{/t}>'))
+    {
+        new Request({
+            url:act,
+            method: 'get',
+            onSuccess: function(rs){
+               var json=JSON.decode(rs);
+                 if(json.error){
+                    MessageBox.error(json.error);
+                    return;
+                 }
+                 MessageBox.success(json.success);
+                 row.remove();
+             }
+        }).send();
+    }
+}
+<{if $tree_number<=1000}>
+void function(){
+   $E('#hideCat-handle').addEvent('click',function(){
+    $ES('#cat_tree .clear_cat').each(function(e){
+        if(e.get('depath')>1){
+            e.setStyles({'display':'none'});
+        }
+    });
+     $ES('#cat_tree .handle-hide').hide();
+     $ES('#cat_tree .handle-show').show();
+  });
+    $E('#showCat-handle').addEvent('click',function(){
+
+        $ES('#cat_tree .clear_cat').each(function(e){
+            if(e.get('depath')>1){
+                e.setStyles({'display':''});
+            }
+        });
+     $ES('#cat_tree .handle-hide').show();
+    });
+
+    $('cat_tree').addEvent('click',function(e){
+
+       if(!e.target.className.match(/handle-/i))return;
+
+
+      var handle=$(e.stop().target);
+            var eventRow=handle.getParent('.row');
+            var visible=handle.hasClass('handle-show')?'':'none';
+                if(visible=='none'){
+                         handle.hide().getNext().show();
+                    }else{
+                         handle.hide().getPrevious().show();
+
+                    }
+            flode(eventRow,visible);
+
+    });
+
+
+
+
+	$('edit-catsort').addEvent('click',function(){
+	     var _ctext = this.get('text').trim();
+	  	 if(_ctext=='<{t}>编辑排序<{/t}>'){
+
+		  $$('#cat_tree input[vtype=unsigned]').each(function(item){
+
+			      item.style.cssText = "";
+				  item.getNext().setStyle('display','none');
+
+			});
+			this.getElement('span span').set({'text':'<{t}>保存排序<{/t}>','styles':{color:'#ff3300'}})
+		 }else{
+		   $('catEditor').fireEvent('submit',{stop:function(){}});
+		}
+
+
+
+
+	});
+
+
+     function flode(eventRow,visible){
+            var cid=eventRow.get('cid');
+            var pid=eventRow.get('pid');
+            var depath=eventRow.get('depath');
+
+            eventRow.getAllNext('div[pid='+cid+']').each(function(row){
+                if(visible=='none'){
+                    row.hide();
+                    var obj=row.getElements('.handle-icon img');
+                    if(obj.length>1){
+                        flode(row,visible);
+                    }
+                }else{
+                    row.show();
+                    var obj=row.getElements('.handle-icon img');
+                    if(obj.length>1){
+                        var vis=(obj[0].getStyle('display')=='none'?'none':'inline');
+                        flode(row,vis);
+                    }
+                }
+
+            });
+    }
+}();
+<{/if}>
+
+</script>

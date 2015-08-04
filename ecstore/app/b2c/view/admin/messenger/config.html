@@ -1,0 +1,105 @@
+<form action="index.php?ctl=member/messenger&act=saveCfg" method="post" class="tableform" id='messengerconfig' target="{update:'messagebox'}">
+<input type="hidden" name="messenger" value="<{$messengername}>" />
+<div class="division">
+<table width="100%" cellspacing="0" cellpadding="0" border="0" id="EConfig">
+<{foreach from=$options item=item key=key}>
+<tr id='<{$key}>'>
+  <th><{$item.label}></th>
+  <td>
+    <{if $item.type=="radio"}>
+        <{input type=$item.type options=$item.options name="config[{$key}]" value=$item.value onclick="methodchange(this.value);"}>
+    <{elseif $item.type=="password"}>
+        <{input type=$item.type options=$item.options name="config[{$key}]" value=$item.value onKeyup="setHidden(this.value);"}>
+    <{else}>
+        <{input type=$item.type options=$item.options name="config[{$key}]" value=$item.value }>
+    <{/if}>
+    </td>
+</tr>
+<{/foreach}>
+</table>
+</div>
+
+<div class="table-action">
+    <{button label=$___b2c="保存"|t:'b2c' type="submit"}>
+    <{if $messengername == 'email'}>
+    <{button label=$___b2c="测试配置"|t:'b2c' onclick="new Dialog('index.php?ctl=member/messenger&act=testEmail&'+_S('messengerconfig').toQueryString(),{width:590,ajaksable:false})"}>
+    <{/if}>
+    <input type="hidden" id="subsmtppasswd" value="">
+</div>
+
+</form>
+<script>
+    setHidden('<{$options.smtppasswd.value}>');
+    var tdHTML=new Array();
+    function methodchange(type){
+        var len = $('EConfig').rows.length;
+        var tdLen = tdHTML.length;
+        var rIndex=0;
+        if (type=="mail"){ 
+            for(var i=0;i<len;i++){
+                if (parseInt($('EConfig').rows[i].id.indexOf('smtp'))==0){
+                    var tmp=new Array();
+                    for (var k=0;k<$('EConfig').rows[i].cells.length;k++){
+                        if (k>0&&$('EConfig').rows[i].id=="smtppasswd")
+                        {
+                            tmp[k]='<input autocomplete="off" type="password" name="config[smtppasswd]" value="'+$('subsmtppasswd').value+'" onKeyUp="setHidden(this.value);" style="" class="_x_ipt password" vtype="password" />';
+                        }
+                        else{
+                             tmp[k]=$('EConfig').rows[i].cells[k].innerHTML;
+                        } 
+                        if (k==parseInt($('EConfig').rows[i].cells.length)-1)
+                        {
+                            tmp[k+1]=$('EConfig').rows[i].id;
+                        }
+                    }
+                    tdHTML[rIndex]=tmp;
+                    rIndex++;
+                }
+                if (parseInt(i)==parseInt(len-1))
+                {
+                    deleteTabRow();
+                }
+            }
+        }
+        else{
+            var tag=document.getElementsByTagName('input');
+            var ext=0;
+            for(var t=0;t<tag.length;t++){
+                if (tag[t].type=="password")
+                {
+                    ext=1;
+                }
+            }
+            if (ext==0)
+            {
+                for(var j=0;j<tdHTML.length;j++){
+                    var tRow = $('EConfig').insertRow(len);
+                    tRow.setAttribute('id',tdHTML[j][2]);
+                    var th = document.createElement('th');
+                    var td = document.createElement('td');
+                    th.innerHTML=tdHTML[j][0];
+                    td.innerHTML=tdHTML[j][1] ;
+                    tRow.appendChild(th);
+                    tRow.appendChild(td);
+                    len++;
+                }
+            }
+        }
+    }
+    function deleteTabRow(){
+        var tlen = $('EConfig').rows.length;
+        for(var i=0;i<tlen;i++){
+            if (!$chk($('EConfig').rows[i])){   
+                continue;
+            }
+            if (parseInt($('EConfig').rows[i].id.indexOf('smtp'))==0){
+                $('EConfig').deleteRow($('EConfig').rows[i].rowIndex);
+                deleteTabRow();
+            }
+        } 
+    }
+    function setHidden(val){
+        $('subsmtppasswd').value = val;
+    }
+    methodchange('<{$options.sendway.value}>');
+</script>

@@ -1,0 +1,32 @@
+<form class="tableform" method='post' action='index.php?app=complain&ctl=admin_reports&act=docomplain' id="docomplain-form">
+<input type='hidden' name='reports_id' value='<{$complain.reports_id}>'>
+<input type='hidden' name='status' value='<{$complain.action}>'>
+<div class="division">
+<table width="100%">
+    <tr>
+        <th style='width:50px;'><{t}>备注：<{/t}></th>
+        <td><textarea name="memo"  cols="40" placeholder='请输入备注' id='actionMemo' style="width:92%" rows="" value=''></textarea></td>
+    </tr>
+    <tr>
+        <th style='width:50px;'>&nbsp;</th>
+        <td><p style='color:#FF0000'>*备注将显示在投诉留言表中。</p></td>
+    </tr>
+    </table>
+</div>
+
+</form>
+
+<{area inject='.mainFoot'}>
+<div class="table-action">
+	<{button label=$___b2c="提交"|t:'b2c' id="docomplain-form-submit" class="order-action" type="button"}>
+</div>
+<{/area}>
+<script>
+$('docomplain-form-submit').addEvent('click',function(){
+     if($('actionMemo').value.trim()==''){
+        MessageBox.error('请输入备注');
+        return;
+     }
+	 $('docomplain-form').fireEvent('submit',{stop:$empty})
+});
+</script>

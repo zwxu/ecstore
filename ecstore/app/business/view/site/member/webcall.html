@@ -1,0 +1,158 @@
+<div class="member-main">
+  <div class="title">
+    <span style="float:left">
+    <{t}>客服注册<{/t}>
+    <{if !$page_load && $allow_webcall && $allow_webcall == 1}>
+    <span class="disc">|</span>
+    <span id="add" class="disc add-icon">
+    <a href="javascript:void(0);"> 开启子号</a>
+    </span>
+    </span>
+    <span class="noticebox">在此开启在线客服的店员子账号</span>
+    <{/if}>
+  </div>
+  <div class="section switch">
+    <div class="switchable-content" >
+      <div class="switchable-panel">
+        <p class="font_red">在线客服可以实时监控网站访客轨迹及来源，可以使访客在不下载、安装客户端的前提下与客服进行交流，客服也可主动与访客交流。</p>
+        <{if $allow_webcall}>
+        <form method="post" enctype="multipart/form-data" id="my_webcall_form">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" class="noktable_heng">
+            <tr>
+              <th height="40"> 
+                <label><{t}>在线客服帐号：<{/t}></label>
+              </th>
+              <td>
+                <{input type="text" class="text" required="true" name="email" value="{$email}" maxlength="50" readonly="readonly" }>
+              </td>
+            </tr>
+            <{if $page_load}>
+            <tr>
+              <th height="40"> 
+                <label><{t}>密码：<{/t}></label>
+              </th>
+              <td>
+                <{input type="password" class="text width5" required="true" vtype="required&&new_password" name="pwd" id="pwd" value=""}>
+                <font color="red"><{t}>*6-12位<{/t}></font>
+                <{t}>推荐与网站会员密码一致<{/t}>
+              </td>
+            </tr>
+            <{if $is_member}>
+              <input type="hidden" name="member_idd" value="<{$is_member}>">
+            <{/if}>
+            <{/if}>
+            <tr>
+              <th height="40">&nbsp;</th>
+              <td>
+                <a href="javascript:void(0);" <{if $page_load}>onclick="if(validate($('my_webcall_form')))$('my_webcall_form').submit();"<{/if}> class="<{if !$page_load}>but_5hui<{else}>but_5<{/if}>" onmouseover="<{if !$page_load}>this.style.color = '#AAAAAA';<{/if}>"><{t}>启用在线客服<{/t}></a>
+                <a href="<{$webcall_center}>" class="but_5" target="_blank"><{t}>在线客服管理中心<{/t}></a>
+                <a href="<{$webcallHost}>/download/setup.exe" class="but_5"><{t}>客服客户端下载<{/t}></a>
+              </td>
+            </tr>
+            <tr>
+              <th height="20">&nbsp;</th>
+              <td>&nbsp;</td>
+            </tr>
+          </table>
+        </form>
+        <{else}>
+          <p>您没有权限开启在线客服</p>
+        <{/if}>
+        <{if !$page_load && $allow_webcall && $allow_webcall == 1}>
+        <form action="<{link app=business ctl=site_webcall act=children}>" method="post" enctype="multipart/form-data" id="children_webcall_form" style="display:none">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" class="noktable_heng">
+            <tr>
+              <th height="40"> 
+                <label><{t}>本店店员：<{/t}></label>
+              </th>
+              <td>
+                <{input type="select" name="member_id" id="children_webcall_member" options=$new_webcall vtype="required"  }>
+              </td>
+            </tr> 
+            <tr>
+              <th height="40"> 
+                <label><{t}>在线客服子帐号：<{/t}></label>
+              </th>
+              <td>
+                <{input type="text" class="text" required="true" name="email" id="children_webcall_account" maxlength="50" value="" readonly="readonly" }>
+              </td>
+            </tr>                  
+            <tr>
+              <th height="40"> 
+                <label><{t}>密码：<{/t}></label>
+              </th>
+              <td>
+                <{input type="password" class="text width5" required="true" vtype="required&&new_password" name="pwd" id="pwd" value=""}>
+                <font color="red"><{t}>*6-12位<{/t}></font>
+                <{t}>推荐与网站会员密码一致<{/t}>
+              </td>
+            </tr>                    
+            <tr>
+              <th height="40">&nbsp;</th>
+              <td>
+                <a href="javascript:void(0);" onclick="if(validate($('children_webcall_form')))$('children_webcall_form').submit();" class="but_5"><{t}>启用在线客服<{/t}></a>
+              </td>
+            </tr>
+          </table>
+        </form>
+       
+        <{if $old_webcall}>
+        <table class="gridlist border-all mt10" width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout:fixed;">
+            <tr>
+                <th  class="first" style="word-wrap:break-word;"><{t}>用户名<{/t}></th>
+                <th><{t}>联系电话<{/t}></th>
+                <th><{t}>姓  名<{/t}></th>
+                <th><{t}>邮  箱<{/t}></th>
+                <th><{t}>操  作<{/t}></th>
+            </tr>
+            <tbody>
+              <{foreach from=$old_webcall item=items key=key}>
+                <tr>
+                    <td class="textcenter"><span class="font-blue"><{$items.login_name|escape:'html'}></span></td>
+                    <td class="textcenter"><{if $items.mobile}><{$items.mobile|escape:'html'}><{else}><{$items.tel|escape:'html'}><{/if}></td>
+                    <td class="textcenter"><span class="font-blue"><{$items.name|escape:'html'}></span></td>
+                    <td class="textcenter"><span class="font-blue"><{$items.email|escape:'html'}></span></td>
+                    <td align="center">
+                      <a href="javascript:void(0);" class="but_5hui" onmouseover="this.style.color = '#AAAAAA';"><{t}>启用在线客服<{/t}></a>
+                    </td>
+                </tr>
+              <{/foreach}>
+            </tbody>
+        </table>
+        <{/if}>
+        <{/if}>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    validatorMap['new_password']= ['<{t}>密码长度应在6-15个字符之间<{/t}>', function(element, v) {
+        var passwd_re = $('pwd');
+        var _is_validate = false;
+        if (passwd_re.value.length <= 15 && passwd_re.value.length >= 6) _is_validate = true||_is_validate;
+        return _is_validate;
+    }];
+    validatorMap['not_empty']= ['<{t}>不能为空<{/t}>', function(element, v) {
+        var _is_validate = false;
+        if (v != '' || v != '0' || v != 0) _is_validate = true||_is_validate;
+        return _is_validate;
+    }];
+    var obj = $('add')||'';
+    if(obj) obj.addEvent('click',function(e){
+      $('children_webcall_form').setStyle('display','inline');
+    });
+    var MEMBER_HASH=new Hash(<{$member_json}>);
+    var obj = $('children_webcall_member')||'';
+    if(obj) obj.removeEvents('change').addEvent('change',function(e){
+      var memb = this.value||'';
+      if(memb && MEMBER_HASH.hasOwnProperty(memb)) email = MEMBER_HASH[memb];
+      else email = [];
+      var body = $('children_webcall_account')||'';
+      if(email && body){
+        var account = email['email'];
+        if(!account) account = email['mobile'];
+        if(!body.value)body.set('value',account);
+      }
+      return false;
+    });
+</script>

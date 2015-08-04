@@ -1,0 +1,108 @@
+<!-- right-->
+<div class="member-main">
+  <div>
+    <form method="post" action="<{link app=business ctl='site_store'   act='save_security'}>" class="section" id="Member_addr">
+      <div class="FormWrap" style="background:none; border:none; padding:0; margin:0;">
+        <div class="title"><{t}>修改店员店铺管理密码<{/t}></div>
+        <div class="division" style="border:none; border-bottom:1px dashed #ddd;">
+              <table  width="100%" border="0" cellspacing="0" cellpadding="0" class="forform">
+                  <tr>
+                  <th><{t}>当前用户名：<{/t}></th>
+                  <td><{$storemember.login_name}></td>
+                
+                  <{input class="inputstyle" name="member_id" type="hidden"  id="member_id" size="30"  value=$storemember.member_id }>
+                  </tr
+                   <tr>
+                  <th><{t}>当前用户姓名：<{/t}></th>
+                  <{input class="inputstyle"  name="store_id" type="hidden"     id="store_id" value=$storemember.store_id }>
+                  <{input class="inputstyle"  name="attach_id" type="hidden"     id="attach_id" value=$storemember.attach_id }>
+                  <td><{$storemember.name}></td>
+                  </tr
+               </table>
+
+
+        </div> 
+
+
+        <div class="division" style="border:none; border-bottom:1px dashed #ddd;">
+          <table class="forform" width="100%" border="0" cellspacing="0" cellpadding="0" class="forform">
+            <tr>
+              <th><{t}>当前密码：<{/t}></th>
+              <td><{input class="inputstyle" type="password" vtype=required name="old_passwd" }></td>
+            </tr>
+            <tr>
+              <th><{t}>新密码：<{/t}></th>
+              <td><{input class="inputstyle" id="newPass" type="password" vtype=required name="passwd"}></td>
+            </tr>
+            <tr>
+              <th><{t}>确认新密码：<{/t}></th>
+              <td><{input class="inputstyle" type="password" id="rePass" vtype=required name="passwd_re"}><input type="hidden" vtype="change_password" /></td>
+	 <input type="hidden" vtype="change_password" />
+            </tr>
+          </table>
+        </div>
+        <div style="padding-left:140px">
+           <{button onclick="subMember_addrForm(event,2);" class="submit-btn" type="button" rel="_request" label=$___b2c="提交"|t:'b2c'}>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  validatorMap['change_password']= ['<{t}>两次输入的密码不一致！<{/t}>', function(element, v) {
+    var passwd_re = $('rePass');
+    var passwd = $('newPass');
+    var _is_validate = false;
+			if (passwd_re.value == passwd.value) _is_validate = true||_is_validate;
+    return _is_validate;
+  }];
+
+var button_valiate = function(element_node){
+            // el element id.
+            var _validate_return = element_node.getElements('[vtype]').every(function(el){
+                    return validate(el);
+              });
+            return _validate_return;
+        };
+
+
+  subMember_addrForm = function (event,sign){
+           if ($('Member_addr')){
+                _formActionUrl = $('Member_addr').get('action');
+
+                if ($('Member_addr')){
+                _return = button_valiate($('Member_addr'));
+                }
+
+            var passwd_re = $('rePass');
+            var passwd = $('newPass');
+            var _is_validate = false;
+			if (passwd_re.value != passwd.value)
+            {
+                Ex_Dialog.alert('两次输入的密码不一致');
+                return;
+            } 
+
+                if (_return){
+                    new Request({
+                      url:_formActionUrl,
+                        method:'post',
+                        data:$('Member_addr').toQueryString(),
+                        onComplete:function(response){
+                            var result = JSON.decode(response);
+                            if(result.status == 'success'){
+                                window.opener.location.reload();
+                                window.close();
+                            }
+                            else{
+                                Message.error(result.msg)
+                            }
+
+                        }
+                    }).send();
+                }
+           }
+        };
+
+</script>
+<!-- right-->

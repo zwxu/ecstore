@@ -1,0 +1,190 @@
+<div class="receiver diviosion" id="receiver">
+	<div class="division">
+    <{if $addrlist}>
+      <ul class="receiver-sel">
+	  <{foreach from=$addrlist key=iloop item=addr}>
+       <li>
+        <label><input type="radio" name="delivery[addr_id]" value="<{$addr.addr_id}>"<{if $addr.def_addr}> checked<{/if}>><{$addr.addr_region|region}> <{$addr.addr_label}>
+        &nbsp;<a href="javascript:void(0)" class="lnk addredit"><{t}>编辑<{/t}></a><{if $addr.def_addr}><input type="hidden" name="def_addr" value="<{$addr.addr_id}>" /><{/if}>
+        </label>
+		</li>
+        <{/foreach}>
+		<li>
+        	<label><input type="radio" name="delivery[addr_id]" value="0"><{t}>其他收货地址<{/t}></label>
+		</li>
+
+	  </ul>
+	  <div id="checkout-recaddr" style='display:none'></div>
+
+     <{else}>
+       <div id='checkout-recaddr'>
+           <{include file="admin/order/rec_addr.html"}>
+        </div>
+     <{/if}>
+     </div>
+
+  <div class='receivermore'>
+    <{t}>订单附言：<{/t}><{input class="inputstyle" style="margin-left:10px;" name="memo" type="text" value="" style='width:400px'}>
+   <{t}> 指定送货时间:<{/t}>
+    <input type='checkbox' id="b2c-admin-checkout-special-delivery"/>
+    <div style='display:none;margin-top:4px' id="b2c-admin-checkout-special-delivery-time">
+     <{t}>送货时间：<{/t}><select class="inputstyle"  style="margin-left:10px;" name="delivery[day]">
+            <option selected="selected" value="<{t}>任意日期<{/t}>"><{t}>任意日期<{/t}></option>
+            <option value="<{t}>仅工作日<{/t}>"><{t}>仅工作日<{/t}></option>
+            <option value="<{t}>仅休息日<{/t}>"><{t}>仅休息日<{/t}></option>
+            <option value="specal"><{t}>指定日期<{/t}></option>
+          </select>&nbsp;
+          <span id="specal_day" style="display:none">
+             <{input type="text" name="delivery[specal_day]" class="cal inputstyle" value=$dlytime real=true style="width:80px" readonly=true}>
+          </span>
+        <select class="inputstyle" name="delivery[time]">
+            <option value="<{t}>任意时间段<{/t}>"><{t}>任意时间段<{/t}></option>
+            <option value="<{t}>上午<{/t}>"><{t}>上午<{/t}></option>
+            <option value="<{t}>下午<{/t}>"><{t}>下午<{/t}></option>
+            <option value="<{t}>晚上<{/t}>"><{t}>晚上<{/t}></option>
+          </select>
+	</div>
+  </div>
+</div>
+ <{if $addrlist}>
+<script>
+window.addEvent('domready',function(){
+
+	var url_area = 'index.php?app=b2c&ctl=admin_order&act=getAddr';
+
+
+    var addlistRadios=$$('input[name^=delivery[addr_id]','receiver');
+
+    if(addlistRadios.length){
+
+        addlistRadios.addEvent('click', function(e,edit){
+                this.set('checked',true);
+                var _value=this.value;
+
+                if(_value!='0'){
+                    if(edit){
+                       $('checkout-recaddr').show();
+                    }
+                    else $('checkout-recaddr').hide();
+				    $('receiver').store('b2c-cart-checkout-ship-addr', 'true');
+                }else{
+                    $('checkout-recaddr').show();
+					$('receiver').store('b2c-cart-checkout-ship-addr', 'false');
+				}
+
+
+                new Request.HTML({
+                    url:url_area,
+                    update:'checkout-recaddr',
+                    onRequest:function(){
+                      $('checkout-recaddr').set('html','<div class="font-green">loading...</div>');
+                    },
+                    onComplete:function(){
+
+                     if(_value=='0'){
+                         $('shipping').set('html','<div class="valierror clearfix" style=" padding-left:20px"><{t}>请先完善收货信息.<{/t}></div>');
+
+                         return;
+                     }
+
+                     /*$E('#checkout-recaddr .recsave td')
+                     .adopt(new Element('span',{'class':'bg-gray'})
+                     .set('html','&nbsp;&nbsp;(勾选保存将覆盖您之前保存的收货人信息)'));*/
+
+
+                      /*if(lastsel=$ES('#checkout-select-area select').getLast()){
+                          if(!lastsel.getValue()||lastsel.getValue()=='_NULL_'){
+                               $('shipping').set('html','<div class="valierror clearfix" style=" padding-left:20px"><{t}>请先完善收货信息.<{/t}></div>');
+                               MessageBox.error('<{t}>请重新选择：收货地区.<{/t}>');
+                               $('checkout-recaddr').show();
+
+                          }
+
+                      }*/
+
+                    }}).get({'addr_id':_value,'member_id':$E('input[name^=member_id]').getValue()?$E('input[name^=member_id]').getValue():null});
+            });
+
+		if ($E('input[name^=def_addr]') == null)
+			addlistRadios[0].fireEvent('click');
+		else
+		{
+			addlistRadios.each(function(el, index){
+				if ($(el).getValue() == $E('input[name^=def_addr]').getValue())
+				{
+					addlistRadios[index].fireEvent('click');
+				}
+			});
+		}
+       addlistRadios.getLast().addEvent('click',$('checkout-recaddr').show.bind($('checkout-recaddr')));
+   }
+
+   Ex_Loader('picker',function(){
+       $E('select[name^=delivery[day]]').addEvent('change',function(e){
+            $('specal_day').style.display=(this.value=='specal')?function(){$('specal_day').getFirst().makeCalable();$E('input[name^=delivery[specal_day]]').set('vtype','required'); return '';}():'none';
+            if ($E('select[name^=delivery[day]]').getValue() != 'specal'){
+                $E("input[name^=delivery[specal_day]]").removeProperty("vtype").set("value","");
+                if ($E('select[name^=delivery[time]]').getValue() == '<{t}>任意时间段<{/t}>' && $E('select[name^=delivery[day]]').getValue() == '<{t}>任意日期<{/t}>'){
+                    $('b2c-admin-checkout-special-delivery').checked = false;
+                    $('b2c-admin-checkout-special-delivery-time').hide();
+                }
+            }
+        });
+
+        $('b2c-admin-checkout-special-delivery').addEvent('click',function(e){
+            $(this).getNext("div")[this.checked?"show":"hide"]();
+            if (!(this.checked)){
+                $E("select[name^=delivery[day]]").getElements("option").each(function(item){item.removeProperty("selected");});
+                $E("select[name^=delivery[day]]").getElements("option[value='<{t}>任意日期<{/t}>']").set("selected","selected");
+                $("specal_day").hide();
+                $E("input[name^=delivery[specal_day]]").removeProperty("vtype").set("value","");
+                $E("select[name^=delivery[time]]").getElements("option").each(function(item){item.removeProperty("selected");});
+                $E("select[name^=delivery[time]]").getElements("option[value='<{t}>任意时间段<{/t}>']").set("selected","selected");
+            }
+        });
+   });
+
+  $$('.addredit','receiver').addEvent('click', function(e){
+            e.stop();
+            /*var ipt =this;
+            var addrRow = ipt.getPrevious('label');
+            var addrObj = addrRow.getElement('input[name^=delivery[addr_id]');*/
+            this.getPrevious('input[name^=delivery[addr_id]').fireEvent('click',[e,true]);
+        });
+
+
+
+});
+</script>
+<{else}>
+<script>
+    Ex_Loader('picker',function(){
+         window.addEvent('domready',function(){
+            $E('select[name^=delivery[day]]').addEvent('change',function(e){
+                $('specal_day').style.display=(this.value=='specal')?function(){$('specal_day').getFirst().makeCalable();$E('input[name^=delivery[specal_day]]').set('vtype','required'); return '';}():'none';
+                if ($E('select[name^=delivery[day]]').getValue() != 'specal'){
+                    $E("input[name^=delivery[specal_day]]").removeProperty("vtype").set("value","");
+                    if ($E('select[name^=delivery[time]]').getValue() == '<{t}>任意时间段<{/t}>' && $E('select[name^=delivery[day]]').getValue() == '<{t}>任意日期<{/t}>'){
+                        $('b2c-admin-checkout-special-delivery').checked = false;
+                        $('b2c-admin-checkout-special-delivery-time').hide();
+                    }
+                }
+            });
+
+            $('b2c-admin-checkout-special-delivery').addEvent('click',function(e){
+                $(this).getNext("div")[this.checked?"show":"hide"]();
+                if (!(this.checked)){
+                    $E("select[name^=delivery[day]]").getElements("option").each(function(item){item.removeProperty("selected");});
+                    $E("select[name^=delivery[day]]").getElements("option[value='<{t}>任意日期<{/t}>']").set("selected","selected");
+                    $("specal_day").hide();
+                    $E("input[name^=delivery[specal_day]]").removeProperty("vtype").set("value","");
+                    $E("select[name^=delivery[time]]").getElements("option").each(function(item){item.removeProperty("selected");});
+                    $E("select[name^=delivery[time]]").getElements("option[value='<{t}>任意时间段<{/t}>']").set("selected","selected");
+                }
+            });
+        });
+
+    });
+
+</script>
+<{/if}>

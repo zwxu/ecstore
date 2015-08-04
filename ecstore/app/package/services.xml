@@ -1,0 +1,39 @@
+<services>
+    <service id="desktop_finder.package_mdl_activity">
+        <class>package_finder_activity</class>
+    </service>
+    <service id="desktop_finder.package_mdl_attendactivity">
+        <class>package_finder_attendactivity</class>
+    </service>
+    <service id="package_group_activity">
+        <class>package_business_activity</class>
+    </service>
+    <service id="site.site_theme_tmpl">
+        <class>package_theme_tmpl</class>
+    </service>
+    <service id="b2c_cart_object_apps">
+        <class>package_cart_object_package</class>
+    </service>
+    
+    <service id="b2c_cart_render_items_apps">
+        <class>package_cart_render_item_package</class>
+    </service>
+    <service id="b2c_cart_render_items_goods_apps">
+        <class>package_cart_render_item_package</class>
+    </service>
+    <service id="b2c_cart_object_split">
+        <class>package_cart_object_split_goods</class>
+    </service>
+    <service id="order_goodstype_operation">
+        <class>package_order_service_package</class>
+    </service>
+    <service id="b2c.order_store_extends">
+        <class>package_order_service_package</class>
+    </service>
+    <service id="b2c_allow_delete_goods">
+        <class>package_delete_check</class>
+    </service>
+    <service id="b2c_order.beforecreate">
+        <class>package_order_beforecreate</class>
+    </service>
+</services>

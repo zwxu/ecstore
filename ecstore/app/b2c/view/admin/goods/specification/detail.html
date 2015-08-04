@@ -1,0 +1,198 @@
+
+<form id="specForm" class="tableform" action="index.php?app=b2c&ctl=admin_specification&act=save&p[0]=1" method="POST">
+
+<input type="hidden" name="spec[spec_id]" value="<{$spec.spec_id}>">
+<div class="division">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+  <th><em class="red">*</em><{t}>规格名称：<{/t}></th>
+  <td><{input type="text" name="spec[spec_name]" vtype="required" value=$spec.spec_name  maxlength='20'}></td>
+</tr>
+<tr>
+  <th><{t}>规格备注：<{/t}></th>
+  <td><{input type="text" name="spec[spec_memo]" value=$spec.spec_memo}></td>
+</tr>
+<tr>
+  <th><{t}>规格别名：<{/t}></th>
+  <td><{input type="text" name="spec[alias]" value=$spec.alias}> <span class="notice-inline"><{t}>用 | 分割<{/t}></span></td>
+</tr>
+<tr>
+  <th><{t}>显示类型：<{/t}></th>
+  <td>
+    <div class='spec_type'>
+      <label><input type="radio" name="spec[spec_type]" value="text" checked/><{t}>文字<{/t}></label> &nbsp; &nbsp; 
+      <label><input type="radio" name="spec[spec_type]" value="image" /><{t}>图片<{/t}></label>
+     </div>
+  </td>
+</tr>
+<tr>
+  <th><{t}>显示方式：<{/t}></th>
+  <td>
+     <div class='spec_show_type'>
+      <label><input type="radio" name="spec[spec_show_type]" value="flat" checked/><{t}>平铺显示<{/t}></label> &nbsp; &nbsp; 
+      <label><input type="radio" name="spec[spec_show_type]" value="select" /><{t}>下拉显示<{/t}></label>
+     </div> 
+  </td>
+</tr>
+</table>
+</div>
+  <div class="division">
+      <div class="gridlist-action">
+        <{button app="desktop" label=$___b2c="添加规格值"|t:'b2c' class="addspec" id="addspec" icon="btn_add.gif" }><!--<span class="notice-inline"></span>-->
+      </div>
+      
+      <table border="0" cellspacing="0" cellpadding="0" class="gridlist sepc_value_table <{$spec.spec_type|default:'text'}>-spec-value-table">
+        <thead>
+         <tr>
+            <th><{t}>规格值名称<{/t}></th>
+            <th><{t}>规格值别名<{/t}></th>
+             <th class='simg-col'><span><{t}>规格图片<{/t}></span></th>
+            <th><{t}>操作<{/t}></th>
+            <!--th><{t}>删除<{/t}></th-->
+          </tr>
+        </thead>
+        <tbody>
+        <{foreach from=$spec.spec_value item=items key=key}>
+        <tr>
+            <td style="vertical-align:middle; text-align:center"><{input type="text" name="spec[spec_value][{$key}][spec_value]" value=$items.spec_value style='width:150px;' maxlength='20'  vtype='required'}></td>
+            <td style="vertical-align:middle; text-align:center"><{input type="text" name="spec[spec_value][{$key}][alias]" value=$items.alias style='width:150px;' maxlength='20' }></td>
+            <td class='simg-col'>
+            <span>
+            <{assign var=name_spec_image value="spec[spec_value][{$key}][spec_image]"}>
+             <span style="" class='edit sel_image'><{input type='image' name=$name_spec_image value=$items.spec_image}></span>
+            </span>
+            </td>
+            <td style="vertical-align:middle;">
+                <input type='hidden' name='spec[spec_value][<{$key}>][spec_value_id]' class='spec-value-id' value='<{$items.spec_value_id}>'/>
+                <{img app=desktop src='bundle/icon_asc.gif' class='asc'  title=$___b2c='向上移动'|t:'b2c' style="cursor:pointer;"}> &nbsp; &nbsp; 
+                <{img app=desktop src='bundle/icon_desc.gif' class='desc' title=$___b2c='向下移动'|t:'b2c' style="cursor:pointer; width:13px; height:12px; margin-top:10px"}> &nbsp; &nbsp; 
+                <{img app=desktop src='bundle/delete.gif' class='delete'  title=$___b2c='删除'|t:'b2c' style="cursor:pointer;" }>
+            </td>
+        </tr>
+        <{/foreach}>
+        </tbody>
+      </table>
+      </div>
+
+
+<div class="table-action">
+    <{button label=$___b2c="保存"|t:'b2c' type="submit" class="btn-primary"}>
+</div>
+
+</form>
+<script>
+(function(){
+    var new_spec_item = 0;
+    var spec_image_width = '<{$width}>';
+    var spec_image_height = '<{$height}>';
+    
+    var specForm=$('specForm');
+    var radio_spec_type=$$("#specForm input[name^=spec[spec_type]");
+    var radio_spec_show_type=$$("#specForm input[name^=spec[spec_show_type]");
+    var table_spec_value=$E("#specForm table.sepc_value_table");
+    
+    radio_spec_type.addEvent('click',function(e){
+                 var clazz=this.value+'-spec-value-table';
+                 /*
+                 if(table_spec_value.hasClass(clazz)){
+                   return;
+                 }
+                 */
+                 if(this.value=='text'){
+                     table_spec_value.getElements('.simg-col').set('styles',{ 'display':'none' });
+                     table_spec_value.removeClass('image-spec-value-table');
+                     table_spec_value.addClass('text-spec-value-table');
+                 }else{
+                     table_spec_value.getElements('.simg-col').set('styles',{ 'display':'' });
+                    table_spec_value.removeClass('text-spec-value-table');
+                    table_spec_value.addClass('image-spec-value-table');
+                 }
+    });
+
+    
+    var bindEditEvent=function(row){
+            var sel_image=row.getElement('span.sel_image');
+            var asc=row.getElement('img.asc');
+            var desc=row.getElement('img.desc');
+            var del=row.getElement('img.delete');
+
+            asc.addEvent('click',function(){
+               var pre=row.getPrevious('tr');
+               if(pre){
+                  row.injectBefore(pre);
+               }
+            });
+            desc.addEvent('click',function(){
+                var next=row.getNext('tr');
+                   if(next){
+                      row.injectAfter(next);
+                   }
+            });
+            del.addEvent('click',function(){
+                if(!this.getParent('td').getElement('.spec-value-id')){
+                    if(confirm('<{t}>删除不可恢复，确认删除本行吗？<{/t}>')){
+                        row.remove();
+                    }
+                    return;
+                };
+               var specvid=this.getParent('td').getElement('.spec-value-id').get('value');
+               if(confirm('<{t}>删除不可恢复，确认删除本行吗？<{/t}>')){
+ new Request({  url:'index.php?app=b2c&ctl=admin_specification&act=check_spec_value_id',
+                  onSuccess:function(re){
+                     if(re=='can'){
+                        row.remove();
+                     }else{
+                        MessageBox.error(re);
+                     }
+                  
+                  }
+              }).post('spec_value_id='+encodeURIComponent(specvid));
+                  
+               }
+            });
+            
+      };
+    
+    var IMP_UPLOAD_TMPL = '<{input type="image" name="{img_upload_name}" width=40 height=40}>';
+
+    var getTemp = function(i){
+        return '<td style="vertical-align:middle; text-align:center;"><{input type="text" name="spec[spec_value][new_'+i+'][spec_value]" value="" style="width:150px;" maxlength="20"  vtype="required"}></td><td style="vertical-align:middle;"><{input type="text" name="spec[spec_value][new_'+i+'][alias]" value="" style="width:150px;" maxlength="20" }></td><td class="simg-col">'+IMP_UPLOAD_TMPL.replace('{img_upload_name}','spec[spec_value][new_'+i+'][spec_image]')+' </td><td style="vertical-align:middle;"><input type="hidden" name="spec[spec_value][new_'+i+'][spec_value_id]" value=""/><{img app=desktop src="bundle/icon_asc.gif" class="asc"  title=$___b2c="向上移动"|t:"b2c"  style="cursor:pointer;"}> &nbsp; &nbsp; <{img app=desktop src="bundle/icon_desc.gif" class="desc" title=$___b2c="向下移动"|t:"b2c"  style="cursor:pointer;"}> &nbsp; &nbsp; <{img app=desktop src="bundle/delete.gif" class="delete"  title=$___b2c="删除"|t:"b2c"  style="cursor:pointer;" }></td>';
+    };
+    
+    $('addspec').addEvent('click',function(e){
+         var newRow=new Element('tr');
+         newRow.inject($E('tbody',table_spec_value));
+         newRow.setHTML(getTemp(new_spec_item++));
+        if(table_spec_value.hasClass('text-spec-value-table')){
+            newRow.getElement('.simg-col').set('styles',{'display':'none'});
+        }else{
+            newRow.getElement('.simg-col').set('styles',{'display':''});
+        }
+         bindEditEvent(newRow);
+    });
+   
+      /*初始化规格设置项RADIO,VALUE*/
+
+      $E('#specForm input[value=<{$spec.spec_type|default:'text'}>]').set('checked',true).fireEvent('click');
+      $E('#specForm input[value=<{$spec.spec_show_type|default:'flat'}>]').set('checked',true);
+      $ES('tbody tr',table_spec_value).each(bindEditEvent);
+ 
+})();
+
+$('specForm').store('target',{
+    onComplete:function(rs){
+        if(!rs) return;
+        rs = JSON.decode(rs);
+        if(rs.success){
+            if(window.finderGroup) window.finderGroup['<{$env.get.finder_id}>'].refresh();
+            if($('specForm').getParent('.dialog')){
+              var Dlg = $('specForm').getParent('.dialog').retrieve('instance');
+              if(Dlg.update){
+                  Dlg.update.retrieve('instance').initContent();
+              }
+              Dlg.close();
+            }
+        }
+    }
+});
+</script>

@@ -1,0 +1,30 @@
+
+<table>
+  <tr>
+    <th><{t}>配送方式：<{/t}></th>
+    <td>
+    <{if !$shippings}>
+        <{t}>请先选择地区<{/t}>
+        <{else}>
+    <table>
+<{foreach from=$shippings item="shipping" key="key"}>
+<tr<{if $key%2==0}> class="row2"<{else}> class="row1"<{/if}>>
+  <td>
+    <label><input type="radio" name="order[shipping][shipping_id]" value="<{$shipping.dt_id}>" /><{$shipping.dt_name}> +<{$shipping.price|cur}></label>
+    <{if $shipping.protect == 1}>
+    <label class="nof kef"><input type="checkbox" name="order[shipping][is_protect][<{$shipping.dt_id}>]" value="1" /><{t}>保价 +<{/t}><{$shipping.protect_rate|cur}></label>
+    <{/if}>
+    <div class="info" style="padding:3px 0 0 20px; color:#666;"><{$shipping.detail|default:'&nbsp;'}></div>
+  </td>
+</tr>
+<{/foreach}>
+    </table>
+       <{/if}>
+
+    </td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+    <td><input type='button' value='<{t}>保存<{/t}>' class='box-submit'/></td>
+  </tr>
+</table>

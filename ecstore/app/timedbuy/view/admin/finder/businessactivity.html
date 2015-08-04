@@ -1,0 +1,112 @@
+<div class="tableform">
+<h4>活动信息</h4>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+  <col class="Colgoodsid"></col>
+  <col class="Colgoodsid"></col>
+  <col class="Colgoodsid"></col>
+  <col class="textleft"></col>     
+    <thead>
+      <th><{t}>活动名称<{/t}></th>
+      <th><{t}>开始时间<{/t}></th>
+      <th><{t}>结束时间<{/t}></th>
+      <th><{t}>状态<{/t}></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><{$activity.name}></td>
+      <td class="textleft"><{$activity.start_time}></td>
+      <td class="textleft"><{$activity.end_time}></td>
+      <td><{if $activity.act_open == 'true'}>开启<{else}>关闭<{/if}></td>
+    </tr>
+  </tbody>
+  </table>
+</div>
+<div class="tableform">
+<h4>申请信息</h4>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+  <col class="Colgoodsid"></col>
+  <col class="Colgoodsid"></col>
+  <col class="Colgoodsid"></col>
+  <col class="textleft"></col>     
+    <thead>
+      <th><{t}>商品名称<{/t}></th>
+      <th><{t}>原价<{/t}></th>
+      <th><{t}>活动价<{/t}></th>
+      <th><{t}>参加活动的商品数量<{/t}></th>
+      <th><{t}>申请商家<{/t}></th>
+      <th><{t}>每人限购<{/t}></th>
+      <th><{t}>包邮<{/t}></th>
+      <th><{t}>状态<{/t}></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><{$goods.name}></td>
+      <td><{$goods.price}></td>
+      <td><{if $business.price}><{$business.price}><{else}>0<{/if}></td>
+      <td class="textleft"><{$business.nums}></td>
+      <td class="textleft"><{$member.login_name}></td>
+      <td><{$business.presonlimit}></td>
+      <td><{if $goods.freight_bear == 'business'}>是<{else}>否<{/if}></td>
+      <td><{if $business.status==1}>待审核<{elseif $business.status==2}>审核通过<{else}>审核不通过<{/if}></td>
+    </tr>
+  </tbody>
+  </table>
+</div>
+<div class="tableform">
+<h4>店铺信息</h4>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+    <thead>
+      <th><{t}>店铺名称<{/t}></th>
+      <th><{t}>店铺等级<{/t}></th>
+      <th><{t}>店铺类型<{/t}></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><{$store_name}></td>
+      <td class="textleft"><{$store_gradename}></td>
+      <td class="textleft"><{$issue_typename}></td>
+    </tr>
+  </tbody>
+  </table>
+</div>
+<{if $business.status==1&&$business.disabled=='false'}>
+<form method="POST" action="<{$from_submit_url}>" id="groupactivity-from">
+<input type="hidden" value="<{$business.id}>" name="id">
+   <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+       <tr>
+            <th>备注：</th>
+            <td><input name='remark' type="text" value="<{$business.remark}>"></td>
+       </tr>
+   </table>
+   <div class="table-action">
+    <{button label="审核通过" type="button" id="groupactivity-btn" }>
+    <{button label="审核不通过" type="button" id="groupactivity-cancel"}>
+    </div>
+</form>
+<script>
+    $('groupactivity-btn').removeEvent('click').addEvent('click',function(){
+        $('groupactivity-from').fireEvent('submit',new Event(this));  
+    });
+    $('groupactivity-cancel').removeEvent('click').addEvent('click',function(){
+        $('groupactivity-from').action = "<{$from_cancle_url}>";
+        $('groupactivity-from').fireEvent('submit',new Event(this));  
+    });
+</script>
+<{/if}>
+<div class="tableform">
+   <div class="division">
+   	  
+	   <div class="clearfix">
+	   		<div class="span-auto"><{t}>前台访问地址：<{/t}></div>
+		    <div class="span-9">
+		    	<input type='url' value='<{$url}>' onkeydown='return false;' class='f-9 shadow ' style='font-family:Arial;width:98%;' onclick='this.focus();this.select();'/>
+		    </div>
+		    <div class="span-auto">
+		    	<span class="finder-action-items flt" style="float:left; margin-left:5px; display:block; padding:0 1px"><a  href="<{$url}>" target="_blank"><span><{t}>访问此链接<{/t}></span></a></span>
+		    </div>
+	   </div>
+   </div>
+</div>

@@ -1,0 +1,260 @@
+<form action="index.php?app=content&ctl=admin_node&act=update" id="nodecatEditor" method="post">
+    <{area inject=".mainHead"}>
+
+        <h2 class="head-title"><{t}>文章栏目<{/t}><em class="num">(<{t}>共<{/t}><{$tree_number}><{t}>条<{/t}>)</em></h2>
+
+        <div class="gridlist-action finder-action clearfix">
+            <{assign var=addnodecat value=$___a='添加文章类目'|t:'content'}>
+            <{assign var=editnodesort value=$___b2c="编辑排序"|t:'content'}>
+            <{assign var=savenodesort value=$___b2c="保存排序"|t:'content'}>
+<div class="span-auto">
+<{button app="desktop" label=$addnodecat  icon="btn_add.gif" onclick="new Dialog('index.php?app=content&ctl=admin_node&act=add', {title:'{$addnodecat}', height:'470'})" }>
+</div>
+  <div class="span-auto">
+            <{button app="desktop" tmplabel=$savenodesort label=$editnodesort  id="edit-nodecatsort"}> 
+  </div>
+<{if $tree_number<=500}>
+<div class="span-auto">
+ <{button app="desktop" label=$___content="展开文章类目"|t:'content'  id="showCat-handle" icon="btn_unfolded.gif" }> </div>
+<div class="span-auto">
+ <{button app="desktop" label=$___content="收起文章类目"|t:'content'  icon="btn_folded.gif" id="hideCat-handle" }>
+</div>
+<{/if}>
+            &nbsp;
+        </div>
+<div class="Node">
+        <div class='gridlist-head finder-header'>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+        	<tr> 
+    		<td width="5%"><{t}>栏目ID<{/t}></td>
+            <td width="20%"><{t}>栏目名称<{/t}></td>
+            <td width="20%" style="text-align:left;">&nbsp;&nbsp;&nbsp;&nbsp;<{t}>栏目URL优化<{/t}></td>
+            <td width="5%"><{t}>排序<{/t}></td>
+            <td width="50%"><{t}>操作<{/t}></td>
+            </tr>
+		</table>
+        </div>
+  </div>
+    <{/area}>
+    <div class="Node-body">
+    <div id="node_tree" class='gridlist finder-list catlist'>
+        <{foreach from=$list item=item name="item"}>
+        <div depath="<{$item.node_depth}>" class="clear_cat row <{if $env.foreach.item.iteration%2>0}>even<{/if}>" node_id="<{$item.node_id}>" parent_id="<{$item.parent_id}>">
+            <div class='row-line' style="padding:0">
+            <table cellpadding="0" cellspacing="0" border="0">
+            <tr>
+			   <td width="5%" style="vertical-align:top"><{$item.node_id}></td>
+               <td width="20%" style="vertical-align:top">
+             
+      <div style="padding-left:<{($item.node_depth)*15}>px;text-align:left">
+    <{if $tree_number<=500}>
+                        <{if $item.has_children=='true'}>  <span class="handle-node" style='width:12px; height:12px;line-height:12px;overflow:hidden;display:inline-block;*margin-right:5px;cursor:pointer'>  <{img app='desktop' src="bundle/handle-hide.gif" alt=$___content="收起子分类"|t:'content'  title=$___content="收起子分类"|t:'content'  class="handle-hide" app='desktop'}>
+                        <{img app='desktop' src="bundle/handle-show.gif" alt=$___content="收起子分类"|t:'content'  title=$___content="展开子分类"|t:'content'  class="handle-show" app='desktop'}> </span> 
+                        <{/if}>
+                        <{/if}>
+                        
+                        <a href="index.php?app=content&ctl=admin_node&act=edit&node_id=<{$item.node_id}>" target="dialog::{title:'<{t}>编辑<{/t}>',width:.7,height:.8}"><{$item.node_name|t:'content'}></a></div>
+          
+                </td>
+               <td width="20%" style="text-align:left; vertical-align:top">&nbsp;&nbsp;&nbsp;&nbsp; <span class="quiet"><{$item.node_pagename}></span></td>
+               <td width="5%" style="vertical-align:top">
+                   
+                    <input class="_x_ipt" type="number" size="5"  name="ordernum[<{$item.node_id}>]" value="<{$item.ordernum|default:0}>" vtype="unsigned" style="display:none" /><b><{$item.ordernum|default:0}></b>         
+
+            
+               </td>    
+                
+               <td width="50%" style="vertical-align:top">
+                       <div class="clearfix">
+                           <div class="span-auto">
+                                <{assign var="node_id" value=$item.node_id}><span class="opt lnk" onClick="new Dialog('index.php?app=content&ctl=admin_node&act=add&parent_id=<{$item.node_id}>', {title:'<{t}>添加文章子类目<{/t}>', height:470})"><{img src="bundle/addcate.gif" border="0" alt=$___content="添加文章子类目"|t:'content'  app='desktop'}>
+                            <{t}>添加文章子类目<{/t}>
+                            </span>
+                           </div> 
+                         <div class="span-auto">
+                              <span class="opt"><a target="_blank" href="index.php?app=content&ctl=admin_article_detail&act=add&node_id=<{$item.node_id}>&type=1"><{img src="bundle/btn_add.gif" border="0" alt=$___content="在此文章类目下添加文章"|t:'content'  app='desktop'}><{t}>添加文章<{/t}></a></span>
+                           </div>
+                         <div class="span-auto">
+                                <span class="opt lnk" onClick="new Dialog('index.php?app=content&ctl=admin_node&act=edit&node_id=<{$item.node_id}>', {title:'<{t}>编辑<{/t}>',width:.7,height:.8})"><{img src="bundle/editcate.gif" border="0" alt=$___content="编辑"|t:'content'   app='desktop'}><{t}>编辑<{/t}></span>
+                           </div>
+                         <div class="span-auto">
+                               <span class="opt lnk" onclick="deleteRow('index.php?app=content&ctl=admin_node&act=remove&node_id=<{$item.node_id}>',event)"><{img src="bundle/delecate.gif" border="0" alt=$___content="删除"|t:'content'  app='desktop'}><{t}>删除<{/t}></span>
+                           </div>
+                         <div class="span-auto">
+                                <span class="opt lnk" onclick='W.page("index.php?app=content&ctl=admin_article&act=index&filter[node_id]=<{$item.node_id}>&action=view&page=1")'><{img src="bundle/showcate.gif" border="0" alt=$___content="查看此文章类目下文章"|t:'content'  app='desktop'}><{t}>查看文章<{/t}></span>
+                           </div>
+
+                         <div class="span-auto">
+                              <span class="opt lnk" onclick="window.open('<{$item.url}>')"><{img src="bundle/zoom_btn.gif" border="0" alt=$___content="跳转前台查看该"|t:'content'  app='desktop'}><{t}>浏览<{/t}></span>
+                           </div> 
+                         <div class="span-auto">
+                         <{if $item.ifpub eq 'true'}>                
+                            <span class="opt lnk" onClick="W.page('index.php?app=content&ctl=admin_node&act=publish&node_id=<{$item.node_id}>&pub=false')"><{img app=desktop src="bundle/visible.gif" }><{t}>已发布<{/t}></span>
+                            <{else}>
+                            <span class="opt" onClick="W.page('index.php?app=content&ctl=admin_node&act=publish&node_id=<{$item.node_id}>&pub=true')"><{img app=desktop src="bundle/un_visible.gif" }><{t}>已禁用<{/t}></span>
+                            <{/if}>
+                           </div>
+                    </div>
+               </td>
+                </tr>
+                </table>
+            </div>
+        </div>
+        <{/foreach}>
+    </div>
+    </div>
+
+</form>
+<script>
+
+function deleteRow(act,event){
+e=$(new Event(event).stop().target);
+     var row=e.getParent('.row');
+    
+    if(confirm('<{t}>您确定要删除该文章类目？<{/t}>')){ 
+        W.page(act,{
+        method:'get',
+        update:'messagebox',
+        onComplete:function(re){
+            
+            if(re.contains('success')){row.remove();}
+        
+            }
+        });
+    }
+}
+<{if $tree_number<=500}>
+void function(){   
+   $E('#hideCat-handle').addEvent('click',function(){
+    $ES('#node_tree .clear_cat').each(function(e){
+        if(e.get('depath')>1){
+            e.setStyles({'display':'none'});
+        }
+    });
+    $ES('#node_tree .handle-hide').hide();
+    $ES('#node_tree .handle-show').show();
+  });
+    $E('#showCat-handle').addEvent('click',function(){
+
+        $ES('#node_tree .clear_cat').each(function(e){
+            if(e.get('depath')>1){
+                e.setStyles({'display':''});
+            }
+        });
+        $ES('#node_tree .handle-hide').show();
+    });
+
+    $('node_tree').addEvent('click',function(e){
+       
+       if(!e.target.className.match(/handle-/i))return;
+    
+
+      var handle=$(e.stop().target);
+            var eventRow=handle.getParent('.row');
+            var visible=handle.hasClass('handle-show')?'':'none';    
+                if(visible=='none'){       
+                          handle.hide().getNext().show();                                                                                                               
+                    }else{                                                                   
+                          handle.hide().getPrevious().show();                          
+                                        
+                    }    
+            flode(eventRow,visible);
+
+    });  
+
+    $('edit-nodecatsort').addEvent('click',function(){
+         var _ctext = this.get('text');
+           if(_ctext.trim()=='<{t}>编辑排序<{/t}>'){
+          
+          $$('#node_tree input[vtype=unsigned]').each(function(item){
+               
+                  item.style.cssText = "";
+                  item.getNext().setStyle('display','none');
+            
+            });
+            this.getElement('span span').set({'text':'<{t}>保存排序<{/t}>','styles':{color:'#ff3300'}}) 
+         }else{                                    
+           $('nodecatEditor').fireEvent('submit',{stop:function(){}}); 
+        }
+         
+         
+        
+    
+    });
+   
+    function flode(eventRow,visible){            
+            var node_id=eventRow.get('node_id');
+            var parent_id=eventRow.get('parent_id');    
+            
+            eventRow.getAllNext('div[parent_id='+node_id+']').each(function(row){                                
+                if(visible=='none'){                        
+                    row.hide();
+                    var obj=row.getElements('.handle-node img');                            
+                    if(obj.length>1){                    
+                        flode(row,visible);    
+                    }                                            
+                }else{                        
+                    row.show();        
+                    var obj=row.getElements('.handle-node img');                            
+                    if(obj.length>1){               
+                        var vis=(obj[0].getStyle('display')=='none'?'none':'inline');            
+                        flode(row,vis);    
+                    }
+                }    
+                        
+            });
+    }
+}();
+<{/if}>
+var articlesEditFrame = (function(){
+
+    /*
+     *  sign:{
+           1:保存并关闭,
+           2:保存当前不关闭，               
+     *    }       
+     */
+    if(!$('catEditor'))return;
+    var _form=$('catEditor'),_formActionURL=_form.get('action'); 
+    subArticleForm = function (event,sign){  
+       var specOBJ='';    
+       var target={extraData:$('finder-tag').toQueryString()+'&'+specOBJ,onComplete:function(){}};
+     
+       switch (sign){
+            case 1:
+                $extend(target,{
+                    onComplete:function(){
+                        window.close();
+                    }}
+                );
+            break;
+            case 2:
+                $extend(target,{
+                    onRequest: function(){
+                        event.target.disabled = true;
+                    },
+                    onComplete:function(e){
+                        if(!JSON.decode(e).id){
+                            event.target.removeProperty('disabled');
+                            return;
+                        }
+                        var id = JSON.decode(e).id;
+                        if(id > 0){
+                            $('aEditor-Garticleid-input').value = JSON.decode(e).id;
+                        }
+                        event.target.disabled = false;
+                    }}
+                );
+            break;
+            default:
+            return;
+       }
+
+        _form.store('target',target);
+        _form.set('action',_formActionURL+'&but='+sign).fireEvent('submit',new Event(event));
+    };
+});
+
+articlesEditFrame();
+
+</script>

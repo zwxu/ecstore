@@ -1,0 +1,14 @@
+<div id="shop_relation" class="tableform">
+<h4><{t}>新建绑定关系<{/t}></h4>
+<div class="division">
+<form action="index.php?app=b2c&ctl=admin_shoprelation&act=addnew" method="post" id="shop_relation_edit">
+<input type="hidden" name="shop[shop_id]" value="<{$shoprelation.shop_id}>" />
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+   <tr> <th><em class="red">*</em><{t}>商店名称：<{/t}></th>
+    <td><input type="text" name="shop[name]" vtype="required" value="<{$shoprelation.name}>" /> &nbsp; <{help}><{t}>此处填写被绑定的商店的名称<{/t}><{/help}></td> </tr>
+  </tr>
+</table>
+</form>
+</div>
+</div>

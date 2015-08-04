@@ -1,0 +1,249 @@
+pam开发手册
+
+since   :   %%date(%Y-%m-%d)  $Rev$
+
+%!target:html
+%!postproc(tex): '\.gif' '.eps'
+%!preproc(html): '\.dot' '.gif'
+%!preproc(tex): '\.dot' '.pdf'
+%!encoding:utf-8
+=pam简介=
+pam全称：Pluggable Authentication Modules 即可插入的验证模块。
+和以往的登陆认证不同,pam会把用户分成若干个体系,用不同的标识来区分不同的体系,在ECOS中我们把体系分成前台和后台，
+前台体系用member 后台体系用shopadmin来区分,然后通过不同的体系去进行不同的身份验证。
+
+=此手册目标人群=
+开发者：开发基于ecos的新应用或扩展已有应用功能需要对系统进行身份验证的都会用到pam
+
+
+=pam提供了下列功能：=
+- 用户认证
+- 登陆框的输出
+- SESSION的存储
+
+=pam身份验证的具体实现：=
+如果您在基于ECOS的框架上开发了某个应用或者系统而需要为这个系统的用户进行身份验证的话就要用到pam这个app了，下面我们来详细的说明一下pam的身份验证是如何实现的：
+
+- ``dbschema/account.php ``
+
+每一个用户系统需要进行身份验证我们必须要有某个或多个表来保存他的登录或验证信息，只有当用户输入的信息和之前注册的信息一致的时候这样才算验证成功，在ECOS框架中不管你为多少个app进行身份验证我们都只会把用户的验证信息保存在某个表中，此表的名称是sdb_pam_account(sdb_为数据表前缀，此前缀在安装时是可配置的，在此我们就统一使用默认的表前缀)。
+
+```
+<?php
+
+$db['account'] = array(
+    'columns'=>array(
+        'account_id'=>array('type'=>'number','pkey'=>true,'extra' => 'auto_increment',), //用户ID
+        'account_type'=>array('type'=>'varchar(30)'),//用户体系标识
+        'login_name'=>array('type'=>'varchar(100)','is_title'=>true, ),//登录名
+        'login_password'=>array('type'=>'varchar(32)'),//登陆密码
+        'disabled'=>array('type'=>'bool','default'=>'false'),
+        'createtime'=>array('type'=>'time'),
+    ),
+  'index' => array (
+    'account' => array ('columns' => array ('account_type','login_name'),'prefix' => 'UNIQUE'),
+  ),
+  'engine' => 'innodb',
+);
+
+```
+	以上代码是pam/dbschema/account.php的文件内容。dbschem的作用详见dbeav的开发详解。下面我们介绍一下sdb_pam_account这个表的个字段的作用。 account_id 是用户的ID，此主键是自动增长而且此ID和用户的附加信息表的ID是保持一致的(附加信息表如b2c下的sdb_b2c_members表和desktop下的sdb_desktop_users表)。account_type是每个会员体系的标识在ECOS中目前的有两个用户体系，他们分别是后台的shopadmin和前台的member。login_name和login_password不用我说大家应该都知道是所有身份验证最重要的两个用户名（此处可能还有其他的叫法，目前姑且就这么命名）和密码。
+
+- ``services.xml``  
+
+```
+<services>
+	<service id="passport">
+		<class>pam_passport_basic</class>
+		<class>pam_passport_oauth</class>	
+		<class>pam_passport_uc</class>
+	</service>
+
+	<service id="api.pam_callback">
+		<class>pam_callback</class>
+	</service>
+</services>
+
+```
+pam提供以下几个services（什么是services请参照base开发文档）。
+	
+	1. ``passport:`` 此serivces 是提供了用户的身份验证，登陆窗口的输出，以及登陆的相关信息配置的，具体细节我们现在进行详细的讲解
+	如果您要为自己的某个应用进行身份验证，就必须往id='passport' 里注册一个service。 我们以pam_passport_basic这个service为例来讲解一下如何开发自己应用的用户认证。首先我们需要介绍一下在interface/passport的pam_interface_passport这个接口
+
+	```
+<?php
+ 
+interface pam_interface_passport{
+
+    function get_name();
+    function get_login_form($auth,$appid,$view,$ext_pagedata=array());
+    function login($auth,&$usrdata);
+    function loginout($auth,$backurl="index.php");
+    function get_data();
+    function get_id();
+    function get_expired();
+}
+```
+
+以上是pam_interface_passport这个接口的全部方法。其中get_name方法主要是显示登录框的名称，如下图红色部分
+
+【图 get_name.png】
+[images/get_name.png]
+get_login_form($auth,$appid,$view,$ext_pagedata=array())方法实现登录框的输出具体参数我们在下面的实现中会介绍到。
+login($auth,&$usrdata) 方法实现身份的验证验证成功返回用户ID否则返回false。loginout($auth,$backurl="index.php")方法实现用户退出。以上是几个必须用到并且最重要的方法
+
+
+	2. ``api.pam_callback:`` 此service主要是实现表单数据提交的处理和数据分发以及用户验证成功后的回调地址。
+
+
+
+==以b2c为例介绍pam的认证过程 ==
+
+	在b2c/contorller/site/passport.php有一个私有方法gen_login_form 具体代码如下：
+
+	```
+private function gen_login_form(){
+        if($_SESSION['next_page']){
+            $url = $_SESSION['next_page'];
+        }
+        else{
+            $url = $this->gen_url(array('app'=>'b2c','ctl'=>'site_member','act'=>'index'));
+        }
+        unset($_SESSION['next_page']);
+        $auth = pam_auth::instance(pam_account::get_account_type($this->app->app_id));  //实例化登录方式类
+        $pagedata['singup_url'] = $this->gen_url(array('app'=>'b2c','ctl'=>'site_passport','act'=>'signup'));
+        $pagedata['lost_url'] = $this->gen_url(array('app'=>'b2c','ctl'=>'site_passport','act'=>'lost'));
+        $pagedata['loginName'] = $_COOKIE['loginName'];
+        #设置回调函数地址
+        $auth->set_redirect_url(base64_encode($this->gen_url(array('app'=>'b2c','ctl'=>'site_passport','act'=>'post_login','arg'=>base64_encode($url)))));  //设置验证后返回地址，已经base64_encode编码
+        foreach(kernel::servicelist('passport') as $k=>$passport){
+            if($auth->is_module_valid($k)){  //验证登录方式是否开启
+                $this->pagedata['passports'][] = array(
+                        'name'=>$auth->get_name($k)?$auth->get_name($k):$passport->get_name(), //登陆框名
+                        'html'=>$passport->get_login_form($auth, 'b2c', 'site/passport/member-login.html', $pagedata), //生成登录框
+                    );
+            }
+        } 
+    }
+```
+其中 ：   $auth = pam_auth::instance(pam_account::get_account_type($this->app->app_id));
+此处作用是获取用户体系标识（用户体系的设置是在系统安装时设置的在每个app下的task.php文件里面设置的，有兴趣的可以研究一下）。
+ $auth->set_redirect_url(base64_encode($this->gen_url(array('app'=>'b2c','ctl'=>'site_passport','act'=>'post_login','arg'=>base64_encode($url)))));
+设置用户认证后的返回地址，即认证成功后系统会自动跳转到$this->gen_url(array('app'=>'b2c','ctl'=>'site_passport','act'=>'post_login','arg'=>base64_encode($url))) 这个地址（地址的转换见base开发文档）。接下来就是循环我们上面提到的passport这个services。只要你注册了多个登录方式（比如论坛整合啊，支付宝用户登陆啊等等）在这里都会根据您的需要而循环出来生成相应的登录框（前提是有这个is_module_valid方法去判断您的登录方式是否开启）。然后去执行每个登陆方式的get_name和get_login_form方法。get_login_form方法的参数 $auth为登陆方式的实例，'b2c'本app的id,'site/passport/member-login.html'登陆框的视图路径，$pagedata为C-V(控制器视图)交互数据。
+
+到此一个登录框就已经形成了，接下来就是提交表单去验证了
+
+生成表单之后我们关心的是当我们填写好认证信息然后提交给谁去处理怎么处理的问题，用Firefox开发工具（或其他的浏览器开发工具查看表单提交地址会是如下图的一串代码）：
+
+【图 get_name.png】
+[images/form.png]
+	
+	当点击立即登录的时候就会把POST数据提交到我们前面提到的这册到api.pam_callback这个services上的程序去处理了。在pam中我们往这个上面注册了一个pam_callback这个service。具体代码如下：
+
+```
+<?php
+
+ 
+class pam_callback{
+
+    function login($params){
+        $auth = pam_auth::instance($params['type']);
+        if($params['module']){
+            if($passport_module = kernel::single($params['module'])){
+                if($passport_module instanceof pam_interface_passport){
+                    $module_uid = $passport_module->login($auth,$auth_data); //验证
+                    if($module_uid){
+                        $auth->account()->update($params['module'], $module_uid, $auth_data);   //验证成功后 SESSION赋值
+                    }                    
+                    $log = array(
+                        'event_time'=>time(),
+                        'event_type'=>$auth->type,
+                        'event_data'=>$auth_data['log_data'],
+                    );
+                    app::get('pam')->model('log')->insert($log);//插入验证日志
+                    $_SESSION['last_error'] = $auth_data['log_data'];
+                    $_SESSION['type'] = $auth->type;
+                    $_SESSION['login_time'] = time();
+                    $url = '';
+                    if($params['mini']) {
+                        $url = '?mini=1';
+                    }
+                    /**
+                     * appעļ
+                     */
+                    $params['member_id'] = $module_uid;
+                    $params['uname'] = $_POST['uname'];
+                    foreach(kernel::servicelist('pam_login_listener') as $service) //登录信息采集（会发到RPC）
+                    {
+                        $service->listener_login($params);
+                    }
+                    
+                    header('Location:' .base64_decode(urldecode($params['redirect'])). $url);    //页面跳转,  base64_decode解码   
+                }
+            }else{
+               
+            }
+        }
+    }
+
+}
+
+```
+该类中的login方法来分工处理登录验证，SESSION赋值以及回调地址。  $module_uid = $passport_module->login($auth,$auth_data);
+登录方式的验证，成功返回用户在sdb_pam_account表中的account_id失败返回fasle。  $auth->account()->update($params['module'], $module_uid, $auth_data);   成功之后SESSION的赋值以及登录日志的插入等操作。接下来就是 header('Location:' .base64_decode(urldecode($params['redirect'])). $url); 成功后页面的跳转
+
+到此我们的登陆框的输出，如何验证用户是否合法，验证成功后SESSION的赋值以及验证合法后页面的跳转都已经结束了。验证的整个流程大致就是这主要的几点
+
+
+	
+==pam其他 ==
+
+- ``前后台用户ID的获取``：
+
+	用户验证成功后，ID会存放在SESSION变量中（此处的SESSION变量已经被kvstore包装过，什么是kvstore见base开发文档），在pam/lib/account.php文件里有一个update方法,其中有
+
+	$_SESSION['account'][$this->type] = $account_id;
+	
+	这样一段代码，这就是把用户的ID存放在了SESSION变量中，其中$this->type为会员体系的标识。例如在b2c中获取会员的登录后的id用下面的方式即可取到：
+	
+	$_SESSION['account'][pam_account::get_account_type($this->app->app_id)]。
+
+	后台也是同样的方法。
+	
+	有同学可能会问SESSION多长时间过期？在ECOS中SESSION的过期时间默认是一个小时，如果需要修改可以在config.php文件做修改。
+
+
+
+- ``验证码``  
+	
+	大部分的身份验证都需要输入验证码，在ECOS中生成验证码有四行代码。如下：
+
+	```
+function gen_vcode(){
+	$vcode = kernel::single('base_vcode'); //创建验证码实例
+        $vcode->length(4);			//验证码数字长度
+        $vcode->verify_key('MEMBERVCODE'); //校验验证码时的key
+        $vcode->display(); //显示验证码
+}
+```
+完成以上代码之后我们只要把html里面的img标签的src属性指向到这个方法即可把完美的验证码显示出来。
+
+验证码生成之后接下来就是验证输入的验证码是否正确了，在pam/lib/passport/pam_basic.php文件里有的login方法里面有如下一段代码：
+
+```
+if($auth->is_enable_vcode()){ //判断登录是否启用了验证码
+            if($auth->type == 'shopadmin'){
+                $key = "DESKTOPVCODE";
+            }
+            else{
+                $key = "MEMBERVCODE"; //这就是我们上面提到的校验验证码时的key  必须和上面的保持一致
+            }            
+            if(!base_vcode::verify($key,intval($_POST['verifycode']))){   // 这里就是验证了
+                $usrdata['log_data'] = app::get('pam')->_('用户').$_POST['uname'].app::get('pam')->_('验证码不正确！');
+                $_SESSION['error'] = $usrdata['log_data']；
+                return false;
+            }
+        }
+
+```
+有兴趣的同学可以研究一下base下的base_vcod类的verify方法。

@@ -1,0 +1,66 @@
+<form id="app_source" action="index.php?app=site&ctl=admin_explorer_app&act=svae_source" method="POST">
+<div>
+<{input type='hidden' name='app_id' value=$app_id }>
+<{input type='hidden' name='content_path' value=$content_path }>
+<{input type='hidden' name='open_path' value=$open_path }>
+<{input type='hidden' name='file_name' value=$file_name }>
+
+<div class="division">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+  <th><{t}>文件源码：<{/t}></th>
+  <td><{input type="textarea" name="file_source" style="width:95%; height:350px" value=$file_content}></td>
+</tr>
+</table>
+</div>
+<table border="0" align="center" cellpadding="0" cellspacing="0" class="table-action">
+  <tr>
+    <td><span><input type="checkbox" name="has_bak" value="1" checked="checked"><{t}>保留备份<{/t}></span></td>
+    <td>
+	<{button label=$___a="保存"|t:'site'  type="submit" }>
+    </td>
+  </tr>
+</table>
+</form>
+
+<{if count($file_baklist) > 0}>
+<div class="division"><{t}>文件修改历史<{/t}>：
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<{foreach from=$file_baklist item=bakfile}>
+<tr>
+  <th><{$bakfile.name}></th>
+  <td><span style="cursor: pointer" onclick="recoverFile(this, 'index.php?app=site&ctl=admin_explorer_app&act=recover_file&app_id=<{$app_id}>&content_path=<{$content_path}>&open_path=<{$open_path}>&file_name=<{$bakfile.name}>');"><{t}>还原<{/t}></span>
+    <span style="cursor: pointer" onclick="deleteFile(this, 'index.php?app=site&ctl=admin_explorer_app&act=delete_file&app_id=<{$app_id}>&content_path=<{$content_path}>&open_path=<{$open_path}>&file_name=<{$bakfile.name}>');"><{t}>删除<{/t}></span></td>
+</tr>
+<{/foreach}>
+</table>
+</div>
+<{/if}>
+
+</div>
+<script>
+
+$('app_source').store('target', {
+	onComplete:function(){
+		if($('app_source').getParent('.dialog'))
+		$('app_source').getParent('.dialog').retrieve('instance').close();
+	}
+});
+
+function deleteFile(event, path){
+    if(confirm('<{t}>您确定要删除该文件?(删除后将不可恢复)<{/t}>')){ 
+		new Request({url:path, onSuccess:function(){
+			event.getParent('tr').remove();
+		}}).send();
+    }
+}
+
+function recoverFile(event, path){
+    if(confirm('<{t}>您确定要恢复该文件?<{/t}>')){
+		new Request({url:path, onSuccess:function(){
+			new Request.HTML({update:event.getParent('.dialog-content-body'), url:$('app_source').getParent('.dialog').retrieve('instance').url}).send();
+		}}).send();
+    }
+}
+
+</script>

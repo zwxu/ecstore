@@ -1,0 +1,180 @@
+<div class="bd" id="J_DataTable">
+  <div class="list-head">
+  <table class="sale_goods gridlist3" width="100%" cellpadding="0" cellspacing="0" border="0">
+    <colgroup >
+      <col width="26">
+      <col width="58">
+      <col width="115">
+      <col width="105">
+      <col width="105">
+      <col width="60">
+      <col width="60">
+      <col width="90">
+      <col width="92">
+      <col width="86">
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="bln"></th>
+        <th></th>
+        <th><{t}>捆绑名称<{/t}></th>
+        <th class="price-head"><{t}>总价格<{/t}></th>
+        <th class="num-head"><{t}>库存<{/t}></th>
+        <th class="num-head"><{t}>商品数<{/t}></th>
+        <th class="num-head"><{t}>限购数<{/t}></th>
+        <th>
+        <a id="sold-amount-label" class="desc" href="javascript:orderByBidCount()" title="总销量"><{t}>总销量<{/t}></a>
+        </th>
+        <th>
+        <a id="left-time-label" class="desc" href="javascript:orderByStartsTime()" title="发布时间"><{t}>发布时间<{/t}></a>
+        </th>
+        <th>操作</th>
+      </tr>
+			<tr>
+        <td colspan="8" class="p0 list-top bln bnn">
+          <div class="operations mr_5">
+            <span class="lineall"><input class="all-selector" type="checkbox"><label>全选</label></span>
+            <button class="trigger-btn" onclick="javascript:deleteItem();" type="button">删 除</button>
+            <button class="trigger-btn" onclick="javascript:onFree()" type="button"> 免运费 </button>
+            <button class="trigger-btn" onclick="javascript:onHave()" type="button"> 有运费 </button>
+          </div>
+        </td>
+      </tr>
+    </thead>
+  </table>
+  <table id="switchable" width="100%" cellpadding="0" cellspacing="0" border="0" class="switchable mr_5 ml_10">
+    <colgroup>
+      <col width="26">
+      <col width="58">
+      <col width="115">
+      <col width="105">
+      <col width="105">
+      <col width="60">
+      <col width="60">
+      <col width="90">
+      <col width="92">
+      <col width="86">
+    </colgroup>
+    <tbody class="data">
+      <{if $goods}>
+      <input type="hidden" value="" name="operate">
+      <{foreach from=$goods item="item" name="item"}>
+        <tr class="recommend with-sid">
+          <td><input class="selector" type="checkbox" value="<{$item.id}>" name="item[]"></td>
+          <td>
+            <{assign var="gimage" value=$item.image|default:$defaultImage}>
+            <div class='product-list-img member-gift-pic goodpic' isrc="<{$gimage|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" ghref='<{link app=package ctl=site_package act="index" arg0=$item.id}>' > 
+            <img src='<{$env.app.res_url}>/images/loading.gif'/> </div>
+          </td>
+          <td class="desc">
+            <div class="item-title-area" title="编辑捆绑标题">
+              <p>
+              <a class="item-title" title="<{$item.name}>" href="<{link app=package ctl=site_package act=index arg=$item.id}>"><{$item.name}></a>
+              </p>
+            </div>
+          </td>
+          <td>
+            <p class="item-price-area" title="编辑价格">
+              <span id="itemId:<{$item.id}>" class="price-now"><{$item.amount}></span>
+            </p>
+          </td>
+          <td>
+            <p class="item-num-area" title="编辑库存">
+              <span id="itemId:<{$item.id}>"><{$item.store}></span>
+            </p>
+          </td>
+          <td width="10%" align="right"><{$item.goods_count}></td>
+          <td width="10%" align="right"><{$item.limitbuy_count}></td>
+          <td width="10%" align="right"><{$item.buy_count}></td>
+          <td><{$item.uptime|cdate:'SDATE_STIME'}></td>
+          <td class="col-right">
+            <a title="" href="<{link app=package ctl=site_business act=package_edit arg0=$item.id}>">编辑捆绑</a>
+            <{if $switch eq 'violate'}>
+            <br/><a title="" href="#" onclick="window.fbox = new Dialog('<{link app=business ctl=site_member act=goods_apply arg0=$item.id}>',{title:'申请',width:800,height:300, modal:true});window.fbox.onSelect='';return false;">申请上架</a>
+            <{/if}>
+          </td>
+        </tr>
+      <{/foreach}>
+      <{/if}>
+    </tbody>              
+  </table>
+  </div>
+  
+
+  <div class="list-footer">
+    <table class="" width="100%" cellpadding="0" cellspacing="0" border="0">
+      <colgroup>
+        <col width="26">
+        <col width="58">
+        <col width="205">
+        <col width="155">
+        <col width="105">
+        <col width="90">
+        <col width="92">
+        <col width="86">
+      </colgroup>
+      <thead>
+        <tr>
+          <td colspan="8" class="p0">
+            <div class="operations">
+              <span class="lineall"><input class="all-selector" type="checkbox"><label>全选</label></span>
+              <button class="trigger-btn" onclick="javascript:deleteItem();" type="button">删 除</button>
+              <{if $switch eq 'onsell'}>
+              <button class="trigger-btn" onclick="javascript:offShelf()" type="button"> 下 架 </button>
+              <{elseif $switch eq 'instock'}>
+              <button class="trigger-btn" onclick="javascript:onShelf()" type="button"> 上 架 </button>
+              <{/if}>
+            </div>
+          </td>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <{pagers data=$pager}>
+<script>
+  window.addEvent('domready', function(){
+    var cart_product_img_viewer=new Element('div',{styles:{'position':'absolute','zIndex':500,'opacity':0,'border':'1px #666 solid'}}).inject(document.body);
+    var cpiv_show=function(img,event){
+        if(!img)return;
+        cart_product_img_viewer.empty().adopt($(img).clone().removeProperties('width','height').setStyle('border','1px #fff solid')).fade(1);
+
+        var size = window.getSize(), scroll = window.getScroll();
+        var tip = {x: cart_product_img_viewer.offsetWidth, y: cart_product_img_viewer.offsetHeight};
+        var props = {x: 'left', y: 'top'};
+        for (var z in props){
+            var pos = event.page[z] + 10;
+            if ((pos + tip[z] - scroll[z]) > size[z]) pos = event.page[z] - 10 - tip[z];
+            cart_product_img_viewer.setStyle(props[z], pos);
+        }
+
+    };
+
+    $$('#switchable .product-list-img').each(function(i){
+        new Asset.image(i.get('isrc'),{onload:function(img){
+            if(!img)return;
+            var _img=img.zoomImg(50,50);
+            if(!_img)return;
+            _img.setStyle('cursor','pointer').addEvents({
+                'mouseenter':function(e){
+                    cpiv_show(_img,e);
+                },
+                'mouseleave':function(e){
+                    cart_product_img_viewer.fade(0);
+                }
+            });
+            i.empty().adopt(new Element('a',{href:i.get('ghref'),target:'_blank',styles:{border:0}}).adopt(_img));
+            },onerror:function(){
+                i.empty();
+        }});
+
+    });
+    
+    /*$$('#switchable .edit-item-title').removeEvents('click').addEvent('click',function(e){
+      var target = $(e.target);
+      var handle = target.getParent('.item-title-area').getElement('p').getElement('a');
+      var gid= target.getAttribute('gid');
+      e.stop();
+    });*/
+  });
+</script>
+</div>

@@ -1,0 +1,13 @@
+<div  class="tableform">
+    <div class="division widgetconfig" style="margin:-5px 0 0 0">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th><{t app='content'}>选择团购商品:<{/t}> </th>
+        <td>
+            <{input type="goods_select" object="goods@b2c" goods_filter=$data.goodsFilter multiple=true rowselect="true" name="linkid" linkid=$setting.linkid value=$setting.goods app_id="b2c" view="b2c:admin/goods/detail/rel_items.html"}>
+        </td>
+      </tr>
+    </table>
+    </div>
+</div>
+

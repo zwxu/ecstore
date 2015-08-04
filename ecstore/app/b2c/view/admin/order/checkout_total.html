@@ -1,0 +1,117 @@
+<div class='clearfix'>
+ <table width="100%" cellpadding="0" cellspacing="0" class="liststyle data">
+            <col class="span-auto bg-gray"></col>
+            <col class="span-4 bg-orange textright"></col>
+      <tr>
+        <th><{t}>商品总价格：<{/t}></th>
+        <td value="<{$order_detail.cost_item}>" class="price"><{$order_detail.cost_item|cur_odr:$order_detail.currency}></td>
+      </tr>
+      <{if $order_detail.cost_freight > 0}>
+      <tr>
+        <th><{t}>配送费用：<{/t}></th>
+        <td><{$order_detail.cost_freight|cur_odr:$order_detail.currency}></td>
+      </tr>
+      <{/if}>
+      <{if $order_detail.cost_protect > 0}>
+      <tr>
+        <th><{t}>配送保价费：<{/t}></th>
+        <td><{$order_detail.cost_protect|cur_odr:$order_detail.currency}></td>
+      </tr>
+      <{/if}>
+      <{if $order_detail.cost_payment > 0}>
+      <tr>
+        <th><{t}>支付费率：(客户承担支付手续费)<{/t}></th>
+        <td><{$order_detail.cost_payment|cur_odr:$order_detail.currency}></td>
+      </tr>
+      <{/if}>
+
+	<{if count($order_detail.gift_p)>0}>
+	<tr>
+		<th><{t}>获得赠品：<{/t}></th>
+		<td>
+			<ol>
+			<{foreach from=$trading.gift_p item="item" key="key"}>
+				<li <{if $item.storage==0}>class="mktprice1"<{/if}>><{$item.name}> <{$item.nums}><{t}> 件<{/t}>&nbsp;&nbsp;<{if $item.storage==0}><{t}>（无货）<{/t}><{/if}></li>
+			<{/foreach}>
+			</ol>
+		</td>
+	</tr>
+	<{/if}>
+
+	<{if $order_detail.pmt_order}>
+      <tr>
+        <th><{t}>优惠金额：<{/t}></th>
+        <td style="color:#f00;">-<{$order_detail.pmt_order|cur_odr:$order_detail.currency}></td>
+      </tr>
+      <{/if}>
+
+	  <{if $order_detail.discount != 0}>
+      <tr>
+        <th><{t}>订单减免：<{/t}></th>
+        <td style="color:#f00;"><{if $order_detail.discount>0}>-<{$order_detail.discount|cur_odr:$order_detail.currency}><{else}>+<{0-$order_detail.discount|cur_odr:$order_detail.currency}><{/if}></td>
+      </tr>
+      <{/if}>
+
+	  <{if $order_detail.totalConsumeScore}>
+      <tr>
+        <th><{t}>抵扣积分：<{/t}></th>
+        <td style="color:#f00;"><{$order_detail.totalConsumeScore}></td>
+      </tr>
+      <{/if}>
+
+	<{if $order_detail.cur_code != '' && $order_detail.cur_code != $order_detail.cur_display}>
+	<tr>
+		<th><{t}>货币汇率:<{/t}></th>
+		<td><{$order_detail.cur_rate}></td>
+	</tr>
+	<tr>
+		<th><{t}>货币结算金额:<{/t}></th>
+		<td><{$order_detail.final_amount|amount:$order_detail.currency:false:false}></td>
+	</tr>
+	<{/if}>
+
+	  <{if $order_detail.cost_tax>0}>
+		<tr>
+		   <th>开发票所需税金：</th>
+		   <td><{$order_detail.cost_tax|cur_odr:$order_detail.currency}></td>
+		</tr>
+		<{/if}>
+
+      <tr>
+        <th><{t}>订单总金额：<{/t}></th>
+        <td><span class="price1"><{$order_detail.total_amount|cur_odr:$order_detail.currency}></span>
+        <br />
+        <{if $trigger_tax == 'true'}>
+              <{t}>是否需要发票?<{/t}>(<{t}>税金:<{/t}><strong><{$tax_ratio*100}>%</strong>)<input type="checkbox" id="is_tax" name="payment[is_tax]" onclick="Order.updateTotal()" <{if $order_detail.trigger_tax == 'true'}>checked="checked"<{/if}> value="true" />
+              <p id='tax_company'><{t}> 发票抬头：<{/t}><input type="text" name="payment[tax_company]" class="inputstyle" value="<{$order_detail.tax_company}>" /></p>
+              <script>
+                 $('is_tax').addEvent('click',function(){
+                       $('tax_company').setStyle('visibility',this.checked?'visible':'hidden');
+                 }).fireEvent('click');
+              </script>
+           <{/if}>
+
+        </td>
+      </tr>
+
+	 <{if ($order_detail.totalGainScore<>0) or ($order_detail.totalConsumeScore<>0)}>
+     <{if $order_detail.totalConsumeScore <> 0}>
+      <tr>
+        <th><{t}>消费积分数：<{/t}></th>
+        <td style="color:#f00;"><{$order_detail.totalConsumeScore}></td>
+      </tr>
+      <{/if}>
+      <tr>
+        <th><{t}>可获得积分：<{/t}></th>
+        <td style="color:#333;"><{$order_detail.totalGainScore}></td>
+      </tr>
+	  <{if $order_detail.totalScore <> 0}>
+      <tr>
+        <th><{t}>积分总计：<{/t}></th>
+        <td><{$order_detail.totalScore}></td>
+      </tr>
+      <{/if}>
+      <{/if}>
+
+    </table>
+</div>

@@ -1,0 +1,12 @@
+<h4><{$data.title}></h4>
+<ul class="new_shop">
+  <{foreach from=$data.goods item=good key=key name="_good"}>
+  <li><a target="_blank" href="<{link app=b2c ctl="site_product" act="index" arg0=$good.goods_id}>"><img class="img-lazyload" src="images/transparent.gif" lazyload="<{$good.image_default_id|default:$data.defaultImage|storager:'m'}>" alt="<{$good.name|cut:72}>" /></a>
+     <p><a target="_blank" href="<{link app=b2c ctl="site_product" act="index" arg0=$good.goods_id}>"><{$good.name}></a></p>
+   <p class="price_p">一口价：<span class="shop_zhi">￥</span><span class="shop_price"><{$good.price}></span></p>
+  </li>
+  <{/foreach}>
+  <div class="cl_zhi"></div>
+</ul>
+<a href="<{link app=business ctl="site_shop" act="gallery" arg0=$data.store.store_id}>"><input type="button" class="shop_right_button ri_zhi" value="更多宝贝" /></a>
+<div class="cl_zhi"></div>

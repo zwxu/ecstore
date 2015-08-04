@@ -1,0 +1,110 @@
+<form class="tableform" method='post' action='index.php?app=b2c&ctl=admin_order&act=doreship' id="order-reship-form">
+  <input type='hidden' name='order_id' value='<{$order.order_id}>'>
+
+<div class="division">  
+<table width="100%" cellspacing="0" cellpadding="0">
+<tr>
+    <th><{t}>订单号:<{/t}></th>
+    <td><{$order.order_id}> 【<{if $order.ship_status == 0}><{t}>未发货<{/t}><{elseif $order.ship_status == 1}><{t}>已发货<{/t}><{elseif $order.ship_status == 2}><{t}>部分发货<{/t}><{elseif $order.ship_status == 3}><{t}>部分退货<{/t}><{elseif $order.ship_status == 4}><{t}>已退货<{/t}><{/if}>】</td>
+    <th><{t}>下单日期:<{/t}></th>
+    <td><{$order.createtime|cdate:'SDATE_STIME'}></td>
+  </tr>
+  <tr>
+    <th><{t}>退货原因:<{/t}></th>
+    <td><select name='reason'>
+      <option value="<{t}>质量原因<{/t}>"><{t}>质量原因<{/t}></option>
+      <option value="<{t}>无理由<{/t}>"><{t}>无理由<{/t}></option>
+      <option value="<{t}>其他<{/t}>"><{t}>其他<{/t}></option>
+    </select></td><{if $order.is_delivery eq "Y"}>
+    <th><{t}>配送方式:<{/t}></th>
+    <td><{input type="select" name='delivery' rows=$shippings valueColumn="dt_id" labelColumn="dt_name" value=$order.shipping.shipping_id}></td>
+    </tr>
+  <tr>
+    <th><{t}>物流公司:<{/t}></th>
+    <td><{input type="select" name='logi_id' rows=$corplist valueColumn="corp_id" labelColumn="name" value=$order.shipping.corp_id onchange="$(this).get('value')=='other'?$('otherinput').show():$('otherinput').hide(this)"}>
+	<span id='otherinput' style="display:none"><input type="text" class='_x_ipt' vtype='text' required='true' size='10' name='other_name'></td>
+    <th><{t}>物流单号:<{/t}></th>
+    <td><{input type='text' name='logi_no' value=$order.account width="150"}></td>
+    </tr>
+  <tr>
+    <th><{t}>配送费用:<{/t}></th>
+    <td><{input type='text' name='money' value=$order.shipping.cost_shipping width="50"}></td>
+<!--    <th><{t}>发货日期:<{/t}></th>
+    <td><{$order.t_begin|cdate}></td>-->
+    <th><{t}>实际保价:<{/t}></th>
+    <td><{input name="is_protect" type="radio" options=$order.protectArr value=$order.shipping.is_protect}></td>
+    </tr>
+  <tr>
+    <th><{t}>退货人姓名:<{/t}></th>
+    <td><{input type='text' name='ship_name' value=$order.consignee.name  width="80"}></td>
+	  <th><{t}>电话:<{/t}></th>
+	  <td><{input type='text' name='ship_tel' value=$order.consignee.telephone width="100"}></td>
+    </tr>
+  <tr>
+    <th><{t}>手机:<{/t}></th>
+    <td><{input type='text' name='ship_mobile' value=$order.consignee.mobile width="100"}></td>
+		<th><{t}>邮政编码:<{/t}></th>
+		<td><{input type='text' name='ship_zip' value=$order.consignee.zip  width="60"}></td><{/if}>
+	</tr>
+	<tr>
+		<th><{t}>退货地区:<{/t}></th>
+		<td colspan=3><{input type='region' vtype="area"  name='ship_area' app="ectools" value=$order.consignee.area }><!--<{input type='text' name='ship_area' value=$order.consignee.area width="100"}>--></td>
+    </tr>
+  <tr>
+    <th><{t}>退货地址:<{/t}></th>
+		<td colspan=3><{input type='text' name='ship_addr' value=$order.consignee.addr  width="150"}></td>
+    </tr>
+  <tr>
+    <th><{t}>退货单备注:<{/t}></th>
+    <td colspan=3><{input type='textarea' name='memo' cols="60" rows="4" value=$order.memo }></td>
+  </tr>
+</table>
+</div>
+<{if count($items) > 0}>
+<div class="division">
+    <table width="100%" cellspacing="0" cellpadding="0" class="gridlist" >
+    <thead>
+      <tr>
+        <th><{t}>货号<{/t}></th>
+        <th><{t}>商品名称<{/t}></th>
+        <th><{t}>购买数量<{/t}></th>
+        <th><{t}>已发货数量<{/t}></th>
+        <th><{t}>此单退货数量<{/t}></th>
+      </tr>
+      </thead>
+      <tbody>
+<{foreach from=$items item=aProduct}>
+      <tr>
+    <td><{$aProduct.bn}></td>
+    <td><{$aProduct.name}>
+      <{foreach from=$aProduct.minfo.product_attr item=minfo key=name}>
+          <br><{$minfo.label}>：<{$minfo.value}>
+          <{/foreach}>
+      <{$aProduct.addon.adjname}></td>
+    <td><{$aProduct.quantity}></td>
+    <td><{$aProduct.sendnum}></td>
+    <td>
+      <{assign var="sendnum" value=$aProduct.sendnum}>
+      <{assign var="pid" value=$aProduct.product_id}> 
+      <{assign var="item_id" value=$aProduct.item_id}>
+      <{if $sendnum > 0}><{input type="text" name="send[{$item_id}]" vtype="required&&number" value=$sendnum  width="40"}><{else}><{t}>未发货<{/t}><{/if}></td>
+    </tr>
+<{/foreach}>
+</tbody>
+    </table>
+</div>
+<{/if}>
+
+</form>
+
+<{area inject='.mainFoot'}>
+<div class="table-action">
+	<{button label=$___b2c="退货"|t:'b2c' id="order-reship-form-submit" class="order-action" type="button"}>
+</div>
+<{/area}>
+
+<script>
+$('order-reship-form-submit').addEvent('click',function(){
+	 $('order-reship-form').fireEvent('submit',{stop:$empty})
+});
+</script>

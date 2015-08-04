@@ -1,0 +1,507 @@
+<!--uc同步登录-->
+<!--uc同步登录-->
+<script>
+function UrlDecode(zipStr){  
+    var uzipStr="";  
+    for(var i=0;i<zipStr.length;i++){  
+        var chr = zipStr.charAt(i);  
+        if(chr == "+"){  
+            uzipStr+=" ";  
+        }else if(chr=="%"){  
+            var asc = zipStr.substring(i+1,i+3);  
+            if(parseInt("0x"+asc)>0x7f){  
+                uzipStr+=decodeURI("%"+asc.toString()+zipStr.substring(i+3,i+9).toString());  
+                i+=8;  
+            }else{  
+                uzipStr+=AsciiToString(parseInt("0x"+asc));  
+                i+=2;  
+            }  
+        }else{  
+            uzipStr+= chr;  
+        }  
+    }  
+  
+    return uzipStr;  
+}  
+  
+function StringToAscii(str){  
+    return str.charCodeAt(0).toString(16);  
+}  
+function AsciiToString(asccode){  
+    return String.fromCharCode(asccode);  
+}
+
+
+	
+	
+	var uc_login_cookie = Cookie.read('uc_login_script');
+	if(uc_login_cookie){
+//		console.log(uc_login_cookie);
+//		console.log(UrlDecode(uc_login_cookie));
+		uc_login_cookie = uc_login_cookie.replace(/\+/g,' ');
+		
+		document.write(uc_login_cookie);
+		
+		Cookie.dispose('uc_login_script');
+	}
+
+	var uc_login_out_cookie = Cookie.read('uc_loginout_script');
+	if(uc_login_out_cookie){
+		uc_login_out_cookie = uc_login_out_cookie.replace(/\+/g,' ');
+		document.write(uc_login_out_cookie);
+		Cookie.dispose('uc_loginout_script');
+	}
+</script>
+<script type="text/javascript">
+new DataLazyLoad({lazyDataType:'img',img:'lazyload'});
+var Shop = <{$shopDefine}>;
+var __time_out = 1000;
+if (Shop.set != undefined&&Shop.set.refer_timeout) __time_out = Shop.set.refer_timeout;
+window.addEvent('domready',function(){
+    var ReferObj ={};
+    Object.append(ReferObj,{
+        serverTime:<{$smarty.now}>,
+        init:function(){
+            var FIRST_REFER=Cookie.read('S[FIRST_REFER]');
+            var NOW_REFER=Cookie.read('S[NOW_REFER]');
+            var nowDate=this.time=this.serverTime*1000;
+            if(!window.location.href.test('#r-')&&!document.referrer||document.referrer.test(document.domain))return;
+            if(window.location.href.test('#r-'))Cookie.dispose('S[N]');
+            if(!FIRST_REFER){
+
+                if(NOW_REFER){
+                    this.writeCookie('S[FIRST_REFER]',NOW_REFER,this.getTimeOut(JSON.decode(NOW_REFER).DATE));
+                }else{
+                    this.setRefer('S[FIRST_REFER]',__time_out);
+                }
+            }
+            this.setRefer('S[NOW_REFER]',__time_out);
+            this.createGUID();
+        },
+        getUid:function(){
+            var lf=window.location.href,pos=lf.indexOf('#r-');
+            return pos!=-1?lf.substr(pos+4):'';
+        },
+        getRefer:function(){
+            return document.referrer?document.referrer:'';
+        },
+        setRefer:function(referName,timeout){
+            var uid=this.getUid(),referrer=this.getRefer();
+            var data={'ID':uid,'REFER':referrer,'DATE':this.time};
+
+            if('S[NOW_REFER]'==referName){
+                var refer=JSON.decode(Cookie.read('S[FIRST_REFER]'));
+                if(uid!=''&&refer&&refer.ID==''){
+                    var fdata={'ID':uid,'REFER':refer.REFER,'DATE':refer.DATE};
+                    this.writeCookie('S[FIRST_REFER]',JSON.encode(fdata),this.getTimeOut(refer.DATE));
+                }else if(uid==''){
+                    Object.append(data,{'ID':refer.ID});
+                }
+            }
+            Cookie.write(referName,JSON.encode(data),{duration:(__time_out||15)});
+        },
+        getTimeOut:function(nowDate){
+            var timeout=nowDate+__time_out*24*3600*1000;
+            var date=new Date(timeout);
+            return date;
+        },
+        writeCookie:function(key,value,timeout){
+            document.cookie=key+ '=' + value+'; expires=' + timeout.toGMTString();
+        },
+        createGUID:function(){
+            var GUID = (function(){
+                var S4=function(){
+                    return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+                };
+                return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4()).toUpperCase();
+            })();
+            Cookie.write('S[N]',GUID,{duration:3650});
+        }
+    });
+    ReferObj.init();
+});
+
+
+  </script>
+
+
+<script>
+(function(){
+<{if $login_type == 'target'}>
+document.addEvent('click', function(e){
+  var el = $(e.target);
+  var url = location.href;
+  var login = '<{link app="b2c" ctl="site_passport" act="login"}>';
+  var member = '<{link app="b2c" ctl="site_member" act="index"}>';
+  var passport = '<{link app="b2c" ctl="site_passport" act="index"}>';
+  var signup = '<{link app="b2c" ctl="site_passport" act="signup"}>';
+  if(el.get('tag') == 'a') {
+    var href = el.get('href');
+    if(!href) return;
+    if((href.contains(login) && !url.contains(login)) || (href.contains(member) && !Cookie.read('S[MEMBER]'))){
+        e.stop();
+        quickPassport(login, '<{t}>已注册用户，请登录<{/t}>');
+    }
+    else if(href.contains(signup)) {
+        e.stop();
+        quickPassport(signup, '<{t}>用户注册<{/t}>');
+    }
+  }
+});
+
+function quickPassport(url, title){
+    new Ex_Dialog(url, {
+        title: title,
+        width: 500,
+        modal: true,
+        onLoad:function(){
+            //this.content.getElement('iframe').set('scrolling','no');
+        },
+        asyncOptions: {
+            data: 'mini_passport=1',
+            onSuccess: function() {
+                var ifm = this.content.getElement('iframe');
+                var ifmWin = ifm.contentWindow || ifm.window;
+                this.setTitle(ifmWin.document.title);
+                ifm.setStyle('height', Math.min(ifmWin.getScrollSize().y+75,window.getSize().y-this.header.getSize().y-this.content.getPatch().y-this.body.getPatch().y-this.container.getPatch().y));
+                this.container.position();
+            }
+        }
+    });
+}
+<{/if}>
+
+
+<{if $openid_open == 'true'}>
+ RemoteLogin={
+        init:function(){
+             if(!$$('.trust__login')||$$('.trustdialog').length)return;
+             $$('.trust__login').removeEvents('click').addEvent('click',this.show.bind(this));
+        },
+        show:function(){
+             new Request({
+                url:'<{link app="openid" ctl="site_trust" act="trust_login"}>',
+                onRequest:function(){
+                    var winWidth = 440,
+                    winHeight = 330,
+                    winTop=(screen.availHeight - winHeight)/2,
+                    winLeft=(screen.availWidth - winWidth)/2,
+                    param0 = "toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no, status=no,directories=no",
+                    params = "top=" + winTop + ",left=" + winLeft + ",width=" + winWidth + ",height=" + winHeight + "," + param0;
+                    this.opt = params;
+                    this.modelopt = "dialogHeight:" + winHeight + "px;dialogWidth:" + winWidth + "px;center:yes;help:no;resizable:no;status:no;scroll:no;";
+                    //this.title = "信任登录";
+                    /*
+                      this.loginDialog = new Element('div',{'class':'dialog trustdialog','id':'trust_footer_login'}).set('html',document.getElement('#template-modal .dialog').get('html').substitute({
+                      title:'信任登录',
+                      content:'<iframe src="" id="RemoteFrm" width="100%" height="90%" frameborder="0" styles="border:none;background: none repeat scroll 0% 0% transparent; "></iframe>'
+                       })).setStyles({display:'none',width:0}).inject(document.body);
+
+                      this.loginDialog.getElement('.dialog-close-btn').addEvent('click',function(){$('trust_footer_login').destroy();});
+                      this.loginDialog.setStyles({width:440,height:330,display:'block'}).position();
+                  */
+                  },
+                onComplete:function(e){
+                     if(e){
+                          var remotesrc='http://openid.ecos.shopex.cn/?certi_id=<{$cert_id}>&callback_url=<{link app="openid" ctl="site_trust" act="other_login" full="1"}>&refertype=ecstore';
+                      }else{
+                         var remotesrc='<{link app="openid" ctl="site_trust" act="error"}>';
+                      }
+                     //this.loginDialog.getElement('iframe').src=remotesrc;
+                      //location.href = remotesrc;
+                      //if(window.showModalDialog) window.showModalDialog(remotesrc,"",this.modelopt);
+                      open(remotesrc,"信任登录",this.opt);
+                      //NewWin.document.title = "信任登录";
+                }
+            }).post();
+        }
+    };
+    RemoteLogin.init();
+<{/if}>
+})();
+</script>
+
+<script>
+miniCart = {
+    'show':function(target){
+           target = $(target);
+           if (!target) return;
+
+           if(this.dialog){
+               this.hide();
+           }
+
+           var _this=this, dialog = this.dialog = (new Element('div#mini-cart-dialog.popup-container.mini-cart-dialog.goodstc1',{
+              'html': $('popup-template').get('html').substitute({
+                  body: 'popup-body',
+                  header: 'popup-header',
+                  close: 'popup-btn-close',
+                  content:'popup-content',
+                  title:'<{t}>正在加入购物车<{/t}>',
+                  main:'<div class="loading">loading...</div>'
+              }),
+              styles:{
+                  display:'block'
+              }
+           }).inject(document.body));
+
+          
+           var setSize = this.setSize = function(){
+              if(!_this.dialog.isDisplay())return;
+              $(_this.dialog).setStyles({
+                  top:target.getPosition().y+target.getSize().y,
+                  left:target.getPosition().x.limit(0,window.getSize().x-_this.dialog.getSize().x) + window.getScroll().x
+              });
+           }
+           setSize();
+
+
+           window.addEvent('resize',setSize);
+
+
+
+    },
+    'hide':function(){
+        try{
+          this.dialog.destroy();
+          window.removeEvent('resize',this.setSize);
+        }catch(e){}
+        try{document.getElement('.dialog-specbox').getParent('[data-single]').retrieve('instance').hide();}catch(e){}
+    },
+    'load':function(){
+        var params=Array.flatten(arguments).link({
+            'remoteURL':Type.isString,
+            'options':Type.isObject
+        });
+        params.options.data = params.options.data?params.options.data.toQueryString()+'&mini_cart=true':'&mini_cart=true';
+        var opts=params=Object.append({
+           url:params.remoteURL,
+           method:'post',
+           onRequest:function(){
+               //this.dialog.getElement('.title').set('html','正在加入购物车');
+           }.bind(this),
+           onSuccess:function(re){
+               var rs;
+               try{
+                  rs = JSON.decode(re);
+               }catch(e){}
+
+               if(rs && rs.url) {
+                  if(Browser.ie && Browser.version < 9) {
+                      var link_tmp = document.createElement("a");
+                      link_tmp.href=rs.url;
+                      document.body.appendChild(link_tmp);
+                      link_tmp.click();
+                      link_tmp.destroy();
+                  }
+                  else {
+                      location.href = rs.url;
+                  }
+               } else if(rs && rs.error) {
+                  $(this.dialog).destroy();
+                  Message.error(rs.error);
+               } else {
+                  
+                  this.dialog.getElement('h2').set('html','<{t}>成功加入购物车<{/t}>');
+                  this.dialog.getElement('.popup-content').innerHTML=re;
+                  this.dialog.getElements('.popup-btn-close').addEvent('click',this.hide.bind(this));
+
+                   if($$('.cart-number')) $$('.cart-number').set('text',Cookie.read('S[CART_NUMBER]')||0);
+                   if($$('.cart-count')) $$('.cart-count').set('text',Cookie.read('S[CART_COUNT]')||0);
+                   if($$('.cart-money-total')) $$('.cart-money-total').set('text',Cookie.read('S[CART_TOTAL_PRICE]')||0);
+
+                   if($('cart_num')){//更新mini购物车数据 by ql （导航栏处）
+                      $('cart_num').set('text',Cookie.read('S[CART_NUMBER]')||0);
+                   }
+
+                   if($('cart_count')){
+                      $('cart_count').set('text',Cookie.read('S[CART_COUNT]')||0);
+                   }
+
+                   if($('MyCart')){//todo
+                      $('MyCart').retrieve('fn:refresh',function(){})();
+                   }
+
+                   if(document.getElement('.minicart_box')&&document.getElement('.minicart_box').get('show_gallery')){
+                      document.getElement('.minicart_box').fireEvent('_show');  //迷你购物车
+                   }
+
+
+               }
+           }.bind(this),
+           onFailure:function(xhr){
+              this.dialog.destroy();
+              Message.error("<{t}>加入购物车失败.<{/t}><br /><ul><li><{t}>可能库存不足.<{/t}></li><li><{t}>或提交信息不完整.<{/t}></li></ul>");
+           }.bind(this)
+        },params.options||{});
+        if(!params.url)return false;
+
+        miniCart.show(opts.target);
+        new Request(opts).send();
+    },
+    init:function(){
+
+          var _clickBubblesCount = 4;
+          $(document.body).addEvent('click',function(e){
+
+                        var clickT = e.target;
+                        var matchEl = null;
+
+                        for (var i = 0; i < _clickBubblesCount; i++) {
+                              
+                              if (clickT&&clickT.match&&clickT.match("a[target=_dialog_minicart]")){
+                                      matchEl = clickT;
+                                      break;
+                              }
+                              if(!!!clickT){
+                               return;
+                              }
+                               clickT = $(clickT.parentNode);
+                        }
+
+                        if(matchEl&&!matchEl.hasClass('hasSpec')){
+                                 e.stop();
+                                 miniCart.load([{url:matchEl.href,data:matchEl.getParent('tr'),target:matchEl}]);
+                        }
+
+
+
+
+          });
+                         /*
+                          var linktocart=$$('a[target=_dialog_minicart]');
+                          if(linktocart.length){
+                              linktocart.addEvent('click',function(e){
+                                  e.stop();
+                                  if(!this.hasClass('hasSpec'))
+                                     
+                              });
+                          }
+                        */
+
+    }
+};
+
+formToCart = function(container) {
+    container = $(container) || document.body;
+
+    var formtocart;
+    if(formtocart = container.getElement('form[target=_dialog_minicart]') || container.getFirst().getParent('form[target=_dialog_minicart]')){
+         formtocart.addEvent('submit', function(e){
+             e.stop();
+             this.getElement('[type=submit]') && this.getElement('[type=submit]').removeClass('disabled');
+             miniCart.load([{
+                 url:this.action,
+                 method:this.method,
+                 data:this,
+                 target:this.getElement('input[value=<{t}>加入购物车<{/t}>]') || null
+             }]);
+         });
+    };
+}
+
+//规格选择对话框
+specdialog = this.SpecDialog = function(contain, options){
+    contain=$(contain)||document;
+    options = options || {};
+    var hasSpec=contain.getElements(options.specbtn || '.hasSpec');
+    if(!hasSpec.length) return;
+
+    var url = options.url || '<{$request_url}>';
+    var itemlist = options.item || '.itemsList';
+    var btn = options.minitarget || '.updateBtn';
+    hasSpec.each(function(specbtn,i){
+        var item=specbtn.getParent(itemlist)||contain.getElements(itemlist)[i];
+        if(!item) return;
+        item.addEvent('showSpec', function(e){
+             e.stop();
+             if(this.retrieve('showSpec')) return;
+             try{document.getElement('.dialog-specbox').getParent('[data-single]').retrieve('instance').hide();}catch(e){}
+             url=(url && !!url.trim().length)?url:this.get('url');
+             var dialog = new Ex_Dialog(url,Object.merge({
+                modal:true,
+                width: 370,
+                height: 212,
+                async:'ajax',
+                single: true,
+                asyncOptions:{
+                  target: this,
+                  data:'gid='+this.get('product'),
+                  onSuccess:function(){
+                    if (options.onSuccess) options.onSuccess(contain, dialog, hasSpec);
+                    var _form=$('dialog-spec').getParent('form');
+                    _form.addEvent('submit',function(e){
+                        if(this.target!='_dialog_minicart') return this.submit();
+                        miniCart.load([{
+                           url:this.action,
+                           method:this.method,
+                           data:this,
+                           target: this.getElement(btn)
+                       }]);
+                    });
+                  }
+                },
+                position:{target:this},
+                effect:{duration:250},
+                onClose:function(){
+                  this.content.set('html',this.options.ajaxTpl);
+                  item.eliminate('showSpec');
+                  try{miniCart.hide();}catch(e){}
+                }
+            }, options));
+            this.store('showSpec', this);
+        });
+        specbtn.addEvent('click',function(e){item.fireEvent('showSpec',e);});
+    });
+}
+
+window.addEvent('domready',function(){
+    miniCart.init();
+    formToCart();
+
+    /*for  goods which has specs
+    var isDebug = '<{if defined("DEBUG_JS") && DEBUG_JS}>js<{else}>js_mini<{/if}>/',
+    path ='<{$env.base_url}>/app/b2c/statics/' + isDebug;
+
+    $LAB.setOptions({BasePath:path}).script('spec.js').wait(function(){
+      try{
+        // update: 规格商品2次提交 --by Tyler Chao
+        var spec_update=$$('.goods-spec')[0].retrieve('_goods_spec');
+        document.getElement('#goods-viewer form[target] .btn-buy').removeEvents('click').addEvent('click',function(e){
+            var form = this.form;
+            if(!form) return;
+            if(form.target == '_dialog_minicart') {
+                e.stop();
+                if(!spec_update) return form.fireEvent('submit', e);
+            }
+            this.blur();
+            var spec_item = spec_update._selectUpdate.check(this.getParent('.ec-spec-box'), this);
+            if(!spec_item.nocheck.length && form){
+                form.action="<{link app=b2c ctl='site_cart' act='add' arg0='goods'}>";
+                // if(form.target == '_dialog_minicart') form.fireEvent('submit',e);
+            } else if(Browser.ie6) {
+                $$(spec_item.nocheckel).length && $$(spec_item.nocheckel).addClass('warn');
+                Message.error('<{t}>请选择规格:<{/t}>' + spec_item.nocheck.join(','));
+            }
+        });
+      }catch(e){}
+    });*/
+
+    specdialog();
+});
+</script>
+
+<script id="dropmenu-template" type="text/template">
+  <div class="{body}">
+    <div class="{content} clearfix">{main}</div>
+  </div>
+</script>
+<script id="popup-template" type="text/template">
+  <div class="{body}">
+     <div class="{header} clearfix">
+        <h2>{title}</h2>
+        <span><button type="button" title="关闭" class="{close}" hidefocus>x</button></span>
+    </div>
+    <div class="{content} clearfix">{main}</div>
+  </div>
+</script>

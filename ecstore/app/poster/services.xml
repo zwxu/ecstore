@@ -1,0 +1,8 @@
+<services>
+    <service id="desktop_finder.poster_mdl_poster">
+        <class>poster_finder_poster</class>
+    </service>
+    <service id="desktop_finder.poster_mdl_position">
+        <class>poster_finder_position</class>
+    </service>
+</services>

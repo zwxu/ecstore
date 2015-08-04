@@ -1,0 +1,6 @@
+<fieldset>
+<legend>
+<{t}>视图名称:<{/t}> <{input type="text" name="view[]" value=$item.label required=true }>&nbsp;&nbsp;&nbsp;&nbsp;<span class="lnk" onclick="this.parentNode.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode.parentNode);"><{t}>删除视图<{/t}></span>
+</legend>
+<{filter type="goods/products" params=$params from=$item.filter name="filter[]"}>
+</fieldset>

@@ -1,0 +1,34 @@
+<{if $goods.gift}>
+          <{assign var="obj_ident" value=$goods.obj_ident}>
+          <{foreach from=$goods.gift item=gift key=key}>
+            <{if $goods.disabled==='true'}><{continue;}><{/if}>
+            <tr goods_rule_id="<{$gift.rule_id|implode:','}>" class="del-<{$goods.obj_items.products.0.product_id}>" urlremove="<{link app=b2c ctl='site_cart' act='remove_cart_to_disabled' arg0='goods' arg1=$obj_ident arg2=$gift.product_id }>">
+            <td>
+              <div class="horizontal-m" style="margin-left:50px;">
+                <div class='cart-product-img goodpic' isrc="<{$gift.default_image.thumbnail|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" ghref='<{link app=gift ctl=site_gift act="index" arg0=$gift.goods_id}>' style='width:52px;height:52px;'>
+                    <img src='<{$res_url}>/loading.gif'/>
+                 </div>
+
+                <div class="cart-giftname goods-main">
+                <div class="goodinfo">
+                <h3><a target="_blank" href="<{link app=gift ctl=site_gift arg0=$gift.goods_id }>"><{$gift.name}></a>
+                <input type="button" name="button" id="button" value="<{t}>赠<{/t}>" class="present-btn" /></h3>
+                </div>
+                </div>
+               </div>
+            </td>
+            <td class="cart-goodsprice point textcenter"> <{$gift.price.buy_price|cur_odr}></td>
+            <td  align="center"><{$gift.quantity}></td>
+            <td  align="center" class="itemTotal font-red">
+               <{t}>商品赠送<{/t}>
+            </td>
+            <td  align="center" class="itemTotal font-red">
+               0
+            </td>
+            <td  align="center">&nbsp;
+
+            </td>
+
+            </tr>
+         <{/foreach}>
+<{/if}>

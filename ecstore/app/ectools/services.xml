@@ -1,0 +1,68 @@
+<services> 
+
+	<service id="desktop_finder.ectools_mdl_payment_cfgs" optname="支付方式后台列表">
+		<class>ectools_finder_payment_cfgs</class>
+	</service>
+	
+	<service id="ectools_payment.ectools_mdl_payment_cfgs" optname="支付插件列表">
+		<class>ectools_payment_plugin_alipay</class>
+		<!--<class>ectools_payment_plugin_99bill</class>
+		<class>ectools_payment_plugin_paypal</class>
+		<class>ectools_payment_plugin_tenpay</class>
+		<class>ectools_payment_plugin_offline</class>-->
+		<class>ectools_payment_plugin_deposit</class>
+	</service>
+	
+	<service id="view_compile_helper">
+		<class>ectools_view_compiler</class>
+	</service>
+	
+    <service id="view_helper">
+        <class>ectools_view_helper</class>
+    </service>
+	
+	<service id="desktop_finder.ectools_mdl_payments">
+        <class>ectools_finder_payments</class>
+	</service>
+	
+	<service id="desktop_finder.ectools_mdl_refunds">
+        <class>ectools_finder_refunds</class>
+	</service>
+	
+	<service id="desktop_finder.ectools_mdl_currency">
+		<class>ectools_finder_currency</class>
+	</service>
+
+	<service id="ectools_regions.ectools_mdl_regions" optname="地区包" opttype="select">
+		<class>ectools_regions_mainland</class>
+	</service>
+	
+	<service id="html_input">
+		<class>ectools_view_input</class>
+	</service>
+	
+	<service id="openapi.ectools_payment">
+		<class>ectools_payment_api</class>
+	</service>
+	
+	<service id="ectools_regions_apps">
+		<class>ectools_regions_operation</class>
+	</service>
+
+	<service id="autotask">
+		<class>ectools_misc_task</class>
+	</service>
+	
+	<service id="api.ectools.get_payments">
+		<class>ectools_api_payment</class>
+	</service>
+
+	<service id="ectools_analysis_hour">
+
+	</service>
+
+	<service id="ectools_analysis_day">
+
+	</service>
+
+</services>

@@ -1,0 +1,27 @@
+<!------------------------------------ 购买 按钮 -------------------------------->
+<input type="hidden" name="goods[goods_id]" value="<{$goods.goods_id}>" />
+<input type="hidden" name="goods[pmt_id]" value="<{$goods.pmt_id}>" />
+<{if !$goods.spec }>
+<input type='hidden' name='goods[product_id]' value='<{$product0id}>'/>
+<{/if}>
+<div class="btnBar clearfix" <{if count($goods.product)<0}>style="visibility:hidden"<{/if}>>
+  <div class="flt">
+    <!--页面按钮service形式 start -->
+    <{foreach from=$btn_page_list item=item}>
+    <{include file=$item.file app=$item.app }>
+    <{/foreach}>
+    <!--页面按钮service形式 end -->
+  </div>
+  <div class="flt">
+    <ul class="button">
+      <li  class="star-off" <{if $login!="nologin"}>star="<{$goods.goods_id}>" data-type="on"<{/if}> title="<{$goods.name|escape:html}>">
+      <a <{if $login=="nologin"}>href="<{link app="b2c" ctl="site_passport" act="login"}>" <{else}>href="###" rel="_fav_"<{/if}> class="btn-a listact"><i class="has-icon"> <!-- <img src='<{$env.app.res_url}>/bundle/collect_icon.gif' /> --></i><span>
+          <div class="fav"><{t}>收藏此商品<{/t}></div>
+          <div class="nofav"><{t}>已收藏<{/t}></div>
+        </span>
+      </a>
+      </li>
+      <!-- <li><a href="#" class="btn-send"><{t}>发送给好友<{/t}></a></li> -->
+    </ul>
+  </div>
+</div>

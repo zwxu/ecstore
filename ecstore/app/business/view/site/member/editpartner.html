@@ -1,0 +1,28 @@
+<!-- right-->
+<div class="member-main">
+  <div>
+    <form method="post" action="<{link app=business ctl='site_partner'   act='edit1'}>" class="section" id="Member_addr">
+      <div class="FormWrap" style="background:none; border:none; padding:0; margin:0;">
+        <div class="title"><{t}>修改合作伙伴<{/t}></div>
+        <div class="division" style="border:none; border-bottom:1px dashed #ddd">
+				<table cellpadding="0" class="forform" cellspacing="0" border="0">
+					<tr>
+					<th><{t}>链接名称：<{/t}></th><td>
+					 <input type="text" name="link_name" id="link_name" style="width:120px" required="true" value=<{$link_name}>
+					   readonly="readonly"><span id="check"></span>
+					</td></tr>
+					<tr><th><{t}>友情链接图片：<{/t}></th><td><{input type='vimage' class="inputstyle" name='image_url' width=150 height=100 value=$image_url}></td></tr>
+					<tr><th><{t}>链接地址：<{/t}></th><td><{input type="text" name="href" class="inputstyle" id="href" value='' width='400px' height='200px' value=$href}></td></tr>
+				</table>
+                </div>
+        <div style="padding-left:140px">
+           <{button class="submit-btn" type="submit" rel="_request" label=$___b2c="提交"|t:'b2c'}>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+ 
+</script>
+<!-- right-->

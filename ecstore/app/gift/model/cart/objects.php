@@ -1,0 +1,7 @@
+<?php
+
+ 
+    
+    class gift_mdl_cart_objects extends b2c_mdl_cart_objects {
+        
+    }

@@ -1,0 +1,220 @@
+<div class="clearboth">
+	<{if $minfo}>
+	<div class="section">
+    <h4 class="order-title-bg">
+      <div class="flt w100">
+			<{t}>商品必填信息<{/t}>
+			<em class="font-red">*</em>
+			</div>
+				<div class='hid_item goods_needs_minfo flt' style="<{if !$has_goods_minfo}>display:none; <{/if}>border:none;">
+			<div class="link_update">
+				<a href="javascript:void(0);" title="<{t}>修改<{/t}>" class="cancel_goods_minfo btn-a" id="goods_info"><span><{t}>修改<{/t}></span></a>
+			</div>
+		</div>
+		</h4>
+		<div id="meta_info_shown_detail" class="hid_item cancel_goods_minfo goods_needs_minfo">
+		<{if $has_goods_minfo}>
+		<{foreach from=$minfo item="product" key=product_id}>
+			<h5 style="padding:0 15px" class="mpro_name font-blue"><{t}>填写购买<{/t}>&nbsp;&nbsp;<{$product.name}><{if $product.nums}> x <{$product.nums}><{/if }>&nbsp;&nbsp;<{t}>时所需信息<{/t}></h5>
+			<div class="field section" >
+				<div>
+				  <table width="100%" class="tableform" cellspacing="0" cellpadding="0" border="0" class=" data">
+
+					  <tbody>
+							 <{foreach key=key from=$product.minfo item="info"}>
+							  <{assign var="infokey" value=$info.name}>
+							  <tr>
+                  <th>
+                    <div>
+                      <label for="misc_<{$key}>"><{$info.label}>：</label>
+                    </div>
+                  </th>
+                  <td>
+                    <div>
+                      <{$info.value}>
+                    </div>
+                  </td>
+							  </tr>
+							  <{/foreach}>
+					  </tbody>
+				  </table>
+				  </div>
+			</div>
+		<{/foreach}>
+		<{/if}>
+		</div>
+		<div class='hid_item goods_info p10' style="<{if $has_goods_minfo}>display:none;<{/if}>">
+		<{foreach from=$minfo item="product" key=product_id}>
+			<div class="field section goods_items" >
+				<h5 class="mpro_name font-blue pl15 pr15" style="padding:0 15px"><{t}>填写购买<{/t}>&nbsp;&nbsp;<{$product.name}><{if $product.nums}> x <{$product.nums}><{/if }>&nbsp;&nbsp;<{t}>时所需信息<{/t}></h5>
+				<input type="hidden" name="minfo[product_id]" value="<{$product_id}>" />
+				<div>
+				  <table width="100%" class="tableform" cellspacing="0" cellpadding="0" border="0" class=" data">
+					<tbody>
+							 <{foreach key=key from=$product.minfo item="info"}>
+							  <{assign var="infokey" value=$info.name}>
+							  <tr>
+							  <th>
+								<em class="font-red">*</em><label for="misc_<{$key}>"><{$info.label}>：</label>
+								<input type="hidden" class="meta_label" name="minfo[<{$product_id}>][<{$info.name}>][label]" value="<{$info.label}>">
+							  </th>
+							  <td>
+                  <div>
+								<{if $info.type=='select'}>
+								<select class="inputstyle x-input meta_val" name="minfo[<{$product_id}>][<{$info.name}>][value]">
+								<{foreach from=$info.options item=opt}>
+								<option value="<{$opt}>"<{if $info.value == $opt}> selected="selected"<{/if}>><{$opt}></option>
+								<{/foreach}>
+								</select>
+								<{elseif $info.type=='text'}>
+								<{input class="inputstyle x-input meta_val" type="textarea" rows="3" cols="40" id="misc_{$product_id}" name="minfo[{$product_id}][{$infokey}][value]" vtype="required" value=$info.value}>
+								<{else}>
+								<{input class="inputstyle meta_val" id="misc_{$product_id}" size="30" name="minfo[{$product_id}][{$infokey}][value]" type='required' value=$info.value}>
+								<{/if}>
+                  </div>
+							  </td>
+							  </tr>
+							  <{/foreach}>
+							  </tbody>
+					  </table>
+
+				  </div>
+			</div>
+		<{/foreach}>
+		</div>
+		<div class="cart-need-conf-div hid_item goods_info"<{if $has_goods_minfo}> style="display:none;"<{/if}>>
+      <{button type="button" class="submit-btn" name="btn_goods_minfo" id="goods_needs_minfo" label=$___b2c="确认必填信息"|t:'b2c'}>
+		<input type="hidden" class="cart-confirm-btn<{if !$has_goods_minfo}> unfold<{/if}>" vtype="need_confirmed" caution='<{t}>商品必填项没有确认！<{/t}>'/>
+		<!--<input type="button" name="btn_goods_minfo" id="goods_needs_minfo" class="cart-btn" value="<{t}>确认必填信息<{/t}>" /><input type="hidden" class="cart-confirm-btn<{if !$has_goods_minfo}> unfold<{/if}>" vtype="need_confirmed" caution='<{t}>商品必填项没有确认！<{/t}>' />--></div>
+	</div>
+	<script>
+		(function(){
+
+				$('goods_needs_minfo').addEvent('click', function(els){
+
+
+						var meta_info = {}, meta_pro_name = {}, _base_url = '<{$base_url}>',_product_id = '';
+
+						if(! button_valiate.is_validate($(els.target)) )return;
+
+						$$('.goods_items').each(function(meta_el, meta_index){
+							if (!!meta_el.getElements('.meta_label').length){
+								_product_id = (meta_el.getElement('input[name^=minfo[product_id]]'))?meta_el.getElement('input[name^=minfo[product_id]]').value:'';
+								meta_pro_name[_product_id] = {"name":$(meta_el).getElement('.mpro_name').innerHTML};
+
+								meta_el.getElements('.meta_label').each(function(lbl_el, lbl_index){
+									var _val=$(lbl_el).getParent('tr').getElements('.meta_val');
+									if (!!_val.length){
+										if (!meta_info[_product_id] || meta_info[_product_id] == undefined)
+											meta_info[_product_id] = {};
+										meta_info[_product_id][lbl_index] = {"name":$(lbl_el).get('value'), 'val':_val.get('value')};
+									}
+								});
+							}
+						});
+
+						var tmpl = '<h5 class="mpro_name font-blue" style=" padding: 0 15px">{name}</h5>';
+            var tpl = '<tr><th>{name}</th><td><div>{val}</div></td></tr>';
+						var _info_shown_detail = [];
+
+						Object.each(meta_pro_name,function(val, index){
+							_info_shown_detail.push(tmpl.substitute(val));
+							_info_shown_detail.push('<div class="field section tableform"><div><table width="100%" cellspacing="0" cellpadding="0" border="0" class=" data"><tbody>');
+							Object.each(meta_info[index],function(meta_val){
+								_info_shown_detail.push(tpl.substitute(meta_val));
+							});
+							_info_shown_detail.push('</tbody></table></div></div>');
+						});
+
+						tmpl = _info_shown_detail.join('');
+						$('meta_info_shown_detail').innerHTML = tmpl;
+						meta_info = JSON.encode(meta_info);
+						Cookie.write('checkout_b2c_goods_buy_info', meta_info, {path:_base_url});
+						button_valiate.fold($(els.target), 'fold').removeCaution($(els.target));
+
+						Order.isEdit($('goods_needs_minfo'));
+
+				});
+		})();
+	</script>
+	<{/if}>
+    
+    <{if $is_need_address}>
+	<div class="section" id="section_address">
+		<div class="form-title receiver_addr">
+			<!--<h4 class="order-title-bg">
+				<div class="flt" style="width:100px">-->
+				<div class="cart_order"><{t}>确认收货信息<{/t}></div><!--</div>	
+			</h4>-->
+			<div id="def_addr_info" class="hid_item cancel_receiver_info receiver_addr"><{include file="site/common/reciver_def_addr.html" app=b2c}></div>
+		</div>
+	</div>
+    <{/if}>
+
+	<!-- <div class="section">
+		<div class="form-title">
+      <h4 class="order-title-bg">
+				<{t}>配送方式确认<{/t}>
+				<em class="font-red">*</em>
+			</h4>
+		</div>
+		<div class="form-body">
+			<div id="shipping">
+				<{if $delivery_html}>
+				<{$delivery_html}>
+				<{else}>
+					<div class="notice" >
+					<{t}>请先“在收货人信息”中选择“收货地区”<{/t}>
+					</div>
+				<{/if}>
+			</div>
+		</div>
+	</div> -->
+    <{if $payments_num > 1}>
+        <div class="section">
+            <div class="form-title">
+          <!--<h4 class="order-title-bg">-->
+                    <h2 class="mt20"><{t}>确认支付方式<{/t}></h2>
+                <!--</h4>-->
+            </div>
+            <div class="form-body">
+                <div id="_payment_currency">
+                    <{if count($currencys) > 1}>
+                        <{t}>货币类型：<{/t}>
+                        <{input type="select" id="payment-cur" name="payment[currency]" rows=$currencys valueColumn="cur_code" labelColumn="cur_name" value=$current_currency class="inputstyle" required="true"}>
+                    <{else}>
+                        <{foreach from=$currencys item="currency_item" key="key" name="currency_item"}>
+                        <{*$currency_item.cur_name*}>
+                        <input type="hidden" id="payment-cur" name="payment[currency]" value="<{$currency_item.cur_code}>" class="inputstyle" required="true" />
+                        <{/foreach}>
+                    <{/if}>
+                </div>
+                <div id='payment'>
+                    <!-- 判断是否有货到付款的支付方式 -->
+                    <script>
+                        (function(){
+                            $('payment').store('b2c-cart-checkout-shipping_has_cod', '<{$shipping_has_cod}>');
+                        })();
+                    </script>
+                    <!-- end -->
+                    <{$payment_html}>
+                </div>
+            </div>
+        </div>
+    <{else}>
+    	<div id="_payment_currency">
+            <{if count($currencys) > 1}>
+                <{t}>货币类型：<{/t}>
+                <{input type="select" id="payment-cur" name="payment[currency]" rows=$currencys valueColumn="cur_code" labelColumn="cur_name" value=$current_currency class="inputstyle" required="true"}>
+            <{else}>
+                <{foreach from=$currencys item="currency_item" key="key" name="currency_item"}>
+                <{*$currency_item.cur_name*}>
+                <input type="hidden" id="payment-cur" name="payment[currency]" value="<{$currency_item.cur_code}>" class="inputstyle" required="true" />
+                <{/foreach}>
+            <{/if}>
+        </div>
+        <div id='payment'>
+            <{$payment_html}>
+        </div>
+    <{/if}>
+</div>

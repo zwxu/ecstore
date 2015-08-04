@@ -1,0 +1,42 @@
+<{assign var=tSpecValue value=$aSpec[spec_value]}>
+<tbody spec="<{$aSpec.tbody_sepc}>" point="<{$aSpec.tbody_point}>">
+<tr>
+	<th width="65">&nbsp;</th>
+	<th width="80">规格值</th>
+	<{if $aSpec.spec_type == 'image'}>
+	<th width="75">规格图片</th>
+	<{/if}>
+	<th>关联商品图册图片<button type="button" app="desktop" class="btn sel-albums-images btn-has-icon"><span><span><i class="btn-icon"><img app="desktop" src="<{$desktop_resource_url}>/bundle/btn_edit.gif"></i>选择</span></span></button></th>
+	<th width="75" class="last">&nbsp;</th>
+</tr>
+<tr pspecid='<{$specValue.private_spec_value_id}>'>
+    <td width="10%">
+        <input type='hidden' name='spec[<{$aSpec.spec_id}>][option][<{$specValue.private_spec_value_id}>][private_spec_value_id]' value='<{$specValue.private_spec_value_id}>'>
+       <{if $aSpec.spec_type == 'text'}>
+    <span class="goods-spec-span"><{if $tSpecValue}><{$tSpecValue[$specValue.spec_value_id][spec_value]|htmlspecialchars}><{else}><{$specValue[spec_value]|htmlspecialchars}><{/if}></span>
+      <{else}>
+      <{assign var='svid' value=$specValue.spec_value_id}>
+    <div class="goods-spec-box"><center><img src='<{if $tSpecValue[$specValue.spec_value_id][spec_image]}><{$tSpecValue[$specValue.spec_value_id][spec_image]|storager}><{elseif $specValue[spec_image]}><{$specValue[spec_image]|storager}><{else}><{$spec_default_pic|storager}><{/if}>' width=20 height=20 alt="<{$specValue.spec_value|htmlspecialchars}>"/></center></div>
+      <{/if}>
+    </td>
+
+    <td class='spec-value-input' specid='<{$aSpec.spec_id}>' specpvid='<{$specValue.private_spec_value_id}>'>
+      <input type="text" name="spec[<{$aSpec.spec_id}>][option][<{$specValue.private_spec_value_id}>][spec_value]" class='spec-value' style="width: 120px;" value="<{$specValue.spec_value|htmlspecialchars}>" oldvalue='<{$specValue.spec_value|htmlspecialchars}>'/>
+      <input type="hidden" name="spec[<{$aSpec.spec_id}>][option][<{$specValue.private_spec_value_id}>][spec_value_id]"  class='spec-value-id' value="<{$specValue.spec_value_id}>"/>
+      <input type="hidden" class="spec-image" name="spec[<{$aSpec.spec_id}>][option][<{$specValue.private_spec_value_id}>][spec_image]" value="<{$specValue.spec_image}>" oldvalue='<{$specValue.spec_image}>'/>
+    </td>
+
+       <{if $aSpec.spec_type == 'image'}>
+    <td>
+    <{assign var=name_spec_image value="spec[{$aSpec.spec_id}][option][{$specValue.private_spec_value_id}][spec_image]"}>
+	<span></span>
+	<b onclick="Ex_Loader('modedialog',function(){new imgDialog('index.php?app=desktop&amp;act=alertpages&amp;goto=index.php%3Fapp%3Dimage%26ctl%3Dadmin_manage%26act%3Dimage_broswer',{handle:this});}.bind(this));"></b>
+      <input type="hidden" name="spec[1][option][130950458810][spec_image]" value="<{$specValue.spec_image}>" />
+    </td>
+      <{/if}>
+
+    <td><span class='sel-imgs-area-<{$specValue.private_spec_value_id}>'><{if $specValue.spec_goods_images}><{foreach from=','|explode:$specValue.spec_goods_images item=imgItem name=gimgs}><{if $smarty.foreach.gimgs.iteration<5 }><img src="<{$imgItem|storager}>" width="22" height="22" style="margin:0 1px" /><{elseif $smarty.foreach.gimgs.iteration==5}>...<{/if}><{/foreach}><{/if}></span>
+      <input type="hidden" class='spec_goods_images' name="spec[<{$aSpec.spec_id}>][option][<{$specValue.private_spec_value_id}>][spec_goods_images]" value="<{$specValue.spec_goods_images}>"/>
+      </td>
+    <td><i class="top"></i><i class="bottom"></i><i class="delete"></i></td>
+    </tr>

@@ -1,0 +1,11 @@
+<{if $activity_tab}>
+<div class="cubt">
+<ul>
+    <{foreach from=$activity_tab key=key item=item}>
+        <li <{if $activity_tab_cur && $item.app == $activity_tab_cur}>class="cur"<{/if}>>
+          <a href="<{link app=$item.app ctl=$item.ctl act=$item.act}>"><{$item.tab_name}></a>
+        </li>
+    <{/foreach}>
+</ul>
+</div>
+<{/if}>

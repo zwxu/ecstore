@@ -1,0 +1,265 @@
+<div class="gridlist-action data-action" id="dataAction" style="margin-bottom:10px;padding:5px; border:0;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <{if $report_type=="true"}>
+      <td nowrap="nowrap" style="width:165px;">
+        <div class="tabs-wrap select-tabs">
+            <ul style="margin-top:2px;padding:0;">
+              <li class="tab <{if $report != "month"}>current<{/if}>">
+              <span><a href="index.php?app=<{$env.get.app}>&ctl=<{$env.get.ctl}>&act=<{$env.get.act}>" type="day"><{t}>日报表<{/t}></a></span>
+              </li>
+              <li class="tab <{if $report == "month"}>current<{/if}>">
+              <span><a href="index.php?app=<{$env.get.app}>&ctl=<{$env.get.ctl}>&act=<{$env.get.act}>" type="month"><{t}>月报表<{/t}></a></span>
+              </li>
+            </ul>
+            <input type="hidden" name="report" value="<{$report}>" />
+        </div>
+      </td>
+      <{/if}>
+      <td <{if $report_type=="true"}>align="right"<{/if}> nowrap="nowrap">
+        <label><{t}>时间范围:<{/t}></label>
+        <{if $report != "month"}>
+            <{input type="date" vtype="date" name="time_from" style="width:66px; font-family:arial;" value=$time_from}><{t}>至<{/t}>
+            <{input type="date" vtype="date" name="time_to" style="width:66px; font-family:arial;" value=$time_to}>
+        <{/if}>
+
+        <{if $report == "month"}>
+        <select id="from_year" class="date_select">
+          <{foreach from=$year item=item}>
+            <option value="<{$item}>" <{if $from_selected[0] == $item}>selected="selected"<{/if}>><{$item}></option>
+          <{/foreach}>
+        </select><{t}>年<{/t}>
+        <select id="from_month" class="date_select">
+          <{foreach from=$month item=item}>
+            <option value="<{$item}>" <{if $from_selected[1] == $item}>selected="selected"<{/if}>><{$item}></option>
+          <{/foreach}>
+        </select><{t}>月 <{/t}><{t}>至<{/t}>
+        <select id="to_year" class="date_select">
+          <{foreach from=$year item=item}>
+            <option value="<{$item}>" <{if $to_selected[0] == $item}>selected="selected"<{/if}>><{$item}></option>
+          <{/foreach}>
+        </select><{t}>年<{/t}>
+        <select id="to_month" class="date_select">
+          <{foreach from=$month item=item}>
+            <option value="<{$item}>" <{if $to_selected[1] == $item}>selected="selected"<{/if}>><{$item}></option>
+          <{/foreach}>
+        </select><{t}>月<{/t}>
+        <input type="hidden" name="time_from" value="<{$time_from}>">
+        <input type="hidden" name="time_to" value="<{$time_to}>">
+        <{/if}>
+
+        <{button class="filterBtn btn-thirdly" label=$___ectools="确定"|t:'ectools'}>&nbsp;
+
+<{if $report != "month"}>
+    <{if $time_shortcut}>
+        <{if $time_shortcut[0]==1}><{button class="dataBtn btn-fourthly" time_from=$yesterday time_to=$yesterday label=$___ectools="昨日"|t:'ectools'}><{/if}>
+        <{if $time_shortcut[1]==2}><{button class="dataBtn btn-fourthly" time_from=$today time_to=$today label=$___ectools="今日"|t:'ectools'}><{/if}>
+        <{if $time_shortcut[2]==3}><{button class="dataBtn btn-fourthly" time_from=$this_week_from time_to=$this_week_to label=$___ectools="本周"|t:'ectools'}><{/if}>
+        <{if $time_shortcut[3]==4}><{button class="dataBtn btn-fourthly" time_from=$last_week_from time_to=$last_week_to label=$___ectools="上周"|t:'ectools'}><{/if}>
+        <{if $time_shortcut[4]==5}><{button class="dataBtn btn-fourthly" time_from=$this_month_from time_to=$this_month_to label=$___ectools="本月"|t:'ectools'}><{/if}>
+        <{if $time_shortcut[5]==6}><{button class="dataBtn btn-fourthly" time_from=$last_month_from time_to=$last_month_to label=$___ectools="上月"|t:'ectools'}><{/if}>
+    <{else}>
+        <{button class="dataBtn btn-fourthly" time_from=$yesterday time_to=$yesterday label=$___ectools="昨日"|t:'ectools'}>
+        <{button class="dataBtn btn-fourthly" time_from=$today time_to=$today label=$___ectools="今日"|t:'ectools'}>
+        <{button class="dataBtn btn-fourthly" time_from=$this_week_from time_to=$this_week_to label=$___ectools="本周"|t:'ectools'}>
+        <{button class="dataBtn btn-fourthly" time_from=$last_week_from time_to=$last_week_to label=$___ectools="上周"|t:'ectools'}>
+        <{button class="dataBtn btn-fourthly" time_from=$this_month_from time_to=$this_month_to label=$___ectools="本月"|t:'ectools'}>
+        <{button class="dataBtn btn-fourthly" time_from=$last_month_from time_to=$last_month_to label=$___ectools="上月"|t:'ectools'}>
+    <{/if}>
+<{else}>
+    <{button class="dataBtn btn-fourthly" time_from=$this_month_from time_to=$this_month_to label=$___ectools="本月"|t:'ectools'}>
+    <{button class="dataBtn btn-fourthly" time_from=$last_month_from time_to=$last_month_to label=$___ectools="上月"|t:'ectools'}>
+<{/if}>
+      </td>
+
+      <{if $type_display == "true"}>
+      <td align="right" nowrap="nowrap">
+        <{t}>选择<{/t}><{$typeData.lab}>:<select name="type_id" id="select_shop"<{if $report != "month"}> style="max-width:90px;_width:90px;"<{/if}>>
+            <option value="0">&nbsp;<{t}>全部<{/t}>&nbsp;</option>
+            <{foreach from=$typeData.data key=key item=item}>
+                <option value="<{$item.type_id}>" <{if $type_selected == $item.type_id}>selected="selected"<{/if}>><{$item.name}></option>
+            <{/foreach}>
+        </select>
+      </td>
+      <{/if}>
+    </tr>
+  </table>
+</div>
+
+<script>
+  (function(){
+    if($E('.num')) $E('.num').innerHTML+=' 数据非及时显示，当天数据请于第二天查看';
+    var _finder = finderGroup['<{$name}>'],
+        dataAction= $('dataAction'),
+        data_ipt=$$(dataAction.getElements('input[name^=time_]'),dataAction.getElements('select')),
+        from=dataAction.getElement('input[name=time_from]'),
+        to=dataAction.getElement('input[name=time_to]');
+
+    if(_finder&&_finder.form){
+      fdoc = document.createDocumentFragment();
+      data_ipt.each(function(ipt){
+        fdoc.appendChild(new Element('input[type=hidden]', {'name': ipt.name, value: ipt.value}));
+      });
+      _finder.form.appendChild(fdoc);
+    }
+
+    data_ipt.addEvent('change',function(e){
+      if(_finder&&_finder.form){
+        var ipt=$E('input[name='+this.name+']',_finder.form);
+        if(ipt)ipt.value=this.value;
+      }
+    });
+
+    <{if $report == "month"}>
+    var today=new Date();
+    $$('select.date_select').each(function(item){
+      /* $A(item.options).each(function(opt,i){
+         if(opt.text==today.getFullYear() || opt.text==today.getMonth()+1) opt.selected=true;
+      }); */
+      item.addEvent('change',function(){
+        setDate(this.get('id').split('_')[0]);
+      });
+    });
+
+    setDate();
+
+    function setDate(){
+      var arguments=arguments.length===0 ? ['from','to'] : arguments;
+      $A(arguments).each(function(item){
+        dataAction.getElement('input[name=time_'+item+']').value=$(item+'_year').options[$(item+'_year').selectedIndex].text+'-'+$(item+'_month').options[$(item+'_month').selectedIndex].text+'-01';
+      });
+    }
+    <{/if}>
+
+    $$('.select-tabs a').addEvent('click',function(e){
+      e.stop();
+      W.page(this.href,{data:'report='+this.type,method:"post"});
+    });
+
+    function setChartData(flag,e){
+      if(!check_data(from,to))return;
+      var params=dataAction.toQueryString(),
+          itemcur=$E('.chart-view .chart-item-cur');
+      dataAction.store('_data',params);
+      if(flag&&itemcur&&$E('iframe',itemcur)) $E('iframe',itemcur).src+='&'+params;
+      if(flag) url='index.php?app=<{$env.get.app}>&ctl=<{$env.get.ctl}>&act=<{$env.get.act}>';
+      else url=e.target.href||e.target.getParent().href;
+      W.page(url, {data:params, method:'post',onComplete:function(){
+          if(_finder) _finder.filter.value=params;
+      }});
+    }
+    if($('select_shop')) $('select_shop').addEvent('change',function(e){setChartData(true);});
+    dataAction.getElement('.filterBtn').addEvent('click',function(e){setChartData(true);});
+
+    var packet=$('finder-packet-<{$name}>');
+    if(packet) packet.addEvent("click",function(e){
+      if(e.target.tagName.toLowerCase()=="a" || e.target.getParent().tagName.toLowerCase()=="a"){
+        e.stop();
+        setChartData(false,e);
+      }
+    });
+
+    <{if $report == "month"}>
+    function check_data(from,to){
+      if(Date.parse(to.value.replace(/-/gi,"/"))<Date.parse(from.value.replace(/-/gi,"/"))){
+        return MessageBox.error('<{t}>选择开始时间必须早于结束时间<{/t}>');
+      }
+      return true;
+    }
+    <{else}>
+    function check_data(from,to){
+      var data=[],
+      _return=[from,to].every(function(el){
+        if(!/^(19|20)[0-9]{2}-([1-9]|0[1-9]|1[012])-([1-9]|0[1-9]|[12][0-9]|3[01])+$/.test(el.value)){
+          new MessageBox('<{t}>请录入日期格式yyyy-mm-dd<{/t}>',{type:'error',autohide:true});
+          el.focus();
+          return false;
+        }
+        data.push(Date.parse(el.value.replace(/-/gi,"/")));
+        return true;
+      });
+
+      if(!_return)return null;
+      if(data[1]<data[0]){
+        return MessageBox.error('<{t}>选择开始时间必须早于结束时间<{/t}>');
+      }
+      return _return;
+    }
+    <{/if}>
+
+    var dataBtn=dataAction.getElements('.dataBtn');
+    dataBtn.each(function(el,i){
+      if(el.get('time_from')==from.value && el.get('time_to')==to.value)
+          el.addClass('btn-fourthly-cur');
+      el.addEvent('click',function(e){
+        from.value=this.get('time_from');
+        to.value=this.get('time_to');
+        /* ['time_from','time_to'].each(function(v){
+         *   dataAction.getElements('input[name='+v+']').value=this.get(v);
+         * },this); */
+        dataAction.getElement('.filterBtn').fireEvent('click');
+      });
+    });
+
+    if($ES('.large .span-auto').length)
+    $ES('.large .span-auto').each(function(el){
+      el.store('tip:title',el.get('title')).store('tip:text',el.get('info'));
+      Xtip.attach(el);
+    });
+  })();
+
+
+  window.addEvent('domready',function(e){
+    var lazyload = new LazyLoad();
+    if($E('.chart-tabs li')) new ItemAgg($ES('.chart-tabs li'),$ES('.chart-view .chart-items'),{
+      activeName:'current',
+      itemsClass:'chart-item-cur',
+      onActive:function(tab,item){
+        lazyload.loadCustomLazyData(item,'textarea');
+        var iframe=item.getElement('iframe'),
+        src=item.retrieve('_src',iframe.src),
+        params=$('dataAction').retrieve('_data','');
+        if(window.ie||iframe.retrieve('_params','')!=params){
+          iframe.src=src+params;
+          iframe.store('_params',params);
+        }
+      }
+    });
+    if($E('.finder-action .export')) $E('.finder-action .export').addEvent('click',function(e){
+      e.stop();
+      var target = this.get('target'),options = JSON.decode(target);
+      new Dialog(this.get('href'),$extend({
+        ajaxoptions:{
+          data:$('dataAction').toQueryString(),
+          method: 'post'
+        },
+        onClose:function(){
+          if((_finder=finderGroup['<{$name}>'])) _finder.refresh();
+        }
+      },options));
+    });
+
+    if($E('.chart-view') && $E('.finder-options')){
+      var closeBtn = $('btn_close_charts') || new Element('div.span-auto',{html:'<a id="btn_close_charts" href="javascript:void(0);">收起图形</a>'}).inject($E('.finder-options'));
+      if(window.ie7) $E('.finder-options').style.cssText = 'width:auto;float:right;';
+      var closedEl = $E('.chart-view');
+      closeBtn.getElement('a').addEvent('click',function(){
+        if(closedEl.isDisplay()){
+          closedEl.hide();
+          this.set('text','展开图形');
+        }
+        else{
+          closedEl.show();
+          var iframe=$E('.chart-view .chart-item-cur iframe'),
+          params=$('dataAction').toQueryString();
+          if(iframe && (window.ie||iframe.retrieve('_params','')!=params)){
+            iframe.src += params;
+            iframe.store('_params',params);
+          }
+          this.set('text','收起图形');
+        }
+        window.fireEvent('resize');
+      });
+    }
+  });
+</script>

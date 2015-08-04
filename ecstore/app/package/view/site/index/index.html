@@ -1,0 +1,79 @@
+<{script src="core.js" app='package'}>
+<{css src="style.css" app='package'}>
+<{css src="b2c.css" app='b2c'}>
+
+<div id="AllWrap" class="clearfix binding m_center">
+  <h2 class="giftname binding_name"><{$package.name}></h2>
+  <form <{if $setting.buytarget==2}> target="_blank_cart"<{elseif $setting.buytarget==3}> target="_dialog_minicart"<{/if}> name="package-form" class="package-form" action="<{link app=package ctl=site_package act=add_to_cart}>" method="post">
+    <input type="hidden" name="checkout" value="1" disabled />
+    <input type="hidden" name="id" value="<{$package.id}>" />
+    <div id="GiftSide" <{if $package.repeat!='true' }>class="GiftRepeat"<{/if}>>
+      <h3 class="mod_category_title" style="margin:0px;">捆绑商品</h3>
+      <div class="GiftBorder">
+        <ul class="giftGroup">
+          <{foreach from=$goods item=item key=key}>
+          <li class="gift-null">
+            <div class="gift-chose">
+              <input type="hidden" name="goods[<{$key}>][goods_id]"  value="<{$item.goods_id}>" class="goodsId" />
+              <input type="hidden" name="goods[<{$key}>][product_id]" class="productId" value="<{$item.products.0.product_id}>" />
+              
+              <div class="small-pic"><img src="<{$item.image_default_id|default:$image_default_id|storager:'m'}>" /></div>
+              <div class="small_box">
+                <ul>
+                  <li class="gift_tit"><{$item.name}></li>
+                  <li class="goodsprice"><em updatespec="updateprice"><{$item.price|cur}></em></li>
+                  <input type="hidden" id="goods_price_hid" value='<{$item.price}>' /> 
+                </ul>
+              </div>
+              
+            </div>
+            <{if $item.spec}>
+            <div class="small_box">
+              <{include file="site/index/spec.html"}>
+            </div>
+            <{/if}>
+            <div style="clear:both"></div>
+          </li>
+          <{/foreach}>
+        </ul>
+
+        <div class="GiftBuy binding_price">
+          <p class="textcenter">捆绑价：<span class="price" style="color:#e40303;font-weight:bold;"><{$package.amount|cur_odr}></span>  元</p>
+          <div class="clearfix textcenter binding_button">
+            <{if $store>$quantity}>
+                <{if $isSeller}>
+                    <{if !$outtime}>
+                        <{button class="order-btn buy" label="立刻购买" type="button"}> <input type="submit" class="btn_kunb" value="加入购物车" />
+                    <{/if}>
+                <{/if}>
+            <{else}>
+            <button class="btn shop-over" type="button" style="margin-left:0;">已卖光</button>
+            <{/if}>
+          </div>
+        </div>
+        <!--浮动框-->
+        <div class="floatbox">
+          <div class="Inner">
+            <p class="textinfo">捆绑商品还差几件商品，快去挑选吧！</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="GiftBody">
+    <div class="GiftHelp clearfix">
+      <!--<div id="GiftHelp-img" class="gift-img">
+        <img src="<{$package.image|default:$image_default_id|storager:'m'}>" alt="<{$goods.title}>" />
+      </div>--->
+      <div class="gift-about">
+        <h4 class="binding_info_titile">商品详情</h4>
+        <div class="binding_info_nr">
+        <p><{$package.intro}></p>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+

@@ -1,0 +1,57 @@
+﻿<!-- right-->
+  <div class="member-main">
+  <div>
+<div class="errorMsg">
+    <ul>
+    <{foreach from=$errorMsg item=item key=key}>
+        <li><{$item}></li>
+    <{/foreach}>
+    </ul>
+</div>
+<form action="<{link app=b2c ctl="site_member" act="download_ddvanceLog"}>" method="post" target='_blank'>
+<div class="title"><{t}>我的保证金<{/t}></div>
+</form>
+<p class="admin-title admin-title2"><{t}>您当前的保证金余额为：<{/t}><span class="point pr5"><{$earnest|cur_odr}></span>
+<{t}>需要交纳保证金：<{/t}><span class="point pr5"><{$issue_money|cur_odr}></span>
+<{if ($issue_money-$earnest) > 0 }>
+<a href="<{link app=business ctl='site_store' act='earnestdeposit' }>" class="btn" style="color:#fff;margin-bottom: 2px;">缴纳</a>
+<{/if}></p>
+<form action="<{link app=b2c ctl="site_member" act="download_ddvanceLog"}>" method="post" target='_blank' id="downloadform">
+<div class="title-bg admin-title2"><div><span style="float:left"><{t}>预存款交易记录：<{/t}></span></div></div>
+</form>
+<table class="gridlist border-all" width="100%" cellpadding="3" cellspacing="0">
+<thead>
+<tr>
+<th class="first"><{t}>来源/订单<{/t}></th>
+  <th><{t}>保证金<{/t}></th>
+  <th><{t}>操作员<{/t}></th>
+  <th><{t}>备注<{/t}></th>
+  <th><{t}>日期<{/t}></th>
+</tr>
+</thead>
+<tbody>
+<{if count($store.log)>0}>
+<{foreach from=$store.log item="event"}>
+<tr>
+   <td class="Colamount"><{$event.orders}></td>   
+   <td class="Colamount"><{$event.earnest_value}>元</td>
+   <td class="Colamount"><{$event.operator_name}></td>
+   <td class="Coldetails"><{$event.remark}></td>
+   <td><{$event.last_modify|cdate:SDATE_STIME}></td>
+ </tr>
+<{/foreach}>
+<{else}>
+<tr>
+<td height="60" colspan="6">
+  <{t}>尚无保证金历史<{/t}>
+</td>
+</tr>
+<{/if}>
+</tbody>
+</table>
+
+<{pagers data=$pager}>
+
+  </div>
+  </div>
+<!-- right-->

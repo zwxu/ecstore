@@ -1,0 +1,85 @@
+<h3 class="head-title"><{t}>地区设置<{/t}></h3>
+<div style="text-align:right;padding:3px 18px"><{help docid="104" type="link"}><{t}>点击查看帮助<{/t}><{/help}></div>
+<div style="content-main" id="main">
+  <div class="notice">
+    <{t}>对于不同地区，如中国大陆、台湾、香港或者美国等不同的国家地区，软件在语言、会员注册地区、购物流程、订单处理机制等各方面都会有着一些差异。为了解决此问题，BBC软件引入本地化这个管理概念，不同地区商家只要使用相应的本地化插件，就会得到一套符合当地情况的设置方案。BBC本地化默认包含"中国地区"方案。<{/t}>
+  </div>
+  <div class="location">
+<!--<span id="locationMore" style="padding: 7px 0 0 5px; float:left;"><a href="http://click.shopex.cn/free_click.php?id=27" style="margin-top:5px;" target="_blank"><{t}>查看更多区域设置&gt;&gt;<{/t}></a></span>-->
+    <{tabber}>
+      <{tab name=$package.name}>
+      <div class="division division-bottom">
+        <{if !$package.installed}>
+          <a class="btn" href="index.php?app=ectools&ctl=regionssetting&act=install" onclick="this.innerHTML='<span><span><{t}>加载中,请稍等...<{/t}></span></span>'"><span><span><{t}>请先点击导入数据<{/t}></span></span></a>
+        <{else}>
+
+        <form method="post" action="index.php?app=ectools&ctl=regionssetting&act=save_regions_package" target="{update:'messagebox'}">
+
+		  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+            <th width="6%" align="right"><{t}>地区包：<{/t}></th>
+            <td width="89%" style="padding-left:4px;">
+            <select title="<{t}>地区包<{/t}>" type="select" name="service[ectools_regions.ectools_mdl_regions]" class=" x-input-select inputstyle">
+                <{foreach from=$ectools_regions_ectools_mdl_regions_list item=regItem}>
+                    <option <{if $ectools_regions_ectools_mdl_regions == $regItem.content_path}>selected="selected"<{/if}> value="<{$regItem.content_path}>"><{$regItem.name}></option>
+                    <{/foreach}>
+                </select>
+                <span class="notice-inline"><{$package.desc}></span></td>
+            </tr>
+            <tr>
+              <th>&nbsp;</th>
+              <td style="padding:5px 0">
+               	<{assign var="message" value=$___ectools="确定更改？"|t:'ectools'}>
+                 <{button type="submit" label=$___ectools="保存"|t:'ectools' onclick="return confirm('{$message}')" }>
+              </td>
+            </tr>
+          </table>
+        </form>
+
+        <form method="post" action="index.php?app=ectools&ctl=regionssetting&act=save_depth" target="{update:'messagebox'}">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+            <th width="6%" align="right"><{t}>地区设置：<{/t}></th>
+            <td width="89%" style="padding-left:4px;"><select name="area_depth">
+                <option value="1"><{t}>使用一级地区<{/t}></option>
+                <{if $package.maxdepth>1}><option value="2" <{if $area_depth eq 2}>selected="selected"<{/if}>><{t}>使用二级地区<{/t}></option><{/if}>
+                <{if $package.maxdepth>2}><option value="3" <{if $area_depth eq 3}>selected="selected"<{/if}>><{t}>使用三级地区<{/t}></option><{/if}>
+                <{if $package.maxdepth>3}><option value="4" <{if $area_depth eq 4}>selected="selected"<{/if}>><{t}>使用四级地区<{/t}></option><{/if}>
+                <{if $package.maxdepth>4}><option value="5" <{if $area_depth eq 5}>selected="selected"<{/if}>><{t}>使用五级地区<{/t}></option><{/if}>
+                <{if $package.maxdepth>5}><option value="6" <{if $area_depth eq 6}>selected="selected"<{/if}>><{t}>使用六级地区<{/t}></option><{/if}>
+                <{if $package.maxdepth>6}><option value="7" <{if $area_depth eq 7}>selected="selected"<{/if}>><{t}>使用七级地区<{/t}></option><{/if}>
+                <{if $package.maxdepth>7}><option value="8" <{if $area_depth eq 8}>selected="selected"<{/if}>><{t}>使用八级地区<{/t}></option><{/if}>
+                <{if $package.maxdepth>8}><option value="9" <{if $area_depth eq 9}>selected="selected"<{/if}>><{t}>使用九级地区<{/t}></option><{/if}>
+                <{if $package.maxdepth>9}><option value="10" <{if $area_depth eq 10}>selected="selected"<{/if}>><{t}>使用十级地区<{/t}></option><{/if}>
+            </select><span class="notice-inline"><{$package.desc}></span> </td>
+            </tr>
+            <tr>
+              <th>&nbsp;</th>
+              <td style="padding:5px 0">
+              <{assign var="message1" value=$___ectools="更改地区后系统已经存在的地区数据将按照您更改后的设置显示，确认更改地区吗？"|t:'ectools'}>
+              <{button type="submit" label=$___ectools="保存"|t:'ectools' onclick="return confirm('{$message1}')" }>
+              </td>
+            </tr>
+          </table>
+        </form></div>
+      <div class="division">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <th width="6%" align="right"><{t}>数据恢复：<{/t}></th>
+            <td width="89%" align="left"><{t}>恢复地区初始数据为<{/t}> [<{$package.name}>]</td>
+          </tr>
+          <tr>
+            <th>&nbsp;</th>
+            <td style="padding:5px 0">
+            <{assign var="message2" value=$___ectools="恢复后现在的地区信息将会完全被覆盖，确定要恢复吗？"|t:'ectools'}>
+            <{assign var="message3" value=$___ectools="恢复中..."|t:'ectools'}>
+             <{button label=$___ectools="恢复初始数据"|t:'ectools' onclick="new Event(event).stop();if(!confirm('{$message2}'))return false;this.innerHTML='{$message3}';W.page('index.php?app=ectools&ctl=regionssetting&act=setDefault');"}>
+            </td>
+          </tr>
+        </table>
+        <{/if}>
+      </div>
+    <{/tab}>
+    <{/tabber}>
+  </div>
+</div>

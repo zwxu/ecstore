@@ -1,0 +1,18 @@
+<services>
+    <service id="b2c_order.beforecreate">
+        <class>couponlog_order_beforecreate</class>
+    </service>
+    
+	<service id="b2c_order.changepayment">
+        <class>couponlog_order_changepayment</class>
+    </service>
+    
+    <service id="desktop_finder.b2c_mdl_coupons">
+        <class>couponlog_finder_coupons</class>
+    </service>
+    
+    <service id="desktop_finder.couponlog_mdl_order_coupon_user">
+        <class>couponlog_finder_order_coupon_user</class>
+    </service>
+    
+</services>

@@ -1,0 +1,98 @@
+<div class="FormWrap Comments referbox" id="goods-comment">
+<div class="goods-referbox-q">
+          <table width="100%" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td width="5%" style=" padding-top:5px" align="right"><img src='<{$env.app.res_url}>/bundle/question_icon.gif' /></td>
+              <td width="95%"><dl style="border:none; margin-top:0">
+                  <dt><span class="flt font-blue">
+                  	 <{if $comment.addon.hidden_name =='YES' && $comment.author_id!=0}>匿名<{else}><{$comment.author}><{/if}>
+                  	&nbsp;<font color="#333333">说：</font><{/t}></span><{if $base_setting.display_lv == 'on'}><{$comlist.member_lv_name}><{/if}> <span class="floatright"><{$comment.time|cdate}></span></dt>
+                  <dd><{$comment.comment}></dd>
+                  <div class="clear" style="margin-bottom:15px"></div>
+                </dl></td>
+              <{if $base_setting.switch_reply == 'on'}>
+              <{/if}> </tr>
+          </table>
+        </div>
+
+<div class="goods-referbox-a">
+          <div class="goods-referbox-a-i">
+            <div class="goods-referbox-a-arr"> <img src='<{$env.app.res_url}>/arr_top.gif' /></div>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td width="4%" style=" padding-top:5px" align="right"><img src='<{$env.app.res_url}>/bundle/aswer_icon.gif' /></td>
+                <td width="96%"><{foreach from=$comment.reply item=items}>
+                <dl style="border:none; margin-top:0">
+                    <dt><span class="flt font-orange author">
+                    	 <{if $items.addon.hidden_name =='YES' && $items.author_id!=0}>匿名<{else}><{$items.author}><{/if}>
+                    	<{t}>回复：<{/t}></span> <{if $base_setting.display_lv == 'on'}><{$items.member_lv_name}><{/if}> <span class="floatright" style="padding:0 14px 0 0"><{$items.time|cdate:'SDATE_STIME'}></span></dt>
+                    <dd><{$items.comment}></dd>
+                  </dl><{/foreach}> </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+<!--  <div class="division boxBrown">
+    <div class="mainReply"><span class="author font-orange"><{$comment.author}></span><{t}>说：<{/t}><span class="timpstamp font10px font-gray"><{$comment.time|cdate}></span>
+      <div><{$comment.comment}></div>
+    </div>
+  </div>
+  <div class="replies prepend-1 "> <{foreach from=$comment.reply item=items}>
+    <div class="replyitem division "><span class="author font-orange"><{$items.author}>
+      <{t}>回复：<{/t}></span><span class="timpstamp font10px font-gray"><{$items.time|cdate:'SDATE_STIME'}></span>
+      <div><{$items.comment}></div>
+    </div>
+    <{/foreach}> </div>-->
+  <script>
+    var checkFormReqs =function(e){
+           e    = new Event(e);
+       var form= $(e.target);
+
+       var reqs = $$(form.getElements('input[type=text]'),form.getElements('textarea'));
+
+       if(reqs.some(function(req){
+
+            if(req.get('value').trim()==''){
+                       req.focus();
+                       Message.error('<{t}>请完善表单必填项.<{/t}>');
+                       return true;
+            }
+
+              return false;
+
+
+       })){
+
+           e.stop();
+
+       }
+
+    };
+ </script>
+  <h3><{t}>发表回复<{/t}></h3>
+  <form class=" division" method="post" action='<{link app=b2c ctl="site_comment" act="toReply" arg0=$comment.comment_id}>' onsubmit='checkFormReqs(event);'>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="forform">
+      <{if $login eq "NO"}>
+      <tr>
+        <th><em>*</em><{t}>联系方式：<{/t}></th>
+        <td><{input type="text" required="true" size=20 name="contact"}><span class="infotips"><{t}>(可以是电话、email、qq等)<{/t}></span></td>
+      </tr>
+      <{/if}>
+      <tr>
+        <th><em>*</em><{t}>回复内容：<{/t}></th>
+        <td><{input type="textarea" required="true" rows="5" name="comment" style="width:80%" }></td>
+      </tr>
+      <{if $login != 'NO'}>
+      <tr>
+        <th>匿名发表:</th>
+        <td><input type="checkbox" name="hidden_name" value="YES"/></td>
+      </tr>
+      <{/if}>
+      <tr>
+        <th></th>
+        <td><!--<input type="submit" class="buttonstyle" value="<{t}>回复<{/t}>">-->
+          <{button class="btn discuss" type="submit" label="回复"}> </td>
+      </tr>
+    </table>
+  </form>
+</div>

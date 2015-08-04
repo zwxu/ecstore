@@ -1,0 +1,124 @@
+<form action="index.php?<{$env.server.QUERY_STRING}>" method="post">
+	<div class="tableform">
+	    <input type=hidden name='member_id' value=<{$mem.member_id}>>
+	    <div class="division" style="border:none;">
+<table class="forform" width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>  <th><{t}>用户名<{/t}></th>
+      <td> <{$mem.pam_account.login_name}></td>
+      </tr>
+      <tr>  <th><{t}>邮箱<{/t}></th>
+      <td>
+       <{if $mem.contact.email}>
+      <input readonly='true' type='text' name='contact[email]' value='<{$mem.contact.email}>'  vtype='required&&email'/>
+      <{else}>
+      <input type='text' name='contact[email]' value='<{$mem.contact.email}>'  vtype='required&&email'/>
+
+      <{/if}>
+  </td>
+      </tr>
+	<tr>  <th><{t}>会员等级<{/t}></th>
+      <td> <{input type='select' name='member_lv[member_group_id]' options=$mem.lv.options required=true value=$mem.lv.value }>  <span onclick="new Dialog('index.php?app=b2c&ctl=admin_member&act=chkpassword&p[0]=<{$member_id}>',{width:400,height:300,title:'<{t}>修改密码<{/t}>'})" class="lnk">[<{t}>修改密码<{/t}>]</span> </td>
+      </tr>
+    <{foreach from=$attr item=item name="item" key='row'}>
+  <tr>
+  <th><{if $item.attr_required eq 'true'}><em>*</em><{/if}><{$item.attr_name|t:'b2c'}></th>
+  <td>  
+      
+ <{if $item.attr_type =='date'}> 
+   <{if $item.attr_value != '0-0-0' && $item.attr_value != '--'}>
+   <{if $item.attr_required eq 'true'}>
+    <{input class="cal" type='date' vtype="required&&date" name=$item.attr_column value=$item.attr_value}>
+    <{else}>
+     <{input class="cal" type='date' name=$item.attr_column value=$item.attr_value}>
+    <{/if}>
+    <{else}>
+    <{if $item.attr_required eq 'true'}>
+      <{input class="cal" type="date" vtype="required&&date" name=$item.attr_column}>
+      <{else}>
+         <{input class="cal" type="date" name=$item.attr_column}>
+      <{/if}>
+      <{/if}>
+  <{/if}>
+      
+   <{if $item.attr_type =='region'}>
+   <{if $item.attr_required eq 'true'}>
+	<{input app=ectools type="region" name=$item.attr_column value=$item.attr_value vtype="area" }>
+   <{else}>
+     <{input app=ectools type="region" name=$item.attr_column value=$item.attr_value vtype="" }>
+   <{/if}>
+   <{/if}>
+   
+   <{if $item.attr_type =='gender'}>
+    <{input type='gender' name=$item.attr_column value=$item.attr_value }>
+   <{/if}>
+   
+      <{if $item.attr_type =='select'}>
+ <select name='<{$item.attr_column}>' <{if $item.attr_required eq 'true'}>class='_x_ipt' vtype='required'<{/if}>>
+   <option value='' <{if $item.attr_value == ''}>selected='true'<{/if}>><{t}>请选择<{/t}></option>
+ <{foreach from=$item.attr_option item=option name="option"}>
+ <option value='<{$option}>' <{if $item.attr_value == $option}>selected='true'<{/if}>><{$option}></option>
+ <{/foreach}>
+
+ </select>
+   <{/if}>
+   
+  <{if $item.attr_type =='checkbox'}>
+  <{foreach from=$item.attr_option item=checkbox name="checkbox" }>
+
+ 
+ 
+ <input type='checkbox' name=box:<{$item.attr_column}>[]" value='<{$checkbox}>' <{foreach from=$item.attr_value item=checkboxvalue name="checkboxvalue" }>
+ <{if $checkboxvalue==$checkbox}>
+ checked ='true' 
+ <{/if}>
+ <{/foreach}>><label><{$checkbox}></label><br/>
+   <{/foreach}><input type='hidden' name='<{$item.attr_column}>[]' value='%no%'>
+
+<{if $item.attr_required eq 'true'}><input type='hidden' class='_x_ipt' vtype='selectc'/>
+<{/if}>
+   <{/if}>
+   
+   
+   <{if $item.attr_type == 'text'}>
+     <input type='text' name=<{$item.attr_column}> value='<{$item.attr_value}>' vtype='<{if $item.attr_required eq 'true'}>required&&<{/if}><{$item.attr_valtype}>' />
+   <{/if}>
+   
+    <{if $item.attr_type == 'number'}>
+    <input type='text' name=<{$item.attr_column}> value='<{$item.attr_value}>' vtype='<{if $item.attr_required eq 'true'}>required&&<{/if}><{$item.attr_valtype}>' />
+   <{/if}>
+
+  <{if $item.attr_type == 'alpha'}>
+   <input type='text' name=<{$item.attr_column}> value='<{$item.attr_value}>' vtype='<{if $item.attr_required eq 'true'}>required&&<{/if}><{$item.attr_valtype}>' />
+   <{/if}>
+
+</td>
+  </tr>
+  <{/foreach}>  
+  <tr>
+    <th></th>
+   
+    </tr>
+</table>
+</div>
+	<div class="table-action"><{button type="submit" label=$___b2c="保存"|t:'b2c' }></div>
+    </div>
+</form>
+
+<script>
+(function(){
+	var input = $(document.body).getElements('input[name=contact[area]]')[0];
+	var select = input.getNext('select');
+	if(input.getParent('span').get('vtype') == 'area') {
+		return;
+	}
+	select.addEvent('change',function(e){
+		if(!e.target) return;
+		if($(e.target).value !='_NULL_'){
+			input.getParent('span').set('vtype','area');
+		}
+		else{
+			input.getParent('span').set('vtype','');
+		}
+	});
+})();
+</script>

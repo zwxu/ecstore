@@ -1,0 +1,46 @@
+
+<div class="tableform">
+   <div class="division clearfix">
+		
+   		<div class="span-auto">
+			<span class="f-14 c-blue"><{$goods.name}></span>
+			<em class="f-9 c-gray"><{$goods.bn}></em>
+		</div>
+		<div class="span-auto">
+			<{if $is_pub}><span class='c-green'><{t}>上架销售中<{/t}></span>
+			<{else}><span class='c-gray'><{t}>下架状态<{/t}></span><{/if}>
+		</div>
+		
+		<div class="span-auto">	<{t}>共<{/t}><{$goods.comments_count}><{t}>次评论<{/t}>,
+	        <{t}>共<{/t}><{$goods.rank_count}><{t}>次咨询<{/t}></div>
+			<div class="span-auto">
+				      	 <{if $goods_point.avg}> 
+									<ul class="star-div" style="list-style:none;margin:0;padding:0">
+									<li class="star<{$goods_point.avg}>"></li>
+									</ul>
+						<{/if}>
+			</div>
+   </div>
+	<div class="division">
+		共被浏览<i class="c-blue f-14"><{$view_count}></i>次,被购买<i class="c-blue f-14"><{$buy_count}></i><{$goods.unit|default:'件'}>。
+		近一周被浏览<i class="c-blue f-14"><{$view_w_count}></i>次，被购买<i class="c-blue f-14"><{$buy_w_count}></i><{$goods.unit|default:'件'}>
+	</div>
+	
+
+
+
+   <div class="division">
+   	  
+	   <div class="clearfix">
+	   		<div class="span-auto"><{t}>前台访问地址：<{/t}></div>
+		    <div class="span-9">
+		    	<input type='url' value='<{$url}>' onkeydown='return false;' class='f-9 shadow ' style='font-family:Arial;width:98%;' onclick='this.focus();this.select();'/>
+		    </div>
+		    <div class="span-auto">
+		    	<span class="finder-action-items flt" style="float:left; margin-left:5px; display:block; padding:0 1px"><a  href="<{$url}>" target="_blank"><span><{t}>访问此链接<{/t}></span></a></span>
+		    </div>
+	   </div>
+   </div>
+
+
+</div>

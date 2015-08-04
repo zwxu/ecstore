@@ -1,0 +1,219 @@
+<script>
+  /*商品详细通用函数*/
+  var priceControl={
+    base:<{$goods.current_price}>,
+    // _format:<{$money_format|default:'false'}>,
+    _format:<{$money_format|default:'false'}>,/*decimals":2,"dec_point":".","thousands_sep":"","fonttend_decimal_type":0,"fonttend_decimal_remain":2,"sign":"\uffe5*/
+    format:function(num){
+      var part;
+      if(!num && num !==0)return;
+      var num = num.toFloat();
+      if(this._format.cur_rate) {
+        num = num * this._format.cur_rate;
+      }
+      num = num.round(this._format.decimals)+'';
+      var p =num.indexOf('.');
+      if(p<0){
+        p = num.length;
+        part = '';
+        }else{
+        part = num.substr(p+1);
+      }
+      while(part.length<this._format.decimals){
+        part+='0';
+      }
+      var c=[];
+      while(p>0){
+        if(p>2){
+          c.unshift(num.substr(p-=3,3));
+          }else{
+          c.unshift(num.substr(0,p));
+          break;
+        }
+      }
+      if(!part){
+        this._format.dec_point='';
+      }
+      return (this._format.sign||"")+c.join(this._format.thousands_sep)+this._format.dec_point+part;
+    }
+  };
+
+  String.implement({
+    toFormElements:function(){
+      if(!this.contains('=')&&!this.contains('&'))return new Element('input',{type:'hidden'});
+      var elements=[];
+      var queryStringHash=this.split('&');
+      Array.from(queryStringHash).each(function(item){
+        if(item.contains('=')){
+          item=Array.from(item.split('='));
+          elements.push(new Element('input',{type:'hidden',name:item[0],value:item[1]}));
+          }else{
+          elements.push(new Element('input',{type:'hidden',name:item}));
+        }
+      });
+      return new Elements(elements);
+    }
+  });
+  Number.implement({
+    interzone:function(min,max){
+      var _v=this.toFloat();
+      if(!_v)_v=0;
+      return _v>=min&&_v<=max;
+    }
+  });
+  var keyCodeFix=[48,49,50,51,52,53,54,55,56,57,96,97,98,99,100,101,102,103,104,105,8,9,46,37,39];
+
+
+</script>
+
+<div class="goods-info-wrap clearfix" id="goods-viewer">
+    <!--暂时针对于团购 开放立即购买功能时需修改-->
+  <form action="<{link app=b2c ctl=site_cart act=add}>" class="fastbuy-form" id="fastbuy-form" method="POST">
+    </form>
+  <div id="main-info" class="ec-spec-box">
+    <form class="goods-action" action="<{link app=b2c ctl='site_cart' act='add' arg0='goods'}>"  method="post" <{if $goods.setting.buytarget==2}> target="_blank_cart"<{elseif $goods.setting.buytarget==3}> target="_dialog_minicart"<{/if}>>
+        <div class="goods-leftbox ">
+        <{if $env.CONF.b2c.product_detail_picture_conf.position == 'left'}>
+            <{include file="site/product/goodspics_y.html" app=b2c}>
+        <{else}>
+            <{include file="site/product/goodspics.html" app=b2c}>
+        <{/if}>
+        </div>
+        <div class="goods-rightbox">
+          <!--商品基本信息区块-->
+        <h2 class="goodsname" id="h5o-2"><{$goods.name|escape:"html"}></h2>
+        <div class='basic-info list clearfix'>
+          <{foreach from=$info_page_list item=item}>
+            <{include file=$item.file app=$item.app }>
+            <{/foreach}>
+          </div>
+          <!--商品基本信息区块结束-->
+
+          <!--商品评分-->
+           <{if $setting.acomment.switch.discuss == 'on'}>
+          <div class="star-div goods-point clearfix"><span class="flt font-black"><{t}>商品评分：<{/t}></span>
+            <ul>
+              <li class="star<{$goods_point.avg}>"></li>
+            </ul>
+          </div>
+          <{/if}>
+          <!--商品评分区块结束-->
+
+          <!--商品简介区块-->
+          <{if $goods.brief}>
+          <p class="goods-brief ">
+          <span ><{t}>商品简介：<{/t}></span>
+          <em><{$goods.brief}></em>
+          </p>
+          <{/if}>
+          <!--商品简介区块结束-->
+
+          <!------------------------------------ 购买区域 开始 -------------------------------->
+          <{assign var=tmp value=$goods.product}>
+          <{assign var=product0bn value=$tmp|array_shift}>
+
+          <{if count($promotions)>0}>
+          <ul class="boxBlue list">
+            <{foreach from=$promotions item=promotion key=key}>
+            <li>
+              <strong class="font-red"><{$promotion.pmt_describe}></strong>
+              <span class="font11px font-black"><{$promotion.pmt_time_begin|userdate}> ~ <{$promotion.pmt_time_end|userdate}></span>
+            </li>
+            <{/foreach}>
+          </ul>
+          <{/if}>
+
+          <{if !$login&&$mLevel  && $env.conf.b2c.site.member_price_display != 2}>
+        <{$goodshtml.mlv_price}>
+
+          <{/if}>
+          <{if $promotionMsg||$promotionOrder}>
+        <{$goodshtml.promotion_info}>
+          <{/if}>
+          <{if $goods.status == 'false' }>
+          <!---已下架--->
+          <{foreach from=$specAddHtml item=item}>
+            <{$item}>
+          <{/foreach}>
+          <div class="hight-offline">
+            <div class="hightbox">
+              <div class="btnBar clearfix">
+                <div class="flt" style="font-weight:bold;padding:5px;"><{t}>此商品已下架<{/t}></div>
+                <div class="floatRight">
+                  <ul class="button">
+                    <li  class="star-on" <{if $login!="nologin"}>star="<{$goods.goods_id}>"<{/if}> title="<{$goods.name|escape:html}>">
+                    <a <{if $login=="nologin"}>href="<{link app="b2c" ctl="site_passport" act="login"}>" <{else}>href="###" rel="_fav_"<{/if}> class="btn-a listact">
+                      <i class="has-icon"> <!-- <img src='<{$env.app.res_url}>/bundle/collect_icon.gif' />--></i>
+                      <span >
+                        <div class="fav"><{t}>收藏此商品<{/t}></div>
+                        <div class="nofav"><{t}>已收藏<{/t}></div>
+                      </span>
+                    </a>
+                    </li>
+                    <!-- <li><a href="#" class="btn-send"><{t}>发送给好友<{/t}></a></li> -->
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <{else}>
+          <!---规格开始--->
+          <{if $goods.spec }>
+        <div id="spec_area" data-sync-type="goodsSpec"></div>
+          <{/if}>
+          <!---规格结束--->
+          <{foreach from=$specAddHtml item=item}>
+            <{$item}>
+          <{/foreach}>
+          <!--购买数量-->
+        <{$goodshtml.store}>
+          <!--购买数量结束-->
+          <!--购买按钮-->
+          <div class="hightline">
+            <input type="hidden" name="goods[goods_id]" value="<{$goods.goods_id}>" />
+            <input type="hidden" name="goods[pmt_id]" value="<{$goods.pmt_id}>" />
+            <{if !$goods.spec }>
+            <input type='hidden' name='goods[product_id]' value='<{$product0id}>'/>
+            <{/if}>
+            <div class="btnBar clearfix" <{if count($goods.product)<0}>style="visibility:hidden"<{/if}>>
+              <div class="flt btnwrap">
+                <!--页面按钮service形式 start -->
+                <{foreach from=$btn_page_list item=item}>
+                <{include file=$item.file app=$item.app }>
+                <{/foreach}>
+                <!--页面按钮service形式 end -->
+              </div>
+              <div class="flt btnwrap addcollect">
+                <ul class="button">
+                  <li  class="star-off" <{if $login!="nologin"}>star="<{$goods.goods_id}>"<{/if}> title="<{$goods.name|escape:html}>"> <a <{if $login=="nologin"}>href="<{link app="b2c" ctl="site_passport" act="login"}>" <{else}>href="###" rel="_fav_"<{/if}> class="btn-a listact"><i class="has-icon"> <!-- <img src='<{$env.app.res_url}>/bundle/collect_icon.gif' /> --></i><span>
+                      <div class="fav"><{t}>收藏此商品<{/t}></div>
+                      <div class="nofav"><{t}>已收藏<{/t}></div>
+                  </span></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!--购买按钮结束-->
+          <!--分享开始-->
+          <div class="share" style="display:none;"></div>
+          <!--分享结束-->
+        <{/if}>
+        </div>
+        <!------------------------------------ 配件 开始 -------------------------------->
+
+    </div>
+  </form>
+    <!-- </td>
+</tr>
+  </table>-->
+  <!--货品列表-->
+  <{if $goods.spec}>
+  <{include file='site/product/products.html' app=b2c}>
+  <{/if}>
+  <div style="clear:both"></div>
+  <!------------------------------------ 购买区域 结束 -------------------------------->
+  <!--页面body page start -->
+
+  <!--  <div class="goods-detail-tab clearfix" > </div> -->
+

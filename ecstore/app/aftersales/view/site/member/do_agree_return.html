@@ -1,0 +1,26 @@
+<div id="member-main">
+    <h1 class="title"><{t}>同意退款申请<{/t}></h1>
+    <form action="<{link app=aftersales ctl=site_member act=do_agree_return}>" method="post" name="return_save" id='x-return-form'>
+        <div class="FormWrap">
+			<div class="division">
+                同意退款申请后，本次订单买家所支付的金额都会打还给买家，确认同意退货么？
+            </div>
+        </div>
+    <input type="hidden" name="return_id" value="<{$return_id}>">
+    <input type="hidden" name="no_need_refund" value="1">
+    <input type="hidden" name="comment" value="<{$comment}>">
+    <input type="hidden" name="order_id" value="<{$order_id}>">
+	<input id="agree" type="submit" class="btn" value="同意退货">
+	<input type="button" class="btn" value="拒绝退货" onclick="do_send('<{link app=aftersales ctl=site_member act=do_no_return}>','<{$return_id}>','<{$order_id}>');">
+</form>
+</div>
+<script>
+function do_send(url,return_id,order_id){
+	new Request.HTML({
+		url:url,
+		method:'post',
+		data:'return_id='+return_id+'&order_id='+order_id,
+		update:$('member-main')
+}).send();
+}
+</script>

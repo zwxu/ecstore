@@ -1,0 +1,121 @@
+<{assign var="obj_id" value=$env.get.obj_id}>
+<div class='selector-panel' id='selector-panel-<{$obj_id}>'>
+  <table class='selector-table'>
+	<tr>
+	<td style="width:532px">
+		<{if $filter}>
+	    <div class='scrollhandle toRight gridlist-head' style="text-align:right;"><{button label=$___desktop="筛选>>"|t:'desktop'}></div>
+	    <{else}>
+		<div class="gridlist-head"><{t}>请选择</{t}></div>
+		<{/if}>
+		<div class='gridlist selectorlist' id="selectorBody-<{$obj_id}>"><{include file="editor/object_items.html"}> </div>
+	</td>
+	<td style="width:532px">
+        <div id="selector-panel-form-<{$obj_id}>"><{$filterbody}> </div>
+		<{if false&&$filter}>
+            <div class='scrollhandle toLeft' style="margin:10px 0 0;">
+                <div class="table-action"> <{button label=$___desktop="立刻筛选"|t:'desktop'}></div>
+            </div>
+    	<{/if}>
+         <{if $filter}>
+            <div class='scrollhandle toLeft gridlist-head' style="text-align:left;"><{button label=$___desktop="<<筛选并返回列表"|t:'desktop'}></div>
+       <{/if}>
+    </td>
+	</tr>
+  </table>
+</div>
+
+
+<script>
+
+void function(){
+
+    var selectorBody=$('selectorBody-<{$obj_id}>');
+
+    var bindEasySelectHandle=(function(){
+         if('checkbox'=='<{$env.get.select}>'.trim()){
+
+                attachEsayCheck(selectorBody,'.row-line input[type=checkbox]');
+
+         }
+
+        return arguments.callee;
+    })();
+
+
+    var form = $('selector-panel-form-<{$obj_id}>');
+
+  var action="index.php?app=desktop&ctl=editor&act=lista&filter={filter}&select={select}&page={page}&obj_id={obj_id}&object={object}&type={type}&app_id={app_id}";
+	action=action.substitute({
+			filter:'<{$env.get.filter|serialize|urlencode}>',
+			select:'<{$env.get.select}>',
+			obj_id:'<{$obj_id}>',
+			object:'<{$env.get.object|urlencode}>',
+			page:'{page}',
+			app_id:'<{$env.get.app_id}>',
+			type:'<{$env.get.type}>',
+	});
+    var req = new Request.HTML({
+		  url:action.substitute({page:p}),
+		  update:selectorBody,onComplete:function(){
+
+
+          bindEasySelectHandle();
+
+    }});
+
+
+    update_<{$obj_id}>=function(p){
+
+        p=p||1;
+        req.post(getQueryString());
+    }
+
+    var getQueryString=function(){
+
+         return form.toQueryString(function(el){
+             el=$(el);
+             return el.isDisplay()||el.getParent().isDisplay();
+
+         });
+
+    };
+
+    var checkFormUpdate=function(){
+
+         var queryStr=getQueryString();
+         if(queryStr!=form.retrieve('qstr',queryStr)){
+              form.store('qstr',queryStr);
+              return true;
+         }
+
+         return false;
+
+    }
+    checkFormUpdate();
+
+   var toWhere=false;
+   var selectorPanel=$('selector-panel-<{$obj_id}>');
+   var scrollFx=new Fx.Scroll(selectorPanel,{link:'cancel',onComplete:function(){
+        if(toWhere=='toLeft'&&checkFormUpdate()){
+            update_<{$obj_id}>(1);
+        }
+   }});
+   selectorPanel.getElements('.scrollhandle').addEvent('click',function(){
+       toWhere=this.className.split(' ')[1].trim();
+	   if(toWhere=='toLeft'){
+	   		$(this).getParent('.dialog').getElements('.dialog-content-foot').setStyle('visibility','visible');
+	   }else{$(this).getParent('.dialog').getElements('.dialog-content-foot').setStyle('visibility','hidden');}
+       scrollFx[toWhere]();
+   });
+
+   selectorPanel.getParent('.dialog').getElement('.dialog-content-head').setStyle('display', 'none');
+
+}();
+</script>
+<{area inject=".mainFoot"}>
+<div class="table-action">
+	<{button type="button" label=$___desktop="确定"|t:'desktop' onclick="var dialog=$(this).getParent('.dialog');dialog.retrieve('callback')(dialog);dialog.retrieve('instance').close();"}>
+	<{button type="button" label=$___desktop="取消"|t:'desktop' onclick="$(this).getParent('.dialog').retrieve('instance').close()"}>
+</div>
+<{/area}>

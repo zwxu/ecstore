@@ -1,0 +1,30 @@
+<div class="tableform">    
+	<div class="division">
+		<table width="100%" cellspacing="0" cellpadding="0">
+			<tbody>
+				<tr>
+					<th><label for="dom_el_2a317d0"><{t}>货币:<{/t}></label></th>
+					<td>
+						<{$curs_name}>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="cur_name"><{t}>货币名称:<{/t}></label></th>
+					<td><{$cur_name}></td>
+				</tr>
+				<tr>
+					<th><label for="cur_sign"><{t}>货币符号:<{/t}></label></th>
+					<td><{$cur_sign}></td>
+				</tr>
+				<tr>
+					<th><label for="dom_el_2a317d1"><{t}>汇率:<{/t}></label></th>
+					<td><{$cur_rate}></td>
+				</tr>
+				<tr>
+					<th><label for="dom_el_2a317d2"><{t}>默认货币:<{/t}></label></th>
+					<td><{if $cur_default == 'false' or $cur_default == ''}><{t}>不是默认<{/t}><{/if}><{if $cur_default == 'true'}><{t}>默认<{/t}><{/if}></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

@@ -1,0 +1,9 @@
+<{foreach from=$views item=view key=key}>
+<{if $key eq $env.get.view}>
+<{$view.title}>
+<{else}>
+<a href="index.php?ctl=<{$env.get.ctl}>&act=<{$env.get.act}>&view=<{$key}>"><{$view.title}></a>
+<{/if}>
+<{/foreach}>
+<hr />
+<{$output}>

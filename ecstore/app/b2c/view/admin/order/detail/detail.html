@@ -1,0 +1,37 @@
+
+
+<div class="create-order">
+<div class="tableform">
+<h4><{t}>请选择顾客用户名和订单中商品<{/t}></h4>
+<div class="division" id='order_create'>
+<form action="index.php?app=b2c&ctl=admin_order&act=create" method="post" id="order_detail" target="{update:'c_order_detail'}">
+	<div class="box-form" url='member'>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+			<th width="18%"><{t}>会员的用户名：<{/t}></th>
+			<td width="82%"><{*input type="object" object="members" name="order[member_id]" cols="name" textcol="login_name@account@pam"*}> 
+				<{input type="text" name="order[login_name]" autocompleter="b2c_autocomplete_member:login_name,member_id" ac_options="{relative:false}"}> 
+				
+				
+				 &nbsp; <{help}><{t}>此处填写订单客户的前台会员用户名，如果该顾客没有注册过会员请留空<{/t}><{/help}></td>
+		  </tr>
+		  <tr>
+			<th><em class="red">*</em><{t}>订单包含的货品：<{/t}></th>
+			<td><{input type="object" object="products" vtype="required" name="order[product_id]" textcol="name" cols="name" filter="goods_type=normal" multiple="true" select="checkbox" view="b2c:admin/order/new_items.html"}> &nbsp; </td>
+		  </tr>
+		  <tr>
+			<th>&nbsp;</th>
+			<td><{button  type="submit" label=$___b2c="下一步"|t:'b2c'}></td>
+		  </tr>
+		  <{input type="hidden" name="finder_id" value=$finder_id}>
+		</table>
+	</div>
+</form>
+</div>
+</div>
+<div></div>
+<div id="c_order_detail" class="tableform">
+</div>
+<div>
+</div>
+</div>

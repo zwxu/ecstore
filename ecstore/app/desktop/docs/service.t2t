@@ -1,0 +1,57 @@
+desktop 所有service说明
+autocomplete.****:定时任务完成时操作
+restore_firevent:数据还原触发的事件
+desktop.widgets：桌面挂件
+desktop_debug_clean_data：数据清除执行的事件
+desktop_menu：显示在右上角的菜单
+desktop_task.****：执行任务
+system_status：系统状态扩展
+desktop_useradd：添加管理员
+desktop_controller_content.*****：修改输出内容
+desktop_controller_content_finderdetail.****:修改finder tab detail里的内容
+desktop_controller_destruct:执行析构函数时的处理
+desktop_io：导入扩展
+desktop_finder.****：绑定显示在finder上的model
+desktop_finder_column_modifier.**：对额外添加的column和detail的修改
+desktop_finder_detail_modifier.***:对finder detail下tab的修改
+finder_actions.*****:finder上绑定的动作的操作
+extend_filter_****:把不在dbschema上的列显示到finder上(会员,订单的 来源地址等)
+desktop_keyboard_setting:keyboard信息配置
+desktop_backup.****:备份时的操作
+desktop_finder_callback.***:是在删除到回收站之后，如果每个model还需要自己对删除的行做处理
+desktop_view_helper:自定义组件
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

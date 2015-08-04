@@ -1,0 +1,36 @@
+<desktop>
+
+    <permissions>
+        <permission id="site" display='true' workground='site.wrokground.theme'>站点管理</permission>
+        <permission id="theme" display='true' workground='site.wrokground.theme'>模板管理</permission>
+        <permission id="seo" display='true' workground='site.wrokground.theme'>搜索引擎优化</permission>
+        <permission id="link" display='true' workground='site.wrokground.theme'>友情连接</permission>
+    </permissions>
+
+    <workground name="站点" id="site.wrokground.theme" controller="admin_module" action="index" order="50">
+        <menugroup name="模板管理">
+            <menu controller='admin_theme_manage' action='index' permission='theme' display='true' order="5">模板列表</menu>
+        </menugroup>
+        <menugroup name="站点管理">
+            <menu controller='admin_module' action='index' permission='site' display='true' order="10">系统模块</menu>
+            <menu controller='admin_menu' action='index' permission='site' display='true' order="20">导航菜单</menu>
+            <menu controller='admin_explorer_app' action='directory' permission='site' display='false' order="50">资源目录</menu>
+            <menu controller='admin_base_setting' action='index' permission='site' display='true' order="40">站点配置</menu>
+            <menu controller='admin_route_static' action='index' permission='seo' display='true' order="50">自定义URL</menu>
+            <menu controller='admin_seo' action='index' permission='seo' display='true' order="60">SEO优化</menu>
+            <menu controller='admin_sitemaps' action='index' permission='seo' display='true' order="60">SITEMAP</menu>
+            <menu controller='admin_widget_proinstance' action='index' permission='site' display='false' order="70">挂件实例</menu>
+        </menugroup>
+        <menugroup name="友情链接">
+            <menu controller='admin_link' action='index' permission='link' display='true' order="120">友情链接</menu>
+        </menugroup>
+    </workground>
+    
+    <workground name="站点" id="site.wrokground.theme" controller="admin_module" action="index">
+        <menugroup name="页面管理">
+            <menu controller='admin_errorpage' action='index' permission='site' display='true' order="100" >异常页面管理</menu>
+            <menu controller='admin_errorpage' action='edit' permission='site' display='false' order="110" >编辑</menu>
+        </menugroup>
+    </workground>
+
+</desktop>

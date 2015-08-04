@@ -1,0 +1,115 @@
+<div class="orderInfo tableform" id="comment_gask_<{$comment.comment_id}>" >
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td colspan="2"><h3 style="padding:0 0 0 15px" class="star-div">
+          <ul>
+            <li style="background:none; text-align:right"><{t}>评论商品<{/t}></li>
+          </ul>
+        </h3>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="vertical-align:top;"><div class="discuss-pro ">
+          <table width="100%" cellpadding="0" cellspacing="0" style=" border:1px solid #ddd; border-right:none;;border-left:none;" border="0">
+           <col style="width:15%">
+           <col style="width:85%">
+            <tr>
+              <td style="padding:8px;">
+              <div class="discuss-pro-pic"><a href="<{$url}>" target="_blank" style="width:150px; height:150px;overflow:hidden;" > <img style="width:160px; height:165px;overflow:hidden;" src="<{if $goods.udfimg == 'true'}><{$goods.thumbnail_pic|storager:'s'}><{else}><{$goods.image_default_id|default:$defaultImage|storager:'s'}><{/if}>" /> </a></div>
+              </td>
+               <td style="padding:5px;">
+                   <ul>
+                      <li> <b>
+                        <label><{t}>商品名称：<{/t}></label>
+                        <a href="<{$url}>" target="_blank"><{$comment.goodname}></a></b></li>
+                        <{if $point_status == 'on'}>
+                      <{if $comment.goods_point.avg}> <li style="padding:0"><div class="star-div"><ul style="margin-left:0"><li style="padding-left:0" class="star<{$comment.goods_point.avg}>"></li></ul></div></li><{/if}>
+                      <{/if}>
+                      <li><{t}>商品链接：<{/t}> <a href="<{$url}>" target="_blank"><{$url}></a> </li>
+                       <li><{t}>共<{/t}><{$goods.comments_count}><{t}>次评论<{/t}></li>
+                      <li>
+                        <label><{t}>发表人：<{/t}></label>
+                        <{if $comment.author_id}> <a target="_blank" href="index.php?app=b2c&ctl=admin_member&act=index&action=detail&singlepage=true&id=<{$comment.author_id}>"><{$comment.author}></a> <{else}>
+                        <{$comment.author}>
+                        <{/if}> </li>
+                      <{if $object_type=='discuss' || $object_type=='ask'}>
+
+                      <{/if}>
+                      <li>
+                        <label><{t}>联系方式：<{/t}></label>
+                        <a href="mailto:<{$comment.contact|nl2br}>" target="_self"><{$comment.contact|nl2br}></a></li>
+                      <li>
+                        <label><{t}>发表时间：<{/t}></label>
+                        <{$comment.time|cdate:SDATE_STIME}></li>
+                      <li>
+                        <label><{t}>发表人IP：<{/t}></label>
+                        <{$comment.ip}></li>
+                      <{foreach from=$tree item=contact name=contact}>
+                      <li>
+                        <label><{$contact.attr_name}>：</label>
+                        <{if $contact.attr_tyname eq 'QQ' && $contact.value !=''}> <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=<{$contact.value}>&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:<{$contact.value}>:51" alt="点击这里给我发消息" title="点击这里给我发消息"/></a> <{/if}><{if $contact.attr_tyname eq 'MSN' && $contact.value !=''}> <a  target="_self" href="msnim:chat?contact=<{$contact.value}>"><img width="16" height="16" border="0" src="http://www.wlmessenger.net/static/img/presence/Online.gif" title="<{$contact.value}>"/></a> <{/if}>
+                        <{if $contact.attr_tyname eq $___b2c='旺旺'|t:'b2c' && $contact.value !=''}> <a target="_blank" href="http://amos1.taobao.com/msg.ww?v=2&uid=<{$contact.value}>&s=1" ><img border="0" src="http://amos1.taobao.com/online.ww?v=2&uid=<{$contact.value}>&s=1" title="<{$contact.value}>"/></a> <{/if}>
+
+                        <{if $contact.attr_tyname eq 'Skype' && $contact.value !=''}> <a href="skype:<{$contact.value}>?call"  target="_self"onclick="return skypeCheck();"><img src="http://mystatus.skype.com/smallclassic/<{$contact.value}>" style="border: none;" alt="Call me!"title="<{$contact.value}>" /></a> <{/if}> </li>
+                      <{/foreach}>
+                    </ul>
+                </td>
+            </tr>
+          </table>
+        </div>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="discus-list">
+           <col style="width:22.5%">
+           <col style="width:78%">
+          <tr>
+            <td align="right" nowrap><{t}>发表内容<{/t}></td>
+            <td>[<a href="index.php?app=b2c&ctl=admin_member_gask&act=to_display&p[0]=<{$comment.comment_id}>&p[1]=<{$comment.display}>&finder_id=<{$env.get._finder.finder_id}>"><{if $comment.display=='true'}><{t}>关闭显示<{/t}><{else}><{t}>显示到商品页<{/t}><{/if}></a>] [<a href="index.php?app=b2c&ctl=admin_member_gask&act=delete_message&p[0]=<{$comment.comment_id}>&finder_id=<{$env.get._finder.finder_id}>" target="{update:'main'}"><{t}>删除<{/t}></a>]</td>
+          </tr>
+          <tr>
+            <td align="right"><{t}>内容：<{/t}></td>
+            <td><{$comment.comment}></td>
+          </tr>
+		  <{if $point_status == 'on'}>
+         <tr>
+          	<td align="right"> <{t}>评分：<{/t}></td>
+			<td>
+			<{if $singlepoint}>
+			<ul>
+			<li style="padding:0">
+			<div class="star-div">
+			<ul style="margin-left:0">
+			<li style="padding-left:0" class="star<{$singlepoint}>"></li>
+			</ul>
+			</div>
+			</li>
+			</ul>
+			<{/if}>
+			</td>
+			</tr>
+          <{/if}>
+          <tr>
+            <td>&nbsp;</td>
+            <td><{if count($reply) > 0}>
+              <{foreach from=$reply item=items}>
+              <h5 style="font-weight:normal; padding-left:0"><{$items.author}><{if $items.levelname!=""}> [<{$items.levelname}>]<{/if}><{t}>于<{/t}><span class="assis" style="margin:0 3px; color:#333">[<{$items.time|cdate:SDATE_STIME}>]</span><{t}>回复：<{/t}><span>[<a href="index.php?app=b2c&ctl=admin_member_gask&act=to_display&p[0]=<{$items.comment_id}>&p[1]=<{$items.display}>&finder_id=<{$env.get._finder.finder_id}>"><{if $items.display=='true'}><{t}>关闭显示<{/t}><{else}><{t}>显示到商品页<{/t}><{/if}></a>] [<a href="index.php?app=b2c&ctl=admin_member_gask&act=delete_reply&p[0]=<{$items.comment_id}>&finder_id=<{$env.get._finder.finder_id}>"><{t}>删除<{/t}></a>]</span></h5>
+              <{if $object_type=='message'}>
+              <{t}>标题:<{/t}> <{$items.title|nl2br}><br>
+              <{/if}>
+              <{t}> 内容：<{/t}><{$items.comment}>
+              <{/foreach}>
+              <{/if}></td>
+          </tr>
+          <tr>
+            <td align="right"><{t}>回复用户：<{/t}></td>
+            <td><{if $object_type=='message'}>
+              <input type="text" class="inputstyle" value="re::<{$comment.title|escape:'html'}>" name="title"/>
+              <{/if}>
+              <input type="hidden" value="<{$comment.comment_id}>" name="comment_id"/>
+              <{input type="textarea"  class="inputstyle" name="reply_content" style=" width:98%" rows=7}></td>
+          </tr>
+          <tr>
+            <td colspan="2" class="table-action"><{button label=$___b2c="立即回复" |t:'b2c' app="b2c" onclick="W.page('index.php?app=b2c&ctl=admin_member_discuss&act=to_reply&act=to_reply&p[0]={$comment.comment_id}&finder_id={$env.get._finder.finder_id}', {data:$('comment_gask_{$comment.comment_id}'),method:'post'})"}> </td>
+          </tr>
+        </table></td>
+    </tr>
+  </table>
+</div>

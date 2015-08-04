@@ -1,0 +1,186 @@
+<form action="index.php?app=b2c&ctl=admin_goods_virtualcat&act=update" id="virtualcatEditor" method="post">
+    <{area inject=".mainHead"}>
+			<h2 class="head-title"><{t}>虚拟分类<{/t}></h2>
+        <div class="gridlist-action">
+        	<{assign var=addvirtualcat value=$___a='添加虚拟分类'|t:'b2c'}>
+			<{assign var=editvsort value=$___b2c="编辑排序"|t:'b2c'}>
+			<{assign var=savevsort value=$___b2c="保存排序"|t:'b2c'}>
+            <{button app="desktop" label=$addvirtualcat icon="btn_add.gif" onclick="new Dialog('index.php?app=b2c&ctl=admin_goods_virtualcat&act=addNew',{title:'{$addvirtualcat}',width:.7,height:.9})" }>
+             <{button app="desktop" tmplabel=$savevsort label=$editvsort  id="edit-vcatsort"}>  
+<{if $tree_number<=500}> <{button app="desktop" label=$___b2c="展开分类"|t:'b2c' id="showCat-handle"  }> <{button app="desktop" label=$___b2c="收起分类"|t:'b2c'  id="hideCat-handle" }><{/if}>
+            &nbsp;
+        </div>
+        <div class="Node">
+        <div class='gridlist-head mainHead'>
+         <table width="100%" border="0" cellpadding="0" cellspacing="0">
+         <tr>
+         	<td width="40%"><{t}>分类名称<{/t}></td>
+			<td width="5%"><{t}>隐藏<{/t}></td>
+			<td width="15%"><{t}>排序<{/t}></td>
+			<td width="40%"><{t}>操作<{/t}></td>
+         </tr>
+         </table>
+        </div></div>
+    <{/area}>
+    <div class="Node-body">
+    <div id="virtualcat_tree" class='gridlist'> <{foreach from=$tree item=item name="item"}>
+        <div style="padding:0; border-bottom:1px solid #ddd;" depath="<{$item.step}>" class="clear_cat row " cid="<{$item.cat_id}>" pid="<{$item.pid}>">
+            <div class='row-line' style="padding:0">
+              <table cellpadding="0" cellspacing="0" border="0">
+            <tr>
+            <td width="40%" style="vertical-align:top">
+                  <div style="padding-left:<{$item.step*15}>px;text-align:left">
+	               <{if $tree_number<=500}>
+                        <{if $item.cls=='true'}><span class="handle-cat" style='width:12px;line-height:12px; height:12px; _margin-right:5px;overflow:hidden;display:inline-block;padding:0;cursor:pointer'><{img src="bundle/handle-hide.gif" alt=$___b2c="收起子分类"|t:'b2c' title=$___b2c="收起子分类"|t:'b2c'  class="handle-hide" app='desktop'}>
+                        <{img src="bundle/handle-show.gif" alt=$___b2c="收起子分类"|t:'b2c' title=$___b2c="展开子分类"|t:'b2c' class="handle-show" app='desktop'}> </span> 
+                        <{/if}>
+                  <{/if}>
+					   <a href="index.php?app=b2c&ctl=admin_goods_virtualcat&act=edit&p[0]=<{$item.cat_id}>" style=" margin-top:10px" target="dialog::{title:'<{t}>编辑分类<{/t}>'}">
+						<{$item.cat_name}>
+					   </a>
+
+                </div>
+
+               </td> 
+
+				<td width="5%" align="center" style="vertical-align:top">
+                    <{if $item.disabled == 'true'}>是<{else}>否<{/if}>
+                </td>
+				
+                <td width="15%" align="center" style="vertical-align:top">
+
+                  <input class="_x_ipt" type="number" size="5"  name="p_order[<{$item.cat_id}>]" value="<{$item.p_order|default:0}>" vtype="unsigned" style="display:none" /><b><{$item.p_order|default:0}></b> 
+
+                </td>
+                 
+                <td width="40%" style="vertical-align:top">
+	                  <div class="clearfix">
+		 				   <div class="span-auto">&nbsp;</div>
+						   <div class="span-auto">&nbsp;</div>
+							<div class="span-auto">
+								 <{assign var="cat_id" value=$item.cat_id}><span class="opt" onClick="new Dialog('index.php?app=b2c&ctl=admin_goods_virtualcat&act=addNew&p[0]=<{$item.cat_id}>', {title:'<{t}>添加子类<{/t}>', width:700, height:400})"><{img src="bundle/addcate.gif" border="0" alt=$___b2c="添加子分类"|t:'b2c' app='desktop'}><{t}>添加子分类<{/t}></span>
+							</div> 
+							<div class="span-auto">
+								<span class="opt" onClick="new Dialog('index.php?app=b2c&ctl=admin_goods_virtualcat&act=edit&p[0]=<{$item.cat_id}>',{title:'<{t}>分类编辑<{/t}>', width:700, height:400})"><{img src="bundle/editcate.gif" border="0" alt=$___b2c="编辑"|t:'b2c'  app='desktop'}><{t}>编辑<{/t}></span>
+							</div>
+							<div class="span-auto">
+								<span class="opt" onclick="deleteRow('index.php?app=b2c&ctl=admin_goods_virtualcat&act=toRemove&p[0]=<{$item.cat_id}>',event)"><{img src="bundle/delecate.gif" border="0" alt=$___b2c="删除"|t:'b2c' app='desktop'}><{t}>删除<{/t}></span>
+							</div>
+							<div class="span-auto">
+								<span class="opt" onclick='W.page("index.php?app=b2c&ctl=admin_goods&act=index&filter=<{$item.filter}>")'><{img src="bundle/showcate.gif" border="0" alt=$___b2c="查看此分类下商品"|t:'b2c' app='desktop'}><{t}>查看商品<{/t}></span>
+							</div>
+							<div class="span-auto last">
+								<span class="opt" onclick="window.open('<{$item.url}>')"><{img src="bundle/zoom_btn.gif" border="0" alt=$___b2c="跳转前台查看该"|t:'b2c' app='desktop'}><{t}>浏览<{/t}></span>
+							</div>
+					  </div>
+	            </td>
+            </tr></table></div>
+        </div>
+        <{/foreach}> </div> </div>
+
+</form>
+<script>
+
+function deleteRow(act,event){
+e=$(new Event(event).stop().target);
+     var row=e.getParent('.row');
+
+    if(confirm('<{t}>您确定要删除该分类？<{/t}>')){
+        W.page(act,{
+        method:'get',
+        update:'messagebox',
+        onComplete:function(re){
+
+            if(re.contains('successSplash')){row.remove();}
+
+            }
+        });
+    }
+}
+<{if $tree_number<=500}>
+void function(){
+   $E('#hideCat-handle').addEvent('click',function(){
+    $ES('#virtualcat_tree .clear_cat').each(function(e){
+        if(e.get('depath')>1){
+            e.setStyles({'display':'none'});
+        }
+    });
+    $ES('#virtualcat_tree .handle-hide').hide();
+	$ES('#virtualcat_tree .handle-show').show();
+  });
+    $E('#showCat-handle').addEvent('click',function(){
+
+        $ES('#virtualcat_tree .clear_cat').each(function(e){
+            if(e.get('depath')>1){
+                e.setStyles({'display':''});
+            }
+        });
+        $ES('#virtualcat_tree .handle-hide').show();
+    });
+
+    $('virtualcat_tree').addEvent('click',function(e){
+
+       if(!e.target.className.match(/handle-/i))return;
+
+
+      var handle=$(e.stop().target);
+            var eventRow=handle.getParent('.row');
+            var visible=handle.hasClass('handle-show')?'':'none';
+                if(visible=='none'){
+                         handle.hide().getNext().show();
+                    }else{
+                         handle.hide().getPrevious().show();
+
+                    }
+            flode(eventRow,visible);
+
+    });
+
+	
+	
+	$('edit-vcatsort').addEvent('click',function(){
+	     var _ctext = this.get('text');
+	  	 if(_ctext=='<{t}>编辑排序<{/t}>'){
+		 	
+		  $$('#virtualcat_tree input[vtype=unsigned]').each(function(item){
+			   
+			      item.style.cssText = "";
+				  item.getNext().setStyle('display','none');
+			
+			});
+			this.getElement('span span').set({'text':'<{t}>保存排序<{/t}>','styles':{color:'#ff3300'}}) 
+		 }else{                                    
+		   $('virtualcatEditor').fireEvent('submit',{stop:function(){}}); 
+		}
+	     
+	     
+		
+	
+	});
+
+    function flode(eventRow,visible){
+            var cid=eventRow.get('cid');
+            var pid=eventRow.get('pid');
+
+            eventRow.getAllNext('div[pid='+cid+']').each(function(row){
+                if(visible=='none'){
+                    row.hide();
+                    var obj=row.getElements('.handle-cat img');
+                    if(obj.length>1){
+                        flode(row,visible);
+                    }
+                }else{
+                    row.show();
+                    var obj=row.getElements('.handle-cat img');
+                    if(obj.length>1){
+                        var vis=(obj[0].getStyle('display')=='none'?'none':'inline');
+                        flode(row,vis);
+                    }
+                }
+
+            });
+    }
+}();
+<{/if}>
+
+</script>

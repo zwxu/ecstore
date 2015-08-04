@@ -1,0 +1,142 @@
+<div class="division"  id="dlg_lnk_base">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <th width="100"><{t}>文本：<{/t}></th>
+      <td><input type="text" size="30" name="text" value="<{$smarty.post.text}>" /></td>
+    </tr>
+    <tr>
+      <th><{t}>标题：<{/t}></th>
+      <td><input type="text" size="30" name="title" value="<{$smarty.post.title}>" /><br /><{t}>当鼠标移至链接上时，会显示链接标题。<{/t}></td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td><input type="checkbox" name="_blank" value="true"<{if $smarty.post.target=='_blank'}> checked="checked"<{/if}> id="lnkInNewWindow"><label for="lnkInNewWindow"><{t}>在新窗口中打开链接<{/t}></label></td>
+    </tr>
+    <tr>
+      <th><{t}>链接到：<{/t}></th>
+      <td><input type="radio" name="type" value="url" id="lnkToUrl" <{if !$smarty.post.type || $smarty.post.type=='url'}>  checked="checked"<{/if}>><label for="lnkToUrl"><{t}>链接<{/t}></label>
+      <input type="radio" name="type" value="goods" id="lnkToGoods"<{if $smarty.post.type=='goods'}>  checked="checked"<{/if}>><label for="lnkToGoods"><{t}>商品<{/t}></label>
+      <input type="radio" name="type" value="page" id="lnkToPage"<{if $smarty.post.type=='page'}>  checked="checked"<{/if}>><label for="lnkToPage"><{t}>页面<{/t}></label><br />
+
+      <input type="radio" name="type" value="article" id="lnkToArt"<{if $smarty.post.type=='article'}>  checked="checked"<{/if}>><label for="lnkToArt"><{t}>文章<{/t}></label>
+      <input type="radio" name="type" value="email" id="lnkToMail"<{if $smarty.post.type=='email'}>  checked="checked"<{/if}>><label for="lnkToMail"><{t}>电子邮件<{/t}></label></td>
+    </tr>
+  </table>
+
+
+<div class="division">
+<div id='dolink'>
+<table id="dolnkToUrl"<{if $smarty.post.type && $smarty.post.type!='url'}> style="display:none"<{/if}>>
+<tr >
+  <th ><{t}>链接地1址:<{/t}></th>
+  <td><input type="text" size="30" name="url" value="<{if !$smarty.post.type || $smarty.post.type=='url'}><{$smarty.post.href}><{/if}>" /></td>
+</tr>
+</table>
+<table id="dolnkToGoods"<{if $smarty.post.type!='goods'}> style="display:none"<{/if}>>
+<tr >
+  <th><{t}>查找商品：<{/t}></th>
+  <td><input type="text" size="20" id="iptGoodsFinder" /><button onclick="new Request.HTML({url:'index.php?ctl=editor&act=find&p[0]=goods&p[1]='+encodeURIComponent($('iptGoodsFinder').value),'method':'get','update':'iptGoodsList'}).send()"><{t}>查找<{/t}></button><br />
+  <div id="iptGoodsList"><{$goodsInfo}></div>
+  </td>
+</tr>
+</table>
+<table id="dolnkToPage"<{if $smarty.post.type!='page'}> style="display:none"<{/if}>>
+<tr >
+  <th><{t}>页面地址:<{/t}></th>
+  <td><select name="page" style="width:200px">
+  <{foreach from=$linked.page item=page}>
+  <option value="<{$page.url}>"<{if $smarty.post.page eq $page.title}> selected="selected"<{/if}>><{$page.title}></option>
+  <{/foreach}>
+  </select></td>
+</tr>
+</table>
+<table id="dolnkToArt"<{if $smarty.post.type!='article'}> style="display:none"<{/if}>>
+<tr >
+  <th><{t}>查找文章:<{/t}></th>
+  <td><input type="text" size="20" id="iptArtFinder" /><button onclick="new Request({url:'index.php?ctl=editor&act=find&p[0]=article&p[1]='+encodeURIComponent($('iptArtFinder').value),'method':'get','update':'iptArtList'}).send()"><{t}>查找<{/t}></button><br />
+  <div id="iptArtList"><{$articleInfo}></div></td>
+</tr>
+</table>
+<table  id="dolnkToMail"<{if $smarty.post.type!='email'}> style="display:none"<{/if}>>
+<tr>
+  <th><{t}>邮件地址:<{/t}></th>
+  <td><input type="text" size="30" name="email" value="<{$smarty.post.email}>" /></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="mainFoot">
+<div class="table-action">
+	<{button label=$___desktop="确定"|t:'desktop' id="mce_dlg_ok"}>
+	<{button class="btn-secondary" label=$___desktop="取消"|t:'desktop' isclosedialogbtn="true"}>
+</div>
+
+</div>
+
+<script>
+$('lnkToUrl').addEvent('click',function(){
+  $ES('table','dolink').setStyle('display','none');
+  $('dolnkToUrl').setStyle('display','');
+});
+$('lnkToGoods').addEvent('click',function(){
+$ES('table','dolink').setStyle('display','none');
+  $('dolnkToGoods').setStyle('display','');
+});
+$('lnkToPage').addEvent('click',function(){
+$ES('table','dolink').setStyle('display','none');
+  $('dolnkToPage').setStyle('display','');
+});
+$('lnkToArt').addEvent('click',function(){
+$ES('table','dolink').setStyle('display','none');
+  $('dolnkToArt').setStyle('display','');
+});
+$('lnkToMail').addEvent('click',function(){
+$ES('table','dolink').setStyle('display','none');
+  $('dolnkToMail').setStyle('display','');
+});
+
+
+$('mce_dlg_ok').addEvent('click',function(){
+  var setting = $('dlg_lnk_base').getValues();
+  var addon=[' ','type="'+setting.type+'"',' '];
+  switch(setting.type){
+    case 'goods':
+      setting.url = setting.goods;
+      break;
+
+    case 'page':
+      setting.url = setting.page;
+      break;
+
+    case 'article':
+      setting.url = setting.article;
+      break;
+
+    case 'email':
+      setting.url = 'mailto:'+setting.email;
+      break;
+
+  }
+   setting.url=decodeURI(setting.url);
+  if(setting.title){
+    addon.push('title="'+setting.title+'"');
+  }
+  if(setting._blank){
+    addon.push('target="_blank"');
+  }
+  var link_uid='link'+(String.uniqueID());
+
+  var linkHtml = new String('<a href="{1}" thref="{1}"  {2} id="'+link_uid+'">{0}</a>').format(setting.text,setting.url,addon.join(''));
+
+  window.curEditor.exec.bind(window.curEditor)('insertHTML',linkHtml);
+
+    var  alink=window.curEditor.inc.win.$(link_uid);
+
+    if(alink){
+         alink.href=alink.get('thref');
+         alink.removeProperties('thref','id');
+         }
+});
+
+</script>

@@ -1,0 +1,30 @@
+<div class="division">
+    <label>所属板块:</label>
+    <{input breakpoint="0" type="object" object="position@poster" name="poster_position" value=$setting.poster_position vtype="required"}>
+</div>
+<div class="division" id='h_w'></div>
+<script>
+window.addEvent('domready',function(){
+var mb = $E('select[name=__wg[tpl]] option:selected').value;
+    if(mb !='default.html'){
+      var tpl = '<tr><th><{t app="b2c"}>图片宽度:<{/t}></th>'
+          tpl += '<td><input type="text" value="<{$setting.width}>" name="width" required="1"></td>';
+          tpl += '<th><{t app="b2c"}>图片高度:<{/t}></th>'
+          tpl += '<td><input type="text" value="<{$setting.height}>" name="height" required="1"></td></tr>';
+          $('h_w').adopt(new Element('table',{'html':tpl,'width':'100%'}));
+    }
+});
+
+$E('select[name=__wg[tpl]]').addEvent('change',function(){
+    var mb = $E('select[name=__wg[tpl]] option:selected').value;
+    $('h_w').empty();
+    if(mb !='default.html'){
+      var tpl = '<tr><th><{t app="b2c"}>图片宽度:<{/t}></th>'
+          tpl += '<td><input type="text" value="<{$setting.width}>" name="width" required="1"></td>';
+          tpl += '<th><{t app="b2c"}>图片高度:<{/t}></th>'
+          tpl += '<td><input type="text" value="<{$setting.height}>" name="height" required="1"></td></tr>';
+          $('h_w').adopt(new Element('table',{'html':tpl,'width':'100%'}));
+    }
+
+});
+</script>

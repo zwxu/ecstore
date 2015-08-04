@@ -1,0 +1,117 @@
+<div class="packet-items tabs-items clearfix">
+	<ul class="clearfix">
+		<{foreach from=$data item=item key=key name=pdata}>
+		<{if $item.addon||($item.optional==1&&$env.get.view_from)}>
+		<{assign var="href" value="index.php?app={$env.get.app}&ctl={$env.get.ctl}&act={$env.get.act}&view={$key}"}>
+		<li class="<{if ($env.get.view && $env.get.view==$key)||(!$env.get.view&&$env.foreach.pdata.iteration==1)}>current<{/if}><{if $env.foreach.pdata.last}> last<{/if}><{if $item.addon == '_FILTER_POINT_'}> filter_point<{/if}>" >
+		 	<a href="<{$item.href|default:$href}>">
+				<{if $item.addon === '_FILTER_POINT_'}>
+				<span><{$item.label}></span></a>
+				<i filter_id="<{$item.filter_id}>"><{img src="bundle/finder_drop_arrow_close.gif" app="desktop"}></i>
+				</li>
+				<{else}>
+				<span><{$item.label}>(<{$item.addon}>)</span>
+				</a>
+		</li>
+				<{/if}>
+		<{/if}>
+		<{/foreach}>
+	</ul>
+</div>
+<div class="scroll-handle l"><span>&laquo;</span></div>
+<div class="scroll-handle r"><span>&raquo;</span></div>
+
+<script>
+
+	$$('#finder-packet-<{$env.get._finder.finder_id}> .filter_point').addEvents({
+		'mouseenter':function(){
+			this.getElement('i').setStyle('visibility','visible');
+		},
+		'mouseleave':function(){
+			this.getElement('i').setStyle('visibility','hidden');
+		}
+	});
+	$$('#finder-packet-<{$env.get._finder.finder_id}> .filter_point i').addEvent('click',function(e){
+			e.stop();
+			if(!confirm('<{t}>确认删除<{/t}>?'))return;
+			var _this  = this;
+			var _thisP = _this.getParent('li');
+			var model = _this.get('model');
+			var filter_id = _this.get('filter_id');
+			new Request({
+				url:'index.php?app=desktop&ctl=filter&act=tab_del&filter_id='+filter_id,
+				onRequest:function(){
+					_thisP.getElement('span')
+					.set({'text':'Removing...',styles:{'fontSize':9}});
+					_this.dispose();
+				},onComplete:function(){
+					if(_thisP.hasClass('current')){
+						W.page($(_thisP.parentNode).getFirst().getElement('a').href);
+						return;
+					}
+					_thisP.dispose();
+				}
+			}).get();
+	});
+
+
+	/*finder packet auto scroll handle*/
+
+	(function(){
+
+
+		var packet = $('finder-packet-<{$env.get._finder.finder_id}>'),
+			 packetItems = $$('#finder-packet-<{$env.get._finder.finder_id}> li');
+
+		<{if !$haspacket}>
+			packet.addClass('hide');
+		<{else}>
+			packet.removeClass('hide');
+		<{/if}>
+
+		var pscrollhandles=packet.getElements('.scroll-handle');
+
+		var _w = 2;
+		packetItems.each(function(i){
+				_w+=i.offsetWidth;
+		});
+		packet.getElement('.packet-items ul').setStyle('width',_w);
+
+		var pitemsbox = packet.getElement('.packet-items');
+		var fxscroll = new Fx.Scroll(pitemsbox, {link: 'cancel'});
+		var packetResizeHandle = function(){
+
+				try{
+						packet[(LAYOUT.content_main.offsetWidth<_w)?'addClass':'removeClass']('packet-scroll')
+						.setStyle('width',LAYOUT.content_main.style.width.toInt()-2);
+						pitemsbox.setStyle('width',
+						LAYOUT.content_main.offsetWidth - pitemsbox.getStyle('marginLeft').toInt()*2);
+						fxscroll.options.duration = 500;
+						fxscroll.scrollIntoView(packet.getElement('.current'));
+				}catch(e){
+				}
+
+		};
+		packetResizeHandle();
+		LAYOUT.content_main.addEvent('resizelayout',packetResizeHandle);
+
+		packet.addEvent('dispose',function(){
+			LAYOUT.content_main.removeEvent('resizelayout',packetResizeHandle);
+		});
+
+
+		pscrollhandles.addEvents({
+			'mouseenter':function(){
+
+				fxscroll.options.duration = 850;
+				fxscroll[this.hasClass('r')?'toRight':'toLeft']();
+			},'mouseleave':function(){
+				fxscroll.stop();
+			}
+		});
+
+
+	})();
+
+
+</script>

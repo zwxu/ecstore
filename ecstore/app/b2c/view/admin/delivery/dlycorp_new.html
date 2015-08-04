@@ -1,0 +1,93 @@
+<form action="index.php?app=b2c&amp;ctl=admin_dlycorp&amp;act=addnew&amp;finder_id=a1c7d6" id="newdlycorp-new-form" method="POST">
+<div class="tableform">
+	<div class="division">
+		<table width="100%" cellspacing="0" cellpadding="0">
+			<tbody>
+				<tr>
+					<th><em class="red">*</em><label for="dlycorp_name"><{t}>物流公司名称<{/t}></label></th>
+					<td><input type="text" id="dlycorp_name" caution="<{t}>请填写公司名称<{/t}>" vtype="required" name="name" title="<{t}>物流公司名称<{/t}>" class="x-input " autocomplete="off"></td>
+				</tr>
+				<tr>
+						<th><em class="red">*</em><label for="dlycorp_code"><{t}>物流公司代码<{/t}></label></th>
+						<td><{input type="corp_code" id="dlycorp_code" name="corp_code" title="{t}物流公司代码{/t}" vtype="required" value="" class="x-input " autocomplete="off"}></td>
+					</tr>
+				<tr>
+					<th><label for="dlycorp_website"><{t}>网址<{/t}></label></th>
+					<td><input type="text" id="dlycorp_website" name="website" title="<{t}>网址<{/t}>" class="x-input " autocomplete="off"></td>
+				</tr>
+				<tr>
+					<th><label for="dlycorp_request_url"><{t}>物流公司询件网址<{/t}></label></th>
+					<td><input type="text" id="dlycorp_request_url" name="request_url" title="<{t}>物流公司询件网址<{/t}>" class="x-input " autocomplete="off"></td>
+				</tr>
+				<tr>
+					<th><label for="dlycorp_ordernum"><{t}>排序<{/t}></label></th>
+					<td><input type="text" id="dlycorp_ordernum" name="ordernum" vtype="unsignedint" title="<{t}>排序<{/t}>" style="width: 50px;" class="x-input " autocomplete="off"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+</form>
+
+<{area inject=".mainFoot"}>
+<div class="table-action">
+	<table width="100%" cellspacing="0" cellpadding="0">
+		<tbody>
+			<tr>
+				<td><button class="btn btn-primary" id="newdlycorp-new-form-submit" type="submit"><span><span><{t}>确定<{/t}></span></span></button></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<{/area}>
+
+<script>
+(function(){
+	var _form = $('newdlycorp-new-form');
+	var btn =$('newdlycorp-new-form-submit');
+	var finder = finderGroup['<{$env.get.finder_id}>'];
+
+	_form.store('target',{
+		onComplete:function(){
+
+			try{
+				var _dialogIns = btn.getParent('.dialog').retrieve('instance');
+		     }catch(e){}
+		    if(_dialogIns){
+			    _dialogIns.close();
+			    finder.refresh.delay(400,finder);
+			}
+
+
+		}
+
+	});
+
+	    btn.addEvent('click',function(){
+
+		    _form.fireEvent('submit',{stop:$empty});
+
+
+
+		});
+
+		$('b2c-admin-corp-other-code').addEvent('click',function(el){
+			var _target = $(el.target) || $(el);
+			var _corp_code_copy = $E('input[name^=corp_code_copy]');
+			if (_corp_code_copy){
+				_corp_code_copy.set('vtype','required');
+			}
+		});
+
+		$('dlycorp_code').addEvent('click',function(el){
+			var _target = $(el.target) || $(el);
+			var _corp_code_copy = $E('input[name^=corp_code_copy]');
+			if (_corp_code_copy){
+				_corp_code_copy.removeProperty('vtype');
+				$('b2c-admin-corp-other-code').checked = false;
+			}
+		});
+})();
+
+
+</script>

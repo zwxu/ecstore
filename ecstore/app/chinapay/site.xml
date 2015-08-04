@@ -1,0 +1,8 @@
+<site> 
+    <module controller='site_request' >
+        <name>chinapay</name>
+        <title>支付状态同步</title>
+        <disable>false</disable>
+    </module>
+    
+</site>

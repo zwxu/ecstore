@@ -1,0 +1,96 @@
+<div class='buyinfo clearfix'>
+  <label><{t}>数量：<{/t}></label>
+  <ul style="float: left;">
+    <li>
+      <div class="Numinput numinputModi">
+       	<span class="substract"></span>
+        <span class="plus"></span>
+        <input class="Num" min="0" name="goods[num]" size="5" value="1" type="text">
+        <div class="numadjust-arr" style="display:none;"><span class="numadjust increase"></span> <span  class="numadjust decrease"></span></div>
+      </div>
+    </li>
+    <li><{if $goods.package_unit}><{$goods.package_unit}><{t}>(每<{/t}><{$goods.package_scale}><{t}>个一<{/t}><{$goods.package_unit}>)<{/if}></li>
+    <li>
+      <span <{if $site_show_storage == 'false'}>style="display:none;"<{/if}>>&nbsp;&nbsp;(<{t}>当前库存:<{/t}>
+        <span class='store' updatespec="text_store" ><{if $goods.store >= 9999 || $goods.nostore_sell || $goods.store === null || $goods.store === ''}>9999+<{else}><{$goods.store - $goods.product_freez}><{/if}></span> 件)
+      </span>
+    </li>
+  </ul>
+</div>
+<!--================================== 购买 按钮 ==============================-->
+<input type="hidden" name="goods[goods_id]" value="<{$goods.goods_id}>" />
+<input type="hidden" name="goods[pmt_id]" value="<{$goods.pmt_id}>" />
+
+<input type='hidden' name='goods[product_id]' updatespec="updatepid" value='<{$product0id}>'/>
+ <div class="btnBar clearfix" <{if count($goods.product)<0}>style="visibility:hidden"<{/if}>></div>
+
+<script>
+   var keyCodeFix=[48,49,50,51,52,53,54,55,56,57,96,97,98,99,100,101,102,103,104,105,8,9,46,37,39<{if $goods.type.floatstore}>,110,190<{/if}>];
+
+
+/*购买数量调节*/
+
+     var getStore=function(){
+        return  $('goods-viewer').getElement('.buy-limit-storess')?$('goods-viewer').getElement('.buy-limit-storess').get('text').toInt():$('goods-viewer').getElement('.buyinfo .store').get('text').toInt();
+     };
+
+     $$('#goods-viewer .buyinfo .numadjust').addEvent('click',function(e){
+          var countText=$('goods-viewer').getElement('.buyinfo input[name^=goods[num]');
+          if(this.hasClass('increase')){
+             countText.set('value',(countText.value.toInt()+1).limit(1,getStore()));
+          }else{
+             countText.set('value',(countText.value.toInt()-1).limit(1,getStore()));
+          }
+          this.blur();
+     });
+
+     $('goods-viewer').getElement('.buyinfo input[name="goods[num]"]').addEvents({
+        'keydown': function(e){
+            if(!keyCodeFix.contains(e.code)){
+               e.stop();
+            }
+        },
+        'keyup': function(e){
+            if(getStore()<this.value)this.value=getStore();
+            if (!this.value || <{if $goods.type.floatstore==='1'}>this.value.toFloat() < 0<{else}>this.value.toInt() < 1<{/if}>) this.value = 1;
+        },
+        'blur': function(e) {
+            if (<{if $goods.type.floatstore==='1'}>this.value.toFloat() <= 0<{else}>this.value.toInt() < 1<{/if}>) this.value = 1;
+            <{if $goods.type.floatstore==='1'}>else this.value = this.value.toFloat();<{/if}>
+        }
+     });
+       $('goods-viewer').getElement('.substract').addEvent('click',function(e){
+     
+         var val=$('goods-viewer').getElement('.Num').get('value');
+          
+         if(val!=1)
+             {
+                 var vals=parseInt(val)-1;
+                 
+                $('goods-viewer').getElement('.Num').set('value',vals);
+             }
+     });
+       $('goods-viewer').getElement('.plus').addEvent('click',function(e){
+           var val=$('goods-viewer').getElement('.Num').get('value');
+           var store='<{$goods.store}>';
+           var freez='<{$goods.freez}>';
+           var nostore_sell='<{$goods.nostore_sell}>';
+           if(nostore_sell!=0)
+               {
+                   
+                 if(val<9999){
+                   var vals=parseInt(val)+1;
+                   $('goods-viewer').getElement('.Num').set('value',vals);
+                 }
+               }
+           else
+               {
+                   var storeNum=store-freez;
+                   var vals=parseInt(val)+1;
+                   if(val<storeNum)
+                       {
+                           $('goods-viewer').getElement('.Num').set('value',vals);
+                       }
+               }
+      });
+</script>

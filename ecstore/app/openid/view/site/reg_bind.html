@@ -1,0 +1,169 @@
+<{css src="passport.css" app="b2c" pdir="css_mini"}>
+
+<div id="changeRegPart">
+  <form method="post" action="<{link app=openid ctl='site_trust' act='reg_bind'}>" class="signupform">
+    <input id="regType" name="reg_type" type="hidden" value="username" />
+    <div class="intro-r">
+      <div class="customMessages">
+          完善信息后，您可以使用该自定义用户名直接登录了！
+      </div>
+    </div>
+
+    <div class="loginbox loginbox2">
+      <ul>
+      <{*
+        <li id="usernameReg">
+          <label class="login-k"><i>*</i><{t}>用户名：<{/t}></label>
+          <div class="login-v width_230">
+            <{input type="text" name="pam_account[login_name]" class="inputstyle" vtype="required" id="reg_user" maxlength="50" onchange="nameCheck(this);"}>
+            <span></span>
+          </div>
+        </li>
+      *}>
+
+        <li id="commonlyEmail">
+          <label class="login-k "><i>*</i><{t}>常用邮箱：<{/t}></label>
+          <div class="login-v width_230">
+            <{input vtype="email&&required" name="contact[email]" id="comm_email" placeholder="yourname@xx.com" onchange="emailCheck(this);"}><span></span>
+          </div>
+        </li>
+
+        <li id="mobileReg">
+          <label class="login-k"><i>*</i><{t}>手机号码：<{/t}></label>
+          <div class="login-v width_230">
+            <{input vtype="number&&required" name="contact[phone][mobile]" id="reg_mobile" onchange="mobileCheck(this);"}><span></span>
+          </div>
+        </li>
+
+        <li>
+          <label class="login-k"><i>*</i><{t}>请输入密码：<{/t}></label>
+          <div class="login-v width_230"><{input name="pam_account[login_password]" class="inputstyle" type="password" vtype="required" id="reg_passwd" onfocus="pwdFocus(this);" onblur="pwdBlur(this);"}><span></span><span></span></div>
+        </li>
+
+        <li>
+          <label class="login-k"><i>*</i><{t}>请确认密码：<{/t}></label>
+          <div class="login-v width_230"><{input name="pam_account[psw_confirm]" type="password" class="inputstyle" vtype="required&&change_password" id="reg_passwd_r" onfocus="pwd2Focus(this);" onblur="pwd2Blur(this);"}><span></span><span></span></div>
+        </li>
+
+        <{if $env.conf.b2c.site.register_valide eq 'true'}>
+          <li>
+            <label class="login-k"><i>*</i><{t}>验证码：<{/t}></label>
+            <div class="login-v width_80">
+              <{input vtype="number&&required" size="4" maxlength="4" class="x-input" name="signupverifycode" id="iptsingup1"}>
+              <span class='verifyCode' style='display:none;'>
+                <img src="#" codesrc='<{link app=b2c ctl="site_passport" act="verifyCode" arg0="s"}>' align="absmiddle" />
+                <a href="javascript:void(0)">&nbsp;<{t}>看不清楚?换个图片<{/t}></a>
+              </span>
+            </div>
+          </li>
+        <{/if}>
+
+        <li>
+          <label class="login-k"></label>
+          <div class="login-v">
+            <input type="hidden" name="secret" value="<{$secret}>" />
+            <input type="hidden" name="has_bind" value="Y" />
+            <input type="hidden" name="url" value="<{$url}>" />
+            <input type="hidden" name="member_id" value="<{$account_id}>" />
+            <{button type="submit"  class="common-btn" rel="_request" label=$___b2c="提交"|t:'b2c'}>
+            <a href="<{$url}>">以后再说，立即去购物</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </form>
+</div>
+
+<script>
+    <{if $env.conf.b2c.site.register_valide eq 'true'}>
+    void function(formclz){
+        var vcodeBox = document.getElement('.'+formclz+' .verifyCode');
+        var vcodeImg  =vcodeBox.getElement('img');
+        var refreshVcodeBtn  = vcodeBox.getElement('a').addEvent('click',function(e){
+            e.stop();
+            vcodeImg.src = vcodeImg.get('codesrc')+'?'+(+new Date());
+        });
+        $$('.'+formclz+' input').addEvent('focus',function(){
+            if (this.form.retrieve('showvcode',false))return;
+            vcodeBox.show();
+            refreshVcodeBtn.fireEvent('click',{stop:function(){}});
+            this.form.store('showvcode',true);
+        });
+        document.getElement('.'+formclz+'').addEvent('submit',function(e){
+            var str=$("reg_user").value.trim();
+            var len = 0;
+            for (var i = 0; i < str.length; i++) {
+                str.charCodeAt(i) > 255? len += 3:len ++;
+            }
+            if(len<3)return false;
+        });
+    }('signupform');
+    <{/if}>
+
+//    function nameCheck(input){
+//        new Request.HTML({
+//            url:'<{link app=b2c ctl=site_passport act=namecheck}>',
+//            update:$(input).getNext(),
+//            method:'post',
+//            data:'name='+encodeURIComponent(input.value.trim())
+//        }).send();
+//    }
+
+    function mobileCheck(input){
+        new Request.HTML({
+            url:'<{link app=b2c ctl=site_passport act=mobilecheck}>',
+            update:$(input).getNext('span'),
+            method:'post',
+            data:'mobile='+encodeURIComponent(input.value.trim())
+        }).send();
+    }
+
+    function emailCheck(input){
+        new Request.HTML({
+            url:'<{link app=b2c ctl=site_passport act=emailcheck}>',
+            update:$(input).getNext(),
+            method:'post',
+            data:'email='+encodeURIComponent(input.value.trim())
+        }).send();
+    }
+
+    function pwdFocus(input){
+        $(input).getNext().set('html', '6-20位字符，可使用字母、数字或符号的组合。');
+    }
+
+    function pwdBlur(input){
+        new Request.HTML({
+            url:'<{link app=b2c ctl=site_passport act=pwdblur}>',
+            update:$(input).getNext(),
+            method:'post',
+            data:'pwd='+encodeURIComponent(input.value.trim())
+        }).send();
+    }
+
+    function pwd2Focus(input){
+        $(input).getNext().set('html', '请再次输入密码。');
+    }
+
+    function pwd2Blur(input){
+        if(input.value.trim() != ''){
+            if(input.value.trim().length > 20 || input.value.trim().length < 6){
+                $(input).getNext().set('html', '密码长度只能在6-20位字符之间。');
+            }else{
+                if(input.value.trim() != $('reg_passwd').value.trim()){
+                    $(input).getNext().set('html', '两次输入密码不一致。');
+                }
+            }
+        }else{
+            $(input).getNext().set('html', '');
+        }
+    }
+
+    validatorMap['change_password']= ['<{t}>两次输入的密码不一致！<{/t}>', function(element, v) {
+        var passwd_re = $('reg_passwd');
+        var passwd = $('reg_passwd_r');
+        var _is_validate = false;
+        if (passwd_re.value == passwd.value) _is_validate = true||_is_validate;
+        return _is_validate;
+    }];
+
+</script>

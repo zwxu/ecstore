@@ -1,0 +1,10 @@
+<div class='buyinfo clearfix'>
+  <label><{t}>数量：<{/t}></label>
+  <div class="Numinput">
+    <input type="text" min="0" numtype="<{if $goods.type.floatstore === '1'}>float<{else}>int<{/if}>" name="goods[num]" size="5" value="1" />
+    <div class="numadjust-arr" style="display:none;"><span  class="numadjust increase"></span> <span  class="numadjust decrease"></span></div>
+  </div>
+  <span><{if $goods.package_unit}><{$goods.package_unit}><{t}>(每<{/t}><{$goods.package_scale}><{t}>个一<{/t}><{$goods.package_unit}>)<{/if}></span>
+
+  <span updatespec="text_store"  <{if $showStorage != 'true'}>style='display:none;'<{/if}>>( <{t}>当前库存&nbsp;<{/t}><em class='store font-red'><{if $goods.nostore_sell}>9999+<{elseif $goods.store - $goods.product_freez > 0}><{$goods.upstore - $goods.product_freez}><{else}>0<{/if}></em> 件)</span>
+</div>

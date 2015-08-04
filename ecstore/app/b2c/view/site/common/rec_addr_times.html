@@ -1,0 +1,133 @@
+<div class='receivermore' style="padding:0 0 0 108px;line-height:30px;<{if $site_checkout_receivermore_open != 'true'}> display:none;<{/if}>">
+  <input type='checkbox'<{if $def_arr_addr.day}> checked="checked"<{/if}> id="b2c-checkout-special-delivery" /><{t}> 指定送货时间:<{/t}>
+  <span id="b2c-checkout-special-delivery-time" style='<{if !$def_arr_addr.day}>display:none;<{/if}>'>
+    <select class="inputstyle"  style="margin-left:10px;" name="delivery[day]">
+      <option<{if !$def_arr_addr.day}> selected="selected"<{elseif $def_arr_addr.day == '任意日期'}> selected="selected"<{/if}> value="<{t}>任意日期<{/t}>"><{t}>任意日期<{/t}></option>
+      <option<{if $def_arr_addr.day == '仅工作日'}> selected="selected"<{/if}> value="<{t}>仅工作日<{/t}>"><{t}>仅工作日<{/t}></option>
+      <option<{if $def_arr_addr.day == '仅休息日'}> selected="selected"<{/if}> value="<{t}>仅休息日<{/t}>"><{t}>仅休息日<{/t}></option>
+      <option<{if $def_arr_addr.day == 'specal'}> selected="selected"<{/if}> value="specal"><{t}>指定日期<{/t}></option>
+    </select>&nbsp;
+    <span id="specal_day"<{if !$def_arr_addr.specal_day}> style="display:none"<{/if}>>
+      <{input type="text" name="delivery[specal_day]" class="cal inputstyle" value=$def_arr_addr.specal_day real=true style="width:80px" readonly=true}>
+    </span>
+    <{if $def_arr_addr.specal_day}>
+    <script>
+      (function(){
+        $('specal_day').getFirst().makeCalable();
+        return '';
+      })();
+    </script>
+    <{/if}>
+    <select class="inputstyle" name="delivery[time]">
+      <option<{if $def_arr_addr.time == '任意时间段'}> selected<{/if}> value="<{t}>任意时间段<{/t}>"><{t}>任意时间段<{/t}></option>
+      <option<{if $def_arr_addr.time == '上午'}> selected<{/if}> value="<{t}>上午<{/t}>"><{t}>上午<{/t}></option>
+      <option<{if $def_arr_addr.time == '下午'}> selected<{/if}> value="<{t}>下午<{/t}>"><{t}>下午<{/t}></option>
+      <option<{if $def_arr_addr.time == '晚上'}> selected<{/if}> value="<{t}>晚上<{/t}>"><{t}>晚上<{/t}></option>
+    </select>
+  </span>
+</div>
+
+<{if !$def_arr_addr}>
+<div class="receiver_info cart-conf">
+  <{button type="button" class="submit-btn" id="receiver_delivery" label=$___b2c="确认收货信息"|t:'b2c'}>
+<input type="hidden" class="cart-confirm-btn<{if !$def_arr_addr}> unfold<{/if}>" vtype="need_confirmed" caution='<{t}>收货地址没有确认！<{/t}>' />
+</div>
+
+<script>
+  $('receiver_delivery').addEvent('click', function(e){
+    // modify the default area id
+    var def_ship_area=$$("#checkout-select-area select").getLast().get('value');
+    document.getElement('input[name="purchase[def_area]"]').value = def_ship_area;
+    if (!button_valiate.is_validate($(e.target))) return;
+
+    var index=document.getElement('.receiver-sel') ? $$('.receiver-sel li').length :0;
+    // var other_addr=document.getElement('.receiver-sel .other_addr');
+    // var bool;
+
+    // if(other_addr)bool=other_addr.checked;
+    var _extends_args = $('order-create').getElement('input[name^=extends_args]') ? $('order-create').getElement('input[name^=extends_args]').value : null;
+
+    new Request({
+      url:Shop.url.purchase_def_addr,
+      method:'post',
+      data:$$('.receiver-address')[0].toQueryString() + '&member_id=' + document.getElement('input[name="purchase[member_id]"]').get('value') + '&radio_index=' + index + '&extends_args=' + _extends_args,
+      onComplete:function(rs){
+        if(!rs) return Message.error('发生错误，请稍候重试。');
+        if(rs.indexOf('{') == 0 && rs.indexOf('}') == rs.length-1) {
+          rs = JSON.decode(rs);
+          if (rs.error) return Message.error(rs.error);
+        }
+        else {
+          $('def_addr_info').set('html',rs);
+          if ($('shipping').getElement('.notice')){
+            $('shipping_info').hide();
+            $('cancel_shipping_info').hide();
+          }else{
+            /*if (!!document.getElement('input[name^=purchase[member_id]]').value.trim().length){
+              var _ck_is_save = document.getElement('input[name^=delivery[is_save]]');
+              if (_ck_is_save&&_ck_is_save.checked&&$('def_radio')){
+                var inject_html = [],tmpl = '<li>{addr}</li>';
+                inject_html.push(tmpl.substitute({"addr":$('def_radio').innerHTML}));
+
+                if (!other_addr){
+                  inject_html.push('<li><label><input type="radio" name="delivery[addr_id]" value="0" class="receiver_radio_addr_id other_addr" /> <{t}>其他收货地址<{/t}></label></li>');
+                  new Element('ul', {"class":"receiver-sel", "html":inject_html.join('')}).inject($('checkout-recaddr'),'before');
+
+                  var _first_li_input = document.getElement('.receiver-sel input');
+                  _first_li_input.checked = true;
+                  $('receiver').store('def_recaddr', _first_li_input);
+                }else{
+                  var _li = $$('.receiver-sel li').getLast();
+                  if (!!bool&&!document.getElement('input[name^=delivery[is_default]]').checked){
+                    $('receiver').retrieve('def_recaddr',{}).checked = true;
+                  }
+                  if(bool)new Element('li',{'html':$('def_radio').innerHTML}).inject(_li,'before');
+
+                }
+              }
+            }*/
+            if (document.getElement('input[name="delivery[addr_id]"]')){
+              $$('input[name="delivery[addr_id]"]').each(function(el,index){
+                if ($(el).value == '0'){
+                  $(el).checked = true;
+                }
+              });
+            }
+          }
+        }
+
+        button_valiate.removeCaution($(e.target));
+        $('cancel_receiver_info').fireEvent('click',$('cancel_receiver_info'));
+        var dialog = ($(e.target).getParent('[data-single]') && $(e.target).getParent('[data-single]').retrieve('instance'));
+        if(dialog) dialog.hide();
+      }
+    }).send();
+  });
+</script>
+<{/if}>
+
+<script>
+document.getElement('select[name="delivery[day]"]').addEvent('change',function(e){
+  $('specal_day').style.display=(this.value=='specal')?function(){$('specal_day').getFirst().makeCalable();document.getElement('input[name="delivery[specal_day]"]').set('vtype','required'); return '';}():'none';
+  if (document.getElement('select[name="delivery[day]"]').get('value') != 'specal'){
+    document.getElement('input[name="delivery[specal_day]"]').removeProperty("vtype").set("value","");
+    if (document.getElement('select[name="delivery[time]"]').get('value') == '<{t}>任意时间段<{/t}>' && document.getElement('select[name="delivery[day]"]').get('value') == '<{t}>任意日期<{/t}>'){
+      $('b2c-checkout-special-delivery').checked = false;
+      $('b2c-checkout-special-delivery-time').hide();
+    }
+  }
+});
+
+$('b2c-checkout-special-delivery').addEvent('click',function(e){
+  $('b2c-checkout-special-delivery-time')[this.checked?"show":"hide"]();
+  if (!(this.checked)){
+    document.getElement('select[name="delivery[day]"]').getElements("option").each(function(item){item.removeProperty("selected");});
+    document.getElement('select[name="delivery[day]"]').getElements("option[value='<{t}>任意日期<{/t}>']").set("selected","selected");
+    $("specal_day").hide();
+    document.getElement('input[name="delivery[specal_day]"]').removeProperty("vtype").set("value","");
+    document.getElement('select[name="delivery[time]"]').getElements("option").each(function(item){item.removeProperty("selected");});
+    document.getElement('select[name="delivery[time]"]').getElements("option[value='<{t}>任意时间段<{/t}>']").set("selected","selected");
+  }
+});
+
+</script>

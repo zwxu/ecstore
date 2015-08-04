@@ -1,0 +1,72 @@
+<form id="menu_module" action='index.php?app=site&ctl=admin_menu&act=savemodule' method='POST' class="tableform">
+<input type='hidden' name='menu[id]' value='<{$menu.id}>' />
+<input type='hidden' name='menu[app]' value='<{$menu.app}>' />
+<input type='hidden' name='menu[ctl]' value='<{$menu.ctl}>' />
+<input type='hidden' name='menu[act]' value='<{$menu.act}>' />
+<div class="division">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+  <th><{t}>菜单标题：<{/t}></th>
+  <td><{input type="text" name="menu[title]" value=$menu.title vtype='required' size=15 }></td>
+</tr>
+<tr>
+  <th><{t}>是否绑定商品分类：<{/t}></th>
+  <td><{input type="select" id="is_goods_cat" name="menu[is_goods_cat]" value=$menu.is_goods_cat options=$is_goods_cat vtype='required' }></td>
+</tr>
+<tr id="goods_cat">
+  <th><{t}>商品分类：<{/t}></th>
+  <td><{input type="object" object="goods_cat@b2c" filter=$filter name="menu[cat_id]" value=$menu.cat_id}></td>
+</tr>
+<tr>
+  <th><{t}>排序：<{/t}></th>
+  <td><{input type="text" name="menu[display_order]" value=$menu.display_order|default:0 vtype='required&&number' size=4 }></td>
+</tr>
+<tr>
+  <th><{t}>新开窗口：<{/t}></th>
+  <td><input type='checkbox' name='menu[target_blank]' value='true' <{if $menu.target_blank eq 'true'}>checked<{/if}> /></td>
+</tr>
+<tr>
+  <th><{t}>在菜单上隐藏：<{/t}></th>
+  <td><input type='checkbox' name='menu[hidden]' value='true' <{if $menu.hidden eq 'true'}>checked<{/if}> /></td>
+</tr>
+</table>
+</div>
+
+<div class="table-action">
+<{if $menu.id eq ''}>
+<{button type="button" id="menuprev" class="btn" label=$___a="上一步"|t:'site'}>
+<{/if}>
+<{button type='submit' label=$___a='保存'|t:'site' }>
+</div>
+
+</form>
+
+<script>
+$('menu_module').store('target',{
+    onComplete:function(){
+        if($('menu_module').getParent('.dialog'))
+        $('menu_module').getParent('.dialog').retrieve('instance').close();
+    }
+});
+if ($('menuprev'))
+$('menuprev').addEvent('click',function(e){
+    var url='index.php?app=site&ctl=admin_menu&act=add&pre[type]=module';
+    new Request.HTML({url:url,update:$('menu_module').getParent()}).post($H({step:'aaa',ba:'111'}));
+});
+
+$('is_goods_cat').addEvent('change',function(){
+    setGoodsCat();
+});
+
+window.addEvent('domready',function(){
+    setGoodsCat();
+});
+
+function setGoodsCat(){
+    if($E("select[name=menu[is_goods_cat]]").value == 'true'){
+        $('goods_cat').setStyle('display','');
+    }else{
+        $('goods_cat').setStyle('display','none');
+    }
+}
+</script>

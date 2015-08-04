@@ -1,0 +1,149 @@
+<{css src="member.css" app='b2c'}>
+<{include file="site/common/header.html" app="b2c"}>
+<div class="member-main">
+<div class="title">咨询管理</div>
+		<div id="tab-discus" class="section switch">
+			<ul class="switchable-triggerBox clearfix">
+				<li <{if !$type}>class="active"<{/if}>><a href="<{link app=business ctl='site_consult' act='consult_manage'}>"><{t}>全部咨询<{/t}></a></li>
+				<li <{if $type == 1}>class="active"<{/if}>><a href="<{link app=business ctl='site_consult' act='consult_manage' arg0='1'}>"><{t}>未回复咨询<{/t}></a></li>
+				<li <{if $type == 2}>class="active"<{/if}>><a href="<{link app=business ctl='site_consult' act='consult_manage' arg0='2'}>"><{t}>已回复咨询<{/t}></a></li>
+			</ul>
+			
+			<div class="list-top2"> <span class="lineall"><input class="all-selector" type="checkbox" id='c1'><label>全选</label></span>
+              <button class="trigger-btn" onclick="javascript:removeSel();" type="button">删 除</button> </div>
+			
+			
+	<form action="<{link app=business ctl='site_consult' act='removeSelect'}>" id="consult_comment" method="post">
+		 <table class="gridlist border-all" width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout:fixed;">
+		  <{foreach from=$data item=data key=key}>
+            <tr class="bjh">
+			    <td width="5%"><input type='checkbox' class="checkbox customs" type="checkbox" name="chkConsult[]" value=<{$data.comment_id}> /></td>
+				<td class="textleft" width="45%"><{$data.name}></td>
+                <td class="textcenter" width="35%"><{$data.author}></td>
+				<td class="textcenter" width="15%"><a href="javascript:remove(<{$data.comment_id}>)">删除</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:show(<{$data.comment_id}>);"><span id="span_<{$data.comment_id}>">回复</span></a></td>
+            </tr>
+            
+                <tr> 
+				    <td colspan="3" class="textleft overhidden">咨询内容：<{$data.comment}></td>
+                    <td class="textcenter" colspan="1"><{$data.time|cdate:SDATE_FTIME}></td>
+                </tr>
+            
+			
+			<{foreach from=$data.sub item=item}>
+			
+                <tr class="bjh2"> 
+				    <td colspan="3" class="textleft overhidden"><{$item.author}>回复：<{$item.comment}></td>
+                    <td class="textcenter" colspan="1"><{$item.lastreply|cdate:SDATE_FTIME}></td>
+                </tr>
+            
+			<{/foreach}>
+			
+			<tr style="display:none" id="<{$data.comment_id}>" class="bjh3"> 
+			<td style="padding-left:0; padding-right:0; text-align:center"  >回复：</td>
+             <td colspan="2"><{input type="textarea" name="reply_content" cols="110" rows="5"}>
+			 <input type="hidden" name="comment_id" value="<{$data.comment_id}>">
+			 </td>
+			 <td ><input type="button" value="立即回复" onclick="reply(<{$data.comment_id}>)"></td>
+			
+			 </tr>
+			
+		<{/foreach}>
+        </table></form>
+	</div>
+	 <{pagers data=$pager}>
+</div>
+<script>
+
+function removeSel(){
+     var reqs = $$('input[name^=chkConsult]:checked').length;
+		var com_id='';
+		$$('.customs:checked').each(function(item){
+			com_id+=','+item.value;
+		});
+		if(com_id.indexOf(',')==0){
+			com_id=com_id.substr(1,com_id.length);
+		}
+		
+		 if(reqs == 0){
+            Ex_Dialog.alert('<{t}>请选择要删除的选项！<{/t}>');
+		 }else{
+		    Ex_Dialog.confirm('<{t}>确定要删除所选项吗？<{/t}>', function(e){
+				if(!e) return;
+
+				new Request.JSON({
+					url:"<{link app=business ctl='site_consult' act='removeSelect' }>",
+					data:'comment_id='+com_id,
+					method:'POST',
+					onSuccess:function(rs){
+					
+					  Ex_Dialog.alert(rs.message);
+					
+					  window.location.reload();
+					}
+				  }).send();
+			});
+		 }
+}
+
+window.addEvent('domready',function() { 
+ $('c1').addEvent('click',function(){
+     
+	     $$('input[name^=chkConsult]').each(function(item){
+		 if($('c1').checked == true){
+            item.checked = true;
+		 }else{
+		    item.checked = false;
+		 }
+		});
+
+ 
+ })
+
+});
+
+ function remove(comment_id) {
+	 Ex_Dialog.confirm('<{t}>确定要删除该咨询吗？<{/t}>', function(e){
+		if(!e) return;
+		new Request.JSON({
+			url:"<{link app=business ctl='site_consult' act='removeCR' }>",
+			data:'comment_id='+comment_id,
+			method:'POST',
+			onSuccess:function(rs){
+			
+			  Ex_Dialog.alert(rs.message);
+			
+			  window.location.reload();
+			}
+		  }).send();
+	});
+ }
+
+function show(comment_id){
+    if($(''+comment_id+'').style.display == 'block'){
+
+	  $(''+comment_id+'').setStyle('display','none');
+	  $('span_'+comment_id+'').innerHTML = '回复';
+
+	}else if($(''+comment_id+'').style.display == 'none'){
+
+	  $(''+comment_id+'').setStyle('display','block');
+	  $('span_'+comment_id+'').innerHTML = '取消回复';
+
+	}
+}
+
+function reply(comment_id){
+    new Request.JSON({
+			url:"<{link app=business ctl='site_consult' act='to_reply'}>",
+			data:$(''+comment_id+''),
+			method:'POST',
+			onSuccess:function(rs){
+			  Ex_Dialog.alert(rs.message);
+              if(rs.message == '回复成功'){
+                setTimeout('window.location.reload()',3000);
+              }
+			}
+		  }).send();
+
+}
+</script>

@@ -1,0 +1,39 @@
+<root>
+	
+	<register ctl="admin_payment_notice" act="index">
+		<operate>支付提示信息设置</operate>
+	</register>
+	
+	<register ctl="currency" act="addnew">
+		<operate>新增货币</operate>
+	</register>
+	
+	<register ctl="currency" act="edit_save">
+		<operate>编辑货币</operate>
+	</register>
+	
+	<register ctl="currency" act="seldefault">
+		<operate>设置默认货币</operate>
+	</register>
+	
+	<register ctl="regions" act="addDlArea">
+		<operate>添加新地区</operate>
+	</register>
+	
+	<register ctl="regions" act="saveDlArea">
+		<operate>保存地区信息</operate>
+	</register>
+	
+	<register ctl="regions" act="toRemoveArea">
+		<operate>删除指定的地区</operate>
+	</register>
+	
+	<register ctl="regions" act="updateOrderNum">
+		<operate>批量编辑排序</operate>
+	</register>
+	
+	<register ctl="regionssetting" act="save_depth">
+		<operate>设置默认地区层级</operate>
+	</register>
+		
+</root>

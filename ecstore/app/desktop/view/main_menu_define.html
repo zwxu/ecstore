@@ -1,0 +1,48 @@
+<{area inject=".mainHead"}>
+↓ 拖动可以改变顺序
+<{/area}>
+
+<form action="index.php?app=desktop&ctl=default&act=set_main_menu" method="post" id="set_main_menu_form">
+<div class="grildlist" id="main_menu_list">
+	<{foreach from=$menus.workground key=key item=item}>
+	<div class="row">
+		<div class="row-line">	
+			<{img src="bundle/grippy.gif" class=" move-handler"}><input type="checkbox" name="workgrounds[]" value="<{$key}>" <{if $key|in_array:$fav_menus}>checked<{/if}>/>
+			<{$item.menu_title}>
+		</div>
+	</div>
+	<{/foreach}>
+</div>
+</div>
+<{area inject=".mainFoot"}>
+<div class="table-action">
+	<{button type="button" id="set_main_menu_btn" label=$___b2c="保存"|t:'desktop'  app="desktop" class="btn-primary"}>
+</div>
+<{/area}>
+<script>
+
+(function(){
+               new Sortables($('main_menu_list'),{clone:true,opacity:.7,handle:'.move-handler',onStart:function(){
+                  
+                   $('main_menu_list').addClass('move-active');
+                 
+               },onComplete:function(){
+                  
+                   $('main_menu_list').removeClass('move-active');
+                  
+               }});
+ })();
+
+$('set_main_menu_form').store('target',{onComplete:function(re){
+		if(confirm("<{t}>保存成功!\n是否刷新？<{/t}>"))
+		location.reload();
+
+}});
+
+
+$('set_main_menu_btn').addEvent('click',function(e) {
+				
+				$('set_main_menu_form').fireEvent('submit',{stop:$empty});
+	
+			});
+</script>

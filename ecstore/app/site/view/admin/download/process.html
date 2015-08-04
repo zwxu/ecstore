@@ -1,0 +1,51 @@
+<style>
+.all-themes {
+	width:950px;
+	margin:8px auto 0;
+	position:relative;
+}
+#download_info {
+	width:948px;
+	padding:90px 0 110px 0;
+	background:#EAEEF4;
+	border:1px solid #C1CFE2;
+}
+.note-title {
+	width:190px;
+	text-align:center;
+	margin:0 auto;
+	background:none;
+	color:#000;
+	font-size:14px;
+	height:34px;
+}
+.download-img {
+	width:190px;
+	text-align:center;
+	position:absolute;
+	top:60%;
+	left:40%;
+}
+</style>
+<div class="all-themes">
+<div class="notice">
+    <{t}>注意：下载过程中请勿关闭此页面！<{/t}>
+</div>
+<div class="download-img"><{img app=site src="images/transmission.gif" id="id_down_progress"}></div>
+<div  id='download_info'></div>
+</div>
+<script>
+function download(url){
+	new Request.HTML({url:url,method:'post'}).send();
+}
+function success(ident){
+	window.location.href = '<{$success_url}>'+'&ident='+ident+'&finder_id=<{$env.get.finder_id}>';
+}
+function failure(msg){
+	$('download_info').set('html',msg);
+}	
+window.addEvent('domready', function(){
+	download('index.php?app=site&ctl=admin_download&act=index&ident=<{$ident}>&finder_id=<{$env.get.finder_id}>');
+	$('download_info').set('html','<div class="note-title"><{t}>正在建立下载链接...<{/t}></div>');
+});
+</script>

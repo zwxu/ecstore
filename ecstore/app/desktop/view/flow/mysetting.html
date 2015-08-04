@@ -1,0 +1,89 @@
+<form method="post" action="index.php?ctl=admin/profile&act=saveSelf" class="tableform" id="x-op-my-info-form">
+  <input type="hidden" name="op_id" value="<{$op_id}>">
+  <div class="division">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <th><{t}>用户名：<{/t}></th>
+    <td><{$data.username}></td>
+  </tr>
+  <tr>
+    <th><{t}>姓名：<{/t}></th>
+    <td><{$data.name}></td>
+  </tr>
+  <tr>
+    <th><{t}>编号：<{/t}></th>
+    <td><{$data.op_no}></td>
+  </tr>
+  <tr>
+    <th><{t}>部门：<{/t}></th>
+    <td><{$data.department}></td>
+  </tr>
+</table></div>
+
+    <div style="padding-left:140px"><input type="checkbox" name="changepwd" value="1" id="x-ipt-change-my-pwd" onclick="$('x-div-change-my-pwd').setStyle('display',this.checked?'':'none')" /><label for="x-ipt-change-my-pwd"><{t}>同时修改密码<{/t}></label></div>
+     <div class="division" style="display:none" id="x-div-change-my-pwd">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr id="cur_pw">
+    <th><{t}>当前密码：<{/t}></th>
+    <td><input type="password" name="oldpass"></td>
+  </tr>
+  <tr id="new_pw">
+    <th><{t}>新密码：<{/t}></th>
+    <td><input id="x-input-my-pwd" type="password" name="userpass"></td>
+  </tr>
+  <tr id="again_pw">
+    <th><{t}>确认密码：<{/t}></th>
+    <td><input type="password" name="passowrd_again"></td>
+  </tr>
+</table>
+ </div>
+
+    <div class="division">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <th><{t}>您的当前时间：<{/t}></th>
+    <td><select name="timezone">
+      <{foreach item=item key=key from=$timezones}>
+      <{if $key == $timezone_value}>selected<{/if}> ><{$item}><option value="<{$key}>" <{if $key == $timezone_value}>selected<{/if}> ><{$item}></option>
+      <{/foreach}>
+    </select></td>
+  </tr>
+<{if !$env.const.SAAS_MODE}>
+  <tr>
+    <th><{t}>当前服务器时间：<{/t}></th>
+    <td>
+      <{$server_tz}>&nbsp;<{help type="dialog"}>
+    <{t}>  系统默认服务器时间为东八区（标准时：北京时间），如果您的服务器不在国内则请按照下面《标准时区列表》修改您的服务器时间。<{/t}><br /><br><{t}>修改服务器时间方法：<{/t}>
+      <div style="border-left:5px solid #ccc;padding:10px;margin:10px;background:#f0f0f0">
+      <{t}>用记事本打开config/config.php文件，找到define SERVER_TIMEZONE这一行（如下面所示），修改后面的数字值即可（譬如8代表东八区北京时间）。<{/t}><br><br>define('SERVER_TIMEZONE','<b style="color:red">8</b>');
+      </div><br>
+      <{t}>《标准时区列表》：<{/t}>
+      <div style="height:75px;overflow-y:scroll;padding-left:10px">
+      <table>
+        <{foreach from=$tzlist item=tz key=key}>
+        <tr><td><{$key}></td><td><{$tz}></td></tr>
+        <{/foreach}>
+      </table>
+    </div>
+
+      <{/help}>
+    </td>
+  </tr>  
+<{/if}>
+  </table>
+  </div>
+
+<div class="table-action">
+	<{button type="submit" id="x-ipt-to-save-self"  label=$___desktop="提交"|t:'desktop'}>
+</div>
+
+</form>
+<script>
+$('x-ipt-to-save-self').addEvent('click',function(e){
+  if($('x-div-change-my-pwd').style.display!='none' && !$('x-input-my-pwd').value){
+    if(!confirm('<{t}>确定设置空密码？<{/t}>')){
+      new Event(e).stop();
+    }
+  }
+});
+</script>

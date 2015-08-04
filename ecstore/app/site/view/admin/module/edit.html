@@ -1,0 +1,51 @@
+<form id="module_edit" action='index.php?app=site&ctl=admin_module&act=save' method='POST' class="tableform">
+<input type="hidden" name="modules[id]" value="<{$modules.id}>" />
+<div class="division">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+  <th><{t}>APP：<{/t}></th>
+  <td><{input type="text" name="modules[app]" value=$modules.app vtype='required' size="10" }></td>
+</tr>
+<tr>
+  <th><{t}>控制器：<{/t}></th>
+  <td><{input type="text" name="modules[ctl]" value=$modules.ctl vtype='required' size="10" }></td>
+</tr>
+<tr>
+  <th><{t}>路径标识：<{/t}></th>
+  <td><{input type="text" name="modules[path]" value=$modules.path vtype='path' size="10" }></td>
+</tr>
+<tr>
+  <th><{t}>扩展名：<{/t}></th>
+  <td><{input type="text" name="modules[extension]" value=$modules.extension }><{t}>（留空则应用默认设置）<{/t}><br/><{t}>注：此处为系统重要设置，一般情况下无需更改，如有更改请前往控制面板手工清空缓存。<{/t}></td>
+</tr>
+<tr>
+  <th><{t}>名称：<{/t}></th>
+  <td><{input type="text" name="modules[title]" value=$modules.title vtype='required' size="10" }></td>
+</tr>
+<tr>
+  <th><{t}>允许添加的菜单：<{/t}></th>
+  <td><{input type="textarea" name="modules[allow_menus]" value=$modules.allow_menus}></td>
+</tr>
+<tr>
+  <th><{t}>启用：<{/t}></th>
+  <td><input type='checkbox' name='modules[enable]' value='true' <{if $modules.enable eq 'true'}>checked<{/if}> /></td>
+</tr>
+</table>
+</div>
+<div class="table-action">
+<{button type='submit' label=$___a='保存'|t:'site' }>
+</div>
+
+</form>
+
+<script>
+$('module_edit').store('target',{
+	onComplete:function(){
+		if($('module_edit').getParent('.dialog'))
+		$('module_edit').getParent('.dialog').retrieve('instance').close();
+	},
+	onSuccess:function(){
+		window.finderGroup['<{$env.get.finder_id}>'].refresh();
+	}
+});
+</script>

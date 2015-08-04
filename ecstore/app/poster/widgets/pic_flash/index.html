@@ -1,0 +1,73 @@
+<style>
+    #ex_slide_<{$widgets_id}>{ 
+        width:<{$data.width}>px;
+        height:<{$data.height}>px;
+        overflow:hidden;
+        position:relative;
+    }
+    #ex_slide_<{$widgets_id}> ol li{
+        width:<{$data.width}>px;
+        height:<{$data.height}>px;
+        list-style:none; 
+        display:block;
+        overflow:hidden;
+        border:0;
+        margin:0;
+    }
+    #ex_slide_<{$widgets_id}> .slide-trigger{
+        position:absolute; 
+        z-index:555;
+    }
+	.slide-trigger{bottom:10px;right:10px;}
+	.slide-trigger li{float:left;width:15px;height:15px;line-height:15px;color:#000;background:#dcdddd;opacity:1;text-align:center;margin-left:8px;cursor:pointer; border-radius:50% 50% 50% 50% }
+	.slide-trigger li.active{background:#ff0000;color:#ffffff}
+</style>
+<div class="ex-slide1-box" style="width:<{$data.width}>px;height:<{$data.height}>px;">
+   <div id="ex_slide_<{$widgets_id}>" class="ex-slide1">
+    <ol class="switchable-content clearfix">
+    <{if $data.poster_imgurl}>
+          <{foreach from=$data.poster_imgurl item=pic key=k}>
+              <li class="switchable-panel">
+                  <{if $pic.linktarget}><a href="javascript:void(0);" posterurl="<{$pic.linktarget}>" posterid="<{$data.poster_id}>"   onclick="toclickcount_<{$widgets_id}>(this);" ><{/if}>
+          <img src="images/transparent.gif" lazyload=<{$pic.link|storager}> class="img-lazyload"  alt="<{$setting.ad_pic_txt}>" <{if $pic.width}>width='<{$pic.width}>'<{/if}> <{if $pic.height}>height='<{$pic.height}>'<{/if}>>
+          <{if $pic.linktarget}></a><{/if}>
+          </li>
+          <{/foreach}>
+    <{else}>
+          <li class="switchable-panel">
+          暂无数据或数据已过期，请联系管理员
+          </li>
+      <{/if}>
+    </ol>
+        <ul class="switchable-triggerBox slide-trigger">
+          <{assign var=countnum value="1"}>
+          <{foreach from=$data.poster_imgurl item=pic key=k}>
+                <li></li> 
+          <{/foreach}> 
+        </ul>
+  </div>
+</div>
+<script>
+new Switchable('ex_slide_<{$widgets_id}>',{
+    effect:'<{$data.poster_switcheffect}>',
+    autoplay:'<{$data.poster_autoplay}>'
+});
+
+function toclickcount_<{$widgets_id}>(e){
+    var rehref=e.getAttribute('posterurl');
+    var posterid=e.getAttribute('posterid');
+    new Request({
+        url:'<{link app=poster ctl=site_poster act=clickcount}>',
+        method:'get',
+        onComplete:function(a){
+           var newtarget=<{if $data.poster_isblank}>"_blank"<{else}>"_self"<{/if}>;
+            if(rehref){
+                window.open(rehref,newtarget);
+            }else{
+                
+            }
+        },
+        data:"posterid="+posterid
+        }).send();
+}
+</script>

@@ -1,0 +1,199 @@
+<{if $aCart.object.goods}>
+<{foreach from=$aCart.object.goods item=goods key=_obj_key}>
+<{if $goods.is_first == 'true'}>
+   <table class="pro_list_cart_xu section" width="100%" border="0" cellspacing="0" cellpadding="0" class="ddqr_info" id="storeid_<{$goods.store_id}>">
+      <!--<col class="span-8 "></col>
+      <col class="span-2 textcenter"></col>
+      <col class="span-2"></col>
+      <col class="span-3"></col>
+      <col class="span-3"></col>
+      <{if !$checkout}><col class="span-2"></col><{/if}>
+      <{if $checkout}><col class="span-4"></col><{/if}>-->
+      <thead>
+        <tr>
+          <th class="bl_none">
+				<p class="goods_shop_info">
+				<span class="cjm_logo"></span>
+              <{if $checkout}>
+                    <span class="pl_10 pr_10">店铺：<span class="lan"><{$goods.store_name}></span></span>
+                    <span class="pl_10 pr_10">商家：<span class="lan"><{$goods.shop_name}></span></span>
+                    <!-- <td id="shipping_<{$goods.store_id}>" class="textcenter storeShipping"></td> -->
+                <{else}>
+                    <span class="pl_10 pr_10">店铺：<span class="lan"><{$goods.store_name}></span></span>
+                    <span class="pl_10 pr_10">商家：<span class="lan"><{$goods.shop_name}></span></span>
+             <{/if}>
+			 <!-- <span class="yh_cart">满2100，减100。</span> -->
+			 </p>
+          </th>
+          <th class="c_969696"><{t}>单价<{/t}></th>
+          <th class="c_969696"><{t}>数量<{/t}></th>
+          <th class="c_969696"><{t}>优惠方式<{/t}></th>
+          <th class="c_969696"><{t}>小计（元）<{/t}></th>
+          <!-- <th><{t}>积分<{/t}></th> -->
+          <{if !$checkout}><th class="c_969696"><{t}>操作<{/t}></th><{/if}>
+          <!-- <{if $checkout}><th class="c_969696"><{t}>配送方式<{/t}></th><{/if}> -->
+        </tr>
+      </thead>
+      <tbody>
+      <{/if}>
+<!-- <{if $goods.is_first == 'true'}>
+<tr id="storeid_<{$goods.store_id}>">
+    <{if $checkout}>
+    <td colspan="5">
+        <span class="pl_10 pr_10">店铺：<{$goods.store_name}></span>
+        <span class="pl_10">商家：<{$goods.shop_name}></span>
+    </td>
+    <td id="shipping_<{$goods.store_id}>" class="textcenter storeShipping"></td>
+    <{else}>
+    <td colspan="6">
+        <span class="pl_10 pr_10">店铺：<{$goods.store_name}></span>
+        <span class="pl_10">商家：<{$goods.shop_name}></span>
+    </td>
+    <{/if}>
+</tr>
+<{/if}> -->
+
+<tr chlid_id="del-<{$goods.obj_items.products.0.product_id}>" urlupdate="<{link app=b2c ctl='site_cart' act='update' arg0='goods' arg1=$item.link_key}>" urlremove="<{link app=b2c ctl='site_cart' act='remove' arg0='goods'}>" number="<{$goods.store.real}>" g_name="<{$goods.store.name}>" floatstore="<{$goods.obj_items.products.0.floatstore}>" buy_price="<{$goods.obj_items.products.0.price.buy_price}>" buy_store="<{$goods.quantity}>" buy_store_id="<{$goods.store_id}>">
+    <td>
+
+        <div class='cart-product-img goodpic spmc_l' isrc="<{$goods.obj_items.products.0.default_image.thumbnail|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" ghref='<{link app=b2c ctl=site_product act="index" arg0=$goods.obj_items.products.0.goods_id}>'>
+            <img src='<{$res_url}>/images/loading.gif'/>
+        </div>
+        <div class="spmc_r">
+            <a target="_blank" class="item_title" href="<{link app=b2c ctl=site_product arg0=$goods.obj_items.products.0.goods_id }>"><{$goods.obj_items.products.0.name}></a>
+            <span><{$goods.obj_items.products.0.spec_info}></span>
+        </div>
+    </td>
+    <td class="goods_price textcenter" >
+        <p class="pie_price">积分：<{$goods.obj_items.products.0.price.buy_score}></p>
+        <{if $goods.obj_items.products.0.price.buy_price > 0}>
+        <p class="now_price">价格：<{$goods.obj_items.products.0.price.buy_price|cur_odr}></p>
+        <{/if}>
+    </td>
+    <td class="textcenter">
+        <{if !$checkout}>
+        <div class="Numinput ma numadjust-arr">
+            <span class="numadjust decrease"></span>
+            <input type="text" min="0" numtype="<{if $goods.obj_items.products.0.floatstore === '1'}>float<{else}>int<{/if}>" name="modify_quantity[<{$goods.obj_ident}>][quantity]" size="3" value="<{$goods.quantity}>" onchange="if(Cart)Cart.ItemNumUpdate(this,this.value,event);"/>
+            <span class="numadjust increase"></span>
+        </div>
+        <p class="t" style="display:none">(<{t}>需要备货<{/t}>)</p>
+        <{else}>
+        <{$goods.quantity}>
+        <{/if}>
+        <!--  <{if $goods.obj_items.products.0.floatstore}><{t}>可输入小数<{/t}><{/if}>-->
+        <{if $goods.store.less<$goods.obj_items.products.0.min_buy}><h6 class="font-red">(<{t}>提示<{/t}>:<{t}>该商品不足起订量!起订量为：<{/t}><{$goods.obj_items.products.0.min_buy}>)</h6><{/if}>
+    </td>
+    <td class="textcenter" >
+        <{if $goods.obj_items.products.0.act_type != 'normal'}><span class="cx_cart">卖家促销</span><{else}>&nbsp<{/if}>
+    </td>
+    <td class="goods_price textcenter buy_price xj_p" >
+        <p class="pie_price">积分：<{$goods.obj_items.products.0.price.buy_score*$goods.quantity}></p>
+        <{if $goods.obj_items.products.0.price.buy_price > 0}>
+        <p>价格：<{$goods.obj_items.products.0.price.buy_price*$goods.quantity|cur_odr}></p>
+        <{/if}>
+    </td>
+    <!-- <td class="consume_score textcenter" ><{$goods.obj_items.products.0.gain_score*$goods.quantity}></td>-->
+    <{if !$checkout}> 
+    <td>
+        <!-- class="CartNav-icon1 " -->
+        <ul class="cart-coll-ul">
+            <li class="star-off btn-bj-hover" <{if $login!="nologin"}>star="<{$goods.obj_items.products.0.goods_id}>"<{/if}> class="star-off textcenter" title=<{$goods.obj_items.products.0.name|escape:"html"}>>
+            <a <{if $login=="nologin"}> href="<{link app=b2c ctl="site_passport" act="login"}>" <{else}>href="###" rel="_fav_"<{/if}> class="btn-fav collect-cart no-unl">
+                <span><div class="fav"><{t}>收藏<{/t}></div><div class="nofav"><{t}>已收藏<{/t}></div></span>
+            </a>
+            </li>
+            <li><a class="CartNav_del delItem btn-bj-hover "><i class="has-icon"> <img src='<{$env.app.res_url}>/bundle/delecate.gif' /></i><span class="delItem"><{t}>删除<{/t}></span></a></li></ul>
+    </td>
+    <{/if}>
+    <!-- <{if $checkout}>
+      <{if $goods.is_first == 'true'}>
+      <td id="shipping_<{$goods.store_id}>" class="textcenter storeShipping"></td>
+      <{else}>
+      <td></td>
+      <{/if}>
+    <{/if}> -->
+</tr>
+
+<{if $item_goods_section}>
+<{foreach from=$item_goods_section item=section}>
+<{if $section.app != 'package' || $goods.is_first == 'true'}>
+<{include file=$section.file app=$section.app }>
+<{/if}>
+<{/foreach}>
+<{/if}>
+
+<{if $goods.is_last == 'true'}>
+    <{if $checkout}>
+    </tbody>
+       </table>
+       <table width="100%" border="0" cellspacing="0" cellpadding="0" class="cart_checkout_order section">
+       <tbody>
+    <tr class="goods_bj">
+        <td colspan="6" style="border:none;padding:15px 10px 0 10px;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                     <td class="bb_none">补充说明：<input type="text" class="width_500" name="shipping[<{$goods.store_id}>][memo]" style="height: 22px" /></td>
+                     <td class="bb_none"></td>
+                    <td class="bb_none">
+                    <div style="float:right;height:30px;line-height:30px;"><em class="font_16 red1" id = "shipping_money" ><{0|cur}></em></div>
+                    <{if $checkout}>
+                      <div id="shipping_<{$goods.store_id}>" class="storeShipping" style="float:right;height:30px;line-height:30px;margin-top:8px"></div>
+                    <{/if}>
+                        <div style="float:right;height:30px;line-height:30px;">运费模板:&nbsp;&nbsp;</div>
+                    </td>
+                     <!-- <td class="bb_none fr"><em class="font_16 red1" id = "shipping_money"><{0|cur}></em></td> -->
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr class="goods_bj">
+        <td colspan="6" id="store_<{$goods.store_id}>" style="border:none;padding:0 10px 15px 10px;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <{assign var='store_id' value=$goods.store_id}>
+                <tr>
+                    <td class="bb_none fr">店铺优惠： 
+                    <select onchange="userCoupons(this,<{$goods.store_id}>)">
+                        <option value="no">--不使用优惠券--</option>
+                        <{foreach from=$coupon_lists.$store_id item=list_coupon key=key}>
+                            <{if $coupon.$store_id.coupon==$list_coupon.memc_code}>
+                            <option value="<{$list_coupon.memc_code}>" selected><{$list_coupon.memc_code}></option>
+                            <{else}>
+                            <option value="<{$list_coupon.memc_code}>"><{$list_coupon.memc_code}></option>
+                            <{/if}>
+                        <{/foreach}>
+                    </select><em class="red1">-<{$discount.$store_id|cur_odr}></em></td>
+                </tr>
+				<tr style="display:none;">
+				<td class="bb_none"></td>
+				<td class="bb_none fr">物流保价：<em class="font_16 red1"><{$store_protect.$store_id}></em></td>
+				</tr>
+				<tr style="display:<{if $discount.$store_id}>''<{else}>none<{/if}>;">
+				<td class="bb_none"></td>
+				<td class="bb_none fr">优惠金额：<em class="font_16 red1"><{$discount.$store_id}></em></td>
+			</tr>
+                <tr>
+                    
+                    <td class="bb_none"></td>
+                    <td class="bb_none fr">店铺合计（含运费）：<em class="font_16 red1"><{if ($aCart.subtotal_price_store.$store_id-$discount.$store_id) > 0  }><{($aCart.subtotal_price_store.$store_id-$discount.$store_id)|cur_odr}><{else}><{0|cur_odr}><{/if}></em></td>
+                </tr>
+                <tr>
+                    <td class="bb_none"></td>
+                    <!-- <td class="bb_none fr">满288元，免运费</td> -->
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <{/if}>
+  </tbody>
+</table>
+<{/if}>
+<{/foreach}>
+<{else}>
+  <{if $item_goods_section}>
+  <{foreach from=$item_goods_section item=section}>
+  <{include file=$section.file app=$section.app }>
+  <{/foreach}>
+  <{/if}>
+<{/if}>
+

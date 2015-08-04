@@ -1,0 +1,85 @@
+<div class="tableform">
+<h3><{$msg_desc}><{t}>模板编辑 <{/t}><span class="c-gray f-12">( <{$action_desc}> )</span></h3>
+
+<form id="tmpl_form" action="index.php?app=b2c&ctl=admin_member_messenger&act=saveTmpl" method="post" >
+<input type="hidden" name="messenger" value="<{$messenger}>">
+<input type="hidden" name="actdo" value="<{$action}>">
+<{if $hasTitle}>
+<div class="division" style="padding:0">
+	<div class="b-gray">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	  <tr>
+	    <th><{t}>可使用变量标签：<{/t}></th>
+	    <td class="varmap"><{$varmap}></td>
+	  </tr>
+	</table>
+	</div>
+</div>
+<script>
+	$$('#tmpl_form .varmap').each(function(item){
+		
+		var _html = item.get('html');	
+		_html = _html.replace(/<([^>]+)>/,'').replace(/\&lt;\{([^\}]+)\}\&gt;/ig,function(p1){
+				return ":<span class='c-blue f-14'>"+p1+"</span>";
+		});
+		
+		item.set('html',_html);
+		
+		
+		
+
+	});
+	
+</script>
+<{/if}>
+<div class="division">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	
+    <{if $messenger != 'b2c_messenger_sms'}>
+    <tr>
+        <th>
+            <{t}>
+              标题：
+                <{/t}>
+        </th>
+        <td><{input type="text" name="title" style="width:360px" value=$title}></td>
+    </tr>
+    <{/if}>
+    <tr>
+        <th><{t}>内容：<{/t}></th>
+        <td><{input type=$type value=$body name="content" cols=50 rows=20}></td>
+    </tr>
+
+</table>
+</div>
+
+<{capture name="footbar"}>
+<div class="table-action">
+	<{button id="tmpl" label=$___b2c="保存模板"|t:'b2c' type="submit" onclick="$('tmpl_form').fireEvent('submit',{stop:function(){}})"}>
+</div>
+<{/capture}>
+
+</form>
+
+
+</div>
+
+
+<script>
+(function(){	
+	var _form = $('tmpl_form');
+	var btn =$('tmpl');
+	_form.store('target',{
+		onSuccess:function(response){
+			hash_res_obj = JSON.decode(response);
+			if (hash_res_obj.success != undefined && hash_res_obj.success != ""){
+				window.close();
+			}			
+		}
+	});
+
+	   
+})();
+	
+	
+</script>

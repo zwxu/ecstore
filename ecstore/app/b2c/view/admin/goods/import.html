@@ -1,0 +1,37 @@
+<table width="100%" border="0" cellpadding="0" cellspacing="0" ><tr><td style="text-align:right;padding-top:3px;padding-right:10px;"><{help docid="76" type="link"}><{t}>点击查看帮助<{/t}><{/help}></td></tr></table><form method="post" action="index.php?app=b2c&ctl=admin_goods&act=do_export" class="tableform">
+  <h4><{t}>第一步：下载商品XML文件（仅限BBC后台和BBC小助理使用）<{/t}></h4>
+  <div class="division">
+    <table cellpadding="0" cellspacing="0" border="0">
+      <tr>
+        <th><{t}>请选择商品类型：<{/t}></th>
+        <td><{input type="select" name="gtype" required="true" options=$gtypes}></td>
+      </tr>
+      <tr>
+        <th>&nbsp;</th>
+        <td><{button class="btn-primary" label=$___b2c="下载"|t:'b2c' type="submit"}></td>
+      </tr>
+    </table>
+    <div style="margin-top:6px"><{t}>为了更方便地管理商店商品，建议您使用<{/t}> <a href="http://www.shopex.cn/products/ShopExAssitant_intro.html" target="_blank"><b><{t}>BBC网店助理<{/t}></b></a>，<{t}>同时可实现多种平台的数据转换和交互，如：淘宝、拍拍等<{/t}></div>
+  </div>
+</form>
+<div class="tableform">
+  <h4><{t}>第二步：填写XML文件<{/t}></h4>
+  <div class="division"><{t}>打开XML文件，在里面对应写入上传商品的内容。<{/t}><a href="http://www.shopex.cn/help/ShopEx48/goods_6.html" target="_blank"><{t}>使用帮助<{/t}></a><{/t}></div>
+</div>
+<form method="post" enctype="multipart/form-data" action="index.php?app=b2c&ctl=admin_goods&act=do_import" class="tableform">
+  <h4><{t}>第三步：上传填写好的XML文件<{/t}></h4>
+  <input type="hidden" name="type" value="XML">
+  
+  <div class="division">
+  <table cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <th><{t}>上传批量XML文件：<{/t}></th>
+    <td><input type="file" name="upload_file"/></td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+    <td><{button class="btn-primary" label=$___b2c="上传"|t:'b2c' type="submit"}></td>
+  </tr>
+  </table>
+  </div>
+</form>

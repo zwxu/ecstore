@@ -1,0 +1,22 @@
+<{if $goods.type.params}>
+<h3><{t}>属性参数<{/t}></h3>
+<div class="division" id='goods-type-params'>
+<br>
+<table>
+<{assign var="paramsItem" value="0"}>
+<{foreach from=$goods.type.params item=param key=group}>
+<tr>
+<th colspan="2" style="text-align:left; background:none;"><{$group}></th>
+</tr>
+<{foreach from=$param item=value key=item}>
+<{assign var="paramsItem" value=$paramsItem+1}>
+<tr>
+<th><{$item}></th>
+<{assign var="params" value="params"}>
+<td><{input type="text" name="goods[params][{$paramsItem}]" value="{$goods[$params][$group][$item]}" }> <input type='hidden' name='goodsParams[group][<{$paramsItem}>]' value='<{$group}>'/> <input type='hidden' name='goodsParams[item][<{$paramsItem}>]' value='<{$item}>'/> </td>
+</tr>
+<{/foreach}>
+<{/foreach}>
+</table>
+</div>
+<{/if}>

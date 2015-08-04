@@ -1,0 +1,89 @@
+<form id="actForm" action="index.php?app=cellphone&ctl=admin_activity&act=save"  method="POST" >
+  <input type="hidden" name="act_id" value="<{$actInfo.act_id}>">
+  <div class="tableform">
+    <div class="division">
+      <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <th><em><font color="red">*</font></em><{t}>活动选择：<{/t}></th>
+        <td>
+          <{input type="object" object="actunit" vtype="required" name="unit_id" callback="_callback" scols="" return_url="" multiple="" select="radio" filter="" value=$actInfo.unit_id}>
+          <div id='activity'><{include file="admin/activity/list.html" app=cellphone}></div>
+        </td>
+      </tr>
+      <tr>
+        <th><em><font color="red">*</font></em><{t}>活动名称：<{/t}></th>
+        <td><{input type="text" name="act_name" vtype="required" value=$actInfo.act_name style="width:60%"}></td>
+      </tr>
+      <tr>
+        <th><{t}>排序：<{/t}></th>
+        <td><{input style="width:50px;" type="unsigned" name="p_order"  value=$actInfo.p_order}></td>
+      </tr>
+      <tr>
+        <th><em><font color="red">*</font></em><{t}>广告图片：<{/t}></th>
+        <td>
+          <div><{if $actInfo.banner_url}><img src="<{$actInfo.banner_url}>"><{/if}></div>
+          <input type=button value=上传图片 class="uploadbtn"><{t}><em><font color="red">为取得最佳显示效果广告图片尺寸比例为640*200</font></em><{/t}><input type="hidden" vtype="required" name="banner" value="<{$actInfo.banner}>">
+        </td>
+      </tr>
+     
+      </table>
+    </div>
+  </div>
+  <div class="table-action">
+    <{button type="submit"  label=$___b2c="保存"|t:'b2c'}>
+  </div>
+</form>
+<script>
+var extra_validator={};
+if(!extra_validator['subBrand']){
+  extra_validator['subBrand'] ={
+    'checkForm':['',function(f,i){
+        var checkNum = 0;
+        $ES('.gType',"brandForm").each(function(item, index, itobj){
+          if(item.checked == true || item.type == 'hidden') checkNum++;
+        });
+        if(checkNum == 0){
+          if(confirm('<{t}>您未选择关联类型，这样将导致商品无法使用该品牌。是否确认保存<{/t}>')){
+            return true;
+          }else{
+            return false;
+          }
+        }else{
+          return true;
+        }
+      }]
+  };
+}
+$('actForm').store('target',{
+	onComplete:function(){
+		if(opener.finderGroup['<{$env.get._finder.finder_id}>'])
+		opener.finderGroup['<{$env.get._finder.finder_id}>'].refresh();
+		window.close();
+	}
+});
+$$("#actForm .uploadbtn").addEvent('click',function(e){bindevent(this)});
+function bindevent(el){
+  var div=$(el).getParent('td').getElement('div').set('html','');
+  var input = $(el).getParent('tr').getElement('input[type^=hidden]');
+  var url='index.php?app=desktop&act=alertpages&goto='+encodeURIComponent("index.php?app=image&ctl=admin_manage&act=image_broswer&type=big");
+  Ex_Loader('modedialog',function(){
+    return new imgDialog(url,{onCallback:function(image_id,image_src){
+        new Element('img',{src:image_src}).inject(div);
+        input.value=image_id;
+    }});
+  });
+}
+function _callback(rs){
+  if(!rs){return}
+  var info = JSON.decode(rs);
+  var target = $('actForm').getElement('input[name^=act_name]');
+  if(target && target.value=='') target.value = info['name'];
+  new Request.HTML({
+    url:'<{link app=cellphone ctl=admin_activity act=get_goods}>',
+    update:$('activity'),
+    onComplete:function(res){
+       $('activity').show();
+    }
+  }).post('unit_id='+info['id']);
+}
+</script>

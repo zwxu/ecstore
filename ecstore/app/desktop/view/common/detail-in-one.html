@@ -1,0 +1,100 @@
+<{if count($_detail_func)>1}>
+<{capture name="sidebar"}>
+<div class="spage-side-nav">
+<ul>
+    
+    <{foreach from=$_detail_func item=item key=key name="menu"}>
+        <li class="l-handle" name="func-<{$key}>"><span><{$item.label}></span></li> 
+    <{/foreach}>
+</ul> 
+</div>
+<{/capture}>
+<{/if}>
+
+<script>
+(function(){
+ if(!$$('.spage-side-nav li').length)return;
+
+ $('main').retrieve('setTabs',function(){
+         var tabs=$ES('#menu-desktop .spage-side-nav li');
+        
+         var hash=location.hash.slice(1);
+         var showIndex=tabs.indexOf($E('#single-page-sidebar .spage-side-nav li[name='+hash+']')).limit(0,1000);
+         new ItemAgg(tabs,$ES('#main .spage-main-box'),{
+         activeName:'cur',
+         onActive:function(tab,item){    
+                  var anotherItems=$$($A(this.items).remove(item));
+                  if(tab.hasClass('all')){
+                     anotherItems.show();
+                  }else{
+                     anotherItems.hide();
+                  }
+        },onBackground:function(tab){
+             tab.style.cssText='';
+             tab.removeClass('l-handle');
+        },
+         show:showIndex
+        });
+    
+    })();
+    
+    function update_html(el,i){
+        var form = $(el).getElement('form');
+        if(!form)return;
+        form.set('action',form.get('action')+'&finderview='+i);
+        
+        var loop=arguments.callee;        
+        /*form.store('target',{
+            onComplete:function(resp){                            
+                el.innerHTML = resp;
+                loop(el,i);
+            }            
+        });    */
+        form.removeEvents('submit').addEvent('submit',function(e){
+            e.stop();
+	    if(!validate(form)){
+            	e.stop();
+            	return (new MessageBox('<{t}>表单验证失败.<{/t}>',{type:'error',autohide:true}));
+            };      	
+            this.set('send', {'onRequest':function(){},
+            'onComplete':function(resp){
+            try{
+                var response_txt = JSON.decode(resp);
+                if(response_txt != undefined && response_txt != "")    {
+                    if (response_txt.error != undefined && response_txt.error != '')
+                     return (new MessageBox(response_txt.error,{type:'error',autohide:true}));
+                    if (response_txt.success != undefined && response_txt.success != '')
+                     MessageBox.success("<{t}>保存成功<{/t}>");
+                }    
+            }catch(e){
+                el.innerHTML = resp;
+                loop(el,i);
+                MessageBox.success("<{t}>保存成功<{/t}>");
+            }                    
+            }}).send();            
+        });
+    }
+
+    $('main').getElements('div.spage-main-box').each(function(el,i){
+		var key = el.get('key');
+        if($(el).getElement('form')){
+            update_html(el,key);
+        }
+    
+    });
+})();
+</script>
+
+<{foreach from=$_detail_func item=item key=key}>
+<div></div>
+<div class="spage-main-box" key="<{$key}>">
+    
+    <h3><{$item.label}></h3>
+    
+    <{*<a id="func-<{$key}>" name="func-<{$key}>"></a>*}>
+    
+    <{$item.html}>
+    
+</div>
+<div></div>
+<{/foreach}>

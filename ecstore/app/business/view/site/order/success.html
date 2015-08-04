@@ -1,0 +1,25 @@
+<{lang_script src="lang.js" app="site"}>
+<{css src="framework.css" app="site" pdir="css_mini"}>
+<{css src="b2c.css" app="b2c" pdir="css_mini"}>
+<{css src="passport.css" app="b2c" pdir="css_mini"}>
+<{if defined("DEBUG_JS") && DEBUG_JS}>
+  <{script src="mootools.js" app="site"}>
+  <{script src="formplus.js" app="site"}>
+  <{script src="jstools.js" app="site"}>
+  <{script src="shoptools.js" app="b2c"}>
+  <{script src="coms/popup.js" app="site"}>
+<{else}>
+  <{script src="moo_min.js" app="site" pdir="js_mini"}>
+  <{script src="tools_min.js" app="site" pdir="js_mini"}>
+  <{script src="shoptools_min.js" app="b2c" pdir="js_mini"}>
+  <{script src="ui_min.js" app="site" pdir="js_mini"}>
+<{/if}>
+<{lang_script src="lang.js" app="b2c"}>
+<{lang_css src="lang.css" app="b2c"}>
+<{$message}>
+<script>
+	function aa(){
+		 top.location.reload();	
+	}
+	setTimeout('aa()',1000);	
+</script>

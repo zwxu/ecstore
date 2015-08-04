@@ -1,0 +1,18 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xn="http://www.renren.com/2009/xnml">
+<head></head>
+<body>
+<script type="text/javascript" src="http://static.connect.renren.com/js/v1.0/FeatureLoader.jsp"></script>
+<script>
+XN_RequireFeatures(["Connect"], function(){
+XN.Main.init("97b05765da9944a99fbb04f5c88b76e2", "http://172.16.1.129/ecstore/src/app/login/view/xd_receiver.html");
+XN.Connect.get_status().waitUntilReady(function (login_state) { 
+   if (login_state == XN.ConnectState.connected) {
+       XN.Connect.logout(function () {
+           window.location="http://172.16.1.129/ecstore/src/";
+       });
+   }
+});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<span class='lnk box-edit'><{t}>[编辑]<{/t}></span><br/>
+
+<table>
+  <tr>
+    <th><{t}>收货信息：<{/t}></th>
+    <td>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tableform">
+<tbody>
+  <tr>
+    <th><{t}>收货地区：<{/t}></td>
+    <td colspan=2>
+      <span><input name="order[consignee][area]" type="hidden" value='<{$order[consignee][area]}>'/><{$order[consignee][area]}></span>
+    </td>
+  </tr>
+  <tr>
+    <th><{t}>收货地址：<{/t}></td>
+    <td>
+    <input type='hidden' name='order[consignee][ship_addr_area]' value='<{$order[consignee][ship_addr_area]}>' />    
+    <span id='selected-area' class='font-gray' title='<{t}>系统将拼接地区选择结果到收获地址<{/t}>'><{t}>[地区]<{/t}></span>
+    <{input type='hidden' name="order[consignee][addr]" value=$order[consignee][addr] }><{$order[consignee][addr]}>
+    </td>
+    <td>
+	<{t}>邮编：<{/t}>
+	<{input name="order[consignee][zip]" type="hidden" value=$order[consignee][zip]}><{$order[consignee][zip]}>
+	</td>
+  </tr>
+  <tr>
+    <th><{t}>收货人姓名：<{/t}></td>
+    <td colspan=2><{input name="order[consignee][name]" type="hidden" value=$order[consignee][name]}><{$order[consignee][name]}></td>
+  </tr>
+  <{if !$addr.member_id}>
+  <tr>
+    <th><{t}>Email：<{/t}></td>
+    <td colspan=2><{input name="order[consignee][email]" type="hidden" value=$order[consignee][email]}><{$order[consignee][email]}></td>
+  </tr>
+  <{/if}>
+  <tr>
+    <th>
+      <{t}>手机：<{/t}>
+    </td>
+    <td colspan=2>
+     <{input name="order[consignee][mobile]" type="hidden" value=$order[consignee][mobile]}><{$order[consignee][mobile]}>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      <em style="color:#ccc">*</em><{t}>固定电话：<{/t}>
+    </td>
+    <td colspan=2>
+     <{input name="order[consignee][telephone]" type="hidden" value=$order[consignee][telephone]}><{$order[consignee][telephone]}>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+  <div class='receivermore'>
+     <{t}>订单附言：<{/t}><{input name="order[memo]" type="hidden" value=$order[memo]}><{$order[memo]}>
+
+    <div style='margin-top:4px'>
+     <{t}>送货时间：<{/t}>
+     <{if $order[consignee][day] == 'specal'}>
+        <{$order[consignee][specal_day]}>
+        <input type='hidden' name='order[consignee][r_time]' value=$order[consignee][specal_day] />
+     <{else}>
+        <{$order[consignee][day]}>&nbsp;<{$order[consignee][time]}>
+        <input type='hidden' name='order[consignee][r_time]' value="<{$order[consignee][day]}> <{$order[consignee][time]}>" />
+     <{/if}>
+      </div>
+
+</div>
+
+    </td>
+  </tr>
+</table>
+
+<script>
+(function(){doAddEvents( $('order_create').getElement('div[url^=shipping]'),'edit' );}).delay(200);
+
+</script>

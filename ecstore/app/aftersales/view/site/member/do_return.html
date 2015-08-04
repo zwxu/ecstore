@@ -1,0 +1,42 @@
+<div id="member-main" class="member-main">
+    <h1 class="title"><{t}>申请退款<{/t}></h1>
+    <form action="<{link app=aftersales ctl=site_member act=return_save_mai}>" enctype="multipart/form-data" encoding="multipart/form-data" method="post" name="return_save" id='x-return-form'>
+        <div class="FormWrap">
+			<div class="division">
+                <h4 class="fontnormal"><{t}>退款金额：<{$return_products.0.amount}><{/t}></h4>
+                <input type="hidden" name="gorefund_price" value="<{$return_products.0.amount}>"/>
+				<{foreach from=$order.items item=item key=key}>
+					<input type="hidden" name="product_item_nums[<{$item.products.product_id}>]" value="<{$item.quantity}>">
+					<input type="hidden" name="products[<{$key}>]" value="<{$item.products.product_id}>">
+					<input type="hidden" name="product_bn[<{$item.products.product_id}>]" value="<{$item.bn}>">
+					<input type="hidden" name="product_nums[<{$item.products.product_id}>]" value="<{$item.sendnum}>">
+					<input type="hidden" name="product_name[<{$item.products.product_id}>]" value="<{$item.name}>">
+				<{/foreach}>
+            </div>
+    </div>
+    <input type="hidden" name="order_id" value="<{$order_id}>">
+	<input type="hidden" name="member_id" value="<{$order.member_id}>">
+    <{button class="" onclick="do_agree();" type="button" label=$___b2c="同意"|t:'b2c'}>
+    <{button class="" onclick="do_send();" type="button" label=$___b2c="拒绝"|t:'b2c'}>
+</form>
+</div>
+<script>
+function do_agree(){
+	new Request.HTML({
+		url:'<{link app=aftersales ctl=site_member act=select_address}>',
+		method:'post',
+		data:'return_id=<{$return_products.0.return_id}>',
+		update:$('member-main')
+}).send();
+}
+
+function do_send(){
+	new Request.HTML({
+		url:'<{link app=aftersales ctl=site_member act=do_no_return}>',
+		method:'post',
+		data:'return_id=<{$return_products.0.return_id}>&order_id=<{$return_products.0.order_id}>',
+		update:$('member-main')
+}).send();
+}
+</script>
+

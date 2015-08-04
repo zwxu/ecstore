@@ -1,0 +1,17 @@
+<app>
+    <name>scws分词组件</name>
+    <description>scws分词组件</description>
+
+    <author>
+        <name>BBC 开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>0.1</version>
+    <license>BBC license</license>
+
+	<depends>
+		<app>search</app>
+	</depends>
+</app>

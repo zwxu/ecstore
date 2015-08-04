@@ -1,0 +1,181 @@
+<div id="J_TabRecommends" class="simple J_DetailSection hslice tm-curTab">
+<h2 class="simple_look simple_lookModi"><{t}>看了又看<{/t}></h2>
+<div id="J_AttrTabRec" class="tm-clear hidden J_BrandAttr"></div>
+<div id="J_Tjwrap">
+  <ul id="see-grid-ul" class="clearfix ald-03040" style="height: 3331px;">
+  <{include file="site/product/see_list.html" app="b2c"}>
+  </ul>
+</div>
+</div>
+<script>
+//var tintervalid = setInterval('cando();',2000);
+var win = this;
+function cando(start){
+  var forInit = $$('#J_Tjwrap .ald-wf-li');
+  //var win = this;
+  var count = <{$goods.count}> || 0;
+  if(!forInit.length || forInit.length>=parseInt(count))return false;
+  
+  //var item = forInit[forInit.length-1];
+  //if(item && (item.getPosition().y-win.getScrollTop())<win.getSize().y){
+    new Request.JSON({
+      url:'<{link app="b2c" ctl="site_product" act="ajax_see"}>',
+      method:'post',
+      secure:false,
+      data:'goods_id=<{$goods.goods_id}>&start='+start,
+      onComplete:function(res,text){
+        if(res.rrr && res.rrr!='success') return;
+        var js='';
+        var html = res.data.stripScripts(function(script){
+            js = script;
+        });
+        $E('#J_Tjwrap ul').set('html',$E('#J_Tjwrap ul').get('html')+html);
+        //Browser.exec(js);
+        new Waterfall({
+            "container":"see-grid-ul",
+            "colWidth":240,
+            "colCount":3
+        });
+        forInitt = $E('#J_Tjwrap ul').getElements('img[lazyload]');
+        //new DataLazyLoad({lazyDataType:'img',img:'lazyload'});
+      }
+    }).send();
+    return true;
+  //}
+}
+
+/**
+var forInit = $$('#J_Tjwrap .ald-wf-li');
+var win = this;
+(function(){
+    if(!forInit.length)return false;
+    var loop = arguments.callee;
+    var loop = function(){
+        var item = forInit[forInit.length-1];
+        if((item.getPosition().y-win.getScrollTop())<win.getSize().y){
+          new Request.JSON({
+            url:'<{link app="b2c" ctl="site_product" act="ajax_see"}>',
+            method:'post',
+            secure:false,
+            data:'goods_id=<{$goods.goods_id}>&start='+forInit.length,
+            onComplete:function(res,text){
+              if(res.rrr && res.rrr!='success') return;
+              var js='';
+              var html = res.data.stripScripts(function(script){
+                  js = script;
+              });
+              $E('#J_Tjwrap ul').set('html',$E('#J_Tjwrap ul').get('html')+html);
+              //Browser.exec(js);
+              var count = <{$goods.count}> || 0;
+              if(forInit.length>=parseInt(count)){
+                clearInterval(tintervalid);
+              }
+              new Waterfall({
+                  "container":"see-grid-ul",
+                  "colWidth":220,
+                  "colCount":3
+              });
+              return;
+            }
+          }).send();
+        }
+    }
+    loop.delay(200);
+})();**/
+function Waterfall(param){
+    this.id = typeof param.container == 'string' ? document.getElementById(param.container) : param.container;
+    this.colWidth = param.colWidth;
+    this.colCount = param.colCount || 4;
+    this.cls = param.cls && param.cls != '' ? param.cls : 'wf-cld';
+    this.init();
+}
+Waterfall.prototype = {
+    maxArr:function(arr){
+        var len = arr.length,temp = arr[0];
+        for(var ii= 1; ii < len; ii++){
+            if(temp < arr[ii]){
+                temp = arr[ii];
+            }
+        }
+        return temp;
+    },
+    init:function(){
+        var _this = this;
+        var col = [],//列高
+            iArr = [];//索引
+            comp = [];
+        var nodes = _this.id.getElements('.ald-wf-li'),len = nodes.length;
+        for(var i = 0; i < _this.colCount; i++){
+            col[i] = 0;
+            comp[i] = [];
+        }
+        for(var i = 0; i < len; i++){
+            nodes[i].h = nodes[i].offsetHeight + 20;
+            iArr[i] = i;
+        }
+        //var comp = ['left':0,'top':0,'bottom':0,'count':0];
+        for(var i = 0; i < len; i++){
+            var ming = i%_this.colCount;
+            if(i<_this.colCount){
+                var left = ming * (_this.colWidth +20);
+                var top = col[ming];
+                col[ming] += nodes[i].h;
+                comp[ming]['left'] = left;
+                comp[ming]['top'] = top;
+                comp[ming]['bottom'] = col[ming];
+                nodes[i].style.left = left + "px";
+                nodes[i].style.top = top + "px";
+                continue;
+            }
+            var temp = comp[0];
+            ming = 0;
+            for(var j = 1; j < _this.colCount; j++){
+                if(comp[j]['bottom']>0 && temp['bottom']>comp[j]['bottom']){
+                    temp = comp[j];
+                    ming = j;
+                }
+            }
+            var left = ming * (_this.colWidth +20);
+            var top = col[ming];
+            col[ming] += nodes[i].h;
+            comp[ming]['left'] = left;
+            comp[ming]['top'] = top;
+            comp[ming]['bottom'] = col[ming];
+            nodes[i].style.left = left + "px";
+            nodes[i].style.top = top + "px";
+        }
+        _this.id.style.height = _this.maxArr(col) + "px";
+    }
+};
+window.addEvent('domready',function(){
+  new Waterfall({
+    "container":"see-grid-ul",
+    "colWidth":240,
+    "colCount":3
+  });
+});
+var forInitt = $$('#see-grid-ul img[lazyload]');
+var num = 0;
+(function(){
+    if(!forInitt.length)return false;
+    var loopqq = arguments.callee;
+    var loopq = function(){
+        forInitt.each(function(item,index){
+            if(!item)return;
+            if((item.getPosition().y-win.getScrollTop())<win.getSize().y){
+                if(item.get('lazyload')){
+                   item.set('src',item.get('lazyload')).removeProperty('lazyload')
+                }
+                if(index == (forInitt.length-1)){
+                    num = num+10;
+                    cando(num);
+                }
+            }
+            if(index == (forInitt.length-1)){
+                loopqq.delay(1000);
+            }
+        });
+    }
+    loopq.delay(200);
+})();
+</script>

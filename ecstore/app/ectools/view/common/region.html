@@ -1,0 +1,119 @@
+<span class="region" vtype="<{$params.vtype}>" id="reg_<{$params.id}>">
+<input name="<{$params.name}>" package="<{$params.package}>" id="<{$params.id}>" type="hidden" value="<{$params.value}>" />
+<{foreach from=$area_depth item=item}>
+<{if $item === 0}>
+<select data-level-index="<{$item}>" class="inputstyle"><option value="_NULL_">请选择</option></select>
+<{else}>
+<select data-level-index="<{$item}>" class="inputstyle" style="display:none"></select>
+<{/if}>
+<{/foreach}>
+</span>
+
+<script>
+//var isDebug = '<{if defined("DEBUG_JS") && DEBUG_JS}>js<{else}>js_mini<{/if}>/',
+var path ='<{$env.base_url}>/app/ectools/statics/js/';
+var callback = '';
+if("<{$params.callback}>") {
+    callback = "<{$params.callback}>";
+}
+var validate_area;
+<{if $env.const.ECAE_MODE}>
+<{$region_data}>
+try {
+    $LAB.setOptions({BasePath:path}).script('region.js').wait(function(){
+        region_sel.init(callback);
+        var str = $$('.region input')[0].value;
+        if(str) {
+            str = str.split(':')[1].split('/');
+            str.each(function(s,i){
+                var sel = $$('select[data-level-index]')[i];
+                var opt = sel.getChildren().filter(function(el){return el.get('text')==s;});
+                region_sel.changeResponse(sel,{opt:opt});
+            });
+
+        }
+    });
+
+    validate_area = LANG_formplus['validate']['area'];
+}
+catch(e) {
+
+    var region_js_path = path + "region.js";
+    Ex_Loader(region_js_path, function(){
+        region_sel.init(callback);
+        var str = $$('.region input')[0].value;
+        if(str) {
+            str = str.split(':')[1].split('/');
+            str.each(function(s,i){
+                var sel = $$('select[data-level-index]')[i];
+                var opt = sel.getChildren().filter(function(el){return el.get('text')==s;});
+                region_sel.changeResponse(sel,{opt:opt});
+            });
+        }
+    });
+
+
+    validate_area = LANG_Validate['area'];
+}
+<{else}>
+try {
+    $LAB.setOptions({BasePath:path}).script('region_data.js').wait(function(){
+        $LAB.setOptions({BasePath:path}).script('region.js').wait(function(){
+	
+            region_sel.init(callback,"reg_<{$params.id}>");
+            var str = $$('#reg_<{$params.id}> input')[0].value;
+            if(str) {
+                str = str.split(':')[1].split('/');
+                str.each(function(s,i){
+                    var sel = $$('#reg_<{$params.id}> select[data-level-index]')[i];
+                    var opt = sel.getChildren().filter(function(el){return el.get('text')==s;});
+                    region_sel.changeResponse(sel,{opt:opt});
+                });
+
+            }
+        });
+    });
+    validate_area = LANG_formplus['validate']['area'];
+}
+catch(e) {
+    Ex_Loader(path + "region_data.js", function(){
+        Ex_Loader(path + "region.js", function(){
+            /*region_sel.init(callback);
+            var str = $$('.region input')[0].value;
+            if(str) {
+                str = str.split(':')[1].split('/');
+                str.each(function(s,i){
+                    var sel = $$('select[data-level-index]')[i];
+                    var opt = sel.getChildren().filter(function(el){return el.get('text')==s;});
+                    region_sel.changeResponse(sel,{opt:opt});
+                });
+            }*/
+			region_sel.init(callback,"reg_<{$params.id}>");
+            var str = $$('#reg_<{$params.id}> input')[0].value;
+            if(str) {
+                str = str.split(':')[1].split('/');
+                str.each(function(s,i){
+                    var sel = $$('#reg_<{$params.id}> select[data-level-index]')[i];
+                    var opt = sel.getChildren().filter(function(el){return el.get('text')==s;});
+                    region_sel.changeResponse(sel,{opt:opt});
+                });
+
+            }
+        });
+    });
+
+    validate_area = LANG_Validate['area'];
+}
+<{/if}>
+validatorMap['area']= [validate_area, function(element, v) {
+    return  element.getElements('select').every(function(sel){
+        if(sel.getStyle('display') != "none") {
+            var selValue=sel.get('value');
+            sel.focus();
+            return selValue!='' && selValue!='_NULL_';
+        }
+        return true;
+    });
+}];
+
+</script>

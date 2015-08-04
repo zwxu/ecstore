@@ -1,0 +1,92 @@
+<{if $comment.list.ask}>
+<{foreach from=$comment.list.ask item=comlist name=discusslist}>
+<dl>
+  <dt class="bcolor-f8">
+  <div class="q-icon"></div>
+  <div class="star-no" style="float:left; padding-top:6px">
+    <ul>
+      <li class="star<{$goods_point.avg}>"></li>
+    </ul>
+  </div>
+  <div class="flt "><span class="font-blue"><{if $comlist.addon.hidden_name =='YES' && $comlist.author_id!=0}>匿名<{else}><{$comlist.author}><{/if}> </span>&nbsp;<span ><{if $base_setting.display_lv == 'on'}><{if $comlist.member_lv_name}>(<{$comlist.member_lv_name}>)<{/if}><{/if}></span></div>
+  <div class="floatright" style="color:#999"><{$comlist.time|cdate:'SDATE_STIME'}></div>
+  </dt>
+  <dd class="bcolor-f8 pl40" style="padding-left:40px"><{$comlist.comment|nl2br}>
+
+  </dd>
+
+  <dd style="padding:0" class="consult-wrap">
+  <{if $base_setting.switch_reply == 'on'}>
+  <div class="relay-wrap bcolor-f8"><div class="repaybtn clearfix "><a class="repay-a btn-a" ><span class="repay_span ask-btn" id="<{$comlist.comment_id}>">回 复</span></a></div></div>
+  <{/if}>
+  <{if $comlist.items}>
+  <!-- 添加回复 begin-->
+  <div class="commentReply  relay-wrap ">
+    <span class="left-repay a-rep"><em class="font-orange"><{$comlist.items|count}></em> 回 复</span>
+    <div class="a-wrap ">
+      <div class="arrow"></div>
+      <{foreach from=$comlist.items item=items key="key"}>
+      <dl <{if $key+1 != count($comlist.items)}>class="bb"<{/if}>>
+        <dt class="clearfix">
+        <div class="a-icon"></div>
+        <div class="star-no flt">
+          <ul>
+            <li class="star<{$goods_point.avg}>"></li>
+          </ul>
+        </div>
+        <div class="flt "><span <{if $items.author==='管理员'}>class="colorred"<{else}>class="font-blue"<{/if}>><!--这里判断一下，如果是管理员回复,class就调用"colorred"--><{if $items.addon.hidden_name =='YES' && $items.author_id!=0}>匿名<{else}><{$items.author}><{/if}> </span>&nbsp;<span ><{if $base_setting.display_lv == 'on'}><{if $items.member_lv_name}>(<{$items.member_lv_name}>)<{/if}><{/if}></span></div>
+        <div class="floatright" style="color:#999"><{$items.time|cdate:'SDATE_STIME'}></div>
+        </dt>
+        <dd><p><{$items.comment|nl2br}></p></dd>
+      </dl>
+      <{/foreach}> </div></div><{/if}>
+  <!-- 添加回复 end-->
+  </dd>
+</dl>
+<{/foreach}>
+  <div class="page-consult">
+  <{if $comment.asktotalpage>1}>
+  <div class="discusspager">
+    <div class="discuss-pagernum">显示<span><{$comment.page.start}></span>-<span><{$comment.page.end}></span>条 <a class="askfirst askpage" href="javascript:void(0);">首页</a> <a class="askfront askpage" href="javascript:void(0);">上一页</a><a class="askfront askpage" href="javascript:void(0);"><<</a>
+      <{foreach from=$comment.askPage item="askPage"}>
+      <a <{if $comment.askcurrent == $askPage+1}>class="current askpage"<{else}>class="askpage"<{/if}> href="javascript:void(0);" value='<{$askPage+1}>' ><{$askPage+1}></a>
+      <{/foreach}>
+      <a class="askpage asknext" href="javascript:void(0);">下一页</a><a class="asknext askpage" href="javascript:void(0);">>></a> <a class="asklast askpage" href="javascript:void(0);">末页</a></div>
+  </div>
+  <{/if}>
+</div>
+<script>
+$$('#consult_content .askpage').removeEvents('click').addEvent('click',function(){
+    if(this.hasClass('current')) return ;
+    var nextpage = this.get('text');
+    if(this.hasClass('asknext')){
+      nextpage = parseInt(<{$comment.askcurrent}>,10)+1;
+      if(nextpage>parseInt(<{$comment.asktotalpage}>,10)) return;
+    }
+    if(this.hasClass('askfront')){
+      nextpage = parseInt('<{$comment.askcurrent}>',10)-1;
+      if(nextpage<1) return;
+    }
+    if(this.hasClass('askfirst')){
+      if(parseInt('<{$comment.askcurrent}>',10) == 1) return;
+      nextpage = 1;
+    }
+    if(this.hasClass('asklast')){
+      nextpage = parseInt('<{$comment.asktotalpage}>',10);
+      if(parseInt('<{$comment.askcurrent}>',10) == nextpage) return;
+    }
+    var type_id='';
+    if(document.getElement('.consult-list .active')){
+      if((document.getElement('.consult-list .active')).getFirst('input'))
+      type_id = (document.getElement('.consult-list .active')).getFirst('input').value;
+    }
+    new Request.HTML({
+      url:'<{link app="b2c" ctl="site_comment" act="ajax_ask"}>',
+      update:$('consult_content'),method:'post',
+      data:'goods_id=<{$goods.goods_id}>&page='+nextpage+'&type_id='+type_id
+    }).send();
+  });
+</script>
+<{else}>
+<{$comment.null_notice.ask}>
+<{/if}>

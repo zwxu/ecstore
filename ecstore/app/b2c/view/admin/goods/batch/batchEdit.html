@@ -1,0 +1,24 @@
+<script>
+
+  	var batchEdit = (function(te,e){
+		e.innerHTML='&nbsp;&nbsp;正在保存...&nbsp;&nbsp;&nbsp;&nbsp;';
+        var dialog = $(e).getParent('.dialog');
+		new Ajax(
+            'index.php?app=b2c&ctl=admin_goods&act=saveBatchEdit',
+            {
+                data:e.getParent('.dialog'),
+                method:'post',
+                onSuccess:function(r){
+        			if(r=='ok'){
+		        		MessageBox.success('保存成功！');
+			        }else{
+				        MessageBox.error(r);
+			        }
+        			dialog.getElement('.dialog-btn-close').fireEvent('click');
+		        	te.refresh();
+		        }
+            }
+        ).request();
+	});
+
+</script>

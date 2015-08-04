@@ -1,0 +1,605 @@
+<div class="cart-wrap bai1200 dis_bl clb" id="log">
+<div class="dis_bl">
+<div class="share_site">当前位置：<a href="/">首页</a> &gt; <a class="red" href="#">购物车</a></div>
+</div>
+     <div class="cart-nav stepbj2 dis_bl clb"></div>
+
+    <form method="post" action='<{link app=b2c ctl="site_order" act="create"}>' id="order-create">
+        <{if $env.post.isfastbuy}>
+        <input type='hidden' name='isfastbuy' value=1 />
+        <{/if}>
+        <!--<div style="display:none"><{input type="checkForm" }></div>-->
+        <input type="hidden" name="purchase[member_id]" value="<{$address.member_id}>" />
+        <input type="hidden" name="purchase[addr_id]" value="<{$def_addr}>" />
+        <input type="hidden" name="purchase[def_area]" value="<{$def_area}>" />
+        <input type="hidden" name="md5_cart_info" value="<{$md5_cart_info}>" />
+        <input type="hidden" name="extends_args" value='<{$json_args}>' />
+        <input type="hidden" name="business_goods" value='<{$aCart.business_goods}>'>
+
+    <{include file="site/cart/checkout_base.html" app=scorebuy}>
+    <{include file="site/cart/cart_items.html" app=b2c}>
+    <{include file="site/cart/cart_solution.html" app=b2c}>
+
+    <{foreach from=$addItems item=item}>
+        <{$item}>
+    <{/foreach}>
+    <div class=" clearfix">
+
+      <div class="cart_under clearfix">
+        <div id="order_promotion">
+          <!-- promotion start -->
+          <{if isset($edit_ajax_data)}>
+          <input type="hidden" id='update-ajax-num' value='<{if $update_cart_type_godos}><{$edit_ajax_data}><{else}><{$edit_ajax_data}><{/if}>' error_msg="<{$error_msg}>" />
+          <{/if}>
+        
+        
+          <{if $aCart.promotion.goods}>
+          <{foreach from=$aCart.promotion.goods item=promotion }>
+            <input type="hidden" class="goods_rule_id" value="<{$promotion.rule_id}>" />
+          <{/foreach}>
+          <{/if}>
+          <{if $aCart.promotion.order}>
+          <div id="cart-real-sales-promotion" class="sales-promotion">
+            <!-- <h4><{t}>已享受的促销优惠<{/t}></h4>
+            <ul>
+            <{foreach from=$aCart.promotion item=promotion key=key}>
+            <{if $key=='goods'}><{continue;}><{/if}>
+            <{if $key=='coupon'}><{continue;}><{/if}>
+              <{foreach from=$promotion item=item}>
+            <li class="clearfix">
+            <span class="promotion-name"><input type="hidden" class="order_rule_id" value="<{$item.rule_id}>" /><{$item.name}> </span>
+            <span class="promotion-inf"><{if $item.solution}><{$item.solution}><{else}><{$item.desc}><{/if}></span>
+            </li>  
+            <{/foreach}>
+            <{/foreach}>
+            </ul> -->
+            <!-- <table width="100%" cellpadding="3" cellspacing="0" >
+            <{foreach from=$aCart.promotion item=promotion key=key}>
+            <{if $key=='goods'}><{continue;}><{/if}>
+            <{if $key=='coupon'}><{continue;}><{/if}>
+             <{foreach from=$promotion item=item}>
+              <tr>
+                <td class="span-auto">
+                  <input type="hidden" class="order_rule_id" value="<{$item.rule_id}>" />
+                  <{$item.name}> 
+                </td>
+                <td class="span-auto" style="text-align:left"><{$item.solution}> </td>
+              </tr>
+             <{/foreach}>
+            <{/foreach}>
+            </table> -->
+          </div>
+          <{/if}>
+          <!-- promotion end -->
+        
+          <{if $is_group_orders == 'false'}>
+          <{if $point_dis_html}><{$point_dis_html}><{/if}><{/if}>
+        
+        </div>
+        <div class='clearfix fr' id="amountInfo"><{include file="site/cart/checkout_total.html" app=b2c}></div>
+		<{if $aCart.inAct}>
+		<div class="vcode">
+		<label class="orderVcode"><{t}>验证码：<{/t}></label>
+		<div class="divcode"><{input  vtype="required&&number" size="4" maxlength="4" name="verifycode" id="iptlogin"  tabindex="3" class="verifycode"}> <span class="sverifyCodebox"><img align="absmiddle" id="membervocde" src="<{link app=b2c ctl=site_cart act=gen_vcode}>" /> <a href="javascript:changeimg('membervocde')"><{t}>看不清楚?换个图片<{/t}></a></span></div>
+		<input type="hidden" name="userVcode" value="1">
+		</div>
+		<{/if}>
+
+      </div>
+        <div align="right" style="margin:10px 0px 10px 0px;">
+        <{if $show_gotocart_button=='true'}>
+            <span class="return-cart" style="display:<{if $fastbuy}>none<{else}>''<{/if}>">
+            <a href="<{link app=b2c ctl='site_cart' act='index'}>" class="ba_ca_ed"><!--<i class="has-icon"> <{img src="bundle/return_icon.gif" app="b2c" }></i>-->返回购物车修改</a>
+            </span>
+        <{/if}>
+        <{button type="submit" class="btn cart_settlement" id="orderSubmit" label=$___b2c="提交订单"|t:'b2c' rel="_request"}>
+       </div>
+    </div>
+
+    <div class="CartBtn clearfix" >
+        <input type="hidden" name="fromCart" value="true" />
+        <!--<div class="span-auto floatRight last"><input class="actbtn btn-confirm" type="submit" value="<{t}>确认无误，下订单<{/t}>" /></div>-->
+    </div>
+    </form>
+</div>
+<script>
+function changeimg(id){
+    $(id).set('src','<{link app="b2c" ctl="site_cart" act="gen_vcode"}>#'+(+new Date()));
+  }
+/*下单*/
+
+(function(){
+    window.addEvent('domready',function(){
+        var f=$('order-create');
+      f.removeEvents('submit').addEvent('submit', function(e){
+            if (!validate(f)) {
+              e.stop();
+              return;
+          }
+        });
+    });
+
+    button_valiate = {
+        is_validate:function(e){
+            // el element id.
+            var section=e.getParent('div').getPrevious('.hid_item') || e.getParent('div.hid_item');
+            var _validate_return = true;
+
+            return section.getElements('[vtype]').every(function(el){
+                    return validate(el);
+              });
+        },
+        fold:function(e, act){
+            var section=e.getParent('.section');
+            if (!section.getElement('.cart-confirm-btn'))return this;
+            section.getElement('.cart-confirm-btn')[act == 'fold'?'removeClass':'addClass']('unfold');
+            return this;
+        },
+        removeCaution:function(e){
+            var section=e.getParent('.section');
+            if (!section.getElement('.cart-confirm-btn'))return this;
+            var _caution = section.getElement('.cart-confirm-btn').getNext('.caution');
+            if (_caution && _caution.hasClass('error')) _caution.destroy();
+        },
+        init:function(){
+            validatorMap['need_confirmed']= ['<{t}>配送方式没有确认！<{/t}>', function(element, v) {
+                if ($(element).hasClass('unfold')){new Fx.Scroll(window).toElement($(element.getParent('.section')));return false;}
+                else return true;
+            }];
+
+            validatorMap['mobile_or_phone']= ['<{t}>手机或电话必填其一！<{/t}>', function(element, v) {
+                var _mobile = $(element).getParent('tr').getPrevious('tr').getElement('input');
+                var _phone = $(element).getPrevious('input');
+
+                return (_mobile.value != '') || (_phone.value != '');
+            }];
+        }
+    }
+    button_valiate.init();
+
+
+    Order={
+        init:function(){
+            var _this=this;
+
+            $ES('.storeShipping').each(function(item){
+              item.addEvent('change',function(e){
+                  var target=$(e.target||e);
+          
+                  switch (target.get('type')){
+                      case 'radio':
+                          target.checked = true;
+                          target.disabled = true;
+                          _this.shippingChange(target);
+                          break;
+                      case 'checkbox':
+                          var shipping=target.getParent('tr').getElement('input[type=radio]');
+                          var id = target.id;
+                          shipping_id = id.substring(12);
+                          var store_id = target.getParent('td').id.substring(9);
+                          _this.shippingMerge(store_id,shipping_id);
+                          break;
+                      case 'select-one':
+                          var id  = item.id;
+                          var store_id = id.substring(9);
+                          var shipping = item.getChildren('select');
+                          shipping = shipping[0];
+                          var shipping_id = shipping.options[shipping.options.selectedIndex].value;
+                          _this.updateStore(store_id,shipping_id);
+                          _this.updateTotal();
+                          _this.resetChecked(store_id,shipping_id);
+                          //target.disabled = true;
+                          //_this.shippingChange(target);
+                          break;
+                      default :break;
+                  }
+              });
+            }); 
+
+            $('payment').addEvent('click',function(e){
+                if($(e.target).hasClass('x-payMethod')){
+          $(e.target).disabled = true;
+                    _this.updateTotal();
+                    /** 暂时保存支付方式 **/
+                    _this.save_payment(e.target);
+                }
+            });
+
+            $$('.link_update a').addEvent('click',function(e){
+                var el=e.target||e;
+                _this.isEdit($(el));
+            });
+
+            if (!$('payment-cur'))return;
+
+            $('payment-cur').addEvent('change',function(){
+        //   _this.setCurrency().updateTotal();
+            });
+
+            if (!!(document.getElement('input[name^=purchase[member_id]').get('value')))
+                $('payment-cur').fireEvent('change'); //会员还是需要调用
+
+            /**
+             * 添加全局变量，判断地址是否需要加入容错的“.”
+             */
+           // $('receiver').store('b2c-cart-checkout-ship-addr', 'true');
+        },
+    resetChecked:function(store_id,shipping){
+      $$('.chk_protect_'+store_id).each(function(item){
+        item.checked = false;
+        item.getParent('div').setStyle('display','none');
+      });
+      var is_protect_checkbox = $('use_protect_'+shipping);
+      if(is_protect_checkbox){
+        is_protect_checkbox.getParent('div').setStyle('display','');
+      }
+    },
+    updateStore:function(store_id,shipping_id){
+        var fastbuy = "<{$isfastbuy}>";
+        var url = "<{link app='b2c' ctl='site_cart' act='updateStoreTotal'}>";
+        if(fastbuy){
+          url =  "<{link app='scorebuy' ctl='site_cart' act='updateStoreTotal'}>";
+        }
+        var updateStoreTotalUrl = "<{$updateStoreTotalUrl}>";
+        if(updateStoreTotalUrl != ''){
+          url =  updateStoreTotalUrl;
+        }
+        var is_protect_checkbox = $('use_protect_'+shipping_id);
+        var is_protect;
+        if(is_protect_checkbox){
+        is_protect = $('use_protect_'+shipping_id).checked;
+        }else{
+        is_protect = false;
+        }
+        var area_id = $('area_id').value;
+        new Request.HTML({
+                url:url,
+                update:$('store_'+store_id),
+        async:false,
+                method:'post',
+        data:{
+          'store_id':store_id,
+          'shipping_id':shipping_id,
+          'is_protect':is_protect,
+          'area_id':area_id
+        }
+        }).send();
+    },
+      updateAllStore:function(){
+        $$('.storeShipping').each(function(item){
+            var id  = item.id;
+                  var store_id = id.substring(9);		   
+                  var shipping = item.getChildren('select');
+                  shipping = shipping[0];
+                  var shipping_id;
+                  if(shipping){
+                     shipping_id = shipping.options[shipping.options.selectedIndex].value;
+                  }
+            Order.updateStore(store_id,shipping_id);
+        });
+      },
+        isEdit:function(el){
+            el = el.getParent('a') || el;
+            var section=el.getParent('.section'),
+            item=section.getElements('.hid_item'),
+            el_id=el.id;
+
+            item.hide();
+            $$('#order-create .'+el_id).show();
+
+            // add or remove unfold class
+            if (el.get('class').indexOf('cancel_') > -1){
+                button_valiate.fold(el, 'unfold');
+            }
+
+            if (el_id.indexOf('cancel_') > -1){
+        // 还原收货地址。
+        deliverying.generateShippings(document.getElement('.receiver_radio_addr_id[checked]'),-1);
+                button_valiate.fold(el, 'fold');
+                button_valiate.removeCaution(el);
+            }
+        },
+        setShippingFromArea:function(lastselect){
+           var _this = this;
+           if(!lastselect)throw new Error('<{t}>非法的地区信息.<{/t}>');
+           var _value = lastselect.value;
+           var _shipping_method = '';
+           if (document.getElement('input[name^=purchase[shipping_method]]'))
+            _shipping_method = document.getElement('input[name^=purchase[shipping_method]]').get('value');
+           var _isfastbuy = '<{$env.post.isfastbuy}>';
+           var _payment = document.getElement('input[name^=payment[pay_app_id]]:checked') ? document.getElement('input[name^=payment[pay_app_id]]:checked').value : null;
+           var _extends_args = $('order-create').getElement('input[name^=extends_args]') ? $('order-create').getElement('input[name^=extends_args]').value : null;
+
+            if (parseInt(_value) > 0)
+            new Request({
+                    url:Shop.url.shipping,
+                    method:'post',
+                    data:{area:_value, isfastbuy:_isfastbuy, shipping_method:_shipping_method, payment:_payment, extends_args:_extends_args},
+                    onRequest:function(){
+                      $ES('.storeShipping').each(function(item){
+                        item.set('text','<{t}>正在获取配送方式...<{/t}>');
+                        $('orderSubmit').disabled=true;
+                        
+                      });
+                   },
+                   onComplete:function(res){
+                      var aDel = JSON.decode(res);
+                      for (var key in aDel) {
+                        $('shipping_'+key).set('html',aDel[key]);
+                      };
+                      _this.updateTotal();
+                      _this.updateAllStore();
+                      
+                      $('orderSubmit').disabled=false;
+                      if ($('def_shipping_info') && !$('def_shipping_info').isDisplay()) $('shipping_info').hide();
+                    }
+                }).send();
+        },
+        setCurrency:function(){
+            var _this = this;
+            new Request.HTML({
+                url:Shop.url.payment,
+                update:$('payment'),
+                method:'post',
+                data:{
+                   'cur':$('payment-cur').get('value'),
+                   'payment':$('payment').getElement('th input:checked')?$('payment').getElement('th input:checked').value:null,
+                   // 'd_pay':$('shipping').getElement('th input:checked')?$('shipping').getElement('th input:checked').get('has_cod'):null,
+                   'def_payment':document.getElement('input[name^=purchase[pay_app_id]]') ? document.getElement('input[name^=purchase[pay_app_id]]').value : null,
+                   'extends_args':$('order-create').getElement('input[name^=extends_args]') ? $('order-create').getElement('input[name^=extends_args]').value : null
+                },
+                onComplete:function(){
+                    _this.updatePayment.call(_this);
+                }
+            }).send();
+            return this;
+        },
+        updatePayment:function(){
+            var _this = this;
+            if(!this.synTotalHash)return;
+
+            if(this.synTotalHash.d_pay&&this.synTotalHash.d_pay == 'true'){
+                if ($('_normal_payment'))
+                    $('_normal_payment').hide();
+
+                if ($('_pay_cod'))
+                   $('_pay_cod').show().getElement('input[type=radio]').checked=true;
+            }else{
+                if ($('_normal_payment'))
+                    $('_normal_payment').show();
+
+                if ($('_pay_cod'))
+                    $('_pay_cod').hide().getElement('input[type=radio]').checked=false;
+
+                if (!document.getElement('.x-payMethod:checked]') && $('_normal_payment')) {$('_normal_payment').getElement('input[type=radio]').checked=true;}
+            }
+        },
+        save_payment:function(target){
+            new Request({
+                url:Shop.url.purchase_payment,
+                method:'post',
+                data:{
+          'pay_app_id':$(target).get('value'),
+                    'extends_args':$('order-create').getElement('input[name^=extends_args]') ? $('order-create').getElement('input[name^=extends_args]').value : null
+        },
+                onComplete:function(res){
+                }
+            }).send();
+        },
+        shippingChange:function(target){
+           this.clearProtect(target);
+           this.updateTotal();
+           this.save_shipping(target);
+        },
+        clearProtect:function(target){
+           if(tmpEl=$('shipping').retrieve('tmp_protect')){
+                if(tmpEl!=target){
+                    tmpEl.removeProperty('protect');
+                    tmpEl.getParent('tr').getElement('input[name^=delivery[is_protect]').checked=false;
+                }
+           }
+           if(tmpEl!=target&&target.get('protect')){$('shipping').store('tmp_protect',target);}
+        },
+        save_shipping:function(target){
+            /** 暂时记住保存配送方式 **/
+            var _chk_protect = $(target).getParent('td').getElement('input[type=checkbox]:checked');
+            new Request({
+                url:Shop.url.purchase_shipping,
+                method:'post',
+                data:{
+                    'shipping_id':$(target).get('value'),
+                    'is_protect':_chk_protect?'true':'false',
+                    'extends_args':$('order-create').getElement('input[name^=extends_args]') ? $('order-create').getElement('input[name^=extends_args]').value : null
+                },
+                onComplete: function(rs){
+                    // if(rs) {
+                    //     var s = $('shipping_change').getElement('input[name="delivery[shipping_id]"]:checked').getParent('td');
+                    //     var name = s.getElement('label').get('text').trim();
+                    //     s = name + s.getElement('.shipping-information').get('html');
+                    //     $('shipping_list').set('html','<tr><td>' + s + '</td></tr>');
+                    //     $('cancel_shipping_info').fireEvent('click',$('cancel_shipping_info'));
+                    // }
+                }
+            }).send();
+        },
+        shippingMerge:function(store_id,shipping_id){
+           this.updateTotal();
+       this.updateStore(store_id,shipping_id);
+        },
+        updateTotal:function(options){
+            options = options||{};
+            this.synTotalHash = (this.synTotalHash||{});
+
+            var _shipping       = $$('.shippingSel'),
+                _coin           = $('payment-cur'),
+                _tax            = $('is_tax'),
+                _tax_company    = document.getElement('input[name^=payment[tax_company]'),
+                _dis_point      = document.getElement('input[name^=payment[dis_point]');
+
+            // if(_shipping){
+            //     Object.append(this.synTotalHash,{
+            //         shipping_id:_shipping.value,
+            //         is_protect:_shipping.getParent('td').getElement('input[type=checkbox]:checked')?'true':'false',
+            //         d_pay:_shipping.get('has_cod')
+            //     });
+            //     this.updatePayment();
+            // }
+            var _shipping_id = new Array();
+            var _is_protect = new Array();
+            _shipping.each(function(item){
+                var shipTr = item.getParent('div');
+                var id = shipTr.id;
+                var store_id = id.substring(9);
+                _shipping_id[store_id] = item.options[item.options.selectedIndex].value;
+                var shippingText = item.options[item.options.selectedIndex].text;
+                shippingText=shippingText.split("￥"); //字符分割
+                if(shippingText[1]){
+                    $('shipping_money').innerHTML = "￥"+shippingText[1];
+                }
+                $E('.shippingSel').removeClass('inputstyle');
+                var is_protect_checkbox = $('use_protect_'+item.options[item.options.selectedIndex].value);
+                if(is_protect_checkbox){
+                  _is_protect[store_id] = $('use_protect_'+item.options[item.options.selectedIndex].value).checked;
+                }else{
+                  _is_protect[store_id] = false;
+                }
+
+            });
+            var _payment = $('payment').getElement('tr input[type=radio]:checked');
+            if(_payment){
+                 Object.append(this.synTotalHash,{
+                    payment:_payment.value
+                });
+            }
+
+            if($('order-create').getElement('input[name=isfastbuy]')){
+                Object.append(this.synTotalHash,{isfastbuy:1});
+            }
+            if(_coin == null){
+                 return;
+            }
+            Object.append(this.synTotalHash,{
+                cur:_coin.get('value'),
+                shipping_id:_shipping_id,
+                is_protect:_is_protect,
+                is_tax:(_tax&&_tax.checked)?'true':'false',
+                area:document.getElement('input[name^=delivery[ship_area]')?document.getElement('input[name^=delivery[ship_area]').get('value'):null,
+                tax_company:(_tax_company != null && _tax_company != undefined) ? _tax_company.get('value') : null,
+                dis_point:_dis_point ? _dis_point.value : null,
+                extends_args:$('order-create').getElement('input[name^=extends_args]') ? $('order-create').getElement('input[name^=extends_args]').value : null
+            });
+            var cart_coupon_list_modal;
+            new Request.HTML(Object.append({url:Shop.url.total,update:$('amountInfo'),onRequest:function(){
+                    $$('#cart-coupon-list .delItem').setStyle('visibility','hidden');
+            },onSuccess:function(){
+            $$('#cart-coupon-list .delItem').fade(1);
+            $$('#payment .x-payMethod').set('disabled', false);
+            $$('#shipping .shipping_radio_shipping_id').set('disabled', false);
+            $$('#shipping input[name^=delivery[is_protect]]').set('disabled', false);
+                <{$point_dis_js}>
+            }},options)).post(this.synTotalHash);
+        }
+    };
+    Order.init();
+})();
+
+
+
+
+/*购物车小图mouseenter效果*/
+function thumb_pic(){
+  if(!$('goodsbody'))return;
+  var cart_product_img_viewer=new Element('div',{styles:{'position':'absolute','zIndex':500,'opacity':0,'border':'1px #666 solid'}}).inject(document.body);
+  var cpiv_show=function(img,event){
+
+      if(!img)return;
+      cart_product_img_viewer.empty().adopt($(img).clone().removeProperties('width','height').setStyle('border','1px #fff solid')).fade(1);
+
+      var size = window.getSize(), scroll = window.getScroll();
+        var tip = {x: cart_product_img_viewer.offsetWidth, y: cart_product_img_viewer.offsetHeight};
+        var props = {x: 'left', y: 'top'};
+        for (var z in props){
+            var pos = event.page[z] + 10;
+            if ((pos + tip[z] - scroll[z]) > size[z]) pos = event.page[z] - 10 - tip[z];
+            cart_product_img_viewer.setStyle(props[z], pos);
+        }
+
+  };
+
+  $$('.cart-product-img').each(function(i){
+      new Asset.image(i.get('isrc'),{
+          onload:function(img){
+              if(!img)return;
+              var _img=img.zoomImg(50,50);
+              if(!_img)return;
+              _img.setStyle('cursor','pointer').addEvents({
+                  'mouseenter':function(e){
+                      cpiv_show(_img,e);
+                  },
+                  'mouseleave':function(e){
+                      cart_product_img_viewer.fade(0);
+                  }
+              });
+              i.empty().adopt(new Element('a',{href:i.get('ghref'),target:'_blank',styles:{border:0}}).adopt(_img));
+          },onerror:function(){
+              i.empty();
+          }
+      });
+  });
+
+};
+
+
+
+window.addEvent('domready',function(){
+    thumb_pic();
+});
+/*
+* 使用优惠券
+*/
+function userCoupons(obj,store_id){
+    var fastbuy = "<{$isfastbuy}>";
+    var coupon_value = obj.options[obj.options.selectedIndex].value;
+    var url = '<{link app=b2c ctl="site_cart" act="add" arg0="coupon"}>';
+    if(fastbuy){
+        url = '<{link app=scorebuy ctl="site_cart" act="add" arg0="coupon"}>';
+        if(coupon_value=='no'){
+          url = '<{link app=scorebuy ctl="site_cart" act="remove_store_coupon" arg0="coupon"}>';
+        }
+    }else{
+        if(coupon_value=='no'){
+          url = '<{link app=b2c ctl="site_cart" act="remove_store_coupon" arg0="coupon"}>';
+        }
+    }
+
+    new Request({
+            url:url,
+            method:'post',
+            data:'coupon='+coupon_value+"&response_type=true&store_id="+store_id,
+            onSuccess:function(res){
+				var re = JSON.decode(res);
+				if(!re){
+					Message.error('<{t}>优惠券删除成功<{/t}>');
+				}else{
+					if(!re.success){
+						Message.error('<{t}>'+re.msg+'<{/t}>');
+					}else{
+						var con = re.data;
+						if(con[0].used==true){
+						}else{
+							Message.error('<{t}>优惠券不适用<{/t}>');
+						}
+					}
+				}
+				var item = $('shipping_'+store_id);
+				var shipping = item.getChildren('select');
+				shipping = shipping[0];
+				var shipping_id = shipping.options[shipping.options.selectedIndex].value;
+				Order.updateStore(store_id,shipping_id); 
+				Order.updateTotal();
+            }
+      }).send();
+}
+
+
+</script>

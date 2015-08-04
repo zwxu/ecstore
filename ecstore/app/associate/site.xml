@@ -1,0 +1,7 @@
+<site>
+	<module id='associate' controller='site_associate' >
+        <name>associate</name>
+        <title>联想自动搜索</title>
+        <disable>false</disable>
+    </module>
+</site>

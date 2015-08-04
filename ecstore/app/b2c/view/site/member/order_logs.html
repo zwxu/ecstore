@@ -1,0 +1,31 @@
+
+<{foreach from=$orderlogs item=log}>
+<p>
+	<{$log.alttime|cdate:FDATE_STIME}>&nbsp;&nbsp;<{$log.log_text}>
+	<{if $log.log_logi_no}>
+		，物流单号：<a href='<{link app="logisticstrack" ctl="site_tracker" act="pull" arg0=$log.log_logi_no.delivery_id}>' class='classless-delivery-id' deliveryid="<{$log.log_logi_no.delivery_id}>"><{$log.log_logi_no.dly_number}></a>
+	<{/if}>
+</p>
+<{/foreach}>
+
+<script>
+<{if app::get('logisticstrack')->is_actived()}>
+$$('.classless-delivery-id').addEvent('click',function(e){
+	var target=e.target,href = target.get('href'),deliveryid=target.get('deliveryid'), p = target.getParent('p');
+	var logisticdomid = 'logistic-'+deliveryid, logisticdom=$(logisticdomid);
+	e.stop(); // prevent jump
+	if ( !logisticdom ) { //
+		logisticdom = {destroy:function(){}};
+		new Request({
+			url:href,noCache:true,async:false,
+			onSuccess:function(responseText,responseXML){
+				var newdom = new Element('div',{html:responseText,'class':'logistic-info',id:logisticdomid});
+				newdom.inject(p,'after');
+			}
+		}).get();
+	} else {
+		logisticdom.destroy();
+	}
+});
+<{/if}>
+</script>

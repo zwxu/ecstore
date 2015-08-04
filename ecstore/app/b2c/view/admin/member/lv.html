@@ -1,0 +1,89 @@
+<{if !$_is_singlepage}>
+
+<form method="POST" action="index.php?app=b2c&ctl=admin_member_lv&act=save" class="tableform" id="form_member_lv">
+<div class="division">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" >
+	<tr>
+	  <th><em class="c-red">*</em><{t}>等级名称：<{/t}></th>
+	  <{if $lv.member_lv_id}><{input type='hidden' name='member_lv_id' value=$lv.member_lv_id}><{/if}>
+	  <td><{input type="text" name="name" size="20" vtype="required" value=$lv.name}></td>
+	</tr>
+</table>
+<table width="100%" border="0" cellpadding="0" cellspacing="0"id='member_level' class="member-set">
+<tr>
+  <th><em class="c-red">*</em><{t}>会员折扣率：<{/t}></th>
+  <td><{input type="unsigned" name="dis_count" style="width:50px" size="20" vtype="required&&number" value=$lv.dis_count}>
+    <span class="notice-inline"><{t}>如果输入0.8，表示该会员等级以销售价8折的价格购买，有效范围0～1。<{/t}></span></td>
+</tr>
+<tr>
+  <th><{t}>是否为会员默认等级：<{/t}></th>
+  <td>
+    <{input type="radio" name="default_lv" options=$lv.default_lv_options value=$lv.default_lv separator="&nbsp;" }>
+	<span class="notice-inline" style="margin:5px 0 0 5px; padding:0"><{t}>如果选择“是”，顾客注册商店会员成功时，初始等级为当前等级<{/t}></span>
+  </td>
+</tr>
+<{if $levelSwitch == '1'}>
+<tr class="member_retail">
+  <th><em class="c-red">*</em><{t}>所需经验值<{/t}>：</th>
+  <td><{input type="unsigned" name="experience" style="width:50px" size="8" class="_x_input" vtype="required&&number" value=$lv.experience}> &nbsp; <span class='notice-inline'><{t}>按经验值升级时会员经验值达到此标准后会自动升级为当前等级<{/t}></span> &nbsp; <{help}><{t}>会员历史消费金额累加数，消费1元增加一个经验值，不足1元忽略<{/t}><{/help}></td>
+</tr>
+<{else}>
+<tr class="member_retail">
+  <th><em class="c-red">*</em><{t}>所需积分<{/t}>：</th>
+  <td><{input type="unsigned" name="point" style="width:50px" size="8" class="_x_input" vtype="required&&number" value=$lv.point}> &nbsp; <span class='notice-inline'><{t}>按积分升级时会员积分达到此标准后会自动升级为当前等级<{/t}></span> &nbsp; <{help}><{t}>商店设置的积分获得方式<{/t}><{/help}></td>
+</tr>
+<{/if}>
+<{if $ext_html}>
+<{$ext_html}>
+<{/if}>
+
+</table>
+
+</div>
+</form>
+<{area inject='.mainFoot'}>
+     <div class="table-action">
+	<{button type="button" label=$___b2c="保存"|t:'b2c' id="member_lv-form-submit"}>
+</div>
+<{/area}>
+
+
+
+
+
+<script>
+(function(){
+	var _form = $('form_member_lv');
+	var btn =$('member_lv-form-submit');
+	var finder = finderGroup['<{$env.get._finder.finder_id}>'];
+
+	_form.store('target',{
+		onSuccess:function(response){
+			var hash_res_obj = JSON.decode(response);
+
+			if (hash_res_obj.success != undefined && hash_res_obj.success != "")
+			{
+				try{
+					var _dialogIns = btn.getParent('.dialog').retrieve('instance');
+				}catch(e){}
+
+				if(_dialogIns)
+				{
+					_dialogIns.close();
+					window.finderGroup['<{$env.get._finder.finder_id}>'].refresh();
+				}
+			}
+
+		}
+	});
+
+	    btn.addEvent('click',function(){
+		    _form.fireEvent('submit',{stop:$empty});
+		});
+
+})();
+
+
+</script>
+
+<{/if}>

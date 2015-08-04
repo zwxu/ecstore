@@ -1,0 +1,51 @@
+<{if count($cat.brand)>0}>
+<h3><{t}>选择品牌：<{/t}></h3>
+  <div class="division clearfix" >
+          <{foreach from=$cat.brand item=aItems}>
+              <div class="span-4 textnowrap selectBranditems">
+              <label for="ipt_brand_<{$aItems.brand_id}>"><input type="checkbox" name="brand_id[]" value="<{$aItems.brand_id}>" id="ipt_brand_<{$aItems.brand_id}>"><{$aItems.brand_name}></label>
+              </div>
+          <{/foreach}>
+  </div>
+<{/if}>
+
+<{capture name=prop_search}>
+	<h3><{t}>选择属性：<{/t}></h3>
+	<div class="division clearfix">
+	<{if $cat.setting.use_props eq 1}>
+	<{foreach from=$cat.props item=prop key=key}>
+		<{if $prop.search != 'disabled' && $prop.name}>
+			<{if $prop.type == 'select' && $prop.search == 'nav'}>
+
+
+				<h5><{$prop.name}>：</h5>
+
+				<{foreach from=$prop.options item=value key=i}>
+					<div class="span-4">
+						<input type="checkbox" name="p_<{$key}>[]" value="<{$i}>" id="prop_<{$key}>_<{$i}>" />
+						<label for="prop_<{$key}>_<{$i}>" style="margin-right:20px"><{$value}></label>
+                     </div>
+
+				<{/foreach}>
+ <div class="clear"></div>
+
+
+			<{else}>
+
+            <div class="span-4">
+			<h5><{$prop.name}>：</h5>
+                <{input type=$prop.type name="p_{$key}[]" nulloption="1" options=$prop.options}>
+            </div>
+ <div class="clear"></div>
+			<{/if}>
+
+			<{assign var="prop_search" value=true}>
+		<{/if}>
+	<{/foreach}>
+	<{/if}>
+	</div>
+<{/capture}>
+
+<{if $prop_search}>
+	<{$smarty.capture.prop_search}>
+<{/if}>

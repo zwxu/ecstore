@@ -1,0 +1,75 @@
+<style>
+#create-proj-tmpl{background:#d4dfe6;height:90%;width:600px;border-spacing:8px;border-collapse:separate}
+#create-proj-tmpl td{background:#fff;vertical-align:top;}
+#create-proj-tmpl .tpl_cat{cursor:pointer;text-align:center;line-height:36px;border-bottom:1px solid #d4dfe6;font-size:14px;font-weight:bold;}
+#create-proj-tmpl .tpl_cat_cur{background:#5779BD;color:#fff;}
+#create-proj-tmpl .tpl_title{cursor:pointer;border:1px solid #d4dfe6;display:inline;width:100px;float:left;padding:2px;margin:2px;text-align:center;font-size:14px;font-weight:bold;}
+#create-proj-tmpl .tpl_title_cur{background:#5779BD;color:#fff;}
+</style>
+<table id="create-proj-tmpl">
+	<tr>
+		<th colspan="2" height="20px" style="text-align:left"><{t}>请选择项目模板:<{/t}></th>
+		</tr>
+	<tr>
+		<td rowspan="2" style="width:150px;">
+			<{foreach value=type key=key from=$types name="ptype"}>
+				<div class="tpl_cat" key="<{$type.class}>"><{$type.name}>
+					<div class="tpl_tmpls" style="display:none">
+						<{foreach from=$type.templates key=tplid item=tpl}>
+						<div class="tpl_title" key='<{$tplid}>'><{$tpl.0}><span style="display:none"><{$tpl.1}></span></div>
+						<{/foreach}>
+					</div>
+				</div>
+			<{/foreach}>
+		</td>
+		<td style="height:50%" class="tpllist" />
+	</tr>
+	<tr>
+		<td style="height:35%" class="tpldesc" />
+	</tr>
+	<tr>
+		<th colspan="2" height="20px" style="height: 20px;text-align:right">
+			<input type="hidden" name="proj_tppl" class="proj_tppl" />
+			<{t}>项目id:<{/t}><input type="text" class="proj_id_ipt" name="proj_id" />
+			<{button label=$___dev="创建项目"|t:'dev' class="createbtn"}></th>
+		</tr>
+	<tr>
+</table>
+<script>
+var projectCreater = new Class({
+	Implements: [Options, Events],
+	options: {
+		periodical: false,
+		delay: 1000
+	},
+
+	initialize: function(el){
+		this.element = $(el);
+		this.catbtns = $ES('.tpl_cat',el).addEvent('click'
+								,this.accessCat.bind(this));
+		this.tpllist = $E('.tpllist',el);
+		this.tpldesc = $E('.tpldesc',el);
+		this.tplipt = $E('input.proj_tppl',el);
+		this.proj_id_ipt = $E('.proj_id_ipt',el);
+		$E('.createbtn',el).addEvent('click',function(e){
+			new cmdrunner('index.php?ctl=project&act=docreate&app=dev&template='+this.tplipt.value+'&id='+this.proj_id_ipt.value,{onSuccess:console.info}).run();
+		}.bind(this));
+	},
+	accessCat:function(e){
+		this.catbtns.removeClass('tpl_cat_cur');
+		e.target.addClass('tpl_cat_cur');
+		$E('.tpl_tmpls',e.target).clone().inject(this.tpllist.empty()).setStyle('display','block');
+		this.tpl_titles = $ES('.tpl_title',this.tpllist).addEvent('click',this.accessTpl.bind(this))
+		this.catkey = e.target.get('key');
+		this.accessTpl({target:this.tpl_titles[0]});
+	},
+	accessTpl:function(e){
+		this.tpl_titles.removeClass('tpl_title_cur');
+		e.target.addClass('tpl_title_cur');
+		$E('span',e.target).clone().inject(this.tpldesc.empty()).setStyle('display','block');
+		this.tplipt.value = this.catkey+':'+e.target.get('key');
+	}
+});
+var devProjectCreater = new projectCreater('create-proj-tmpl');
+devProjectCreater.accessCat.bind(devProjectCreater)({target:devProjectCreater.catbtns[0]});
+</script>

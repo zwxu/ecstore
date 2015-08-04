@@ -1,0 +1,122 @@
+<{if $comment.switch.discuss == 'on'}>
+<div class="title2">我的评论</div>
+<div class="pdtdetail" data-sync-type="goodsdiscuss" style="display:none" tab="<{t}>商品评论<{/t}> (<em><{$comment.discussCount|default:'0'}></em>)" data-order="2">
+  <h3 class="hd-font">商品评论</h3>
+</div>
+<{/if}>
+
+<{if $comment.switch.ask == 'on'}>
+<div class="pdtdetail" data-sync-type="goodsconsult" style="display:none" tab="<{t}>商品咨询<{/t}> (<em><{$comment.askCount|default:'0'}></em>)" data-order="2">
+  <h3 class="hd-font">商品咨询</h3>
+</div>
+<{/if}>
+
+<{if $comment.switch.ask == 'on' or $comment.switch.discuss == 'on'}>
+<script>
+(function(){
+  $$('.consult-panel').addEvent('click',function(e){
+    //this.hide();
+    if(!$(e.target).hasClass('repay_span'))return;
+    if($('new_repay_box'))
+      $('new_repay_box').destroy();
+    var replay_div = $('repay_box').clone();
+    replay_div.setStyle('display','');
+    var replay_form = replay_div.getFirst('form');
+    new Request({
+      url:'<{link app="b2c" ctl="site_comment" act="reply_link"}>',
+      onComplete:function(response){
+        replay_form.action = response;
+
+        var el = $('new_repay_box').getElement('.inputstyle');
+
+        if(!('placeholder' in document.createElement('input'))) {
+          el.setStyles({'fontSize':'12px','color':'#999'});
+          el.value = '欢迎发表评论（最多1000字）';
+          el.addEvent('focus',function(e){
+            if(e.target.value  === e.target.get('placeholder')){
+              el.setStyle('color','#000');
+              e.target.value = '';
+            }
+          });
+        };
+
+        el.addEvent('keyup',function(e){
+          var limitNum = 1000;
+          var _parent = $('new_repay_box');
+          if(e.target.value.length > limitNum) e.target.value = e.target.value.substring(0,limitNum);
+          _parent.getElement('.price1').set('text',e.target.value.length);
+        });
+
+      }
+    }).post('comment_id='+$(e.target).id);
+    replay_div.setProperty('id','new_repay_box');
+    replay_div.inject($(e.target).getParent('div'),'after');
+  });
+
+$$('.showdisaskvcode').addEvent('focus',function(){
+  if (this.retrieve('showdisaskvcode',false)) return;
+  var vcodeImg = this.getNext('img');
+  vcodeImg.src = vcodeImg.get('codesrc')+'?'+(+new Date());
+  vcodeImg.show();
+  this.store('showdisaskvcode',true);
+});
+
+$$('.consult-panel').addEvent('click',function(e){
+  if(!$(e.target).hasClass('showvcode'))return;
+  if ($(e.target).retrieve('showvcode',false))return;
+  var vcodeImg = $(e.target).getNext('img');
+  vcodeImg.src = vcodeImg.get('codesrc')+'?'+(+new Date());
+  vcodeImg.show();
+  $(e.target).store('showvcode',true);
+});
+})();
+
+function cancle(){
+  var new_repay_box = $('new_repay_box');
+  if(new_repay_box){
+    var span = new_repay_box.getPrevious('div').getFirst('a');
+    span.show();
+    new_repay_box.destroy();
+  }
+
+}
+</script>
+
+<script>
+
+var checkFormReqs =function(e){
+ e    = new Event(e);
+ var _form= $(e.target);
+
+ var reqs = $$(_form.getElements('input[type=text]'),_form.getElements('textarea'));
+
+ if(reqs.some(function(req){
+  if(!req.get('required')&&!req.get('vtype').contains('required'))return;
+  if(req.getValue().trim()==''){
+   req.focus();
+   Message.error('<{t}>请完善表单必填项<{/t}><sup>*</sup>');
+   return true;
+ }
+
+ return false;
+
+})){
+   e.stop();
+ }
+};
+
+function replyVcodeCheck(input){
+  new Request.HTML({
+    url:'<{link app=b2c ctl=site_comment act=vocdecheck}>',
+    update:$(input).getNext('span'),
+    method:'post',
+    data:'name='+encodeURIComponent(input.value=input.value.trim())
+  }).send();
+}
+
+function changereplyimg(a){
+  a.getPrevious('img').set('src','<{link app="b2c" ctl="site_comment" act="gen_replyvcode"}>#'+$time());
+}
+
+</script>
+<{/if}>

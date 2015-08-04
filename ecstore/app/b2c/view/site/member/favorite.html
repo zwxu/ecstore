@@ -1,0 +1,60 @@
+<!-- right-->
+ <!-- right-->
+<div class="member-main">
+<div class="title title2"><{t}>我的收藏<{/t}></div>
+<div id="tab-favorite" class="section switch">
+    <ul class="switchable-triggerBox tab_member clearfix">
+      <li class="active"><a href="#"><{t}>宝贝收藏<{/t}></a></li>
+    </ul>
+
+
+<{if !$favorite}>
+<div class="noinfo"><{t}>暂无收藏<{/t}></div>
+<{else}>
+<form action="<{link app=business ctl=site_favorite act=delSel}>"  method="post" id='return-form'>
+<div class="GoodsSearchWrap" id="mbc-my-fav">
+<div class="ItemsWarp clearfix">
+      <div id="b2c-member-fav-list">
+        <{include file="site/member/favorite_items.html" app="business"}>
+  </div>
+  </div>
+    <input type="hidden" id="b2c-fav-current-page" value="<{$current_page}>" />
+  </div>
+ </form>
+<{pagers data=$pager}>
+<{/if}>
+<!--<{script src='goodscupcake.js' app='b2c'}>-->
+<script>
+var ajax_del_fav = function(el,e){
+    var gid = el.get('gid');
+    Ex_Dialog.confirm('<{t}>确定删除?<{/t}>',function(e){
+        if(!e) return false;
+        new Request({
+            url:'<{$fav_ajax_del_goods_url}>',
+            method:'post',
+            data:'t='+(+new Date())+'&gid='+gid+'&current='+$('b2c-fav-current-page').value,
+            onComplete:function(res){
+                res = JSON.decode(res);
+                if (res.error){
+                    MessageBox.error(res.error);
+                }else{
+                    if (!res.data&&res.reload != null){
+                        location.href=res.reload;
+                    }else{
+                        $('b2c-member-fav-list').innerHTML = res.data;
+                    }
+                }
+            }
+        }).send();
+        $('goods_'+gid).setOpacity(.5);
+        var MEMBER=Cookie.read('S[MEMBER]');
+        var FAVCOOKIE= new Cookie('S[GFAV]['+MEMBER+']',{duration:365});
+        FAVCOOKIE.write(Array.from((FAVCOOKIE.read('S[GFAV]')||'').split(',')).erase(gid).join(','));
+        return false;
+    });
+};
+</script>
+
+</div>
+</div>
+<!-- right-->

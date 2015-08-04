@@ -1,0 +1,17 @@
+<div class="m_literary_title"><h3><{$data.title}></h3><h4></h4></div>
+<div class="m_literary_cont">
+    <div class="m_literary_contl fl"><a href="<{link app=content ctl=site_article act=index arg0=$data.content.article_id arg1=$data.content.node_id}>"><img src="<{$data.content.image_id|storager:''}>"/></a></div>
+    <div class="m_literary_contr fr">
+        <h4><a href="<{link app=content ctl=site_article act=index arg0=$data.content.article_id arg1=$data.content.node_id}>"><{$data.content.title}></a></h4>
+        <div class="literary_contr_main"><p><{$data.content.content}></a></p></div>
+        <a href="<{link app=content ctl=site_article act=index arg0=$data.content.article_id arg1=$data.content.node_id}>" class="fr" style="display:none" id="<{$widgets_id}>_more">更多>></a>
+        <div class="m_recommend">推荐</div>
+    </div>
+</div>
+<script>
+window.addEvent('domready',function(){
+    if($E('.literary_contr_main').getElement('p').getHeight()>184){
+        $("<{$widgets_id}>_more").setStyle('display','');
+    }
+});
+</script>

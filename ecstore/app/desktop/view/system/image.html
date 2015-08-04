@@ -1,0 +1,217 @@
+<div class="image-viewer">
+<div class="section">
+
+	<table>
+	<caption><{t}>图片信息<{/t}></caption>
+	<tr><th><{t}>原始尺寸<{/t}></th>
+	<td><{$image.width}> x <{$image.height}></td></tr>
+	<tr><th><{t}>更新时间<{/t}></th>
+	<td><{$image.last_modified|cdate}></td></tr>
+	<tr><th><{t}>存储引擎<{/t}></th>
+	<td><{$image.storage}></td></tr>
+	</table>
+
+	<table id="image-size-<{$image.image_id}>">
+	<caption><{t}>尺寸版本<{/t}></caption>
+	<{foreach from=$allsize item=item key=size}>
+		<tr>
+		<td style="width:30px"><input type="checkbox" <{if $image.s_url}>checked="checked"<{/if}> /></td>
+		<td style="width:130px;"><label><{t}>生成<{/t}><{$item.title}> ( <{$item.size}> )</label></td>
+		<td><input type="hidden" value="" name="area[<{$size}>]"><img src="statics/transparent.gif" class="cut-tool" title="<{t}>剪裁<{/t}>" /></td>
+		</tr>
+	<{/foreach}>
+	</table>
+
+	<br />
+	<button><{t}>保存设置<{/t}></button>
+</div>
+
+<center style="margin-right:200px;">
+	<div class="image-crop" id="image-crop">
+    	<div class="image-crop-bg">
+		   <{imglib src=$image.image_id size="400" style="background:#333;-webkit-box-shadow:#333 2px 2px 20px;"}>
+    	</div>
+		<div class="image-crop-handle">
+			<div class="image-crop-handle-inner"></div>
+			<div class="image-crop-resizer-wrapper">
+				<div class="image-crop-resizer image-crop-resizer-nw"></div>
+				<div class="image-crop-resizer image-crop-resizer-ne"></div>
+				<div class="image-crop-resizer image-crop-resizer-se"></div>
+				<div class="image-crop-resizer image-crop-resizer-sw"></div>
+			</div>
+		</div>
+    </div>
+
+
+
+
+
+<table class="addon">
+	<tr>
+		<th><{t}>原图<{/t}></th><td><{$image.url}></td>
+	</tr>
+	<{if $image.l_url}>
+	<tr>
+		<th><{t}>大图<{/t}></th><td><{$image.l_url}></td>
+	</tr>
+	<{/if}>
+	<{if $image.m_url}>
+	<tr>
+		<th><{t}>中图<{/t}></th><td><{$image.m_url}></td>
+	</tr>
+	<{/if}>
+	<{if $image.s_url}>
+	<tr>
+		<th><{/t}>小图<{/t}></th><td><{$image.s_url}></td>
+	</tr>
+	<{/if}>
+</table>
+
+<center>
+<div style="clear:both">&nbsp;</div>
+<style>
+.image-viewer{
+	background:#666;padding:20px;color:#ccc;font-weight:bold;border:2px solid #999;border-color:#42597B #A4C5FF #A4C5FF #42597B
+}
+.image-viewer .section{
+	width:200px;float:right
+}
+.image-viewer .section table{
+	background:#999;margin-bottom:10px
+}
+.image-viewer .section table td{padding:2px;color:#fff;}
+.image-viewer .section table th{padding:2px;color:#fff;}
+.image-viewer .section caption{
+	background:#333;color:#fff
+}
+.image-viewer .cut-tool{
+	border:1px dotted #fff;
+	width:10px;
+	height:10px;
+	cursor: pointer;
+	margin-left:20px
+}
+.image-viewer .addon{width:auto;margin-top:20px}
+.image-viewer .addon th{width:50px;color:#eee;font-weight:bold}
+.image-viewer .addon td{padding:2px 10px;width:300px;display:block;overflow:hidden;border:1px solid #999;border-color:#333 #999 #999 #333}
+.image-viewer button{
+	padding:5px 10px;font-weight:bold;font-size:16px;background:#050;-webkit-border-radius:10px;color:#fff
+}
+</style>
+<style>
+.image-crop { position:relative; width:400px; overflow:hidden;}
+.image-crop-handle { position:absolute; z-index:120; border:1px dashed #fff; width:100px; height:100px; top:10px; left:10px; }
+.image-crop-handle-inner { background:#000; opacity:0.2; border:1px dashed #000; z-index:121; width:100%; height:100%;  }
+.image-crop-resizer { position:absolute; width:10px; height:10px; background:#fff; border:1px solid #ccc; opacity:0.7; z-index:130;}
+.image-crop-resizer-nw { left:-5px; top:-5px;}
+.image-crop-resizer-ne { right:-5px; top:-5px;}
+.image-crop-resizer-se { right:-5px; bottom:-5px;}
+.image-crop-resizer-sw { left:-5px; bottom:-5px;}
+
+</style>
+<script>
+/*
+@param left
+@param top
+@param limit, An object with x and y properties used to limit the resize of the Element.
+*/
+var ImageCrop = new Class({
+    
+    Implements: [Options],
+    
+    options:{
+        width: 100,
+        height: 100,
+        minWidth: 10
+    },
+    
+    initialize: function(el, options){
+        this.setOptions(options);
+        this.el = $(el);
+        if(!this.el) return false;
+        this.handle = this.el.getElement('.image-crop-handle');
+        this.handleInner = this.el.getElement('.image-crop-handle-inner');
+        this.resizers = this.el.getElements('.image-crop-resizer');
+        this.width = this.options.width;
+        this.ratio = this.options.width / this.options.height;
+        this.sizeLimit = this.options.limit || {
+            x: [this.options.minWidth, this.el.getSize().x],
+            y: [this.options.minWidth / this.ratio, this.el.getSize().y]
+        };
+        
+        this.cropCis = {
+            width: this.options.width,
+            height: this.options.height,
+            left: $chk(this.options.left) ? this.options.left : this.sizeLimit.x[1]/2 - this.options.width/2,
+            top: $chk(this.options.top) ? this.options.top: this.sizeLimit.y[1]/2 - this.options.height/2
+        };
+        this.setCrop(this.cropCis);
+        
+        var that = this;
+        this.crop = new Drag.Move(this.handle, {
+            container: this.el,
+            handle: this.handleInner,
+            onComplete: function(){
+                that.update();
+            }
+        });
+        
+        this.addResizer(this.resizers);
+    },
+    
+    setCrop: function(cis){
+        this.handle.setStyles(cis);
+    },
+    
+    update: function(){
+        this.cropCis = this.handle.getCoordinates();
+    },
+    
+    addResizer: function(resizers){
+        this.resizeHandles = this.resizeHandles || [];
+        resizers.each(function(item){
+            var that = this;
+            var resizer = new Drag(this.handle, {
+                handle: item,
+                invert: item.hasClass('image-crop-resizer-nw') || item.hasClass('image-crop-resizer-ne'),
+                limit: that.sizeLimit,
+                modifiers: {x: 'width', y: 'width'},
+                onDrag: function(el){
+                    var nowWidth = that.width;
+
+                    var xpos = el.getStyle('left').toInt(),
+                        ypos = el.getStyle('top').toInt(),
+                        w = el.getStyle('width').toInt(),
+                        h = w / that.ratio,
+                        withinLimit = w < that.sizeLimit.x[1] && h < that.sizeLimit.y[1];
+
+                    var coords = {
+                        left: withinLimit ? (xpos > 0 ? xpos - (w-nowWidth)/2 : 0) : xpos,
+                        top: withinLimit ? (ypos > 0 ? ypos - (h-nowWidth/that.ratio)/2 : 0) : ypos
+                    };
+                    
+                    for (var i = 2; i--; i){
+                        w = w.limit(that.sizeLimit.x[0], Math.min(that.sizeLimit.x[1] - coords.left, h * that.ratio));
+                        h = h.limit(that.sizeLimit.y[0], Math.min(that.sizeLimit.y[1] - coords.top, w / that.ratio));
+                    }
+                    el.setStyles($extend(coords, {
+                        width: w,
+                        height: h
+                    }));
+                    that.width = w;
+                },
+                onComplete: function(el){
+                    that.update();
+                }
+            });
+            this.resizeHandles.push(resizer);
+        },this);
+    }
+});
+
+new ImageCrop('image-crop');
+
+
+$ES('.cut-tool','image-size-<{$image.image_id}>').addEvent('click',function(e){
+});
+</script>

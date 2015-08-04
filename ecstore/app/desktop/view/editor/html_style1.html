@@ -1,0 +1,62 @@
+<script>var <{$id}>;</script>
+
+        <div id="mce_handle_<{$id}>" class="mce_style_1 mce_noactive" style='opacity:0.4;FILTER:alpha(opacity=40);'>
+
+        <ul><li><img class="x-align" src="<{$img_src}>/bundle/mceico_29.gif" title="<{t}>左对齐<{/t}>" onclick="<{$id}>.set.bind(<{$id}>)('justifyLeft')"></li>
+           <li><img class="x-align" src="<{$img_src}>/bundle/mceico_30.gif" title="<{t}>居中<{/t}>" onclick="<{$id}>.set.bind(<{$id}>)('justifyCenter')"></li>
+           <li><img class="x-align" src="<{$img_src}>/bundle/mceico_31.gif" title="<{t}>右对齐<{/t}>" onclick="<{$id}>.set.bind(<{$id}>)('justifyRight')"></li>
+		   <{if $params.nolink!=1}>
+           <li><img src="<{$img_src}>/bundle/mceico_33.gif" title="<{t}>添加链接<{/t}>" onclick="<{$id}>.mklink.bind(<{$id}>)()"></li>
+		   <{/if}>
+           <li><img src="<{$img_src}>/bundle/mceico_38.gif" title="<{t}>插入表格<{/t}>" onclick="<{$id}>.dialog.bind(<{$id}>)('table',{width:543,height:230,title:'<{t}>插入表格<{/t}>'})"></li>
+           <li><img src="<{$img_src}>/bundle/mceico_36.gif" title="<{t}>插入图片<{/t}>" onclick="<{$id}>.dialog.bind(<{$id}>)('image',{title:'<{t}>插入图片<{/t}>'})"></li>
+           <li><img src="<{$img_src}>/bundle/mceico_39.gif" title="<{t}>插入横线<{/t}>" onclick="<{$id}>.set.bind(<{$id}>)('insertHTML','<hr />')"></li>
+           <li><img class="x-enable" value="Bold" title="<{t}>加粗<{/t}>" src="<{$img_src}>/bundle/mceico_19.gif" onclick="<{$id}>.set.bind(<{$id}>)('Bold')"></li>
+           <li><img class="x-enable" value="Italic" title="<{t}>斜体<{/t}>" src="<{$img_src}>/bundle/mceico_20.gif" onclick="<{$id}>.set.bind(<{$id}>)('Italic')"></li>
+           <li><img class="x-enable" value="Underline" title="<{t}>下划线<{/t}>" src="<{$img_src}>/bundle/mceico_21.gif" onclick="<{$id}>.set.bind(<{$id}>)('Underline')"></li>
+           <li><img class="x-enable" value="strikeThrough" title="<{t}>中划线<{/t}>" src="<{$img_src}>/bundle/mceico_22.gif" onclick="<{$id}>.set.bind(<{$id}>)('strikeThrough')"></li>
+           <li><img class="x-enable" value="subscript" title="<{t}>脚注<{/t}>" src="<{$img_src}>/bundle/mceico_23.gif" onclick="<{$id}>.set.bind(<{$id}>)('subscript')"></li>
+           <li><img class="x-enable" value="superscript" title="<{t}>标注<{/t}>" src="<{$img_src}>/bundle/mceico_24.gif" onclick="<{$id}>.set.bind(<{$id}>)('superscript')"></li>
+           <li><img class="x-enable" value="insertOrderedList" title="<{t}>排序列表<{/t}>" src="<{$img_src}>/bundle/mceico_25.gif" onclick="<{$id}>.set.bind(<{$id}>)('insertOrderedList')"></li>
+           <li><img class="x-enable" value="insertUnorderedList" title="<{t}>无序列表<{/t}>" src="<{$img_src}>/bundle/mceico_26.gif" onclick="<{$id}>.set.bind(<{$id}>)('insertUnorderedList')"></li>
+           <li><img src="<{$img_src}>/bundle/mceico_27.gif" title="<{t}>减少缩进<{/t}>" onclick="<{$id}>.set.bind(<{$id}>)('outdent')"></li>
+           <li><img src="<{$img_src}>/bundle/mceico_28.gif" title="<{t}>增加缩进<{/t}>" onclick="<{$id}>.set.bind(<{$id}>)('indent')"></li>
+
+           <li><select class='ft_select'>
+              <option><{t}>字体<{/t}></option>
+              <option value='仿宋_GB2312'><{t}>仿宋<{/t}></option>
+              <option value='宋体'><{t}>宋体<{/t}></option>
+              <option value='黑体'><{t}>黑体<{/t}></option>
+              <option value='楷体_GB2312'><{t}>楷体<{/t}></option>
+              <option value='新宋体'><{t}>新宋体<{/t}></option>
+              <option value='Microsoft Yahei'><{t}>雅黑<{/t}></option>
+              <option value='Tahoma'><{t}>Tahoma<{/t}></option>
+              <option value='Times New Roman'><{t}>Times<{/t}></option>
+              <option value='Arial'><{t}>Arial<{/t}></option>
+              <option value='IMPACT'><{t}>IMPACT<{/t}></option>
+              <option value='Verdana'><{t}>Verdana<{/t}></option>
+            </select></li>
+
+           <li><select class='fs_select'>
+              <option><{t}>字号<{/t}></option>
+              <option value='1'>1</option>
+              <option value='2'>2</option>
+              <option value='3'>3</option>
+              <option value='4'>4</option>
+              <option value='5'>5</option>
+              <option value='6'>6</option>
+              <option value='7'>7</option>
+            </select></li>
+           <li><img class="fontColorPicker" title="<{t}>文字颜色<{/t}>" src="<{$img_src}>/bundle/mceico_44.gif" ></li>
+           <li><img class="fontBGColorPicker" title="<{t}>背景颜色<{/t}>" src="<{$img_src}>/bundle/mceico_45.gif" ></li>
+           <li onclick="<{$id}>.editHTML.call(<{$id}>)" style='color:#660000'><{t}>HTML源码<{/t}></li>
+        </ul><br style='clear:both;display:none'/>
+        </div>
+		<script>
+            window.addEvent('domready',function(e){
+				Ex_Loader("editor",function(){
+					mceHandler.implement(editor_style_1);
+					<{$id}>=new mceHandler($('mce_handle_<{$id}>'),new mceInstance('<{$id}>',{includeBase:<{$includeBase}>}));
+				});
+            });
+         </script>

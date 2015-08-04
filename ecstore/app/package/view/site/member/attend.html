@@ -1,0 +1,319 @@
+<div class="member-main">
+  <form action="<{$submit_url}>" method="post" id="attend-create">
+    <div>
+      <div class="title"><{t}>活动信息<{/t}></div>
+      <table border="0" width="100%" cellpadding="0" cellspacing="0" class="order-info" style="margin:10px 0 20px 0">
+        <tr>
+          <input type="hidden" name="aid" value="<{$actInfo.act_id}>">
+          <input type="hidden" name="id" value="<{$businessAct.id}>">
+          <td width="30%" valign="top"><ul>
+            <li><{t}>活动名称：<{/t}><span class="price-normal"><{$actInfo.name}></span></li>
+            <li><{t}>开始时间：<{/t}><span class="color_3"><{$actInfo.start_time}></span></li>
+            <li><{t}>结束时间：<{/t}><span class="color_3"><{$actInfo.end_time}></span></li>
+            <li><{t}>活动描述：<{/t}><span class="color_3"><{$actInfo.description}></span></li>
+            </ul>
+          </td>
+        <tr>
+      </table>
+      <h4><{t}>申请信息<{/t}></h4>
+      <table width="100%" cellspacing="1" cellpadding="0" border='0'  bgcolor="#f9f9f9" class="takegoods" >
+        <tr>
+          <th style="width:20%;">捆绑名称：</th>
+          <td><{input type="text" name="name" vtype="required" value="{$businessAct.name}" maxlength="20"}></td>
+        </tr>
+        <tr>
+          <th style="width:20%;">捆绑图片：</th>
+          <{if false}><td><{input type='vimage' name='image' width=300 height=300 value=$businessAct.image}></td><{/if}>
+          <td>
+            <div class="division pic-main" >
+              <div class="clearfix">
+                <span class="pic-uploader">
+                  <{button app="desktop" class="btn-upload" label=$___b2c="添加商品图片"|t:'b2c' icon="image_new.gif"}>
+                </span>
+                <{help}><{t}>提示：上传图片需为<{$img_size}>以上正方形图片，大小不能超过1M<{/t}><{/help}>
+              </div>
+              <div class="pic-area">
+                <input type="hidden" name="image_default" value="<{$goods.image_default_id}>" />
+                <{include file="site/goods/gimage_goods.html" app="business"}>
+              </div>
+            </div>
+          </div>
+        </tr>
+        <tr>
+          <th style="width:20%;">活动商品：</th>
+          <td><{input type="vobject" object="goods" return_url=$return_url filter=$filter callback="_callback" multiple="true" rowselect="true" cols="name,spec_info" textcol="name" name="gid" value=$businessAct.gid}></td>
+        </tr>
+        <script>
+          function _callback(rs){
+            $('price').store('account',0);
+            $('store').store('minstore',0);
+            if(rs){
+              var reg = /<p([^>]*)>(.*?)<\/p>/ig;
+              var info = '';
+              while(reg.test(rs)){ 
+                info = RegExp.$2;
+              }
+              var info = JSON.decode(info);
+              for(var i=0;i<info.length;i++){
+                var _rs = info[i];
+                $('price').store('account',parseInt(_rs.price)+parseInt($('price').retrieve('account'))).set('html',$('price').retrieve('account'));
+                if(!parseInt($('store').retrieve('minstore'))) $('store').store('minstore',parseInt(_rs.store));
+                $('store').store('minstore',Math.min(parseInt(_rs.store),parseInt($('store').retrieve('minstore')))).set('html',$('store').retrieve('minstore'));
+              }
+            }
+          }
+        </script>
+        <tr>
+          <th>捆绑总价：</th>
+          <td><{input type="text" name="amount" vtype="unsigned" value="{$businessAct.amount}"}><span style="color:red;">留空默认为原始总价格。原始总价格：<span id="price"><{$goods.price}></span></span></td>
+        </tr>
+        <tr>
+          <th>活动数量：</th>
+          <td><{input type="text" name="store" required="true" vtype="required&&unsigned" value="{$businessAct.store}"}><span>选择商品最小库存：</span><span id="store"><{$goods.store}></span></td>
+        </tr>
+        <tr>  
+          <th>每人限购：</th>
+          <td><{input type="text" vtype="unsigned" value="{$businessAct.presonlimit}" name="presonlimit" id="presonlimit"}><span>留空默认为1</span></td>
+        </tr>
+        <tr>
+          <th ><{t}>运费模板：<{/t}></th>
+          <td>
+            <{input type="vobject" object="dlytype@b2c" filter=$gdlytype_filter multiple="true" rowselect="true" textcol="dt_name" name="gdlytype" value=$businessAct.gdlytype}>
+          </td>
+        </tr>          
+        <tr>
+          <th ><{t}>是否包邮：<{/t}></th>
+          <td>
+            <input type="radio" name="freight_bear"<{if $businessAct.freight_bear != 'business' }> checked="checked"<{/if}> value="member" ><{t}>否<{/t}>
+            <input type="radio" name="freight_bear"<{if $businessAct.freight_bear == "business"}> checked="checked"<{/if}> value="business" ><{t}>是<{/t}>
+          </td>
+        </tr>
+        <tr>  
+          <th>积分：</th>
+          <td><{input type="digits" required="true" value=$businessAct.score|default:0 name="score" maxlength="25" vtype="unsigned" id="gain_score"}>
+            <input type='hidden' name='score_setting' value='number'/>
+            <{if false}><span>（请填写与商品销售价的比例，运营商设置范围为<{$point_mim_get_value}>%~<{$point_max_get_value}>%）</span><{/if}></td>
+        </tr>
+        <tr>  
+          <th>详细说明：</th>
+          <td><{input type="vhtml" name="intro" value=$businessAct.intro includeBase=true}></td>
+        </tr>
+        <tr>  
+          <th>备注：</th>
+          <td><{input type="textarea" class="x-input" value=$businessAct.remark style="resize:none;" cols="50" rows="5" maxth="255" readonly="readonly"}></td>
+        </tr>
+      </table>
+      <div style=" margin-top:10px; padding-left:173px;">
+        <{button class="submit-btn" type="submit" label=$___b2c="确定"|t:'package'}>
+        <{button class="btn btn-quit" type="button" label=$___b2c="退出"|t:'b2c' onclick=""}>
+      </div>
+    </div>
+  </form>
+</div>
+<script>
+  var store = '<{$businessAct.store}>';
+  if(store) store = parseInt(store);
+  else store = 0;
+  $('price').store('account',0);
+  $('store').store('minstore',store);
+  $('store').getParent('td').getElement('input').addEvent('change',function(e){
+    var obj = $('presonlimit').getParent('td').getElement('input');
+    var num = parseInt(obj.value);
+    num = isNaN(num)?0:num
+    $('presonlimit').getParent('td').getElement('input').value = (num+0).limit(1,parseInt($('store').retrieve('minstore')));
+  });
+  $('presonlimit').getParent('td').getElement('input').addEvent('change',function(e){
+    var num = parseInt(this.value);
+    num = isNaN(num)?0:num;
+    this.value = (num+0).limit(1,parseInt($('store').retrieve('minstore')));
+  });
+  validatorMap['score']= ['<{t}>积分填写不正确<{/t}>', function() {
+    var gain_score = $('gain_score');
+    var _is_validate = false;
+    if (gain_score.value >= <{$point_mim_get_value}> && gain_score.value <= <{$point_max_get_value}>) _is_validate = true||_is_validate;
+    return _is_validate;
+  }];
+  var goodsEditor = null;
+  var ShopExGoodsEditor = new Class({
+    Implements:[Options],
+    options: {
+      periodical: false,
+      delay: 500,
+      postvar:'finderItems',
+      varname:'items',
+      width:500,
+      height:400
+    },
+    pic:{
+      del:function(obj){
+        if(obj.get('ident') && $('typeDetailView')){
+          var obj_input = $('typeDetailView').getElements('.spec_goods_images')||[];
+          for(var i=0;i<obj_input.length;i++){
+            if(obj_input[i].value.trim().split(',').in_array(obj.get('ident'))){
+              Message.error('该图片已经关联规格，请取消关联关系，再删除');
+              return false;
+            }
+          }
+        }
+          if(confirm(LANG_goodseditor['comfirmDelPic'])){
+              var input = $ES('input[name^=img['+obj.get('ident')+']','goods_spec_images')||'';
+              if(input) input.destroy();
+              obj = $(obj);
+              var pic_box=obj.getParent('.gpic-box'),picNext=pic_box.getNext('.gpic-box');
+              try{
+              if(obj.get('ident')){
+                     if($$('#all-pics input[name=image_default]')[0])
+                     $$('#all-pics input[name=image_default]')[0].value=obj.get('ident');
+                     $('all-pics').eliminate('cururl');
+                     pic_box.destroy();
+                 /*    if($$('#all-pics .gpic-box .current')[0])return;
+                     if($$('#all-pics .gpic-box').length&&$$('#all-pics .gpic-box').length>0){
+                       $('all-pics').empty().set('html','<div class="notice" style="margin:0 auto">请重新选择默认商品图片.</div>');
+                     }else{
+                       $('all-pics').empty().set('html','<div class="notice" style="margin:0 auto">您还未上传商品图片.</div>');
+                     }   */
+              }}catch(e){
+                 pic_box.destroy();
+              }
+              if(picNext)picNext.getElement('.gpic').onclick();
+          }
+      },
+      setDefault:function(id,obj){
+          var pic_main = $(obj).getParent('.pic-main');
+          var area = pic_main.getElement('.pic-area');
+          var target=$E('.gpic[image_id='+id+']',area);
+          //var target=$$('#pic-area .gpic[image_id='+id+']')[0];
+              if(target.hasClass('current')){return;}
+              var cur,imgdefinput;
+              if(cur = $E('.current',area)){
+                   cur.removeClass('current');
+               }
+              if(imgdefinput = $E('input[name=image_default]',area)){
+                 imgdefinput.set('value',id);
+              }
+          target.addClass('current');
+      },
+      getDefault:function(){
+          var pic_main = obj.getParent('.pic-main');
+          var area = pic_main.getElement('.pic-area');
+          var o = $E('input[name=image_default]',area);
+          //var o = $$('#pic-area input[name=image_default]')[0];
+
+          if(o){
+            return o.value;
+          }else{
+            return false;
+          }
+      },
+      viewSource:function(act){
+         return new Dialog(act,{title:LANG_goodseditor['viewSource'],singlon:false,'width':650,'height':300});
+      }
+  }
+  });
+  var goodsEditFrame = (function(op){
+    goodsEditor = new ShopExGoodsEditor();
+    Ex_Loader('uploader',function(){
+      $$('.pic-uploader').each(function(el,j){
+        if (document.getElements('.swiff-uploader-box')) {
+          document.getElements('.swiff-uploader-box').destroy();
+        }
+        var pic_main = el.getParent('.pic-main');
+        var area = pic_main.getElement('.pic-area');
+        var pics = pic_main.getElement('.all-pics');
+        new Swiff.Uploader({
+          allowDuplicates: true,
+          verbose: true,
+          url:op.url,
+          path: op.path,
+          typeFilter: {
+            'Images (*.jpg, *.jpeg, *.gif, *.png)': '*.jpg; *.jpeg; *.gif; *.png'
+          },
+          fileSizeMax:op.IMAGE_MAX_SIZE,
+          target:el,
+          onSelect:function(rs){
+            if(rs)
+            rs.each(function(v){
+                if(v.size>this.fileSizeMax){
+                  Message.error('文件超出大小');
+                };
+              },this);
+          },
+          onSelectFail:function(rs){
+            rs.each(function(v){
+              if(v.validationError=='sizeLimitMax'){
+                Message.error(v.name+'文件超出大小');
+              };
+            });
+          },
+          onSelectSuccess:function(rs){
+            var PID='up_';
+            var _this=this;
+            rs.each(function(v,i){
+              new Element('div',{'class':'gpic-box','id':PID+j+v.id}).inject(pics);
+            });
+            this.start();
+          },
+          onFileOpen:function(e){
+            $('up_'+j+e.id).setHTML('<em style="font-size:13px;font-family:Georgia;">0%</em>');
+          },
+          onFileProgress:function(e){
+            $('up_'+j+e.id).getElement('em').set('text',(e.progress.percentLoaded>100?100:e.progress.percentLoaded)+'%');
+          },
+          onFileComplete: function(res){
+            if(res.response.error){
+              $('up_'+j+res.id).destroy();
+              return Message.error('文件'+res.name+'上传失败');
+            }else if(res.response.text == 1){
+              $('up_'+j+res.id).destroy();
+              return Message.error('上传图片尺寸不是'+op.imgsize+'以上的正方形图片或上传图片大小超过1M！');
+            }else if(res.response.text == 2){
+              $('up_'+j+res.id).destroy();
+              return Message.error('上传图片空间已满，请与管理员联系！');
+            }
+            $('up_'+j+res.id).setHTML(res.response.text);
+            if(!$E('.current',area)&&$E('.gpic',area)){
+              $E('.gpic',area).onclick();
+            }
+          }
+        });
+      });
+    });
+  });
+  window.addEvent('domready',function(){
+    window.addEvent('domready',function(){
+      goodsEditFrame({'path':'<{$current_url}>/uploader.swf','IMAGE_MAX_SIZE':'<{$IMAGE_MAX_SIZE}>','url':'<{link app=business ctl=site_mimages act=gimage_swf_remote arg=$store_id}>','imgsize':'<{$img_size}>'});
+    });
+    var f=$('attend-create');
+    f.removeEvents('submit').addEvent('submit', function(e){
+      var gid = $('list_datas').value;
+      var _form = this;
+      var _button = _form.getElement('button[type^=submit]');
+      if(!gid){
+        _button.removeClass('disabled');
+        e.stop();
+        return Message.error('请选择商品');
+      }else{
+          var temp = gid.split(',').length;
+          if(temp < 2){
+              _button.removeClass('disabled');
+              e.stop();
+              return Message.error('活动商品不得少于两件');
+          }
+      }
+      if (_button.retrieve('submiting')) {
+        return e.stop();
+      }
+      if (!validate(_form)) {
+          _button.removeClass('disabled');
+          e.stop();
+          return Message.error('表单验证失败');
+      }
+      $ES('textarea[ishtml=true]', _form).getValue();
+      _button.store('submiting',true);
+    });
+    var quit = $ES('.btn-quit', '#attend-create')||'';
+    if(quit) quit.removeEvents('click').addEvent('click',function(e){
+      if(confirm('确定退出?'))window.location='<{link app=package ctl=site_activity act=myAttend}>';
+    });
+  });
+</script>

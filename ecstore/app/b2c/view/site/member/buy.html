@@ -1,0 +1,34 @@
+<div class="member-main">
+<div class="last-shop">
+<ul>
+<{if $aData}>
+<{foreach from=$aData item="good" key="key"}>
+<{if $key%2 == 0}>
+<li> <{/if}>
+<dl>
+<{if $good.udfimg == 'true'}>
+    <{assign var="gimage" value=$good.thumbnail_pic|default:$defaultImage}>
+    <{else}>
+    <{assign var="gimage" value=$good.image_default_id|default:$defaultImage}>
+    <{/if}>
+<dt><a target="_blank" style='<{if $env.conf.site.thumbnail_pic_width !=0 && $env.conf.site.thumbnail_pic_height !=0}> width:<{$env.conf.site.thumbnail_pic_width}>px;height:<{$env.conf.site.thumbnail_pic_height}>px;<{/if}>' href="<{link app=b2c ctl=site_product act=index arg=$good.goods_id}>"> <img  style="width:120px; height:120px;" src="<{$gimage|storager:'s'}>"  alt="<{$product.name|escape:html}>"/> <{*<span class='zoom-handle' pic='<{$product.big_pic|default:$env.conf.site.default_big_pic|storager}>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>*}> </a></dt>
+<dd>
+<h5 class="fontnormal"><a target="_blank" class="font-blue" href="<{link app=b2c ctl=site_product act=index arg=$good.goods_id}>"><{$good.name}></a></h5>
+<p><{t}>购于:<{/t}><{$good.buytime|cdate}></p>
+ <{if $switch_discuss == 'on'}>
+ <p class="pt10"><{if $good.is_discuss == 'true'}><a class="nogoods listact" href="#" style="cursor:default; color:#929292"><span><{t}>已评价<{/t}></span></a><{else}><a href="<{link app=business ctl=site_comment act=discuss arg0=$good.order_id}>" class="addcart-btn listact" ><span><{t}>去评价<{/t}></span></a><{/if}></p><{/if}>
+</dd>
+</dl>
+<{if ($key+1)%2 == 0}>
+</li>
+<{/if}>
+<{/foreach}>
+<{pagers data=$pager}>
+<{if ($key+1)%2!==0}>
+</ul>
+<{/if}>
+<{else}>
+<{t}>最近暂无购买<{/t}>
+<{/if}>
+</div>
+</div>

@@ -1,0 +1,289 @@
+
+<div class="image-broswer">
+  <{area inject=".mainHead"}>
+  <div class="tabs-wrap image-broswer-handle" id="image-broswer-handle">
+    <ul>
+     <li class="tab current" tf="local"><span><{t}>从本地选择图片<{/t}></span></li>
+     <li class="tab" tf="img_lib"><span><{t}>从图库选择图片<{/t}></span></li>
+     <li class="tab" tf="www"><span><{t}>互联网上的图片<{/t}></span></li>
+    </ul>
+  </div>
+  <{/area}>
+  
+  <div class="image-broswer-panel">
+      <div class="tableform">
+		  <form action="index.php?app=image&ctl=admin_manage&act=image_upload" enctype="multipart/form-data" method="post">
+			  <div class="division">
+				 <h5><{t}>从本地计算机浏览图片<{/t}> </h5>
+				 <input type="hidden" name="callbackfunc" value="imageBroswerUploadCallBack"/>
+				 <input type="hidden" name="type" value="<{$type}>"/>
+				 <input type="file" name="upload_item"/>          
+			  </div>
+			  <div class="division">
+					<h5><{t}>为图片打上标签(多个标签用空格分隔):<{/t}></h5>
+					<input size="50" type="text" name="tag[name]" class="x-tag-input"></input>
+					<dl class="x-tag-wrapper clearfix">
+					    <dt class="x-tag-info"><{t}>常用标签：<{/t}></dt>
+    					<dd class="x-tag-list x-tag-container">
+        					 <{foreach from=$tags item=tag}>
+        					    <span class="x-tag" tag_id="<{$tag.tag_id}>"><{$tag.tag_name}></span>
+        					 <{/foreach}>
+    					</dd>
+					</dl>
+			  </div>
+		  </form>	
+      </div>
+      <div class="tableform">
+		<{if $tags}>
+              <div class="division">
+                 <dl id="tag-filter" class="x-tag-wrapper clearfix">
+				     <dt class="x-tag-info"><{t}>标签:<{/t}></dt>
+				     <dd class="x-tag-list">
+							<li class="x-tag c-blue" tag_id="0">全部</li>
+    				 <{foreach from=$tags item=tag}>
+    						<li class="x-tag" tag_id="<{$tag.tag_id}>"><{$tag.tag_name}></li>
+    				 <{/foreach}>
+                     </dd>
+                 </dl>
+              </div>
+			<{/if}>
+               <div class="division image_list">
+                   <h5><{t}>图库<{/t}></h5>
+                   <div class="can" id="image_lib">
+                     <div class='note'><{t}>正在载入图库...<{/t}></div>
+                   </div>
+               </div>
+      </div>
+      <div class="tableform">
+	  	 <form action="index.php?app=image&ctl=admin_manage&act=image_www_uploader" enctype="multipart/form-data" method="post">
+			  <div class="division">
+				  <h5><{t}>网络图片链接<{/t}></h5>
+				  <input type="hidden" name="callbackfunc" value="imageBroswerUploadCallBack"/>
+				  <input type="hidden" name="type" value="<{$type}>"/>
+				 <input type="text" name="upload_item" class="inputstyle"/>
+			  </div>
+			  <div class="division">
+				<h5><{t}>为图片打上标签(多个标签用空格分隔):<{/t}></h5>
+				<input size="50" type="text" name="tag[name]" class="x-tag-input"></input>
+				<dl class="x-tag-wrapper clearfix">
+				    <dt class="x-tag-info"><{t}>常用标签：<{/t}></dt>
+					<dd class="x-tag-list x-tag-container">
+  					 <{foreach from=$tags item=tag}>
+  					    <span class="x-tag" tag_id="<{$tag.tag_id}>"><{$tag.tag_name}></span>
+  					 <{/foreach}>
+					</dd>
+				</dl>
+			  </div>
+		</form>
+      </div>
+  </div>
+
+</div>
+<{area inject='.mainFoot'}>
+<div class="table-action">
+
+   <{button type="button" label=$___a="确认"|t:'image' id="image-broswer-submit"}>
+   
+   
+   <{button type="button" label=$___a="取消"|t:'image' onClick="window.close();" class="btn-secondary" closedialog=true}>
+
+</div>
+<{/area}>
+
+<script>
+   
+				
+     void function(){
+           
+          var dialogCallBack =window.dialogArguments?window.dialogArguments.imgcallback.bind(window.dialogArguments):$empty;
+         /*upload callback */
+            imageBroswerUploadCallBack = function(ident,src){
+					
+                   dialogCallBack(ident,src);
+            };
+  
+		
+            new Acc($$('#image-broswer-handle .tab'), $$('.image-broswer .tableform'),{onActive:function(t,i){
+            
+                        t.addClass('current');
+                        
+                        var item = t.retrieve('linkitem',i).setStyle('display','block');
+                        
+                        if(t.get('tf')=='img_lib'){
+                             if($('image_lib').get('container'))return;
+                             $('image_lib').set('container',true);
+                             W.page("index.php?app=image&ctl=admin_manage&act=image_lib",{update:'image_lib',clearUpdateMap:false});
+                        }                    
+            }});
+     
+     
+            
+     
+             $('image-broswer-submit').addEvent('click',function(){
+             
+                 var curHandle = $E('#image-broswer-handle .current');
+                 var curLinkItem = curHandle.retrieve('linkitem');
+                 
+				
+                 switch(curHandle.get('tf')){                 
+                    case 'local':						
+                         curLinkItem.getElement('form').fireEvent('submit',{stop:$empty});
+                         break;
+                    case 'img_lib':
+						var img_cur=$('image_lib').retrieve('image-selected');
+						if(!img_cur)break;
+						var ident=img_cur.get('gid'),
+							src=img_cur.get('src');
+							<{if $env.get.type=='big'}>
+								src = img_cur.get('lsrc');
+							<{/if}>
+						dialogCallBack(ident,src);	
+						break;                    
+                    case 'www':
+						curLinkItem.getElement('form').fireEvent('submit',{stop:$empty});
+						break;
+                 }
+                                
+				 
+             
+             
+             });
+
+
+            $E('.image_list').addEvent('click',function(e){
+				var target=$(e.target);
+				if(target.match('img')&&target.get('gid')){
+					$('image_lib').retrieve('image-selected',target).getParent('.item').removeClass('current');
+					target.getParent('.item').addClass('current');
+					$('image_lib').store('image-selected',target);	
+				}
+			}); 
+			    
+     
+			$ES('#tag-filter .x-tag').addEvent('click',function(e){
+				var _this=this,box=$('image_lib');
+				if(_this.retrieve('cache_fn'))return _this.retrieve('cache_fn')();		
+				var url='index.php?app=image&ctl=admin_manage&act=image_lib&p[0]='+this.get('tag_id');
+				W.page(url,{update:box,onRequest:function(){
+					box.innerHTML='Loading......';
+				},onComplete:function(rs){	
+					_this.retrieve('cache_fn',function(){						
+						box.eliminate('image-selecte').innerHTML=rs;
+						var tagBox=_this.getParent('#tag-filter');			
+						tagBox.retrieve('tag-selected',_this).removeClass('x-tag-selected');
+						_this.addClass('x-tag-selected');	
+						tagBox.store('tag-selected',_this);	
+					})();
+				}});
+			});
+
+
+var SimpleTagEditor = new Class({
+
+    Implements: [Options],
+
+    options:{
+        interval: 400
+    },
+
+    initialize: function(el, container, options){
+        this.el = $(el);
+        this.container = $(container);
+        if(!this.el || !this.container) return;
+        this.setOptions(options);
+
+        this.tagCache = [];
+        this.altTags = this.container.getElements('.x-tag');
+        this.addTags();
+
+        this.el.addEvents({
+            'focus': this.start.bind(this),
+            'blur': this.stop.bind(this)
+        });
+        this.container.addEvent('click', this.toggleTag.bindWithEvent(this));
+    },
+
+    addTags: function(){
+        var values = [];
+        this.altTags.each(function(tag){
+            var value = tag.get('text');
+            this.tagCache.push(value);
+            if(tag.hasClass('x-tag-selected')) values.push(value);
+        },this);
+        this.value = values.join(' ');
+        return this;
+    },
+
+    getValue: function(){
+        return this.el.get('value');
+    },
+
+    setValue: function(){
+        this.el.set('value', this.value);
+        return this;
+    },
+
+    checkTag: function(){
+        if(!this.focus) return;
+        var value = this.getValue();
+        if(this.value === value) return;
+        var values = value.split(' ');
+        this.altTags.removeClass('x-tag-selected');
+        values.each(function(item){
+            this.tagCache.each(function(tag, index){
+                if(tag == item) this.altTags[index].addClass('x-tag-selected');
+            },this);
+        },this);
+        this.value = value;
+        this.setValue();
+    },
+
+    toggleTag: function(e){
+        e.stop();
+        var tgt = e.target;
+        if(!tgt.hasClass('x-tag')) return;
+        var value = tgt.get('text'),
+            values = this.value.clean().split(' ');
+        if(!tgt.hasClass('x-tag-selected')){
+            values.include(value);
+            tgt.addClass('x-tag-selected');
+        }else{
+            values.erase(value);
+            tgt.removeClass('x-tag-selected');
+        }
+        this.value = values.join(' ').trim();
+        this.setValue();
+        return this;
+    },
+
+    start: function(){
+        if(this.focus) return;
+        this.focus = true;
+        this.timer = this.checkTag.periodical(this.options.interval, this);
+    },
+
+    stop: function(){
+        if(!this.focus) return;
+        this.timer = $clear(this.timer);
+        this.focus = false;
+    }
+
+});
+
+
+			$$('.x-tag-input').each(function(input){
+			    var container = input.getParent().getElement('.x-tag-container');
+			    if(!container) return;
+			    new SimpleTagEditor(input, container);
+			},this);
+            
+			
+     }();       
+
+		
+
+
+</script>
+
+
+

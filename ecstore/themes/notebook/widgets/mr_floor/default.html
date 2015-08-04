@@ -1,0 +1,54 @@
+<div class="m_index_floor_cont">
+        <div class="m_floor_title">
+            <div class="m_floor_bt"><{if $data.floor_pic_link}><a href="<{$data.floor_pic_link}>"><{/if}><img src="<{$data.floor_pic}>"/><{if $data.floor_pic_link}></a><{/if}></div>
+            <div class="m_floor_link">
+                <{if $data.top_link_title}>
+                <ul>
+                    <{foreach from=$data.top_link_title item=toplink key=top_key name=toplink}>
+                        <li><a href="<{$data.top_link_url.$top_key}>"><{$toplink}></a></li>
+                        <{if !$smarty.foreach.toplink.last}>
+                            <li>|</li>
+                        <{/if}>
+                    <{/foreach}>
+                </ul>
+                <{/if}>
+            </div>
+        </div>
+        <div class="m_floor_main">
+            <div class="m_floor_mainl fl">
+                <div class="m_pic_legend">
+                    <a href="<{$data.floor_suspended_goods.goods_info.0.goodsLink}>"><img src="<{if $data.floor_suspended_goods.goods_info.0.pic}><{$data.floor_suspended_goods.goods_info.0.pic}><{else}><{$data.floor_suspended_goods.goods_info.0.goods_info.goodsPicM}><{/if}>"/></a>
+                    <div class="m_legend">
+                        <p><{$data.floor_suspended_goods.goods_info.0.goods_info.goodsIntro}></p>
+                    </div>
+                </div>
+                <div class="m_title">
+                    <!-- <h3><a href="#">王杰</a></h3> -->
+                    <P><a href="<{$data.floor_suspended_goods.goods_info.0.goods_info.goodsLink}>"><{if $data.floor_suspended_goods.goods_info.0.nice}><{$data.floor_suspended_goods.goods_info.0.nice}><{else}><{$data.floor_suspended_goods.goods_info.0.goods_info.goodsName}><{/if}></a></P>
+                </div>
+                <div class="m_price f16">
+                    <div class="red fl"><{$data.floor_suspended_goods.goods_info.0.goods_info.goodsSalePrice|cur}> </div>
+                    <div class="fr"><del><{$data.floor_suspended_goods.goods_info.0.goods_info.goodsMarketPrice|cur}></del></div>
+                </div>
+            </div>
+            <div class="m_floor_mainr fr">
+                <ul>
+                <{foreach from=$data.floor_goods.goods_info item=goods key=key name=floor_goods}>
+                    <li class="m_product">
+                        <div class="m_product_pic"><a href="<{$goods.goods_info.goodsLink}>"><img src="<{if $goods.pic}><{$goods.pic}><{else}><{$goods.goods_info.goodsPicM}><{/if}>"/></a></div>
+                        <div class="m_product_title">
+                            <a href="<{$goods.goods_info.goodsLink}>">
+                                <{if $goods..nice}>
+                                    <{$goods.nice}>
+                                <{else}>
+                                    <{$goods.goods_info.goodsName}>
+                                <{/if}>
+                            </a>
+                            <span><{$goods.goods_info.goodsSalePrice|cur}></span>
+                        </div>
+                    </li>
+                <{/foreach}>
+                </ul>
+            </div>
+        </div>
+    </div>

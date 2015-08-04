@@ -1,0 +1,93 @@
+<?php 
+
+$db['activity'] = array(
+    'columns'=>array(
+        'act_id'=>array(
+            'type'=>'mediumint(8)',
+            'extra'=>'auto_increment',
+            'pkey'=>'true',
+            'label'=>__('序号'),
+            'in_list'=>true,
+        ),
+        'name'=>array(
+            'type'=>'varchar(200)',
+            'label'=>__('活动名称'),
+            'editale'=>false,
+            'in_list'=>true,
+            'default_in_list'=>true,
+        		'searchtype' => 'has',
+        		'filtertype' => 'custom',
+        		'filterdefault' => true,
+        ),
+        'description'=>array(
+            'type'=>'text',
+            'label'=>__('活动描述'),
+            'editable'=>false,
+            'in_list'=>true,
+            'default_in_list'=>true,
+        ),
+        'start_time'=>array(
+            'type'=>'time',
+            'label'=>__('活动开始时间'),
+            'editable'=>false,
+            'in_list'=>true,
+            'default_in_list'=>true,
+        ),
+        'end_time'=>array(
+            'type'=>'time',
+            'label'=>__('活动结束时间'),
+            'editable'=>false,
+            'in_list'=>true,
+            'default_in_list'=>true,
+        ),
+        'apply_start_time'=>array(
+            'type'=>'time',
+            'label'=>__('申请开始时间'),
+            'editable'=>false,
+            'in_list'=>true,
+            'default_in_list'=>true,
+        ),
+        'apply_end_time'=>array(
+            'type'=>'time',
+            'label'=>__('申请结束时间'),
+            'editable'=>false,
+            'in_list'=>true,
+            'default_in_list'=>true,
+        ),
+        'business_type'=>array(
+            'type'=>'varchar(200)',
+            'label'=>__('商户经营范围'),
+            'editable'=>false,
+            'in_list'=>false,
+            'default_in_list'=>false,
+        ),
+        'act_open'=>array(
+            'type' => 'bool',
+            'default' => 'false',
+            'label'=>__('活动开启状态'),
+            'editable' => false,
+            'required' => false,
+            'in_list'=>true,
+            'default_in_list'=>true,
+        ),
+        'act_status'=>array(
+            'type'=>array(
+                0=>__('未开始'),
+                1=>__('进行中'),
+                2=>__('已结束'),
+            ),
+            'default' => 0,
+            'label'=>__('活动进行状态'),
+            'editable' => false,
+            'required' => true,
+            'in_list'=>false,
+            'default_in_list'=>false,
+        ),
+        'last_modified'=>array(
+            'type'=>'time',
+            'label'=>__('最后修改时间'),
+            'editable'=>false,
+            'required'=>false,
+        ),
+    ),
+);

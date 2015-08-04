@@ -1,0 +1,259 @@
+<{css src="style.css" app="business"}>
+<{script src="dialog.js" app="business" pdir="js"}>
+<{script src="modedialog.js" app="business" pdir="js"}>
+<{script src="load.js" app="business" pdir="js"}>
+<{lang_script src="lang.js" app="desktop"}>
+
+
+<!-- right-->
+<div class="member-main">
+   <div>
+
+       <div class="title"><{t}>店铺优惠券<{/t}></div>
+
+        <table width="100%" cellpadding="3" cellspacing="0" class="gridlist border-all">
+            <col class="span-2 "></col>
+             <col></col>
+            <col class="span-4"></col>
+            <col class="span-3"></col>
+            <col class="span-2"></col>
+             <col class="span-2"></col>
+            <col class="span-2"></col>
+        <thead>
+        <tr>
+          <th class="first"><{t}>优惠券号码<{/t}></th>
+          <th><{t}>名称<{/t}></th>
+          <th><{t}>优惠券类型<{/t}></th>
+          <th><{t}>获取的总数量<{/t}></th>
+          <th><{t}>发行类型<{/t}></th>
+          <th><{t}>启用状态<{/t}></th>
+          <th><{t}>线上发放数<{/t}></th>
+          <th><{t}>线上领取数<{/t}></th>
+          <th><{t}>每人限量<{/t}></th>
+          <th><{t}>操作<{/t}></th>
+        <!--  <th><{t}>限用商品<{/t}></th>-->
+        </tr>
+        </thead>
+        <tbody><{if count($coupons)>0}>
+        <{foreach from=$coupons item=item key=key}>
+        <{if strval($key) eq 'cpns_store_id'}>
+        <{continue}>
+        <{/if}>
+        <tr>
+          <td><{$item.cpns_prefix}></td>
+          <td class="textcenter font-black"><{$item.cpns_name}><br />
+        </td>
+          <{if $item.cpns_type == 1}>
+          <td align="center"><{t}>多张使用一次<{/t}></td>
+          <{else}>
+          <td align="center"><{t}>一张无限使用<{/t}></td>
+          <{/if}>
+
+          <td align="center"><{$item.cpns_gen_quantity}></td>
+          <{if $item.issue_type == 1}>
+          <td align="center"><{t}>店铺<{/t}></td>
+          <{else}>
+          <td align="center"><{t}>平台<{/t}></td>
+          <{/if}>
+         
+          <{if $item.cpns_status == 1}>
+          <td align="center"><{t}>已启用<{/t}></td>
+          <{else}>
+          <td align="center"><{t}>已停用<{/t}></td>
+          <{/if}>
+          <td align="center"><{$item.num_online}></td>
+          <td align="center"><{$item.online_num}></td>
+          <td align="center"><{$item.num_online_limit}></td>
+          <td align="center">
+           <{if $item.issue_type == 1}>
+            <a  id='editcoupon'  onclick='getcouponinfo(<{$item.cpns_id}>)'><{t}>编辑<{/t}></a>
+            <br />
+            <{if  $item.cpns_type ==1}>
+            <form action="<{link app=business ctl=site_store act=download_storecoupon arg0=$item.cpns_id arg1=$coupons.cpns_store_id}>" method="post" target='_blank' id="<{$item.cpns_id}>_downloadform">
+              <input type='hidden' id='<{$item.cpns_id}>_nCount' name='nCount'/>
+              <a  class="delete_addr" id='downloadcoupon' onclick='downloadcoupon(<{$item.cpns_id}>)'  ><{t}>下载<{/t}></a>
+            </form>
+           
+            <{/if}>
+            <a  class="delete_addr"  onclick='delcoupon(<{$item.cpns_id}>)'  ><{t}>删除<{/t}></a>
+            </br>
+            <a href="javascript:copylink(<{$item.cpns_id}>)" class="btn-bj-hover operate-btn"><{t}>拷贝链接<{/t}></a>
+
+          <{/if}>
+          </td>
+          
+        </tr>
+        <!--<tr>
+          <td class=" textleft"><span style="color:#666;"><{$item.pmt_describe}></span></td>
+        </tr>-->
+        <{/foreach}>
+        <{else}>
+        <tr>
+        <td height="60" colspan="6">
+          <{t}>尚无任何优惠券<{/t}></td>
+        </tr>
+        <{/if}>
+        
+        </tbody>
+        </table>
+        <{pagers data=$pager}>
+    </div>
+
+    <div style='height:20px;'>
+    </div>
+   
+     <div style='height:40px;'>
+            <span style="float:left"><span id='add' class="disc add-icon" >
+            <a href="javascript:void(0);" >
+            <{t}>发行优惠券<{/t}></a></span></span>
+            <span class="noticebox"><{t}>在此发行本店铺优惠券。<{/t}></span>
+    </div>
+     <div id='addr_div' style="display:none">
+            <{include file="site/store/coupon/frame.html" app=business}>
+    </div> 
+    
+</div>
+<!-- right-->
+
+
+<script>
+   $("add").addEvent('click',function(e){
+          
+           $('addr_div').setStyle('display','inline');
+           //$('addr_div').setStyle('float','left');
+           
+        });
+
+ function getcouponinfo(input){
+
+         var update=$('addr_div');
+         if(request)request.cancel();
+      
+         var request = new Request.HTML({
+                    url:'<{link app="business" ctl="site_store" act="edit_storecoupon" }>',
+                    update:update,
+                    async:false,
+                    onComplete:function(res){
+                        update.show();
+                        $('addr_div').setStyle('display','inline');
+                    }                                        
+         }).post($H({cpns_id:input}));
+
+     
+ } 
+ 
+ function  downloadcoupon(input) {
+
+     var  src = '<{link app="business" ctl="site_store" act="download_storecoupon" }>';
+
+     var count=prompt("请输入需要下载优惠券的数量：","50");//将输入的内容赋给变量 name ，
+    //这里需要注意的是，prompt有两个参数，前面是提示的话，后面是当对话框出来后，在对话框里的默认值
+     if(count)//如果返回的有内容
+     {
+
+        //alert("欢迎您："+ name)
+        if(isNaN(count)){
+            Message.error("请输入数字。");
+            return;
+        }
+
+       $(input+'_nCount').value =count;
+       $(input+'_downloadform').submit();
+
+
+        /*
+
+         new Request.JSON({
+                    url:src,
+                    method:'post',
+                    data:'cpns_id='+ input +"&num=" +count,
+                    onComplete:function(re){
+
+                        if(re ==null)return;
+
+                        if(re.status =='success') {
+                             Message.success(re.msg);
+
+                        } else {
+                             Message.error(re.msg);
+
+                        }
+                       
+                        //top.location.href="<{link app=b2c ctl=site_member act=coupon}>"
+                    }
+                }).send();
+
+
+          */
+
+
+
+
+
+     }
+   
+
+  
+
+
+ }
+
+ function  delcoupon(input) {
+  // href="<{link app=business ctl=site_store act=del_storecoupon arg0=$item.cpns_id }>"
+     var  src = '<{link app=business ctl=site_store act=del_storecoupon}>';
+
+      Ex_Dialog.confirm('<{t}>确认删除此优惠券？<{/t}>', function(e){
+                if(!e) return;
+                new Request({
+                    url:src,
+                    data:'cpns_id='+input,
+                    onComplete:function(re){
+                        if(re ==null)return;
+                        var _success_res = JSON.decode(re);
+
+                        if(_success_res.status =='success') {
+                            Message.success(_success_res.message, function(){
+                                location.reload();
+                            });
+
+                        } else {
+                             Message.error(_success_res.message, function(){
+                                location.reload();
+                            });
+
+                        }
+                    }
+                }).post();
+      });
+
+
+ }
+
+function copylink(cid){
+
+    var copylink = "<{link app=business ctl='site_member' act='copylink'}>";
+	quickPassport(copylink, '<{t}>拷贝链接<{/t}>',cid);
+}
+
+function quickPassport(url, title,cid){
+    new Ex_Dialog(url, {
+        title: title,
+        width: 500,
+        height: 250,
+        modal: true,
+        onLoad:function(){
+            //this.content.getElement('iframe').set('scrolling','no');
+        },
+        asyncOptions: {
+            data: 'cid='+cid
+            
+        }
+    });
+}
+</script>
+
+
+
+
+
+

@@ -1,0 +1,51 @@
+<div class="division" style=" padding:3px; margin:0;">
+<div class="gridlist-action">
+<{button label=$___b2c="添加一个可选项"|t:'b2c' onclick="addRow('select')" app="desktop" icon="btn_add.gif" }>
+<{button label=$___b2c="添加一个单行输入项"|t:'b2c' onclick="addRow('input')" app="desktop" icon="btn_add.gif" }>
+<{button label=$___b2c="添加一个多行输入项"|t:'b2c' onclick="addRow('text')" app="desktop" icon="btn_add.gif" }>
+</div>
+
+<div class="gridlist-head">
+    <div class="p_label span-3"><{t}>用户购买必填项<{/t}></div>
+    <div class="p_type span-3"><{t}>输入类型<{/t}></div>
+    <div class="p_options span-5"><{t}>可选值 (用"<{/t}><font color='blue'>,</font><{t}>"分隔)<{/t}></div>
+  </div>
+<div id="minfo_box" class="gridlist" style="height:180px;overflow:auto">
+<{foreach from=$gtype.minfo item=minfo key=key}>
+    <div class="row clearfix">
+        <div class="p_label span-3"><input size="12" name="gtype[minfo][<{$key}>][label]"  value='<{$minfo.label}>' /><input type='hidden' name="gtype[minfo][<{$key}>][name]"  value='<{$minfo.name}>' /></div>
+        <div class="p_type span-3">
+            <select name="gtype[minfo][<{$key}>][type]"  onchange="minfoChange(this)">
+                <option value="input" <{if $minfo.type == 'input'}>selected<{/if}>><{t}>单行输入项<{/t}></option>
+                <option value="text" <{if $minfo.type == 'text'}>selected<{/if}>><{t}>多行输入项<{/t}></option>
+                <option value="select" <{if $minfo.type == 'select'}>selected<{/if}>><{t}>选择项<{/t}></option>
+            </select>
+        </div>
+        <div class="p_options span-5"><input name="gtype[minfo][<{$key}>][options]" value='<{if $minfo.options}><{$minfo.options|implode:','}><{/if}>' <{if $minfo.type !='select'}>style='display:none'<{/if}>/>&nbsp;</div>
+        <div class="p_btn span-1" style=" text-align:center;color:red; cursor:pointer;" onclick="this.parentNode.parentNode.removeChild(this.parentNode)"><{img title=$___b2c="删除"|t:'b2c' alt=$___b2c="删除"|t:'b2c' app="desktop" src="bundle/delete.gif"}></div>
+        </div>
+<{/foreach}>
+</div>
+</div>
+
+<script language="javascript">
+
+var MINFOTMP = '<div class="row clearfix"><div class="p_label span-3"><input size="12" name="gtype[minfo][{key}][label]"  /></div><div class="p_name span-3" style="display:none"><input size="12" name="gtype[minfo][{key}][name]"  /></div><div class="p_type span-3"><select name="gtype[minfo][{key}][type]" onchange="minfoChange(this)"><option value="input"><{t}>单行输入项<{/t}></option><option value="text"><{t}>多行输入项<{/t}></option><option value="select"><{t}>选择项<{/t}></option></select></div><div class="p_options span-5"><input name="gtype[minfo][{key}][options]"  />&nbsp;</div><div class="p_btn span-1" style=" text-align:center;color:red;cursor:pointer;" onclick="this.parentNode.parentNode.removeChild(this.parentNode)"><{img title=$___b2c="删除"|t:"b2c" alt=$___b2c="删除"|t:"b2c" app="desktop" src="bundle/delete.gif"}></div></div>';
+var minfoItem = 0;
+function addRow(isSel){
+    var minfo = new Element('div').set('html',MINFOTMP.substitute({'key':'new_'+(minfoItem++)})).getFirst();
+    $('minfo_box').adopt(minfo);
+    minfo.getElements('select[name^=gtype[minfo] option').each(function(e){
+        if(e.get('value') == isSel)e.set('selected','selected');
+    });
+ minfoChange(  minfo.getElement('select[name^=gtype[minfo]') );
+
+}
+function minfoChange( e ){
+    if( $(e).get('value') != 'select' ){
+        $(e).getParent('div').getNext('div').getElement('input').set('styles',{'display':'none'});
+    }else{
+        $(e).getParent('div').getNext('div').getElement('input').set('styles',{'display':''});
+    }
+}
+</script>

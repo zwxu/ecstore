@@ -1,0 +1,56 @@
+<div class="tableform" style=" padding:3px; margin:0;">
+<div class="gridlist-action"><{button label=$___b2c="添加一个参数组"|t:'b2c' app="desktop" icon="btn_add.gif" onclick="addGrp()" }></div>
+<div id="params_box" style="height:400px;overflow:auto">
+
+<{assign var=grpItem value=0}>
+<{foreach from=$gtype.params key=key item=groupitems}>
+<div class="division" style=" border:1px solid #C7DBE5; margin:5px 0 0;" grp="<{$grpItem}>">
+  <{t}>参数组名称:<{/t}><input name="gtype[params][<{$grpItem}>][group]" value="<{$key|escape:html}>"/><{button type="button" label=$___b2c="添加一个参数"|t:"b2c" app="desktop" icon="btn_add.gif" onclick="addGrpItem(this)" }> <{button type="button" label=$___b2c="删除此参数组"|t:"b2c" app="desktop" icon="delete.gif" onclick="delGrpItem(this)" }>
+  <div class="division"><ul class="grp-item">
+<{assign var=grpPrmItem value=0}>
+<{foreach from=$groupitems key=keyx item=option}>
+    <li style="clear:both"><{t}>参数名：<{/t}><input name="gtype[params][<{$grpItem}>][name][<{$grpPrmItem}>]" value="<{$keyx|escape:html}>"  size="15" onchange="check_same(this)" class="params" /><span<{if !$gtype.type_id}> style="display:none"<{/if}>><{t}>别名：<{/t}><input name="gtype[params][<{$grpItem}>][alias][<{$grpPrmItem}>]" value="<{$option}>"/><span class="notice-inline"><{t}>用“|”分隔：<{/t}></span></span><span onclick="delGrpItem(this)"><{img title=$___b2c="删除"|t:'b2c' alt=$___b2c="删除"|t:'b2c'  src="bundle/delecate.gif" app='desktop'}></span></li>
+<{assign var=grpPrmItem value=$grpPrmItem+1}>
+<{/foreach}>
+  </ul></div>
+</div>
+<{assign var=grpItem value=$grpItem+1}>
+<{/foreach}>
+</div>
+</div>
+<script>
+var grpItem = 0;
+var GRPTMP = '<div class="division" style=" border:1px solid #C7DBE5; margin:5px 0 0;" grp="{key}"><{t}>参数组名称:<{/t}><input name="gtype[params][{key}][group]" value=""/><{button label=$___b2c="添加一个参数"|t:"b2c" app="desktop" icon="btn_add.gif" onclick="addGrpItem(this)" }><{button label=$___b2c="删除此参数组"|t:"b2c" app="desktop" icon="delete.gif" onclick="delGrpItem(this)" }><div class="division"><ul class="grp-item"></ul></div></div>';
+
+var GRPITEMTMP = '<li style="clear:both"><{t}>参数名：<{/t}><input name="gtype[params][{key}][name][{keyx}]" value=""  size="15" onchange="check_same(this)" class="params"/><span><{t}>别名：<{/t}><input name="gtype[params][{key}][alias][{keyx}]" value=""/><span class="notice-inline"><{t}>用“|”分隔：<{/t}></span></span><span onclick="delGrpItem(this)"><{img title=$___b2c="删除"|t:"b2c" alt=$___b2c="删除"|t:"b2c" src="bundle/delecate.gif" app="desktop"}></span></li>';
+
+var addGrp = (function(){
+    var grp = new Element('div').set('html',GRPTMP.substitute({'key':'new_'+(grpItem++)})).getFirst();
+    $('params_box').adopt(grp);
+    addGrpItem(grp.getElement('.addorde'));
+});
+var addGrpItem = (function(el){
+	if(!el)return;
+    var tableform = $(el).getParent('.division');
+    tableform.getElement('.grp-item').adopt(new Element('div').set('html',GRPITEMTMP.substitute({'key':tableform.get('grp'),'keyx':'new_'+(grpItem++)})).getFirst());
+});
+var delGrpItem = (function(el){
+	if(!el)return;
+  $(el).parentNode.parentNode.removeChild(el.parentNode);
+});
+
+function check_same(el){
+    if (el.value == '') return;
+    var parent = el.getParent('.division');
+    var ipt = parent.getElements('input.params');
+
+    var i=0,j=ipt.length;
+    for(;i<j;i++){
+        if(ipt.indexOf(el)==i) continue;
+        if (el.value == ipt[i].value){
+        	alert('参数名重复');
+        	break;
+        }
+    }
+};
+</script>

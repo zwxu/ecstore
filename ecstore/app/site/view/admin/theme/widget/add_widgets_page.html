@@ -1,0 +1,183 @@
+<{*<{area inject=".mainHead"}>
+<!-- <h2 class="titleimg">Widgets Center</h2> -->
+<{/area}>*}>
+<div id="wgtcenter" class="wgtcenter clearfix">
+  <div class="span-4 wgtcat side-bx side" style="height:528px">
+    <div class="spage-side-nav">
+      <div class="syswgtnav">
+        <h2>系统级挂件</h2>
+        <ul>
+          <{foreach from=$widgetsLib.systemlist item=widgets key=key}>
+          <li><a rel="<{$widgets}>" href="javascript:void(0);"><{$widgets}></a></li>
+          <{/foreach}>
+        </ul>
+      </div>
+      <div class="wgtnav">
+        <h2>模板自带挂件</h2>
+        <ul>
+          <{foreach from=$widgetsLib.themelist item=widgets key=key}>
+          <li><a rel="<{$widgets}>" href="javascript:void(0);"><{$widgets}></a></li>
+          <{/foreach}>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div style="position:absolute; left:165px;width:625px;">
+    <div class="notice"><{t}>友情提示：为保持页面美观，请尽量在“挂件槽”内添加相同宽度的挂件。<{/t}><a href="javascript:void(0);" class="close"><{t}>我知道了<{/t}></a></div>
+    <div class="wgtcontent">
+      <h3><{t}>常用版块:<{/t}></h3>
+      <ul class="commenwgt">
+        <{foreach from=$widgetsLib.usual item=widgets key=key}>
+        <li class="clearfix" data-widgets='<{json from=$widgets}>'>
+        <dl><dt><q><{$widgets.label}>(<{$widgets.folder}>)</q><i><img src="<{$widgets.bimg}>"></i><b class="close">×</b></dt><dd><img src="<{$widgets.img}>"></dd></dl>
+          <div class="fl">
+            <h2><{$widgets.label}>(<{$widgets.folder}>)</h2>
+            <div class="clearfix">
+              <div class="desc">
+                <div>
+                  <{t}><{$widgets.description}><{/t}>
+                </div>
+                <a href="javascript:void(0);" class="more" style="display:none;"><{t}>更多<{/t}></a>
+              </div>
+            </div>
+          </div>
+          <div class="fr"><{button type="button" label="添加" icon="btn_add.gif" app="desktop"}></div>
+        </li>
+        <{/foreach}>
+      </ul>
+    </div>
+  </div>
+</div>
+<script>
+void function(){
+    var wgtCenter = $('wgtcenter');
+    var wgtCat = wgtCenter.getElement('.wgtnav');
+    var syswgtCat = wgtCenter.getElement('.syswgtnav');
+    var wgtcontent = wgtCenter.getElement('.wgtcontent');
+    var dialog = wgtCenter.getParent('.dialog-content-body');
+
+    dialog.setStyle('overflow','hidden');
+
+    //点击“我知道了”关闭提示
+    //Cookie.dispose('wgtCenter.notice');
+    if(Cookie.read('wgtCenter.notice')) wgtCenter.getElement('.notice').hide();
+    //设置高度为对话框高度
+    var setSize = (function(el){
+        var elH = el.isDisplay() ? el.getSize().y + el.getPatch('margin').y : 0;
+        wgtcontent.setStyle('height',dialog.getStyle('height').toInt()+dialog.getStyle('padding-bottom').toInt()-wgtcontent.getPatch().y - elH);
+        return arguments.callee;
+    })(dialog.getElement('.notice'));
+    wgtCenter.getElement('.notice .close').addEvent('click',function(e){
+      e.stop();
+      this.getParent().hide();
+      setSize(this.getParent());
+      Cookie.write('wgtCenter.notice',true);
+    });
+
+    function getHeight(els){
+      els.length && els.each(function(el){
+        if(el.getSize().y / el.getStyle('line-height').toInt() > 2 && !el.getParent().getElement('.more').isDisplay()) {
+          el.addClass('inner');
+          el.getParent().getElement('.more').show();
+        }
+      });
+    }
+    getHeight(wgtcontent.getElements('.desc div'));
+
+    //鼠标划过显示大图
+    wgtcontent.addEvents({
+        'mouseover':function(e){
+            var el = $(e.target);
+            var dl = el.getParent('dl');
+            var li = el.getParent('li');
+            //(function(){
+              this.getElements('dl.hover').removeClass('hover');
+            //}).delay(100,this);
+            if(dl) {
+                dl.addClass('hover');
+                li.removeClass('hover');
+                var dt = dl.getElement('dt');
+                if(dt.getSize().y + dl.getPosition(dialog).y>dialog.getSize().y) dt.setStyle('top',dialog.getSize().y-dt.getSize().y - dl.getPosition(dialog).y);
+            }
+            if(li && !dl) {
+                li.addClass('hover').getSiblings('.hover').removeClass('hover');
+            }
+        },
+        'mouseleave':function(e){
+            this.getElements('dl.hover').removeClass('hover');
+        },
+        'click':function(e){
+            var el = $(e.target);
+            //关闭大图显示
+            if(el.hasClass('close')){
+                e.stop();
+                el.getParent('dl').removeClass('hover');
+            }
+            //更多展示/隐藏
+            else if(el.hasClass('more')){
+                e.stop();
+                el.set('text','隐藏').getParent('.desc').setStyle('height','auto').getElement('div').removeClass('inner');
+                el.className = 'hided';
+                //el.destroy();
+            }
+            else if(el.hasClass('hided')) {
+                e.stop();
+                el.set('text','更多').getParent('.desc').setStyle('height',36).getElement('div').addClass('inner');
+                el.className = 'more';
+            }
+            //添加挂件
+            else if(el.getParent('.fr')) {
+                _addWeigets([el.getParent('li').get('data-widgets'),"<{$theme}>"]);
+            }
+        }
+    });
+
+    wgtCat.getElements('a').addEvent('click',function(e){
+        e.stop();
+        var now = wgtCenter.retrieve('cur');
+        if(!now || now != this) {
+            if(now) now.removeClass('current');
+            this.addClass('current');
+            wgtCenter.store('cur', this);
+        }
+
+        new Request.HTML({
+            url:'index.php?app=site&ctl=admin_theme_widget&act=add_widgets_page_extend&theme=<{$theme}>',
+            update:wgtcontent,
+            onRequest:function(){
+                wgtcontent.set('html','<div class="notice"><{t}>正在载入板块信息...<{/t}></div>');
+            },
+            onComplete:initContent
+        }).post({catalog:this.get('rel')});
+    });
+    syswgtCat.getElements('a').addEvent('click',function(e){
+        e.stop();
+        var now = wgtCenter.retrieve('cur');
+        if(!now || now != this) {
+            if(now) now.removeClass('current');
+            this.addClass('current');
+            wgtCenter.store('cur', this);
+        }
+
+        new Request.HTML({
+            url:'index.php?app=site&ctl=admin_theme_widget&act=add_widgets_page_extend',
+            update:wgtcontent,
+            onRequest:function(){
+                wgtcontent.set('html','<div class="notice"><{t}>正在载入板块信息...<{/t}></div>');
+            },
+            onComplete:initContent
+        }).post({catalog:this.get('rel')});
+    });
+    var initContent = (function (){
+        getHeight(wgtcontent.getElements('.desc div'));
+        //var witems = wgtcontent.getElements('.commenwgt li');
+        //wgtCat.setStyles({'height':wgtCat.getParent('.dialog-content-body').getScrollSize().y-wgtCat.getPatch().y});
+        //new Equalizer(witems).equalize('width');
+
+       return arguments.callee;
+   })();
+}();
+
+
+</script>

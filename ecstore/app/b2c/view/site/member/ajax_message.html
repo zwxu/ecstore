@@ -1,0 +1,27 @@
+<{if !$reply}>
+  <input type="hidden" name="comment_id" value="<{$init.comment_id}>">
+  <{/if}>
+  <table id="table_<{$init.comment_id}>" class='send_table' width="100%">
+  <tr>
+    <td class="textcenter"><{t}>发送给：<{/t}></td>
+    <td><{input class="inputstyle" type="text" value=$__b2c="管理员"|t:'b2c' readonly="readonly" size="30" disabled="disabled"}></td>
+  </tr>
+  <tr>
+    <td class="textcenter"><em>*</em><{t}>标题：<{/t}></td>
+    <td><{input name="subject" class="inputstyle" type="text"  vtype=required id="comment_email" size=30 value=$init.title|escape:'html'}></td>
+  </tr>
+
+    <tr>
+    <td class="textcenter"><em>*</em><{t}>内容：<{/t}></td>
+    <td><{input class="inputstyle font12px" type="textarea" name="comment" vtype=required cols="50" rows="5" id="commenttitle" value=$init.comment}></td>
+  </tr>
+  <tr>
+    <td class="textcenter"></td>
+    <td>
+	<{button id="Submit" onclick="cha_form(1,this);" rel="_request" class="submit-btn" type="submit" label=$___b2c="发送"|t:'b2c'}>
+	&nbsp;
+	<input id="outbox_btn" name="has_sent" type="hidden" value="true">
+	<{button id="Submit_outbox" onclick="cha_form(1,this);return true;" rel="_request" type="submit" label=$___b2c="保存到草稿箱"|t:'b2c'}> &nbsp;
+	</td>
+  </tr>
+</table>

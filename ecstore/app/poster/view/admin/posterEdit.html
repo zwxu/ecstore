@@ -1,0 +1,346 @@
+<{script src="coms/modedialog.js" app="desktop" }>
+<{script src="goodseditor.js" app="b2c" }>
+
+<h4><{t}>添加广告<{/t}></h4>
+<div class="goods-detail">
+<div class="tableform" id='finder-tag'>
+<form method="POST" name="gEditor" id="gEditor" action="index.php?app=poster&ctl=admin_poster&act=toEdit" class="tableform" 
+ enctype="multipart/form-data" >
+        <{if $poster.poster_id}>
+        <input type="hidden" name="poster[poster_id]" value="<{$poster.poster_id}>" id="gEditor-GId-input"/>
+        <{/if}>
+        <table width="100%" cellpadding="0" cellspacing="0" >
+            <tr>
+                <th><em class="red">*</em><{t}>所属板块<{/t}></th>
+                <td><{input breakpoint="0" type="object" object="position@poster" name="poster[poster_position]" value=$poster.poster_position vtype="required"}>
+                <br />
+                备注:如果同一板块添加多条广告,会取结束时间最晚的那条
+                </td>
+            </tr>
+            <tr>
+                <th><em class="red">*</em><{t}>广告类型<{/t}></th>
+                <td>
+                  <{input type="select" name="poster[poster_type]"  vtype="required" options=$poster_type value=$poster.poster_type}>
+                备注:请选则相应的显示类型,要不可能造成广告显示不正常.<br/>
+                </td>
+             </tr>
+             <tr>
+                <th><{t}>弹出方式<{/t}></th>
+                <td>
+                <input type="radio" name="poster[poster_isblank]" value="0" <{if $poster.poster_isblank }><{else}>checked<{/if}> />本网页打开
+                <input type="radio" name="poster[poster_isblank]" value="1" <{if $poster.poster_isblank }>checked<{/if}> />弹出新窗口
+                </td>
+             </tr>
+             <tbody id="roll_pic_rule" style="display:none">
+                <tr>
+                  <th><{t app="poster"}>图片轮播<{/t}></th>
+                  <td>
+                      <div id="roll_pic_rule_div">
+                          <{if $poster.poster_switcheffect && $poster.poster_autoplay}>
+                          <table>
+                            <tr>
+                                <th><{t app="b2c"}>切换效果:<{/t}></th>
+                                <td><{input required=true type='radio' name="poster_switcheffect" options=array('scrollx'=>横向滚动,'scrolly'=>竖向滚动,'fade'=>渐现渐隐) value=$poster.poster_switcheffect|default:scrollx}></td>
+                             </tr>
+                             <tr>
+                                <th><{t app="b2c"}>自动播放:<{/t}></th>
+                               <td><{input required=true type='radio' name="poster_autoplay" options=array('true'=>是,'false'=>否) value=$poster.poster_autoplay|default:true}></td>
+                             </tr>
+                          </table>
+                          <{/if}>
+                      </div>
+                  </td>
+                </tr>
+             </tbody>
+             <tr>
+                <th><{t app="poster"}>已添加的图片和文字<{/t}></th>
+                <td>
+                    <div id="picAddress" class="division">
+                        <div class="piccontent">
+                            <{foreach from=$pics item=data key=key}>
+                                <{if $data.smallpic}>
+                                  <div>
+                                    <table  width="100%" cellpadding="0" cellspacing="0">
+                                      <tr>
+                                        <th><{t app="b2c"}>大图片地址:<{/t}></th>
+                                          <td><input type=hidden name=pic[<{$key}>][id] value="<{$key}>"><input name='pic[<{$key}>][link]' class="imgsrc" id="pic[<{$key}>][link]"  value="<{$data.link}>"><input type=button value=上传图片 class="uploadbtn"></td>
+                                          <th><{t app="b2c"}>链接地址:<{/t}></th>
+                                          <td><input name="pic[<{$key}>][linktarget]" value="<{$data.linktarget}>"> </td>
+                                      </tr>
+                                      <tr>
+                                        <th><{t app="b2c"}>图片宽度:<{/t}></th>
+                                          <td><input name="pic[<{$key}>][width]" value="<{$data.width}>"> </td>
+                                          <th><{t app="b2c"}>图片高度:<{/t}></th>
+                                          <td><input name="pic[<{$key}>][height]" value="<{$data.height}>"> </td>
+                                      </tr>
+                                      <tr>
+                                          <th><{t app="b2c"}>描述:<{/t}></th>
+                                          <td><input name="pic[<{$key}>][linkinfo]" value="<{$data.linkinfo}>"> </td>
+                                          <th>&nbsp</th>
+                                          <td>&nbsp</td>
+                                      </tr>
+                                  </table>
+                                  <{foreach from=$data.smallpic item=small key=k name="smallpic"}>
+                                      <table  width="100%" cellpadding="0" cellspacing="0">
+                                      <tr>
+                                        <th><{t app="b2c"}>小图片地址:<{/t}></th>
+                                          <td><input type=hidden name=pic[<{$key}>][id][smallpic][<{$k}>] value="<{$key}>"><input name='pic[<{$key}>][smallpic][<{$k}>][link]' class="imgsrc" id="pic[<{$key}>][smallpic][<{$k}>][link]"  value="<{$small.link}>"><input type=button value=上传图片 class="uploadbtn"></td>
+                                          <th><{t app="b2c"}>链接地址:<{/t}></th>
+                                          <td><input name="pic[<{$key}>][smallpic][<{$k}>][linktarget]" value="<{$small.linktarget}>"> </td>
+                                      </tr>
+                                      <tr>
+                                        <th><{t app="b2c"}>图片宽度:<{/t}></th>
+                                          <td><input name="pic[<{$key}>][smallpic][<{$k}>][width]" value="<{$small.width}>"> </td>
+                                          <th><{t app="b2c"}>图片高度:<{/t}></th>
+                                          <td><input name="pic[<{$key}>][smallpic][<{$k}>][height]" value="<{$small.height}>"> </td>
+                                      </tr>
+                                      <{if $smarty.foreach.smallpic.last}>
+                                      <tr>
+                                          <th><{t app="b2c"}>描述:<{/t}></th>
+                                          <td><input name="pic[<{$key}>][smallpic][<{$k}>][linkinfo]" value="<{$small.linkinfo}>"> </td>
+                                          <th><{t app="b2c"}>删除该图片及描述:<{/t}></th>
+                                          <td><span onclick="$(this).getParent('div').destroy()" name="del_span"><{img src="delecate.gif" style="cursor:pointer;" alt=$___b2c="删除"|t:'b2c' title=$___b2c="删除"|t:'b2c'}></span></td>
+                                      </tr>
+                                      <{else}>
+                                      <tr>
+                                          <th><{t app="b2c"}>描述:<{/t}></th>
+                                          <td><input name="pic[<{$key}>][smallpic][<{$k}>][linkinfo]" value="<{$small.linkinfo}>"> </td>
+                                          <th>&nbsp</th>
+                                          <td>&nbsp</td>
+                                      </tr>
+                                      <{/if}>
+                                  </table>
+                                  <{/foreach}>
+                                  </div>
+                                <{else}>
+                                  <table  width="100%" cellpadding="0" cellspacing="0">
+                                      <tr>
+                                        <th><{t app="b2c"}>图片地址:<{/t}></th>
+                                          <td><input type=hidden name=pic[<{$key}>][id] value="<{$key}>"><input name='pic[<{$key}>][link]' class="imgsrc" id="pic[<{$key}>][link]"  value="<{$data.link}>"><input type=button value=上传图片 class="uploadbtn"></td>
+                                          <th><{t app="b2c"}>链接地址:<{/t}></th>
+                                          <td><input name="pic[<{$key}>][linktarget]" value="<{$data.linktarget}>"> </td>
+                                      </tr>
+                                      <tr>
+                                        <th><{t app="b2c"}>图片宽度:<{/t}></th>
+                                          <td><input name="pic[<{$key}>][width]" value="<{$data.width}>"> </td>
+                                          <th><{t app="b2c"}>图片高度:<{/t}></th>
+                                          <td><input name="pic[<{$key}>][height]" value="<{$data.height}>"> </td>
+                                      </tr>
+                                      <tr>
+                                          <th><{t app="b2c"}>描述:<{/t}></th>
+                                          <td><input name="pic[<{$key}>][linkinfo]" value="<{$data.linkinfo}>"> </td>
+                                          <th><{t app="b2c"}>删除该图片及描述:<{/t}></th>
+                                          <td><span onclick="$(this).getParent('table').destroy()" name="del_span"><{img src="delecate.gif" style="cursor:pointer;" alt=$___b2c="删除"|t:'b2c' title=$___b2c="删除"|t:'b2c'}></span></td>
+                                      </tr>
+                                  </table>
+                                <{/if}>
+                            <{/foreach}>
+                        </div>
+                    <{button label=$___b2c="添加图片"|t:'b2c' class="addimage" app="desktop" icon="btn_add.gif"}>
+                    </div>
+                </td>
+             </tr>
+             <tr>
+                <th><em class="red">*</em><{t}>上线时间<{/t}></th>
+                <td>
+                    <{input type="time" name="poster_starttime" vtype="required" value=$poster.poster_starttime}>
+                </td>
+             </tr>
+             <tr>
+                <th><em class="red">*</em><{t}>下线时间<{/t}></th>
+                <td>
+                    <{input type="time" name="poster_endtime" vtype="required" value=$poster.poster_endtime}>
+                </td>
+             </tr>
+             <tr>
+                <th><{t}>维护人员<{/t}></th>
+                <td>
+                    <label><{if $poster.poster_author!=''}><{$poster.poster_author}><{else}><{/if}></label>
+                </td>
+             </tr>
+             <{if $edit}>
+             <tr>
+                <th><{t}>创建时间<{/t}></th>
+                <td>
+                    <label><{if $poster.poster_createtime==''}><{else}><{$poster.poster_createtime|cdate}><{/if}></label>
+                    <input type="hidden" name="poster[poster_createtime]" value="<{$poster.poster_createtime}>" />
+                </td>
+             </tr>
+             <tr>
+                <th><{t}>更新时间<{/t}></th>
+                <td>
+                    <label><{if $poster.poster_updatetime==''}><{else}><{$poster.poster_updatetime|cdate}><{/if}></label>
+                    <input type="hidden" name="poster[poster_updatetime]" value="<{$poster.poster_updatetime}>" />
+                </td>
+             </tr>
+             <{/if}>
+        </table>
+<{capture name='footbar'}>
+<table cellspacing="0" cellpadding="0" style="margin:0 auto; width:100%;" class="table-action" >
+      <tbody>
+       <tr valign="middle">
+        <td>
+        <{assign var="___da" value=$___b2c='确定退出?'|t:'b2c'}>
+        <{assign var="___ca" value="关  闭"}>
+            <{button label=$___b2c="保存并关闭窗口"|t:'b2c' class="btn-primary" id="btn-save-close" onclick="subOrderForm(event,2)"}>
+            <{button label=$___b2c="保存当前"|t:'b2c' class="btn-primary" id="btn-save-stay" onclick="subOrderForm(event,1)"}>
+            <{button label=$___b2c="确定退出"|t:'b2c' class="btn-secondary" onclick="if(confirm('{$___da}'))window.close()"}>
+        </td>
+        </tr>
+        </tbody>
+</table>
+<{/capture}> 
+</form>
+
+
+<script>
+window.addEvent('domready',function(){
+    <{if $poster.poster_switcheffect && $poster.poster_autoplay}>
+      $('roll_pic_rule').setStyle('display','');
+    <{/if}>
+});
+subOrderForm = function (event,sign){
+    var target={};
+    switch (sign){
+        case 1:                    //保存不关闭
+          $extend(target,{
+            onComplete:function(res){
+                if(window.opener.finderGroup&&window.opener.finderGroup['<{$finder_id}>'])
+                  window.opener.finderGroup['<{$finder_id}>'].refresh();
+                $('btn-save-stay').set('disabled', 'disabled');
+                window.location.reload();
+            }}
+          );
+        break;
+        case 2:                   //保存关闭
+          $extend(target,{
+            onComplete:function(res){
+                if(window.opener.finderGroup&&window.opener.finderGroup['<{$finder_id}>'])
+                  window.opener.finderGroup['<{$finder_id}>'].refresh();
+                $('btn-save-close').set('disabled', 'disabled');
+                window.close();
+            }}
+          );
+        break;
+    }
+
+    var _form=$('gEditor');
+    if(!_form)return;
+    var _formActionURL=_form.get('action'); 
+    _form.store('target',target);
+    _form.set('action',_formActionURL+'&but='+sign).fireEvent('submit',new Event(event));
+    };
+(function(){
+    var tag_type='table',tag_class='pic_items';
+    document.getElement(".addimage").addEvent('click',function(){
+            var poster_type_sel = $E('select[name=poster[poster_type]] option:selected').value;
+            var i=new Date().getTime();
+            if(poster_type_sel == 2){
+                var tpl = getTlp(i,1,1);
+                tpl += getTlp(i,2,1);
+                tpl += getTlp(i,2,2);
+                tpl += getTlp(i,3,3);
+                tag_type = 'div';
+            }else{
+                var tpl=getTlp(i,1,1);
+            }
+            $('picAddress').getElement('.piccontent').adopt(new Element(tag_type,{'html':tpl,'width':'100%','class':tag_class}));
+            $ES('.uploadbtn').each(function(item,index){
+                tag_type = 'table';
+                item.removeEvents('click').addEvent('click',function(e){bindevent(this)});
+            
+            });
+    });
+    $ES('.uploadbtn').each(function(item,index){
+        item.addEvent('click',function(e){bindevent(this)});
+    
+    });
+    function bindevent(el){
+        var target=$(el).getParent(tag_type).getElement('.imgsrc');
+        var url='index.php?app=desktop&act=alertpages&goto='+encodeURIComponent("index.php?app=image&ctl=admin_manage&act=image_broswer&type=big");
+        return new imgDialog(url,{onCallback:function(image_id,image_src){
+            target.value=image_src;
+        }})
+    }
+})();
+
+$E('select[name=poster[poster_type]]').addEvent('change',function(){
+    var poster_type_sel = $E('select[name=poster[poster_type]] option:selected').value;
+    $('roll_pic_rule_div').empty();
+    $('picAddress').getElement('.piccontent').empty();
+    if(poster_type_sel == '1' || poster_type_sel == '2'){
+        var tpl = '<tr><th><{t app="b2c"}>切换效果:<{/t}></th>'
+        tpl += '<td><input type="radio" value="scrollx" name="poster_switcheffect" required="1" checked="checked">横向滚动&nbsp&nbsp';
+        tpl +='<input type="radio" value="scrolly" name="poster_switcheffect" required="1">竖向滚动&nbsp&nbsp';
+        tpl +='<input type="radio" value="fade" name="poster_switcheffect" required="1">渐现渐隐</td></tr>';
+        tpl += '<tr><th><{t app="b2c"}>自动播放:<{/t}></th>'
+        tpl += '<td><input type="radio" value="true" name="poster_autoplay" required="1" checked="checked">是&nbsp&nbsp';
+        tpl +='<input type="radio" value="false" name="poster_autoplay" required="1">否</td></tr>';
+        $('roll_pic_rule_div').adopt(new Element('table',{'html':tpl,'width':'100%','class':'pic_items'}));
+        $('roll_pic_rule').setStyle('display','');
+    }else{
+      $('roll_pic_rule').setStyle('display','none');
+    }
+});
+/**
+**
+**/
+function getTlp(i,key,small_k){
+    
+    var poster_type_sel = $E('select[name=poster[poster_type]] option:selected').value;
+    var tpl = '';
+    switch(poster_type_sel){
+        case '0':
+        case '1':
+            tpl += '<tr><th><{t app="b2c"}>图片地址:<{/t}></th>';
+            tpl += '<td><input type=hidden name=pic['+i+'][id] value="'+i+'"><input name="pic['+i+'][link]" class="imgsrc"><input type=button value=<{t app="b2c"}>上传图片<{/t}> class="uploadbtn" id="pic['+i+']"></td>';
+            tpl += '<th><{t app="b2c"}>链接地址:<{/t}></th>';
+            tpl += '<td><input name="pic['+i+'][linktarget]"></td></tr>';
+            tpl += '<tr><th><{t app="b2c"}>图片宽度:<{/t}></th>';
+            tpl += '<td><input name="pic['+i+'][width]"></td>';
+            tpl += '<th><{t app="b2c"}>图片高度:<{/t}></th>';
+            tpl += '<td><input name="pic['+i+'][height]"></td></tr>';
+            tpl += '<tr><th><{t app="b2c"}>描述:<{/t}></th>';
+            tpl += '<td><input name="pic['+i+'][linkinfo]"></td>';
+            tpl += '<th><{t app="b2c"}>删除该图片及描述:<{/t}></th>';
+            tpl += '<td><span onclick="$(this).getParent(\'table\').destroy()" name="del_span"><{img src="delecate.gif" style="cursor:pointer;" alt=$___b2c="删除"|t:"b2c" title=$___b2c="删除"|t:"b2c"}></span></td>';
+            break;
+       case '2':
+            switch(key){
+              case 1:
+                  var str = '大';
+                  var s_b = ''
+                  break;
+              case 2:
+                  var str = '小';
+                  var s_b = '[smallpic]['+small_k+']';
+                  break;
+              case 3:
+                  var str = '小';
+                  var s_b = '[smallpic]['+small_k+']';
+                  break;
+            }
+            tpl += '<table><tr><th><{t app="b2c"}>'+str+'图片地址:<{/t}></th>';
+            tpl += '<td><input type=hidden name=pic['+i+']'+s_b+'[id]><input name="pic['+i+']'+s_b+'[link]" class="imgsrc"><input type=button value=<{t app="b2c"}>上传图片<{/t}> class="uploadbtn" id="pic['+i+']"></td>';
+            tpl += '<th><{t app="b2c"}>链接地址:<{/t}></th>';
+            tpl += '<td><input name="pic['+i+']'+s_b+'[linktarget]"></td></tr>';
+            tpl += '<tr><th><{t app="b2c"}>图片宽度:<{/t}></th>';
+            tpl += '<td><input name="pic['+i+']'+s_b+'[width]"></td>';
+            tpl += '<th><{t app="b2c"}>图片高度:<{/t}></th>';
+            tpl += '<td><input name="pic['+i+']'+s_b+'[height]"></td></tr>';
+            tpl += '<tr><th><{t app="b2c"}>描述:<{/t}></th>';
+            tpl += '<td><input name="pic['+i+']'+s_b+'[linkinfo]"></td>';
+            if(key != 3){
+              tpl += '<th>&nbsp</th>';
+              tpl += '<td>&nbsp</td>';
+            }else{
+                tpl += '<th><{t app="b2c"}>删除该图片及描述:<{/t}></th>';
+                tpl += '<td><span onclick="$(this).getParent(\'div\').destroy()" name="del_span"><{img src="delecate.gif" style="cursor:pointer;" alt=$___b2c="删除"|t:"b2c" title=$___b2c="删除"|t:"b2c"}></span></td>';
+            }
+            tpl += '</table>';
+            break;
+    }
+    return tpl;
+}
+</script>
+

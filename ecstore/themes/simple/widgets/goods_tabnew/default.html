@@ -1,0 +1,104 @@
+<div class="sj_info mt_10">
+	<div class="info_title">热门推荐</div>
+	 <div class="hot_kind">
+	    <ul class="hot_kind_ul">
+		   <li class="le_zhi currentHotT"><a href="#" class="hover" id="t_1"><{$setting.tag0|default:'热门推荐'}></a></li>
+		   <li class="ri_zhi"><a href="#" id="t_2"><{$setting.tag1|default:'新品上架'}></a></li>
+		   <div class="cl_zhi"></div>
+		 </ul>
+ 
+             <ul class="hot_kind_ul_list currentHotC" id="tag1">
+        <{foreach from=$data.goods_tab1 item=goodsdemo}>
+        <{if $goodsdemo.is_tui eq 'true'}>
+          <li>
+            <a target='_blank' href="<{link app=b2c ctl=site_product act=index arg=$goodsdemo.goods_id}>">
+            <{if $goodsdemo.udfimg == 'true'}>
+            <{assign var="gimage" value=$goodsdemo.thumbnail_pic}>
+            <{else}>
+            <{assign var="gimage" value=$goodsdemo.image_default_id|default:$data.defaultImage}>
+            <{/if}>
+            <img class="img-lazyload" src="images/transparent.gif" lazyload="<{$gimage|storager}>" alt="<{$goodsdemo.name}>"></a>
+          <p class="clo_info">
+            <a target='_blank' href="<{link app=b2c ctl=site_product act=index arg=$goodsdemo.goods_id}>"><{$goodsdemo.name}></a></p>
+          <p class="price"><strong class="le_zhi"><{$goodsdemo.price|cur}></strong> 
+          <span class="ri_zhi">已售出<span><{$goodsdemo.buy_count}></span>笔</span>
+          <span class="cl_zhi"></span>
+          </p>
+          </li>
+          <{/if}>
+        <{/foreach}>
+      </ul>
+        
+             <ul class="hot_kind_ul_list" id="tag2">
+        <{foreach from=$data.goods_tab2 item=goodsdemo}>
+         <{if $goodsdemo.is_new eq 'true'}>
+          <li>
+            <a target='_blank' href="<{link app=b2c ctl=site_product act=index arg=$goodsdemo.goods_id}>">
+            <{if $goodsdemo.udfimg == 'true'}>
+            <{assign var="gimage" value=$goodsdemo.thumbnail_pic}>
+            <{else}>
+            <{assign var="gimage" value=$goodsdemo.image_default_id|default:$data.defaultImage}>
+            <{/if}>
+            <img class="img-lazyload" src="images/transparent.gif" lazyload="<{$gimage|storager}>" alt="<{$goodsdemo.name}>"></a>
+          <p class="clo_info">
+            <a target='_blank' href="<{link app=b2c ctl=site_product act=index arg=$goodsdemo.goods_id}>"><{$goodsdemo.name}></a></p>
+          <p class="price"><strong class="le_zhi"><{$goodsdemo.price|cur}></strong> 
+          <span class="ri_zhi">已售出<span><{$goodsdemo.buy_count}></span>笔</span>
+          <span class="cl_zhi"></span>
+          </p>
+          </li>
+          <{/if}>
+        <{/foreach}>
+      </ul>
+	 </div>
+</div>          
+<script type="text/javascript" src="http://lib.sinaapp.com/js/jquery/1.10.2/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+	jQuery.noConflict();
+	jQuery(function($){
+		var Time1;
+		var Time2;
+		var ListTitle=$(".ListTitle span");
+		var ListContent=$(".ListContent");
+		$.each(ListTitle,function(index){
+			$(this).hover(function(){
+				Time1=setTimeout(function(){
+					ListTitle.eq(index).addClass("currentTitle").siblings().removeClass("currentTitle");
+					ListContent.eq(index).addClass("currentContent").siblings().removeClass("currentContent");
+				},100)
+					
+			},function(){
+				clearTimeout(Time1);	
+			})	
+		})
+		var hot_kind_ul_li=$(".hot_kind_ul li");
+		var hot_kind_ul_list=$(".hot_kind_ul_list");
+		$.each(hot_kind_ul_li,function(key){
+			$(this).hover(function(){
+				Time2=setTimeout(function(){
+					hot_kind_ul_li.eq(key).addClass("currentHotT").siblings().removeClass("currentHotT");
+					hot_kind_ul_list.eq(key).addClass("currentHotC").siblings().removeClass("currentHotC");			
+				},100)	
+			},function(){
+				clearTimeout(Time2);	
+			})
+		})
+		$(".toTop").hover(function(){
+			$(this).css({"backgroundPosition":"bottom left"});	
+		},function(){
+			$(this).css({"backgroundPosition":"top left"})	
+		})	
+		 
+		
+		
+		 $(window).scroll(function(){ 
+			if ($(this).scrollTop()>400) { 
+				$(".toTop").fadeIn(300);
+			}else{ 
+				$(".toTop").fadeOut(300);
+			}
+				
+		 }) 
+		
+	})
+</script>

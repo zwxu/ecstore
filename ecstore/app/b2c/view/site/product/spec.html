@@ -1,0 +1,81 @@
+<div id="goods-spec" class='goods-spec'>
+  <div class="clearfix border-bottom-dot spec-warp" >
+    <p class='spec-tip'>
+    <span> <{if $SelectSpecValue.selected}>
+      <{t}>您选择了：<{/t}>
+      <{else}>
+      <{t}>请选择：<{/t}>
+      <{/if}>
+    </span>
+    <em><{$SelectSpecValue.value}></em>
+    </p>
+
+    <div id='view-products-list'>
+      <a href='javascript:void(0)' class="no-unl" onclick="new Event(event).stop();$('goods-products-list').fireEvent('pop')"><{t}>规格列表<{/t}></a>
+    </div>
+  </div>
+  <!--flat-->
+  <input type='hidden' name='goods[product_id]' value='<{$goods.product_id}>' disabled='true'/>
+  <!--尺码-->
+
+  <{foreach from=$goods.spec key=key item=goodsFlatSpecDesc}>
+  <{if $goodsFlatSpecDesc.spec_show_type != 'flat'}><{assign var=hasSelSpec value='true'}><{continue}>
+  <{/if}>
+  <div class='spec-item specItem clearfix'>
+    <div class="spec-label"><span><em><{$goodsFlatSpecDesc.spec_name}>：</em></span></div>
+    <div class="spec-values">
+      <ul>
+        <{foreach from=$goodsFlatSpecDesc.option key=skey item="subDesc"}>
+        <{if $goods.used_spec.$skey}>
+        <{if $goodsFlatSpecDesc.display!="block"}>
+        <li>
+        <a href="<{link app=b2c ctl=site_product act=index arg0=$goods.goods_id arg1=$subDesc.spec_goods_images}>" specvid="<{$skey}>" specid="<{$key}>" > <{if $goodsFlatSpecDesc.spec_type=='text'}>
+          <span><nobr><{$subDesc.spec_value}></nobr></span>
+          <{else}>
+          <img src="<{if $subDesc.spec_image}><{$subDesc.spec_image|storager}><{else}><{$spec_default_pic|storager}><{/if}>"  alt="<{$subDesc.spec_value}>" title="<{$subDesc.spec_value}>" width="<{$specimagewidth}>" height="<{$specimageheight}>"/>
+          <{/if}>
+          <i title='<{t}>点击取消选择<{/t}>'>&nbsp;</i>
+        </a>
+        </li>
+        <{/if}>
+        <{/if}>
+        <{/foreach}>
+      </ul>
+    </div>
+  </div>
+  <{/foreach}>
+  <!-- 颜色-->
+  <{if $hasSelSpec}>
+  <div class='spec-item'>
+    <ul class='clearfix'>
+      <{foreach from=$goods.spec key=selKey item=goodsSelSpecDesc}>
+      <{if $goodsSelSpecDesc.spec_show_type != 'select'}><{continue}><{/if}>
+      <{foreach from=$goods.spec[$selKey].value key=sSelKey item="subDesc"}>
+      <{if $subDesc.selected}>
+      <{assign var='selectValue' value=$subDesc.spec_value}>
+      <{/if}>
+      <{/foreach}>
+      <{assign var='__cs' value=$___b2c='请选择'|t:'b2c'}>
+      <li>
+      <div class="handle<{if $selectValue}> selected<{/if}>">
+        <em><{$goodsSelSpecDesc.spec_name}>：</em>
+        <span><{if $selectValue|trim == ''}><{$selectValue}><{else}><{$__cs}><{/if}></span>
+        <{assign var="selectValue" value=' '}>
+      </div>
+      <div class="content specItem clearfix">
+        <ul>
+          <{foreach from=$goodsSelSpecDesc.option key=sSelKey item="subDesc"}>
+          <{if $goods.used_spec.$sSelKey}>
+          <{if $goodsFlatSpecDesc.display!="block"}>
+          <li> <a href="<{link app=b2c ctl=site_product act=index arg0=$goods.goods_id arg1=$subDesc.spec_goods_images}>" specvid="<{$sSelKey}>" specid="<{$selKey}>"> <{if $goodsSelSpecDesc.spec_type=='text'}> <span><{$subDesc.spec_value}></span> <{else}> <img src="<{if $subDesc.spec_image}><{$subDesc.spec_image|storager}><{else}><{$spec_default_pic|storager}><{/if}>" style='border:1px #ccc solid' alt="<{$subDesc.spec_value}>" title="<{$subDesc.spec_value}>" width="<{$specimagewidth}>" height="<{$specimageheight}>"> <{/if}> <i title='<{t}>点击取消选择<{/t}>'>&nbsp;</i> </a> </li>
+          <{/foreach}>
+          <{/if}>
+          <{/if}>
+        </ul>
+      </div>
+      </li>
+      <{/foreach}>
+    </ul>
+  </div>
+  <{/if}>
+</div>

@@ -1,0 +1,15 @@
+<!--会员中心首页捆绑商品样式部分--> 
+
+<div class="gift-item-name">
+  <span class="fontbold font-blue">[捆绑商品]</span><a href="<{link app=giftpackage ctl=site_giftpackage act=index arg0=$giftpackage_order.goods_id }>"><{$giftpackage_order.name}></a>
+</div>
+<div class="member-giftwrap">
+  <ul class="member-giftlist">
+  <{foreach from=$giftpackage_order.order_items item=item}>
+    <li class="bottomboder"><a href="<{link app=b2c ctl=site_product act=index arg0=$item.goods_id}>"><{$item.name}> </a></li>
+  <{/foreach}>
+  </ul>
+</div>
+
+
+<!--会员中心首页捆绑商品样式部分结束--> 

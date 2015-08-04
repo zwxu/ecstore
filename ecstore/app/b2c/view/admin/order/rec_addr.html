@@ -1,0 +1,87 @@
+<div class="division">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" >
+<tbody>
+  <tr>
+    <th><em class="c-red">*</em><{t}>收货地区：<{/t}></td>
+    <td colspan=2>
+      <span id="checkout-select-area"><{input type="region" id="shipping-area" name="delivery[ship_area]" app="ectools" vtype="area" value=$addr.area callback="selectArea"}></span>
+    </td>
+  </tr>
+  <tr>
+    <th><em class="c-red">*</em><{t}>收货地址：<{/t}></td>
+    <td>
+    <input type='hidden' name='delivery[ship_addr_area]' value='' id='selected-area-hidden'/>    
+    <span id='selected-area' class='font-gray' title='<{t}>系统将拼接地区选择结果到收获地址<{/t}>'><{t}>[地区]<{/t}></span>
+    <{input class="inputstyle" name="delivery[ship_addr]"   id="addr" vtype="required" value=$addr.addr size="50"}>
+    </td>
+  </tr>
+  <tr>
+   <th>
+    <{t}>邮编：<{/t}></th>
+    <td>
+    <{input class="inputstyle" name="delivery[ship_zip]" size="15" id="zip"  type="text" value=$addr.zipcode}>
+    </td>
+  </tr>
+  <tr>
+    <th><em class="c-red">*</em><{t}>收货人姓名：<{/t}></td>
+    <td colspan=2><{input class="inputstyle" name="delivery[ship_name]" size="15" id="name" vtype="required"  type="text" value=$addr.name}></td>
+  </tr>
+  <{if !$address.member_id}>
+  <tr>
+    <th><em class="c-red">*</em><{t}>Email：<{/t}></td>
+    <td colspan=2><{input name="delivery[ship_email]" class="inputstyle" id="ship_email"  size="15" type="text" vtype="required&&email" value=$addr.email}></td>
+  </tr>
+  <{/if}>
+  <tr>
+    <th>
+      <em class="c-red">*</em><{t}>手机：<{/t}>
+    </td>
+    <td colspan=2>
+     <{input class="inputstyle" name="delivery[ship_mobile]" size="15" type="text" id="mobile" value=$addr.phone.mobile}>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      <{t}>固定电话：<{/t}>
+    </td>
+    <td colspan=2>
+     <{input class="inputstyle" name="delivery[ship_tel]" size="15" type="text" id="tel" value=$addr.phone.telephone}>
+     <input type="hidden" vtype="mobile_or_phone" />
+    </td>
+  </tr>
+  </tbody>
+</table>
+</div>
+<{$selectArea}>
+<script>
+window.addEvent('domready',function(){
+
+    selectArea = function(sels) {
+        var selected = [], lastsel;
+        sels.each(function(s){
+            if(s.getStyle('display') != 'none') {
+                lastsel = s;
+               var text = s[s.selectedIndex].text.trim().clean();
+               if(['<{t}>北京<{/t}>','<{t}>天津<{/t}>','<{t}>上海<{/t}>','<{t}>重庆<{/t}>'].indexOf(text)>-1)return;
+               selected.push(text);
+            }
+        });
+        var selectedV = selected.join('');
+        $('selected-area').setText(selectedV).removeClass('font-gray').addClass('font-black');
+        $('selected-area-hidden').value =  selectedV;
+        var _addr_node = $('addr');
+        var _addr_value = _addr_node.value;
+        var _replaced_value = _addr_node.value.replace(selectedV,'');
+        
+        var _input_radios = $ES('input[name^=delivery[addr_id]]');
+        
+        if (_input_radios.length > 0){
+            if (_replaced_value == '' && $('receiver').retrieve('b2c-cart-checkout-ship-addr') == 'true')
+                _replaced_value = '.';
+        }
+        $('addr').set('value',_replaced_value);
+        Order.setShippingFromArea(lastsel.getSelected()[0]);
+    };
+    
+});
+</script>

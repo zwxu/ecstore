@@ -1,0 +1,26 @@
+<h1 class="head-title" style="border:none"><{t}>控制面板<{/t}></h2>
+<div class="admin-panel" id="adminpanel">
+<{foreach from=$groups name=groups item=group}>
+<{if $group.items}>
+     <div class="group flt <{if $env.foreach.groups.last}>last<{/if}>">
+	  
+        <div class="flt">
+           <img src="<{$group.icon}>" width=64 />
+        </div>
+        <div class="item">
+            <h4><{$group.title|t:'desktop'}></h4>
+            <ul>
+            <{foreach from=$group.items item=item}>
+            <li class="span-auto"><a href="index.php?<{$item.menu_path}>"><{$item.menu_title|t:'desktop'}></a></li>
+            <{/foreach}>
+            </ul>
+        </div>
+	   
+     </div>
+<{/if}>
+<{/foreach}>
+</div>
+<script> 
+ new Equalizer($$('#adminpanel .item li a')).equalize('width');//等宽 
+ new Equalizer($$('#adminpanel .group')).equalize('height');//等宽
+</script>

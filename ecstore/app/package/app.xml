@@ -1,0 +1,23 @@
+<app version="1.0">
+  <name>捆绑商品</name>
+
+  <description>BBC 捆绑商品</description>
+
+  <author>
+      <name>BBC 开发团队</name>
+      <email></email>
+      <url></url>
+  </author>
+
+  <version>0.1</version>
+  <parent_model_class>dbeav_model</parent_model_class>
+  <license>license</license>
+  <depends>
+    <app>desktop</app>
+    <app>content</app>
+    <app>ectools</app>
+    <app>b2c</app>
+    <app>business</app>
+  </depends>
+
+</app>

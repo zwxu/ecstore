@@ -1,0 +1,377 @@
+<{if $goods.description}>
+
+  <div class="pdtdetail desc1" data-sync-type="goodsdescription" tab="<{t}>详情描述<{/t}>" data-order="1">
+  <{foreach from=$addSections item=item}>
+      <{$item}>
+  <{/foreach}>
+<div class="goodsdetails">  
+  
+      <ul class="goods-intro-list clearfix" > 
+        <{if $goods.brand_name || $goods.brand_keywords}>
+         <li title="" ><{t}>品牌名称：<{/t}><{$goods.bn}>
+   <{if $goods.brand_name}><{$goods.brand_name}><{if $goods.brand_keywords}>- <{$goods.brand_keywords}><{/if}><{else}><{$goods.brand_keywords}><{/if}></li>
+    
+    <{/if}>
+        <{if $goodsbndisplay eq 'true'}>
+        <li title="" ><{t}>编号：<{/t}><{$goods.bn}></li>
+        <{/if}>
+        <li title="" ><{t}>货号：<{/t}><{if $goods.product_bn}><{$goods.product_bn}><{else}><{$product0bn.bn}><{/if}></li>
+     
+        <li title=""><{t}>价格区间：
+          <{if $goods.minmktprice && $goods.maxmktprice}>
+          <{$goods.minmktprice|cur_odr:$order.currency}>&nbsp;-&nbsp;<{$goods.maxmktprice|cur_odr:$order.currency}>
+          <{else}>
+          <{$goods.mktprice|cur_odr:$order.currency}>
+          <{/if}>
+          <{/t}>
+        </li>
+        <{if $env.conf.b2c.goodsprop.display.position != 1}>
+        <{foreach from=$goods.type.props item=propord key=key}>
+        <{if $propord.show}>
+        <{assign var="pkey" value="p_{$key}"}>
+        <{assign var="pcol" value=$goods.props.$pkey.value}>
+        <{if trim($pcol) !== ''}>
+        <li> <span><{$propord.name}>：</span> <{if $propord.type == 'select'}>
+          <{if $env.conf.b2c.goodsprop.display.switch == 'true'}><a href="<{selector args=array("{$goods[category][cat_id]}") value="{$goods[category][cat_id]}" filter=array('cat_id'=>array("{$goods[category][cat_id]}"),"p_{$key}"=>array($pcol))}>" target="_blank"><{$propord.options.$pcol}></a><{else}><{$propord.options.$pcol}><{/if}>
+          <{else}>
+          <{$pcol}>
+          <{/if}>
+        </li>
+        <{/if}>
+        <{/if}>
+        <{/foreach}>
+        <{/if}>
+      </ul>
+      
+ <div class="" data-sync-type="goodsparams" tab="<{t}>规格参数<{/t}>" data-order="1">
+</div>
+</div> 
+    <div id="goods-intro" class="p10">
+			<div class="loading-box">正在加载...</div>
+			<textarea class="textarea-lazyload" style="display:none"><{$goods.description|lazyimg}></textarea>
+	</div>
+    <script>
+	window.addEvent('domready',function(){
+			var intro=$('goods-intro'),loading=document.getElement('.loading-box',intro);
+			if(loading){
+				loading.destroy();
+				new LazyLoad().loadCustomLazyData(intro);
+			}
+		   // new DataLazyLoad({img:'lazy-load-img',lazyDataType:'img'},$('goods-intro'));
+	});
+	</script>
+    <div class="goods-intro-shop">
+      <div style=" background:#fff; padding:10px 0">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <th  class="goods-introbtn" width="35%"> <{t}>现价：<{/t}><span class="fontcolorRed font20px fontbold price1"><{if $goods.minprice && $goods.maxprice}>
+              <{$goods.minprice|cur_odr:$order.currency}>&nbsp;-&nbsp;<{$goods.maxprice|cur_odr:$order.currency}>
+              <{else}>
+              <{$goods.current_price|cur_odr:$order.currency}>
+              <{/if}></span></th>
+            <td width="65%" align="left"><div class="flt"> <{if count($goods.products)>0}>
+                <{if $env.conf.system.goods.fastbuy}>
+                <input class="actbtn btn-fastbuy" value="<{t}>立即购买<{/t}>" type="button" />
+                <{/if}>
+                <input class="actbtn btn-buy" value="<{t}>加入购物车<{/t}>" type="submit" />
+                <input  class="actbtn btn-notify" value="<{t}>缺货登记<{/t}>" type="submit" style="display: none;" />
+                <{else}>
+                <{if $goods.store-$goods.freez>0 || $goods.store==='' || $goods.store === null}>
+                <{if $env.conf.system.goods.fastbuy}>
+                <input class="actbtn btn-fastbuy" value="<{t}>立即购买<{/t}>" type="button" />
+                <{/if}>
+                <input class="actbtn btn-buy" value="<{t}>加入购物车<{/t}>" type="submit" />
+                <{else}>
+                <input  class="actbtn btn-notify" value="<{t}>缺货登记<{/t}>" type="submit" />
+                <{/if}>
+                <{/if}> </div>
+              <div class="flt" style="margin:12px 0 0 5px">
+                <ul class="button">
+                  <li class="star-off" <{if $login!="nologin"}>star="<{$goods.goods_id}>"<{/if}> title="<{$goods.name|escape:html}>"> <a  <{if $login=="nologin"}> href="<{link app="b2c" ctl="site_passport" act="login"}>" <{else}>href="#" onclick="return false;"<{/if}> class="btn-a listact"  rel="nofollow" ><i class="has-icon"> <!-- <img src='<{$env.app.res_url}>/bundle/collect_icon.gif' /> --></i><span >
+                  <div class="fav"><{t}>收藏此商品<{/t}></div>
+                  <div class="nofav"><{t}>已收藏<{/t}></div>
+                  </span></a>
+                  </li>
+                </ul>
+              </div></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="referbox"> </div>
+  </div>
+  <{/if}>
+
+  <{if count($goods.params)>0 && $goods.params}>
+  <div class="pdtdetail" style="display:none" tab="<{t}>详细参数<{/t}>" >
+    <h2><{t}>详细参数<{/t}></h2>
+    <div class="body"  id="goods-params">
+      <table width="100%" cellpadding="0" cellspacing="0" class="liststyle data">
+        <col class="span-4 bg-gray font-black">
+        </col>
+
+        <{foreach from=$goods.params item=params key=group}>
+        <tr>
+          <td colspan="2" class="colspan bg-graydark"><{$group}><span class="gname"></span></td>
+        </tr>
+        <{foreach from=$params item=value key=key}>
+        <{if $value != ''}>
+        <tr>
+          <th><{$key}></th>
+          <td><{$value|default:'-'}></td>
+        </tr>
+        <{/if}>
+        <{/foreach}>
+        <{/foreach}>
+      </table>
+    </div>
+  </div>
+  <{/if}>
+
+
+
+<{if $sellLog.display.switch == 'true'  && $sellLogList.data|@count >0 && $sellLog.display.limit<= $sellLogList.total }>
+<div class="pdtdetail" data-sync-type="goodssellloglist" tab="<{t}>销售记录<{/t}>" data-order="1">
+
+</div>
+<{/if}>
+
+
+<{if $comment.switch.discuss == 'on'}>
+<div class="pdtdetail" data-sync-type="goodsdiscuss" style="display:none" tab="<{t}>商品评价<{/t}> " data-order="1">
+  <h3 class="hd-font">商品评论</h3>
+</div>
+<{/if}>
+
+<{if $comment.switch.ask == 'on'}>
+<div class="pdtdetail" data-sync-type="goodsconsult" style="display:none" tab="<{t}>咨询<{/t}> " data-order="1">
+  <h3 class="hd-font">商品咨询</h3>
+</div>
+<{/if}>
+
+<!--
+<div class="section pdtdetail" data-sync-type="goodssee" style="display:none" tab="<{t}>看了又看<{/t}>" data-order="1">
+  <h3 class="hd-font">看了又看</h3>
+</div>-->
+
+<{if $comment.switch.ask == 'on' or $comment.switch.discuss == 'on'}>
+<script>
+(function(){
+  $$('.consult-panel').addEvent('click',function(e){
+    //this.hide();
+    if(!$(e.target).hasClass('repay_span'))return;
+    if($('new_repay_box'))
+      $('new_repay_box').destroy();
+    var replay_div = $('repay_box').clone();
+    replay_div.setStyle('display','');
+    var replay_form = replay_div.getFirst('form');
+    new Request({
+      url:'<{link app="b2c" ctl="site_comment" act="reply_link"}>',
+      onComplete:function(response){
+        replay_form.action = response;
+
+        var el = $('new_repay_box').getElement('.inputstyle');
+
+        if(!('placeholder' in document.createElement('input'))) {
+          el.setStyles({'fontSize':'12px','color':'#999'});
+          el.value = '欢迎发表评论（最多1000字）';
+          el.addEvent('focus',function(e){
+            if(e.target.value  === e.target.get('placeholder')){
+              el.setStyle('color','#000');
+              e.target.value = '';
+            }
+          });
+        };
+
+        el.addEvent('keyup',function(e){
+          var limitNum = 1000;
+          var _parent = $('new_repay_box');
+          if(e.target.value.length > limitNum) e.target.value = e.target.value.substring(0,limitNum);
+          _parent.getElement('.price1').set('text',e.target.value.length);
+        });
+
+      }
+    }).post('comment_id='+$(e.target).id);
+    replay_div.setProperty('id','new_repay_box');
+    replay_div.inject($(e.target).getParent('div'),'after');
+  });
+
+$$('.showdisaskvcode').addEvent('focus',function(){
+  if (this.retrieve('showdisaskvcode',false)) return;
+  var vcodeImg = this.getNext('img');
+  vcodeImg.src = vcodeImg.get('codesrc')+'?'+(+new Date());
+  vcodeImg.show();
+  this.store('showdisaskvcode',true);
+});
+
+$$('.consult-panel').addEvent('click',function(e){
+  if(!$(e.target).hasClass('showvcode'))return;
+  if ($(e.target).retrieve('showvcode',false))return;
+  var vcodeImg = $(e.target).getNext('img');
+  vcodeImg.src = vcodeImg.get('codesrc')+'?'+(+new Date());
+  vcodeImg.show();
+  $(e.target).store('showvcode',true);
+});
+})();
+
+function cancle(){
+  var new_repay_box = $('new_repay_box');
+  if(new_repay_box){
+    var span = new_repay_box.getPrevious('div').getFirst('a');
+    span.show();
+    new_repay_box.destroy();
+  }
+
+}
+</script>
+
+<script>
+
+var checkFormReqs =function(e){
+ e    = new Event(e);
+ var _form= $(e.target);
+
+ var reqs = $$(_form.getElements('input[type=text]'),_form.getElements('textarea'));
+
+ if(reqs.some(function(req){
+  if(!req.get('required')&&!req.get('vtype').contains('required'))return;
+  if(req.getValue().trim()==''){
+   req.focus();
+   Message.error('<{t}>请完善表单必填项<{/t}><sup>*</sup>');
+   return true;
+ }
+
+ return false;
+
+})){
+   e.stop();
+ }
+};
+
+function replyVcodeCheck(input){
+  new Request.HTML({
+    url:'<{link app=b2c ctl=site_comment act=vocdecheck}>',
+    update:$(input).getNext('span'),
+    method:'post',
+    data:'name='+encodeURIComponent(input.value=input.value.trim())
+  }).send();
+}
+
+function changereplyimg(a){
+  a.getPrevious('img').set('src','<{link app="b2c" ctl="site_comment" act="gen_replyvcode"}>#'+(+new Date));
+}
+
+function changereplyimgtt(a){
+  a.getNext('img').set('src','<{link app="b2c" ctl="site_comment" act="gen_replyvcode"}>#'+(+new Date));
+}
+</script>
+<{/if}>
+
+
+<img src="<{link app=b2c ctl=site_product act=cron arg=$goods.goods_id }>" width="1" border="none" height="1">
+ <script>
+
+ /*设置浏览过的商品*/
+
+window.addEvent('domready', function(){
+
+	/*Tab的处理*/
+	//try{
+    var viewDetails = $$('.goods-detail-infos');
+    var viewSections=$$('.goods-detail-infos .pdtdetail');
+
+    viewDetails.each(function(v,i){
+        var viewTabsContainer=v.getElement('.goods-detail-tab');
+        var viewTabs=[];
+
+        viewSections.each(function(se){
+            var type = se.getAttribute('data-sync-type');
+            var id = se.getAttribute('data-order');
+            var t = new Element('li.goodsDetailTab',{'data-tab-type':type,'html':'<a>'+se.getAttribute('tab')+'</a>'});
+
+            (id == i) && viewTabs.push(t);
+        });
+
+        viewTabsContainer.adopt(new Element('ul').adopt(viewTabs));
+        new Tabs(v,{
+          panels:'.pdtdetail',
+          eventType:'click',
+          activeIndex: 0,
+          triggers:'.goodsDetailTab',
+          content:'.goodsDetailContent',
+          onInit:function(){
+            this.panels.each(function(el,i){
+              if(el.get('data-order') == 0) return;
+              el.show().getElements('.displaydiv').hide();
+              el.getElements('.allnum').addEvent('click', function(e){
+                this.triggers[i].fireEvent('click');
+                this.panels[i].getElement('textarea').focus();
+              }.bind(this));
+            },this);
+          },
+          onSwitch:function(index){
+            this.panels.each(function(el,i){
+              if(el.get('data-order') == 0) {
+                try{
+                  // 修复ie67下图片不显示bug:reflow
+                  if(Browser.ie6 || Browser.ie7) $('goods_link').getElements('li .picwidth,li .goodinfo h3,li li,li li .addcart-btn span,li li .addcart-btn .has-icon').show('block');
+                }catch(e){}
+                return; 
+              };
+              if(!this.activeIndex){
+                el.show().getElements('.displaydiv').hide();
+                el.getElements('.all_link').hide();
+              }else{
+                if(this.activeIndex!=i) el.hide();
+                el.getElements('.displaydiv').show();
+                el.getElements('.all_link').hide();
+
+              }
+            },this);
+          }
+        });
+    });
+	//}catch(e){}
+});
+
+/*验证码刷新*/
+function changeimg(id,type){
+	if(type == 'discuss'){
+		$(id).set('src','<{link app="b2c" ctl="site_comment" act="gen_dissvcode" arg0="s"}>?'+(+new Date()));
+	}
+	else if(type == 'ask'){
+		$(id).set('src','<{link app="b2c" ctl="site_comment" act="gen_askvcode" arg0="s"}>?'+(+new Date()));
+	}
+}
+
+window.addEvent('domready',function(){
+  var els = $$('.addcomment').getElement('.inputstyle');
+
+  els.each(function(item,i){
+    if('placeholder' in document.createElement('input')) {}else{
+      item.setStyles({'fontSize':'12px','color':'#999'});
+      if(i === 1 ) {item.value = '欢迎发表咨询（最多1000字）'}else{item.value = '欢迎发表评论（最多1000字）'};
+      if (document.getElement('.addcomment .font-orange'))
+        document.getElement('.addcomment .font-orange').set('text',0);
+      item.addEvent('focus',function(e){
+        e = $(e.target);
+        if(e.value === e.get('placeholder')){
+          e.setStyle('color','#000');
+          e.value = '';
+        }
+      });
+    };
+
+    item.addEvent('keyup',function(e){
+      e.stop();
+      var limitNum = 1000;
+      var target = $(e.target);
+      if(target.value.length > limitNum) target.value = target.value.substring(0,limitNum);
+      if (target.getNext().getElement('.font-orange'))
+       target.getNext().getElement('.font-orange').set('text',target.value.length);
+   });
+  });
+});
+
+
+</script>

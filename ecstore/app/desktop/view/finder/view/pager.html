@@ -1,0 +1,72 @@
+<table>
+	<tfoot>
+		<tr>
+		 <td style="text-align:left;width:150px;border:none;padding:0;">
+		   	<div class="clearfix">
+	  			<div class="flt"><span><{t}> 每页最多显示：<{/t}></span></div>
+	  			<div class="flt pointer finder-pageset" id="finder-pageset-<{$name}>">
+	  				<div class="finder-pageset-handle"></b><{$plimit}></b><{t}>条<{/t}></div>
+	  				<div id="finder-pagesel-<{$name}>" class="x-drop-menu" style="visibility:hidden;display:block">
+	  				   <{$plimit_sel}>
+	  				</div>
+	  			</div>
+	 		</div>
+		 </td>
+				  <{if $pager}>
+		 <td style="text-align:left;width:150px">
+			  <label for="finder-jumpinput-<{$name}>"><{t}> 跳转到第<{/t}>
+	             <input type="text" style="width:20px; padding:0;border:1px #ccc solid;margin:0;font-size:12px;" value="" id='finder-jumpinput-<{$name}>'/>
+	           <{t}>页 <{/t}>
+			  </label>
+		 </td>
+
+	          <td style="text-align:center;">
+	             <{$pager}>
+	          </td>
+		   <{/if}>
+	       <td style="text-align:right;">
+		     <{t}>共<{/t}><{$pinfo.count}><{t}>条记录<{/t}><{if $to>2}><{t}>,当前页:<{/t}><{$from|default:1}>-<{$to}><{t}>条<{/t}> <{/if}>
+		   </td>
+	    </tr>
+	</tfoot>
+</table>
+
+
+
+<script>
+void function(){
+	var _h = $$('#finder-pageset-<{$name}> .finder-pageset-handle');
+	var _s = $('finder-pagesel-<{$name}>');
+	if(!_h[0]||!_s)return;
+	_h = _h[0];
+	$('finder-pageset-<{$name}>').addEvents({
+			'mouseenter':function(){
+				_h.addClass('active');
+				var _pos = _h.getPosition('workground');
+				_s.setStyles({
+					left:_pos.x+(Browser.firefox?1:0),
+					top:_pos.y - _s.getSize().y + (Browser.ie?4:1),
+					visibility:'visible'
+				});
+			},
+			'mouseleave':function(){
+				_h.removeClass('active');
+				_s.setStyle('visibility','hidden');
+			}
+	
+	});
+}();
+  
+<{if $pager}>
+   (function(){
+       var ipt=$('finder-jumpinput-<{$name}>');
+       var keyCodeFix=[13,48,49,50,51,52,53,54,55,56,57,96,97,98,99,100,101,102,103,104,105,8,9,46,37,39];
+
+       ipt.addEvent('keydown',function(e){
+                            if(!keyCodeFix.contains(e.code)){e.stop();}
+                            if(e.key=="enter"){<{$var_name}>.page(ipt.value);};
+                   });
+
+       })();
+<{/if}>
+</script>

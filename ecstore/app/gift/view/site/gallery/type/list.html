@@ -1,0 +1,81 @@
+<div class="ItemsWarp clearfix">
+<{assign var='zindex' value='1000'}>
+<{foreach from=$products item="product"}>
+  <div class="items-list horizontal-m clearfix itemsList <{$mask_webslice}>" product="<{$product.goods_id}>" id="pdt-<{$product.goods_id}>">
+          <div class="goodpic gift-list" valign="middle" style="width:120px">
+          <{if $product.udfimg == 'true'}>
+          <{assign var="gimage" value=$product.thumbnail_pic}>
+          <{else}>
+          <{assign var="gimage" value=$product.image_default_id|default:$defaultImage}>
+          <{/if}>
+          <a target="_blank" style='<{if $image_set.S.width}> width:<{$image_set.S.width}>px;height:<{$image_set.S.height}>px;<{/if}>' href="<{link app=gift ctl=site_gift act=index arg=$product.goods_id}>">
+            <img  src="<{$gimage|storager:'s'}>"  alt="<{$product.name|escape:html}>"/>
+            <{*<span class='zoom-handle' pic='<{$product.big_pic|default:$env.conf.site.default_big_pic|storager}>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>*}>
+          </a>
+        </div>
+        <div class="goods-main">
+        <div class="goodinfo">
+            <!-- title -->
+            <h3>
+                <a href="<{link app=gift ctl=site_gift act=index arg=$product.goods_id}>" title="<{$product.name|escape:html}>" class="entry-title" target="_blank"><{$product.name|escape:"html"}></a>
+                <{if $product.tags}>
+                    <{foreach from=$product.tags item=tags}>
+                    <{if $tags.params.tag_showOnIndex}>
+                    &nbsp;<span style="color:<{$tags.tag_bgcolor}>"><{$tags.tag_name}></span>
+                    <{/if}>
+                    <{/foreach}>
+                <{/if}>
+            </h3>
+
+
+            <!-- 描述信息 -->
+            <{assign var="gift" value=$product.gift}>
+            <{include file="site/product/info/brief.html" app="gift"}>
+
+        </div>
+        <div class="price-wrap floatright giftlist-btn" >
+          <ul style="margin-bottom:6px;width:132px">
+            <li><span class="font-red fontbold font14px"><{t}>所需积分：<{/t}><{$product.gift.consume_score}></span></li>
+          </ul>
+          <ul style="width:132px">
+          <!-- 规格 start -->
+
+            <{if $product.hasspec=='true'}>
+				<{if $open=='1'}>
+					<span>未开启积分，目前不能兑换赠品</span>
+				<{else}>
+				<{if $site_point_usage=='1'}>
+					<li class="addcart  buy-select hasSpec" style="z-index:<{$zindex}>">
+					<a class="btn-a"><span><{t}>兑换赠品<{/t}></span></a>
+					</li>
+					<{else}>
+					<span>只用于抵扣，不能兑换</span>
+					<{/if}>
+				<{/if}>
+            <{else}>
+              <{if $item.store === null || $item.store - intval($item.freez) > 0}>
+              <{if $open=='1'}>
+					<span>未开启积分，目前不能兑换赠品</span>
+				<{else}>
+				<{if $site_point_usage=='1'}>
+                <li class="addcart">
+                <a href="<{link app=b2c ctl=site_cart act=add arg0=gift arg1=$product.goods_id arg2=$product.gift.product_id arg3='1' }>" type="g" buy="<{$product.goods_id}>" class="listact btn-a"<{if $setting.buytarget == 2}> target="_blank_cart"<{elseif $setting.buytarget == 3}> target="_dialog_minicart"<{/if}> title="<{t}>兑换赠品<{/t}>" rel="nofollow"><span><{t}>兑换赠品<{/t}></span></a>
+                </li>
+				<{else}>
+				<span>只用于抵扣，不能兑换</span>
+				<{/if}>
+                <{/if}>
+              <{/if}>
+            <{/if}>
+            </li>
+            <li class="vdetail zoom" style="padding:5px 0; clear:both" >
+                <a title="<{$product.name|escape:html}>" href="<{link app=gift ctl=site_gift act=index arg0=$product.goods_id}>" pic='<{$product.big_pic|default:$env.conf.site.default_big_pic|storager}>' target="_blank" class="listact btn-a" title="<{t}>查看详细<{/t}>"><span><{t}>查看详细<{/t}></span></a>
+            </li>
+          <!-- 规格 end -->
+          </ul>
+        </div>
+      </div>
+  </div>
+<{/foreach}>
+</div>
+

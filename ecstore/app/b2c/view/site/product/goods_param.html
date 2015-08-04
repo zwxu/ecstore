@@ -1,0 +1,25 @@
+  <p class="goodsIntro">商品简介：<{$goods.brief}></p>
+  <h3><{t}>规格参数<{/t}></h3>
+  <ul class="goodsStandard">
+ 
+   <{if $env.conf.b2c.goodsprop.display.position != 2}>
+    <{foreach from=$goods.type.props item=propord key=key}>
+    <{if $propord.show}>
+    <{assign var="pkey" value="p_{$key}"}>
+    <{assign var="pcol" value=$goods.props.$pkey.value}>
+    <{if trim($pcol) !== ''}>
+    <li>
+      <{$propord.name}>：
+      <{if $propord.type == 'select'}>
+        <{if $env.conf.b2c.goodsprop.display.switch == 'true'}><a href="<{selector args=array("{$goods[category][cat_id]}") value="{$goods[category][cat_id]}" filter=array('cat_id'=>array("{$goods[category][cat_id]}"),"p_{$key}"=>array($pcol))}>" class="font-blue" target="_blank"><{$propord.options.$pcol}></a><{else}><{$propord.options.$pcol}><{/if}>
+        <{else}>
+        <{$pcol}>
+        <{/if}>
+      
+    </li>
+    <{/if}>
+    <{/if}>
+    <{/foreach}>
+    <{/if}>
+        	           
+  </ul>

@@ -1,0 +1,19 @@
+<div class="tableform">
+<label for="f_tag"><{t}>标签<{/t}> </label>
+    <select style="width:120px" id="f_tag" name="tag[]" size="7" multiple="multiple">
+      <option style="font-weight:bold" value="_ANY_" selected="selected"><{t}>全部<{/t}></option>
+      <{foreach from=$data.tags item=tag name="_s"}>
+      <{if in_array($tag.tag_id,$setting.tag)}>
+      <option selected="selected" <{if $env.foreach._s.iteration is odd}>  class="row2"<{/if}> value="<{$tag.tag_id}>"><{$tag.tag_name}></option>
+      <{else}>
+      <option<{if $env.foreach._s.iteration is odd}> class="row2"<{/if}> value="<{$tag.tag_id}>"><{$tag.tag_name}></option>
+      <{/if}>
+      <{/foreach}>
+    </select>  
+</div>
+<div class="tableform">	
+	显示商品数：<input type="text" name='show_nums' value='<{$setting.show_nums}>'>
+</div>
+<div class="tableform">	
+	选择商品：<{input type="goods_select" object="goods@b2c" filter=$goodslink_filter multiple="true" return_url="{$related_return_url}" rowselect="true"  textcol="name" name="linkid" linkid=$setting.linkid value=$setting.goods view="b2c:admin/goods/detail/rel_items.html"}>
+</div>

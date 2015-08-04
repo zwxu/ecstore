@@ -1,0 +1,87 @@
+<form action="<{$callback}>" method="post" id="loginBar">
+<div class="site dis_bl clb">
+    <div class="login_title">
+    <span class="site_l fl">当前位置：<a href="/">首页</a> &gt; <a class="red" href="#">用户登录</a></span> 
+    <span class="site_r fr">如果您尚未注册，请<a href="<{link app=b2c ctl=site_passport act=signup}>" class="lan">注册新用户</a></span> 
+    </div>
+</div>
+  <div class="loginbox login_body" style="border:0px;" <{if $mini_passport}>style="margin-bottom:0;padding-left:5px;padding-right:5px;border:0px;"<{/if}>> 
+  <div class="frt">
+    <ul class="login_ul">
+      <li>
+      <label class="login-k"><!--<i>*</i>--><{t}>邮箱/用户名/已验证手机：<{/t}></label>
+      <div class="login-v aling_left">
+        <{input name="uname" vtype="required" class="inputstyle" placeholder="用户名/邮箱/已验证手机" id="uname" tabindex="1" value="{$loginName}" onblur="checkUname(this);" class="user_name"}>
+        <!-- <a href="<{$singup_url}>"><{t}>立即注册<{/t}></a> -->
+		<div class="crl_sz">
+			<span id="remind_uname"></span>
+			<span id="mobile_info" style="display: none;"></span>
+		</div>
+      </div>
+      </li>
+      <li>
+      <label class="login-k"><!--<i>*</i>--><{t}>密码：<{/t}></label>
+      <div class="login-v"><{input name="password" type="password" class="inputstyle password" vtype="required" id="password" tabindex="2"}></div>
+      </li>
+      <{if $show_varycode}>
+      <li id="pictureCode">
+      <label class="login-k"><!--<i>*</i>--><{t}>验证码：<{/t}></label>
+      <div class="login-v"><{input  vtype="required&&number" size="4" maxlength="4" name="verifycode" id="iptlogin"  style="width:60px;padding:6px 0px 6px 14px;" tabindex="3" class="mobileverifycode"}> <span class='verifyCodebox' style="display:none"><img align="absmiddle" id="membervocde" src="<{link app="b2c" ctl="site_passport" act="gen_vcode"}>" /> <a href="javascript:changeimg('membervocde')"><{t}>看不清楚?换个图片<{/t}></a></span></div>
+      </li>
+      <{/if}>
+	  <li class="zidong_for">
+		<!-- <input type="checkbox" /><a href="#">自动登录</a> --><a href="<{$lost_url}>" <{if $mini_passport==1}>target="_top"<{/if}>><{t}>忘记密码？<{/t}></a>
+	  </li>
+      <li>
+      <div class="login-v">
+        <{button class="btn-login common-btn login_button" type="submit" label=$__b2c="登录"|t:'b2c' tabindex="4" rel="_request"}>
+        <input type="hidden" name="forward" value="<{$forward}>">
+      </div>
+      </li>
+    </ul>
+
+    <{if $login_image_url.0}>
+    <{if $mini_passport == 1}>
+    <div style="margin-left:48px;">
+      <ul class="trustlogos">
+        <{foreach from=$login_image_url item=login_image_url}>
+            <{$login_image_url}>
+        <{/foreach}>
+      </ul>
+    </div>
+    <{/if}>
+    <{/if}>
+	</div>
+	<div class="crl"></div>
+  </div>
+</form>
+<{if $show_varycode}>
+<script>
+  $$('#loginBar input').addEvent('focus',function(){
+    if($(this.form).retrieve('showvcode',false))return;
+    changeimg('membervocde');
+    $$('.verifyCodebox').setStyle('display','');
+    $(this.form).store('showvcode',true);
+  });
+  function changeimg(id){
+    $(id).set('src','<{link app="b2c" ctl="site_passport" act="gen_vcode"}>#'+(+new Date()));
+  }
+</script>
+<{/if}>
+
+<script>
+    function checkUname(input){
+        new Request({
+            url:'<{link app=b2c ctl=site_passport act=checkuname}>',
+            onComplete:function(response){
+                if(response == 1){
+                    $('remind_uname').set('html','');
+                }else{
+                    $('remind_uname').set('html',response);
+                }
+            },
+            method:'post',
+            data:'login_name='+encodeURIComponent(input.value.trim())
+        }).send();
+    }
+</script>

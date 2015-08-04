@@ -1,0 +1,34 @@
+<td colspan="6" id="store_<{$store_id}>">
+        <table width="100%">
+            <tr>
+                <td class="bb_none">补充说明：<input type="text" class="width_500" name="shipping[<{$store_id}>][memo]" style="height: 22px" /></td>
+                <td class="bb_none fr">店铺优惠： 
+				<select onchange="userCoupons(this,<{$store_id}>)">
+					<option value="no">--不使用优惠券--</option>
+					<{foreach from=$coupon_lists.$store_id item=list_coupon key=key}>
+						<{if $coupon.$store_id.coupon==$list_coupon.memc_code}>
+						<option value="<{$list_coupon.memc_code}>" selected><{$list_coupon.memc_code}></option>
+						<{else}>
+						<option value="<{$list_coupon.memc_code}>"><{$list_coupon.memc_code}></option>
+						<{/if}>
+					<{/foreach}>
+				</select><em class="red1">-<{$discount.$store_id|cur_odr}></em></td>
+            </tr>
+			<tr style="display:<{if $store_protect.$store_id}>''<{else}>none<{/if}>;">
+				<td class="bb_none"></td>
+				<td class="bb_none fr">物流保价：<em class="font_16 red1"><{$store_protect.$store_id}></em></td>
+			</tr>
+			<tr style="display:<{if $discount.$store_id}>''<{else}>none<{/if}>;">
+				<td class="bb_none"></td>
+				<td class="bb_none fr">优惠金额：<em class="font_16 red1"><{$discount.$store_id}></em></td>
+			</tr>
+            <tr>
+                <td class="bb_none"></td>
+                <td class="bb_none fr">店铺合计（含运费）：<em class="font_16 red1"><{if ($subtotal_price_store.$store_id-$discount.$store_id) > 0  }><{($subtotal_price_store.$store_id-$discount.$store_id)|cur_odr}><{else}><{0|cur_odr}><{/if}></em></td>
+            </tr>
+            <tr>
+                <td class="bb_none"></td>
+                <!-- <td class="bb_none fr">满288元，免运费</td> -->
+            </tr>
+</table>
+</td>

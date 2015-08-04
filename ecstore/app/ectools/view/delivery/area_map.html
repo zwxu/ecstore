@@ -1,0 +1,48 @@
+<form action="index.php?app=ectools&ctl=regions&act=updateOrderNum" id="catEditor" method="post">
+
+<div class="action-bar mainHead"><{button type="button" app="desktop" icon="btn_add.gif" onclick="W.page('index.php?app=ectools&ctl=regions&act=showNewArea')" label="添加地区"}></div>
+<table cellspacing="0" cellpadding="0" class="gridlist">
+<col class="Colauto"></col>
+<col class="Coloption-1b"></col>
+<col class="Coloption-1b"></col>
+<col class="Coloption-1b"></col>
+<col class="Coloption-1b"></col>
+<col></col>
+<thead>
+<tr>
+<th><{t}>地区名称<{/t}></th>
+<th><{t}>排序<{/t}></th>
+<th><{t}>添加子地区<{/t}></th>
+<th><{t}>编辑<{/t}></th>
+<th><{t}>删除<{/t}></th>
+<th></th>
+</thead>
+<tbody>
+<{foreach from=$area item=item name="area"}>
+<tr>
+
+  <td style=" width:300px; white-space:nowrap;text-align:left; font-size:12px; padding-left:<{$item.region_grade*35}>px" nowrap>
+     <a style="font-weight:700; color:#000; text-decoration:none;padding-right:15px;" href='index.php?app=ectools&ctl=regions&act=detailDlArea&p[0]=<{$item.region_id}>'><{$item.local_name}></a>
+    </td>
+    <td><span class="quiet"><{t}>排序:<{/t}></span><input class="_x_ipt" type="number" size="2"  name="p_order[<{$item.region_id}>]" value="<{$item.ordernum}>|default:0" vtype="digits"></td>
+    <td><a href='index.php?app=ectools&ctl=regions&act=showNewArea&p[0]=<{$item.region_id}>'><{img src="bundle/addcate.gif" border="0" alt=$___ectools="添加子地区"|t:'ectools' title=$___ectools="添加子地区"|t:'ectools'}></a></td>
+    <td><a class="i" href='index.php?app=ectools&ctl=regions&act=detailDlArea&p[0]=<{$item.region_id}>'><{img src="bundle/editcate.gif" border="0" alt=$___ectools="编辑"|t:'ectools'}></a></td>
+    <td><span onclick="javascript: if(confirm('<{t}>您确定要删除<{/t}>&nbsp;[<{$item.local_name}>]&nbsp;?')){ W.page('index.php?app=ectools&ctl=regions&act=toRemoveArea&p[0]=<{$item.region_id}>',{method:'get'});}" style="cursor:pointer"><{img src="bundle/delecate.gif" border="0" alt=$___ectools="删除"|t:'ectools'}></span></Td>
+    <td></td>
+
+<!-- <a href='index.php?ctl=goods/category&act=view&p[0]=<{$item.cat_id}>'><{t}>视图<{/t}></a> -->
+</tr>
+<{/foreach}>
+</tbody>
+</table>
+  <div class="mainFoot">
+    <div class="footer">
+
+
+    <div class="table-action">
+	<{button label=$___ectools="保存排序"|t:'ectools' onclick="$('catEditor').fireEvent('submit',{stop:{$empty}})" type="submit"}>
+</div>
+
+    </div>
+  </div>
+</form>

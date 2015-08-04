@@ -1,0 +1,22 @@
+<div id="main" class="member-main">
+<iframe src='<{$env.app.res_url}>/about.html' name='upload' id='uploadframe' class='hide' style="display:none !important"></iframe>
+    <div class="title ">
+    <span style="float:left">批量发布宝贝<span class="disc">|</span> 
+	   <span class="disc add-icon" id="btn_export_csv"><a href="javascript:void(0);">选择分类导出新CSV模板</a></span>
+	   <span class="disc">|</span> 
+	   <span class="disc add-icon" id="btn_import_list"><a href="javascript:void(0);">我已经下载了CSV模板，直接导入</a>
+       </span>
+	   </span>
+    </div>
+    <div id="import_tpl">
+        <{include file='site/member/import/list.html' app='business'}>
+    </div>
+    <div id="export_tpl">
+        
+    </div>
+</div>
+
+<{script src="goods_import.js" app="business" pdir="js"}>
+<script>
+var import_login='<{link app=b2c ctl=site_passport act=login}>';
+</script>

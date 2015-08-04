@@ -1,0 +1,722 @@
+<{lang_script src="lang.js" app="b2c"}>
+<{lang_css src="lang.css" app="b2c"}>
+
+<{if defined("DEBUG_JS") && DEBUG_JS}>
+    <{script src="browserstore.js" app="b2c"}>
+    <{script src="shoptools.js" app="b2c"}>
+    <{script src="goodscupcake.js" app="b2c"}>
+<{else}>
+    <{script src="shoptools_min.js" app="b2c" pdir="js_mini"}>
+<{/if}>
+<script>
+  /*商品详细通用函数*/
+  var priceControl={
+    base:"<{$goods.current_price}>",
+    _format:<{$money_format|default:'false'}>,/*"decimals":2,"dec_point":".","thousands_sep":"","fonttend_decimal_type":0,"fonttend_decimal_remain":2,"sign":"\uffe5"*/
+    format:function(num,force){
+      var part;
+      var sign = this._format.sign || '';
+      if(!(num || num === 0)) return;
+      var num = num.toFloat();
+      if(this._format.cur_rate) {
+        num = num * this._format.cur_rate;
+      }
+      num = num.round(this._format.decimals)+'';
+      var p =num.indexOf('.');
+      if(p<0){
+        p = num.length;
+        part = '';
+      }else{
+        part = num.substr(p+1);
+      }
+      while(part.length<this._format.decimals){
+        part+='0';
+      }
+      var c=[];
+      while(p>0){
+        if(p>2){
+          c.unshift(num.substr(p-=3,3));
+        }else{
+          c.unshift(num.substr(0,p));
+          break;
+        }
+      }
+      if(!part){
+        this._format.dec_point='';
+      }
+      if(force) {
+        sign = '<ins class="price-currency">' + sign + '</ins>';
+      }
+      return sign + c.join(this._format.thousands_sep)+this._format.dec_point+part;
+    },
+    number: function(format) {
+      if(!format) return null;
+      if(typeOf(format) === 'number') return format;
+      if(typeOf(format)==='element') format = format.get(format.tagName === 'INPUT' ? 'val' : 'text');
+      if(format.indexOf(this._format.sign) == 0) format = format.split(this._format.sign)[1];
+      return Number.from(format);
+    },
+    calc: function(calc, n1, n2, noformat) {
+      if(!(n1 || n1 === 0)) return null;
+      if(!n2) {
+        n1 = this.number(n1);
+      }
+      else {
+        calc = !calc || calc == 'add' ? 1 : -1;
+        var t1 = 1, t2 = 1;
+        if(typeOf(n1) === 'array') {
+          t1 = n1[1];
+          n1 = n1[0];
+        }
+        if(typeOf(n2) === 'array') {
+          t2 = n2[1];
+          n2 = n2[0];
+        }
+        var decimals = Math.pow(10, this._format.decimals * this._format.decimals);
+        n1 = Math.abs(t1 * decimals * this.number(n1) + calc * t2 * decimals * this.number(n2)) / decimals;
+      }
+      if(!noformat) n1 = this.format(n1);
+      return n1;
+    },
+    add: function(n1, n2, flag) {
+      return this.calc('add', n1, n2, flag);
+    },
+    diff: function(n1, n2, flag) {
+      return this.calc('diff', n1, n2, flag);
+    }
+  };
+
+  Number.implement({
+    interzone:function(min,max){
+      var _v=this.toFloat();
+      if(!_v)_v=0;
+      return _v>=min&&_v<=max;
+    }
+  });
+  var keyCodeFix=[48,49,50,51,52,53,54,55,56,57,96,97,98,99,100,101,102,103,104,105,8,9,46,37,39];
+
+
+</script>
+
+<div id="goods-viewer">
+    <!--暂时针对于团购 开放立即购买功能时需修改-->
+  <form action="<{link app=spike ctl=site_cart act=add}>" class="fastbuy-form" id="fastbuy-form" method="post">
+  </form>
+  <div id="main-info" class="ec-spec-box">
+    <form class="goods-action clearfix" action="<{link app=spike ctl='site_cart' act='add' arg0='goods'}>" method="post" >
+        <div class="goods-leftbox leftBoxModi">
+        <{if $env.CONF.b2c.product_detail_picture_conf.position == 'left'}>
+            <{include file="site/product/goodspics_y.html" app=b2c}>
+        <{else}>
+            <{include file="site/product/goodspics.html" app=b2c}>
+        <{/if}>
+        </div>
+        <div class="goods-rightbox rightBoxModi">
+          <!--商品基本信息区块-->
+        <h2 class="goodsname goodsnameModi" id="h5o-2" title="<{$goods.name}>">
+        <span style="font-weight:bold;"><{$goods.name|cut:150|escape:"html"}></span>
+        </h2>
+        <span class="viebuy viebuyModi"><{$activity.activity_tag}></span>
+        <div class='basic-info list clearfix'>
+          <!--商品简介-->
+          <!--<p class="goods-brief">
+          <span><{t}>商品简介：<{/t}></span>
+          <em><{t}><{$goods.brief|default:'暂无'}><{/t}></em>
+          </p>-->
+          <!--商品简介区块结束-->
+          <{foreach from=$info_page_list item=item}>
+            <{include file=$item.file app=$item.app }>
+          <{/foreach}>
+          <!--商品基本信息区块结束-->
+
+          <!--商品促销-->
+          <{if $promotionMsg||$promotionOrder}>
+          <{$goodshtml.promotion_info}>
+          <{/if}>
+          <!--商品促销结束-->
+        </div>
+
+          <!--================================== 购买区域 开始 ==============================-->
+          <{assign var=tmp value=$goods.product}>
+          <{assign var=product0bn value=$tmp|array_shift}>
+
+          <{if count($promotions)>0}>
+          <ul class="boxBlue list">
+            <{foreach from=$promotions item=promotion key=key}>
+            <li>
+              <strong class="font-red"><{$promotion.pmt_describe}></strong>
+              <span class="font11px font-black"><{$promotion.pmt_time_begin|userdate}> ~ <{$promotion.pmt_time_end|userdate}></span>
+            </li>
+            <{/foreach}>
+          </ul>
+          <{/if}>
+
+          <{if $goods.marketable == 'false' }>
+          <!--已下架-->
+          <{foreach from=$specAddHtml item=item}>
+            <{$item}>
+          <{/foreach}>
+          <div class="hight-offline">
+            <div class="hightbox">
+              <div class="btnBar clearfix" style="line-height:25px;padding:3px 10px 0;">
+                <div class="flt"><b><{t}>此商品已下架<{/t}></b></div>
+              </div>
+            </div>
+          </div>
+          <{else}>
+          <div class="goods-buy-area">
+            <!--规格开始-->
+            <{if $goods.spec}>
+            <div id="spec_area" data-sync-type="goodsspec"></div>
+            <{/if}>
+            <!--规格结束-->
+            <{foreach from=$specAddHtml item=item}>
+            <{$item}>
+            <{/foreach}>
+            <!--购买数量-->
+            <{$goodshtml.store}>
+            <!--购买数量结束-->
+            <!--购买按钮-->
+            <div class="hightline">
+              <input type="hidden" name="goods[goods_id]" value="<{$goods.goods_id}>" />
+              <input type="hidden" name="goods[pmt_id]" value="<{$goods.pmt_id}>" />
+              <{if !$goods.spec }>
+              <input type='hidden' name='goods[product_id]' value='<{$product0id}>'/>
+              <{/if}>
+              <div class="btnBar clearfix" <{if count($goods.product)<0}>style="visibility:hidden"<{/if}>>
+                <div class="flt btnwrap btnwrapModi">
+                  <!--页面按钮service形式 start -->
+				  <{if $isSeller=='true'}>
+					  <{foreach from=$btn_page_list item=item}>
+					  <{include file=$item.file app=$item.app }>
+					  <{/foreach}>
+				  <{/if}>
+                  <!--页面按钮service形式 end -->
+                </div>
+              </div>
+            </div>
+            <!--购买按钮结束-->
+          </div>
+          <!--分享开始-->
+          <div class="share" style="display:none;"></div>
+          <!--分享结束-->
+        <{/if}>
+      <!--  <ul class="tb-meta metaModi">
+          <li>
+            <ul class="tb-meta tb-serUnified tm-clear">
+              <li>
+                <span class="tb-metatit">
+                  <a target="_blank" href="javascript:void(0);">商城积分</a>
+                </span>送
+                <em id="J_EmPoint" class="tb-serIntegral"><{$goods.gain_score|default:0}></em>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <{if $im_webcall}>
+        <span style="cursor:pointer; " id="xyz" ></span>
+        <script type='text/javascript' src='http://chat.szmall.com/IMMeForPartner.aspx?email=<{$im_webcall}>&accountid=B2B2C.szmall.com&LL=0&365webcall_IMME_Icon=xyz'></script>
+        <{/if}>-->
+
+ <div class="pro_goodspics dis_bl clb">
+<div class="fl collect_title">您还可以：</div>
+          <!--收藏开始-->
+             <div class="pro_collect fl">
+                 <ul class="button">
+                     <li  class="star-off" <{if $login=="member"}> star="<{$goods.goods_id}>" data-type="on"<{/if}> title="<{$goods.name|escape:html}>"> 
+					 <a <{if $login=="nologin"}>href="<{link app="b2c" ctl="site_passport"   act="login"}>"<{elseif$login=="business"}>href="javascript:void(0);"<{else}>href="javascript:void(0);" rel="_fav_"<{/if}> class="listact">
+					 <span>    
+					     <div class="fav"><{t}>收藏此商品<{/t}></div>
+                         <div class="nofav"><{t}>已收藏<{/t}></div>
+                         <span class="red"><{$goods.fav_count|default:'0'}></span>
+                    </span></a>
+                     </li>
+              </ul>
+          </div>
+         <!--收藏结束-->
+         <!--举报开始-->
+         <{if $isSeller == 'true'}>
+           <div class="pro_report fl"><a href="<{link app='complain' ctl='site_buyer_reports' act='add' arg0=$goods.goods_id arg1=$store_id}>"><{t}>举报<{/t}></a></div>
+         <{else}>
+             <div class="pro_report fl"><a href="<{link app='complain' ctl='site_seller_reports' act='add' arg0=$goods.goods_id arg1=$store_id}>"><{t}>举报<{/t}></a></div>
+         <{/if}>
+       <!--举报结束-->
+                <!--分享开始-->
+                <div class="share" style="display:none;"></div>
+                <!-- JiaThis Button BEGIN -->
+                   <div id="ckepop" class="pro_share"> <span class="jiathis_txt">分享到：</span>
+                        <a class="jiathis_button_douban"></a>
+                        <a class="jiathis_button_renren"></a>
+                        <a class="jiathis_button_tqq"></a>
+                        <a class="jiathis_button_tsina"></a>
+                        <a class="jiathis_button_kaixin001"></a>
+                        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank">更多</a> <a class="jiathis_counter_style"></a>
+                   </div>
+  <script type="text/javascript" >
+  var jiathis_config={
+    data_track_clickback:false,
+    url:"",
+    summary:"",
+    title:"<{$goods.share}>"+"-ORBIS",
+    pic:"<{$goods.image_default_id|storager:''}>",
+    hideMore:false
+  }
+  </script>
+  <script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1626174" charset="utf-8"></script>
+  <!-- JiaThis Button END --> 
+                <!--分享结束-->
+
+        </div>
+        <!--================================== 配件 开始===============================-->
+
+    </div>
+  </form>
+</div>
+  <!--货品列表-->
+  <{if $goods.spec}>
+  <{include file='site/product/products.html' app=b2c}>
+  <{/if}>
+<{include file="site/product/description/see2see2.html" app="b2c"}>
+  <div style="clear:both"></div>
+   </div>
+  <!--================================== 购买区域 结束 ==============================-->
+  <!--页面body page start -->
+<div class="ri_zhi w960">
+<div class="goods-info-wrap clearfix info_modify">
+ <div style="clear:both"></div>
+<div class="lezhiModi">
+<div class="goods-detail-infos"  <{if $goods.adjunct && $adjunctGoodsNum>0 ||($goods.goodslink && $goods.goodslink>0) }><{else}>style="display:none;"<{/if}>>
+  <div class="clearfix goods-detail-tab detailtabModi"></div>
+  <div id="app_area" class="app-area goodsDetailContent">
+  <{if $goods.adjunct && $adjunctGoodsNum>0}>
+  <div class="section pdtdetail" data-sync-type="goodsadjunct" tab="<{t}>可选配件<{/t}> (<em><{$adjunctNum|default:'0'}></em>)" data-order="0">
+    <h3 class="hd-font">可选配件</h3>
+  </div>
+  <{/if}>
+<!--
+  <{*if $promotionNum && $promotionNum>0*}>
+  <div class="section pdtdetail" data-sync-type="goodspromotion" tab="<{t}>促销信息<{/t}> (<em><{$promotionNum|default:'0'}></em>)" data-order="0"<{if $goods.adjunct && $adjunctGoodsNum>0}> style="display:none;"<{/if}>>
+    <h3 class="hd-font"><{t}>促销信息<{/t}></h3>
+  </div>
+  <{*/if*}>
+-->
+
+  <{if $goods.goodslink && $goods.goodslink>0}>
+  <div class="section pdtdetail" data-sync-type="goodslink" tab="<{t}>相关商品<{/t}> (<em><{$goods.goodslink|default:'0'}></em>)" data-order="0" style="display:none;">
+    <h3 class="hd-font"><{t}>相关商品<{/t}></h3>
+  </div>
+  <{/if}>
+
+</div>
+</div>
+
+
+<div id="goodsDetailMain" class="goods-detail-infos">
+  <a id="consult"></a>
+  <div class="clearfix goods-detail-tab detailtabModi"></div>
+  <!--原捆绑商品-->
+  <{foreach from=$addons item=tmpl}>
+  <{require file=$tmpl}>
+  <{/foreach}>
+  <div class="goodsDetailContent"> </div>
+  <{foreach from=$addons item=tmpl}>
+  <{require file=$tmpl}>
+  <{/foreach}>
+  <div id="intro_basic_info" style="display:none;">
+    <{if $goodsbndisplay eq 'true'}>
+    <li title=""><{t}>编号：<{/t}><{$goods.bn}></li>
+    <{/if}>
+    <li title="" ><{t}>货号：<{/t}><{if $goods.product_bn}><{$goods.product_bn}><{else}><{assign var="product0bn" value=$goods.product|current}><{$product0bn.bn}><{/if}></li>
+    <{if $goods.brand.brand_name}>
+    <li title=""><{t}>品牌：<{/t}><{$goods.brand.brand_name}></li>
+    <{/if}>
+    <li title=""><{t}>价格区间：
+      <{if $goods.minmktprice && $goods.maxmktprice}>
+      <{$goods.minmktprice|cur_odr:$order.currency}>&nbsp;-&nbsp;<{$goods.maxmktprice|cur_odr:$order.currency}>
+      <{else}>
+      <{$goods.mktprice|cur_odr:$order.currency}>
+      <{/if}>
+      <{/t}>
+    </li>
+    <{if $env.conf.b2c.goodsprop.display.position != 1}>
+    <{foreach from=$goods.type.props item=propord key=key}>
+    <{if $propord.show}>
+    <{assign var="pkey" value="p_{$key}"}>
+    <{assign var="pcol" value=$goods.props.$pkey.value}>
+    <{if trim($pcol) !== ''}>
+    <li><span><{$propord.name}>：</span><{if $propord.type == 'select'}>
+      <{if $env.conf.b2c.goodsprop.display.switch == 'true'}><a href="<{selector args=array("{$goods[category][cat_id]}") value="{$goods[category][cat_id]}" filter=array('cat_id'=>array("{$goods[category][cat_id]}"),"p_{$key}"=>array($pcol))}>" target="_blank"><{$propord.options.$pcol}></a><{else}><{$propord.options.$pcol}><{/if}>
+      <{else}><{$pcol}><{/if}>
+    </li>
+    <{/if}>
+    <{/if}>
+    <{/foreach}>
+    <{/if}>
+  </div>
+  <img src="<{link app=b2c ctl=site_product act=cron arg=$goods.goods_id }>" width="10" border="none" height="1">
+  <!--页面body page end -->
+</div>
+</div>
+</div>
+</div>
+<div id="J_dqPostAgeCont_body" class="ks-overlay" style="display:none; width: 420px; visibility: visible; z-index: 8; left: 550px; top: 252px;">
+  <div class="citySelector clearfix">
+    <b class="J_CitySelectorClose">关闭</b>
+    <ul class="J_ZxCity cityList clearfix">
+      <{foreach from=$region_info item=item}>
+      <li><a class="" code="<{$item.region_id}>" href="#"><{$item.local_name}></a></li>
+      <{/foreach}>
+    </ul>
+    <ul class="J_Area cityList clearfix"></ul>
+  </div>
+</div>
+<script>
+  window.addEvent('domready',function(){
+    var clickCity = function(id,aa){
+      var _input_text = "<li><a class='{select}' code={id} href='#'>{name}</a></li>";
+      var objcls = $E('#J_dqPostAgeCont_body .J_CitySelectorClose')||'';
+      new Request({
+        url:'<{link app=b2c ctl=site_product act=get_city_area}>',
+        async:true,
+        onSuccess:function(res){
+          response = JSON.decode(res);
+          if(response.length<=0 && objcls && (!aa || (aa && aa!=2))){
+            objcls.fireEvent('click');
+          }
+          var replyHtml = '';
+          for(var i=0;i<response.length;i++){
+            var tpi = {'id':response[i]['region_id'],'name':response[i]['local_name']};
+            if(response[i]['self']){
+              tpi = $extend(tpi, {'select':'select'});
+            }else{
+              tpi = $extend(tpi, {'select':''});
+            }
+            replyHtml += _input_text.substitute(tpi);
+          }
+          var obj = $E('#J_dqPostAgeCont_body .J_Area')||'';
+          if(obj){
+            obj.set('html',replyHtml);
+            var list = obj.getElements('a[code]')||[];
+            if(list.length>0) list.removeEvents('click').addEvent('click',function(e){
+              list.removeClass('select');
+              this.addClass('select');
+              clickCity(this.get('code'),1);
+              return false;
+            });
+          }
+        }
+      }).post('city_id='+id);
+      
+        new Request({
+          url:'<{link app=b2c ctl=site_product act=get_dlytype}>',
+          onSuccess:function(res){
+            if(!res){
+              Message.error("没有可用数据");
+              return false;
+            }
+            response = JSON.decode(res);
+            var its = $('J_dqPostAgeCont')||'';
+            if(its){
+              its.set('code',response['area']).set('parent',response['parent']).set('html',response['localname']);
+            }
+            var its = $E('#J_PostageToggleCont span')||'';
+            if(its){
+              var value = '';
+              for(var i=0;i<response['dlytype'].length;i++){
+                value = value + response['dlytype'][i]['dt_name'] + '：' + response['dlytype'][i]['money'];
+              }
+              its.set('html',value);
+            }
+            if(objcls && aa && aa==1) objcls.fireEvent('click');
+          }
+        }).post({'goods_id':<{$goods.goods_id}>,'area_id':id});
+    };
+    
+    var obj = $('J_dqPostAgeCont')||'';
+    if(obj) obj.removeEvents('click').addEvent('click',function(e){
+      var local_area = this.get('code');
+      var parent_area = this.get('parent');
+      if(!local_area || !parent_area) return false;
+      clickCity(local_area,2);
+      var body = $('J_dqPostAgeCont_body')||'';
+      if(body) body.setStyle('display','block');
+      else return false;
+      var list = body.getElements('a')||[];
+      if(list.length > 0){
+        list.each(function(p){
+          if(p.get('code') == parent_area) p.addClass('select');
+          p.removeEvents('click').addEvent('click',function(e){
+            list.removeClass('select');
+            p.addClass('select');
+            clickCity(p.get('code'));
+            return false;
+          })
+        });
+      }
+      return false;
+    });
+    
+    var obj = $E('#J_dqPostAgeCont_body .J_CitySelectorClose')||'';
+    if(obj) obj.removeEvents('click').addEvent('click',function(e){
+      var body = $('J_dqPostAgeCont_body')||'';
+      if(body) body.setStyle('display','none');
+      return false;
+    });
+  });
+//withBrowserStore(function(browserStore){
+    //browserStore.get('history',function(history){
+        //history=JSON.decode(history);
+        //if(!history||typeOf(history)!=='array')history=[];
+        //if(history.length==40){history.pop()};
+        //var newhis={
+            //'goodsId':<{$goods.goods_id}>,
+            //'goodsName':'<{$goods.name|replace:"'":"\'"}>',
+            //'goodsImg':'<{$images.gimages[$goods.image_default].small|storager}>',
+            //'sortTime':+new Date(),
+            //'viewTime':+new Date(),
+            //'goodsPrice':'<{$goods.price|cur_odr:$order.currency}>'
+        //};
+        //if(!history.some(function(i,index){
+            //if(i['goodsId']==newhis['goodsId']){
+                 //history.erase(i);
+                 //history.include(newhis);
+                 //return true;
+            //}
+            //return false;
+        //})){history.include(newhis);}
+
+        //browserStore.set('history',JSON.encode(history));
+    //});
+//});
+
+
+// 可提取脚本文件 gezhi  2012-0416  start
+  (function(){
+    var LayoutRquest = this.LayoutRquest = new Class({
+      Implements: [Events,Options],
+      options:{
+        threshold:50,
+        loadCls:'loading',
+        errorCls:'error',
+        completeCls:'',
+        onRequest:function(item){
+          var el, loadCls=this.options.loadCls;
+          if(el = item.update) el.addClass(loadCls);
+          if(el = item.append) new Element('div',{'data-load':item.name,'class':loadCls}).inject(el);
+        },
+        onFailure:function(queue){
+          var el,loadCls=this.options.loadCls, errorCls=this.options.errorCls;
+          if(el = queue.append) el= el.getElement('div[data-load='+queue.name+']');
+          if(queue.update) el= queue.update;
+          el.removeClass(loadCls);
+          //new Element('div',{'data-load':queue.name,'class':errorCls}).inject(el).set('html','请求出错');
+        },
+        onComplete:function(queue){
+          var el,loadCls=this.options.loadCls,errorCls= this.options.errorCls;
+          if(el = queue.append) el= el.getElement('div[data-load='+queue.name+']');
+          if(el)el.destroy();
+          if(el = queue.update)el.removeClass(loadCls).removeClass(errorCls);
+        },
+        onSuccess:function(){}
+      },
+      initialize:function(ajax_queue,options){
+        if(!ajax_queue.length)return;
+        this.sync_queue = ajax_queue;
+
+        this.setOptions(options).fireEvent('load');
+        this.initEvent();
+      },
+      initEvent:function(){
+        var timer , self = this; this.cur_sync = {},win = window;
+        //win.addEvent('domready',this.progress.bind(this,this.sync_queue));
+        win.addEvent('domready',function(){
+            self.progress.call(self,self.sync_queue);
+        });
+        if(!this.sync_queue.length)return;
+        win.addEvents({'scroll':loader,'resize':loader});
+
+        function loader(){
+          if(timer) return;
+          timer = function(){
+            self.progress.call(self,self.sync_queue);
+            if(!self.sync_queue.length)
+            win.removeEvent('scroll',loader).removeEvent('resize',loader);
+            timer = null;
+          }.delay(200);
+        }
+      },
+      progress:function(queue){
+        if(!queue.length)return this;
+        var no_require_queue=[],require_queue = [];
+
+        queue.each(function(q){
+          if(!q.require)return no_require_queue.push(q);
+          require_queue.push(q);
+        });
+
+        !!no_require_queue.length && no_require_queue.each(this.filterSync,this);
+        !!require_queue.length && this.require(require_queue,queue);
+      },
+      filterItems:function(queue){
+
+        var offsetY = (queue.update || queue.append).getOffsets().y, appendEl,
+        win = window ,top = win.getScroll(), threshold, vh=win.getSize().y ;
+
+        if(appendEl = queue.append) offsetY += appendEl.getSize().y;
+        if(threshold = this.options.threshold)  offsetY -= threshold;
+        return offsetY <= top.y + vh ? true : false;
+      },
+      filterSync:function(q){
+        if(!q.update && !q.append) return this.sync_queue.erase(q);
+        this.filterItems(q) && this.request(q);
+      },
+      require:function(cur_queue,queue){
+        cur_queue.each(function(q){
+          var cur_sync=this.cur_sync[q.require];
+
+          if(cur_sync && cur_sync.running)
+          return cur_sync.ajaxCb=function(){return this.filterSync(q);};
+
+          if(cur_sync=='complete')this.filterSync(q);
+
+        },this);
+      },
+      request:function(item){
+        if(!item)return;
+        var _onSuccess= item.onSuccess || function(){}, _onFailure= item.onFailure|| function(){},
+        _onRequest= item.onRequest || function(){}, self = this,
+        count = 2 , sync =self.cur_sync[item.name];
+
+        var ele = document.getElement('div[data-sync-type='+item.name+']');
+        if(ele){
+          if(item.update) item.update = ele;
+          else item.append = ele;
+        }
+        if(!ele && this.detail)return this.sync_queue.erase(item);
+
+        var view = item.view? '&view='+item.view:'';
+        if(sync && sync.running)return this;
+        return this.cur_sync[item.name]= new Request.HTML(
+        Object.append(item,{
+          timeout:30000,
+          data:'invalid_post_data=1'+view,
+          onTimeout:function(async){
+            this.cancel();
+            if(!count)
+            return self.fireEvent('failure',item).complete(item);
+            count -= 1; this.send();
+          },
+          onRequest:function(){
+            self.fireEvent('request',item);
+            _onRequest.apply(self, arguments);
+          },
+          onFailure:function(){
+            self.fireEvent('failure',item);
+            _onFailure.apply(self, arguments);
+            self.failure.call(self,item);
+          },
+          onSuccess:function(rs){
+            self.fireEvent('complete',item);
+            _onSuccess.apply(self, arguments);
+            self.complete.call(self,item);
+            if(this.ajaxCb)this.ajaxCb.call(self);
+          }
+        })).send();
+      },
+      complete:function(queue){
+        this.cur_sync[queue.name] ='complete';
+        this.sync_queue.erase(queue);
+        if(!this.sync_queue.length)this.success();
+      },
+      failure:function(queue){
+        this.cur_sync[queue.name]='failure';
+        this.sync_queue.erase(queue).each(function(q){
+          if(q.require==queue.name){
+            delete q.require;
+            this.filterSync(q);
+          }
+        },this);
+      },
+      success:function(){this.fireEvent('success');}
+    });
+    //   可提取脚本文件 gezhi  2012-0416
+
+
+    //规格事先加载
+    <{if $goods.spec}>
+    new Request.HTML({url:'<{link app="spike" ctl="site_product" act="goodsSpec" arg=$goods.goods_id arg1=$goods.spec_node}>',update:$('spec_area'),name:'goodsspec',timeout:30000,data:'invalid_post_data=1'}).send();
+    <{/if}>
+
+    var param = {
+      <{if $goods.adjunct && $adjunctGoodsNum>0}>
+      goodsAdjunct:{update:$('app_area'),name:'goodsadjunct'},
+      <{/if}>
+     // <{*if $promotionMsg||$promotionOrder*}>
+     // goodsPromotion:{append:$('app_area'),name:'goodspromotion'<{if $goods.adjunct && adjunctGoodsNum>0}>,require:'goodsadjunct'<{/if}>},
+      //<{*/if*}> 
+      <{if $goods.goodslink && $goods.goodslink>0}>
+      goodsLink:{append:$('app_area'),name:'goodslink',require:'goodspromotion'},
+      <{/if}>
+      <{*if $goods.recommend == 'true'*}>
+      goodsRecommend:{append:$('app_area'),name:'goodsrecommend'<{if $goods.goodslink && $goods.goodslink>0}>,require:'goodslink'<{else}>,require:'goodspromotion'<{/if}>},
+      <{*/if*}>
+      goodsBodyContent:{update:$$('.goodsDetailContent')[1],name:'goodsbodycontent',
+        onSuccess:function(){
+          this.detail = true;
+          $$('#goodsDetailMain ul.goods-intro-list').set('html',$('intro_basic_info').get('html'));
+          new DataLazyLoad();
+          var self = this;
+          $$('.goodsDetailTab').addEvent('click',function(e){
+              var elem = this.hasClass('goodsDetailTab') ? this : this.getParent('.goodsDetailTab'),
+                  type = elem.get('data-tab-type'),
+                  queue = self.sync_queue.filter(function(r){
+                      return r.name == type;
+                  });
+              if(queue[0]){
+                  queue[0]['onComplete']=function(){$$('.pdtdetail[data-sync-type='+type+'] .displaydiv').show();};
+                  self.request(queue[0]);
+              }
+              this.removeEvent('click',arguments.callee);
+          });
+        }
+      },
+      goodsParams:{append:$$('.goodsDetailContent')[1],name:'goodsparams',require:'goodsbodycontent'},
+      goodsSellLoglist:{append:$$('.goodsDetailContent')[1],name:'goodssellloglist',require:'goodsparams'},
+      goodsDiscuss:{append:$$('.goodsDetailContent')[1],name:'goodsdiscuss',require:'goodsparams'},
+      goodsConsult:{append:$$('.goodsDetailContent')[1],name:'goodsconsult',require:'goodsdiscuss'},
+      goodssee:{append:$$('.goodsDetailContent')[1],name:'goodssee',require:'goodsparams'}
+
+    },queue_items = [];
+
+    Object.each(param,function(v,k){
+    queue_items.push(Object.append({
+        url:'<{link app="b2c" ctl="site_product" act="'+k+'" arg=$goods.goods_id}>'
+    },v));
+    });
+
+    if(<{$async_request_list}>) {
+        Object.each(<{$async_request_list}>,function(v,k){
+            queue_items.push({name:k,url:v,append:$('app_area')});
+        });
+    }
+
+
+    new LayoutRquest(queue_items);
+  })();
+  
+window.addEvent('domready', function(){
+  var rs = location.hash.match(/consultnlist/i);
+  if(rs && (obj = $E('#goods-point a'))) {
+      showdisucsslist.delay(9000);
+  }
+  function showdisucsslist(){
+      new Fx.Scroll(document,{
+        onComplete:function(){
+          $$('li[data-tab-type=goodsdiscuss]')[0].fireEvent('click');
+        }
+      }).toElement('goodsDetailMain');
+      return false;
+      //$E('#goods-point a').fireEvent('click');
+  }
+});
+</script>

@@ -1,0 +1,27 @@
+<{if $type.dialog}>
+  <span>
+    <span onclick="new Dialog(this.getNext('div').clone().setStyle('display',''),{modal:true,title:'<{t}>帮助<{/t}> <{$label}>'});"><img src="<{$type.icon}>" /><{if $label}><{$label}><{/if}></span>
+    <div style="display:none; padding:15px;">
+      <p><{$text}></p>
+      <{if $url}><p><a target="blank" href="<{$url}>"><{t}>更多<{/t}></a></p><{/if}>
+      <{if $movie}><p><a href="http://docs.shopex.cn/videos/<{$movie}>"><{t}>观看视频<{/t}></a></p><{/if}>
+    </div>
+  </span>
+<{else}>
+  <{if $docid}>
+    <a href="http://click.shopex.cn/free_click.php?id=<{$docid}>" target="_blank" style="margin:0;padding:0" title="<{$text|escape:"html"}>"><img src="<{$type.icon}>" style="cursor:pointer;" title="<{$text|escape:"html"}>" /><{if $label}><{$label}><{/if}></a>
+  <{elseif $href}>
+    <a href="<{$href}>" target="_blank" style="margin:0;padding:0" title="<{$text|escape:"html"}>"><img src="<{$type.icon}>" style="cursor:pointer;" title="<{$text|escape:"html"}>" /><{if $label}><{$label}><{/if}></a>
+  <{else}>
+    <span id="<{$dom_id}>"><img src="<{$type.icon}>" /><{if $label}><{$label}><{/if}></span>
+    <{if $text}>
+    <div id="tip_Xtip">
+      <div><i class="arr"></i><i class="arr2"></i></div>
+    </div>
+    <script>
+      $('<{$dom_id}>').store('tip:title','<{$label}>').store('tip:text',"<{$text|replace:'"':'\\"'}>");
+      Xtip.attach($('<{$dom_id}>'));
+    </script>
+    <{/if}>
+  <{/if}>
+<{/if}>

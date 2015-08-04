@@ -1,0 +1,14 @@
+<site>
+    
+    <module controller='site_cart' >
+        <name>fastbuy</name>
+        <title>立即购买</title>
+        <disable>false</disable>
+    </module>
+    <module controller='site_order' >
+        <name>fastorder</name>
+        <title>立即购买</title>
+        <disable>false</disable>
+    </module>
+    
+</site>

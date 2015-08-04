@@ -1,0 +1,8 @@
+<div class="ColColorOrange clearfix">
+    <{foreach from=$detail key=key item=item name="info"}>
+     <div class="span-auto" title="<{$key}>" info="<{$item.memo}>"> 	
+        <a><{img src="bundle/{$item.icon}" app='desktop'}></a> 
+        <span class="f-12"><{$key}>:</span><strong class="f-18"><{$item.value}></strong>
+     </div>
+    <{/foreach}>
+</div>

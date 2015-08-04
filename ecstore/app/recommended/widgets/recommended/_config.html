@@ -1,0 +1,67 @@
+<div class="tableform widgetconfig">
+<div class="division">
+<h4>基本设置</h4>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <th><{t}>显示商品数量：<{/t}></th>
+        <td><{input name="num" type="text" size=5 value=$setting.num|default:'5' required="true" vtype="required&&unsignedint"}> 支持水平/垂直,自动换行</td>
+    </tr>
+    <tr>
+        <th><{t}>商品排序规则：<{/t}></th>
+        <td>
+                              上次购买时间 新->旧
+            <!--<select name="orderby"> 
+                <{foreach from=$data.orderby item=orderby key=key}>
+                <option value="<{$key}>" <{if $setting.orderby==$key}>selected<{/if}>><{$orderby}></option>
+                <{/foreach}>
+            </select>
+            -->
+            (购买指已付款)
+        </td>
+    </tr>
+</table>
+</div>
+<div class="division">
+<h4>商品显示设置</h4>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <th><{t}>商品图片大小：<{/t}></th>
+        <td>
+            宽 <{input name="pic_w" type="text" size=5 value=$setting.pic_w|default:'150' vtype="unsignedint" onblur="change_num('pic_w_h', this.value)"}>px
+            <{input id="pic_w_h" name="pic_w" type="hidden" size=5 value=$setting.pic_w|default:'150'}>
+            高 <{input name="pic_h" type="text" size=5 value=$setting.pic_h|default:'150' vtype="unsignedint" onblur="change_num('pic_h_h', this.value)"}>px 默认为商品缩略图大小；图片显示方式为强制大小
+            <{input id="pic_h_h" name="pic_h" type="hidden" size=5 value=$setting.pic_h|default:'150'}>
+        </td>
+    </tr>
+    <tr>
+        <th><{t}>商品名称长度：<{/t}></th>
+        <td><{input name="maxlength" type="text" size=5 value=$setting.maxlength|default:'35' vtype="unsignedint" onblur="change_num('maxlength_h', this.value)"}>
+        <{input id="maxlength_h" name="maxlength" type="hidden" size=5 value=$setting.maxlength|default:'35'}>
+        </td>
+    </tr>
+    <tr>
+        <th><{t}>是否显示商品价格：<{/t}></th>
+        <td><input type="radio" name="price" value="0" <{if $setting.price==0}>checked<{/if}> onchange="price_show(this.value)">是<input type="radio" name="price" value="1" <{if
+            $setting.price==1}>checked<{/if}> onchange="price_show(this.value)"> 否</td>
+    </tr>
+</table>
+</div>
+
+</div>
+<script language='javascript'>
+function price_show(id){
+    if(!$('price_style')) return;
+	if(id==1){
+		$('price_style').style.display="none";
+	} else {
+		$('price_style').style.display="";
+	}
+}
+function change_num(name, num){
+    if ($(name) && num==''){
+        $(name).value = 150;
+    }else if ($(name)){
+        $(name).value = num;
+    }
+}
+</script>

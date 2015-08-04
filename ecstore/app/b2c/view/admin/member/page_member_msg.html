@@ -1,0 +1,19 @@
+
+<div container='true'>
+	<div class="tableform">
+    <table class="gridlist" border="0" cellspacing="0" cellpadding="0">
+		<thead>
+			<tr>  <th><{t}>序号<{/t}></th><th><{t}>信件标题<{/t}></th><th><{t}>发信人<{/t}></th><th><{t}>收信人<{/t}></th><th><{t}>是否已读<{/t}></th><th><{t}>发表时间<{/t}></th>      </tr>
+		</thead>
+		<tbody>
+			<{foreach from=$msgs item=item key=key}>
+	             <tr>  <th><{$key+1}></td><td><{$item.title}></td><td><{$item.author}></td><td><{$item.to_uname}></td><td><{if $item.mem_read_status == 'true'}><{t}>是<{/t}><{else}><{t}>否<{/t}><{/if}></td><td><{$item.time|cdate}></td> </tr>
+	        <{/foreach}>
+		</tbody>
+    </table>
+    	  <{$pager}>
+    <!-- <div class="table-action"><{button type="submit" label="保存" }></div> -->
+    </div>
+</div>
+
+ 

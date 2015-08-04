@@ -1,0 +1,18 @@
+<app>
+    <name>%*APP_NAME*%</name>
+    <description>Project %*APP_NAME*%</description>
+
+    <author>
+        <name>author name</name>
+        <email>author email</email>
+        <url>http://author.example.com</url>
+    </author>
+
+    <version>0.1</version>
+    <license>Mit license</license>
+
+	<depends>
+		<app>base</app>
+	</depends>
+
+</app>

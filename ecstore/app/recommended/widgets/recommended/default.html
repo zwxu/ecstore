@@ -1,0 +1,12 @@
+<div id='showRecommendedInfo'>
+<script>
+(function(){
+    new Request.HTML({
+        url:"<{link app=recommended ctl=site_show act=index}>",
+        method:'post',
+		update:$('showRecommendedInfo'),
+        data:'tpl=default&url='+window.location.href+'&num=<{$setting.num}>&pic_w=<{$setting.pic_w}>&pic_h=<{$setting.pic_h}>&maxlength=<{$setting.maxlength}>&price=<{$setting.price}>'
+    }).send();
+})();
+</script>
+</div>

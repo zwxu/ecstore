@@ -1,0 +1,81 @@
+.content { width: 820px; margin: 70px auto; }
+.login-t{margin:0;width:50%;padding:0;}
+.publicize{ height:250px;}
+.passport-item{border:1px #ccc solid;border-left:1px #999 solid;border-bottom:1px #999 solid;padding:10px;height:250px;background:#efefef;}
+.passport-item{border-radius: 0 10px 10px 0; -webkit-border-radius: 0 10px 10px 0; -moz-border-radius: 0 10px 10px 0;  }
+.passport-item ul,.passport-item li{list-style:none;margin:0;padding:0;}
+.passport-item li {}
+.passport-title { font-size:14px;font-family:"Microsoft YaHei","黑体","Verdana";padding:4px;margin:4px;border-bottom:1px #ccc solid;}
+.passport-item label { font-weight: normal; color: #333; font-size: 12px; }
+.passport-bd { line-height: 22px; }
+.passport-bd li { padding: 5px 0; }
+.passport-bd li label{width:80px;text-align:right;display:inline-block;*zoom:1;}
+li.colspan { padding-left: 45px; color:#3F4C68; padding-top:5px; text-align:left; }
+.verifycodeimg { margin: 3px 0 0 5px; }
+.inputstyle-out {  width:210px; height:18px; margin:0px; border:1px solid #DBDBDB; padding:2px 0 0 22px;}
+.inputstyle-move {  width:210px; height:18px; margin:0px; border:1px solid #91A7D5; padding:2px 0 0 22px;}
+.inputstyle-out-name { background:url(signup_icon.gif) no-repeat 4px -60px;}
+.inputstyle-move-name { background:url(signup_icon.gif) no-repeat 4px -39px;}
+.inputstyle-out-pw { background:url(signup_icon.gif) no-repeat 4px -18px;}
+.inputstyle-move-pw { background:url(signup_icon.gif) no-repeat 4px 3px;}
+.inputstyle-short-out { width: 40px; height:18px; padding:1px 0 0 2px; margin:0px; border:1px solid #DBDBDB; }
+.inputstyle-short-move { width: 40px; height:18px; padding:1px 0 0 2px; margin:0px; border:1px solid #91A7D5;}
+.btn-login { background: url(signup_27.gif) no-repeat; border: none; color: #fff; width:120px; height: 33px; line-height:36px; padding:0 0 0 12px; cursor: pointer; font-size:14px;font-weight:bold;}
+.info-tip { background: #ffffcc; position: absolute; margin:9px 0 0 39px; *margin: 33px 0 0 -237px; overflow: visible; padding: 0 5px; color: #333; border: 1px solid #cccccc; visibility: hidden; }
+.info-tip-arrow { background: url(arrow.gif) no-repeat; width:10px; height:10px; position: absolute; margin:-10px 0 0 3px; *margin:-13px 0 0 3px; display: block; }
+.error-info { background: #FFF2F2 url(stop.gif) no-repeat 5px 3px; color: #333; border: 1px solid #FF8080; position:absolute; padding: 0 5px 0 25px; margin: 0 0 0 48px; *margin: 0 0 0 -121px; top:167px;}
+.copyright { width:100%; height:50px; text-align:center; color:#666; font-size:12px;}
+.copyright-main{ width:754px; height:40px; background:url(signup_inverted.gif) no-repeat center top; margin:0 auto;  padding-top:10px; }
+.title h3{margin-top:0;}
+.title h3 span{display:block;line-height:20px;font-size:9px;font-weight:normal;}
+
+.fav{line-height:25px;padding-left:10px;}
+.fav a{color:#666;text-decoration:none;}
+.fav a:hover{text-decoration:underline;}
+.fav .act{padding-left:16px;background:url(fav.gif) no-repeat 0 -19px;}
+.fav .createshortcut{background-position:0 0;}
+
+/*---------signup--------*/
+*{ margin:0 auto; padding:0;}
+ul,p,dd,dl,dt,img,li { margin:0; padding:0; border:0;}
+.logo h3{ text-align:left; margin:0; padding:0 0 0 5px; border:0; color:#4F638F;}
+.logo h3 span{display:block;line-height:20px;font-size:9px;font-weight:normal;}
+li { list-style:none; text-align:left;}
+body {margin:0px; padding:0; font-size:12px; text-align:center; font-family:Arial, Helvetica, sans-serif,"宋体"; background:url(bg.gif) repeat-x; background-color:#fff; }
+.signup-contant { width:100%; height:auto; margin:70px auto;}
+.signup-contant-main{ width:754px; height:auto; margin:0 auto; padding:0; }
+.logo {height:35px; padding:0 0 6px 0;}
+.signup { width:748px; height:278px; border:2px solid #91A7D5; padding:1px;}
+.signip-main { width:748px; height:278px; background:url(signup_05.gif) repeat-x;}
+.signup-middle { width:100%; height:325px; background:url(signup_bg.jpg) no-repeat center bottom;}
+.ifram { width:327px; padding:16px 20px 10px 0px; float:left; text-align:left; color:#333333; font-size:12px; overflow:hidden;}
+.window { width:376px; height:254px; float:left; padding:18px 0 0 10px; background:url(signup_03.gif) no-repeat top left;}
+.window-main {width:338px; height:200px; float:left; padding:30px 0px 0px 38px;}
+.window-tab-current { width:auto; height:30px; float:left; }
+.window-tab { width:334px; height:30px; float:left; padding-left:42px; color:#3F4C68; font-size:14px; background:url(signup_07.gif) no-repeat left bottom;}
+.window-tabmore li{ float:left;}
+.window-tabsingle li{ float:left;}
+.window-tabcurrent-left { width:5px; height:30px; float:left; background:url(signup_12.gif) no-repeat;}
+.window-tabcurrent-mid { width:auto; height:24px; float:left; padding:6px 8px 0px 9px; background:url(signup_14.gif) repeat-x; }
+.window-tabcurrent-right { width:5px; height:30px; float:left; background:url(signup_16.gif) no-repeat;}
+.window-tab-unselected { width:auto; height:22px; float:left; padding:6px 0px 0px 20px;}
+.window-info { width:260px; height:24px; float:left; padding:5px 0px 5px 0px;}
+.window-info-title { width:56px; height:24px; float:left; overflow:hidden; font-size:14px; color:#3F4D69; text-align:right; padding:6px 6px 0px 0px;}
+.window-info-input { width:182px; height:24px; float:left; text-align:left;}
+.window-info-inputcode{ width:112px; height:24px; float:left; text-align:left;}
+.signup-input { width:176px; height:18px; margin:0; border:1px solid #C1CFE2; padding:2px 0 0 2px;}
+.signup-input-code { width:106px; height:18px; margin:0px; border:1px solid #C1CFE2; padding:2px 0 0 2px;}
+.code { width:65px; height:22px; float:left;}
+.check-txt { width:78px; height:17px; float:left; font-size:12px; color:#3F4C68; text-align:left; padding:5px 0px 0px 2px;}
+.check { width:auto; height:22px; float:left; text-align:left; padding-left:58px;}
+.window-btn { width:79px; height:29px; float:left; padding-left:62px;}
+.inverted-image {width:817px; height:24px; background:url(signup_31.png) no-repeat; float:left; }
+
+/*---------激活码提交--------*/
+.signup-activation { height:348px;}
+.activation-main { width:748px; height:348px; background:url(activation_05.gif) repeat-x;}
+.activation { width:448px; padding:38px 0 0 0; margin:0 auto; }
+.activation .window-main {width:310px; height:180px; float:left; padding:30px 68px 0px 68px; border:1px solid #CCD7EC; margin:0 0 25px 0;}
+.activation .blank-line{ width:310px; line-height:normal; border-bottom:1px solid #CCD7EC; margin:26px 0 20px 0; *margin:10px 0 20px 0;}
+.activation-input { border:1px solid #91A7D5; width:200px; height:22px; line-height:160%;}
+.activation .btn { float:left; padding:0 0 0 168px;}

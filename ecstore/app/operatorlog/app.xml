@@ -1,0 +1,20 @@
+<app version="1.0">
+  <name>操作明细日志</name>
+
+  <description>管理员操作日志管理，主要记录管理员操作会员，商品，订单，其他部分操作</description>
+
+  <author>
+	  <name>BBC 开发团队</name>
+	  <email></email>
+	  <url></url>
+  </author>
+
+  <version>0.1</version>
+
+  <license>Commercial</license>
+
+	<depends>
+		<app>desktop</app>
+	</depends>
+
+</app>

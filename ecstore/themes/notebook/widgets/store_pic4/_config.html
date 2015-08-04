@@ -1,0 +1,78 @@
+<div class="tableform">
+<div class="widgetconfig">
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+  <tbody><tr>
+    <th><{t app='b2c'}>广告尺寸高度：<{/t}></th>
+    <td><{t app='b2c'}>高<{/t}><input type="text" vtype="digits" required="true"  class='x-input' autocomplete='off' name="height" style="width:40px" value="<{$setting.height|default:223}>">px
+	</td>
+  </tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="tableform">
+<div class="widgetconfig">
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+  <tbody>
+  <tr>
+    <th><{t app='b2c'}>图片：<{/t}></th>
+    <td>
+	<input type=hidden name="pic[0][pic]" value="<{$setting.pic.0.pic}>">
+    <input name='pic[0][pic]' class="imgsrc x-input" id="ad_pic0" vtype="img_url" required='true'  value="<{$setting.pic.0.pic}>">
+    <input type=button value="<{t app='b2c'}>上传图片<{/t}>" class="uploadbtn" index='ad_pic0' onclick="addPic(this)">
+	</td>
+    <th><{t app='b2c'}>图片描述：<{/t}></th>
+    <td><input type="text"  class='x-input' autocomplete='off'  name="pic[0][pic_txt]" value="<{$setting.pic.0.pic_txt}>"></td>
+    <th><{t app='b2c'}>图片链接：<{/t}></th>
+    <td><input type="text"  class='x-input' autocomplete='off' vtype="purl"    name="pic[0][pic_link]" value="<{$setting.pic.0.pic_link}>"></td>
+  </tr>
+  <tr>
+    <th><{t app='b2c'}>图片：<{/t}></th>
+    <td>
+	<input type=hidden name="pic[1][pic]" value="<{$setting.pic.1.pic}>">
+    <input name='pic[1][pic]' class="imgsrc x-input" id="ad_pic1" vtype="img_url" required='true'  value="<{$setting.pic.1.pic}>">
+    <input type=button value="<{t app='b2c'}>上传图片<{/t}>" class="uploadbtn" index='ad_pic1' onclick="addPic(this)">
+	</td>
+    <th><{t app='b2c'}>图片描述：<{/t}></th>
+    <td><input type="text"  class='x-input' autocomplete='off'  name="pic[1][pic_txt]" value="<{$setting.pic.1.pic_txt}>"></td>
+    <th><{t app='b2c'}>图片链接：<{/t}></th>
+    <td><input type="text"  class='x-input' autocomplete='off'  vtype="purl"  name="pic[1][pic_link]" value="<{$setting.pic.1.pic_link}>"></td>
+  </tr>
+  <tr>
+    <th><{t app='b2c'}>图片：<{/t}></th>
+    <td>
+	<input type=hidden name="pic[2][pic]" value="<{$setting.pic.2.pic}>">
+    <input name='pic[2][pic]' class="imgsrc x-input" id="ad_pic2" vtype="img_url" required='true'  value="<{$setting.pic.2.pic}>">
+    <input type=button value="<{t app='b2c'}>上传图片<{/t}>" class="uploadbtn" index='ad_pic2' onclick="addPic(this)">
+	</td>
+    <th><{t app='b2c'}>图片描述：<{/t}></th>
+    <td><input type="text"  class='x-input' autocomplete='off'  name="pic[2][pic_txt]" value="<{$setting.pic.2.pic_txt}>"></td>
+    <th><{t app='b2c'}>图片链接：<{/t}></th>
+    <td><input type="text"  class='x-input' autocomplete='off'  vtype="purl"  class='x-input' autocomplete='off' name="pic[2][pic_link]" value="<{$setting.pic.2.pic_link}>"></td>
+  </tr>
+  <tr>
+    <th><{t app='b2c'}>图片：<{/t}></th>
+    <td>
+	<input type=hidden name="pic[3][pic]" value="<{$setting.pic.3.pic}>">
+    <input name='pic[3][pic]' class="imgsrc x-input" id="ad_pic3"  vtype="img_url" required='true' value="<{$setting.pic.3.pic}>">
+    <input type=button value="<{t app='b2c'}>上传图片<{/t}>" class="uploadbtn" index='ad_pic3' onclick="addPic(this)">
+	</td>
+    <th><{t app='b2c'}>图片描述：<{/t}></th>
+    <td><input type="text" class='x-input' autocomplete='off' name="pic[3][pic_txt]" value="<{$setting.pic.3.pic_txt}>"></td>
+    <th><{t app='b2c'}>图片链接：<{/t}></th>
+    <td><input type="text" class='x-input' autocomplete='off' vtype="purl"   name="pic[3][pic_link]" value="<{$setting.pic.3.pic_link}>"></td>
+  </tr>
+</tbody>
+</table>
+</div>
+</div>
+<script>
+	function addPic(obj){
+			var url='btools-alertpages.html?dd='+Date.now()+'&goto='+encodeURIComponent("btools-image_broswer.html?type=big");
+			Ex_Loader('modedialog',function(){
+			return new imgDialog(url,{onCallback:function(image_id,image_src){
+					 $($(obj).get('index')).value=image_src;
+			}})	;
+			});
+		}
+</script>

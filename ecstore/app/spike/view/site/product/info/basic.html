@@ -1,0 +1,360 @@
+<ul class="goods-info-list">
+    <{if $goodsbndisplay eq 'true'}><li><span><{t}>商品编号：<{/t}></span><em class="infoModi"><{$goods.bn}></em>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <span><{t}>商品货号：<{/t}></span><em id="goodsBn"  class="infoModi" updatespec="text_bn"><{assign var=apro value=$goods.product|current}><{$apro.bn}><{assign var=apro value=null}></em></li><{/if}>
+    <li style="display:none">
+    <span><em class='font-red font24px fix-price'>
+    <{if $goods.minprice && $goods.maxprice}>
+    <{$goods.minprice|cur_odr}>&nbsp;-&nbsp;<{$goods.maxprice|cur_odr:$order.currency}>
+    <{else}>
+    <{$goods.price|cur_odr}>
+    <{/if}>
+    </em></span>
+    </li>
+    <li>
+        <span class="viebuy1 viebuy1Modi"><{t}>促销：<{/t}></span>
+        <em class="goodsprice2" >
+            <{if $activity.price_tag != ''}><strong class="viebuy2"><{$activity.price_tag}></strong><{/if}>
+            <span class="viebuy1Modi">￥</span>
+            <strong class="viebuy2 viebuy2Modi" updatespec="updateprice">
+                <{$goods.current_price|cur_odr}>
+            </strong>
+        
+        </em>
+        <span class="viebuy3">原价：</span>
+        <em class="viebuy4">
+            <{if $goods.minmktprice && $goods.maxmktprice}>
+            <{$goods.minmktprice|cur_odr}>&nbsp;-&nbsp;<{$goods.maxmktprice|cur_odr}>
+            <{else}>
+            <{$goods.mktprice|cur_odr}>
+            <{/if}>
+        </em>
+    </li>
+
+    <li class="list-item list-itemSpec">
+    <span class="viebuy1Modi viebuy5Modi"><{$time_info.name}>：</span>
+        <div id="J_PromoBox" class="mall_pro_shop_activity">
+            <strong class="viebuy3 viebuy3Modi"><{$time_info.time}></strong>
+            <span class="tm-mjsTarget J_PromArrow" data-type="mjslist">
+            店铺活动
+            <span class="tb-arrow"></span>
+            </span>
+            <div id="J_MoreMjsSlider" class="tm-promo-slider" style="display: none;">
+            <p><{$actapply.act_desc}></p>
+            </div>
+        </div>
+    </li>
+
+    <li class="list-item">
+      <div class="time" id="time">
+        <span class="viebuy1Modi">剩余时间：</span>
+        <span class="day">0</span><span class="timeUnit">天</span>
+        <span class="hour">0</span><span class="timeUnit">小时</span>
+        <span class="minute">0</span><span class="timeUnit">分</span>
+        <span class="second">0</span><span class="timeUnit">秒</span>
+      </div>
+    </li>
+
+    <!-- <{if $env.conf.b2c.site.member_price_display != 2}>
+    <{$goodshtml.mlv_price}>
+    <{/if}> -->
+
+    <{if $goods.setting.score == '3'&& $goods.gain_score}><li><span><{t}>所得积分：<{/t}></span><em id="goodsScore"><{$goods.gain_score}></em></li><{/if}>
+      
+    <{if !!$gpromotion_info.promotionMsg.0.0.gid}>
+    <li class="list-item"><span><{t}>促销：</span><{/t}>
+      <div id="J_PromoBox" class="mall_pro_shop_activity">
+        <em class="tb-promo-price-type">今日促销</em>
+        <strong><{$gpromotion_info.promotionMsg.0.0.price|cur_odr}></strong>
+        <{if false}>
+        <span class="tb-arrow tm-promoMore J_PromArrow" data-type="promolist"></span>
+        <ul id="J_MorePromoSlider" class="tm-promo-slider tm-clear" style="display: none;">
+          <li class="post-script">以上价格可在付款时选择享用</li>
+        </ul>
+        <{/if}>
+        <span class="tm-mjsTarget J_PromArrow" data-type="mjslist">店铺活动
+        <span class="tb-arrow"></span>
+        </span>
+        <div id="J_MoreMjsSlider" class="tm-promo-slider" style="display: none;">
+        <p> <{$gpromotion_info.promotionMsg.0.0.description}> </p>
+        <{if false}>
+        <a class="ui-more-nbg" href="" data-spm-anchor-id="a220o.1000855.0.88">
+        更多
+        <i class="ui-more-nbg-arrow"></i>
+        </a>
+        <{/if}>
+        </div>
+      </div>
+    </li>
+    <{/if}>
+    <{if $dlytype_info}>
+    <li class="list-item"><span><{t}>配送：</span><{/t}>
+    <div class="tb-postAge">
+      <{if $goods.freight_bear == 'business'}>
+      <div class="tb-postAge-info"><span>商家包邮</span></div>
+      <{else}>
+      <div id="J_PostageToggleCont" class="tb-postAge-info">
+      <span><{foreach from=$dlytype_info.dlytype item=item}> <{$item.dt_name}>：<{$item.money}><{/foreach}></span>
+      </div>
+      <{/if}>
+      <span id="J_deliveryAdd" class="tb-deliveryAdd"><{$area_from}></span>
+      至
+      <a id="J_dqPostAgeCont" class="tb-postAgeCont" code="<{$dlytype_info.area}>" parent="<{$dlytype_info.parent}>" href="#"><{$dlytype_info.localname}></a>
+    </div></li><{/if}>
+    <li class="list-item"><span><{t}>月销量：</span><{/t}><em class="mon_sell "><em class="color_3355aa"><{$goods.buy_m_count|default:0}></em>件</em>
+    <{if $setting.acomment.switch.discuss == 'on'}>
+    <div class="star-div goods-point clearfix" id="goods-point"><span class="flt font-black"><{t}>评价：<{/t}></span>
+      <ul class="fl">
+        <li class="star<{$goods_point.avg|default:0}>"> </li>
+      </ul>
+      <em class="fl color_3355aa"><{$goods_point.avg_num|default:'0'}>分(累计评价<a href="#consult" onclick="new Fx.Scroll(document,{onComplete:function(){$$('li[data-tab-type=goodsdiscuss]')[0]&&$$('li[data-tab-type=goodsdiscuss]')[0].fireEvent('click');}}).toElement('goodsDetailMain');return false;"><{$total_discuss_nums|default:0}></a>)</em>
+    </div>
+    <{/if}></li>
+
+</ul>
+<script type="text/javascript">
+//new AutoSize('.goods-info-list .list-item');
+window.addEvent('domready', function(){
+  var obj = $E('#J_PromoBox .tb-arrow')||'';
+  if(obj)
+  obj.addEvents({
+  mouseover:function(){
+  var p_obj = $('J_MoreMjsSlider')||'';
+  if(p_obj)p_obj.setStyle('display','block');
+  },
+  mouseleave:function(){
+  var p_obj = $('J_MoreMjsSlider')||'';
+  if(p_obj)p_obj.setStyle('display','none');
+  }
+  });
+});
+</script>
+
+<script>
+    (function() {
+        var timestamp_statues = (new Date()).valueOf();
+        var timeCount=timestamp_statues;
+        var timeCount = this.timeCount = {
+            init:function(nowtime,endtime,dom){
+                var diff = Math.abs((nowtime.getTime() - endtime.getTime())/1000);
+                var secondDiff = diff % 60;
+                var minuteDiff = ((diff - secondDiff)/60) % 60;
+                var hourDiff = ((diff - secondDiff  - minuteDiff*60)/3600) % 24;
+                var dayDiff = (diff - secondDiff  - minuteDiff*60 - hourDiff*3600) / 86400;
+                var timeDiff = [dayDiff,hourDiff,minuteDiff,parseInt(secondDiff)];
+                this.s = (function(){this.calcTime.periodical(1000,this,{
+                        aaa:1,
+                        time:timeDiff,
+                        dom:dom
+                    })}).delay(100,this);
+            },
+            formatToInt : function(timeDiff){
+                for(var i=0;i<timeDiff.length;i++){
+                    parseInt(timeDiff[i]);
+                };
+                return timeDiff;
+            },
+            judgeTime : function(timeDiff){
+                if(timeDiff[3]< 0  && timeDiff[2]>0){
+                    timeDiff[3] = 59;
+                    timeDiff[2]--;
+                    return timeDiff;
+                }else if(timeDiff[3] <0 && timeDiff[2]==0 && timeDiff[1]>0){
+                    timeDiff[3] = 59
+                    timeDiff[2] = 59;
+                    timeDiff[1]--;
+                    return timeDiff;
+                }else if(timeDiff[3] <0 && timeDiff[2]==0 && timeDiff[1]==0 && timeDiff[0]>0){
+                    timeDiff[3] = 59
+                    timeDiff[2] = 59;
+                    timeDiff[1] = 23;
+                    timeDiff[0]--;
+                    return timeDiff;
+                }else if(timeDiff[3]==0 && timeDiff[2]==0 && timeDiff[1]==0 && timeDiff[0]==0){
+                    $E('.time').empty();
+                    reloadTime();
+                    return;
+                }
+            },
+            calcTime : function (obj){
+                if(!obj.dom) return;
+                var _timeDiff = obj.time;
+                this.formatToInt(_timeDiff);
+                _timeDiff[3]--;
+                this.judgeTime(_timeDiff);
+                var dom = obj.dom;
+                dom.second.innerHTML = _timeDiff[3];
+                dom.minute.innerHTML = _timeDiff[2];
+                dom.hour.innerHTML = _timeDiff[1];
+                dom.day.innerHTML = _timeDiff[0];
+            }
+        }
+    })();
+    (function(){
+        var random = parseInt(10000000000*Math.random());
+        var timeNow;
+        new Request({
+          url: '<{link app=b2c ctl=site_product act=getCurrentTime}>', 
+          method: 'post',
+          async:false,
+          onSuccess:function(re){
+            timeNow = new Date(re*1000);;
+          }
+        }).send('random='+random);
+        var timeEnd= new Date(<{$activity.end_time * 1000}>);
+        var timeStart= new Date(<{$activity.start_time * 1000}>);
+
+        var dom = {
+            second: $E('.second'),
+            minute:$E('.minute'),
+            hour:$E('.hour'),
+            day:$E('.day')
+        };
+
+        if(timeStart > timeNow){
+            timeCount.init(timeStart,timeNow,dom);
+        }else if(timeNow >= timeStart && timeNow <timeEnd){
+            timeCount.init(timeNow,timeEnd,dom);
+        }
+    })();
+function reloadTime(){
+    item = $E('.time');
+    new Element('span',{'html':'倒计时：'}).inject(item,'bottom');
+    new Element('span',{'html':0,'class':'day'}).inject(item,'bottom');
+    new Element('span',{'html':'天'}).inject(item,'bottom');
+    new Element('span',{'html':0,'class':'hour'}).inject(item,'bottom');
+    new Element('span',{'html':'小时'}).inject(item,'bottom');
+    new Element('span',{'html':0,'class':'minute'}).inject(item,'bottom');
+    new Element('span',{'html':'分'}).inject(item,'bottom');
+    new Element('span',{'html':0,'class':'second'}).inject(item,'bottom');
+    new Element('span',{'html':'秒'}).inject(item,'bottom');
+
+    var random = parseInt(10000000000*Math.random());
+    var timeNow;
+    new Request({
+      url: '<{link app=b2c ctl=site_product act=getCurrentTime}>', 
+      method: 'post',
+      async:false,
+      onSuccess:function(re){
+        timeNow = new Date(re*1000);;
+      }
+    }).send('random='+random);
+
+    var timeEnd= new Date(<{$activity.end_time * 1000}>);
+    var timeStart= new Date(<{$activity.start_time * 1000}>);
+
+    var dom = {
+        second: item.getElement('.second'),
+        minute:item.getElement('.minute'),
+        hour:item.getElement('.hour'),
+        day:item.getElement('.day')
+    };
+
+    var btn_div = $('group-btn');
+    if(timeNow >= timeStart && timeNow <timeEnd){
+        btn_div.empty();
+        new Element('input',{'type':'button','class':'actbtn btn-spikebuy','id':'btn_lj','value':'立即秒杀'}).inject(btn_div,'bottom');
+        timeCount.init(timeNow,timeEnd,dom);
+        spikebtn()
+    }else if(timeNow >= timeEnd) {
+        btn_div.empty();
+        new Element('span',{'html':'立即秒杀','class':'btn-hui'}).inject(btn_div,'bottom');
+    }
+}
+
+function spikebtn(){
+    buyljBtn=$('btn_lj');
+    if (buyljBtn) buyljBtn.store('tip:text','');
+    if (buyljBtn) new Tips(buyljBtn, {
+            showDelay: 0,
+            hideDelay: 0,
+            className: 'cantbuy',
+            onShow: function(tip) {
+                if (!tip.getElement('.tip-text') || ! tip.getElement('.tip-text').get('text')) {
+                    buyljBtn.setStyle('cursor', 'pointer');
+                    return tip.setStyle('visibility', 'hidden');
+                } else {
+                    buyljBtn.setStyle('cursor', 'not-allowed');
+                }
+
+                tip.setStyle('visibility', 'visible');
+            }
+        });
+
+    if (buyljBtn){
+        buyljBtn.removeEvent('click');
+        buyljBtn.addEvent('click', function(e) {
+            var msg = '请选择规格：';
+            var specCheck = false;
+            if($$('.spec-item.specItem')){
+              $$('.spec-item.specItem').each(function(item,index){
+                var spec_label = item.getChildren('div.spec-label');
+                label = spec_label[0].getChildren('span');
+                var specName = label[0].firstChild.innerHTML;
+                var spec_values = item.getChildren('div.spec-values');
+                var specValue = spec_values[0].getChildren('ul');
+                var specOne  = false;
+                specValue[0].getChildren('li').each(function(el){
+                  if(el.getChildren('a.selected').length!=0){
+                    specOne = true;
+                  }
+                });
+                if(!specOne){
+                  if(msg=='请选择规格：'){
+                    msg = msg + specName;
+                  }else{
+                    msg = msg + ','+specName;
+                  }
+                  specCheck = true;
+                }
+                
+              });
+            }
+            if(specCheck){
+              Message.error(msg);
+            }else{
+                msg = '';
+                e.stop();
+                this.blur();
+                if (this.retrieve('tip:text')) return false;
+                var form=buyljBtn.getParent('form');
+                var backup =form.action;
+                var sign = false;
+                new Request({
+                  url:"<{link app=spike ctl=site_cart act=addCheck arg0='goods' arg1='fastbuy'}>",
+                  async:false,
+                  method:'post',
+                  data:form,
+                  onSuccess:function(re){
+                    re = JSON.decode(re);
+                    if(re.status=='succ'){
+                        sign = true;
+                    }else if(re.status=='nologin'){
+                        msg = re.error;
+                        Message.error(msg);
+                        window.location = '<{link app=b2c ctl=site_passport act=login}>';
+                    }else{
+                        msg = re.error;
+                        Message.error(msg);
+                    }
+                  }
+                }).send();
+                if(sign){
+                  form.action="<{link app=spike ctl='site_cart' act='add' arg0='goods' arg1='fastbuy'}>";
+                  var url = "<{link app=spike ctl='site_product' act='joinspike'}>";
+
+                  var dialog = new Dialog(url,{
+                       title:'<{t}>秒杀<{/t}>',
+                       width:400,
+                       height:200,
+                       modal:false,
+                       _callback:function(){
+                          form.submit();
+                          form.action=backup;
+                      }
+                  });
+
+                }
+            }
+        });
+    }
+}
+</script>

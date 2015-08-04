@@ -1,0 +1,14 @@
+<div class="TreeList">
+    <{if $data.__shownode}>
+    <div class="TreeListTitle">
+        <{if !$data.__stripparenturl}>
+            <a href="<{$data.node_url}>"  class="cat0" ><{$data.node_name}></a>
+        <{else}>
+            <{$data.node_name}>
+        <{/if}>
+    </div> 
+    <{/if}>
+    <div class="TreeListContent">
+        <{$data.__html}>
+    </div> 
+</div>

@@ -1,0 +1,66 @@
+<div class="tableform">
+  <div class="division"> <{if $is_bklinks == 'true'}>
+    <{input type='refer' id=$member_id ident='member' name=$___b2c='会员'|t:'b2c' show='refer_id,refer_url,refer_time,c_refer_id,c_refer_url,c_refer_time'}>
+    <{/if}>
+    <table width="100%" cellspacing="0" cellpadding="0">
+      <tr>
+        <th><label><{t}>用户姓名：<{/t}></label></th>
+        <td><{$mem.contact.name|escape:'html'}></td>
+        <th><label><{t}>地区：<{/t}></label></th>
+        <td><{$mem.contact.area|region}></td>
+        <th><label><{t}>手机：<{/t}></label></th>
+        <td><{$mem.contact.phone.mobile}></td>
+        <th><label><{t}>出生日期：<{/t}></label></th>
+        <td><{$mem.profile.birthday}></td>
+      </tr>
+      <tr>
+        <th><label><{t}>当前积分：<{/t}></label></th>
+        <td class="price0"><{$mem.score.total}></td>
+        <th><label>E-mail：</label></th>
+        <td><{$mem.contact.email}></td>
+        <th><label><{t}>邮编：<{/t}></label></th>
+        <td><{$mem.contact.zipcode|escape:'html'}></td>
+        <th><label><{t}>注册日期：<{/t}></label></th>
+        <td><{$mem.regtime|cdate:FDATE}></td>
+      </tr>
+      <tr>
+        <th><label><{t}>当前预存款：<{/t}></label></th>
+        <td><{$mem.advance.total|cur}></td>
+        <th><label><{t}>固定电话：<{/t}></label></th>
+        <td><{$mem.contact.phone.telephone}></td>
+        <th><label><{t}>性别：<{/t}></label></th>
+        <td><{if $mem.profile.gender == 'male'}><{t}>男<{/t}><{elseif $mem.profile.gender == 'female'}><{t}>女<{/t}><{/if}></td>
+        <th><label><{t}>注册IP：<{/t}></label></th>
+        <td><{$mem.reg_ip}></td>
+      </tr>
+      <{foreach from=$attr item=item name="item" key='row'}>
+      <{if $row%4 == 0}>
+      <tr> <{/if}>
+        <th><label><{$item.attr_name}>：</label></th>
+        <td><{if $item.attr_group eq 'contact'}>
+          <{if $item.attr_tyname eq 'QQ' && $item.attr_value !=''}> <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=<{$item.attr_value}>&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:<{$item.attr_value}>:51" alt="点击这里给我发消息" title="点击这里给我发消息"/></a> <{/if}>
+          <{if $item.attr_tyname eq 'MSN' && $item.attr_value !=''}> <a  target="_self" href="msnim:chat?contact=<{$item.attr_value}>"><img width="16" height="16" border="0" src="http://www.wlmessenger.net/static/img/presence/Online.gif" title='<{$item.attr_value}>'/></a> <{/if}>
+          <{if $item.attr_tyname eq $__b2c='旺旺'|t:'b2c' }> <a target="_blank" href="http://amos1.taobao.com/msg.ww?v=2&uid=<{$item.attr_value}>&s=1" ><img border="0" src="http://amos1.taobao.com/online.ww?v=2&uid=<{$item.attr_value}>&s=1"  title='<{$item.attr_value}>'/></a> <{/if}>
+          <{if $item.attr_tyname eq 'Skype' && $item.attr_value !=''}> <a href="skype:mengsajewel?call"  target="_self"onclick="return skypeCheck();"><img src="http://mystatus.skype.com/smallclassic/<{$item.attr_value}>" style="border: none;" alt="Call me!" title='<{$item.attr_value}>'/></a> <{/if}>
+          <{if $item.attr_type =='date'}>
+          <{$item.attr_value}>
+          <{/if}>
+          <{else}>
+          <{$item.attr_value}>
+          <{/if}> </td>
+        <{if ($row+1)%4 == 0}> </tr>
+      <{/if}>
+      <{/foreach}>
+    </table>
+    <table class="multi-cols" width="100%" cellspacing="0" cellpadding="0">
+      <tr>
+        <th><label><{t}>备注：<{/t}></label></th>
+        <td><{$mem.remark}></td>
+      </tr>
+      <tr>
+        <th><label><{t}>地址：<{/t}></label></th>
+        <td><{$mem.contact.addr}></td>
+      <tr>
+    </table>
+  </div>
+</div>

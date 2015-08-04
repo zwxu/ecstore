@@ -1,0 +1,19 @@
+<div class="side-bx">
+	<div class="side-bx-title">
+		<h3><{t}>按标签检索<{/t}></h3>
+	</div>
+	<div class="side-bx-bd">
+		<ul>
+			<{foreach from=$tags item=t}>
+			<li>
+			<a href='<{$url}>&filter[tag]=<{$t.tag_id}>'>
+			<{if $t.tag_abbr}>
+				<span class="tag-label"<{if $t.tag_bgcolor}> style="color:<{$t.tag_fgcolor}>;background-color:<{$t.tag_bgcolor}>"<{/if}>>
+				<{$t.tag_abbr}></span>
+			<{/if}>
+			<{$t.tag_name}><{if $t.rel_count}> (<{$t.rel_count}>)<{/if}>
+			</a></li>
+			<{/foreach}>
+		</ul>
+	</div>
+</div>

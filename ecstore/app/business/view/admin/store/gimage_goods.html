@@ -1,0 +1,8 @@
+<div id='all-pics' style="width:100%">
+		<{if $goods.image}>
+			<{foreach from=$goods.images item=gimage}>
+			   <div class="gpic-box"><{include file="gimage.html" app='image'}></div>
+               <input name ="goods[attach_ids][]"  type ="hidden"   value="<{$gimage.attach_id}>"  >
+			<{/foreach}>          
+		<{/if}>     
+</div>    

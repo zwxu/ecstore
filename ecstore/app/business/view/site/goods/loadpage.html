@@ -1,0 +1,122 @@
+<{capture name="header"}>
+<{/capture}>
+<{lang_script src="lang.js" app="site"}>
+<{if defined("DONOTUSE_CSSFRAMEWORK")&&DONOTUSE_CSSFRAMEWORK}>
+<{else}>
+<{css src="framework.css" app="site" pdir="css_mini"}>
+<{/if}>
+<{if defined("DONOTUSE_JSFRAMEWORK")&&DONOTUSE_JSFRAMEWORK}>
+<{else}>
+	<{if defined("DEBUG_JS") && DEBUG_JS}>
+	    <{script src="mootools.js" app="site"}>
+	    <{script src="moomore.js" app="site"}>
+	    <{script src="patch.js" app="site"}>
+	    <{script src="lab.js" app="site"}>
+	    <{script src="formplus.js" app="site"}>
+	    <{script src="jstools.js" app="site"}>
+	    <{script src="coms/datapicker.js" app="site"}>
+	    <{script src="coms/popup.js" app="site"}>
+	    <{script src="coms/switchable.js" app="site"}>
+	<{else}>
+	    <{script src="moo_min.js" app="site" pdir="js_mini"}>
+	    <{script src="tools_min.js" app="site" pdir="js_mini"}>
+	    <{script src="ui_min.js" app="site" pdir="js_mini"}>
+	<{/if}>
+<{/if}>
+
+<div class='body' id='body'>
+	<div class='msgbox' id='messagebox'></div>
+    <div class='container clearfix' id='container'>
+        <div class='side span-auto side-close' id='side' <{if !$env.capture.sidebar}>style="display:none;width:0"<{/if}>>
+            <div class='side-menu mlist'  id="menu-desktop">
+				<{$env.capture.sidebar}>
+			</div>
+		</div>
+        <div class='workground' style="width:100%" id='workground'>
+			<div class="toggler-left flt hide" id='leftToggler'>
+	            <div class="toggler-left-inner">&nbsp;</div>
+	        </div>
+			 <div class='content-head' style="<{if !$env.capture.headbar}>font-size:0;height:0;<{/if}>"><{$env.capture.headbar}></div>
+            <div class='content-main' id='main'>
+			   <{$env.capture.body}>
+            </div>
+          <div class='content-foot' style="<{if !$env.capture.footbar}>font-size:0;height:0;<{/if}>"><{$env.capture.footbar}></div>
+        </div>
+		<div class="side-r hide" id="side-r">
+			<div class="side-r-resize" id="side-r-resize">&nbsp;</div>
+		  <div class="side-r-top clearfix">
+	        <b class="side-r-title flt f-14"></b>
+	        <span class="frt side-r-close pointer"><{img src="bundle/finder_drop_arrow_close.gif" app="desktop"}></span>
+	      </div>
+		  <div class="side-r-head" style="border-bottom:1px #999 solid;padding:2px 0 2px 0;font-size:0;height:0;"></div>
+	      <div id="side-r-content" class="side-r-content" conatainer="true" style="overflow:auto"></div>
+		  <div class="side-r-foot" style="font-size:0;height:0;"></div>
+        </div>
+    </div>
+</div>
+<{css src="member.css" pdir="css_mini"}>
+<{css src="style.css" app="business"}>
+<script>
+  window.loadedPart = [1,0,(new Date).getTime()];
+  BREADCRUMBS ='0:0';
+  MODALPANEL = {
+    createModalPanel:function(){
+      var mp = new Element('div',{'id':'MODALPANEL'});
+      var mpStyles = {
+        'position': 'absolute',
+        'background': '#333333',
+        'width': '100%',
+        'display':'none',
+        'height': window.getScrollSize().y,
+        'top': 0,
+        'left': 0,
+        'zIndex': 65500,
+        'opacity': .4
+      };
+      this.element = mp.setStyles(mpStyles).inject(document.body);
+      return this.element;
+    },
+    show:function(){
+      var panel = this.element = this.element||this.createModalPanel();
+      panel.setStyles({
+        'width': '100%',
+        'height': window.getScrollSize().y
+      }).show();
+    },hide:function(){
+      if(this.element)this.element.hide();
+    }
+  };
+  var LAYOUT = {
+	    container: $('container'),
+	    side: $('side'),
+	    workground: $('workground'),
+	    content_main: $('main'),
+	    content_head: $E('#workground .content-head'),
+	    content_foot: $E('#workground .content-foot'),
+	    side_r: $('side-r'),
+      side_r_content:$('side-r-content')
+	};
+</script>
+<iframe src='<{$current_url}>/tpl.html' id='tplframe' tabindex=-1 style="display:none" ></iframe>
+<{script src="load.js" app="business" pdir="js"}>
+<{script src="wpage.js" app="business" pdir="js"}>
+<script>
+  var W = new Wpage({});
+</script>
+<{script src="dialog.js" app="business" pdir="js"}>
+<{script src="goodseditor.js" app="business" pdir="js"}>
+<{script src="uploader.js" app="business" pdir="js"}>
+<{script src="modedialog.js" app="business" pdir="js"}>
+<script>
+  window.addEvent('domready',function(){
+    goodsEditFrame({'path':'<{$current_url}>/uploader.swf','IMAGE_MAX_SIZE':'<{$IMAGE_MAX_SIZE}>'});
+  });
+</script>
+<script>
+  var shopeEvents = {},TaskRemote=null;
+  W.page('<{$goto}>?dialog=true',{clearUpdateMap:false,onComplete:function(){
+      var modedialog=window.dialogArguments;		
+      if(modedialog)modedialog.onLoad.call(modedialog,window);
+       window.resizeLayout();
+  }});
+</script>

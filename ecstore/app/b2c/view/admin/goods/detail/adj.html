@@ -1,0 +1,12 @@
+<h3><{t}>配件<{/t}></h3>
+<div class="tableform">
+<{button label=$___b2c="添加配件"|t:'b2c' app="desktop" type="button" onclick="goodsEditor.adj.addGrp.bind(goodsEditor)('goods-adj')" icon="btn_add.gif"}>
+<div class="adjs" id="goods-adj">
+<{foreach from=$goods.adjunct item=adjunct key=key}>
+
+<{if $adjunct.type}>
+<{include file="admin/goods/detail/adj/row.html"}>
+<{/if}>
+<{/foreach}>
+</div>
+</div>

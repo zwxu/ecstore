@@ -1,0 +1,7 @@
+<services>
+     
+    <service id="b2c_promotion_tpl_order_apps">
+        <class>proqgoods_conditions_goods_goodsofquantity</class>
+    </service>
+    
+</services>

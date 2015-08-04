@@ -1,0 +1,18 @@
+<div class="loginbox_left">
+<div class="tableform">
+	<{foreach from=$passports item=item}>
+		<{$item.html}>
+	<{/foreach}>
+	<div class="foot"></div>
+	</div>
+</div>
+<{if $no_right!=1}>
+<div class="loginbox-right">
+<{if $mini_passport}>
+	<br /><br /><br /><br /><br />
+	<{t}>没有帐号？现在<{/t}><a class="link" href="<{link app="b2c" ctl="site_passport" act="signup" mini_passport=1}>"><{t}>注册<{/t}></a>
+<{/if}>
+		</div>
+<{/if}>
+
+

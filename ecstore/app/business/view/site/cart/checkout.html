@@ -1,0 +1,7 @@
+<{include file="site/cart/checkoutsplit.html" app=b2c}>
+<script type="text/javascript">
+window.addEvent('domready',function(){
+  var form = $('order-create');
+  form.action = '<{link app=business ctl=site_cart act=create}>';
+});
+</script>

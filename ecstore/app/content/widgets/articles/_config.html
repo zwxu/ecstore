@@ -1,0 +1,58 @@
+<div  class="tableform">
+    <div class="division widgetconfig" style="margin:-5px 0 0 0">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th><{t app='content'}>选择节点:<{/t}> </th>
+        <td>
+            <{input type='select' name='node_id' value=$setting.node_id  vtype='required' caution=$___content='请选择上级节点'|t:'gift' rows=$setting.selectmaps valueColumn="node_id" labelColumn="node_name"}> <{t app='content'}>顶级节点请选'无'<{/t}>
+        </td>
+        <th><{t app='content'}>节点下显示文章数:<{/t}> </th>
+        <td ><{input type='text' name='limit' value=$setting.limit  size=4}></td>
+      </tr>
+      <tr>
+        <th><{t app='content'}>深度:<{/t}> </th>
+        <td ><{input type='text' name='lv' value=$setting.lv size=4}></td>
+        <th><{t app='content'}>是否显示子节点名称:<{/t}> </th>
+        <td >
+            <input type="radio" name="shownode" value="1" <{if $setting.shownode!=0}> checked <{/if}> > <{t app='content'}>是<{/t}>
+            <input type="radio" name="shownode" value="0" <{if $setting.shownode==0}> checked <{/if}>> <{t app='content'}>否<{/t}>
+        </td>
+      </tr>
+      <tr>
+        <th><{t app='content'}>显示其节点下文章:<{/t}> </th>
+        <td >
+            <input type="radio" name="showallart" value="1" <{if $setting.showallart==1}> checked <{/if}> > <{t app='content'}>是<{/t}>
+            <input type="radio" name="showallart" value="0" <{if $setting.showallart!=1}> checked <{/if}> > <{t app='content'}>否<{/t}>
+        </td>
+        <th>排序方式:</th>
+        <td>
+        	按
+            <select name="order_type">
+              <{foreach from=$setting.select_order.order_type key=key item=item}>
+            	<option value="<{$key}>" <{if $key==$setting.order_type}>selected="selected"<{/if}> ><{$item}></option>
+              <{/foreach}>
+            </select>
+            <select name="order">
+              <{foreach from=$setting.select_order.order key=key item=item}>
+            	<option value="<{$key}>" <{if $key==$setting.order}>selected="selected"<{/if}> ><{$item}></option>
+              <{/foreach}>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th><{t app='content'}>去除父节点链接:<{/t}> </th>
+        <td >
+            <input type="radio" name="stripparenturl" value="1" <{if $setting.stripparenturl ==1}> checked <{/if}> > <{t app='content'}>是<{/t}>
+            <input type="radio" name="stripparenturl" value="0" <{if $setting.stripparenturl !=1}> checked <{/if}> > <{t app='content'}>否<{/t}>
+        </td>
+        <th>&nbsp;</th>
+        <td>&nbsp;</td>
+    </tr>
+        <!--
+        <th>文章样式统一</th>
+        <td><input type="checkbox" name="styleart" value="1" <{if $setting.styleart==='1'}> checked="checked" <{/if}> ></td>
+        -->
+    </table>
+    </div>
+</div>
+

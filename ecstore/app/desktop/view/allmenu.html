@@ -1,0 +1,33 @@
+<form id="shortcuts_from" method="post" action="index.php?app=desktop&ctl=default&act=set_shortcuts">
+<div class="gridlist">
+<{foreach from=$menus item=item}>
+    <div class="row"><div class="row-line" style="padding:0 10px;"><strong><{$item.menu_title}></strong></div></div>
+    <{foreach from=$item.menu_group item=item1 key=key}>
+    <div class="row"><div class="row-line" style="padding:0 20px;">
+        <div class="span-2"><{$key}> --</div>
+        <{foreach from=$item1 item=item2}>
+        <div class="span-auto">
+            <label><input type="checkbox" name="shortcuts[]" value="<{$item2.menu_title}>|<{$item2.menu_path}>" <{if $item2.menu_path|in_array:$shortcuts_menus}>checked<{/if}>/> <{$item2.menu_title}></label>
+        </div>
+        <{/foreach}>
+        </div>
+    </div>
+    <{/foreach}>
+    <div class="clear"></div>
+<{/foreach}>
+</div>
+
+<{area inject=".mainFoot"}>
+<div class="table-action">
+    <{button label=$___desktop="确定"|t:'desktop' class="btn-primary" type="submit" onclick="$('shortcuts_from').fireEvent('submit',{stop:function(){}})"}>
+    <{button label=$___desktop="取消"|t:'desktop' class="btn-secondary" isCloseDialogBtn='true'}>
+</div>
+<{/area}>
+<script>
+$('shortcuts_from').store('target',{
+    onComplete:function(){
+        location.reload();
+    }
+});
+</script>
+</form>

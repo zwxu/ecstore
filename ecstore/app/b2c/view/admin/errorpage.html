@@ -1,0 +1,19 @@
+<FORM METHOD=POST ACTION="index.php?app=b2c&ctl=admin_errorpage&act=saveErrorPage" target="{update:'messagebox'}" class="tableform">
+<h4><{t}>当商店页面出现<{/t}><{$pagename}><{t}>（系统<{/t}><{$code}><{t}>页面）<{/t}><{t}>时，显示如下内容：<{/t}></h4>（注：当顾客使用除IE浏览器之外的其他浏览器时，此功能生效。）
+<div class="division">
+<table>
+<tr>
+<!--<th><{t}>显示内容：<{/t}></th>-->
+  <td><{input name="errorpage" type="html" value=$errorpage}>
+  <input type='hidden' name="code" value='<{$code}>'>
+  </td>
+</tr>
+
+</table>
+</div>
+   <div class="table-action">
+	<{button type="submit"  label="保存"}>
+</div>
+
+
+</FORM>

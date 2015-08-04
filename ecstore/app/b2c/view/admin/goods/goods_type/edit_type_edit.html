@@ -1,0 +1,78 @@
+<form action="index.php?app=b2c&ctl=admin_goods_type&act=save" method="post" id='type_form' >
+  <input type="hidden" name="gtype[type_id]" value=<{$gtype.type_id}>>
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" ><tr><td class="t-r" style="padding: 5px 20px 0 0"><{help docid="72" type="link"}><{t}>点击查看帮助<{/t}><{/help}></td></tr></table>
+
+    <div class="tableform tableform-tabs">
+    <{tabber}>
+    <div class="division" style="padding:5px; border:1px solid #dddddd; border-top:none; margin:0;">
+            <{tab name=$___b2c="基本设置"|t:'b2c'}>
+            <input type='hidden' name='gtype[is_physical]' value='<{$gtype.is_physical}>'/>
+            <input type='hidden' name='gtype[setting][use_brand]' value='<{$gtype.setting.use_brand}>'/>
+                <{include file="admin/goods/goods_type/form_edit_name.html"}>
+            <{/tab}>
+        <{if $gtype.setting.use_props}>
+            <input type='hidden' name='gtype[setting][use_props]' value='1'/>
+            <{tab name=$___b2c="扩展属性"|t:'b2c'}>
+                <{include file="admin/goods/goods_type/form_edit_props.html"}>
+            <{/tab}>
+        <{/if}>
+            <{tab name=$___b2c="规格"|t:'b2c'}>
+                <{include file="admin/goods/goods_type/form_edit_spec.html"}>
+            <{/tab}>
+        <{if $gtype.setting.use_params}>
+            <input type='hidden' name='gtype[setting][use_params]' value='1'/>
+            <{tab name=$___b2c="详细参数表"|t:'b2c'}>
+                <{include file="admin/goods/goods_type/form_edit_params.html"}>
+            <{/tab}>
+        <{/if}>
+        <{if $gtype.setting.use_minfo}>
+            <input type='hidden' name='gtype[setting][use_minfo]' value='1'/>
+            <{tab name=$___b2c="购物必填信息"|t:'b2c'}>
+                <{include file="admin/goods/goods_type/form_edit_minfo.html"}>
+            <{/tab}>
+        <{/if}>
+        <{foreach from=$tabs item=elements}>
+            <{foreach from=$elements item=item}>
+            <input type='hidden' name='gtype[setting][use_<{$item.name}>]' value='<{$item.value}>'/>
+            <{if $item.value && $item.type != 'hidden'}>
+            <{tab name=$___b2c="{$item.title}"|t:'b2c'}>
+                <{include app=$item.app file=$item.file}>
+            <{/tab}>
+            <{/if}>
+            <{/foreach}>
+        <{/foreach}>
+    </div>
+    <{/tabber}>
+    </div>
+
+  <div class="table-action">
+	<{button type="button"  label=$___b2c="保存"|t:'b2c' id='type_submit'}>
+</div>
+</form>
+<script>
+(function(){
+    $('type_submit').addEvent('click',function(){
+
+           new Request({url:'index.php?app=b2c&ctl=admin_goods_type&act=check_type',data:'id='+$E('#type_form input[name^=gtype[type_id]').get('value')+'&name='+$E('#type_form input[name^=gtype[name]').get('value'),
+		   method:'post',
+                             onRequest:function(){
+                             },
+                             onComplete:function(e){
+                                if(e == 'false')
+                                    alert('<{t}>类型名称已存在<{/t}>');
+                                else
+                                    $('type_form').fireEvent('submit',{stop:$empty});
+                             }
+           }).send();
+    });
+})();
+$('type_form').store('target',{
+	onComplete:function(rs){
+		var json={};
+		try{json = JSON.decode(rs)}catch(e){}
+		if(json.error) return false;
+		if($('type_form').getParent('.dialog'))
+		$('type_form').getParent('.dialog').retrieve('instance').close();
+	}
+});
+</script>

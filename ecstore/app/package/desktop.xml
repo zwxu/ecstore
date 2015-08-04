@@ -1,0 +1,15 @@
+<desktop>
+    <permissions>
+        <permission id="package_buy" display='true'>捆绑活动列表</permission>
+        <permission id="package_activity" display='true'>捆绑申请列表</permission>
+    </permissions>
+
+    <workground name="营销" id="b2c.wrokground.sale" controller="admin_sales_coupon" action="index" order="40">
+        <menugroup name="活动列表">
+            <menu controller='admin_activity' action='index' permission='package_buy' display='true' order='30'>捆绑活动列表</menu>
+        </menugroup>
+        <menugroup name="活动申请列表">
+            <menu controller='admin_attendactivity' action='index' permission='package_activity' display='true' order='40' >捆绑申请列表</menu>
+        </menugroup>
+    </workground>  
+</desktop>

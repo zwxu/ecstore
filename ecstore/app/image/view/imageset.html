@@ -1,0 +1,110 @@
+<div style="text-align:right;padding:3px 18px"><{help docid="102" type="link"}><{t}>点击查看帮助<{/t}><{/help}></div>
+<h3 class="head-title"><{t}>商品图片配置 <{/t}></h3>
+<div class="tableform notice"><{t}>一张商品图片上传后，会自动生成三张图片，分别出现在商店的三类页面，如下：<{/t}><br>1：<{t}>显示在商品列表页、首页商品版块内的图片，我们称为“列表页缩略图”；<{/t}><br>2：<{t}>显示在商品详细页内的图片，我们称为“商品页详细图”；<{/t}><br>3：<{t}>显示在商品相册页内的图片，我们称为“商品相册图”；<{/t}><br /><br /><{t}>注意：如果尺寸修改过大，可能导致前台页面显示不正常!<{/t}></div>
+
+<form method="post" action="<{$this_url}>&act=imageset" id="imageset" class="tableform">
+  <{foreach from=$allsize key=size item=item}>
+  <h4><{t}><{$item.title}>设定<{/t}></h4>
+  <div class="division">
+    <table class="<{if $item.wm_type=='none'}>watermark-none<{elseif $item.wm_type=='image'}>watermark-image<{elseif $item.wm_type=='text'}>watermark-text<{/if}>" cellpadding="0" cellspacing="0">
+      <tr>
+        <th><{t}>默认图：<{/t}></th>
+        <td>
+          <div class="dft_image">
+            <{assign var="image_id" value=$image_set.$size.default_image|default:$item.default_image}>
+            <span class="lnk"><{input type="image" name="pic[{$size}][default_image]" value=$image_id width=$minsize['width'] height=$minsize['height']}></span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th><{t}>尺寸：<{/t}></th>
+        <td><{t}>宽 <{/t}><{input id="pic[{$size}][width]" type="number" name="pic[{$size}][width]" value=$image_set.$size.width|default:$item.width size="2"}>&nbsp;&nbsp;&nbsp;x&nbsp;&nbsp;&nbsp;<{t}>高<{/t}> <{input id="pic[{$size}][height]" type="number" name="pic[{$size}][height]" value=$image_set.$size.height|default:$item.height size="2"}>
+        </td>
+      </tr>
+      <{if $item.watermark}>
+      <tr>
+        <th><{t}>水印：<{/t}></th>
+        <td>
+          <label><input class="watermark-radio" <{if $image_set.$size.wm_type=='none'}>checked="checked"<{/if}> type="radio" name="pic[<{$size}>][wm_type]" value="none" /><{t}>无水印<{/t}></label>
+          <label><input class="watermark-radio" <{if $image_set.$size.wm_type=='image'}>checked="checked"<{/if}> type="radio" name="pic[<{$size}>][wm_type]" value="image" /><{t}>图片水印<{/t}></label>
+          <label><input class="watermark-radio" <{if $image_set.$size.wm_type=='text'}>checked="checked"<{/if}> type="radio" name="pic[<{$size}>][wm_type]" value="text" /><{t}>文字水印<{/t}></label>
+
+          <div class="watermark-setting">
+            <h4 style="padding:10px 0 0"><{t}>水印设置<{/t}></h4>
+            <div class="tableform">
+              <div class="watermark-set span-6" style="padding-left:4px; line-height:44px">
+                <div class="watermark-text-set"><{t}>水印文字：<{/t}><input type="text" value="<{$image_set.$size.wm_text|default:$item.wm_text}>" name="pic[<{$size}>][wm_text]" /></div>
+                <div class="watermark-image-set"><{t}>水印图片：<{/t}><{input type="image" value=$image_set.$size.wm_image|default:$item.wm_image name="pic[{$size}][wm_image]" }></div>
+                <div><{t}>透明度：<{/t}><input type="text" name="pic[<{$size}>][wm_opacity]" style="width:30px" value="<{$image_set.$size.wm_opacity|default:$item.wm_opacity}>" />% </div>
+              </div>
+
+              <div class="flt">
+                <table class="pos-select" style="width:auto;">
+                  <caption><{t}>水印位置<{/t}><input type="hidden" value="<{$image_set.$size.wm_loc|default:$item.wm_loc}>" name="pic[<{$size}>][wm_loc]"></caption>
+                  <tr>
+                    <td v="tl"><{t}>左上<{/t}></td>
+                    <td v="tc"><{t}>中上<{/t}></td>
+                    <td v="tr"><{t}>右上<{/t}></td>
+                  </tr>
+                  <tr>
+                    <td v="ml"><{t}>左中<{/t}></td>
+                    <td v="mc"><{t}>正中<{/t}></td>
+                    <td v="mr"><{t}>右中<{/t}></td>
+                  </tr>
+                  <tr>
+                    <td v="bl"><{t}>左下<{/t}></td>
+                    <td v="bc"><{t}>中下<{/t}></td>
+                    <td v="br"><{t}>右下<{/t}></td>
+                  </tr>
+                </table>
+              </div>
+              <div class="clear"></div>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <{/if}>
+      <tr><th><{t}>效果即时预览：<{/t}></th><td><{button image_size="{$size}" class="lnk btn-preview" label="预览"}></td></tr>
+    </table>
+  </div>
+<{/foreach}>
+<div class="table-action">
+  <{button label=$___image="保存"|t:'image' class="btn-primary" type="submit"}>
+</div>
+</form>
+
+<script>
+  $$('.btn-preview').addEvent('click', function(e){
+    var _target = this;
+    new Dialog('index.php?app=image&ctl=admin_manage&act=img_preview&size='+_target.get('image_size'),{
+      title:'<{t}>预览效果<{/t}>',
+      iframe:true,
+      ajaxoptions:{method:'post',data:this.getParent('form')}
+    });
+  });
+
+  $$('#imageset .watermark-radio').each(function(el){
+    var cls = 'watermark-' + el.value;
+    el.addEvent('click', function(){
+      this.getParent('table').className = cls;
+    });
+    if(el.checked) el.getParent('table').className = cls;
+  });
+  $$('#imageset .pos-select').each(function(table){
+    var ipt=$E('input',table);
+    table.addEvent('click',function(e){
+      var target=new Event(e).target;
+      if(target.tagName=='TD' && target.get('v')){
+        try{$E('td.current',table).removeClass('current')}catch(e){}
+        ipt.value=target.get('v');
+        target.addClass('current');
+      }
+    });
+    if(ipt.value){
+      try{$E('td[v="'+ipt.value+'"]',table).addClass('current');}catch(e){}
+    }
+  });
+
+  
+</script>
+

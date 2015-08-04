@@ -1,0 +1,32 @@
+<{css src="login_verify.css" app="entermembercenter" pdir="css_mini"}>
+<div id="login-jumpout-box" class="hidden-box">
+</div>
+<div id="main" class="main-member"> 
+  <div class="content"> 
+	<div class="content-inner"> 
+	  <iframe id="frm1" style=""  frameborder="0" allowtransparency='true' scrolling='auto' width='100%' height='100%' src="about:blank"></iframe>
+	  <script>
+		(function(){
+		  var fm = document.getElementById('frm1');
+		  fm.src = '<{$enterprise_url}>?ctl=iframeent&act=index&url=<{$callback_url}>&t=<{$smarty.now}>';
+		  fm.onload = function(){
+			fm.style.visibility = 'visible';
+			fm.onload = function(){};
+		  };
+		})();
+		function fn_jumpout(){
+			var _hidden_box = document.getElementById('login-jumpout-box');
+			_hidden_box.style.display = 'none';
+			var _main = document.getElementById('main');
+			_main.style.display = 'none';
+		}		
+		setTimeout(fn_jumpout, 4000);
+	  </script>
+	</div>
+  </div>
+  <div class="skip-enter-member">
+	<a href="javascript:void(0);" title="<{t}>跳过登录<{/t}>" onclick="return fn_jumpout();">
+	  <{t}>跳过登录<{/t}>
+	</a>
+  </div>
+</div>

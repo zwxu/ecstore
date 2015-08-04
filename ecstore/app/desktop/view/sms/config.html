@@ -1,0 +1,65 @@
+<form action="index.php?app=desktop&ctl=sms&act=saveCfg" method="post" class="tableform" id='messengerconfig' >
+
+<div class="division">
+<table width="100%" cellspacing="0" cellpadding="0" border="0" id="EConfig">
+<{foreach from=$options item=item key=key}>
+<tr id='<{$key}>'>
+  <th><{$item.label}></th>
+  <td>
+    <{if $item.type=="radio"}>
+        <{input type=$item.type options=$item.options name="config[{$key}]" value=$item.value onclick="methodchange(this.value);"}>
+    <{elseif $item.type=="password"}>
+        <{input type=$item.type options=$item.options name="config[{$key}]" value=$item.value onKeyup="setHidden(this.value);"}>
+    <{else}>
+        <{input type=$item.type options=$item.options style="width:300px" name="config[{$key}]" value=$item.value }>
+    <{/if}>
+    </td>
+</tr>
+<{/foreach}>
+</table>
+</div>
+
+<div class="table-action">
+    <{button id="config" label=$___desktop="保存"|t:'desktop' type="button"}>
+</div>
+
+</form>
+
+<script>
+(function(){	
+	var _form = $('messengerconfig');
+	var btn =$('config');
+	//alert('1111');
+	//var finder = finderGroup['<{$env.get._finder.finder_id}>'];
+	
+	_form.store('target',{
+		onSuccess:function(response){
+			var hash_res_obj = JSON.decode(response);
+		
+			if (hash_res_obj.success != undefined && hash_res_obj.success != "")
+			{
+				try{
+					var _dialogIns = btn.getParent('.dialog').retrieve('instance');
+				}catch(e){}
+				
+				if(_dialogIns)
+				{	
+					_dialogIns.close();
+					//window.finderGroup['<{$env.get._finder.finder_id}>'].refresh();
+				}
+			}
+			
+		}
+	});
+
+	    btn.addEvent('click',function(){
+		
+		    _form.fireEvent('submit',{stop:$empty});
+			
+		
+		
+		});
+})();
+	
+	
+</script>

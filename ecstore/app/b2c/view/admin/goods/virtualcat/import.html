@@ -1,0 +1,44 @@
+<form method="post" action="index.php?ctl=goods/virtualcat&act=doImport">
+<div class="tableform">
+<div class="division">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr align="left" valign="middle"> 
+          <td width="48%"> 
+            <h4><{t}>选择商品分类源节点：<{/t}></h4>
+          <div id='virtualcatTree' class='x-tree-list' style="border:1px solid #2c6c8a; padding:5px; margin:5px 0 5px 0;  "></div>
+<font class="font-gray"><{t}>注：请选择需要导入的商品分类目录<{/t}></font></td>
+                <td width="4%" align="center" style="vertical-align:middle; " ><h2 style="color:#2c6c8a;">>></h2></td>
+          <td width="48%"> 
+          <h4><{t}>选择前台虚拟分类目标节点：<{/t}></h4>
+
+    <{input type="select" name="vCat_id" value=$cat.parent_id rows=$catList valueColumn="cat_id" labelColumn="cat_name" }>     </td>
+ </tr>
+        <tr align="left" valign="middle">
+          <td colspan="3"><span class='lnk' onclick='$("virtualcatTree").empty();initTreelist(4);$(this).remove();'><{t}>展开全部<{/t}></span><br><input type="checkbox" name="defaultfilter" checked><{t}>同时将原商品分类添加为虚拟分类的过滤条件<{/t}> &nbsp; &nbsp; <{help}><{t}>如果未选中此项，新导入的虚拟分类将没有任何过滤条件，即在商店前台点击该虚拟分类时会列出整个商店的全部商品<{/t}><br /><br /><{t}>如果勾选此项，新导入的虚拟分类将把原商品分类作为过滤条件，即前台该虚拟分类仅列出原商品分类下的商品<{/t}><{/help}></td>
+        </tr>
+</table>
+
+
+
+
+</div>
+</div>
+<div class="table-action">
+<{button label=$___b2c="开始导入"|t:'b2c' type="submit"}>
+</div>
+
+
+</form>
+
+<script>
+function initTreelist(step){
+   new TreeList({
+                           remoteURL:'index.php?ctl=goods/virtualcat&act=getGoodsCatById&{param}={value}',
+                           remoteParamKey:'p[0]',
+                           container:'virtualcatTree',
+                           checkboxName:'cat[]',
+                           showStep:step||1
+  });
+}
+ initTreelist(1);
+</script>

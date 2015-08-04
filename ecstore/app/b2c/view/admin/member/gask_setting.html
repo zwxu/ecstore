@@ -1,0 +1,53 @@
+<form method="post" action="index.php?app=b2c&ctl=admin_member_gask&act=to_setting">
+  <div class="tableform">
+    <h4><{t}>基本设置：<{/t}></h4>
+    <div class="division">
+      <table width="100%" cellspacing="0" cellpadding="2" border="0">
+        <tr>
+          <th><{t}>是否开启咨询功能：<{/t}></th>
+          <td><{input type='radio' name="switch[ask]" options=$setting.aSwitch.ask value=$setting.switch.ask separator=""}></td>
+        </tr>
+        <tr>
+          <th><{t}>发表咨询权限：<{/t}></th>
+          <td><{input type='radio' name="power[ask]" options=$setting.aPower.ask value=$setting.power.ask separator=""}><br /></td>
+        </tr>
+      </table>
+    </div>
+     <h4><{t}>提示文字设置：<{/t}></h4>
+    <div class="division">
+      <table width="100%" cellspacing="0" cellpadding="2" border="0">
+   <tr>
+          <th><{t}>无咨询时缺省文字：<{/t}></th>
+          <td><{input type="input" name="null_notice[ask]" class="inputstyle" style="width:360px" size=30 value=$setting.null_notice.ask}></td>
+        </tr>
+    <tr>
+    <th><{t}>等待审核提示：<{/t}></th>
+      <td> <{input type="input" name="submit_hidden_notice[ask]" class="inputstyle" style="width:360px" size=30 value=$setting.submit_hidden_notice.ask}>
+      </td>
+  </tr>    
+  <tr>
+         <th><{t}>发表成功提示：<{/t}></th>
+      <td> <{input type="input" name="submit_display_notice[ask]" class="inputstyle" size=30  style="width:360px" value=$setting.submit_display_notice.ask}>
+      </td>
+    </tr>
+      <tr>
+         <th><{t}>用户填写咨询时所见提示：<{/t}></th>
+      <td> <{input type="input" name="submit_comment_notice[ask]" class="inputstyle" size=30  style="width:360px" value=$setting.submit_comment_notice.ask}>
+      </td>
+    </tr>
+      </table>
+    </div>
+     <{if is_array($html)}>
+    <{foreach from=$html item=commenthtml}>
+    <{$commenthtml}>
+    <{/foreach}>
+    <{/if}>
+      <div class="table-action">
+	<{button type="submit"  label=$___b2c="保存"|t:'b2c' }>
+</div>
+
+
+  </div>
+  
+
+</form>

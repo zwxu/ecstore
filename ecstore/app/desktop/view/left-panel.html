@@ -1,0 +1,13 @@
+<{foreach from=$menus_data item=menus}>  
+<div class="side-bx">
+    <div class="side-bx-title">
+        <h3><{$menus.menugroup}></h3>
+    </div>
+    <div class="side-bx-bd">
+        <ul><{foreach from=$menus.menu item=menu}> 
+            <li><a <{if $menu.addon}>target="_blank"<{/if}>href="index.php?<{$menu.menu_path}>"><{$menu.menu_title}></a></li>
+            <{/foreach}>
+        </ul>
+    </div>
+</div>
+<{/foreach}>

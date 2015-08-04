@@ -1,0 +1,148 @@
+<form id="theme_source" action="index.php?app=site&ctl=admin_explorer_theme&act=svae_source" method="post">
+  <{input type='hidden' name='theme' value=$theme }>
+  <{input type='hidden' name='open_path' value=$open_path }>
+  <{input type='hidden' name='file_name' value=$file_name }>
+
+  <div class="">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="table-widgets">
+      <tr>
+        <td><div><{t}>文件源码：<{/t}></div>
+          <!--<div class="area-widgets">
+            <div class="content" id="add_widgets">
+              <a class="lnk"><i class="icon-add"></i> 插入挂件样例</a>
+              <div class="list" style="display:none;">
+                <ul>
+                  <li>
+                  <a href="javascript:void(0);" rel="1"><img src="" width="60" height="60" />
+                    <i>挂件名称挂件名称</i></a>
+                  </li>
+                  <li>
+                  <a href="javascript:void(0);" rel="2"><img src="" width="60" height="60" />
+                    <i>挂件名称挂件名称</i></a>
+                  </li>
+                  <li>
+                  <a href="javascript:void(0);" rel="3"><img src="" width="60" height="60" />
+                    <i>挂件名称挂件名称</i></a>
+                  </li>
+                  <li>
+                  <a href="javascript:void(0);" rel="4"><img src="" width="60" height="60" />
+                    <i>挂件名称挂件名称</i></a>
+                  </li>
+                  <li>
+                  <a href="javascript:void(0);" rel="5"><img src="" width="60" height="60" />
+                    <i>挂件名称挂件名称</i></a>
+                  </li>
+                  <li>
+                  <a href="javascript:void(0);" rel="6"><img src="" width="60" height="60" />
+                    <i>挂件名称挂件名称</i></a>
+                  </li>
+                  <li>
+                  <a href="javascript:void(0);" rel="7"><img src="" width="60" height="60" />
+                    <i>挂件名称挂件名称</i></a>
+                  </li>
+                  <li>
+                  <a href="javascript:void(0);" rel="8"><img src="" width="60" height="60" />
+                    <i>挂件名称挂件名称</i></a>
+                  </li>
+                  <li>
+                  <a href="javascript:void(0);" rel="9"><img src="" width="60" height="60" />
+                    <i>挂件名称挂件名称</i></a>
+                  </li>
+                  <li>
+                  <a href="javascript:void(0);" rel="10"><img src="" width="60" height="60" />
+                    <i>挂件名称挂件名称</i></a>
+                  </li>
+                  <li>
+                  <a href="javascript:void(0);" rel="11"><img src="" width="60" height="60" />
+                    <i>挂件名称挂件名称</i></a>
+                  </li>
+                  <li>
+                  <a href="javascript:void(0);" rel="12"><img src="" width="60" height="60" />
+                    <i>挂件名称挂件名称</i></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>-->
+        <div style="border:1px #ccc solid;">
+         <{input type="soucecode" mode=$mode name="file_source" width='100%' height='350' value=$file_content}>
+        </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <table border="0" align="center" cellpadding="0" cellspacing="0" class="table-action">
+    <tr>
+      <td align="left">
+        <span><label><input type="checkbox" name="has_bak" value="1" checked="checked"><{t}>保留备份<{/t}></label></span>&nbsp;&nbsp;
+        <span><label><input type="checkbox" name="has_clearcache" value="1"><{t}>保存后清空模板缓存<{/t}></label></span>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <{button label=$___a="保存"|t:'site' type="submit"}>
+      </td>
+    </tr>
+  </table>
+</form>
+<{area inject='.mainFoot'}>
+<{if count($file_baklist) > 0}>
+<div class="division"><{t}>文件修改历史<{/t}>：
+  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <{foreach from=$file_baklist item=bakfile}>
+    <tr>
+      <th><{$bakfile.name}></th>
+      <td><span class="lnk" onclick="recoverFile(this, 'index.php?app=site&ctl=admin_explorer_theme&act=recover_file&theme=<{$theme}>&open_path=<{$open_path}>&file_name=<{$bakfile.name}>');"><{t}>还原<{/t}></span>
+        <span class="lnk" onclick="deleteFile(this, 'index.php?app=site&ctl=admin_explorer_theme&act=delete_file&theme=<{$theme}>&open_path=<{$open_path}>&file_name=<{$bakfile.name}>');"><{t}>删除<{/t}></span></td>
+    </tr>
+    <{/foreach}>
+  </table>
+</div>
+<{/if}>
+<{/area}>
+<script>
+$('theme_source').store('target', {
+    onComplete:function(){
+        if($('theme_source').getParent('.dialog'))
+        $('theme_source').getParent('.dialog').retrieve('instance').close();
+    }
+});
+
+/*
+$('add_widgets').addEvents({
+    'mouseover':function(e){this.getElement('.lnk').addClass('act');this.getElement('.list').show();},
+    'mouseout':function(e){this.getElement('.lnk').removeClass('act');this.getElement('.list').hide();},
+    'click':function(e){this.getElement('.lnk').removeClass('act');this.getElement('.list').hide();}
+});
+$('add_widgets').getElements('li a').addEvent('click',function(e){
+    var wid = '{{widget id="'+this.get('rel')+'"}}';
+    var textarea = $$('[name=file_source]')[0];
+    textarea.focus();
+    var start = textarea.getSelectedRange().start;
+    var end = textarea.getSelectedRange().end;
+    textarea.value = textarea.value.substring(0,start) + wid + textarea.value.substring(end);
+    textarea.selectRange(start,start + wid.length);
+});
+*/
+
+function deleteFile(event, path){
+    confirmDialog('<{t}>确定要删除该文件吗(删除后将不可恢复)？<{/t}>',function(){
+        new Request({url:path, onSuccess:function(){
+            event.getParent('tr').remove();
+            W.render();
+        }}).send();
+    });
+}
+
+function recoverFile(event, path){
+    confirmDialog('<{t}>确定要恢复该文件吗？<{/t}>',function(){
+        new Request.JSON({url:path, onSuccess:function(rs){
+            if(rs.success){
+                MessageBox.success(rs.success);
+                event.getParent('.dialog').retrieve('instance').close();
+            }
+            //new Request.HTML({update:event.getParent('.dialog-content-body'),onComplete:function(){W.render();}, url:$('theme_source').getParent('.dialog').retrieve('instance').url}).send();
+        }}).send();
+    });
+}
+</script>

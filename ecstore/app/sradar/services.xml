@@ -1,0 +1,11 @@
+<services>    
+    <service id="desktop_finder.b2c_mdl_goods">
+        <class>sradar_finder_goods</class>
+    </service>
+    <service id="desktop_controller_content.b2c.admin_goods.index">
+        <class>sradar_ctl_admin_goods</class>
+    </service>
+    <service id="desktop_view_helper">
+        <class>sradar_view_helper</class>
+    </service>
+</services>

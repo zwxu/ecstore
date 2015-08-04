@@ -1,0 +1,177 @@
+<div class="member-main">
+<div class="title">发货</div>
+<form class="tableform" method='post' action="<{link app=business ctl='site_order' act='dodelivery'}>" id="order-delivery-form">
+  <input type='hidden' name='order_id' value='<{$order.order_id}>'>
+
+<{if $order.is_delivery eq "Y"}>
+<div class="mt_10">
+<table cellpadding="0" cellspacing="0" class="pplist" width="100%">
+<tr>
+    <th width="48"><{t}>订单号：<{/t}></th>
+    <td colspan="2" class="textleft"><{$order.order_id}> 【<{if $order.ship_status == 0}><{t}>未发货<{/t}><{elseif $order.ship_status == 1}><{t}>已发货<{/t}><{elseif $order.ship_status == 2}><{t}>部分发货<{/t}><{elseif $order.ship_status == 3}><{t}>部分退货<{/t}><{elseif $order.ship_status == 4}><{t}>已退货<{/t}><{/if}>】</td>
+    <th width="60"><{t}>下单日期：<{/t}></th>
+    <td colspan="2"><{$order.createtime|cdate:'SDATE_STIME'}></td>
+</tr>
+</table>
+<table  cellpadding="0" cellspacing="0" class="gridlist3" width="100%">
+<{if count($items) > 0}>
+	<tr>
+	  <th class="width_180"><{t}>货号<{/t}></th>
+	  <th class="width_250"><{t}>商品名称<{/t}></th>
+	  <th class="width_100"><{t}>当前库存<{/t}></th>
+	  <th class="width_100"><{t}>购买数量<{/t}></th>
+	  <th class="width_100"><{t}>已发货<{/t}></th>
+	  <th style="border-right:1px solid #ddd" class="width_100"><{t}>此单发货<{/t}></th>
+	</tr>
+      <{foreach from=$arrItems item=aProduct}>
+      <tr>
+        <td><{$aProduct.bn}></td>
+        <td><{$aProduct.name}>
+          <{foreach from=$aProduct.minfo.product_attr item=minfo key=name}>
+          <br><{$minfo.label}>：<{$minfo.value}>
+          <{/foreach}>
+          </td>
+        <td><{$aProduct.products.store}></td>
+        <td><{$aProduct.quantity}></td>
+        <td><{$aProduct.sendnum}></td>
+        <td style="border-right:1px solid #ddd"><{assign var="nums" value=$aProduct.quantity}> 
+          <{assign var="sendnum" value=$aProduct.sendnum}> 
+          <{assign var="pid" value=$aProduct.product_id}>
+          <{assign var="item_id" value=$aProduct.item_id}>
+          <{if $aProduct.needsend > 0}><{input type="text" vtype="required&&number" name="send[{$item_id}]" value=$aProduct.needsend  size="3"}><{else}><{t}>已经发货<{/t}><{/if}></td>
+      </tr>
+      <{/foreach}>
+</table>
+</div>	  
+<{/if}>
+
+<{if count($giftItems) > 0}>
+
+<div class="mt_10">
+<table class="gridlist3" cellpadding="0" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <th class="width_430"><{t}>赠品名称<{/t}></th>
+          <th class="width_100"><{t}>兑换积分<{/t}></th>
+		  <th class="width_100"><{t}>当前库存<{/t}></th>
+          <th class="width_100"><{t}>已发货/兑换量<{/t}></th>
+          <th style="border-right:1px solid #ddd" class="width_100"><{t}>需发货<{/t}></th>
+        </tr>
+      </thead>
+      <tbody>      <{foreach from=$giftItems item=aGift}>
+      <tr>
+        <td><{$aGift.name}></td>
+        <td><{$aGift.point}></td>
+		<td><{$aGift.store}></td>
+        <td><{$aGift.sendnum}>/<{$aGift.nums}></td>
+        <td style="border-right:1px solid #ddd"><{assign var="item_id" value=$aGift.item_id}>
+		<{if $aGift.needsend > 0}><input type="text" name="gift_send[<{$item_id}>]" value="<{$aGift.needsend}>" size="3"><{else}><{t}>已经发货<{/t}><{/if}></td>
+      </tr>
+      <{/foreach}>
+    </table>
+</div>
+<{/if}>
+
+<{if count($extendsItems) > 0}>
+<{foreach from=$extendsItems item=aExtend}>
+<div class="mt_10">
+<table class="gridlist3" cellpadding="0" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <th><{t}>名称<{/t}></th>
+          <th><{t}>兑换积分<{/t}></th>
+		  <th><{t}>当前库存<{/t}></th>
+          <th><{t}>已发货/兑换量<{/t}></th>
+          <th style="border-right:1px solid #ddd"><{t}>需发货<{/t}></th>
+        </tr>
+      </thead>
+      <tbody>      
+	  <{foreach from=$aExtend item=aGift}>
+      <tr>
+        <td><{$aGift.name}></td>
+        <td><{$aGift.point}></td>
+		<td><{$aGift.nums}></td>
+        <td><{$aGift.sendnum}>/<{$aGift.nums}></td>
+        <td style="border-right:1px solid #ddd"><{assign var="item_id" value=$aGift.item_id}>
+		<{if $aGift.needsend > 0}><input type="text" name="extend_send[<{$item_id}>]" value="<{$aGift.needsend}>" size="3"><{else}><{t}>已经发货<{/t}><{/if}></td>
+      </tr>
+      <{/foreach}>
+
+<{/foreach}>
+<{/if}>
+
+
+</table>
+<table class="gridlist3 mt_10" cellpadding="0" cellspacing="0" width="100%">
+<div>
+<{if $order.needAddress}>
+<h3 class="lineheight-30"><{t}>收货人信息：<{/t}></h3>
+<div class="lineblock1"><{$order.consignee.area_show}>/<{$order.consignee.addr}>，<{$order.consignee.zip}>，<{$order.consignee.name}>，<{if $order.consignee.mobile}><{$order.consignee.mobile}><{else}><{$order.consignee.telephone}><{/if}></div>
+<input type="hidden" name="delivery" value="1"/>
+<input type="hidden" name="money" value="0"/>
+<input type="hidden" name="is_protect" value='false'/>
+<input type="hidden" name="cost_freight" value="<{$$order.shipping.cost_shipping}>"/>
+<input type="hidden" name="ship_name" value="<{$order.consignee.name}>"/>
+<input type="hidden" name="ship_tel" value="<{$order.consignee.telephone}>"/>
+<input type="hidden" name="ship_mobile" value="<{$order.consignee.mobile}>"/>
+<input type="hidden" name="ship_zip" value="<{$order.consignee.zip}>"/>
+<input type="hidden" name="ship_area" value="<{$order.consignee.area}>"/>
+<input type="hidden" name="ship_addr" value="<{$order.consignee.addr}>"/>
+<input type="hidden" name="memo" value="<{$order.memo}>"/>
+<{/if}>
+<{if $order.needDelivery}>
+<h3 class="lineheight-30"><{t}>选择发货地址：<{/t}></h3>
+<{foreach from=$addresses item=ads key=k}>
+	
+		
+			<div class="lineblock1"><label><input type="radio" name="deladdress" value="<{$ads.da_id}>" <{if $ads.consign == 'true'}>checked<{/if}>/><{t}><{$ads.region}><{$ads.address}>,<{$ads.uname}>,<{$ads.phone}>,<{$ads.mobile}><{/t}></label></div>
+		
+	</div>
+<{/foreach}>
+
+
+	<tr>
+	  <th><{t}>公司名称<{/t}></th>
+	  <th><{t}>运单号码<{/t}></th>
+	  <th style="border-right:1px solid #ddd"><{t}>操作<{/t}></th>
+	</tr>
+    <{if count($corplist) > 0}>
+        <{foreach from=$corplist item=corp key=k}>
+            <tr>
+              <td><{t}><{$corp.name}><{/t}></td>
+              <input type="hidden" id="logi_id_<{$k}>" value="<{$corp.corp_id}>"/>
+              <td><{t}><input type="text" id="logi_no_<{$k}>" /><{/t}></td>
+              <td style="border-right:1px solid #ddd"><input type="button" name="button_<{$k}>" id="button" class="order-btn2"  onclick="do_del(<{$k}>)" value="确定"/></td>
+            </tr>	
+        <{/foreach}>
+    <{else}>
+        <tr><td colspan="3" style="border-right:1px solid #ddd">没有找到任何物流公司，请到物流工具->默认的物流公司勾选至少一个物流公司！</td></tr>
+    <{/if}>
+<{else}>
+    <tr><td colspan="3" style="border-right:1px solid #ddd"><input type="submit" name="button_-1" id="button" class="order-btn2"  onclick="do_send()" value="确定"/></td></tr>
+<{/if}>
+</table>
+<input type="hidden" name="logi_id" id="logi_id" value=""/>
+<input type="hidden" name="logi_no" id="logi_no" value=""/>
+</div>
+<{/if}>
+
+</form>
+</div>
+<script type="text/javascript">
+function do_del(k){
+	var logi = 'logi_id_'+k;
+	var logo = 'logi_no_'+k;
+	var logi_no = $(logo).value;
+    if(logi_no == ''){
+        Message.error('请填写相应的运单号！');
+        return false;
+    }else{
+        var logi_id = $(logi).value;
+        var _form = $('order-delivery-form');
+        $('logi_id').value = logi_id;
+        $('logi_no').value = logi_no;
+        _form.submit();
+    }
+}
+</script>

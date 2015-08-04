@@ -1,0 +1,105 @@
+    <form id="rolesform" action="index.php?ctl=roles&act=save" method="POST">
+		<div style="text-align:right;padding:3px 18px"><{help docid="101" type="link"}><{t}>点击查看帮助<{/t}><{/help}></div>
+		<div class="division">   
+				<h4><{t}>角色名称<{/t}></h4>
+	   
+       	<input type="text" vtype="required" name="role_name" value="<{$roles.role_name}>" class="x-input " autocomplete="off">
+       </div>
+       
+       <div class="division"> 
+            <h4><{t}>大类权限<{/t}><{help}>本权限设定只对【商品列表】、【订单列表】、【店铺列表】、【店员列表】起作用。<{/help}></h4>
+        <ul>
+        <li ><input class='parent' style="float:left;" type="checkbox">全选
+            <ul style="margin-left:10px;">
+           <{foreach from=$cat item=value}>
+               <li style="float:left;"><label><input  class='leaf ' type='checkbox' name='cat[]' value="<{$value.cat_id}>"><{$value.cat_name}></label></li>
+           <{/foreach}>
+           </ul>
+        </li>
+       	</ul>
+       </div>
+     
+       <div class='division'>
+          <h4><{t}>桌面挂件权限<{/t}></h4>
+         <input type='hidden'  vtype='requiredcheckbox'/>
+        <{$menus1}><!-- 桌面挂件权限 -->
+       </div>
+        <div class='division'>
+            <h4><{t}>控制面板权限<{/t}></h4>
+            <{$menus2}><!-- 控制面板权限 -->
+        </div>
+        <div class='division'>
+            <h4><{t}>业务权限<{/t}></h4>
+            <ul><input class='parent' type="checkbox">全选(业务权限)
+            <{foreach from=$menus3 item=value}>
+            <{$value}>
+            <{/foreach}>
+            </ul>
+        </div>
+    </form>
+
+
+<{area inject=".mainFoot"}>
+		<div class="table-action">
+                   <{button label=$___desktop="确定"|t:'desktop' id="rolesform-submit" class="btn-primary"}>
+	   </div>
+<{/area}>
+<script>
+function nameCheck(input){
+	id = input.value;
+	role_id = $('roleID').value;
+    if((input.checked)){
+        new Request.HTML({url:'index.php?app=desktop&ctl=roles&act=get_permission',method:'post',
+		update:$(input).getNext(),data:'role_id='+role_id+'&name='+encodeURIComponent(input.value=input.value.trim())}).send();
+    $('workground'+id).setStyle('display','block');    
+    }
+    else{
+        $('workground'+id).setStyle('display','none').empty();;
+    }
+  
+}
+
+</script>
+<script>
+(function(){
+    var _form = $('rolesform');
+    var btn =$('rolesform-submit');
+    var finder = finderGroup['<{$env.get.finder_id}>'];
+    
+    _form.store('target',{
+       onComplete:function(){
+	  },
+	  onSuccess:function(response){
+		var hash_res_obj = JSON.decode(response);
+		if (hash_res_obj.success != undefined && hash_res_obj.success != ""){
+		  try{
+			var _dialogIns = btn.getParent('.dialog').retrieve('instance');
+		  }catch(e){}
+
+		  if(_dialogIns){
+			_dialogIns.close();
+			finder.refresh.delay(400,finder);
+
+		  }
+		}
+	  }
+        
+    });
+
+        btn.addEvent('click',function(){
+        
+            _form.fireEvent('submit',{stop:$empty});
+            
+        
+        
+        });
+    
+})();
+    
+    
+</script>
+<script>
+    $$('input.parent').addEvent('change',function(){
+        this.getParent().getElements('ul li input[type=checkbox]').set('checked',this.checked);
+    })
+</script>

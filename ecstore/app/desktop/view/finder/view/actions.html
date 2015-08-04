@@ -1,0 +1,161 @@
+<base target="_self" />
+<div class="finder-packet<{if !$haspacket}> hide<{/if}>" id="finder-packet-<{$name}>" >
+  <span class="font9px">loading...</span>
+</div>
+
+
+<div class="gridlist-action finder-action clearfix" id="finder-action-<{$name}>" style="padding-right:<{if $use_buildin_filter}>75<{else}>7<{/if}>px;">
+  <ul class="finder-action-items flt">
+    <{foreach from=$show_actions item=item}>
+    <li <{if $item.group&&count($item.group)>0}>class="finder-action-group"<{/if}>>
+        <a <{if $item.group&&count($item.group)>0}>class="finder-action-group-handle"<{/if}> <{foreach from=$item item=v key=k}> <{$k}>="<{if $k=='group'}>true<{else}><{$v}><{/if}>"<{/foreach}>>
+            <span><{if $item.icon}><!--todo ICON--><{/if}><{$item.label}>
+            <{if $item.group&&count($item.group)>0}>
+                 <i class="arrowdown">&nbsp;</i>
+             <{/if}>
+            </span>
+        </a>
+        <{if $item.group&&count($item.group)>0}>
+           <ul>
+                <{foreach from=$item.group item=item }>
+                  <{if $item.label=="_SPLIT_"}>
+                    <li class="split">&nbsp;</li>
+                  <{else}>
+                    <li>
+                        <a <{if !$item.href}>href="javascript:void(0);"<{/if}> <{foreach from=$item item=v key=k}> <{$k}>="<{$v}>"<{/foreach}>>
+                           <span><{if $item.icon}><!--todo ICON--><{/if}><{$item.label}></span>
+                        </a>
+                    </li>
+                   <{/if}>
+                <{/foreach}>
+           </ul>
+        <{/if}>
+
+    </li>
+    <{/foreach}>
+    <{if $other_actions}>
+    <li class="finder-action-group">
+         <a class="finder-action-group-handle" href="javascript:void(0)">
+         <span><{t}>其他动作...<{/t}><i class="arrowdown">&nbsp;</i></span>
+         </a>
+         <ul>
+              <{foreach from=$other_actions item=item}>
+              <li class="item"><a <{foreach from=$item item=v key=k}>  <{$k}>="<{$v}>" <{/foreach}> ><span><{$item.label}></span></a></li>
+              <{/foreach}>
+        </ul>
+    </li>
+    </ul>
+    <{else}>
+    </ul>
+  <{/if}>
+
+        <{if $use_buildin_filter}>
+        <div class="finder-filter-action-handle">
+            <a lnk="<{$url}>&action=filter" href="javascript:void(0);" id="finder-filter-action-<{$name}>">
+                    <{t}>高级筛选<{/t}><span>&raquo;</span>
+            </a>
+        </div>
+        <script>
+        void function(){
+            var sr  = null,fs = $('finder-search-<{$name}>'),state;
+                ffa =$('finder-filter-action-<{$name}>');
+                ffa.addEvent('click',function(e){
+                    e.stop();
+                    ffa.addClass('active');
+
+                    if(sr){return sr.hideSide();}
+
+                    sr = new Side_R(this.get('lnk'),{
+                            width:180,
+                            isClear:false,
+                            title:'<{t}>高级筛选(搜索)<{/t}>',
+                            trigger:$('finder-action-<{$name}>'),
+                            onLoad:function(){
+                                W.render(this.container);
+                            },
+                            onShow:function(){
+                                if(fs)fs.setStyle('visibility','hidden');
+                                this.container.setStyle('overflow-y','auto');
+                                if(state)this.cache=true;
+                                state=true;
+                            },
+                            onHide:function(){
+                                //finderGroup['<{$name}>'].filter.value = "";
+                                //finderGroup['<{$name}>'].refresh();
+                                ffa.removeClass('active');
+                                if(fs)fs.setStyle('visibility','visible');
+                                sr = null;
+                            }});
+            });
+
+
+        }();
+        </script>
+        <{/if}>
+  <{if $searchOptions}>
+  <div class="frt" >
+    <form class="finder-search" style="_display:inline;zoom:1;" id="finder-search-<{$name}>" current_key="<{$searchOptions|key}>">
+      <table cellpadding="0" cellspacing="0" style="width:auto">
+        <tr>
+          <td>
+            <span class="finder-search-select" id="finder-keywords-handle-<{$name}>" dropmenu="finder-keywords-<{$name}>"><label><{$__search_options_default_label}></label><{img src="bundle/arrow-down.gif"}></span>
+          </td>
+          <td><input class="finder-search-input f-12" type="text" search="true" autocomplete="off" size="15" value="<{$__search_options_default_value}>" maxlength="40" placeholder="<{t}>输入后直接回车确认<{/t}>"/>
+          </td>
+          <td>
+                <a class="finder-search-btn lnk-search" href="javascript:void(0);">
+                    <span><{t}>搜索<{/t}></span>
+                </a>
+         </td>
+        </tr>
+      </table>
+      <div id="finder-keywords-<{$name}>" class="x-drop-menu" style="width:auto;border:1px #898989 solid;">
+        <ul class="group">
+          <{foreach from=$searchOptions key=key item=item}>
+          <li class="item" key="<{$key}>"><{$item}></li>
+          <{/foreach}>
+        </ul>
+      </div>
+    </form>
+        <script>
+      void function(){
+      /*try{
+           var plh = $$('#finder-search-<{$name}> input[placeholder]')[0];
+           if(!('placeholder' in new Element('input'))){
+                plh.set({'value':"<{t}>输入后直接回车确认<{/t}>",styles:{opacity:.7}}).addEvent('focus',function(){
+
+                    plh.set({'value':"",styles:{opacity:1}}).removeEvent('focus',arguments.callee);
+
+                });
+           }
+
+        }catch(e){}*/
+        new DropMenu("finder-keywords-handle-<{$name}>", {eventType:'mouse',offset:{x:-6, y:0},temppos:true, relative:'finder-action-<{$name}>'});
+
+        var lis = $$('#finder-keywords-<{$name}> li');
+        $('finder-search-<{$finder_name}>').getElement('.finder-search-input').name=lis[0].get('key');
+        lis.addEvent('click',function(e){
+          $('finder-search-<{$finder_name}>').getElement('label').set('text',this.get('text'));
+          $('finder-search-<{$finder_name}>').getElement('.finder-search-input').set('name',this.get('key'));
+        });
+        <{*
+          <{if $env.get.search|key}>
+          $$('#finder-keywords-<{$name}> li[key=<{$env.get.search|key}>]')[0].fireEvent('click');
+          <{/if}>*}>
+      }();
+    </script>
+  </div>
+  <{/if}>
+</div>
+<script>
+   $$('.finder-action-group').addEvents({
+        'mouseenter':function(){
+            this.getElement('ul').setStyle('visibility','visible');
+        },
+        'mouseleave':function(){
+            this.getElement('ul').setStyle('visibility','hidden');
+        }
+
+   });
+</script>
+

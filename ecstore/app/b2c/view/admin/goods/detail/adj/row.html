@@ -1,0 +1,35 @@
+<div class="division">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <th><{t}>配件组名称：<{/t}></th>
+    <td>
+<{input type="text" name="adjunct[name][{$key}]" value=$adjunct.name}>
+<input type="hidden" name="adjunct[type][<{$key}>]" value="<{$adjunct.type}>">
+<{button label=$___b2c="删除此组配件"|t:'b2c' app="desktop" onclick="this.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode.parentNode.parentNode.parentNode)" icon="delete.gif" }>
+</td>
+  </tr>
+  <tr>
+    <th><{t}>最小购买量：<{/t}></th>
+    <td><{input type="unsigned" name="adjunct[min_num][{$key}]" size="3" value=$adjunct.min_num}></td>
+  </tr>
+  <tr>
+    <th><{t}>最大购买量：<{/t}></th>
+    <td><{input type="unsigned" name="adjunct[max_num][{$key}]" size="3" value=$adjunct.max_num}></td>
+  </tr>
+  <tr>
+    <th><{t}>配件优惠：<{/t}></th>
+    <td><input type="radio" name="adjunct[set_price][<{$key}>]" value="discount" <{if $adjunct.set_price!='minus'}>checked=checked<{/if}>><{t}>优惠某个折扣<{/t}>
+  <input type="radio" name="adjunct[set_price][<{$key}>]" value="minus" <{if $adjunct.set_price=='minus'}>checked=checked<{/if}>><{t}>优惠一定金额<{/t}></td>
+  </tr>
+  <tr>
+    <th><{t}>优惠额度：<{/t}></th>
+    <td><{input type="unsigned" value=$adjunct.price name="adjunct[price][{$key}]" size="3" }>&nbsp;&nbsp;<{t}>(无优惠可不填；优惠9折就输入0.9，优惠100元就输入100)<{/t}></td>
+  </tr>
+  <th><{t}>添加配件商品：<{/t}></th>
+    <td><{if $adjunct.type}>
+<{assign var="type" value=$adjunct.type}>
+<{include file="admin/goods/detail/adj/{$type}.html"}>
+<{/if}></td>
+  </tr>
+</table>
+</div>

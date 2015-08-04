@@ -1,0 +1,12 @@
+<form id="finder-form-<{$name}>" action='index.php?<{$query}>' method='post'>
+    <input id='finder-filter-<{$name}>' type="hidden"/>
+    <input name="_finder[finder_id]" value="<{$name}>" type="hidden" />
+    <input name="_finder[in_pager]" value="1" type="hidden" />
+    <{$inputhtml}>
+</form>
+<div class="finder-header-wrapper" style="overflow:hidden" id="finder-header-<{$name}>">
+	<{$subheader}>
+</div>
+
+
+

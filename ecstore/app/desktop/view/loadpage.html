@@ -1,0 +1,84 @@
+<{capture name="header"}>
+<{/capture}>
+
+<script>
+var shopeEvents = {},TaskRemote=null;
+W.page('<{$goto}>&dialog=true',{clearUpdateMap:false,onComplete:function(){
+	var explorer = window.navigator.userAgent ;
+    if(explorer.indexOf("Chrome") >= 0){
+    	var testpost = <{$post}>;
+    	var select_data=window.opener.$(testpost.handle).getParent().getElement('input[type=hidden]').value;
+    	var form = document.getElement('form[id^=finder-form-]');
+    	if(select_data){
+    		form.store('rowselected',select_data.split(','));	
+        }
+    	if(document.getElement('.dialogBtn')){
+    		document.getElement('.dialogBtn').addEvent('click',function(e){
+    			var form = document.getElement('form[id^=finder-form-]');
+                var value = form.retrieve('rowselected','');
+                var data = decodeURI(form.getElement('input[id^=finder-filter-]').value);
+                if(value=='_ALL_'){
+                	var value1 = new Array();
+                    document.getElementById('main').getElements('tr').each(function(item){
+                    	var item_id = item.getAttribute("item-id");
+                    	value1.push(item_id);
+                    });
+                    value = value1.join(",");
+                }
+                if(data&&value=='_ALL_') {
+                    data = data.replace(/&amp;/g,',');
+                    data = data.replace(/&/g,',');
+                    data = encodeURIComponent(data);
+                }
+                if(!value || !value.length) return;
+                var returnvalue = value.toString().split(',');
+                window.opener.document.getElement("input[id^=list_datas_]").value = returnvalue;
+                
+    			var tmpForm=new Element('div'),fdoc=window.opener.document.createDocumentFragment();
+                //var params=this.options.params;
+                var params = <{$params}>;
+                
+                for(var i=0,l=returnvalue.length;i<l;i++){
+                    fdoc.appendChild(new Element('input',{type:'hidden','name':params.name,value:returnvalue[i]}));
+                }
+                tmpForm.appendChild(fdoc);
+                //var testpost = <{$post}>;
+                if(!testpost.data){
+                	testpost['data'] = returnvalue;
+                }
+                var data1=(params.postdata)?tmpForm.toQueryString()+'&'+params.postdata:tmpForm.toQueryString();
+                data1 = data?data1+'&filter[advance]='+data:data1;
+                new Request({
+                	url:params.url,
+                	method:'post',
+                    data:testpost,
+                	onSuccess:function(rs){
+                     tmpForm.destroy();
+                     if(testpost.type){
+                    	 if(testpost.type=='radio'){
+                             if(JSON.decode(rs)){
+                                 window.opener.$(testpost.handle).tagName==='INPUT'?window.opener.$(testpost.handle).value=JSON.decode(rs).name:window.opener.$(testpost.handle).setText(JSON.decode(rs).name);
+                             }
+                         }else if(testpost.type=='checkbox'){
+                        	 window.opener.$(testpost.handle).innerHTML=rs;
+                         }
+                    	 window.opener.$(testpost.handle).getParent().getElement('input[type=hidden]').value=returnvalue;
+                    	 window.opener.$(testpost.handle).show();
+                    	 window.close();
+                     }
+                     //$(params.handle).show();
+                }
+                }).send();
+    			//window.resizeLayout();
+    			//window.opener.$(testpost.handle).show();
+    			//window.close();
+    		});
+    	}
+     }else{
+    	var modedialog=window.dialogArguments;	
+		if(modedialog)modedialog.onLoad.call(modedialog,window);
+		 window.resizeLayout();
+    }
+}});
+</script>
+

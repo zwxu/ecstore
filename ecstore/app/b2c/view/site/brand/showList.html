@@ -1,0 +1,29 @@
+<div class="brand-wrap clearfix">
+<div class='clearfix'>
+ <{pagers data=$pager}>
+</div>
+  <{foreach from=$data item=data}>
+  <div class="span-5 items">
+    <dl>
+      <dt class="img" style="text-align:center"><a  href="<{link app=b2c ctl=site_brand act=index arg0=$data.brand_id}>" title="<{t}>了解<{/t}> <{$data.brand_name}>"><img src="<{$data.brand_logo|default:$defaultImage|storager}>"></a></dt>
+      <dd class="intro textcenter">
+       <a href="<{link app=b2c ctl=site_brand act=index arg0=$data.brand_id}>" title="<{t}>了解<{/t}> <{$data.brand_name}>"><{$data.brand_name}></a>
+       <a href="<{link app=b2c ctl=site_brand act=index arg0=$data.brand_id}>"  title="<{t}>全部<{/t}><{$data.brand_name}><{t}>商品<{/t}>">&raquo;</a>
+     </dd>
+    </dl>
+  </div>
+  <{/foreach}>
+
+<div class='clearfix' style="clear:both;">
+ <{pagers data=$pager}>
+</div>
+</div>
+
+<script>
+window.addEvent('load',function(){
+         var Imgs_1=$$('.items .img img');
+        try{
+         fixProductImageSize($$(Imgs_1),'dt');
+         }catch(e){}
+    });
+</script>

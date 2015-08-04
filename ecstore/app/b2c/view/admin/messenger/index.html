@@ -1,0 +1,54 @@
+<h3><{t}>邮件短信管理<{/t}></h3>
+<form action="index.php?app=b2c&ctl=admin_member_messenger&act=save" method="post" id="c_msg_list">
+<div class="gridlist-action">
+<{button label=$___b2c="邮件账号设置"|t:'b2c' app="desktop"  onclick="new Dialog('index.php?app=desktop&ctl=email&act=setting',{height:300,title:'邮件账号设置'})"}>
+<{if $sms_app}>
+<{button label=$___b2c="短信平台设置"|t:'b2c' app="desktop"  onclick="new Dialog('{$sms_url}',{height:400,width:600,title:'短信平台'})"}>
+<{else}>
+<{button label=$___b2c="短信平台设置"|t:'b2c' app="desktop"  onclick="new Dialog('{$sms_url}',{height:.9,width:.9,iframe:true,title:'短信平台'})"}>
+<{/if}>
+</div>
+<table class="gridlist" cellpadding="0"  cellspacing="0" border="0">
+<thead>
+<tr>
+<th style="width:15%"><{t}>发送项目<{/t}></th>
+<{foreach from=$messenger item=item key=key}>
+<th><{$item.name}></th>
+<{/foreach}>
+<th style=" text-align:left">&nbsp;</th>
+</tr>
+</thead>
+<tbody>
+<{foreach from=$actions item=actinfo key=action name="item"}>
+<tr<{if $smarty.foreach.item.iteration is not odd}> class="even"<{/if}>>
+  <td width="15%"><{$actinfo.label}></td>
+  <{foreach from=$messenger item=item key=key}>
+<{if $actinfo[$key] != 'false'}>
+  <td width="15%"><input class="c_<{$key}>" value="1" type="checkbox" <{if $call[$action][$key]}>checked="checked" <{/if}>name="actdo[<{$action}>][<{$key}>]"><a target="_blank" href="index.php?app=b2c&ctl=admin_member_messenger&act=edtmpl&p[0]=<{$action}>&p[1]=<{$key}>"><{t}>编辑模板<{/t}></a></td>
+  <{else}>
+  <td>---</td>
+  <{/if}>
+  <{/foreach}>
+  <td>&nbsp;</td>
+</tr>
+<{/foreach}>
+
+</tbody>
+</table>
+<{area inject=".mainFoot"}>
+<div class="table-action">
+	<{button label=$___b2c="保存设置"|t:'b2c' type="button" onclick="$('c_msg_list').fireEvent('submit',{stop:function(){}})"}>
+</div>
+<{/area}>
+
+
+
+
+</form>
+<script>
+function c_toggle(o,css){
+  $ES('input[class="c_'+css+'"]','c_msg_list').each(function(e){
+    e.checked = o.checked;
+  });
+}
+</script>

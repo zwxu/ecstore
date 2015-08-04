@@ -1,0 +1,9 @@
+<div  style="width:75%;margin-left:236px;margin-top:-22px;*margin-top:0;height:25px">
+<{if $isfront eq 'true'}>
+   <{input type="vobject"   object=$object name=$name cols="name"  cols="name,spec_info" callback=$callback 
+    filter=$storeid_filter   value=$value textcol="name" view="b2c:admin/goods/rows.html"}>
+<{else}>
+    <{input type="object" object=$object name=$name cols="name"  cols="name,spec_info" callback=$callback 
+    filter=$storeid_filter   value=$value textcol="name" view="b2c:admin/goods/rows.html"}>
+<{/if}>
+</div>

@@ -1,0 +1,5502 @@
+网上商店系统开发手册
+
+since   :   %%date(%Y-%m-%d)  $Rev$
+
+%!target:html
+%!postproc(tex): '\.gif' '.eps'
+%!preproc(html): '\.dot' '.gif'
+%!preproc(tex): '\.dot' '.pdf'
+%!encoding:utf-8
+=网上商店系统简介=
+网上商店系统是集支付，货币，数据精度和地区包为一体的电子商务通用功能。可以灵活配置支付功能和数据精度管理，方便其他应用使用。
+网上商店系统作为ecos的一个基础app一般不单独存在，是其他app操作流程的载体。系统是基于ecos的开源商城系统，亦依赖ectools。
+=此手册目标人群=
+开发者：开发基于ecos的新应用或扩展已有支付方式的扩展都会用到此应用。
+
+= 功能模块 = 
++== 商品 ==+
+-
+=== sdf ===
+```
+array(
+    [goods_id] => 商品编号
+    [bn] =>货号
+    [name] => 商品名称
+    [type] => array	//商品类型
+        (
+            [type_id] => 类型编号
+            [name] => 类型名称
+            [floatstore] =>是否浮点库存
+            [alias] =>类型别名
+            [is_physical] => 是否实体商品
+            [minfo] => 必填信息
+            [params] => Array
+                (
+			//参数表
+                )
+            [props] => Array
+                (
+                    [1] => Array	//对于goods属性p_（）
+                        (
+                            [props_id] => 属性id
+                            [type_id] => 类型id
+                            [type] => 属性类型
+                            [search] => 属性展示方式
+                            [show] => 是否显示
+                            [name] => 名称
+                            [alias] => 别名
+                            [goods_p] => 商品属性位 对于goods属性p_（）
+                            [ordernum] => 排序
+                            [options] => Array //属性值 选择项
+                                (
+                                    [1] => 纯棉
+                                    [2] => 真丝
+                                    [3] => 涤纶
+                                    [4] => 亚麻
+                                    [5] => 化纤
+                                    [6] => 真皮
+                                )
+
+                            [optionAlias] => Array	//属性值别名 选择项
+                                (
+                                    [1] => 
+                                    [2] => 
+                                    [3] => 
+                                    [4] => 
+                                    [5] => 
+                                    [6] => 
+                                )
+
+                        )
+			.....
+                )
+        )
+
+    [category] => array(	//商品分类
+	[cat_id] => 分类编号
+    ),
+    [brand] => Array	//品牌
+        (
+            [brand_id] => 品牌编号
+	    [brand_name] => 品牌名称
+        )
+
+    [status] => 上架状态
+    [unit] => 单位
+    [brief] => 简介
+    [uptime] => 上架时间
+    [last_modify] => 最后修改时间
+    [goods_type] => 商品类型
+    [image_default_id] => 默认图id
+    [udfimg] => 是否有默认缩略图
+    [thumbnail_pic] => 缩略图
+    [small_pic] => 小图
+    [big_pic] => 大图
+    [description] => 商品详情
+    [store] => 库存
+    [min_buy] => 最小购买量
+    [params] => 参数
+    [props] => Array //属性
+        (
+            [p_1] => Array
+                (
+                    [value] => 3
+                )
+		...选择项属性 一直到p_20
+
+            [p_21] => Array
+                (
+                    [value] => 
+                )
+		...输入项属性 到p_28
+
+        )
+
+    [adjunct] => 配件
+    [seo_info] => Array //seo设置
+        (
+            [seo_title] => 
+            [seo_keywords] => 
+            [seo_description] => 
+        )
+    [price] => 销售价
+    [cost] => 成本价
+    [mktprice] => 市场价
+    [current_price] => 当前价格 会员价
+    [weight] => 重量
+    [product] => Array	 //sku
+        (
+            [55] => Array
+                (
+                    [product_id] => 货品编号
+                    [goods_id] => 商品编号
+                    [barcode] => 条码
+                    [title] => 名称
+                    [bn] => 货号
+                    [price] => Array //价格
+                        (
+                            [price] => Array
+                                (
+                                    [price] => 销售价
+                                    [current_price] => 当前价格 会员价
+                                )
+
+                            [cost] => Array
+                                (
+                                    [price] => 成本价
+                                )
+
+                            [mktprice] => Array
+                                (
+                                    [price] => 市场价
+                                )
+
+                            [member_lv_price] => Array //会员价
+                                (
+                                    [1] => Array
+                                        (
+                                            [level_id] => 会员等级编号
+                                            [price] => 会员价
+                                            [title] => 会员等级名称
+                                            [custom] => 受否自定义价格
+                                        )
+					....
+                                )
+                        )
+                    [name] => 名称
+                    [weight] => 重量
+                    [unit] => 单位
+                    [store] => 库存
+                    [freez] => 冻结库存
+                    [spec_info] => 规格信息
+                    [spec_desc] => Array //规格
+                        (
+                            [spec_value] => Array //规格值 array( 规格id=>规格值
+                                (
+                                    [1] => 黑色
+                                    [3] => XXS
+                                )
+
+                            [spec_private_value_id] => Array //私有规格id
+                                (
+                                    [1] => 12880784971
+                                    [3] => 12880784992
+                                )
+
+                            [spec_value_id] => Array //规格值id
+                                (
+                                    [1] => 3
+                                    [3] => 13
+                                )
+
+                        )
+
+                    [uptime] => 上架时间
+                    [last_modify] => 最后更新时间
+                    [status] => 是否上架
+                )
+        )
+
+    [spec] => Array//规格
+        (
+            [1] => Array //key：规格id
+                (
+                    [spec_id] => 规格编号
+                    [spec_name] => 规格名称
+                    [spec_show_type] => 展示方式
+                    [spec_type] => 图片/文字
+                    [spec_memo] => 规格描述
+                    [p_order] => 排序
+                    [alias] => 别名
+                    [option] => Array //规格值
+                        (
+                            [12880784971] => Array //key：私有规格值
+                                (
+                                    [private_spec_value_id] => 12880784971 私有规格值
+                                    [spec_value] => 规格值
+                                    [spec_value_id] => 规格值id
+                                    [spec_image] => 图片
+                                    [spec_goods_images] => 相关商品大图
+                                )
+
+                        )
+
+                )
+		...
+        )
+)
+```
+-
+=== 数据表 ===
++
+==== 商品分类 ====
+
+商品分类(cat)是商品特有的属性
+
+权限:继承了商品管理的权限
+
+关联关系：商品类型(goods_type)一对一弱绑定关系
+
+存储方式：商品分类单独设置了文件缓存，每次更新时会更新文件缓存。
+
+```
+goods_cat     类别属性值有限表
+```
++
+==== 虚拟分类 ====
+
+虚拟分类(virtualcat)是商品特有的属性，虚拟分类是指商品按自定义搜索条件下筛选出来的商品结果
+
+权限:继承了商品管理的权限
+
+存储方式：虚拟分类单独设置了文件缓存，每次更新时会更新文件缓存。
+
+```
+goods_virtual_cat     虚拟分类表
+```
++
+====adjunct商品配件====
+
+商品配件是商品特有附加属性，一个商品可以选择多个配件，配件商品既可以是商品，也可以是货品
+
+权限:继承了商品管理的权限
+
+在``service.xml``里添加
+```
+    <service id="b2c_cart_render_items_goods_apps">
+        <class>b2c_cart_render_item_goods_adjunct</class>
+    </service>
+```
+
+adjunct配置信息作为goods表里的一个附加字段，序列化保存在dbeav下meta表中，因此首先在安装B2C时，需要先将adjunct字段结构注册到meta表里(具体参见task.php)
+       
+```
+       $col = array(
+          'adjunct'=>
+            array (
+                  'type' => 'text',
+                  'required' => false,
+                  'label' => app::get('b2c')->_('商品配件'),
+                  'width' => 110,
+                  'editable' => false,
+            ),
+        );
+```
+特别说明：text类型说明其内容保存在dbeav_meta_value_text表里
+
++
+====goods_rate相关商品====
+
+相关商品(goods_rate)是商品特有附加属性，一个商品可以选择多个相关商品，但不能选择规格货品
+
+权限:继承了商品管理的权限
+
+```
+goods_rate     相关商品表
+```
+特别说明：manual单项 当前商品关联选择的商品
+          manual双项 当前商品与选择的商品相互关联
+
++
+====brand品牌====
+brand品牌是商品的特有的一个属性，一个品牌下可以有多个商品，商品只能属于一个品牌
+
+权限:继承了商品管理的权限
+
+在``service.xml``里添加
+```
+    <service id="desktop_finder.b2c_mdl_brand">
+        <class>b2c_finder_brand</class>
+    </service>
+```
+说明：将商品品牌列注册到desktop的finder下，用于增加后台商品品牌列表项
+
+关联关系：商品品牌(brand)和商品(goods_type)类型具有关联关系，在添加品牌时可以选择该品牌需要关联的类型。因此当选定一个品牌时，类型范围也会被指定
+```
+brand     品牌表
+type_brand     类型品牌关联表
+```
+
++
+====goods_type商品类型====
+商品类型为商品的定义 确定商品的属性参数 
+
+权限:继承了商品管理的权限
+
+关联关系：与规格有弱绑定关系 绑定后的规格会成为添加商品时的规格模板
+
+```
+goods_type     商品类型表
+goods_type_props     商品属性表
+goods_type_props_value     商品属性值表
+goods_type_spec     类型 规格关联表
+```
+
++
+====specification商品规格====
+商品规格
+
+权限:继承了商品管理的权限
+
+```
+specification     商店中商品规格
+spec_values     商店中商品规格值
+```
+
++
+====goods商品====
+说明：自定义会员价存储在goods_lv_price表中 默认跟随会员等级做折扣 开启规格商品会在goods_spec_index表做索引
+
+```
+goods     商品表
+goods_keywords     商品关键字
+goods_lv_price     商品会员等级价格
+goods_spec_index     商品规格索引表
+products     货品表
+```
+-
+=== 接口 ===
+
+`` function cat2json():`` 将商品分类保存数据存入文件缓存
+            
+`` function goods_filter(&$filter, &$object):`` 前后台商品筛选的关键函数，组成部分where语句 
+                                             参数：$filter ： 传入搜索条件
+                                                   $object ： APP对象
+
+`` function dbeav_filter_parser($filter,null,$where,$object):`` 前后台筛选的关键函数，组成全部where语句
+                                             参数：$filter ： 传入搜索条件
+                                                   $object ： APP对象
+                                                   $where  ： 函数goods_filter组成的条件
+
+`` public function freez($goods_id, $product_id, $num) `` 冻结商品库存
+                                             参数：$goods_id：商品id
+                                             $product_id：货品id
+                                             $num：欲冻结数
+                                             return：bool
+
+`` public function unfreez($goods_id, $product_id, $num) `` 解冻商品库存
+                                             参数：$goods_id：商品id
+                                             $product_id：货品id
+                                             $num：欲解冻数
+                                             return：bool
+
+`` public function getRealStore( $pId ) `` 获取真实库存
+                                             参数：$pId：货品id
+                                             return：真实货品库存
+
+`` public function checkStore( $pId, $quantity ) `` 验证购买数量是否符合库存
+                                             参数：$pId：货品id
+                                             $quantity：购买数量
+                                             return：bool
+
+
++== 会员 ==+
+
+会员是商店系统的重要部分。
+
+与会员相关的操作主要有一下几个地方
+
+- 会员登录
+
+- 会员注册
+
+- 会员中心相关操作
+
+- 会员充值预存款
+
+- 会员商店留言，评论
+
+1. 会员管理：
+
+- ``会员注册``
+
+(1). 首先我们来熟悉一下会员的数据结构，会员的dbschema结构如下(dbschema见dbeav这个app的开发文档)
+
+```
+$db['members']=array (
+  'columns' => 
+  array (
+    'member_id' => 
+    array (
+      'type' => 'table:account@pam',
+      'pkey' => true,
+      'sdfpath' => 'pam_account/account_id',
+      'label' => app::get('b2c')->_('用户名'),
+      'width' => 110,
+      'editable' => false,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'member_lv_id' => 
+    array (
+      'required' => true,
+      'default' => 0,
+      'label' => app::get('b2c')->_('会员等级'),
+      'sdfpath' => 'member_lv/member_group_id',
+      'width' => 75,
+      'type' => 'table:member_lv',
+      'editable' => true,
+      'filtertype' => 'bool',
+      'filterdefault' => 'true',
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'name' => 
+    array (
+      'type' => 'varchar(50)',
+      'label' => app::get('b2c')->_('姓名'),
+      'width' => 75,
+      'sdfpath' => 'contact/name',
+      'searchtype' => 'has',
+      'editable' => true,
+      'filtertype' => 'normal',
+      'filterdefault' => 'true',
+      'in_list' => true,
+      'is_title'=>true,
+      'default_in_list' => false,
+    ),
+    'point' => 
+    array (
+      'type' => 'number',
+      'default' => 0,
+      'required' => true,
+      'sdfpath' => 'score/total',
+      'label' => app::get('b2c')->_('积分'),
+      'width' => 110,
+      'editable' => false,
+      'filtertype' => 'number',
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'lastname' => 
+    array (
+      'sdfpath' => 'contact/lastname',
+      'type' => 'varchar(50)',
+      'editable' => false,
+    ),
+    'firstname' => 
+    array (
+      'sdfpath' => 'contact/firstname',
+      'type' => 'varchar(50)',
+      'editable' => false,
+    ),
+    'area' => 
+    array (
+      'label' => app::get('b2c')->_('地区'),
+      'width' => 110,
+      'type' => 'region',
+      'sdfpath' => 'contact/area',
+      'editable' => false,
+      'filtertype' => 'yes',
+      'filterdefault' => 'true',
+      'in_list' => true,
+      'default_in_list' => false,
+    ),
+    'addr' => 
+    array (
+      'type' => 'varchar(255)',
+      'label' => app::get('b2c')->_('地址'),
+      'sdfpath' => 'contact/addr',
+      'width' => 110,
+      'editable' => true,
+      'filtertype' => 'normal',
+      'in_list' => true,
+      'default_in_list' => false,
+      
+    ),
+    'mobile' => 
+    array (
+      'type' => 'varchar(30)',
+      'label' => app::get('b2c')->_('手机'),
+      'width' => 75,
+      'sdfpath' => 'contact/phone/mobile',
+      'searchtype' => 'head',
+      'editable' => true,
+      'filtertype' => 'normal',
+      'filterdefault' => 'true',
+      'in_list' => true,
+      'default_in_list' => false,
+    ),
+    'tel' => 
+    array (
+      'type' => 'varchar(30)',
+      'label' => app::get('b2c')->_('固定电话'),
+      'width' => 110,
+      'sdfpath' => 'contact/phone/telephone',
+      'searchtype' => 'head',
+      'editable' => true,
+      'filtertype' => 'normal',
+      'filterdefault' => 'true',
+      'in_list' => true,
+      'default_in_list' => false,
+    ),
+    'email' => 
+    array (
+      'type' => 'varchar(200)',
+      'label' => 'EMAIL',
+      'width' => 110,
+      'sdfpath' => 'contact/email',
+      'required' => 1,
+      'searchtype' => 'has',
+      'editable' => true,
+      'filtertype' => 'normal',
+      'filterdefault' => 'true',
+      'in_list' => true,
+      'default_in_list' => false,
+    ),
+    'zip' => 
+    array (
+      'type' => 'varchar(20)',
+      'label' => app::get('b2c')->_('邮编'),
+      'width' => 110,
+      'sdfpath' => 'contact/zipcode',
+      'editable' => true,
+      'filtertype' => 'normal',
+      'in_list' => true,
+    ),
+
+    'order_num' => 
+    array (
+      'type' => 'number',
+      'default' => 0,
+      'label' => app::get('b2c')->_('订单数'),
+      'width' => 110,
+      'editable' => false,
+      'hidden' => true,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'refer_id' => 
+    array (
+      'type' => 'varchar(50)',
+      'label' => app::get('b2c')->_('来源ID'),
+      'width' => 75,
+      'editable' => false,
+      'filtertype' => 'normal',
+      'in_list' => false,
+    ),
+    'refer_url' => 
+    array (
+      'type' => 'varchar(200)',
+      'label' => app::get('b2c')->_('推广来源URL'),
+      'width' => 75,
+      'editable' => false,
+      'filtertype' => 'normal',
+      'in_list' => false,
+    ),
+    'b_year' => 
+    array (
+        'label' => app::get('b2c')->_('生年'),
+      'type' => 'smallint unsigned',
+      'width' => 30,
+      'editable' => false,
+      'in_list'=>false,
+    ),
+    'b_month' => 
+    array (
+      'label' => app::get('b2c')->_('生月'),
+      'type' => 'tinyint unsigned',
+      'width' => 30,
+      'editable' => false,
+      'hidden' => true,
+      'in_list' => false,
+    ),
+    'b_day' => 
+    array (
+      'label' => app::get('b2c')->_('生日'),
+      'type' => 'tinyint unsigned',
+      'width' => 30,
+      'editable' => false,
+      'hidden' => true,
+      'in_list' => false,
+    ),
+    'sex' => 
+    array (
+      'type' => 
+      array (
+        0 => app::get('b2c')->_('女'),
+        1 => app::get('b2c')->_('男'),
+      ),
+      'sdfpath' => 'profile/gender',
+      'default' => 1,
+      'required' => true,
+      'label' => app::get('b2c')->_('性别'),
+      'width' => 30,
+      'editable' => true,
+      'filtertype' => 'yes',
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'addon' => 
+    array (
+      'type' => 'longtext',
+      'editable' => false,
+    ),
+    'wedlock' => 
+    array (
+      'type' => 'intbool',
+      'default' => '0',
+      'required' => true,
+      'editable' => false,
+    ),
+    'education' => 
+    array (
+      'type' => 'varchar(30)',
+      'editable' => false,
+    ),
+    'vocation' => 
+    array (
+      'type' => 'varchar(50)',
+      'editable' => false,
+    ),
+    'interest' => 
+    array (
+      'type' => 'longtext',
+      'editable' => false,
+    ),
+    'advance' => 
+    array (
+      'type' => 'money',
+      'default' => '0.00',
+      'required' => true,
+      'label' => app::get('b2c')->_('预存款'),
+      'sdfpath' => 'advance/total',
+      'width' => 110,
+      'editable' => false,
+      'filtertype' => 'number',
+      'in_list' => true,
+    ),
+    'advance_freeze' => 
+    array (
+      'type' => 'money',
+      'default' => '0.00',
+      'sdfpath' => 'advance/freeze',
+      'required' => true,
+      'editable' => false,
+    ),
+    'point_freeze' => 
+    array (
+      'type' => 'number',
+      'default' => 0,
+      'required' => true,
+      'sdfpath' => 'score/freeze',
+      'editable' => false,
+    ),
+    'point_history' => 
+    array (
+      'type' => 'number',
+      'default' => 0,
+      'required' => true,
+      'editable' => false,
+    ),
+    
+    'score_rate' => 
+    array (
+      'type' => 'decimal(5,3)',
+      'editable' => false,
+    ),
+    'reg_ip' => 
+    array (
+      'type' => 'varchar(16)',
+      'label' => app::get('b2c')->_('注册IP'),
+      'width' => 110,
+      'editable' => false,
+      'in_list' => true,
+    ),
+    'regtime' => 
+    array (
+      'label' => app::get('b2c')->_('注册时间'),
+      'width' => 75,
+      'type' => 'time',
+      'editable' => false,
+      'filtertype' => 'time',
+      'filterdefault' => true,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'state' => 
+    array (
+      'type' => 'tinyint(1)',
+      'default' => 0,
+      'required' => true,
+      'label' => app::get('b2c')->_('验证状态'),
+      'width' => 110,
+      'editable' => false,
+      'in_list' => false,
+    ),
+    'pay_time' => 
+    array (
+      'type' => 'number',
+      'editable' => false,
+    ),
+    'biz_money' => 
+    array (
+      'type' => 'money',
+      'default' => '0',
+      'required' => true,
+      'editable' => false,
+    ),
+    /*
+    'pw_answer' => 
+    array (
+      'label' => app::get('b2c')->_('回答'),
+      'type' => 'varchar(250)',
+      'sdfpath' => 'account/pw_answer',
+      'editable' => false,
+    ),
+    'pw_question' => 
+    array (
+      'label' => app::get('b2c')->_('安全问题'),
+      'type' => 'varchar(250)',
+      'sdfpath' => 'account/pw_question',
+      'editable' => false,
+    ),*/ 
+    'fav_tags' => 
+    array (
+      'type' => 'longtext',
+      'editable' => false,
+    ),
+    'custom' => 
+    array (
+      'type' => 'longtext',
+      'editable' => false,
+    ),
+    'cur' => 
+    array (
+      'sdfpath' => 'currency',
+      'type' => 'varchar(20)',
+      'label' => app::get('b2c')->_('货币'),
+      'width' => 110,
+      'editable' => false,
+      'in_list' => true,
+    ),
+    'lang' => 
+    array (
+      'type' => 'varchar(20)',
+      'label' => app::get('b2c')->_('语言'),
+      'width' => 110,
+      'editable' => false,
+      'in_list' => true,
+    ),
+    'unreadmsg' => 
+    array (
+      'type' => 'smallint unsigned',
+      'default' => 0,
+      'required' => true,
+      'label' => app::get('b2c')->_('未读信息'),
+      'width' => 110,
+      'editable' => false,
+      'filtertype' => 'number',
+      'in_list' => true,
+    ),
+    'disabled' => 
+    array (
+      'type' => 'bool',
+      'default' => 'false',
+      'editable' => false,
+    ),
+    'remark' => 
+    array (
+      'label' => app::get('b2c')->_('备注'),
+      'type' => 'text',
+      'width' => 75,
+      'in_list' => true,
+    ),
+    'remark_type' => 
+    array (
+      'type' => 'varchar(2)',
+      'default' => 'b1',
+      'required' => true,
+      'editable' => false,
+    ),
+    'login_count' => 
+    array (
+      'type' => 'int(11)',
+      'default' => 0,
+      'required' => true,
+      'editable' => false,
+    ),
+    'experience' => 
+    array (
+      'label' => app::get('b2c')->_('经验值'),
+      'type' => 'int(10)',
+      'default' => 0,
+      'editable' => false,
+      'in_list' => true,
+    ),
+    'foreign_id' => 
+    array (
+      'type' => 'varchar(255)',
+    ),
+    'member_refer' => 
+    array (
+      'type' => 'varchar(50)',
+      'hidden' => true,
+      'default' => 'local',
+    ),
+  ),
+  'comment' => app::get('b2c')->_('商店会员表'),
+  'index' => 
+  array (
+    'ind_email' => 
+    array (
+      'columns' => 
+      array (
+        0 => 'email',
+      ),
+    ),
+    'ind_regtime' => 
+    array (
+      'columns' => 
+      array (
+        0 => 'regtime',
+      ),
+    ),
+    'ind_disabled' => 
+    array (
+      'columns' => 
+      array (
+        0 => 'disabled',
+      ),
+    ),
+  ),
+  'engine' => 'innodb',
+  'version' => '$Rev: 42798 $',
+);
+```
+
+a) member_id - 会员ID 此ID和pam下的pam_account下的account_id是一致的。如不一致会出现错误
+
+b) member_lv_id - 会员等级ID
+
+c) email - 会员EMAIL 唯一
+
+d) advance - 预存款
+
+e) point - 会员积分
+
+f) experience - 会员经验值
+
+以上是会员数据中比较重要的几个字段,其他的可以参照dbscheam中的label属性
+
+看看会员结构每个字段的sdfpath (sdfpath 可以参照dbeav文档) 这里以邮箱为例，它的sdfpath是contact/email 
+
+那我们在save保存的时候要保存这个应该怎么保存呢，其实很简单 像这样 : $sdf['contact']['email'] = '*@*.com'
+
+其他的字段以此类推
+
+会员注册分前台注册和后台管理员添加，大多数情况下只会出现前台商店的会员注册。会员注册，无疑就是向我们上面介绍的会员表里面插数据，而插入数据就往往会调用model层的save方法。在会员的model中我们重写了它父类的save方法,代码如下：
+``` 
+function save(&$sdf,$mustUpdate=null){
+        if(isset($sdf['member_id']) && !isset($sdf['pam_account']['account_id'] )){
+            $sdf['pam_account']['account_id'] = $sdf['member_id'];
+        }
+        if(isset($sdf['profile']['gender'])){
+            if($sdf['profile']['gender']=='male'){
+            $sdf['profile']['gender']=1;
+            }elseif($sdf['profile']['gender']=='female'){
+               $sdf['profile']['gender']=0;
+            }else{
+                unset($sdf['profile']['gender']);
+            }
+        }
+        if(isset($sdf['profile']['birthday'])){
+              $data = explode('-',$sdf['profile']['birthday']);
+              $sdf['b_year']=intval($data[0]);$sdf['b_month']=intval($data[1]);$sdf['b_day']=intval($data[2]);
+            unset($sdf['profile']['birthday']);
+        }
+        $sdf['contact']['addr'] = htmlspecialchars($sdf['contact']['addr']);
+        parent::save($sdf);
+        return true;
+    }
+```
+
+@params array sdf 保存会员信息的sdf结构
+
+@return bool
+
+此方法和父类的save方法区别不大,而且最后还是要调一下父类的save方法的,主要是翻译一下生日类型和性别类型,从代码可以一目了然的看出
+
+关于会员注册的操作在经过一系列的字段合法性检查之后最终是会调用model层的save方法。因此这个方法也相当的重要
+
+这里有人要问既然插入数据的时候我们做了性别和生日的翻译,那么查询出来的时候不也是要做这些字段的翻译吗?
+
+恭喜你·完全正确,我们在dump会员数据的时候也会进行翻译的，可以参考会员model的dump方法，这里就不啰嗦了。
+
+@return array log list
+- ``会员登录管理``
+
+其实会员的登陆操作是在pam这个APP里进行操作的,在pam这个app中有详细的会员登录流程,这里就不做介绍了,
+可以参考pam这个app的开发文档
+
+- ``会员中心管理``
+
+在会员中心里的操作很多，都是基于会员进行的，大部分都是基于业务的,这里不做业务的介绍，
+
+感兴趣的同学可以通过业务对照代码并始终保持科学发展观的态度来进行更深层次的研究，我们
+
+主要介绍一下会员对商品的收藏和对缺货货品的登记，因为这两个操作都是基于一个dbchema的
+
+下面是其的dbschema 结构：
+
+```
+$db['member_goods']=array (
+  'columns' => 
+  array (
+    'gnotify_id' => array (
+       'type' => 'number',
+      'required' => true,
+      'pkey' => true,
+      'extra' => 'auto_increment',
+      'label' => 'ID',
+      'width' => 110,
+      'editable' => false,
+      'default_in_list' => true,
+      'id_title' => true,
+    ),
+    'goods_id' => array (
+      'type' => 'table:goods',
+      'required' => true,
+      'label' => app::get('b2c')->_('缺货商品名称'),
+      'in_list' => true,
+    ),
+    'member_id' => array(
+        'type'=>'table:members',
+        'in_list' => true,
+         'label' => app::get('b2c')->_('会员用户名'),
+       'default_in_list' => true,
+    ),
+    'product_id' => array (
+      'type' => 'table:products',
+      'default' => null,
+    ),
+    'email' => array(
+        'type'=>'varchar(100)',
+        'in_list' => true,
+         'label' => 'Email',
+       'default_in_list' => true,
+    ),
+    'status' => array (
+      'type' => "enum('ready', 'send', 'progress')",
+      'required' => true,
+    ),
+    'send_time' => 
+     array (
+      'type' => 'time',
+      'label' => app::get('b2c')->_('发送时间'),
+      'width' => 110,
+      'editable' => false,
+      'filtertype' => 'time',
+      'filterdefault' => true,
+      'in_list' => true,
+    ),
+    'create_time' => 
+    array (
+      'type' => 'time',
+      'label' => app::get('b2c')->_('申请时间'),
+      'width' => 110,
+      'editable' => false,
+      'filtertype' => 'time',
+      'filterdefault' => true,
+      'in_list' => true,
+    ),
+    'disabled' => array (
+      'type' => 'bool',
+      'default'=>'false',
+    ),
+    'remark' => array (
+      'type' => 'longtext',
+      'default'=>'false',
+    ),
+    'type' =>array(
+        'type' =>  "enum('fav', 'sto')",
+        ),
+     'object_type' =>array(
+        'type' => 'varchar(100)',
+        'default' => 'goods',
+        ),
+  ),
+  'comment' => app::get('b2c')->_('收藏/缺货登记'),
+   'engine' => 'innodb',
+   'version' => '$Rev$',
+);
+```
+a) gnotify_id - ID 主键
+
+b) goods_id - 商品ID 缺货时代表 缺货货品对应商品的ID，收藏时对应收藏商品的ID 
+
+c) member_id - 会员ID
+
+d) product_id - 货品ID 表示收藏时此字段为空
+
+e) email - 登记邮箱
+
+f) status - 缺货登记发送通知的状态
+
+g) send_time - 发送时间
+
+h) type - 类型(fav表示收藏,sto表示缺货登记)
+
+其他字段可参照dbschema
+
+在进行缺货登记时，如果货品ID和email同时相等则属于重复登记，登记失败
+
+在了解了收藏和缺货登记的数据结构之后，对其进行的save,dump,getList 都是比较简单的了，最重要就是用type来区分
+
+- ``会员预存款充值``
+
+会员的预存款管理是一个相当非常重要的业务，其主要业务包括：
+
+管理员增加扣除预存款
+
+会员充值和消费预存款
+
+改变预存款的时候会同时会把日志查到会员预存款的member_advance表中,
+
+此dbschema结构如下:
+
+```
+$db['member_advance']=array (
+  'columns' => 
+  array (
+    'log_id' => 
+    array (
+      'type' => 'number',
+      'required' => true,
+      'pkey' => true,
+      'extra' => 'auto_increment',
+      'label' => app::get('b2c')->_('日志id'),
+      'width' => 110,
+      'comment' => app::get('b2c')->_('日志id'),
+      'editable' => false,
+      'hidden' => true,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'member_id' => 
+    array (
+      'type' => 'table:account@pam',
+      'required' => true,
+      'default' => 0,
+      'label' => app::get('b2c')->_('用户名'),
+      'width' => 110,
+      'comment' => app::get('b2c')->_('用户id'),
+      'editable' => false,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'money' => 
+    array (
+      'type' => 'money',
+      'required' => true,
+      'default' => 0,
+      'label' => app::get('b2c')->_('出入金额'),
+      'width' => 110,
+      'comment' => app::get('b2c')->_('出入金额'),
+      'editable' => false,
+      'hidden' => true,
+      'in_list' => true,
+    ),
+    'message' => 
+    array (
+      'type' => 'varchar(255)',
+      'label' => app::get('b2c')->_('管理备注'),
+      'is_title' => true,
+      'width' => 110,
+      'comment' => app::get('b2c')->_('管理备注'),
+      'editable' => true,
+      'in_list' => true,
+    ),
+    'mtime' => 
+    array (
+      'type' => 'time',
+      'required' => true,
+      'default' => 0,
+      'label' => app::get('b2c')->_('交易时间'),
+      'width' => 75,
+      'comment' => app::get('b2c')->_('交易时间'),
+      'editable' => false,
+      'in_list' => true,
+    ),
+    'payment_id' => 
+    array (
+      'type' => 'varchar(20)',
+      'label' => app::get('b2c')->_('支付单号'),
+      'width' => 110,
+      'comment' => app::get('b2c')->_('支付单号'),
+      'editable' => false,
+      'in_list' => true,
+    ),
+    'order_id' => 
+    array (
+      'type' => 'table:orders',
+      'label' => app::get('b2c')->_('订单号'),
+      'width' => 110,
+      'comment' => app::get('b2c')->_('订单号'),
+      'editable' => false,
+      'in_list' => true,
+    ),
+    'paymethod' => 
+    array (
+      'type' => 'varchar(100)',
+      'label' => app::get('b2c')->_('支付方式'),
+      'width' => 110,
+      'comment' => app::get('b2c')->_('支付方式'),
+      'editable' => false,
+      'in_list' => true,
+    ),
+    'memo' => 
+    array (
+      'type' => 'varchar(100)',
+      'label' => app::get('b2c')->_('业务摘要'),
+      'width' => 110,
+      'comment' => app::get('b2c')->_('业务摘要'),
+      'editable' => false,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'import_money' => 
+    array (
+      'type' => 'money',
+      'default' => '0',
+      'required' => true,
+      'label' => app::get('b2c')->_('存入金额'),
+      'width' => 110,
+      'comment' => app::get('b2c')->_('存入金额'),
+      'editable' => false,
+      'in_list' => true,
+    ),
+    'explode_money' => 
+    array (
+      'type' => 'money',
+      'default' => '0',
+      'required' => true,
+      'label' => app::get('b2c')->_('支出金额'),
+      'width' => 110,
+      'comment' => app::get('b2c')->_('支出金额'),
+      'editable' => false,
+      'in_list' => true,
+    ),
+    'member_advance' => 
+    array (
+      'type' => 'money',
+      'default' => '0',
+      'required' => true,
+      'label' => app::get('b2c')->_('当前余额'),
+      'width' => 110,
+      'comment' => app::get('b2c')->_('当前余额'),
+      'editable' => false,
+      'in_list' => true,
+    ),
+    'shop_advance' => 
+    array (
+      'type' => 'money',
+      'default' => '0',
+      'required' => true,
+      'label' => app::get('b2c')->_('商店余额'),
+      'width' => 110,
+      'comment' => app::get('b2c')->_('商店余额'),
+      'editable' => false,
+      'hidden' => true,
+      'in_list' => true,
+    ),
+    'disabled' => 
+    array (
+      'type' => 'bool',
+      'default' => 'false',
+      'required' => true,
+      'comment' => app::get('b2c')->_('失效'),
+      'editable' => false,
+      'label' => app::get('b2c')->_('失效'),
+      'in_list' => true,
+    ),
+  ),
+  'comment' => app::get('b2c')->_('预存款历史记录'),
+  'index' => 
+  array (
+    'ind_mtime' => 
+    array (
+      'columns' => 
+      array (
+        0 => 'mtime',
+      ),
+    ),
+    'ind_disabled' => 
+    array (
+      'columns' => 
+      array (
+        0 => 'disabled',
+      ),
+    ),
+  ),
+  'engine' => 'innodb',
+  'version' => '$Rev: 40912 $',
+);
+```
+
+各字段的描述可以参考label属性
+
+以上的两个业务主要看member_advance这个model里的几个接口
+
+add-预存款充值
+
+参数介绍:
+
+@params string member_id - 会员id
+
+@params string money - 存入金额
+
+@params string message - 消息
+
+@params string errMsg - 返回信息
+
+@params string payment_id - 支付方式ID
+
+@params string order_id - 订单ID
+
+@params string paymenthod - 支付名称
+
+@params string memo - 描述
+
+@params string type - 类型
+
+@return bool 充值成功或者失败
+
+deduct-预存款充值
+
+参数介绍:
+
+@params string member_id - 会员id
+
+@params string money - 扣除金额
+
+@params string message - 消息
+
+@params string errMsg - 返回信息
+
+@params string payment_id - 支付方式ID
+
+@params string order_id - 订单ID
+
+@params string paymenthod - 支付名称
+
+@params string memo - 描述
+
+@return bool 扣除成功或者失败
+
+adj_amount-后台管理员操作预存款
+
+参数介绍:
+
+@params string nMemberId - 会员id
+
+@params string aAdvanceInfo - 扣除/充值金额
+
+@params string errMsg - 返回信息
+
+@return bool 扣除/充值成功或者失败
+
+如果我们dump会员数据的时候需要连同把预存款记录也dump出来，那我们怎么写呢
+
+请看如下代码
+
+$member_id 会员ID 假设已经赋值
+
+$obj = app::get('b2c')->model('members');
+
+$data = $obj->dump($member_id,'*',array('advance/event'=>array('*')));
+
+print_r($data);
+
+这样就把会员信息和预存款充值记录一起dump出来了··有同学会问 为什么我传个array('advance/event'=>array('*'))
+
+这样的参数数组就可以把预存款记录一下dump出来呢，这是因为在会员的model里面 有这样的一段代码:
+
+var $has_many = array(
+        'contact/other'=>'member_addrs:append',
+        'advance/event'=>'member_advance:append:member_id^member_id',
+        'score/event'=>'member_point:append',
+    );
+
+has_many的作用可以参考dbeav开发文档
+
+下面是打印出来的上面的$data 数组结构
+
+```
+Array
+(
+    [pam_account] =&gt; Array
+        (
+            [account_id] =&gt; 2
+        )
+
+    [member_lv] =&gt; Array
+        (
+            [member_group_id] =&gt; 1
+        )
+
+    [contact] =&gt; Array
+        (
+            [name] =&gt; 张三
+            [lastname] =&gt; 
+            [firstname] =&gt; 
+            [area] =&gt; mainland:重庆/重庆市/渝中区:66
+            [addr] =&gt; 
+            [phone] =&gt; Array
+                (
+                    [mobile] =&gt; 15800001111
+                    [telephone] =&gt; 
+                )
+
+            [email] =&gt; demo@demo.com
+            [zipcode] =&gt; 
+            [qq] =&gt; 
+            [msn] =&gt; 
+            [skype] =&gt; 
+            [wangwang] =&gt; 
+        )
+
+    [score] =&gt; Array
+        (
+            [total] =&gt; 1234
+            [freeze] =&gt; 0
+        )
+
+    [order_num] =&gt; 1
+    [refer_id] =&gt; 
+    [refer_url] =&gt; 
+    [b_year] =&gt; 2010
+    [b_month] =&gt; 6
+    [b_day] =&gt; 3
+    [profile] =&gt; Array
+        (
+            [gender] =&gt; male
+            [birthday] =&gt; 2010-6-3
+        )
+
+    [addon] =&gt; 
+    [wedlock] =&gt; 0
+    [education] =&gt; 
+    [vocation] =&gt; 
+    [interest] =&gt; 
+    [advance] =&gt; Array
+        (
+            [total] =&gt; 9008.000
+            [freeze] =&gt; 0.000
+            [event] =&gt; Array
+                (
+                    [1] =&gt; Array
+                        (
+                            [log_id] =&gt; 1
+                            [member_id] =&gt; 2
+                            [money] =&gt; 9000.000
+                            [message] =&gt; 管理员代充值
+                            [mtime] =&gt; 1277789711
+                            [payment_id] =&gt; 
+                            [order_id] =&gt; 
+                            [paymethod] =&gt; 
+                            [memo] =&gt; 
+                            [import_money] =&gt; 9000.000
+                            [explode_money] =&gt; 0.000
+                            [member_advance] =&gt; 9000.000
+                            [shop_advance] =&gt; 9000.000
+                            [disabled] =&gt; false
+                        )
+
+                    [2] =&gt; Array
+                        (
+                            [log_id] =&gt; 2
+                            [member_id] =&gt; 2
+                            [money] =&gt; 11.000
+                            [message] =&gt; 管理员代充值
+                            [mtime] =&gt; 1287555109
+                            [payment_id] =&gt; 
+                            [order_id] =&gt; 
+                            [paymethod] =&gt; 
+                            [memo] =&gt; 
+                            [import_money] =&gt; 11.000
+                            [explode_money] =&gt; 0.000
+                            [member_advance] =&gt; 9011.000
+                            [shop_advance] =&gt; 9011.000
+                            [disabled] =&gt; false
+                        )
+
+                    [3] =&gt; Array
+                        (
+                            [log_id] =&gt; 3
+                            [member_id] =&gt; 2
+                            [money] =&gt; 21.000
+                            [message] =&gt; 管理员代充值
+                            [mtime] =&gt; 1287555115
+                            [payment_id] =&gt; 
+                            [order_id] =&gt; 
+                            [paymethod] =&gt; 
+                            [memo] =&gt; 
+                            [import_money] =&gt; 21.000
+                            [explode_money] =&gt; 0.000
+                            [member_advance] =&gt; 9032.000
+                            [shop_advance] =&gt; 9032.000
+                            [disabled] =&gt; false
+                        )
+
+                    [13] =&gt; Array
+                        (
+                            [log_id] =&gt; 13
+                            [member_id] =&gt; 2
+                            [money] =&gt; 12.000
+                            [message] =&gt; admin管理员后台扣款
+                            [mtime] =&gt; 1287562071
+                            [payment_id] =&gt; 
+                            [order_id] =&gt; 
+                            [paymethod] =&gt; 
+                            [memo] =&gt; 
+                            [import_money] =&gt; 0.000
+                            [explode_money] =&gt; 12.000
+                            [member_advance] =&gt; 9020.000
+                            [shop_advance] =&gt; 9905.000
+                            [disabled] =&gt; false
+                        )
+
+                    [14] =&gt; Array
+                        (
+                            [log_id] =&gt; 14
+                            [member_id] =&gt; 2
+                            [money] =&gt; 12.000
+                            [message] =&gt; admin管理员后台扣款
+                            [mtime] =&gt; 1287562124
+                            [payment_id] =&gt; 
+                            [order_id] =&gt; 
+                            [paymethod] =&gt; 
+                            [memo] =&gt; 
+                            [import_money] =&gt; 0.000
+                            [explode_money] =&gt; 12.000
+                            [member_advance] =&gt; 9008.000
+                            [shop_advance] =&gt; 9893.000
+                            [disabled] =&gt; false
+                        )
+
+                )
+
+        )
+
+    [point_history] =&gt; 0
+    [score_rate] =&gt; 
+    [reg_ip] =&gt; 127.0.0.1
+    [regtime] =&gt; 1277789671
+    [state] =&gt; 0
+    [pay_time] =&gt; 
+    [biz_money] =&gt; 0.000
+    [fav_tags] =&gt; 
+    [custom] =&gt; 
+    [currency] =&gt; CNY
+    [lang] =&gt; 
+    [unreadmsg] =&gt; 0
+    [disabled] =&gt; false
+    [remark] =&gt; 
+    [remark_type] =&gt; b1
+    [login_count] =&gt; 0
+    [experience] =&gt; 39
+    [foreign_id] =&gt; 
+    [member_refer] =&gt; local
+)
+```
+
+会员积分的相关操作和预存款是类似的,可以参照以上说明进行研究
+
+- ``会员商店留言/商品评论/咨询/站内信/短消息/订单留言``
+
+在系统中 商店留言/商品评论/咨询/站内信/短消息/订单留言 都是公用一个dbschema的··这就需要相当熟悉这个dbschema和对应的model
+
+dbschema:
+
+```
+$db['member_comments']=array (
+  'columns' => 
+  array (
+    'comment_id' => array (
+        'type' => 'number',
+        'required' => true,
+        'pkey' => true,
+        'extra' => 'auto_increment',
+        'label' => 'ID',
+        'width' => 110,
+        'editable' => false,
+        'default_in_list' => true,
+    ),
+    'for_comment_id' => array (
+        'type' => 'mediumint(8) ',
+        'label' => app::get('b2c')->_('对m的回复'),
+        'default' =>0,
+    ),
+    'type_id' => array(
+        'type' => 'table:goods',
+        'label' =>app::get('b2c')->_('名称'),
+        'in_list' => true,
+        'default_in_list' => true,
+    ),
+    'order_id' => array(
+        'type' => 'table:orders',
+        'label' => app::get('b2c')->_('订单编号'),
+        'in_list' => false,
+        'default_in_list' => false,
+    ),
+    'object_type' => array (
+        'type' => "enum('ask', 'discuss', 'buy', 'message', 'msg', 'order')",
+        'label' => app::get('b2c')->_('类型'),
+        'default' => 'ask',
+        'required' => true,
+    ),
+    'author_id' => array(
+        'type'=>'mediumint(8)',
+        'in_list' => false,
+        'label' => app::get('b2c')->_('作者ID'),
+        'default' => 0,
+        'default_in_list' => false,
+    ),
+    'author' => array (
+        'type' => 'varchar(100)',
+        'label' => app::get('b2c')->_('发送者'),
+        'searchtype' => 'has',
+        'filtertype' => 'normal',
+        'filterdefault' => 'true',
+        'in_list' => true,
+    ),
+    'contact' => 
+    array (
+        'type' => 'varchar(255)',
+        'label' => app::get('b2c')->_('联系方式'),
+        'width' => 110,
+        'filtertype' => 'normal',
+        'filterdefault' => 'true',
+        'in_list' => true,
+    ),
+    'mem_read_status' => array (
+        'type' => "enum('false', 'true')",
+        'label' => app::get('b2c')->_('会员阅读标识'),
+        'default'=>'false',
+    ),
+    'adm_read_status' => array (
+        'type' => "enum('false', 'true')",
+        'label' => app::get('b2c')->_('管理员阅读标识'),
+        'default'=>'false',
+    ),
+    'time' => array (
+        'type' => 'time',
+        'in_list' => true,
+        'filtertype' => 'normal',
+        'filterdefault' => 'true',
+        'label' => app::get('b2c')->_('时间'),
+    ),
+    'lastreply' => array (
+        'type' => 'time',
+        'label' => app::get('b2c')->_('最后回复时间'),
+    ),
+     'reply_name' => array(
+        'type'=>'varchar(100)',
+        'in_list' => true,
+        'label' => app::get('b2c')->_('最后回复人'),
+        'default_in_list' => true,
+    ),
+    'inbox' => array (
+        'type' => 'bool',
+        'label' => app::get('b2c')->_('收件箱'),
+        'default'=>'true',
+    ),
+    'track' => array (
+        'type' => 'bool',
+        'label' => app::get('b2c')->_('发件箱'),
+        'default'=>'true',
+    ),
+     'has_sent' => array (
+        'type' => 'bool',
+        'label' => app::get('b2c')->_('是否发送'),
+        'default'=>'true',
+        ), 
+    'to_id' => array (
+        'type' => 'table:members',
+        'default' =>0,
+        'required' => true,
+    ),
+    'to_uname' => array(
+        'type'=>'varchar(100)',
+        'default_in_list' => true,
+    ),
+     'title' => array(
+        'type'=>'varchar(255)',
+        'in_list' => true,
+        'label' => app::get('b2c')->_('标题'),
+        'is_title'=>true,
+        'searchtype' => 'has',
+        'filtertype' => 'normal',
+        'filterdefault' => 'true',
+        'default_in_list' => true,
+    ),
+    'comment' => array(
+        'type'=>'longtext',
+        'label' => app::get('b2c')->_('内容'),
+        'in_list' => true,
+        'searchtype' => 'has',
+        'filtertype' => 'normal',
+        'filterdefault' => 'true',
+        'default_in_list' => true,
+    ),
+    'ip' => array(
+        'type'=>'varchar(15)',
+        'in_list' => true,
+        'label' => 'IP',
+        'default_in_list' => true,
+    ),
+    'display' => array(
+        'type'=>'bool',
+        'in_list' => true,
+        'label' => app::get('b2c')->_('前台是否显示'),
+        'filtertype' => 'bool',
+        'default' =>'true',
+        'default_in_list' => true,
+    ),
+    'p_index' => array(
+        'type'=>'tinyint(2)',
+        'label' => 'p_index',
+        'default_in_list' => true,
+    ),
+    'disabled' => array(
+        'type'=> "enum('false', 'true')",
+        'default' =>'false',
+        'default_in_list' => true,
+    ),
+  ),
+   
+  'comment' => app::get('b2c')->_('咨询,评论,留言,短消息表'),
+   'engine' => 'innodb',
+   'version' => '$Rev$',
+);
+```
+这里介绍几个比较重要的字段
+
+comment_id - 信息ID 主键
+
+for_comment_id - 对某个信息的回复
+
+type_id - 当是咨询或者评论是为商品的ID
+
+order_id - 当为订单留言时为订单的ID
+
+object_type - 消息类型。枚举类型(ask:咨询 discuss:评论 message:商店留言 msg:短消息，站内信 order:订单留言)
+
+在b2c/lib下有个message的文件夹,下面有五个文件
+
+comment.php 基类文件 直接调用model得到数据
+
+disask.php 继承comment.php里的类 处理商品评论和咨询的业务操作
+
+message.php 继承comment.php里的类 处理商店留言的业务操作
+
+msg.php 继承comment.php里的类 处理会员短消息和站内信的业务操作
+
+order.php 继承comment.php里的类 处理订单留言的业务操作
+
+这里主要介绍一下comment.php里累的几个接口
+
+dump-根据消息ID取一条记录而且是唯一的一条 
+
+getList-取符合filter 的数据 返回一组记录
+
+如果某个同学要直接调member_comment 这个model 然后按照一贯的getList 和dump 来取数据的话会取不到
+
+你想要的,因为我们在这个model里把getList 和dump 这两个传统的方法写的面目全非了 ，你必须深入的研究才
+
+能随心所欲的调用它 细节可以参照代码 一般都是实例一个我们上面提到的四个子类 然后再调用其的dump和
+
+getList方法。
+
+你会看到member_comment 这个model中filter 有个for_comment_id的字段 这里代表当for_comment_id=all
+
+时就是不考虑for_comment_id为多少··相当于unset掉这个键值 当$this->type == 'msgtoadmin' 代表类型是
+
+msg但是是属于站内信, 即会员于管理员之间的通信。
+
+具体的操作可以参照业务中的代码来获取你想要的数据
+
+- ``会员注册项``
+
+会员注册项就是会员在注册的时候需填写的字段,除了系统本身有的会员字段之外,用户还可以定义新的字段让注
+
+册的会员填写,而这些字段我们在里面叫meta字段。它和商品的配件字段有着相同的感念.
+
+关于什么是meta可以参照base或dbeav文档 我们在使用meta的时候 只要在model的构造方法里调用一下
+
+父类的$this->use_meta();方法  //member中的扩展属性将通过meta系统进行存储
+
+- ``会员埋点``
+
+关于会员的埋点暂时不是很多
+
+1，会员注册地址跳转 
+
+为以后的会员注册提供跳转地址，当会员系统中支持整合登录的情况下，会员注册就不是系统中的会员注册了,
+
+比如系统中支持淘宝会员登录，当会员注册时可以直接跳转到淘宝的会员注册页面 此处提供了一个services
+
+ID 为api_signup  例如以下代码:
+
+```
+	<service id="api_signup">
+		<class>shangchao_passport_signup</class>
+	</service>
+```
+
+services内容为：
+
+```
+<?php
+
+class shangchao_passport_signup {
+    
+    function get_status(){ //状态 是否启用
+        return true;
+    }
+
+    function get_url(){
+        return "http://member1.taobao.com/member/newbie.htm"; //注册地址
+    }
+}
+?>
+
+```
+2，类似邮件/短消息自动触发埋点
+
+在后台控制面板里有一个邮件短信管理的菜单 从里面的选项可知有很多的业务会触发此事件,订单模块有
+
+介绍，但是有同学会问，难道我创建了一个订单就只能给会员发短信和邮件吗?我就不能再发送其他的东西
+
+比如手机短信啊 ,旺旺啊,msn啊，等等。可以告诉你，我们这里也有一个埋点,首先看b2c下的一个services
+
+```
+<service id="b2c_messenger">
+        <class>b2c_messenger_email</class>
+        <class>b2c_messenger_msgbox</class>
+</service>
+```
+如果你想再添加一个向msn之类的，你可以往这个services上注册的，系统会自动发送邮件短消息和你注册的类型的
+
+b2c_messenger_email和b2c_messenger_msgbox 中有几个相同的接口
+
+-ready 发送前准备
+
+-finish发送完成
+
+-send发送
+
+还有一个相同的属性 var $sdfpath = 'contact/email'; // 发送对象
+
+这个和会员dbschema中某个字段的sdfpath要保持一样
+
+例如会员deschema中有手机这个字段 那么他的sdfpath和这个sdfpath必须一样
+
+否则不会找到类型
+
+下面列出会员
+
+用一下代码可以把会员的整个sdf格式都dump出来
+
+$a_mem = $member_model->dump($member_id,'*',array( ':account@pam'=>array('*')));
+
+print_r($a_mem);
+
+打印出来结构如下:
+
+```
+Array
+(
+    [pam_account] =&gt; Array
+        (
+            [account_id] =&gt; 3
+            [account_type] =&gt; member
+            [login_name] =&gt; sanow
+            [login_password] =&gt; 96e79218965eb72c92a549dd5a330112
+            [disabled] =&gt; false
+            [createtime] =&gt; 1287543158
+        )
+
+    [member_lv] =&gt; Array
+        (
+            [member_group_id] =&gt; 1
+        )
+
+    [contact] =&gt; Array
+        (
+            [name] =&gt; 
+            [lastname] =&gt; 
+            [firstname] =&gt; 
+            [area] =&gt; 
+            [addr] =&gt; 
+            [phone] =&gt; Array
+                (
+                    [mobile] =&gt; 
+                    [telephone] =&gt; 
+                )
+
+            [email] =&gt; 1113@12216.com
+            [zipcode] =&gt; 
+            [qq] =&gt; 
+            [msn] =&gt; 
+            [skype] =&gt; 
+            [wangwang] =&gt; 
+        )
+
+    [score] =&gt; Array
+        (
+            [total] =&gt; 0
+            [freeze] =&gt; 0
+        )
+
+    [order_num] =&gt; 0
+    [refer_id] =&gt; 
+    [refer_url] =&gt; 
+    [b_year] =&gt; 0
+    [b_month] =&gt; 0
+    [b_day] =&gt; 0
+    [profile] =&gt; Array
+        (
+            [gender] =&gt; female
+            [birthday] =&gt; 0-0-0
+        )
+
+    [addon] =&gt; 
+    [wedlock] =&gt; 0
+    [education] =&gt; 
+    [vocation] =&gt; 
+    [interest] =&gt; 
+    [advance] =&gt; Array
+        (
+            [total] =&gt; 643.000
+            [freeze] =&gt; 0.000
+        )
+
+    [point_history] =&gt; 0
+    [score_rate] =&gt; 
+    [reg_ip] =&gt; 192.168.0.27
+    [regtime] =&gt; 1287543158
+    [state] =&gt; 0
+    [pay_time] =&gt; 
+    [biz_money] =&gt; 0.000
+    [fav_tags] =&gt; 
+    [custom] =&gt; 
+    [currency] =&gt; CNY
+    [lang] =&gt; 
+    [unreadmsg] =&gt; 0
+    [disabled] =&gt; false
+    [remark] =&gt; 
+    [remark_type] =&gt; b1
+    [login_count] =&gt; 0
+    [experience] =&gt; 12
+    [foreign_id] =&gt; 
+    [member_refer] =&gt; local
+)
+```
+
+
++== 购物车 ==+
+购物车是网店系统的基本单元之一。它能够跟踪顾客所选的的商品，记录下所选商品，还能够随时更新，并支付购买，给顾客提供很大的方便。
+
+系统中它主要实现了如下几个功能：
+
+- 加入购物车、修改、删除
+
+- 统算 (包括相应的促销结果)
+
+- 生成数据结构体 (抛给订单)
+
+1.首先让我们了解下购物车数据表结构
+- ``购物车表   obj_ident、member_ident、member_id 组成购物车对象唯一标识``
+
+```
+$db['cart_objects']=array (
+  'columns' => 
+  array (
+    'obj_ident' => 
+    array (
+      'type' => 'varchar(255)',
+      'pkey' => true,
+      'required' => true,
+      'label' => app::get('b2c')->_('对象ident'),
+      'editable' => false,
+      'in_list' => true,
+      'default_in_list' => true,
+      'is_title' => true,
+    ),
+    'member_ident' => 
+    array (
+      'type' => 'varchar(50)',
+      'pkey' => true,
+      'required' => true,
+      'label' => app::get('b2c')->_('会员ident'),
+      'editable' => false,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'member_id' => 
+    array (
+      'type' => 'int(8) ',
+      'pkey' => true,
+      'required' => true,
+      'label' => app::get('b2c')->_('会员 id'),
+      'editable' => false,
+      'default' => -1,
+    ),
+    'obj_type' => 
+    array (
+      'type' => 'varchar(20)',
+      'required' => true,
+      'label' => app::get('b2c')->_('购物车对象类型'),
+      'editable' => false,
+      'in_list' => true,
+    ),
+    'params' => 
+    array (
+      'type' => 'serialize',
+      'required' => true,
+      'label' => app::get('b2c')->_('购物车对象参数'),
+      'editable' => false,
+      'in_list' => true,
+    ),
+    'quantity' => 
+    array (
+      'type' => 'float unsigned',
+      'required' => true,
+      'label' => app::get('b2c')->_('数量'),
+      'editable' => false,
+      'in_list' => true,
+    ),
+  ),
+  'comment' => app::get('b2c')->_('购物车'),
+  'engine' => 'innodb',
+  'version' => '$Rev: 40912 $',
+);
+```
+a) obj_ident 购物车项标识
+
+b) member_ident 会员唯一标识
+
+c) member_id  会员id
+
+d) obj_type 购物车对象类型 如：goods、coupon
+
+e) params 购物车参数
+
+f) quantity 数量
+
+- ``cart 表系统保留``
+
+- ``购物车接口``
+
+```
+1. b2c_mdl_cart
+
+/* 
+ * 获取购物车数据
+ * params $aData cart_objects数据
+ * params $aResult 购物车数据
+ * return 购物车数据
+ */
+public fucntion get_objects($aData=array(),$aResult = array(),$aConfig = array()) {
+   ......
+}
+
+/* 
+ * 数据统算 参数引用形式
+ * params $aData 购物车数据
+ */
+public fucntion count_objects(&$aData) {
+   ......
+}
+
+/* 
+ * 为执行的优惠方案 针对于条件未满一类促销
+ * 额度：setting：cart.total_limit
+ * params $aCart 购物车数据
+ * return array
+ */
+public function get_unuse_solution_cart( $aCart ) {
+   ......
+}
+
+/* 
+ * 验证购物车是否为空
+ * parmas $aCart 购物车数据
+ * return bool
+ */
+public fucntion is_empty($aCart){
+   .....
+}
+
+/* 
+ * 加入购物车（非入库形式）
+ * params $arr_goods 
+ * params $member_ident 唯一标识
+ * return cart_objects数据
+ */
+public fucntion set_cookie_cart_arr($arr_goods=array(), $member_ident='') {
+   ....
+}
+
+/* 
+ * 获取购物车（非入库形式）
+ * params $member_ident 唯一标识
+ * return cart_objects数据
+ */
+public fucntion get_cookie_cart_arr($member_ident='') {
+   .....
+}
+
+/* 
+ * 删除购物车（非入库形式）
+ * params $member_ident 唯一标识
+ * return cart_objects数据
+ */
+public fucntion del_cookie_cart_arr($member_ident='') {
+   .....
+}
+
+/* 
+ * 删除购物车（非入库形式）
+ * params $arr_goods art_objects数据
+ * return cart数据
+ */
+public fucntion get_cart_object($arr_goods=array()) {
+   .....
+}
+
+* 参见以下服务区块
+get_item_render
+get_item_goods_render
+
+2. b2c_mdl_cart_object
+
+/* 
+ * 加入购物车 
+ * @param array  $aData  // $_POST $_GET 等数据
+ * @param string $sType  // 类型对应于b2c_cart_apps 里的 b2c_cart_$sType里的add处理
+ * @return boolean
+ */
+public fucntion add_object($aData,$sType='goods') {
+   .....
+}
+
+/*
+ * 获取指定的类型购物车数据 指定$sIdent的数据
+ * @param string $sType
+ * @param string $sIdent
+ * @return array
+ */
+public fucntion get_object($sType = null,$sIdent = null) {
+   .....
+}
+
+/*
+ * 删除指定的类型购物车数据
+ * @param string $sType
+ * @param string $sIdent
+ * return bool
+ */
+public fucntion remove_object($sType='', $sIdent = null) {
+   .....
+}
+
+/*
+ * 修改指定的类型购物车数据
+ * @param string $sType
+ * @param string $sIdent
+ * $params 数量 array or int
+ * return bool
+ */
+public fucntion update_object($sType='', $sIdent,$quantity) {
+   .....
+}
+```
+
+- ``购物车service``
+
+```
+b2c_cart_object_apps  
+ 注册购物车包含类型 
+ 系统默认包含 goods、coupon
+ 注册新的购物车类型如：赠品(app:gift)
+```
+    [images/cart_objects_service_apps.png]
+```
+b2c_cart_process_apps
+ 购物车处理流程（ 商品预过滤、订单过滤皆在此注册 ）
+
+b2c_cart_render_items_apps
+ 购物车项展示模板 如:goods gift
+```
+    [images/cart_render_items_apps.png]
+```
+b2c_cart_render_items_goods_apps
+ 购物车goods项下模板 如:配件(adjunct) 还有我们app（gift）中的gift项
+```
+   [images/cart_render_items_goods_apps.png]
+
+
+
+
++== 订单 ==+
+订单是商店系统的重要部分，可以说是围绕订单展开的，一系列其他的业务都是围绕订单这个主线开展的。
+
+下一次订单可以大致分为几个步骤
+
+- 订单的辅助功能，包括物流公司、配送方式等
+
+- 订单相关单据的管理，如订单、发货单以及退货单管理
+
+- 订单相关的一些埋点
+
+- 订单相关业务流程介绍
+
+1. 订单的辅助功能介绍：
+
+- ``物流公司管理``
+
+(1). 首先介绍下物流公司的数据结构
+
+```
+$db['dlycorp']=array (
+  'columns' => 
+  array (
+    'corp_id' => 
+    array (
+      'type' => 'number',
+      'required' => true,
+      'pkey' => true,
+      'extra' => 'auto_increment',
+      'label' => app::get('b2c')->_('物流公司ID'),
+      'width' => 110,
+      'editable' => false,
+      'hidden' => true,
+    ),
+    'type' => 
+    array (
+      'type' => 'varchar(6)',
+      'editable' => false,
+      'is_title' => true,
+    ),
+    'name' => 
+    array (
+      'type' => 'varchar(200)',
+      'label' => app::get('b2c')->_('物流公司'),
+      'width' => 180,
+      'editable' => true,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'disabled' => 
+    array (
+      'type' => 'bool',
+      'default' => 'false',
+      'editable' => false,
+    ),
+    'ordernum' => 
+    array (
+      'type' => 'smallint(4) unsigned',
+      'label' => app::get('b2c')->_('排序'),
+      'width' => 180,
+      'editable' => true,
+      'in_list' => true,
+    ),
+    'website' => 
+    array (
+      'type' => 'varchar(200)',
+      'label' => app::get('b2c')->_('物流公司网址'),
+      'width' => 180,
+      'editable' => true,
+      'default_in_list' => true,
+      'in_list' => true,
+    ),
+    'request_url' => 
+    array (
+      'type' => 'varchar(200)',
+      'label' => app::get('b2c')->_('查询接口网址'),
+      'width' => 180,
+      'hidden'=>false,
+      'editable' => true,
+      'in_list' => true,
+    ),
+  ),
+  'comment' => app::get('b2c')->_('物流公司表'),
+  'index' => 
+  array (
+    'ind_type' => 
+    array (
+      'columns' => 
+      array (
+        0 => 'type',
+      ),
+    ),
+    'ind_disabled' => 
+    array (
+      'columns' => 
+      array (
+        0 => 'disabled',
+      ),
+    ),
+    'ind_ordernum' => 
+    array (
+      'columns' => 
+      array (
+        0 => 'ordernum',
+      ),
+    ),
+  ),
+  'version' => '$Rev$',
+);
+```
+
+a) corp_id - 物流公司ID
+
+b) type - 物流公司类型
+
+c) name - 物流公司名称
+
+d) disabled - 无效
+
+e) ordernum - 排序
+
+f) website - 物流公司网址
+
+g) request_url - 查询接口网址
+
+- ``配送方式管理``
+
+(1). 首先介绍下配送方式的数据结构
+
+```
+$db['dlytype']=array (
+  'columns' => 
+  array (
+    'dt_id' => 
+    array (
+      'type' => 'number',
+      'required' => true,
+      'pkey' => true,
+      'extra' => 'auto_increment',
+      'label' => app::get('b2c')->_('配送ID'),
+      'width' => 110,
+      'editable' => false,
+      'hidden' => true,
+      'in_list' => false,
+    ),
+    'dt_name' => 
+    array (
+      'type' => 'varchar(50)',
+      'label' => app::get('b2c')->_('配送方式'),
+      'width' => 180,
+      'editable' => true,
+      'in_list' => true,
+      'is_title' => true,
+      'default_in_list' => true,
+    ),
+    'has_cod' => 
+    array (
+      'type' => 'bool',
+      'default' => 'false',
+      'required' => true,
+      'label' => app::get('b2c')->_('货到付款'),
+      'width' => 110,
+      'editable' => false,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'firstunit'=>
+    array(
+        'type' => 'number',
+        'editable' => false,
+        'required' => true,
+        'default' => 0,
+
+    ),
+    'continueunit'=>array(
+        'type' => 'number',
+        'editable' => false,
+        'required' => true,
+        'default' => 0
+    ),
+    'protect' => 
+    array (
+      'type' => 'bool',
+      'default' => 'false',
+      'required' => true,
+      'label' => app::get('b2c')->_('物流保价'),
+      'width' => 75,
+      'editable' => false,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'protect_rate' => 
+    array (
+      'type' => 'float(6,3)',
+      'editable' => false,
+    ),
+    'minprice' => 
+    array (
+      'type' => 'float(10,2)',
+      'default' => '0.00',
+      'required' => true,
+      'editable' => false,
+    ),
+    'setting'=>array(
+      'type' => 
+      array (
+        '0' => '0',
+        '1' => '1',
+      ),
+      'editable' => false,
+      'default' => '1',
+    ),
+
+    'def_area_fee'=>array(
+        'type'=>'bool',
+        'default'=>'false',
+        'label'=>app::get('b2c')->_('按地区设置配送费用时，是否启用默认配送费用'),
+        'required' => false,
+        'editable' => false,
+    ),
+
+    'firstprice'=>array(
+       'type' => 'float(10,2)',
+      'default' => '0.00',
+      'required' => false,
+      'editable' => false,
+    ),
+
+    'continueprice'=>array(
+      'type' => 'float(10,2)',
+      'default' => '0.00',
+      'required' => false,
+      'editable' => false,    
+    ),
+
+    'dt_discount'=>array(
+      'type' => 'float(10,2)',
+      'default' => '0.00',
+      'required' => false,
+      'editable' => false,    
+    ),
+        
+    'dt_expressions' => 
+    array (
+      'type' => 'longtext',
+      'editable' => false,
+    ),
+    'dt_useexp' => 
+    array (
+      'type' => 'bool',
+      'editable' => false,
+      'default' => 'false',
+    ),
+
+    'corp_id' => 
+    array (
+        'type' => 'number',
+        'editable' => false,
+        'required' => false
+    ),
+
+    'dt_status' => 
+    array (
+      'type' => 
+      array (
+        '0' => app::get('b2c')->_('关闭'),
+        '1' => app::get('b2c')->_('启用'),
+      ),
+      'label' => app::get('b2c')->_('状态'),
+      'width' => 75,
+      'editable' => false,
+      'default' => '1',
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+
+    'detail' => 
+    array (
+      'type' => 'longtext',
+      'editable' => false,
+    ),
+    'area_fee_conf' => 
+    array (
+      'type' => 'longtext',
+      'required' => false,
+      'default' => '',
+      'editable' => false,
+    ),
+    'ordernum' => 
+    array (
+      'type' => 'smallint(4)',
+      'default' => 0,
+      'label' => app::get('b2c')->_('排序'),
+      'width' => 110,
+      'editable' => true,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    
+    'disabled' => 
+    array (
+      'type' => 'bool',
+      'default' => 'false',
+      'editable' => false,
+    ),
+
+  ),
+  'comment' => app::get('b2c')->_('商店配送方式表'),
+  'index' => 
+  array (
+    'ind_disabled' => 
+    array (
+      'columns' => 
+      array (
+        0 => 'disabled',
+      ),
+    ),
+  ),
+  'version' => '$Rev$',
+);
+```
+a) dt_id - 配送ID
+
+b) dt_name - 配送名称
+
+c) has_cod - 是否支持货到付款
+
+d) firstunit - 首重重量
+
+e) continueunit - 续重重量
+
+f) protect - 是否是物流保价
+
+g) protect_rate - 标价费用比率
+
+h) minprice - 最低保价费
+
+i) setting - 地区费用类型
+
+j) def_area_fee - 启用默认费用
+
+k) firstprice - 首重费用
+
+l) continueprice - 续重费用
+
+m) dt_discount - 邮寄折扣（默认为1，外贸版本可以设定）
+
+n) dt_expressions - 配送费用计算公式
+
+o) dt_useexp - 是否使用公式
+
+p) corp_id - 配送公司ID
+
+q) dt_status - 是否启用
+
+r) detail - 详细描述
+
+s) area_fee_conf - 制定配送地区信息（序列化值）
+
+t) ordernum - 排序
+
+u) disabled - 是否禁用
+
+2. 订单相关单据的管理：
+
+- ``订单管理``
+
+(1). 首先介绍下订单相关数据 - orders
+
+```
+$db['orders']=array (
+  'columns' => 
+  array (
+    'order_id' => 
+    array (
+      'type' => 'bigint unsigned',
+      'required' => true,
+      'default' => 0,
+      'pkey' => true,
+      'label' => app::get('b2c')->_('订单号'),
+      'is_title' => true,
+      'width' => 110,
+      'searchtype' => 'has',
+      'editable' => false,
+      'filtertype' => 'custom',
+      'filterdefault' => true,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'total_amount' => 
+    array (
+      'type' => 'money',
+      'default' => '0',
+      'required' => true,
+      'editable' => false,
+    ),
+    'final_amount' => 
+    array (
+      'type' => 'money',
+      'default' => '0',
+      'required' => true,
+      'editable' => false,
+      'sdfpath' => 'cur_amount',
+      'label' => app::get('b2c')->_('订单总额'),
+      'width' => 75,
+      'filtertype' => 'number',
+      'filterdefault' => true,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+     'member_id' => 
+    array (
+      'type' => 'table:members',
+      'label' => app::get('b2c')->_('会员用户名'),
+      'width' => 75,
+      'editable' => false,
+      'filtertype' => 'yes',
+      'filterdefault' => true,
+      'in_list' => true,
+    ),
+     'status' => 
+    array (
+      'type' => 
+      array (
+        'active' => app::get('b2c')->_('活动订单'),
+        'dead' => app::get('b2c')->_('已作废'),
+        'finish' => app::get('b2c')->_('已完成'),
+      ),
+      'default' => 'active',
+      'required' => true,
+      'label' => app::get('b2c')->_('订单状态'),
+      'width' => 75,
+      'hidden' => true,
+      'editable' => false,
+      'in_list' => true,
+      
+    ),
+    'pay_status' => 
+    array (
+      'type' => 
+      array (
+        0 => app::get('b2c')->_('未支付'),
+        1 => app::get('b2c')->_('已支付'),
+        2 => app::get('b2c')->_('已付款至到担保方'),
+        3 => app::get('b2c')->_('部分付款'),
+        4 => app::get('b2c')->_('部分退款'),
+        5 => app::get('b2c')->_('全额退款'),
+      ),
+      'default' => 0,
+      'required' => true,
+      'label' => app::get('b2c')->_('付款状态'),
+      'width' => 75,
+      'editable' => false,
+      'filtertype' => 'yes',
+      'filterdefault' => true,
+      'in_list' => true,
+       'default_in_list' => true,
+    ),
+        'ship_status' => 
+    array (
+      'type' => 
+      array (
+        0 => app::get('b2c')->_('未发货'),
+        1 => app::get('b2c')->_('已发货'),
+        2 => app::get('b2c')->_('部分发货'),
+        3 => app::get('b2c')->_('部分退货'),
+        4 => app::get('b2c')->_('已退货'),
+      ),
+      'default' => 0,
+      'required' => true,
+      'label' => app::get('b2c')->_('发货状态'),
+      'width' => 75,
+      'editable' => false,
+      'filtertype' => 'yes',
+      'filterdefault' => true,
+      'in_list' => true,
+       'default_in_list' => true,
+    ),
+    'is_delivery' => 
+    array (
+      'type' => 'tinybool',
+      'default' => 'Y',
+      'required' => true,
+      'editable' => false,
+    ),
+    'shipping_id' => 
+    array (
+      'type' => 'table:dlytype',
+      'label' => app::get('b2c')->_('配送方式'),
+      'filtertype' => 'yes',
+      'filterdefault' => true,
+      'editable' => false,
+      'sdfpath' => 'shipping/shipping_id',
+      'in_list' => false,
+    ),
+   
+    'shipping' => 
+    array (
+      'type' => 'varchar(100)',
+      'label' => app::get('b2c')->_('配送方式'),
+      'width' => 75,
+      'editable' => false,
+      'sdfpath' => 'shipping/shipping_name',
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+     'payment' => 
+    array (
+      'type' => 'varchar(100)',
+      'label' => app::get('b2c')->_('支付方式'),
+      'width' => 75,
+      'editable' => false,
+      'filtertype' => 'yes',
+      'filterdefault' => true,
+      'sdfpath' => 'payinfo/pay_app_id',
+      'in_list' => true,
+      
+    ), 
+    'confirm' => 
+    array (
+      'type' => 'tinybool',
+      'default' => 'N',
+      'required' => true,
+      'label' => app::get('b2c')->_('确认状态'),
+      'width' => 75,
+      'hidden' => true,
+      'editable' => false,
+      'in_list' => false,
+    ),
+   
+      'createtime' => 
+    array (
+      'type' => 'time',
+      'label' => app::get('b2c')->_('下单时间'),
+      'width' => 110,
+      'editable' => false,
+      'filtertype' => 'time',
+      'filterdefault' => true,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+     'last_modified' => 
+    array (
+      'label' => app::get('b2c')->_('最后更新时间'),
+      'type' => 'last_modify',
+      'width' => 110,
+      'editable' => false,
+      'in_list' => true,
+    ),
+    'ship_name' => 
+    array (
+      'type' => 'varchar(50)',
+      'label' => app::get('b2c')->_('收货人'),
+      'sdfpath' => 'consignee/name',
+      'width' => 75,
+      'searchtype' => 'head',
+      'editable' => false,
+      'filtertype' => 'normal',
+      'filterdefault' => true,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'ship_area' => 
+    array (
+      'type' => 'region',
+      'label' => app::get('b2c')->_('收货地区'),
+      'width' => 180,
+      'editable' => false,
+      'filtertype' => 'yes',
+      'sdfpath' => 'consignee/area',
+      'in_list' => true,
+    'default_in_list' => true,
+    ),
+    'weight' => 
+    array (
+      'type' => 'money',
+      'editable' => false,
+    ),
+    'tostr' => 
+    array (
+      'type' => 'longtext',
+      'editable' => false,
+      'sdfpath' => 'title',
+    ),
+    'itemnum' => 
+    array (
+      'type' => 'number',
+      'editable' => false,
+    ),   
+    'ip' => 
+    array (
+      'type' => 'varchar(15)',
+      'editable' => false,
+    ),    
+    'ship_addr' => 
+    array (
+      'type' => 'varchar(100)',
+      'label' => app::get('b2c')->_('收货地址'),
+      'searchtype' => 'has',
+      'width' => 180,
+      'editable' => false,
+      'filtertype' => 'normal',
+      'sdfpath' => 'consignee/addr',
+      'in_list' => true,
+    ),
+    'ship_zip' => 
+    array (
+      'type' => 'varchar(20)',
+      'editable' => false,
+      'sdfpath' => 'consignee/zip',
+    ),
+    'ship_tel' => 
+    array (
+      'type' => 'varchar(30)',
+      'label' => app::get('b2c')->_('收货人电话'),
+      'searchtype' => 'has',
+      'width' => 75,
+      'editable' => false,
+      'filtertype' => 'normal',
+      'filterdefault' => true,
+      'sdfpath' => 'consignee/telephone',
+      'in_list' => true,
+    ),
+    'ship_email' => 
+    array (
+      'type' => 'varchar(150)',
+      'editable' => false,
+      'sdfpath' => 'consignee/email',
+    ),
+    'ship_time' => 
+    array (
+      'type' => 'varchar(50)',
+      'editable' => false,
+      'sdfpath' => 'consignee/r_time',
+    ),
+    'ship_mobile' => 
+    array (
+      'label' => app::get('b2c')->_('收货人手机'),
+      'hidden' => true,
+      'searchtype' => 'has',
+      'type' => 'varchar(50)',
+      'editable' => false,
+      'sdfpath' => 'consignee/mobile',
+      'in_list' => true,
+    ),
+    'cost_item' => 
+    array (
+      'type' => 'money',
+      'default' => '0',
+      'required' => true,
+      'editable' => false,
+    ),
+    'is_tax' => 
+    array (
+      'type' => 'bool',
+      'default' => 'false',
+      'required' => true,
+      'editable' => false,
+    ),
+    'cost_tax' => 
+    array (
+      'type' => 'money',
+      'default' => '0',
+      'required' => true,
+      'editable' => false,
+    ),
+    'tax_company' => 
+    array (
+      'type' => 'varchar(255)',
+      'editable' => false,
+      'sdfpath' => 'tax_title',
+    ),
+    'cost_freight' => 
+    array (
+      'type' => 'money',
+      'default' => '0',
+      'required' => true,
+      'label' => app::get('b2c')->_('配送费用'),
+      'width' => 75,
+      'editable' => false,
+      'filtertype' => 'number',
+      'sdfpath' => 'shipping/cost_shipping',
+      'in_list' => true,
+    ),
+    'is_protect' => 
+    array (
+      'type' => 'bool',
+      'default' => 'false',
+      'required' => true,
+      'editable' => false,
+      'sdfpath' => 'shipping/is_protect',
+    ),
+    'cost_protect' => 
+    array (
+      'type' => 'money',
+      'default' => '0',
+      'required' => true,
+      'editable' => false,
+      'sdfpath' => 'shipping/cost_protect',
+    ),
+    'cost_payment' => 
+    array (
+      'type' => 'money',
+      'editable' => false,
+      'sdfpath' => 'payinfo/cost_payment',
+    ),
+    'currency' => 
+    array (
+      'type' => 'varchar(8)',
+      'editable' => false,
+    ),
+    'cur_rate' => 
+    array (
+      'type' => 'decimal(10,4)',
+      'default' => '1.0000',
+      'editable' => false,
+    ),
+    'score_u' => 
+    array (
+      'type' => 'money',
+      'default' => '0',
+      'required' => true,
+      'editable' => false,
+    ),
+    'score_g' => 
+    array (
+      'type' => 'money',
+      'default' => '0',
+      'required' => true,
+      'editable' => false,
+    ),
+    'discount' => 
+    array (
+      'type' => 'money',
+      'default' => '0',
+      'required' => true,
+      'editable' => false,
+    ),
+    'pmt_goods' => 
+    array (
+      'type' => 'money',
+      'editable' => false,
+    ),
+    'pmt_order' => 
+    array (
+      'type' => 'money',
+      'editable' => false,
+    ),
+    'payed' => 
+    array (
+      'type' => 'money',
+      'default' => '0',
+      'editable' => false,
+    ),
+    'memo' => 
+    array (
+      'type' => 'longtext',
+      'editable' => false,
+    ),
+    'mark_text' => 
+    array (
+      'type' => 'longtext',
+      'label' => app::get('b2c')->_('订单备注'),
+      'width' => 50,
+      'editable' => false,
+      'searchtype' => 'has',
+      'filtertype' => 'normal',
+      'in_list' => true,
+    ),
+    'disabled' => 
+    array (
+      'type' => 'bool',
+      'default' => 'false',
+      'editable' => false,
+    ),
+    'mark_type' => 
+    array (
+      'type' => 'varchar(2)',
+      'default' => 'b1',
+      'required' => true,
+      'label' => app::get('b2c')->_('订单备注图标'),
+      'hidden' => true,
+      'width' => 150,
+      'editable' => false,
+      'in_list' => true,
+    ),
+    'extend' => 
+    array (
+      'type' => 'varchar(255)',
+      'default' => 'false',
+      'editable' => false,
+    ),
+    'order_refer' => 
+    array (
+      'type' => 'varchar(20)',
+      'required' => true,
+      'default' => 'local',
+      'hidden' => true,
+    ),
+  ),
+  'index' => 
+  array (
+    'ind_ship_status' => 
+    array (
+      'columns' => 
+      array (
+        0 => 'ship_status',
+      ),
+    ),
+    'ind_pay_status' => 
+    array (
+      'columns' => 
+      array (
+        0 => 'pay_status',
+      ),
+    ),
+    'ind_status' => 
+    array (
+      'columns' => 
+      array (
+        0 => 'status',
+      ),
+    ),
+    'ind_disabled' => 
+    array (
+      'columns' => 
+      array (
+        0 => 'disabled',
+      ),
+    ),
+  ),
+  'engine' => 'innodb',
+  'version' => '$Rev: 42376 $',
+);
+```
+
+order_id - 订单号
+
+total_amount - 订单总额（本位币）
+
+final_amount - 订单总额（货币值）
+
+member_id - 会员ID
+
+status - 订单状态
+
+pay_status - 订单支付状态
+
+ship_status - 订单配送状态
+
+is_delivery - 是否需要配送
+
+shipping_id - 配送方式ID
+
+shipping - 配送方式名称
+
+payment - 支付方式
+
+confirm - 是否确认
+
+createtime - 创建时间
+
+last_modified - 最近修改时间
+
+ship_name - 收货人姓名
+
+ship_area - 收获地区
+
+weight - 订单总重量
+
+tostr - 文字描述
+
+itemnum - 订单商品总数
+
+ip - 下定单机器的ip
+
+ship_addr - 收货地址
+
+ship_zip - 收货地址ZIP
+
+ship_tel - 收货人电话
+
+ship_email - 收货人邮件
+
+ship_time - 配送时间
+
+ship_mobile - 收货人手机
+
+cost_item - 商品总价格
+
+is_tax - 是否需要税率
+
+cost_tax - 税率费用
+
+tax_company - 税票抬头
+
+cost_freight - 配送费用
+
+is_protect - 是否需要保价费
+
+cost_protect - 保价费
+
+cost_payment - 支付费用
+
+currency - 订单货币
+
+cur_rate - 货币汇率
+
+score_u - 订单使用积分数
+
+score_g - 订单得到的积分数
+
+discount - 订单折扣费用
+
+pmt_goods - 商品优惠价格
+
+pmt_order - 订单优惠价格
+
+payed - 订单支付金额
+
+memo - 订单附言
+
+mark_text - 订单备注
+
+disabled - 订单是否有效的标记
+
+mark_type - 订单备注图标
+
+extend - 订单扩展
+
+order_refer - 订单推荐链接
+
+(2). 首先介绍下订单相关数据 - order_objects
+
+订单对象表是表示订单内的同一个区块
+
+```
+$db['order_objects']=array (
+  'columns' => 
+  array (
+    'obj_id' => 
+    array (
+      'type' => 'number',
+      'required' => true,
+      'pkey' => true,
+      'extra' => 'auto_increment',
+      'editable' => false,
+    ),
+    'order_id' => 
+    array (
+      'type' => 'table:orders',
+      'required' => true,
+      'default' => 0,
+      'editable' => false,
+    ),
+    'obj_type' => 
+    array (
+      'type' => 'varchar(50)',
+      'default' => '',
+      'required' => true,
+      'editable' => false,
+    ),
+    'obj_alias' => 
+    array (
+      'type' => 'varchar(100)',
+      'default' => '',
+      'required' => true,
+      'editable' => false,
+    ),
+    'goods_id' => 
+    array (
+      'type' => 'table:goods',
+      'required' => true,
+      'default' => 0,
+      'editable' => false,
+    ),
+    'bn' => 
+    array (
+      'type' => 'varchar(40)',
+      'editable' => false,
+      'is_title' => true,
+    ),
+    'name' => 
+    array (
+      'type' => 'varchar(200)',
+      'editable' => false,
+    ),
+    'price' => 
+    array (
+      'type' => 'money',
+      'default' => '0',
+      'required' => true,
+      'editable' => false,
+    ),
+    'amount' => 
+    array (
+      'type' => 'money',
+      'default' => '0',
+      'required' => true,
+      'editable' => false,
+    ),
+    'quantity' => 
+    array (
+      'type' => 'float',
+      'default' => 1,
+      'required' => true,
+      'editable' => false,
+    ),
+    'weight' => 
+    array (
+      'type' => 'number',
+      'editable' => false,
+    ),
+    'score' => 
+    array (
+      'type' => 'number',
+      'editable' => false,
+    ),
+  ),
+  'engine' => 'innodb',
+  'version' => '$Rev: 40912 $',
+);
+```
+
+obj_id - 订单对象ID
+
+order_id - 订单ID
+
+obj_type - 订单对象类别
+
+obj_alias - 订单对象别名
+
+goods_id - 订单对象商品ID
+
+bn - 商品的bn
+
+name - 商品名称
+
+price - 商品单位价格
+
+amount - 商品总价格
+
+quantity - 商品数量
+
+weight - 商品总重量
+
+score - 商品积分
+
+(3). 首先介绍下订单相关数据 - order_items
+
+订单详细项目表
+
+```
+$db['order_items']=array (
+  'columns' => 
+  array (
+    'item_id' => 
+    array (
+      'type' => 'number',
+      'required' => true,
+      'pkey' => true,
+      'extra' => 'auto_increment',
+      'editable' => false,
+    ),
+    'order_id' => 
+    array (
+      'type' => 'table:orders',
+      'required' => true,
+      'default' => 0,
+      'editable' => false,
+    ),
+    'obj_id' => 
+    array (
+      'type' => 'table:order_objects',
+      'required' => true,
+      'default' => 0,
+      'editable' => false,
+    ),
+    'product_id' => 
+    array (
+      'type' => 'table:products',
+      'required' => true,
+      'default' => 0,
+      'editable' => false,
+      'sdfpath' => 'products/product_id'
+    ),
+    'goods_id' => 
+    array (
+      'type' => 'table:goods',
+      'required' => true,
+      'default' => 0,
+      'editable' => false,
+    ),
+    'type_id' => 
+    array (
+      'type' => 'number',
+      'editable' => false,
+    ),
+    'bn' => 
+    array (
+      'type' => 'varchar(40)',
+      'editable' => false,
+      'is_title' => true,
+    ),
+    'name' => 
+    array (
+      'type' => 'varchar(200)',
+      'editable' => false,
+    ),
+    'cost' => 
+    array (
+      'type' => 'money',
+      'editable' => false,
+    ),
+    'price' => 
+    array (
+      'type' => 'money',
+      'default' => '0',
+      'required' => true,
+      'editable' => false,
+    ),
+    'amount' => 
+    array (
+      'type' => 'money',
+      'editable' => false,
+    ),
+    'score' =>
+    array (
+      'type' => 'number',
+      'label' => app::get('b2c')->_('积分'),
+      'width' => 30,
+      'editable' => false,
+    ),
+    'weight' => 
+    array (
+      'type' => 'number',
+      'editable' => false,
+    ),
+    'nums' => 
+    array (
+      'type' => 'float',
+      'default' => 1,
+      'required' => true,
+      'editable' => false,
+      'sdfpath' => 'quantity',
+    ),
+    'sendnum' => 
+    array (
+      'type' => 'float',
+      'default' => 0,
+      'required' => true,
+      'editable' => false,
+    ),
+    'addon' => 
+    array (
+      'type' => 'longtext',
+      'editable' => false,
+    ),
+    'item_type' => 
+    array (
+      'type' => 
+      array (
+        'product' => app::get('b2c')->_('商品'),
+        'pkg' => app::get('b2c')->_('捆绑商品'),
+        'gift' => app::get('b2c')->_('赠品商品'),
+      ),
+      'default' => 'product',
+      'required' => true,
+      'editable' => false,
+    ),
+  ),
+  'engine' => 'innodb',
+  'version' => '$Rev: 44813 $',
+);
+```
+
+item_id - 详细项目ID
+
+order_id - 订单ID
+
+obj_id - 对象ID
+
+product_id - 产品ID
+
+goods_id - 商品ID
+
+type_id - 商品类型ID
+
+bn - 商品bn
+
+name - 商品名称
+
+cost - 商品成本价
+
+price - 商品品购买单价
+
+amount - 商品小计
+
+score - 商品积分
+
+weight - 商品重量
+
+nums - 商品数量
+
+sendnum - 已发货数量
+
+addon - 附加信息，如果是pkg,则存放附属商品的序列化信息
+
+item_type - 订单明晰项目类别
+
+(4). 以上三个表之间的关系
+
+orders 1->n order_objects
+
+order_objects 1->n order_items
+
+(5). 列出订单相关的sdf数据
+
+```
+array (
+  'order_id' => '20100629225279',
+  'total_amount' => '39.000',
+  'cur_amount' => '39.000',
+  'member_id' => '2',
+  'status' => 'active',
+  'pay_status' => '1',
+  'ship_status' => '1',
+  'is_delivery' => 'Y',
+  'shipping' => 
+  array (
+    'shipping_id' => '2',
+    'shipping_name' => '普通配送',
+    'cost_shipping' => '5.000',
+    'is_protect' => 'false',
+    'cost_protect' => '0.000',
+  ),
+  'payinfo' => 
+  array (
+    'pay_app_id' => 'alipay',
+    'cost_payment' => '0.000',
+  ),
+  'confirm' => 'N',
+  'createtime' => '1277879496',
+  'last_modified' => '1277901575',
+  'consignee' => 
+  array (
+    'name' => '张三',
+    'area' => 'mainland:上海/上海市/徐汇区:25',
+    'addr' => '上海市徐汇区虹桥路333号慧谷创业406',
+    'zip' => '200030',
+    'telephone' => '',
+    'email' => 'demo@demo.com',
+    'r_time' => '任意日期任意时间段',
+    'mobile' => '15800874524',
+  ),
+  'weight' => '20.000',
+  'title' => '订单明细介绍',
+  'itemnum' => '1',
+  'ip' => '127.0.0.1',
+  'cost_item' => '34.000',
+  'is_tax' => 'false',
+  'cost_tax' => '0.000',
+  'tax_title' => NULL,
+  'currency' => 'CNY',
+  'cur_rate' => '1.0000',
+  'score_u' => '0.000',
+  'score_g' => '34.000',
+  'discount' => '0.000',
+  'pmt_goods' => '0.000',
+  'pmt_order' => '0.000',
+  'payed' => '39.000',
+  'memo' => '测试订单，请勿配货。',
+  'mark_text' => NULL,
+  'disabled' => 'false',
+  'mark_type' => 'b1',
+  'extend' => 'false',
+  'order_refer' => 'local',
+  'order_objects' => 
+  array (
+    1 => 
+    array (
+      'obj_id' => '1',
+      'order_id' => '20100629225279',
+      'obj_type' => 'goods',
+      'obj_alias' => '捆绑销售',
+      'goods_id' => '23',
+      'bn' => 'P4C2AAF827A20B',
+      'name' => '多用包特价多层休闲包',
+      'price' => '0.000',
+      'amount' => '0.000',
+      'quantity' => '1',
+      'weight' => '20',
+      'score' => '0',
+      'order_items' => 
+      array (
+        1 => 
+        array (
+          'item_id' => '1',
+          'order_id' => '20100629225279',
+          'obj_id' => '1',
+          'products' => 
+          array (
+            'product_id' => '37',
+            'goods_id' => '23',
+            'barcode' => NULL,
+            'title' => NULL,
+            'bn' => 'P4C2AAF827A20B',
+            'price' => 
+            array (
+              'price' => 
+              array (
+                'price' => '34.000',
+              ),
+              'cost' => 
+              array (
+                'price' => '3.000',
+              ),
+              'mktprice' => 
+              array (
+                'price' => '67.000',
+              ),
+            ),
+            'name' => '多用包特价多层休闲包',
+            'weight' => '20.000',
+            'unit' => NULL,
+            'store' => '899.00',
+            'store_place' => NULL,
+            'freez' => '0',
+            'goods_type' => 'normal',
+            'spec_info' => NULL,
+            'spec_desc' => NULL,
+            'uptime' => NULL,
+            'last_modify' => '1277902825',
+            'disabled' => 'false',
+            'status' => 'true',
+          ),
+          'goods_id' => '23',
+          'type_id' => '3',
+          'bn' => 'P4C2AAF827A20B',
+          'name' => '多用包特价多层休闲包',
+          'cost' => '3.000',
+          'price' => '34.000',
+          'amount' => '34.000',
+          'score' => NULL,
+          'weight' => '20',
+          'quantity' => '1',
+          'sendnum' => '1',
+          'addon' => '',
+          'item_type' => 'product',
+        ),
+      ),
+    ),
+  ),
+)
+```
+
+(6). 发货单数据
+
+发货单主表 `delivery`
+
+```
+$db['delivery']=array (
+  'columns' => 
+  array (
+    'delivery_id' => 
+    array (
+      'type' => 'bigint unsigned',
+      'required' => true,
+      'pkey' => true,
+      'label' => app::get('b2c')->_('发货单号'),
+      'extra' => 'auto_increment',
+      'comment' => app::get('b2c')->_('配送流水号'),
+      'editable' => false,
+      'searchtype' => 'has',
+      'filtertype' => 'yes',
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'order_id' => 
+    array (
+      'type' => 'varchar(100)',
+      'label' => app::get('b2c')->_('订单号'),
+      'comment' => app::get('b2c')->_('订单号'),
+      'editable' => false,
+      'searchtype' => 'tequal',
+      'filtertype' => 'normal',
+      'filterdefault' => true,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'delivery_bn' => 
+    array (
+      'type' => 'varchar(32)',
+      'required' => false,
+      'label' => app::get('b2c')->_('发货中心单号'),
+      'comment' => app::get('b2c')->_('配送流水号'),
+      'editable' => false,
+      'width' =>140,
+      'searchtype' => 'has',
+      'filtertype' => 'yes',
+      'filterdefault' => true,
+      'in_list' => false,
+      'default_in_list' => false,
+      'is_title' => false,
+    ),
+    'member_id' => 
+    array (
+      'type' => 'table:members',
+      'label' => app::get('b2c')->_('会员用户名'),
+      'comment' => app::get('b2c')->_('订货会员ID'),
+      'editable' => false,
+      'filtertype' => 'yes',
+      'filterdefault' => true,
+      'in_list' => true,
+      'default_in_list' => false,
+    ),
+     'money' => 
+    array (
+      'type' => 'money',
+      'required' => true,
+      'default' => 0,
+      'label' => app::get('b2c')->_('物流费用'),
+      'comment' => app::get('b2c')->_('配送费用'),
+      'editable' => false,
+      'filtertype' => 'number',
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+     'is_protect' => 
+    array (
+      'type' => 'bool',
+      'default' => 'false',
+      'required' => true,
+      'label' => app::get('b2c')->_('是否保价'),
+      'comment' => app::get('b2c')->_('是否保价'),
+      'editable' => false,
+      'filtertype' => 'yes',
+      'in_list' => true,
+      'default_in_list' => false,
+    ),
+        'delivery' => 
+    array (
+      'type' => 'table:dlytype',
+      'label' => app::get('b2c')->_('配送方式'),
+      'comment' => app::get('b2c')->_('配送方式(货到付款、EMS...)'),
+      'editable' => false,
+      'filtertype' => 'normal',
+      'filterdefault' => true,
+      'in_list' => true,
+      'is_title' => true,
+      'default_in_list' => false,
+    ),
+    'logi_id' => 
+    array (
+      'type' => 'varchar(50)',
+      'comment' => app::get('b2c')->_('物流公司ID'),
+      'editable' => false,
+      'label' => app::get('b2c')->_('物流公司ID'),
+      'in_list' => false,
+    ),
+    'logi_name' => 
+    array (
+      'type' => 'varchar(100)',
+      'label' => app::get('b2c')->_('物流公司'),
+      'comment' => app::get('b2c')->_('物流公司名称'),
+      'editable' => false,
+      'filtertype' => 'normal',
+      'filterdefault' => true,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'logi_no' => 
+    array (
+      'type' => 'varchar(50)',
+      'label' => app::get('b2c')->_('物流单号'),
+      'comment' => app::get('b2c')->_('物流单号'),
+      'editable' => false,
+      'searchtype' => 'tequal',
+      'filtertype' => 'normal',
+      'filterdefault' => true,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'ship_name' => 
+    array (
+      'type' => 'varchar(50)',
+      'label' => app::get('b2c')->_('收货人'),
+      'comment' => app::get('b2c')->_('收货人姓名'),
+      'editable' => false,
+      'searchtype' => 'tequal',
+      'filtertype' => 'normal',
+      'filterdefault' => true,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+   'delivery_bn' => 
+    array (
+      'type' => 'varchar(32)',
+      'required' => false,
+      'label' => app::get('b2c')->_('发货中心单号'),
+      'comment' => app::get('b2c')->_('配送流水号'),
+      'editable' => false,
+      'width' =>140,
+      'searchtype' => 'has',
+      'filtertype' => 'yes',
+      'filterdefault' => true,
+      'in_list' => false,
+      'default_in_list' => false,
+      'is_title' => false,
+    ),
+    'ship_area' => 
+    array (
+      'type' => 'region',
+      'label' => app::get('b2c')->_('收货地区'),
+      'comment' => app::get('b2c')->_('收货人地区'),
+      'editable' => false,
+      'filtertype' => 'normal',
+      'filterdefault' => true,
+      'in_list' => true,
+    ),
+    'ship_addr' => 
+    array (
+      'type' => 'varchar(100)',
+      'label' => app::get('b2c')->_('收货地址'),
+      'comment' => app::get('b2c')->_('收货人地址'),
+      'editable' => false,
+      'filtertype' => 'normal',
+      'filterdefault' => true,
+      'in_list' => true,
+    ),
+    'ship_zip' => 
+    array (
+      'type' => 'varchar(20)',
+      'label' => app::get('b2c')->_('收货邮编'),
+      'comment' => app::get('b2c')->_('收货人邮编'),
+      'editable' => false,
+      'filtertype' => 'normal',
+      'in_list' => true,
+    ),
+    'ship_tel' => 
+    array (
+      'type' => 'varchar(30)',
+      'label' => app::get('b2c')->_('收货人电话'),
+      'comment' => app::get('b2c')->_('收货人电话'),
+      'editable' => false,
+      'filtertype' => 'normal',
+      'in_list' => true,
+    ),
+    'ship_mobile' => 
+    array (
+      'type' => 'varchar(50)',
+      'label' => app::get('b2c')->_('收货人手机'),
+      'comment' => app::get('b2c')->_('收货人手机'),
+      'editable' => false,
+      'filtertype' => 'normal',
+      'filterdefault' => true,
+      'in_list' => true,
+    ),
+    'ship_email' => 
+    array (
+      'type' => 'varchar(150)',
+      'label' => app::get('b2c')->_('收货人Email'),
+      'comment' => app::get('b2c')->_('收货人Email'),
+      'editable' => false,
+      'filtertype' => 'normal',
+      'in_list' => true,
+    ),
+    't_begin' => 
+    array (
+      'type' => 'time',
+      'label' => app::get('b2c')->_('单据创建时间'),
+      'comment' => app::get('b2c')->_('单据生成时间'),
+      'editable' => false,
+      'filtertype' => 'time',
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    't_send' => 
+    array (
+      'type' => 'time',
+      'comment' => app::get('b2c')->_('单据结束时间'),
+      'editable' => false,
+      'label' => app::get('b2c')->_('单据结束时间'),
+      'in_list' => true,
+    ),
+    't_confirm' => 
+    array (
+      'type' => 'time',
+      'comment' => app::get('b2c')->_('单据确认时间'),
+      'editable' => false,
+      'label' => app::get('b2c')->_('单据确认时间'),
+      'in_list' => true,
+    
+    ),
+    'op_name' => 
+    array (
+      'type' => 'varchar(50)',
+      'label' => app::get('b2c')->_('操作员'),
+      'comment' => app::get('b2c')->_('操作者'),
+      'editable' => false,
+      'searchtype' => 'tequal',
+      'filtertype' => 'normal',
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'status' => 
+    array (
+      'type' => 
+      array (
+        'succ' => app::get('b2c')->_('成功到达'),
+        'failed' => app::get('b2c')->_('发货失败'),
+        'cancel' => app::get('b2c')->_('已取消'),
+        'lost' => app::get('b2c')->_('货物丢失'),
+        'progress' => app::get('b2c')->_('运送中'),
+        'timeout' => app::get('b2c')->_('超时'),
+        'ready' => app::get('b2c')->_('准备发货'),
+      ),
+      'default' => 'ready',
+      'required' => true,
+      'comment' => app::get('b2c')->_('状态'),
+      'editable' => false,
+      'label' => app::get('b2c')->_('状态'),
+      'in_list' => true,
+    ),
+    'memo' => 
+    array (
+      'type' => 'longtext',
+      'label' => app::get('b2c')->_('备注'),
+      'comment' => app::get('b2c')->_('备注'),
+      'editable' => false,
+      'filtertype' => 'normal',
+      'in_list' => true,
+    ),
+    'disabled' => 
+    array (
+      'type' => 'bool',
+      'default' => 'false',
+      'comment' => app::get('b2c')->_('无效'),
+      'editable' => false,
+      'label' => app::get('b2c')->_('无效'),
+      'in_list' => false,
+    ),
+  ),
+  'comment' => app::get('b2c')->_('发货/退货单表'),
+  'index' => 
+  array (
+    'ind_disabled' => 
+    array (
+      'columns' => 
+      array (
+        0 => 'disabled',
+      ),
+    ),
+    'ind_logi_no' => 
+    array (
+      'columns' => 
+      array (
+        0 => 'logi_no',
+      ),
+    ),
+  ),
+  'version' => '$Rev: 43384 $',
+);
+```
+
+delivery_id - 发货单号
+
+order_id - 订单号
+
+delivery_bn - 发货中心单号
+
+member_id - 订货会员ID
+
+money - 配送费用
+
+is_protect - 是否保价
+
+delivery - 配送方式
+
+logi_id - 物流公司ID
+
+logi_name - 物流公司名称
+
+logi_no - 物流单号
+
+ship_name - 收货人姓名
+
+delivery_bn - 配送流水号
+
+ship_area - 收货地区
+
+ship_addr - 收货地址
+
+ship_zip - 收货邮编
+
+ship_tel - 收货人电话
+
+ship_mobile - 收货人手机
+
+ship_email - 收货人Email
+
+t_begin - 单据生成时间
+
+t_send - 单据结束时间
+
+t_confirm - 单据确认时间
+
+op_name - 操作者
+
+status - 状态（发货单状态）
+
+memo - 备注
+
+disabled - 无效
+
+发货单明细表 `delivery_items`
+
+```
+$db['delivery_items']=array (
+  'columns' => 
+  array (
+    'item_id' => 
+    array (
+      'type' => 'int unsigned',
+      'required' => true,
+      'pkey' => true,
+      'extra' => 'auto_increment',
+      'editable' => false,
+    ),
+    'delivery_id' => 
+    array (
+      'type' => 'table:delivery',
+      'required' => true,
+      'default' => 0,
+      'editable' => false,
+    ),
+    'item_type' => 
+    array (
+      'type' => 
+      array (
+        'goods' => app::get('b2c')->_('商品'),
+        'gift' => app::get('b2c')->_('赠品'),
+        'pkg' => app::get('b2c')->_('捆绑商品'),
+      ),
+      'default' => 'goods',
+      'required' => true,
+      'editable' => false,
+    ),
+    'product_id' => 
+    array (
+      'type' => 'bigint unsigned',
+      'required' => true,
+      'default' => 0,
+      'editable' => false,
+    ),
+    'product_bn' => 
+    array (
+      'type' => 'varchar(30)',
+      'editable' => false,
+      'is_title' => true,
+    ),
+    'product_name' => 
+    array (
+      'type' => 'varchar(200)',
+      'editable' => false,
+    ),
+    'number' => 
+    array (
+      'type' => 'float',
+      'required' => true,
+      'default' => 0,
+      'editable' => false,
+    ),
+  ),
+  'comment' => app::get('b2c')->_('发货/退货单明细表'),
+  'version' => '$Rev: 40654 $',
+);
+```
+
+item_id - 订单明细ID
+
+delivery_id - 发货单ID
+
+item_type - 发货单详细类别
+
+product_id - 产品ID
+
+product_bn - 产品bn
+
+product_name - 产品名称
+
+number - 发货数量
+
+发货单sdf
+
+```
+array (
+  'delivery_id' => '120100630000001',
+  'order_id' => '20100629225279',
+  'delivery_bn' => NULL,
+  'member_id' => '2',
+  'money' => '5.000',
+  'is_protect' => 'false',
+  'delivery' => '2',
+  'logi_id' => '2',
+  'logi_name' => 'EMS',
+  'logi_no' => '',
+  'ship_name' => '张三',
+  'ship_area' => 'mainland:上海/上海市/徐汇区:25',
+  'ship_addr' => '上海市徐汇区虹桥路333号慧谷创业406',
+  'ship_zip' => '200030',
+  'ship_tel' => '',
+  'ship_mobile' => '15800874524',
+  'ship_email' => NULL,
+  't_begin' => '1277885351',
+  't_send' => NULL,
+  't_confirm' => NULL,
+  'op_name' => 'admin',
+  'status' => 'progress',
+  'memo' => '测试订单，请勿配货。',
+  'disabled' => 'false',
+  'delivery_items' => 
+  array (
+    1 => 
+    array (
+      'item_id' => '1',
+      'delivery_id' => '120100630000001',
+      'item_type' => 'goods',
+      'product_id' => '37',
+      'product_bn' => 'P4C2AAF827A20B',
+      'product_name' => '多用包特价多层休闲包',
+      'number' => '1',
+    ),
+  ),
+)
+```
+
+(7). 退货单数据 
+
+退货单主表 - reship
+
+```
+$db['reship']=array (
+  'columns' => 
+  array (
+    'reship_id' => 
+    array (
+      'type' => 'bigint unsigned',
+      'required' => true,
+      'pkey' => true,
+      'label' => app::get('b2c')->_('退货单号'),
+      'extra' => 'auto_increment',
+      'comment' => app::get('b2c')->_('配送流水号'),
+      'editable' => false,
+      'searchtype' => 'has',
+      'filtertype' => 'yes',
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'order_id' => 
+    array (
+      'type' => 'varchar(100)',
+      'label' => app::get('b2c')->_('订单号'),
+      'comment' => app::get('b2c')->_('订单号'),
+      'editable' => false,
+      'searchtype' => 'tequal',
+      'filtertype' => 'normal',
+      'filterdefault' => true,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'reship_bn' => 
+    array (
+      'type' => 'varchar(32)',
+      'required' => false,
+      'label' => app::get('b2c')->_('中心退货单号'),
+      'comment' => app::get('b2c')->_('退货流水号'),
+      'editable' => false,
+      'width' =>140,
+      'searchtype' => 'has',
+      'filtertype' => 'yes',
+      'filterdefault' => true,
+      'in_list' => false,
+      'default_in_list' => false,
+      'is_title' => false,
+    ),
+    'member_id' => 
+    array (
+      'type' => 'table:members',
+      'label' => app::get('b2c')->_('会员用户名'),
+      'comment' => app::get('b2c')->_('订货会员ID'),
+      'editable' => false,
+      'filtertype' => 'yes',
+      'filterdefault' => true,
+      'in_list' => true,
+      'default_in_list' => false,
+    ),
+    'money' => 
+    array (
+      'type' => 'money',
+      'required' => true,
+      'default' => 0,
+      'label' => app::get('b2c')->_('物流费用'),
+      'comment' => app::get('b2c')->_('配送费用'),
+      'editable' => false,
+      'filtertype' => 'number',
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'is_protect' => 
+    array (
+      'type' => 'bool',
+      'default' => 'false',
+      'required' => true,
+      'label' => app::get('b2c')->_('是否保价'),
+      'comment' => app::get('b2c')->_('是否保价'),
+      'editable' => false,
+      'filtertype' => 'yes',
+      'in_list' => true,
+      'default_in_list' => false,
+    ),
+    'delivery' => 
+    array (
+      'type' => 'varchar(20)',
+      'label' => app::get('b2c')->_('配送方式'),
+      'comment' => app::get('b2c')->_('配送方式(货到付款、EMS...)'),
+      'editable' => false,
+      'filtertype' => 'normal',
+      'filterdefault' => true,
+      'in_list' => true,
+      'is_title' => true,
+      'default_in_list' => false,
+    ),
+    'logi_id' => 
+    array (
+      'type' => 'varchar(50)',
+      'comment' => app::get('b2c')->_('物流公司ID'),
+      'editable' => false,
+      'label' => app::get('b2c')->_('物流公司ID'),
+      'in_list' => false,
+    ),
+    'logi_name' => 
+    array (
+      'type' => 'varchar(100)',
+      'label' => app::get('b2c')->_('物流公司'),
+      'comment' => app::get('b2c')->_('物流公司名称'),
+      'editable' => false,
+      'filtertype' => 'normal',
+      'filterdefault' => true,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'logi_no' => 
+    array (
+      'type' => 'varchar(50)',
+      'label' => app::get('b2c')->_('物流单号'),
+      'comment' => app::get('b2c')->_('物流单号'),
+      'editable' => false,
+      'searchtype' => 'tequal',
+      'filtertype' => 'normal',
+      'filterdefault' => true,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'ship_name' => 
+    array (
+      'type' => 'varchar(50)',
+      'label' => app::get('b2c')->_('收货人'),
+      'comment' => app::get('b2c')->_('收货人姓名'),
+      'editable' => false,
+      'searchtype' => 'tequal',
+      'filtertype' => 'normal',
+      'filterdefault' => true,
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'ship_area' => 
+    array (
+      'type' => 'region',
+      'label' => app::get('b2c')->_('收货地区'),
+      'comment' => app::get('b2c')->_('收货人地区'),
+      'editable' => false,
+      'filtertype' => 'normal',
+      'filterdefault' => true,
+      'in_list' => true,
+    ),
+    'ship_addr' => 
+    array (
+      'type' => 'varchar(100)',
+      'label' => app::get('b2c')->_('收货地址'),
+      'comment' => app::get('b2c')->_('收货人地址'),
+      'editable' => false,
+      'filtertype' => 'normal',
+      'filterdefault' => true,
+      'in_list' => true,
+    ),
+    'ship_zip' => 
+    array (
+      'type' => 'varchar(20)',
+      'label' => app::get('b2c')->_('收货邮编'),
+      'comment' => app::get('b2c')->_('收货人邮编'),
+      'editable' => false,
+      'filtertype' => 'normal',
+      'in_list' => true,
+    ),
+    'ship_tel' => 
+    array (
+      'type' => 'varchar(30)',
+      'label' => app::get('b2c')->_('收货人电话'),
+      'comment' => app::get('b2c')->_('收货人电话'),
+      'editable' => false,
+      'filtertype' => 'normal',
+      'in_list' => true,
+    ),
+    'ship_mobile' => 
+    array (
+      'type' => 'varchar(50)',
+      'label' => app::get('b2c')->_('收货人手机'),
+      'comment' => app::get('b2c')->_('收货人手机'),
+      'editable' => false,
+      'filtertype' => 'normal',
+      'filterdefault' => true,
+      'in_list' => true,
+    ),
+    'ship_email' => 
+    array (
+      'type' => 'varchar(150)',
+      'label' => app::get('b2c')->_('收货人Email'),
+      'comment' => app::get('b2c')->_('收货人Email'),
+      'editable' => false,
+      'filtertype' => 'normal',
+      'in_list' => true,
+    ),
+    't_begin' => 
+    array (
+      'type' => 'time',
+      'label' => app::get('b2c')->_('单据创建时间'),
+      'comment' => app::get('b2c')->_('单据生成时间'),
+      'editable' => false,
+      'filtertype' => 'time',
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    't_send' => 
+    array (
+      'type' => 'time',
+      'comment' => app::get('b2c')->_('单据结束时间'),
+      'editable' => false,
+      'label' => app::get('b2c')->_('单据结束时间'),
+      'in_list' => true,
+    ),
+    't_confirm' => 
+    array (
+      'type' => 'time',
+      'comment' => app::get('b2c')->_('确认时间'),
+      'editable' => false,
+      'label' => app::get('b2c')->_('确认时间'),
+      'in_list' => true,
+    ),
+    'op_name' => 
+    array (
+      'type' => 'varchar(50)',
+      'label' => app::get('b2c')->_('操作员'),
+      'comment' => app::get('b2c')->_('操作者'),
+      'editable' => false,
+      'searchtype' => 'tequal',
+      'filtertype' => 'normal',
+      'in_list' => true,
+      'default_in_list' => true,
+    ),
+    'status' => 
+    array (
+      'type' => 
+      array (
+        'succ' => app::get('b2c')->_('成功到达'),
+        'failed' => app::get('b2c')->_('发货失败'),
+        'cancel' => app::get('b2c')->_('已取消'),
+        'lost' => app::get('b2c')->_('货物丢失'),
+        'progress' => app::get('b2c')->_('运送中'),
+        'timeout' => app::get('b2c')->_('超时'),
+        'ready' => app::get('b2c')->_('准备发货'),
+      ),
+      'default' => 'ready',
+      'required' => true,
+      'comment' => app::get('b2c')->_('状态'),
+      'editable' => false,
+      'label' => app::get('b2c')->_('状态'),
+      'in_list' => true,
+    ),
+    'memo' => 
+    array (
+      'type' => 'longtext',
+      'label' => app::get('b2c')->_('备注'),
+      'comment' => app::get('b2c')->_('备注'),
+      'editable' => false,
+      'filtertype' => 'normal',
+      'in_list' => true,
+    ),
+    'disabled' => 
+    array (
+      'type' => 'bool',
+      'default' => 'false',
+      'comment' => app::get('b2c')->_('无效'),
+      'editable' => false,
+      'label' => app::get('b2c')->_('无效'),
+      'in_list' => false,
+    ),
+  ),
+  'comment' => app::get('b2c')->_('发货/退货单表'),
+  'index' => 
+  array (
+    'ind_disabled' => 
+    array (
+      'columns' => 
+      array (
+        0 => 'disabled',
+      ),
+    ),
+    'ind_logi_no' => 
+    array (
+      'columns' => 
+      array (
+        0 => 'logi_no',
+      ),
+    ),
+  ),
+  'version' => '$Rev: 40654 $',
+);
+```
+
+reship_id - 退货单号
+
+order_id - 订单号
+
+reship_bn - 中心退货单号
+
+member_id - 订货会员ID
+
+money - 配送费用
+
+is_protect - 是否保价
+
+delivery - 配送方式
+
+logi_id - 物流公司ID
+
+logi_name - 物流公司名称
+
+logi_no - 物流单号
+
+ship_name - 收货人姓名
+
+ship_area - 收货人地区
+
+ship_addr - 收货人地址
+
+ship_zip - 收货人邮编
+
+ship_tel - 收货人电话
+
+ship_mobile - 收货人手机
+
+ship_email - 收货人Email
+
+t_begin - 单据创建时间
+
+t_send - 单据结束时间
+
+t_confirm - 确认时间
+
+op_name - 操作者
+
+status - 退货状态
+
+memo - 备注
+
+disabled - 无效
+
+退货单明细表 - reship_items
+
+```
+$db['reship_items']=array (
+  'columns' => 
+  array (
+    'item_id' => 
+    array (
+      'type' => 'int unsigned',
+      'required' => true,
+      'pkey' => true,
+      'extra' => 'auto_increment',
+      'editable' => false,
+    ),
+    'reship_id' => 
+    array (
+      'type' => 'bigint unsigned',
+      'required' => true,
+      'default' => 0,
+      'editable' => false,
+    ),
+    'item_type' => 
+    array (
+      'type' => 
+      array (
+        'goods' => app::get('b2c')->_('商品'),
+        'gift' => app::get('b2c')->_('赠品'),
+        'pkg' => app::get('b2c')->_('捆绑商品'),
+      ),
+      'default' => 'goods',
+      'required' => true,
+      'editable' => false,
+    ),
+    'product_id' => 
+    array (
+      'type' => 'bigint unsigned',
+      'required' => true,
+      'default' => 0,
+      'editable' => false,
+    ),
+    'product_bn' => 
+    array (
+      'type' => 'varchar(30)',
+      'editable' => false,
+      'is_title' => true,
+    ),
+    'product_name' => 
+    array (
+      'type' => 'varchar(200)',
+      'editable' => false,
+    ),
+    'number' => 
+    array (
+      'type' => 'float',
+      'required' => true,
+      'default' => 0,
+      'editable' => false,
+    ),
+  ),
+  'comment' => app::get('b2c')->_('发货/退货单明细表'),
+  'version' => '$Rev: 40654 $',
+);
+```
+
+item_id - 退货明细ID
+
+reship_id - 退货单编号
+
+item_type - 项目类别
+
+product_id - 产品ID
+
+product_bn - 产品bn
+
+product_name - 产品名称
+
+number - 退货数量
+
+3. 订单相关的一些埋点以及接口的介绍：
+
+- ``model order 的接口介绍：``
+
+```
+1） fetchByMember - 通过会员的编号得到orders标准数据格式
+
+参数介绍：
+
+@params string member_id - 会员id
+
+@params string page_number - 分页数
+
+@params string pay_status - 支付状态，默认为空
+
+@return array sdf 数据
+
+2）trasform_status - 返回订单字段的对照表
+
+参数介绍：
+
+@params string 订单的三种相关状态
+
+@params string key value
+
+@return string 对应状态的值
+
+3）getLastestOrder - 取到最新的几条order
+
+@params int number 最新显示的数量
+
+@return array 订单的数组
+
+4）getProductInfo - 得到货品信息数组
+
+@param $orderid string 订单id
+
+@param $goodsbn string goods_bn
+
+@return array 货品信息数组
+
+5）getOrderLogList - 得到特定订单的所有日志
+
+@params string order id 订单ID
+
+@params int page num 页面页码
+
+@params int page limit 每页显示的条数
+
+@return array log list
+
+6）fireEvent - 订单的邮件触发器
+
+@params string 订单处理动作
+
+@params array 订单数据
+
+@params int member id
+
+@return boolean true or false
+
+下面为订单对应finder上面的修改
+
+7）modifier_payment - 订单的邮件触发器
+
+@params string 字段的值
+
+@return string 修改后的字段的值
+```
+
+- ``b2c 订单埋点介绍``
+
+order fireEvent - 类似javascript mootools的fireEvent，触发事件专用
+
+具体详见app/b2c/model/trigger.php中object_fire_event方法
+
+```
+/**
+ * object_fire_event
+ * 执行对象事件
+ *
+ * @param mixed $action
+ * @param mixed $object
+ * @param mixed $member_id
+ * @param mixed $target
+ * @access public
+ * @return void
+ */
+function object_fire_event($action , &$object, $member_id,&$target){
+	if(false===strpos($action,':')){
+		$trigger_event = $target->table_name().':'.$action;
+		$modelName = $target->table_name();
+	}else{
+		$trigger_event = $action;
+		list($modelName,$action) = explode(':',$action);
+	}
+	$typeName = substr(strstr(get_class($target),'_'),1);
+	$aType = explode('_',$typeName);
+	foreach($aType as $val){
+		$type = $val;
+	}
+	#$type = "order";
+	
+	$app_id = $target->app->app_id;
+	$this->app->messenger = &$this->app->model('member_messenger');
+	$this->app->_msgList = $this->app->messenger->actions();
+	if($this->app->_msgList[$type.'-'.$action]){
+		$this->app->messenger->actionSend($type.'-'.$action,$object,$member_id);
+	}
+	
+	if(defined('DISABLE_TRIGGER') && DISABLE_TRIGGER){
+		return true;
+	}else{
+		// triggers 待续...
+		if (isset($this->listeners) && $this->listeners)
+			foreach(array_merge((array)$this->listeners['*'],
+				(array)$this->listeners[$app_id.":".$target->table_name().':*'],
+				(array)$this->listeners[$app_id.":".$target->table_name().':'.$action])
+				as $func){
+				list($mod,$func) = $this->get_func($func);
+				$mod->$func($action,$object);
+			}
+
+		return true;
+	}
+}
+```
+
+此方法中主要处理两种形式的埋点
+
+第一种是处理发邮件相关的问题
+
+第二种是处理listener相关事件，详见app/b2c/task.php
+
+```
+ /**
+ * listener array
+ */
+private $arr_listener = array(
+	'b2c:orders:create' =>'b2c:stats_listener:get_orderinfo',
+	'b2c:orders:payed'=>'b2c:stats_listener:get_payinfo',
+	'b2c:orders:shipping'=>'b2c:stats_listener:get_deliveryinfo',
+	'b2c:orders:returned'=>'b2c:stats_listener:get_deliveryinfo',
+	'b2c:member_account:register'=>'b2c:stats_listener:get_memberinfo',
+	'b2c:member_account:login'=>'b2c:stats_listener:get_logmember',
+	'b2c:member_advance:changeadvance'=>'b2c:stats_listener:get_money',
+);
+```
+
+一些相关的动作需要监控，左边是监控的行为，右边为处理控制的方法。
+
+第三种是在订单的相关流程一系列中心交互（apc）
+
+详见app/b2c/lib/api/rpc/request.php
+
+```
+/**
+ * rpc方式发送请求
+ * @param string method name
+ * @param array parameters array
+ * @param array callback
+ * @param int timeout type
+ */
+private function rpc_request($method,$params,$callback,$time_out=1)
+{
+	// 取到连接对方的信息
+	$obj_shop = $this->app->model('shop');
+	$arr_shop = $obj_shop->dump(array('status' => 'bind', 'node_type' => 'ecos.ome'));
+	
+	if ($arr_shop)
+	{        
+		$params = array_merge(array('node_type' => $arr_shop['node_type'], 'to_node_id' => $arr_shop['node_id']), $params);
+		
+		$callback_class = $callback['class'];
+		$callback_method = $callback['method'];
+		$callback_params = (isset($callback['params'])&&$callback['params'])?$callback['params']:array();
+		$rst = $this->app->matrix()->set_callback($callback_class,$callback_method,$callback_params)
+			->set_timeout($time_out)
+			->call($method,$params);
+	}        
+}
+```
+
+统一处理调用中心话的请求，具体中心化的请求见KA-TS项目
+
+又请求就会有相应的反馈
+
+详见app/b2c/lib/api/callback/app.php，生成反馈通知。
+
+```
+public function callback($result)
+{
+	  
+	$str_xml .= "<query>";
+	foreach ($result->response as $key=>$value)
+	{
+		$str_xml .= "<$key>" . $value . "</$key>";
+	}
+	$str_xml .= "</query>";
+	//$str_xml .= "</response>';";
+	
+	/*fwrite($fs, $str_xml);
+	fclose($fs);*/
+	kernel::log($str_xml);
+	
+	// 生成通知信息
+	$arr_callback_params = $result->get_callback_params();        
+	include_once(ROOT_DIR.'/app/b2c/lib/api/rpc/request_api_method.php');
+	
+	$message = 'msg_id:' . $result->response['msg_id'] . ', ' . $arr_apis[$arr_callback_params['method']] . (($result->response['rsp'] == 'succ') ? app::get('b2c')->_('成功，') : app::get('b2c')->_('失败，')) . app::get('b2c')->_('单号：') . $arr_callback_params['tid'];
+	
+	$arr_msg = array(
+		'rsp' => $result->response['rsp'],
+		'res' => $message,
+		'data' => '',
+	);
+	return $arr_msg;
+}
+```
+
+4. 订单相关业务流程介绍：
+
+[images/order_process.png]
+
+
+
+
++== 促销 ==+
+
+1. 促销的几大模块
+
+- 商品预过滤
+
+- 订单促销
+
+- 优惠券
+
+
+2. 促销的几大因素
+
+- 优先级 
+
+注：执行顺序以数值 从高到低 执行
+
+- 排它原则
+
+- 过滤条件 
+
+注：判断该促销是否适用于当前场景
+
+- 应用条件 
+
+注：指定优惠方案的应用范围。如：某类产品。（商品预过滤中没有此项）
+
+- 优惠方案
+
+
+3. 促销条件-概念
+
+- ``集合器``
+
+```
+促销条件的基础、每个条件都是从集合器开始的。
+public function getItem() 
+返回标准化数据
+
+下面以商品集合器为例：
+class b2c_sales_goods_aggregator_combine extends b2c_sales_goods_aggregator
+{
+
+  public function getItem() {
+     return array(
+       'b2c_sales_goods_aggregator_combine' => array(
+         'name'=>app::get('b2c')->_('商品条件'),
+               'value'=>'goods_combine',
+               'object'=>'b2c_sales_goods_aggregator_combine',
+               'support'=>array(
+                   'aggregator'=>'all',
+                   'item'=>array(
+                      'goods'=>app::get('b2c')->_('-----商品属性-----'),
+                      'brand'=>app::get('b2c')->_('-----商品品牌-----'),
+                    )
+               ),
+           )
+      );
+   }
+}
+该数组为其返回值。item属性标明了包含项goods：商品属性，brand：商品品牌
+
+具体商品项加载项相关请看下边 ··促销概念-项·· 的介绍
+```
+
+- ``项``
+
+```
+基于集合器详细的阐述了包含那些具体的属性。
+
+接上：以商品属性为例说明。
+
+class b2c_sales_goods_item_goods extends b2c_sales_goods_item
+{
+    public function getItem() {
+        return array(
+          'goods_goods_id'     => array('name'=>'商品',   'path'=>'goods_id',      'type'=>'goods', 'object'=>'b2c_sales_goods_item_goods', 'operator'=>array('contain'), 'input'=>'dialog', 'table'=>'goods',),
+          'goods_brand_id'     => array('name'=>'商品品牌',   'path'=>'brand_id',      'type'=>'goods', 'object'=>'b2c_sales_goods_item_goods', 'operator'=>array('contain'), 'input'=>'checkbox', 'options'=>'table:SELECT brand_id AS id,brand_name AS name FROM sdb_b2c_brand'),
+
+          'goods_brief'        => array('name'=>'商品简介',   'path'=>'brief',         'type'=>'goods', 'object'=>'b2c_sales_goods_item_goods', 'operator'=>array('equal','contain','contain1','null')),
+          'goods_mktprice'     => array('name'=>'商品市场价', 'path'=>'mktprice',      'type'=>'goods', 'object'=>'b2c_sales_goods_item_goods', 'operator'=>array('equal','equal1'),  'vtype'=>'unsigned'),
+          'goods_bn'           => array('name'=>'商品货号',   'path'=>'bn',            'type'=>'goods', 'object'=>'b2c_sales_goods_item_goods', 'operator'=>array('equal','contain','contain1'),  'vtype'=>'alphaint'),
+          'goods_unit'         => array('name'=>'商品单位',   'path'=>'unit',          'type'=>'goods', 'object'=>'b2c_sales_goods_item_goods', 'operator'=>array('equal','contain','contain1'),  'vtype'=>'alphanum'),
+          'goods_store'        => array('name'=>'商品库存',   'path'=>'store',         'type'=>'goods', 'object'=>'b2c_sales_goods_item_goods', 'operator'=>array('equal','equal1'),  'vtype'=>'digits'),
+          'goods_last_modify'   => array('name'=>'修改时间',  'path'=>'last_modify',  'type'=>'goods', 'object'=>'b2c_sales_goods_item_goods', 'operator'=>array('equal','equal1'),  'input'=>'datetime','vtype'=>'date'),
+          'goods_rank'         => array('name'=>'商品评分',   'path'=>'rank',         'type'=>'goods', 'object'=>'b2c_sales_goods_item_goods', 'operator'=>array('equal','equal1'),  'vtype'=>'number'),
+        );
+    }
+
+}
+
+getItem()详解
+| name 		| 名称 |
+| path 		| 购物车中的相对路径 |
+| type 		| 类型 |
+| object		| 所属对象 |
+| operator	| 操作符 |
+| name 		| 名称 |
+| input 		| html显示类型，默认text文本框 dialog弹窗 对应属性table 弹窗罗列的数据表名称 |
+| input 		| checkbox 对应属性options 支持sql语句 如上 |
+| input 		| datetime 日期 |
+```
+
+
+
+
+4. 促销-service
+
+- ``商品预过滤 条件模板`` b2c_promotion_tpl_goods_apps
+
+```
+<service id="b2c_promotion_tpl_goods_apps">
+    <class>b2c_promotion_conditions_goods_allgoods</class>
+    <class>b2c_promotion_conditions_goods_brand</class>
+    <class>b2c_promotion_conditions_goods_cat</class>
+    <class>b2c_promotion_conditions_goods_selectgoods</class>
+    <class>b2c_promotion_conditions_goods_type</class>
+    <class>b2c_promotion_conditions_goods_typeandbrand</class>
+</service>
+
+以b2c_promotion_conditions_goods_brand举例说明。
+
+class b2c_promotion_conditions_goods_brand{
+    var $tpl_name = "商品品牌";
+    var $tpl_type = 'config';  // 类型 分为 html(写死的html) | config(可选项的) | auto(全开放的配置)
+
+    function getConfig($aData = array()) {
+        return  array(
+              'type'=> 'b2c_sales_goods_aggregator_combine',
+              'aggregator'=> 'all',
+              'conditions'=> array(
+                                 0 => array(
+                                           'type' =>'b2c_sales_goods_item_goods',
+                                           'attribute' => 'goods_brand_id'
+                                         )
+                                 )
+                );
+    }
+}
+
+tpl_name 模板显示title
+tpl_type 模板类型
+
+getConfig函数  
+	tpl_type 为 html 类型时 返回html
+	tpl_type 为 config 类型时 返回标准化数组 
+	tpl_type 为 auto 返回空数组即可 
+
+```
+- ``订单促销  条件模板`` b2c_promotion_tpl_order_apps
+```
+<service id="b2c_promotion_tpl_order_apps">
+    <class>b2c_promotion_conditions_order_allorderallgoods</class>
+    <class>b2c_promotion_conditions_order_itemsquanityallgoods</class>
+    <class>b2c_promotion_conditions_order_itemsquanityuserdefinedgoods</class>
+    <class>b2c_promotion_conditions_order_subtotalallgoods</class>
+    <class>b2c_promotion_conditions_order_subtotalselectgoods</class>
+    <class>b2c_promotion_conditions_order_subtotaluserdefinedgoods</class>
+</service>
+
+注：参数同上（预过滤 条件模板)
+```
+- ``解决方案模板`` b2c_promotion_solution_tpl_apps(以下service列表不在罗列，都在service.xml中)
+
+```
+<service id="b2c_promotion_solution_tpl_apps">
+    <class>b2c_promotion_solutions_byfixed</class>
+    <class>b2c_promotion_solutions_bypercent</class>
+    <class>b2c_promotion_solutions_tofixed</class>
+    <class>b2c_promotion_solutions_topercent</class>
+    <class>b2c_promotion_solutions_addscore</class>
+    <class>b2c_promotion_solutions_toscore</class>
+</service>
+
+public function config($aData = array()) 
+@return 优惠方案html模板
+
+/*
+ * 优惠方案应用
+ * @param array $object  // 引用的一个商品信息
+ * @param array $aConfig // 优惠的设置
+ * @param array $cart_object // 购物车信息(预过滤的时候这个为null)
+ * @return void // 引用处理了,没有返回值
+ */
+public function apply(&$object,$aConfig,&$cart_object = null) {
+  ......
+}
+
+/*
+ * 优惠方案应用
+ *
+ * 应用于订单促销中针对于订单项
+ *
+ * @param array $object  // 引用的一个商品信息
+ * @param array $aConfig // 优惠的设置
+ * @return void // 引用处理了,没有返回值
+ */
+public function apply_order(&$object, &$aConfig,&$cart_object = null) {
+  .....
+}
+
+public function get_status()
+@return bool 
+@当前类型促销是否可用。场景：积分促销（后台积分未开启时 此处返回false)
+```
+
+- ``促销操作符`` b2c_sales_basic_operator_apps
+```
+/* 
+ * @操作符数组
+ * 
+ * @return array
+ */
+public function getOperators()
+
+/*
+ * validate
+ *
+ * @param string $operator  // 操作符
+ * @param mix $value        // 规则里设定的值
+ * @param mix $validate     // 购物车项中取出的对应的'attribute'[path] 的值
+ * @return boolean
+ */
+public function validate($operator,$value,$validate)
+```
+- ``预过滤 集合器`` b2c_sales_goods_aggregator_apps
+```
+to：促销条件-概念 集合器
+```
+
+- ``预过滤 项`` b2c_sales_goods_item_apps
+```
+to：促销条件-概念 项
+```
+
+- ``订单促销 集合器`` b2c_sales_order_aggregator_apps
+```
+to：促销条件-概念 集合器
+```
+
+- ``订单促销 项`` b2c_sales_order_item_apps
+
+```
+to：促销条件-概念 项
+```
+
+商品预过滤结构
+```
+预过滤基表 sales_rule_goods
+
+$db['sales_rule_goods'] = array(
+    'columns' =>
+    array (
+        'rule_id' =>
+        array (
+            'type' => 'int(8)',
+            'required' => true,
+            'pkey' => true,
+            'label' => app::get('b2c')->_('规则id'),
+            'editable' => false,
+            'extra' => 'auto_increment',
+            ),
+        'name' =>
+        array (
+            'type' => 'varchar(255)',
+            'required' => true,
+            'default' => '',
+            'label' => app::get('b2c')->_('规则名称'),
+            'editable' => true,
+            'in_list' => true,
+            'default_in_list' => true,
+            'filterdefault'=>true,
+            'is_title' => true,
+            ),
+        'description' =>
+        array (
+            'type' => 'text',
+            'label' => app::get('b2c')->_('规则描述'),
+            'required' => false,
+            'default' => '',
+            'editable' => false,
+            'in_list' => true,
+            'filterdefault'=>true,
+            ),
+        'create_time' =>
+        array (
+            'type' => 'time',
+            'label' => app::get('b2c')->_('修改时间'),
+            'editable' => true,
+            'in_list' => true,
+            'default_in_list' => false,
+            'filterdefault'=>true,
+            ),
+        'from_time' =>
+        array (
+            'type' => 'time',
+            'label' => app::get('b2c')->_('起始时间'),
+            'default'=> 0,
+            'editable' => true,
+            'in_list' => true,
+            'default_in_list' => true,
+            'filterdefault'=>true,
+            ),
+        'to_time' =>
+        array (
+            'type' => 'time',
+            'label' => app::get('b2c')->_('截止时间'),
+            'default'=> 0,
+            'editable' => true,
+            'in_list' => true,
+            'default_in_list' => false,
+            'filterdefault'=>true,
+            ),
+        'member_lv_ids' =>
+        array (
+            'type' => 'varchar(255)',
+            'default' => '',
+            'required' => false,
+            'label' => app::get('b2c')->_('会员级别集合'),
+            'editable' => false,
+            ),
+            //status 标志是否使用该规则执行预过滤
+        'status' =>
+        array (
+            'type' => 'bool',
+            'default' => 'false',
+            'required' => true,
+            'label' => app::get('b2c')->_('开启状态'),
+            'in_list' => true,
+            'editable' => false,
+            'filterdefault'=>true,
+            'default_in_list' => true,
+            ),
+        'conditions' =>
+        array (
+            'type' => 'serialize',
+            'default' => '',
+            'required' => true,
+            'label' => app::get('b2c')->_('规则条件'),
+            'editable' => false,
+            ),
+        'stop_rules_processing' =>
+        array (
+            'type' => 'bool',
+            'default' => 'false',
+            'required' => true,
+            'label' => app::get('b2c')->_('是否排斥'),
+            'in_list' => true,
+            'editable' => true,
+            'filterdefault'=>true,
+            'default_in_list' => true,
+            ),
+        'sort_order' =>
+        array (
+            'type' => 'int(10) unsigned',
+            'default' => '0',
+            'required' => true,
+            'label' => app::get('b2c')->_('优先级'),
+            'in_list' => true,
+            'editable' => true,
+            'default_in_list' => true,
+            ),
+        'action_solution' =>
+        array (
+            'type' => 'serialize',
+            'default' => '',
+            'required' => true,
+            'label' => app::get('b2c')->_('动作方案'),
+            'editable' => false,
+            ),
+        'free_shipping' =>
+        array(
+            'type' => 'tinyint(1) unsigned',
+            'default' => '0',
+            'label' => app::get('b2c')->_('免运费'),
+            'editable' => false,
+            ),
+        'c_template' =>
+        array(
+            'type' => 'varchar(100)',
+            'label' => app::get('b2c')->_('过滤条件模板'),
+            'editable' => false,
+            ),
+        's_template' =>
+        array(
+            'type' => 'varchar(100)',
+            'label' => app::get('b2c')->_('优惠方案模板'),
+            'editable' => false,
+            ),
+        'apply_time' =>
+        array (
+            'type' => 'time',
+            'label' => app::get('b2c')->_('预过滤时间'),
+            'editable' => true,
+            'in_list' => true,
+            'default_in_list' => true,
+            ),
+        ),
+    'comment' => app::get('b2c')->_('商品促销规则'),
+    );
+
+
+商品预过滤添加之后需要手动应用该规则。
+应用之后会把对应数据插入到 预过滤关联表 goods_promotion_ref （关联到具体商品）
+$db['goods_promotion_ref'] = array(
+    'columns' =>
+    array (
+        'ref_id' =>
+        array (
+            'type' => 'int(8)',
+            'required' => true,
+            'pkey' => true,
+            'label' => 'id',
+            'editable' => false,
+            'extra' => 'auto_increment',
+            ),
+          'goods_id' =>
+         array (
+            'type' => 'table:goods',
+            'default' => 0,
+            'required' => true,
+            'editable' => false,
+         ),
+         'rule_id' =>
+         array (
+            'type' => 'table:sales_rule_goods',
+            'default' => 0,
+            'required' => true,
+            'editable' => false,
+         ),
+        'description' =>
+        array (
+            'type' => 'text',
+            'label' => app::get('b2c')->_('规则描述'),
+            'required' => false,
+            'default' => '',
+            'editable' => false,
+            'in_list' => true,
+            ),
+        'member_lv_ids' =>
+        array (
+            'type' => 'varchar(255)',
+            'default' => '',
+            'required' => false,
+            'label' => app::get('b2c')->_('会员级别集合'),
+            'editable' => false,
+            ),
+        'from_time' =>
+        array (
+            'type' => 'time',
+            'label' => app::get('b2c')->_('起始时间'),
+            'editable' => true,
+            'in_list' => true,
+            'default'=> 0,
+            'default_in_list' => true,
+            ),
+        'to_time' =>
+        array (
+            'type' => 'time',
+            'label' => app::get('b2c')->_('截止时间'),
+            'default'=> 0,
+            'editable' => true,
+            'in_list' => true,
+            'default_in_list' => true,
+            ),
+       //预定字段
+        'status' =>
+        array (
+            'type' => 'bool',
+            'default' => 'false',
+            'required' => true,
+            'label' => app::get('b2c')->_('状态'),
+            'in_list' => true,
+            'editable' => false,
+            ),
+        'stop_rules_processing' =>
+        array (
+            'type' => 'bool',
+            'default' => 'false',
+            'required' => true,
+            'label' => app::get('b2c')->_('是否排斥其他规则'),
+            'editable' => true,
+            ),
+        'sort_order' =>
+        array (
+            'type' => 'int(10) unsigned',
+            'default' => '0',
+            'required' => true,
+            'label' => app::get('b2c')->_('优先级'),
+            'editable' => true,
+            ),
+        'action_solution' =>
+        array (
+            'type' => 'text',
+            'default' => '',
+            'required' => true,
+            'label' => app::get('b2c')->_('动作方案'),
+            'editable' => false,
+            ),
+        'free_shipping' =>
+        array(
+            'type' => 'tinyint(1) unsigned',
+            'default' => '0',
+            'label' => app::get('b2c')->_('免运费'),
+            'editable' => false,
+            ),
+        ),
+    'comment' => app::get('b2c')->_('商品与商品促销规则'),
+    );
+```
+
+订单促销结构（优惠券形成的规则也会在该表记录 rule_type）
+```
+$db['sales_rule_order'] = array(
+    'columns' =>
+    array (
+        'rule_id' =>
+        array (
+            'type' => 'int(8)',
+            'required' => true,
+            'pkey' => true,
+            'label' => app::get('b2c')->_('规则id'),
+            'editable' => false,
+            'extra' => 'auto_increment',
+            'in_list' => false, 
+            ),
+        'name' =>
+        array (
+            'type' => 'varchar(255)',
+            'required' => true,
+            'default' => '',
+            'label' => app::get('b2c')->_('规则名称'),
+            'editable' => true,
+            'in_list' => true,
+            'default_in_list' => true,
+            'filterdefault'=>true,
+            'is_title' => true,
+            ),
+        'description' =>
+        array (
+            'type' => 'text',
+            'label' => app::get('b2c')->_('规则描述'),
+            'required' => false,
+            'default' => '',
+            'editable' => false,
+            'in_list' => true,
+            'filterdefault'=>true,
+            ),
+        'from_time' =>
+        array (
+            'type' => 'time',
+            'label' => app::get('b2c')->_('起始时间'),
+            'default'=> 0,
+            'editable' => true,
+            'in_list' => true,
+            'default_in_list' => true,
+            'filterdefault'=>true,
+            ),
+        'to_time' =>
+        array (
+            'type' => 'time',
+            'label' => app::get('b2c')->_('截止时间'),
+            'default'=> 0,
+            'editable' => true,
+            'in_list' => true,
+            'default_in_list' =>false,
+            'filterdefault'=>true,
+            ),
+        'member_lv_ids' =>
+        array (
+            'type' => 'varchar(255)',
+            'default' => '',
+            'required' => true,
+            'label' => app::get('b2c')->_('会员级别集合'),
+            'editable' => false,
+            ),
+        'status' =>
+        array (
+            'type' => 'bool',
+            'default' => 'false',
+            'required' => true,
+            'label' => app::get('b2c')->_('开启状态'),
+            'in_list' => true,
+            'editable' => false,
+            'filterdefault'=>true,
+            'default_in_list' => true,
+            ),
+        'conditions' =>
+        array (
+            'type' => 'serialize',
+            'default' => '',
+            'required' => true,
+            'label' => app::get('b2c')->_('规则条件'),
+            'editable' => false,
+            ),
+        'action_conditions' =>
+        array (
+            'type' => 'serialize',
+            'default' => '',
+            'label' => app::get('b2c')->_('动作执行条件'),
+            'editable' => false,
+            ),
+        'stop_rules_processing' =>
+        array (
+            'type' => 'bool',
+            'default' => 'false',
+            'required' => true,
+            'label' => app::get('b2c')->_('是否排斥'),
+            'editable' => true,
+            'filterdefault'=>true,
+            'in_list' => true,
+            'default_in_list' => true,
+            ),
+        'sort_order' =>
+        array (
+            'type' => 'int(10) unsigned',
+            'default' => '0',
+            'required' => true,
+            'label' => app::get('b2c')->_('优先级'),
+            'editable' => true,
+            'in_list' => true,
+            'default_in_list' => true,
+            ),
+        'action_solution' =>
+        array (
+            'type' => 'serialize',
+            'default' => '',
+            'required' => true,
+            'label' => app::get('b2c')->_('动作方案'),
+            'editable' => false,
+            ),
+        'free_shipping' =>
+        array(
+            'type' =>array(
+                    0=>app::get('b2c')->_('免运费'),
+                    1=>app::get('b2c')->_('满足过滤条件的商品免运费'),
+                    2=>app::get('b2c')->_('全场免运费')
+             ),
+            'default' => '0',
+            'label' => app::get('b2c')->_('免运费'),
+            'editable' => false,
+            'filterdefault'=>true,
+            'in_list' => false,
+            ),
+       'rule_type' =>
+            array (
+            'type' => array (
+                'N' => app::get('b2c')->_('普通规则'),
+                'C' => app::get('b2c')->_('优惠券规则'),
+            ),
+            'default' => 'N',
+            'required' => true,
+            'editable' => false,
+            ),
+        'c_template' =>
+        array(
+            'type' => 'varchar(100)',
+            'label' => app::get('b2c')->_('过滤条件模板'),
+            'editable' => false,
+            ),
+        's_template' =>
+        array(
+            'type' => 'varchar(255)',
+            'label' => app::get('b2c')->_('优惠方案模板'),
+            'editable' => false,
+            ),
+        ),
+    'comment' => app::get('b2c')->_('订单促销规则'),
+    );
+```
+
+优惠券结构 
+```
+基本信息会存储在coupons表中、形成的具体规则会放入sales_rule_order中
+$db['coupons']=array (
+  'columns' =>
+  array (
+    'cpns_id' =>
+    array (
+      'type' => 'number',
+      'required' => true,
+      'pkey' => true,
+      'extra' => 'auto_increment',
+      'label' => app::get('b2c')->_('id'),
+      'width' => 110,
+      'comment' => app::get('b2c')->_('优惠券方案id'),
+      'editable' => false,
+    ),
+    'cpns_name' =>
+    array (
+      'type' => 'varchar(255)',
+      'label' => app::get('b2c')->_('优惠券名称'),
+      'searchable' => true,
+      'width' => 110,
+      'comment' => app::get('b2c')->_('优惠券名称'),
+      'editable' => false,
+      'in_list' => true,
+      'default_in_list' => true,
+      'filterdefault'=>true,
+    ),
+    'pmt_id' =>
+    array (
+      'type' => 'number',
+      'comment' => app::get('b2c')->_('*暂时废弃'),
+      'editable' => false,
+    ),
+    'cpns_prefix' =>
+    array (
+      'type' => 'varchar(50)',
+      'required' => true,
+      'default' => '',
+      'label' => app::get('b2c')->_('优惠券号码'),
+      'width' => 110,
+      'comment' => app::get('b2c')->_('生成优惠券前缀/号码(当全局时为号码)'),
+      'editable' => false,
+      'in_list' => true,
+      'default_in_list' => true,
+      'filterdefault'=>true,
+    ),
+    'cpns_gen_quantity' =>
+    array (
+      'type' => 'number',
+      'default' => 0,
+      'required' => true,
+      'label' => app::get('b2c')->_('总数量'),
+      'width' => 110,
+      'comment' => app::get('b2c')->_('总数量'),
+      'editable' => false,
+      'in_list' => true,
+      'default_in_list' => true,
+      'filterdefault'=>true,
+    ),
+    'cpns_key' =>
+    array (
+      'type' => 'varchar(20)',
+      'required' => true,
+      'default' => '',
+      'width' => 110,
+      'comment' => app::get('b2c')->_('优惠券生成的key'),
+      'editable' => false,
+    ),
+    'cpns_status' =>
+    array (
+      'type' => 'intbool',
+      'default' => '1',
+      'required' => true,
+      'label' => app::get('b2c')->_('是否启用'),
+      'width' => 110,
+      'comment' => app::get('b2c')->_('优惠券方案状态'),
+      'editable' => false,
+      'in_list' => true,
+      'default_in_list' => true,
+      'filterdefault'=>true,
+    ),
+    'cpns_type' =>
+    array (
+      'type' =>
+      array (
+        0 => app::get('b2c')->_('一张无限使用'),
+        1 => app::get('b2c')->_('多张使用一次'),
+        //2 => __('外部优惠券'),
+      ),
+      'default' => 0,
+      'required' => true,
+      'label' => app::get('b2c')->_('优惠券类型'),
+      'width' => 110,
+      'comment' => app::get('b2c')->_('优惠券类型'),
+      'editable' => false,
+      'in_list' => true,
+      'default_in_list' => false,
+      'filterdefault'=>true,
+    ),
+    'cpns_point' =>
+    array (
+      'type' => 'number',
+      'default' => NULL,
+      'label' => app::get('b2c')->_('兑换所需积分'),
+      'width' => 110,
+      'comment' => app::get('b2c')->_('兑换优惠券积分'),
+      'editable' => false,
+      'in_list' => true,
+    ),
+    'rule_id'=>
+        array(
+          'type' => 'table:sales_rule_order',
+          'sdfpath' => 'rule/rule_id',
+          'default' => NULL,
+          'comment' => app::get('b2c')->_('相关的订单促销规则ID'), // rule_type ='C'
+          'editable' => false,
+        ),
+  ),
+
+  'comment' => app::get('b2c')->_('优惠券表'),
+  'index' =>
+  array (
+    'ind_cpns_prefix' =>
+    array (
+      'columns' =>
+      array (
+        0 => 'cpns_prefix',
+      ),
+    ),
+  ),
+);
+
+member_coupon：用户优惠券表（记录该会员兑换的优惠券信息)
+$db['member_coupon']=array (
+  'columns' => 
+  array (
+    'memc_code' => 
+    array (
+      'type' => 'varchar(255)',
+      'required' => true,
+      'default' => '',
+      'pkey' => true,
+      'editable' => false,
+    ),
+    'cpns_id' => 
+    array (
+      'type' => 'number',
+      'required' => true,
+      'default' => 0,
+      'editable' => false,
+    ),
+    'member_id' => 
+    array (
+      'type' => 'table:members',
+      'required' => true,
+      'default' => 0,
+      'editable' => false,
+    ),
+    'memc_gen_orderid' => 
+    array (
+      'type' => 'varchar(15)',
+      'editable' => false,
+    ),
+    'memc_source' => 
+    array (
+      'type' => 
+      array (
+        'a' => app::get('b2c')->_('全体优惠券'),
+        'b' => app::get('b2c')->_('会员优惠券'),
+        'c' => app::get('b2c')->_('ShopEx优惠券'),
+      ),
+      'default' => 'a',
+      'required' => true,
+      'editable' => false,
+    ),
+    'memc_enabled' => 
+    array (
+      'type' => 'bool',
+      'default' => 'true',
+      'required' => true,
+      'editable' => false,
+    ),
+    'memc_used_times' => 
+    array (
+      'type' => 'mediumint',
+      'default' => 0,
+      'editable' => false,
+    ),
+    'memc_gen_time' => 
+    array (
+      'type' => 'time',
+      'editable' => false,
+    ),
+  ),
+    'comment' => app::get('b2c')->_('用户优惠券表'),
+```
+
+
+
+
+
+
+

@@ -1,0 +1,22 @@
+<div class="sj_info mt_10">
+	<div class="info_title"><{$setting.tag0|default:'宝贝排行榜'}></div>
+  <{if !!$data.goodsdata}>
+  <{foreach from=$data.goodsdata item=goodsdemo}>
+	<div class="ranklist">
+    <a target='_blank' class="le_zhi" href="<{link app=b2c ctl=site_product act=index arg=$goodsdemo.goods_id}>">
+      <{if $goodsdemo.udfimg == 'true'}>
+      <{assign var="gimage" value=$goodsdemo.thumbnail_pic}>
+      <{else}>
+      <{assign var="gimage" value=$goodsdemo.image_default_id|default:$data.defaultImage}>
+      <{/if}>
+      <img class="img-lazyload" src="images/transparent.gif" lazyload="<{$gimage|storager}>" alt="<{$goodsdemo.name}>"></a>
+	  <div class="ranklist_ri ri_zhi">
+	    <p><a target='_blank' href="<{link app=b2c ctl=site_product act=index arg=$goodsdemo.goods_id}>"><{$goodsdemo.name}></a></p>
+	    <p class="price"><{$goodsdemo.price|cur}></p>
+	    <p class="sell">已售出<{$goodsdemo.buy_count}>笔</p>
+	  </div>
+	  <div class="cl_zhi"></div>
+	</div>
+	<{/foreach}>
+  <{/if}>
+</div>

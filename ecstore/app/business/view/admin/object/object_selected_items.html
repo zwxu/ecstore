@@ -1,0 +1,61 @@
+<div class="js_selected_object">
+<div class="brands_namez2 object_body">
+<{if $info.right}>
+<{foreach from=$info.right item=item}>
+<div class="js_object_item" data_id="<{$item.self_id}>" data_tab="<{$item.self_tab}>" rel="select"><span><input type="checkbox" rel="chkbox"/></span><{t}><{$item.self_name}><{/t}></div>
+<{/foreach}>
+<{/if}>
+</div>
+<div class="sel-opt">
+  <input id="object_all" class="sel all" type="checkbox" rel="selectAll">
+  <label for="object_all"><{t}>全选<{/t}></label>
+  <input class="sel other" type="checkbox" rel="selectAll">
+  <label><{t}>反选<{/t}></label>
+</div>
+<p class="selected-tip">
+  <{t}>已添加<{/t}>
+  <span class="num"></span>
+  <{t}>件<{/t}>
+</p>
+</div>
+<script>
+(function(){
+  var dialog = $('object_id_ipt').getParent('.dialog').retrieve('instance'),
+      body = dialog.dialog;
+  var info_body=$E('.js_selected_object',info_body);
+  var Dataitem={
+    format:function(){
+      list = info_body.getElement('.object_body');
+      this.bodySize(list);
+      return this;
+    },
+    bodySize:function(sel){
+      var el_size = sel.getSize();
+			//if(el_size.y<el_size.scrollSize.y)
+      this.search(sel);
+			this.scroll();
+		},
+    search:function(sel){
+      var obj_div = new Element('div',{'class':'brands_search'});
+      
+      var obj_input = new Element('input',{'autofocus':true,'name':'textfield','placeholder':'输入名称查找'}).inject(obj_div);
+      obj_input.addEvents({
+        'keyup':function(){
+          var kwords=this.getValue().trim();
+          var soptions=sel.getElements('div');
+					if(!kwords) return soptions.show();
+					if(soptions)soptions.each(function(opt){
+						opt[opt.get('text').test(kwords,'i')?'show':'hide']();
+					});
+        },
+        'focus':function(){this.setStyle('color','#000');}
+      });
+      obj_div.inject(info_body,'top');
+		},
+		scroll:function(){
+			info_body.retrieve('fxscroll',new Fx.Scroll(info_body.getParent(),{link:'cancel'})).toRight();
+		}
+	};
+  Dataitem.format();
+})();
+</script>

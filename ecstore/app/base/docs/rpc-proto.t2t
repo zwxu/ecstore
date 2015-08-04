@@ -1,0 +1,181 @@
+系统之间的互联
+since   :   %%date(%Y-%m-%d)  $Rev$
+
+%!target:html
+%!postproc(tex): '\.gif' '.eps'
+%!preproc(html): '\.dot' '.gif'
+%!preproc(tex): '\.dot' '.pdf'
+%!encoding:utf-8
+
+=远端通信的类型=
+
+- web访问回调,用来定位某一具体注册到``api.``的service
+- 远端过程调用 rpc, 就是我们刚才讲的``ecos-rpc``
+- 信息广播, ``ecos-rpc``的一个特殊实例,
+    对外来说，就是向矩阵发送事件消息
+
+
+=调用方式=
+
+==ECOS-RPC节点==
+
+指所有满足ecos-rpc通信协议的web站点。每个节点的信息包含两个主要部分。
+- 站点的url
+- rpc入口的url路径
+
+
+所有符合ecos-rpc协议的web站点，根目录下都有一个``rpc.txt``，暂时内容只有一行：
+```
+handle: api_path
+```
+这个就是指，rpc的入口地址。
+
+将站点的url和入口地址拼接在一起就是api的绝对访问地址。 例如站点是:``http://www.example.com``
+
+访问``http://www.example.com/rpc.txt``,内容如下：
+```
+handle: index.php/api/
+```
+拼接在一起：
+```
+http://www.example.com/index.php/api
+```
+
+
+==服务端==
+
+所有对外提供改的服务，或者说可被外部调用的api对象。都是注册好的service。
+特别的是，这些service必须以"``api.``"开头
+
+**app/abc/lib/rpc/hello.php**
+```
+<?php
+class abc_rpc_hello{
+
+    public function world(){
+        ...
+    }
+
+    public function earth(){
+        ...
+    }
+
+    public function moon(){
+        ...
+    }
+
+}
+```
+
+注册这个服务。**app/abc/services.xml**
+```
+<services>
+    <service id="api.abc.hello">
+        <class>abc_rpc_hello</class>
+    </service>
+</services>
+```
+
+==客户端==
+
+调用都是依附在某一APP上执行的，因此要从APP上做入A，
+调用的时候不需要添加``api.``, 直接写刚才定义的service名+method
+```
+$params = array(
+            'a'=>'b',
+            'b'=>'c'
+        );
+
+$result = app::get('base')->remote(5)->call('server.time');
+```
+
+当执行成功后，会自动实例化并调用``dev_sandbox_finish::test()``处理返回的结果。
+因为网络和远端系统的复杂性，不能保证在远端系统的执行时间一定满足用户体验的要求。
+所以在调用时可以设置一个过期时间。
+
+调用该对象的方法：
+```
+app::get('base')->remote(5)->set_timeout(1)->call('server.time');
+```
+
+当超过过期时间后，请求会自动转为异步交互，对象会自动返回``false``。
+此时可以通过检查对象的``status``状态来判断刚才请求的结果。
+
+```
+$remote_hello_object = app::get('base')->remote(5)->set_timeout(1);
+$result = $remote_hello_object->call('server.time',$params);
+
+switch($remote_hello_object->status){
+
+    case RPC_RST_RUNNING:
+        //请求正在远端运行，完成后将自动结果回调。
+        ...
+        break;
+
+    case RPC_RST_FINISH:
+        //请求正常完成, 并且已经完成结果回调。
+        break;
+
+    case RPC_RST_ERROR:
+        //请求执行出错
+        print_r($remote_hello_object->error);
+        break;
+}
+```
+
+如果一段代码一定要在完成之后执行，那么我们就将其设置为``callback``方法。
+``callback``方法会在同步或异步模式**一定**执行。
+
+
+=协议=
+
+我们设计了一个基于http扩展的，可协商的，rpc调用方式。可以同时实现阻塞和非阻塞两种调用方法。
+
+==消息头==
+
+需要用到的http header
+|| Header | Description | Example |
+| Connection | 复用标准设计,表达连接时间 | Connection:30 |
+| Callback | 扩展。用在超时/非阻塞情况下：得到结果后将使用json-rpc请求该地址 |  Callback: http://www.example.com/Api?action_id=123 |
+
+- 普通的浏览器请求，通常会阻塞直到结果返回。
+- 请求包含Connection头,服务器将：
+
+    当有结果时，保存在结果k-v引擎里。 如果请求包含Callback
+    主动回调请求Callback，客户端发送成功消息后，服务器端删除process_id的。k
+
+    客户端每隔一段时间向服务器提交process_id检查是否成功完成，
+
+消息体采用json-rpc格式
+
+
+== Request==
+
+使用JSON格式对以下结构进行封装
+
+method - 字符串格式, 表示请求的方法名
+params - 请求的的参数。数组格式
+id - request id。这可以是任何类型。用于区隔同一个客户端的多个请求
+
+==Response==
+
+请求的结果有三种情况。
+<-- { "running": 123} //123号进程仍然在执行，未得到结果。
+
+   ...1分钟之后...
+
+--> { "checkprocess": 1}
+<-- { "result": "Hello JSON-RPC", "error": null, "id": 1}
+```
+
+当超时发生时，客户端和服务器端都可以主动断开连接。需要注意的是：当客户端通过代理服务器连接时。由**请求端主动断开连接**的事件并不会传递到**真实服务器**。
+此时的连接是这样：
+
+```
+client --- 8< --- proxy <--------> server
+```
+
+因此，服务器端不能仅凭连接来判断是否变更为异步请求。
+实际判断条件为。
+
+- 存在超时时间，并且已经超时，

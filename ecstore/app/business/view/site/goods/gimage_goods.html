@@ -1,0 +1,7 @@
+<div class='all-pics' id="goods_new_images" style="width:100%">
+		<{if $goods.images}>
+			<{foreach from=$goods.images item=gimage}>
+			   <div class="gpic-box"><{include file="site/goods/gimage.html" app='business'}></div>
+			<{/foreach}>          
+		<{/if}>     
+</div>

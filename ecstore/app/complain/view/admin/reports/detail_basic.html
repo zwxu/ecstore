@@ -1,0 +1,153 @@
+
+<div class="action-bar">
+
+<{if $complain.status=='intervene'}>
+<div class="order-ctls clearfix" complain_id="<{$complain.reports_id}>">
+    <div class="span-auto"><b><{t}>举报操作：<{/t}></b></div>
+   <div class ='flt order-action'>
+   <{button type="button"  label='成立'   app=complain   confirm='成立操作意味着卖家需要对该起举报负责，满足买家要求，确认要执行吗?'   act=success    }>
+   </div>
+   <div class ='flt order-action'>
+   <{button type="button"  label='不成立'   app=complain   confirm='不成立操作意味着买家举报失败，确认要执行吗?'    act=error}>
+   </div>
+   <div class ='flt order-action'>
+   <{button type="button"  label='撤销'   app=complain   confirm='撤销操作会将该举报撤销并且不允许再做任何操作，确认要执行吗?'   act=cancel}>
+   </div>
+</div>
+</div>
+<{elseif $complain.status=='success'}>
+    <b class="font-green">举报成立</b>
+<{elseif $complain.status=='error'}>
+    <b class="font-green">举报不成立
+<{else}>
+    <b class="font-green">举报撤销</b>
+<{/if}>
+</div>
+
+<div class='tableform'>
+<table cellspacing="0" cellpadding="0" border="0" class="orderdetails_basic" style="margin-top:10px">
+  <tbody><tr>
+    <td style=" padding:0;">
+<h5 align="center" style=" margin-top:10px;">举报基本信息</h5>
+    <table cellspacing="0" cellpadding="0" border="0" class="multi-cols">
+
+      <tbody><tr>
+        <th>举报单号：</th>
+        <td><{$complain.reports_id}></td>
+      </tr>
+      <tr>
+        <th>商品名称：</th>
+        <td>
+        <a target='_blank' href='index.php?app=b2c&ctl=admin_goods&act=index&action=detail&id=<{$complain.goods_id}>&singlepage=true&finderview=detail_basic'>
+        <{$complain.goods_name}></a>
+        </td>
+      </tr>
+      <tr>
+        <th>举报申请时间：</th>
+        <td><{$complain.createtime|cdate:FDATE_STIME}></td>
+      </tr>
+      <tr>
+        <th>举报类型：</th>
+        <td><{ $complain.cat_name}></td>
+      </tr>
+      <tr>
+        <th>举报状态：</th>
+        <td><{if $complain.status=='intervene'}>
+          平台已经介入
+          <{elseif $complain.status=='success'}>
+          举报成立
+          <{elseif $complain.status=='error'}>
+          举报不成立
+          <{else}>
+          举报撤销
+          <{/if}>
+         </td>
+      </tr>
+      </tbody>
+    </table>
+    </td>
+    <td style=" padding:0">
+<h5 align="center" style=" margin-top:10px">买家信息</h5>
+    <table cellspacing="0" cellpadding="0" border="0" class="multi-cols">
+
+      <tbody><tr>
+        <th>用户名：</th>
+        <td>
+        <a target="_blank" href="index.php?app=b2c&ctl=admin_member&act=index&action=detail&id=<{$member_info.member_id}>&singlepage=true&target=_blank">
+        <{$member_info.uname}>
+        </a>
+        </td>
+      </tr>
+      <tr>
+        <th>电话：</th>
+        <td><{$complain.mobile}></td>
+      </tr>
+       <tr>
+        <th>邮箱：</th>
+        <td><{$member_info.email}></td>
+      </tr>
+      </tbody></table>
+    </td>
+    <td style=" padding:0">
+    <h5 align="center" style=" margin-top:10px">卖家信息</h5>
+    <table cellspacing="0" cellpadding="0" border="0" class="multi-cols">
+            <tbody><tr>
+        <th>用户名：</th>
+        <td>
+        <a target="_blank" href="index.php?app=b2c&ctl=admin_member&act=index&action=detail&id=<{$store_info.account_id}>&singlepage=true&target=_blank">
+        <{$store_info.shop_name}>
+        </a></td>
+      </tr>
+      <tr>
+        <th>店铺名称：</th>
+        <td><{$store_info.store_name}></td>
+      </tr>     
+	 </tbody></table>
+    </td>
+  </tr>
+</tbody></table>
+</div>
+<script>
+$$('.order-ctls button[act]').each(function(btn){
+	   var cfm_str = btn.get('confirm'),
+		_dialog = null,
+		act_url = "index.php?app=complain&ctl=admin_reports&act=cprocess&p[0]=<{$complain.reports_id}>&p[1]={action}";
+
+	   btn.addEvent('click',function(){
+			 _dialog = new Dialog( act_url.substitute({'action':btn.get('act')}),
+			{
+                title:btn.get('text')+":<{$complain.reports_id}>",
+                  width:.3,
+                  height:.4,
+                  onLoad:function(){
+                    var _dialog_form = this.dialog;
+                    this.dialog.getElement('form').store('target',{
+                        onRequest:function(){
+                            _dialog_form.getElement('.table-action .order-action').set('disabled','disabled');
+                        },
+                        onComplete:function(re){
+                        try{re = JSON.decode(re)}catch(e){}
+                        if(re&&re.error){return;}
+                         <{if !$env.get.singlepage}>
+                                <{if $env.get.finder_id}>
+                                    finderGroup['<{$env.get.finder_id}>'].request({
+                                        method:'post',
+                                        onComplete:function(){
+                                           _dialog.close();
+                                           this.loadPacket();
+                                        }});
+                                <{/if}>
+                          <{else}>
+                                _dialog.close();
+                                if (opener.finderGroup&&opener.finderGroup['<{$env.get.finder_id}>'])
+                                    opener.finderGroup['<{$env.get.finder_id}>'].refresh();
+                                 location.reload();
+                          <{/if}>
+                        }
+                    });
+			   }
+             });
+	   });
+
+});
+</script>

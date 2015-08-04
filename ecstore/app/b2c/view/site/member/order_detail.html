@@ -1,0 +1,95 @@
+<!-- right-->
+<div class="member-main">
+  <div>
+
+    <div class="title"><{t}>订单详情<{/t}></div>
+    <div class="note" style='border-width:1px;background:#fff;'>
+    <ol>
+      <{foreach from=$orderlogs item=action name="orderlog"}>
+      <li><span class="date"><{$action.acttime|cdate:FDATE_STIME}></span>&nbsp;&nbsp;&nbsp;&nbsp;<{$action.log_text}></li>
+      <{/foreach}>
+    </ol>
+    </div>
+
+
+    <div class='notice' style='border-width:1px;background:#fff;'>
+   <{if $order.status=='active' && ($order.pay_status == 0 || $order.pay_status == 3)}>
+       <h4 class='font-red'><{t}>您尚未完成订单<{/t}>(<{$order.order_id}>).</h4>
+       <div style="float:left; width:620px;">
+        <a href="<{link app=b2c ctl=site_order act=index arg0=$order.order_id}>" class="orangebtn"><span>为订单付款</span></a>
+        &nbsp;&nbsp;&nbsp;&nbsp;<a href="<{link app=b2c ctl=site_member act=add_order_msg arg0=$order.order_id arg1=1}>" class="orangebtn"><span>我已经付款了</span></a></div>
+   <{/if}>
+      <div style="float:left;">
+        <a href="<{link app=b2c ctl=site_member act=add_order_msg arg0=$order.order_id arg1=0}>" class="btn-a"><span>我有问题</span></a></div>
+      <div style=" clear:both;"></div>
+    </div>
+
+    <{require file="common/orderinfo.html"}>
+
+<{if $ordermsg}>
+<div class="FormWrap">
+    <h4><{t}>订单留言<{/t}></h4>
+    <div class="division">
+    <table border="0" cellspacing="0" cellpadding="0" class="liststyle data" width="100%">
+    <{foreach from=$ordermsg item=msgitem name="ordermsg"}>
+    <tr>
+
+    <td width="25%">
+    <strong><{t}>时间：<{/t}></strong><{$msgitem.date_line|usertime}>
+    </td>
+
+    <td width="45%">
+    <strong><{t}>标题：<{/t}></strong><{$msgitem.subject}>
+    </td>
+
+    <td>
+    <strong><{t}>留言人：<{/t}></strong><{$msgitem.msg_from}>
+    </td>
+
+    </tr>
+
+    <tr>
+    <td colspan=3>
+    <{$msgitem.message|nl2br}>
+    </td>
+
+    </tr>
+    <{/foreach}>
+
+    </table>
+    </div>
+</div>
+<{/if}>
+
+
+
+<script>
+function show_delivery_item(cur_obj,key,item_info){
+    if($(cur_obj).getParent().getNext("div[id="+key+"]")){
+        var obj = $(cur_obj).getParent().getNext("div[id="+key+"]");
+        if(obj.style.display == 'none'){
+        	obj.style.display = '';
+        }else{
+        	obj.style.display = 'none';
+        }
+    }else{
+        var div1 = new Element("div",{
+                'id' : key,
+                'style' : 'overflow:hidden;height:100%;width:98%',
+                'class' : 'note'
+            }).inject($(cur_obj).getParent(),'after');
+        var div2 = new Element('div',{
+                'style' : 'clear:left'
+            }).inject(div1);
+
+        item_info.each(function(item){
+                new Element('div',{'class':'span-9'}).set('text','<{t}>购买的商品：<{/t}>'+item['name']).inject(div2);
+                new Element('div',{'class':'span-9'}).set('text','<{t}>数量：<{/t}>'+item['number']).inject(div2);
+            });
+    }
+}
+</script>
+
+</div>
+</div>
+<!-- right-->

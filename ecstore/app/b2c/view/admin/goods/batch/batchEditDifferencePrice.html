@@ -1,0 +1,26 @@
+<form action="index.php?app=b2c&ctl=admin_goods&act=saveBatchEdit" method="post" id="form01">
+<div id="dialogContent" style="overflow-x:scroll;">
+<{include file="admin/goods/batch/batchEditDifferencePriceList.html"}>
+</div>
+
+</div>
+</form>
+<{area inject=".mainFoot"}>
+   <div class="table-action">
+        <{button label="保存" type="button" id="btn01" class="btn-primary"}>
+   </div>
+<{/area}>
+
+<script>
+  $('btn01').addEvent('click',function(){
+
+      $('form01').store('target',{onComplete:function(re){
+           re = JSON.decode(re);
+
+           if(re.error)return;
+           $('form01').getParent('.dialog').retrieve('instance').close();
+      }});
+      $('form01').fireEvent('submit',{stop:$empty});
+
+  });
+</script>

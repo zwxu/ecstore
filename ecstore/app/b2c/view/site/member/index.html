@@ -1,0 +1,309 @@
+<!-- right-->
+<{assign var=defaultImage value=app::get('image')->getConf('image.set')}>
+<{assign var=defaultImage value=$defaultImage['S']['default_image']}>
+<{assign var=fontColor value=$setting.fontColor2}>
+<{css src="buy.css" app="business"}>
+<div class="sell_ri ri_zhi">
+    <div class="member_center_nav">当前位置：<a href="#">首页</a> > <a href="#" class="current">会员中心</a></div>
+	<div class="sell_ri_top">
+	    <div class="sell_ri_top_le le_zhi">
+             <span class="mall_buy_p_mob_span">账户安全：</span>
+			<p <{if $is_pass_num ==0 }>class="mall_buy_safe_1"<{elseif $is_pass_num == 1}>class="mall_buy_safe_2"<{elseif $is_pass_num == 2}>class="mall_buy_safe_3"<{elseif $is_pass_num == 3}>class="mall_buy_safe_4"<{/if}>></p>
+			<{if $is_mobile}>
+			<p class="mem_yanicon mem_yanicon_yes">手机已验证</p>
+			<{else}>
+			<p class="mem_yanicon mem_yanicon_no"><a href="<{link app=b2c ctl=site_member act=setting}>">手机未验证</a></p>
+			<{/if}>
+			<{if $is_email}>
+			<p class="mem_yanicon mem_yanicon_yes">邮箱已验证</p>
+			<{else}>
+			<p class="mem_yanicon mem_yanicon_no"><a href="<{link app=b2c ctl=site_member act=setting}>">邮箱未验证<a></p>
+			<{/if}>
+			<!--p class="mall_buy_p_mob_3">已设置支付密码</p-->
+		</div>
+
+	    <div class="sell_ri_top_ri ri_zhi">
+		    <div class="order_info">
+				<div class="order_info_le le_zhi">
+                     <p class="tit_p">
+                           <span><{if $member.name==''}><{$member.uname}><{else}><{$member.name}><{/if}></span>，<{t}>欢迎您！<{/t}>
+                           <font class="price-normal_1 price-normal">[<{$member.levelname}>]</font>
+                            <!--<{t}>您目前经验值为<{/t}><{$member.experience}><{t}>，<{if $switch_lv.lv_data-$member.experience<=0}>您的等级已经是最高级<{else}>再获得经验值<{/t}><{$switch_lv.lv_data-$member.experience}><{t}>可升级为<{/t}><span class="price-normal">[<{$switch_lv.lv_name}>]<{/if}></span>-->
+                     </p>
+				    <ul>
+						<li>订单提醒：
+							<{if $member.un_pay_orders}>
+						  	<span class="red">
+						  		<a href="<{link app=b2c ctl=site_member act=orders args0='nopayed' args1=' ' args2=' ' args3=' ' args4='all'}>">待付款（<{$member.un_pay_orders}>）</a>
+						  	</span>
+						  	<{else}>
+					  	  <span>
+						  		待付款（<{$member.un_pay_orders}>）
+					  	  </span>
+								<{/if}>
+
+						  	<{if $confirm_num}>
+					  	  <span class="red">
+						  		<a href="<{link app=b2c ctl=site_member act=orders args0='confirm' args1=' ' args2=' ' args3=' ' args4='all'}>">待确认（<{$confirm_num}>）</a>
+					  	  </span>
+						  	<{else}>
+						  	<span>
+						  		待确认（<{$confirm_num}>）
+						  	</span>
+						  	<{/if}>
+
+						    <{if $discuss_num}>
+						    <span class="red">
+								<a href="<{link app=b2c ctl='site_member' act=orders arg0='comment'}>">待评价（<{$discuss_num}>）</a>
+							</span>
+							<{else}>
+						  	<span>
+						  		待评价（<{$discuss_num}>）
+						  	</span>
+						    <{/if}>
+
+						    <span>
+						    	待晒单（0）
+						    </span>
+						</li>
+
+						<li>
+							我的关注：
+							<{if $goods_price_down_num}>
+							<span class="red">
+								<a href="<{link app=b2c ctl=site_member act=favorite arg0='down'}>">降价商品（<{$goods_price_down_num}>）</a>
+							</span>
+							<{else}>
+						  	<span>
+						  		降价商品（<{$goods_price_down_num}>）
+						  	</span>
+						    <{/if}>
+
+							<{if $pmt_good_num}>
+							<span class="red">
+								<a href="<{link app=b2c ctl=site_member act=favorite arg0='pmt'}>">促销商品（<{$pmt_good_num}>）</a>
+							</span>
+							<{else}>
+						  	<span>
+						  		促销商品（<{$pmt_good_num}>）
+						  	</span>
+							<{/if}>
+						</li>
+
+						<li class="none">
+							我的消息：
+							<{if $sto_goods_num}>
+							<span class="red">
+								<a href="<{link app=b2c ctl=site_member act=notify}>">我的通知（<{$sto_goods_num}>）</a>
+							</span>
+							<{else}>
+						  	<span>
+						  		我的通知（<{$sto_goods_num}>）
+						  	</span>
+							<{/if}>
+
+							<{if $remind_info_count}>
+						  <span class="red">
+								<a href="<{link app=business ctl=site_msg act=my_msg arg0=1}>">我的提醒（<{$remind_info_count}>）</a>
+						  </span>
+							<{else}>
+					  	  <span>
+						  		我的提醒（0）
+					  	  </span>
+							<{/if}>
+						</li>
+				  </ul>
+				</div>
+                <div class="memberindex_money ri_zhi">
+                      <ul>
+                            <li><b>账户余额：</b><span class="red"><{$member.advance.total-$member.advance.freeze|cur_odr}></span></li>
+                            <{if $site_point_usage == 'true'}><li><b>我的积分：</b><a href="<{link app=b2c ctl=site_member act=my_point}>"><{$member.point}></a><{t}>分<{/t}></li><{/if}>
+                            <li><b>优惠券：</b><{$coupon_num}><{t}>张<{/t}></li>
+                      </ul>
+                </div>
+				<div class="cl_zhi"></div>
+		    </div>
+		</div>
+	    <div class="cl_zhi"></div>
+	</div>
+    
+    
+    <!--订单-待评价-待付款开始-->
+    <div class="Plate" id="all_orders">
+                   <h4>
+					  <a href="javascript:void(0);" id="all" onclick="tosearch(this.id)">我的订单</a>
+                       <a  href="javascript:void(0);" search_type='type' id='comment' onclick="tosearch(this.id)">待评价的商品</a>
+                       <a  href="javascript:void(0);" 
+					   id ='nopayed' onclick="tosearch(this.id)">待付款</a>
+					   <a  href="javascript:void(0);" id='confirm' onclick="tosearch(this.id)">待确认收货</a>
+                       <a  href="javascript:void(0);" id='notify' onclick="tosearch(this.id)">到货通知</a>
+                   </h4>
+                  <!-- <form action="<{link app=b2c ctl='site_member' act='index'}>" method="post" id="frm">
+                     <{input type="hidden" name="type" value=$type|default:''}>
+                   </form>-->
+                   <div class="Plate_info" id='my_order'>
+				   </div>
+	</div>
+	<!--订单-待评价-待付款结束-->
+    
+    
+			 <!--关注的商品-->
+               <div class="Plate">
+			   <h4 class="dis_bl"><div class="p_tit"><span>您关注的商品</span></div></h4>
+			    <div class="Drying_single Plate_info" id="Plate_info">
+                <{if !$favorite}>
+                   <div class="noinfo"><{t}>暂无关注的商品<{/t}></div>
+                <{else}>
+                       <li  class="none toleft" >
+                           <a  class="clo_ds_le"></a>
+                       </li>
+
+                       <div class='picscroll_buy' style="float: left;width:888px;margin:0px;">
+                          <div  class='pics'  style='width:888px;overflow:hidden;'>
+                           <{assign var=count value=count($favorite)*222}>
+                              <div style="overflow:hidden;width:<{$count}>px;">
+                               <{foreach from=$favorite item="favorite" name=favorite}>
+                                  <li>
+                                       <a href="<{link app=b2c ctl=site_product act=index arg0=$favorite.goods_id}>">
+                                       <img src="<{if $favorite.udfimg == 'true'}><{$favorite.thumbnail_pic|default:$defaultImage|storager:'s'}><{else}><{$favorite.image_default_id|default:$defaultImage|storager:'s'}><{/if}>"/>
+                                        </a>
+                                     
+                                      <p><a href="<{link app=b2c ctl=site_product act=index arg0=$favorite.goods_id}>"><{$favorite.name}></a></p>
+                                      <div class="price-wrap"><span class="font-red font14px fontbold"><{$favorite.price|cur_odr}></span></div>
+                                  </li>
+                               <{/foreach}>
+                               </div>
+                           </div>
+                       </div>
+
+                        <li class="none toright">
+                            <a  class="clo_ds_ri"></a>
+                        </li>
+                       <div class="cl_zhi"></div>
+                    </div>
+             <{/if}>
+			 </div>
+			 <!--关注的商品-->		 
+			 
+		 </div>   
+         
+<!-- right-->
+<script>
+ window.addEvent('domready',function(){
+         var picscroll=$E('#Plate_info .picscroll_buy');
+         var scrollARROW=$E('#Plate_info').getElements('.none');
+         if($E('.pics',picscroll)){
+             var picsContainer=$E('.pics',picscroll).scrollTo(0,0);
+             if(picsContainer.getSize().x < picsContainer.getScrollSize().x){
+                   scrollARROW.setStyle('visibility','visible').addEvent('click',function(){
+                        var scrollArrow=this;
+                         var to=eval("picsContainer.scrollLeft"+(scrollArrow.hasClass('toleft')?"-":"+")+"picsContainer.offsetWidth");
+                         picsContainer.retrieve('fxscroll',new Fx.Scroll(picsContainer,{'link':'cancel'})).start(to);
+                   });
+                  
+             };
+         }
+})
+
+/*小图mouseenter效果*/
+window.addEvent('domready',function(){
+  $('all').addClass('current');
+  tosearch('all');
+});
+ var sale = new Switchable('sale-active',{
+  'autoplay':true,
+  'effect':'scrolly',
+  'duration':500,
+  'interval':4000,
+  'hasTriggers':false
+ })
+
+ function cancel(order_id){
+     Ex_Dialog.confirm('<{t}>确定要取消该订单吗？<{/t}>', function(e){
+		if(!e) return;
+		new Request.JSON({
+			url:"<{link app=business ctl='site_order' act='docancel'}>",
+			data:'order_id='+order_id,
+			method:'POST',
+			onSuccess:function(rs){
+			
+			  Ex_Dialog.alert(rs);
+			
+			  window.location.reload();
+			}
+		  }).send();
+	});
+
+}
+
+function remind(order_id){
+     Ex_Dialog.confirm('<{t}>卖家将会收到发货提醒，确定发送提醒吗？<{/t}>', function(e){
+		if(!e) return;
+		new Request.JSON({
+			url:"<{link app=business ctl='site_order' act='remind'}>",
+			data:'order_id='+order_id,
+			method:'POST',
+			onSuccess:function(rs){
+			
+			  Ex_Dialog.alert(rs);
+			
+			  window.location.reload();
+			}
+		  }).send();
+	});
+
+}
+
+function tosearch(id){
+     $(id).addClass('current');
+ 
+	if(id=='all')
+	{
+	  $('comment').removeClass('current');
+	  $('nopayed').removeClass('current');
+	  $('confirm').removeClass('current');
+	  $('notify').removeClass('current');
+	}
+	if(id=='comment')
+	{
+	  $('all').removeClass('current');
+	  $('nopayed').removeClass('current');
+	  $('confirm').removeClass('current');
+	  $('notify').removeClass('current');
+	}
+	if(id=='nopayed')
+	{
+	  $('all').removeClass('current');
+	  $('comment').removeClass('current');
+	  $('confirm').removeClass('current');
+	  $('notify').removeClass('current');
+	}
+	if(id=='confirm')
+	{
+	  $('all').removeClass('current');
+	  $('comment').removeClass('current');
+	  $('notify').removeClass('current');
+	  $('nopayed').removeClass('current');
+	}
+	if(id=='notify')
+	{
+	  $('all').removeClass('current');
+	  $('comment').removeClass('current');
+	  $('confirm').removeClass('current');
+	  $('nopayed').removeClass('current');
+	}
+	 
+	new Request.HTML({
+            url:'<{link app=b2c ctl=site_member act=orders_member}>',
+            update:$('my_order'),
+            method:'POST',
+            data:'type='+encodeURIComponent(id),
+			onComplete:function(res){
+                       $('my_order').show();
+                    }
+        }).send();
+}
+
+ 
+
+</script>

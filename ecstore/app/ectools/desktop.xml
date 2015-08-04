@@ -1,0 +1,26 @@
+<desktop>
+    <panelgroup id="currency" icon="panel-currency.png" order="20">支付与货币</panelgroup>
+    <panelgroup id="regions" icon="panel-regions.png" order="40">地区管理</panelgroup>
+
+    <adminpanel group="ectools_currency" controller="currency" action="index" permission='currency' order="20" display='true'>货币管理</adminpanel>
+    <adminpanel group="ectools_currency" controller="setting" action="index" permission='currency' order="30" display='true'>价格精度设置</adminpanel>
+    <adminpanel group="ectools_currency" controller="payment_cfgs" action="index" permission='currency' order="10" display='true'>支付方式管理</adminpanel>
+	<adminpanel group="ectools_currency" controller="admin_payment_notice" action="index" permission='currency' order="31" display='true'>支付自定义设置</adminpanel>
+    <adminpanel group="ectools_regions" controller="regions" action="index" permission='regions' order="10" display='true'>地区管理</adminpanel>
+    <adminpanel group="ectools_regions" controller="regionssetting" action="index" permission='regions' order="20" display='true'>地区设置</adminpanel>
+
+    <permissions>
+       <!-- <permission display="false" id="payment">支付方式</permission> -->
+        <permission id="currency">支付,货币管理</permission>
+        <permission id="regions">地区管理</permission>
+       <!-- <permission id="setting">运算设置</permission> -->
+    </permissions>
+    
+    <workground name="订单" id="ectools.wrokground.order" app="ectools" controller="admin_payment" action="index" order='10'>
+        <menugroup name="单据管理">
+            <menu controller='admin_payment' action='index' permission='bills' display='true' order='30'>收款单</menu>
+            <menu controller='admin_refund' action='index' permission='bills' display='true' order='40'>退款单</menu>
+        </menugroup>
+    </workground>
+
+</desktop>

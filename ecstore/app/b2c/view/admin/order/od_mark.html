@@ -1,0 +1,62 @@
+<div class="tableform" id="Order_Form_Mark_<{$orderid}>">
+<{if $_is_singlepage}><input type='hidden' name='all_reload' value='1'><{/if}>
+  <input type="hidden" name='orderid' value="<{$orderid}>">
+  <div class="division">
+  <div class="mark_area">
+	<{if $mark_text}>
+	<ul>
+   <{foreach from=$mark_text item=mark_info name=mark}>   
+	<li>Marked by <{$mark_info.op_name}>,&nbsp;<{$mark_info.mark_text}>,&nbsp;<{if is_int($mark_info.add_time)}><{$mark_info.add_time|cdate}><{else}><{$mark_info.add_time}><{/if}></li>   
+   <{/foreach}>
+   </ul>
+   <{/if}>
+  </div>
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" id="b2c-order-mark-table">
+   <tr>
+   <th align='right'><{t}>标记：<{/t}></th>
+   <td align='left'>
+      <label><input type='radio' name='mark_type' value='b1' id='b1'><img src='<{$res_url}>/remark_icons/b1.gif' width='20' height='20'></label>
+	   <label><input type='radio' name='mark_type' value='b2' id='b2'><img src='<{$res_url}>/remark_icons/b2.gif' width='20' height='20'></label>
+	  <label><input type='radio' name='mark_type' value='b3' id='b3'><img src='<{$res_url}>/remark_icons/b3.gif' width='20' height='20'></label>
+	  <label><input type='radio' name='mark_type' value='b4' id='b4'><img src='<{$res_url}>/remark_icons/b4.gif' width='20' height='20'></label>
+	  <label><input type='radio' name='mark_type' value='b5' id='b5'><img src='<{$res_url}>/remark_icons/b5.gif' width='20' height='20'></label>
+	  <label><input type='radio' name='mark_type' value='b0' id='b0'><img src='<{$res_url}>/remark_icons/b0.gif' width='20' height='20'></label>
+   </td>
+   </tr>
+    <tr>
+      <th><{t}>订单备注：<{/t}></th>
+      <td><textarea name="mark_text" rows="6" style="width:80%"></textarea></td>
+    </tr>
+    </table>
+    <div class="table-action">
+        <{button label=$___b2c="保存"|t:'b2c' id="btn_do_submit"}>
+    </div>  
+  </div>
+</div>
+
+
+
+
+<script>
+	window.addEvent('domready',function(){
+		if('<{$mark_type}>'!=''){
+		    $('<{$mark_type}>').checked = true;
+		}else{
+		    $('b1').checked = true;
+		}
+		
+		$('btn_do_submit').addEvent('click', function(){
+			new Request({
+				url:'index.php?app=b2c&ctl=admin_order&act=saveMarkText',
+				data:$('Order_Form_Mark_<{$orderid}>'),
+				method:'post',
+				onSuccess:function(response){
+					// 还原原来的input的值.
+					if (response != 'error'){
+						$E('.mark_area').innerHTML = response;
+					}
+				}
+			}).send();
+		});
+	});
+</script>

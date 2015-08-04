@@ -1,0 +1,7 @@
+<services>
+	
+	<service id="autocomplete.associate_autocomplete_goods">
+        <class>associate_goods_autocomplete</class>
+    </service>
+
+</services>

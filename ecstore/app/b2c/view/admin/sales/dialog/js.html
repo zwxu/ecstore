@@ -1,0 +1,31 @@
+<script>
+
+function doTemplate(obj,__name) {
+    new Dialog(
+                obj.href,
+                {
+                    width:550, 
+                    height:450, 
+                    title:obj.get('html'),
+                    callback:function(e){
+                        e.getElements('input[type=checkbox]').each(function(item){
+                            if(item.checked) {
+                                var _item_name = 'item_' + item.get('value');
+                                if(!obj.getNext('div').getElementById(_item_name)) {
+                                    var _div_element = new Element('div', {'class':'row','id':_item_name});
+                                    var _input_element = new Element('input', {type:'hidden', value:item.get('value'), name:__name});
+                                    var _lable_element = new Element('label', {html:item.getNext('label').get('html')});
+                                    var _img_element = new Element('img', {'class':'imgbundle operater', src:e.getElement('img').get('src'), onclick:"this.getParent('div').destroy();"});
+                                    _div_element.adopt(_img_element, _input_element, _lable_element);
+                                    obj.getNext('div').adopt(_div_element);
+                                } 
+                            }
+                        });
+                    }
+                }
+            );
+    return false;
+}
+
+
+</script>

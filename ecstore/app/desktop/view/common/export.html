@@ -1,0 +1,21 @@
+<form action='<{$thisUrl}>&action=to_export' id="export_form" method='post' enctype="multipart/form-data">
+<div class="tableform">
+<div class="division" >
+<{if $change_type}>
+<{t}>导出类型<{/t}>
+<input type='radio' name='_export_type' value='1' <{if $change_type==1}>checked<{/if}>/>type1  &nbsp;
+<input type='radio' name='_export_type' value='2' <{if $change_type==2}>checked<{/if}>/>type2<br/>
+<{/if}>
+<{foreach from=$ioType item=io}>
+<input type='radio' name='_io_type' value='<{$io}>' <{if $io=='csv'}>checked<{/if}>/><{$io}><span style="padding:0 10px">
+<{button type="submit" label=$___desktop="导出"|t:'desktop' app="desktop" icon="btn_get_world.gif"}>
+</span><br/>
+<{/foreach}>
+<{toinput from=$env.post}>
+</div></div>
+</form>
+<script>
+$('export_form').addEvent('submit',function(e){
+    this.getParent('.dialog').retrieve('instance').close.delay(1000,this.getParent('.dialog').retrieve('instance'));
+});
+</script>

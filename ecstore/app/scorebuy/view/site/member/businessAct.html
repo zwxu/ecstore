@@ -1,0 +1,97 @@
+<div class="member-main">
+  <{include file="site/member/activity_tab.html" app=business }>
+  <div class="orderlist-warp">
+        <div class="title"><{t}>申请列表<{/t}></div>
+        <table class="gridlist table-goods-list" style="border-bottom:none" width="100%" border="0" cellspacing="0"  cellpadding="0">
+            <tr>
+                <th class="first"><{t}>活动名称<{/t}></th>
+                <th><{t}>商品名称<{/t}></th>
+                <th><{t}>活动积分<{/t}></th>
+                <th><{t}>活动价格<{/t}></th>
+                <th><{t}>申请状态<{/t}></th>
+                <th><{t}>活动状态<{/t}></th>
+                <th><{t}>会员价格<{/t}></th>
+                <th><{t}>备注<{/t}></th>
+                <th><{t}>操作<{/t}></th>
+            </tr>
+            <tbody>
+                <{foreach from=$busiAct item=item name="busiAct" key=key}>
+                    <tr style="text-align:center;">
+                        <td class="horizontal-m"><{t}><{$item.actInfo.name}><{/t}></td>
+                        <td><{t}><a  href="<{$item.goodsLink}>"><{$item.good.name}></a><{/t}></td>
+                        <td><{t}><{$item.score}><{/t}></td>
+                        <td><{t}><{if $item.price}><{$item.price}><{else}><{$item.actInfo.price}><{/if}><{/t}></td>
+                        <td><{t}><{if $item.status==1}>待审核<{elseif $item.status==2}>审核通过<{else}>审核不通过<{/if}><{/t}></td>
+                        <td><{t}><{if $item.actInfo.act_open=='true'}>开启<{else}>未开启<{/if}><{/t}></td>
+                        <td><{if $item.isMemLv}><a href="javascript:void(0)" onclick="detailMemPrice(<{$item.id}>,<{$item.gid}>);">查看会员价格</a><{/if}></td>
+                        <td><{t}><{$item.remark}><{/t}></td>
+                        <td><{t}>
+                        <{if $item.status==3&&$item.actInfo.act_open=='true'}>
+                          <a  href="<{link app=scorebuy ctl='site_activity' act='editAttend' arg0=$item.id}>">编辑</a>
+                        <{/if}>
+                        <{if $item.status != '2'}>
+                        <a href="<{link app=scorebuy ctl=site_activity act=quitActivity arg0=$item.id}>">退出活动</a>
+                        <{/if}>
+                        <{/t}></td>
+                    </tr>
+                <{/foreach}>
+            </tbody>
+        </table>
+  </div>
+</div>
+<{css src="style.css" app="scorebuy"}>
+<{script src="wpage.js" app="scorebuy" pdir="js"}>
+<script>
+  var W = new Wpage({});
+  var MODALPANEL = {
+    createModalPanel:function(){
+      var mp = new Element('div',{'id':'MODALPANEL'});
+      var mpStyles = {
+        'position': 'absolute',
+        'background': '#333333',
+        'width': '100%',
+        'display':'none',
+        'height': window.getScrollSize().y,
+        'top': 0,
+        'left': 0,
+        'zIndex': 65500,
+        'opacity': .4
+      };
+      this.element = mp.setStyles(mpStyles).inject(document.body);
+      return this.element;
+    },
+    show:function(){
+      var panel = this.element = this.element||this.createModalPanel();
+      panel.setStyles({
+        'width': '100%',
+        'height': window.getScrollSize().y
+      }).show();
+    },hide:function(){
+      if(this.element)this.element.hide();
+    }
+  };
+
+var BREADCRUMBS ='0:0';
+var LAYOUT = {
+  container: $('container'),
+  side: $('side'),
+  workground: $('workground'),
+  content_main: $('main'),
+  content_head: $E('#workground .content-head'),
+  content_foot: $E('#workground .content-foot'),
+  side_r: $('side-r'),
+  side_r_content:$('side-r-content')
+};
+</script>
+<{script src="dialog.js" app="scorebuy" pdir="js"}>
+<script>
+function detailMemPrice(id,gid){
+  var url = "<{link app=scorebuy ctl='site_activity' act='detailMemPrice'}>?id="+id+'&gid='+gid;
+  var dialog = new Dialog(url,{
+                 title:'<{t}>会员价格<{/t}>',
+                 width:400,
+                 height:200,
+                 modal:false
+            });
+}
+</script>

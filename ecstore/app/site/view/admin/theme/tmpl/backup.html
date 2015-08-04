@@ -1,0 +1,28 @@
+<div class="tableform">
+    <table>
+        <tr height="30">
+            <th width="100"><{t}>备份模板：<{/t}></th>
+            <td>
+                <a href="javascript:;" onClick="doTemplate('bak', '<{t}>确定备份吗！<{/t}>');"><{t}>备份<{/t}></a>
+            </td>
+        </tr>
+        <tr>
+            <th ><{t}>应用模板：<{/t}></th>
+            <td>
+                <select id='reset-to'>
+                <{$option}>
+                </select>
+                <a href="javascript:;" onClick="doTemplate('reset', '<{t}>确定应用吗！<{/t}>');"><{t}>应用<{/t}></a>
+            </td>
+        </tr>
+    </table>
+</div>
+<script>
+    function doTemplate(_act, msg) {
+        if(confirm(msg)) {
+            W.page(
+                'index.php?app=site&ctl=admin_theme_manage&act='+ _act +'&theme=<{$theme}>&rid=' + $('reset-to').value
+            );
+        };
+    }
+</script>

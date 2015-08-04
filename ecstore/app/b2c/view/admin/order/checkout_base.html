@@ -1,0 +1,95 @@
+<{if $minfo}>
+<{foreach from=$minfo item="product" key=product_id}>
+<div class='FormWrap'>
+	<h5 style="border-bottom:1px solid #ccc; padding:3px 0"><{t}>填写购买<{/t}>&nbsp;&nbsp;<{$product.name}><{if $product.nums>1}> x <{$product.nums}><{/if }>&nbsp;&nbsp;<{t}>时所需信息<{/t}></h5>
+	<div class="field section" >
+		<div>
+		  <table width="100%" cellspacing="0" cellpadding="0" border="0" class="liststyle data">
+			  <col class="span-5"></col>
+			  <col></col>
+			  <tbody>
+					 <{foreach key=key from=$product.minfo item="info"}>
+					  <{assign var="infokey" value=$info.name}>
+					  <tr>
+					  <th>
+						<em class="c-red">*</em><label for="misc_<{$key}>"><{$info.label}>：</label>
+						<input type="hidden" name="minfo[<{$product_id}>][<{$info.name}>][label]" value="<{$info.label}>">
+					  </th>
+					  <td>
+						<{if $info.type=='select'}>
+						<select class="inputstyle x-input" name="minfo[<{$product_id}>][<{$info.name}>][value]">
+						<{foreach from=$info.options item=opt}>
+						<option value="<{$opt}>"><{$opt}></option>
+						<{/foreach}>
+						</select>
+						<{elseif $info.type=='text'}>
+						<{input class="inputstyle x-input" type="textarea" rows="3" cols="40" id="misc_{$key}" name="minfo[{$product_id}][{$infokey}][value]" vtype="required"}>
+						<{else}>
+						<{input class="inputstyle" id="misc_{$key}" size="30" name="minfo[{$product_id}][{$infokey}][value]" type='required' }>
+						<{/if}>
+					  </td>
+					  </tr>
+					  <{/foreach}> 
+			  </tbody>
+		  </table>
+			 
+		  </div>
+	</div>
+</div>
+<{/foreach}>
+<{/if}>
+
+<div class="FormWrap checkoutbase" >
+  <div class="section">
+    <div class="form-title">
+      <h5>
+      <span>1</span>
+      <{t}>收货信息确认<{/t}>
+      <em class="c-red">*</em>
+      </h5>
+    </div>
+    <div class="form-body">
+      <{include file="admin/order/receiver.html" app=b2c}>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="form-title">
+      <h5>
+      <span>2</span>
+      <{t}>配送方式确认<{/t}>
+      <em class="c-red">*</em>
+      </h5>
+    </div>
+    <div class="form-body">
+      <div id="shipping">
+        <{if $delivery_html}>
+          <{$delivery_html}>
+        <{else}>
+          <div class="notice" >
+          <{t}>请先“在收货人信息”中选择“收货地区”<{/t}>
+          </div>
+        <{/if}>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="form-title">
+      <h5>
+        <span>3</span>
+        <{t}>支付方式确认<{/t}>
+        <em class="c-red">*</em>
+      </h5>
+    </div>
+    <div class="form-body">
+      <div id="_payment_currency" style="margin:0 0 10px;">
+      <{t}>货币类型：<{/t}>
+      <{input type="select" id="payment-cur" name="payment[currency]" rows=$currencys valueColumn="cur_code" labelColumn="cur_name" value=$current_currency class="inputstyle" required="true"}>
+      </div>
+      <div id='payment'>
+        <{$payment_html}>
+      </div>
+    </div>
+  </div>
+</div>

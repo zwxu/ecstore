@@ -1,0 +1,12 @@
+
+<desktop>
+<!--
+    <workground name="开发工具" id="dev.wrokground.tools" controller="project" action="index" order="10">
+        <menugroup name="project">
+            <menu controller='project' action='index' display="true" order="10">project</menu>
+        </menugroup>
+    </workground>
+-->
+<widgets id="dev_desktop_docs" order='50'>开发者工具</widgets>
+</desktop>
+-

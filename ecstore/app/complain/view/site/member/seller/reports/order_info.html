@@ -1,0 +1,34 @@
+<div id="J_BabyDetail" class="boxbase baby-detail J_BabyDetail">
+	<div class="box-hd">
+        <i class="hd-icon"></i>
+        <h4>
+            <span>宝贝信息</span>
+        </h4>
+    </div>
+	<div class="box-bd">
+			<div class="row-item">商品名：<{$complain.goods_name}>
+            </div>
+		<div class="row-item last-row-item">
+            <a hidefocus=""  class="more " href='<{link app=b2c ctl="site_product" act="index" arg0=$complain.goods_id}>' target="blank">查看商品信息<s class="spt-icon"></s></a>
+        </div>
+		
+	</div>
+</div>
+<script>
+(function(){
+if($('J_MoreBabyTrigger')){
+    $('J_MoreBabyTrigger').addEvent('click',function(e){
+          e.stop();
+          this.toggleClass('close');
+          $('J_MoreBabyBox').toggleClass('hidden');      
+       });
+   }
+   if(document.getElement('.J_MoreDescTrigger')){
+        document.getElement('.J_MoreDescTrigger').addEvent('click',function(e){
+          e.stop();
+          this.toggleClass('shrink');
+          document.getElement('.J_TextDesc').toggleClass('height-auto');
+        });
+    }
+})();
+</script>

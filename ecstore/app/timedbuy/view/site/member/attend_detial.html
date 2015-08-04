@@ -1,0 +1,34 @@
+<div class="member-main">
+<form action="<{$return_url}>" method="post">
+    <div >
+    <div class="title"><{t}>活动信息<{/t}></div>
+    <table border="0" width="100%" cellpadding="0" cellspacing="0" class="order-info" style="margin:10px 0 20px 0">
+        <tr>
+        <td width="30%" valign="top"><ul>
+            <li><{t}>活动名称：<{/t}><span class="price-normal"><{$actInfo.name}></span></li>
+            <li><{t}>开始时间：<{/t}><span class="color_3"><{$actInfo.start_time}></span></li>
+            <li><{t}>结束时间：<{/t}><span class="color_3"><{$actInfo.end_time}></span></li>
+			<li><{t}>活动描述：<{/t}><span class="color_3"><{$actInfo.description}></span></li>
+          </ul>
+        </td>
+        </tr>
+        <tr>
+        <td width="30%" valign="top"><ul>
+            <li><{t}>商品名称：<{/t}><span class="price-normal"><{$goods.name}></span></li>
+            <li><{t}>商品原价：<{/t}><span class="color_3"><{$goods.price}></span></li>
+            <li><{t}>活动价格：<{/t}><span class="color_3"><{$businessAct.price}></span></li>
+			<li><{t}>活动库存：<{/t}><span class="color_3"><{if $businessAct.remainnums}><{$businessAct.remainnums}><{else}><{$goods.store}><{/if}></span></li>
+            <li><{t}>商家描述：<{/t}><span class="color_3"><{$businessAct.discription}></span></li>
+          </ul>
+        </td>
+        </tr>
+    </table>
+    
+    <{button class="submit-btn" rel="_request" onclick="jump();" type="button" label=$___b2c="返回"|t:'timedbuy'}>
+    </form>
+</div>
+<script>
+function jump(){
+    window.location='<{link app=timedbuy ctl=site_activity act=myAttend}>';
+}
+</script>

@@ -1,0 +1,44 @@
+
+<style>
+
+.shop_show_pro_<{$widgets_id}> {margin-top:12px;}
+.shop_show_pro_<{$widgets_id}> >a {float:left;display:block; width:540px; height:459px;}
+.shop_show_pro_<{$widgets_id}> >a >img{width:540px; height:459px;}
+.shop_show_pro_ul_<{$widgets_id}>{width:646px;}
+.shop_show_pro_ul_<{$widgets_id}> li{float:left;list-style:none;}
+.shop_show_pro_ul_<{$widgets_id}> li a {display:block; width:317px; height:224px;margin-bottom:12px;position:relative;}
+.shop_show_pro_ul_<{$widgets_id}> li a img {width:317px; height:224px;}
+.shop_show_pro_ul_<{$widgets_id}> li a.tu_8{margin-right:12px;}
+.shop_show_pro_ul_<{$widgets_id}> li a strong {display:none;position:absolute; bottom:0px;left:0px; height:37px; line-height:37px; background:#5a1856; width:287px; padding:0 10px;}
+.shop_show_pro_ul_<{$widgets_id}> li a strong span {font-family:tahoma,"microsoft yahei","微软雅黑";font-size:14px;}
+.shop_show_pro_ul_<{$widgets_id}> li:hover strong{display:block}
+
+</style>
+
+
+<div class="shop_show_pro_<{$widgets_id}>">
+   <a href="<{$data.l.pic_link}>">   
+       <img src=<{$data.l.pic|storager}>  alt="<{$data.l.pic_txt}>">
+    </a>
+  <ul class="shop_show_pro_ul_<{$widgets_id}> ri_zhi"> 
+   <li><a class="tu_8" href="<{$data.c.0.pic_link}>">
+       <img src=<{$data.c.0.pic|storager}>  alt="<{$data.c.0.pic_txt}>">
+       <strong><span class="info_span le_zhi">修身T恤</span>
+       <span class="price_span ri_zhi">RMB:141.90</span>
+       <span class="cl_zhi"></span></strong>
+   </a>
+   </li>
+   <li><a href="<{$data.c.1.pic_link}>">
+       <img src=<{$data.c.1.pic|storager}>  alt="<{$data.c.1.pic_txt}>">
+       </a></li>
+   <li><a class="tu_8"href="<{$data.c.2.pic_link}>">
+       <img src=<{$data.c.2.pic|storager}>  alt="<{$data.c.2.pic_txt}>">
+    </a></li>
+   <li><a href="<{$data.c.3.pic_link}>">
+       <img src=<{$data.c.3.pic|storager}>  alt="<{$data.c.3.pic_txt}>">
+       </a>
+   </li>
+    <div class="cl_zhi"></div>
+   </ul>
+   <div class="cl_zhi"></div>
+</div>

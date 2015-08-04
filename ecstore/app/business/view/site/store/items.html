@@ -1,0 +1,33 @@
+
+   <ul class="classf_pro">
+      <{assign var="store_count" value=0}>
+      <{foreach from=$brandstore.goodsdata.goodsRows item=goodsdemo key=key}>
+          <{assign var="store_count" value=$store_count+1}>
+          <{if $store_count>4}>
+             <{break}>
+          <{/if}>
+         <li style="height:190px;">
+              <a target="_blank" href="<{$goodsdemo.goodsLink}>">
+                  <{if $brandstore.info[$goodsdemo.goodsId].pic}>
+                       <img  style="width:100%;padding:1px;height:130px;" src="<{$brandstore.info[$goodsdemo.goodsId].pic}>" alt="<{if $brandstore.info[$goodsdemo.goodsId].nice}><{$brandstore.info[$goodsdemo.goodsId].nice}><{else}><{$goodsdemo.goodsName}><{/if}>" />
+                  <{else}>
+                        <img style="width:100%;padding:1px;height:130px;" src="<{$goodsdemo.goodsPicM}>" alt="<{if $brandstore.info[$goodsdemo.goodsId].nice}><{$brandstore.info[$goodsdemo.goodsId].nice}><{else}><{$goodsdemo.goodsName}><{/if}>"  />
+                  <{/if}>
+              </a>
+              <p class="clo_info">
+                  <a target="_blank" href="<{$goodsdemo.goodsLink}>">
+						<{if $brandstore.info[$goodsdemo.goodsId].nice}>
+							<{$brandstore.info[$goodsdemo.goodsId].nice}>
+						<{else}>
+							<{$goodsdemo.goodsName}>
+						<{/if}>
+					</a>
+              </p>			   
+              <p class="clo_price"><{$goodsdemo.goodsSalePrice|cur_odr}></p>			   
+         </li>
+      <{/foreach}>
+   </ul>
+     
+
+
+

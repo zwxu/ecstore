@@ -1,0 +1,170 @@
+
+<{area inject='.mainHead'}>
+
+ <div id='swf-uploader-container' style='height:110px;'>
+  <h5 style="height:30px; text-align:center; line-height:30px" id='image-currentcount'><{t}>当前图库图片数量：<{/t}><em  style='color:#ff3300;'><{$currentcount}></em></h5>
+  <div class='table-action no-align-center' style=" border:none">
+  <div class='division' style="margin:0">
+    <{button type="button" label=$___a="上传本地图片"|t:'image' id='swf-uploader-btn'  icon='image_new.gif'}>
+    <div class="std-upload-txt" style="top:97px;left:150px;">
+    <div><{t}>无法打开图片选择窗口？点此<{/t}></div>
+        <div class="browse">
+            <form target="upload" method="post" enctype="multipart/form-data" action="#">
+                <input type="file" name="Filedata" onchange="new StdUpload('index.php?app=image&ctl=admin_manage&act=image_swf_remote&sess_id=<{$ssid}>','img_manage').start();" />
+            </form>
+            <a href="javascript:void(0);"><{t}>上传图片<{/t}></a>
+        </div>
+        <div class="std-loading-icon"></div>
+    </div>
+  </div>
+ </div>
+
+<div style="height:1px; line-height:1px; clear:both;"> </div>
+<{/area}>
+<div class='division' style="overflow:auto;height:150px;position:relative;">
+<h5><{t}>本次上传的图片<{/t}>(<em style='color:#ff3300;'>0</em><{t}>张<{/t}>):</h5>
+<div class='clearfix image-list' style="height:auto;overflow:hidden" id='swf-uploader-result-container' >
+</div>
+<div style="height:1px; clear:both"></div>
+</div>
+<{area inject='.mainFoot'}>
+<div class="table-action">
+    <{button isCloseDialogBtn="true" label=$___a="确定"|t:'image' type="button"}>
+</div>
+<{/area}>
+
+<script>
+void function(){
+   var cd = $('swf-uploader-result-container').getParent('.division').hide();
+   $('swf-uploader-container').getParent('.dialog').retrieve('instance').addEvent('close',function(){
+      window.finderGroup['<{$env.get._finder.finder_id}>'].refresh();
+   });
+   Ex_Loader('uploader',function(){
+   new Swiff.Uploader( {
+            verbose: true,
+            container:'swf-uploader-container',
+            zIndex:65535,
+            url:'index.php?app=image&ctl=admin_manage&act=image_swf_remote&sess_id=<{$ssid}>',
+            path: '<{$env.app.res_url}>/uploader.swf',
+            typeFilter: {
+                'Images (*.jpg, *.jpeg, *.gif, *.png)': '*.jpg; *.jpeg; *.gif; *.png'
+            },
+            fileSizeMax:<{$IMAGE_MAX_SIZE}>,
+            target:'swf-uploader-btn',
+            onLoad:function(){
+                this.tpl='<div class="loadpart"><div class="msg">{cur}<{t}>张已上传到图库(共<{/t}>{count}<{t}>张)<{/t}></div><div class="lpb">'+
+                    '<div class="lpp" style="height:5px;overflow:hidden;width:{width}%">&nbsp;</div></div></div>';
+            },
+            onSelect:function(rs){
+                if(rs)
+                rs.each(function(v){
+                    if(v.size>this.fileSizeMax){
+                        alert(v.name+'<{t}>\n\n文件超出大小<{/t}>');
+                    };
+                },this);
+            },
+            onSelectFail:function(rs){
+               rs.each(function(v){
+                    if(v.validationError=='sizeLimitMax'){
+                        alert(v.name+'\n\n<{t}>文件超出大小限制<{/t}>');
+                    };
+                });
+            },
+            onSelectSuccess:function(rs){
+
+                this.substr=substr=$H({'cur':0,'count':rs.length,'width':0}),dialog=$('swf-uploader-container').getParent('.dialog');
+                var tpl=this.tpl; tpl=tpl.substitute(substr); this.width=width=265;
+
+                this.loader=new Element('div',{'class':'tableform','html':tpl}).setStyles({
+                    'zIndex':'65552',
+                    'background':'#fff',
+                    'border':'1px solid #ccc',
+                    'width':width
+                }).inject(document.body).amongTo(dialog);
+
+                rs.each(function(v,i){
+                    new Element('div',{'class':'span-auto','id':'uping-'+v.id,styles:{
+                        width:55,
+                        height:55,
+                        padding:1,
+                        'padding-top':2,
+                        'line-height':55,
+                        'text-align':'center',
+                        marginBottom:10
+                    }}).inject('swf-uploader-result-container');
+                });
+
+                this.start();
+            },
+            onFileOpen:function(e){
+                $('uping-'+e.id).setHTML('<{t}>正在连接...<{/t}>');
+            },
+            onFileProgress:function(e){
+                var pt=Number(e.progress.bytesLoaded*100/e.size).toFixed()+'%';
+                    $('uping-'+e.id).set('text',pt);
+                $$('[isCloseDialogBtn]').set('disabled',true);
+            },
+            onFileComplete: function(res){
+               var _this = this;
+               $$('[isCloseDialogBtn]').set('disabled',false);
+               if(res.response.error){
+                    return  new MessageBox('<{t}>文件<{/t}>'+res.name+'<{t}>上传失败<{/t}>',{type:'error',autohide:true});
+                }
+                var el=$('uping-'+res.id).setHTML(res.response.text).setStyle('position','relative');
+                var _img=el.getElement('img').setStyle('border','1px #ccc solid');
+
+                var _delbtn=new Element('span',{
+                    'styles':{
+                        'width':'14px',
+                        'height':'14px',
+                        'cursor':'pointer',
+                        'background':'url('+DESKTOPRESFULLURL+'/btn_gimg.gif) no-repeat 0px -94px #fff',
+                        'display':'none',
+                        'position':'absolute',
+                        'zIndex':'65874',
+                        'top':'-6px',
+                        'right':'-4px'
+                    },
+                    'events':{
+                        'click':function(e){
+                            var id=_img.get('image_id');
+                            if(window.confirm('<{t}>是否确定删除此图片<{/t}>'))
+                            new Request({
+                              url:'index.php?app=image&ctl=admin_manage&act=image_del&image_id='+id,
+                              onComplete:function(e){
+                                if(e){
+                                    _this.remove();
+                                    var length=cd.getElements('img').length;
+                                    if(length<2){
+                                        cd.hide();
+                                    }
+                                    $E('#image-currentcount em').set('text', $E('#image-currentcount em').get('text').toInt() - 1);
+                                    cd.getElement('h5 em').set('text', cd.getElement('h5 em').get('text').toInt() - 1);
+                                    el.remove();
+                                }
+                            }}).send();
+                        }
+                    }
+                }).inject(el);
+
+                el.addEvents({
+                    'mouseover':function(){_delbtn.show()},
+                    'mouseout':function(){_delbtn.hide()}
+                });
+
+                var cur=this.substr.get('cur')+1,tpl=this.tpl,length=this.substr.get('count');
+                var substr=this.substr.set('cur',cur).set('width',(cur/length)*100);
+                this.loader.set('html',tpl.substitute(substr));
+
+                if(cur==length)this.loader.remove();
+
+
+                $E('#image-currentcount em').set('text',$E('#image-currentcount em').get('text').toInt()+1);
+                cd.getElement('h5 em').set('text',cd.getElement('h5 em').get('text').toInt()+1);
+                if(!cd.isDisplay())cd.show();
+            }
+        });
+    });
+}();
+
+</script>

@@ -1,0 +1,99 @@
+<{css src="member.css" app='b2c'}>
+<{include file="site/common/header.html" app="b2c"}>
+<div class="member-main">
+    <div>
+       <div class="title">
+	   <span style="float:left"><{t}>在线客服<{/t}>
+	   <span class="disc">|</span> 
+	   <span id='add' class="disc add-icon" ><a href="javascript:void(0);" ><{t}>添加客服<{/t}></a></span>
+	   </span>
+	   </div>
+		<!------------------>
+	   <div id='add_div' <{if !$edit}>style="display:none"<{/if}>>
+            <form method="post" action="<{link app=business ctl=site_webcall act=toAddservice}>">
+                <div class="division" style="border:none; border-bottom:1px dashed #ddd">
+                    <table cellpadding="0" class="forform" cellspacing="0" border="0">
+                        <tr><th><{t}>客服类型：<{/t}></th><td>
+                            <input type="radio" name="type" value="qq" <{if $info.type == 'qq'}>checked<{elseif $info.type != 'ww'}>checked<{/if}>/><{t}>qq客服<{/t}>
+                            <input type="radio" name="type" value="ww" <{if $info.type == 'ww'}>checked<{/if}>/><{t}>旺旺客服<{/t}>
+                        </td></tr>
+                        <tr>
+                        <th><{t}>客服名称：<{/t}></th><td><input type="text" value="<{$info.name}>" name="name" vtype='required' class='x-input'/></td></tr> 
+                        <tr>
+                        <th><{t}>客服账号：<{/t}></th><td><input type="text" value="<{$info.number}>" name="number" vtype='required' class='x-input'/></td></tr>
+                        <{input type="hidden" name="edit" value=$edit}>
+                        <{input type="hidden" name="items_id" value=$info.items_id}>
+                    </table>
+                </div>
+                <div style="padding-left:142px; "><span>
+                        <{button class="btn submit-btn" type="submit" rel="_request" label=$___b2c="保存"|t:'b2c'}></span>
+                    <span class="float-span" style="float:left; margin-left:8px">
+                        <{button id="unset" type="button" label=$___b2c="取消添加"|t:'b2c'}></span>
+                </div>
+            </form>
+        </div>
+		<!------>
+        <table class="gridlist border-all mt10" width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout:fixed;">
+            <tr>
+                <th ><{t}>客服名称<{/t}></th>
+				<th ><{t}>客服类型<{/t}></th>
+                <th ><{t}>账号<{/t}></th>
+                <th ><{t}>是否默认<{/t}></th>
+                <th><{t}>操作<{/t}></th>				
+            </tr>
+           <{foreach from=$data item=data key=key}>
+            <tbody >
+                <tr > 
+                    <td class="textcenter" style="word-wrap:break-word;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<{$data.name}></td>
+                    <td class="textcenter" style="word-wrap:break-word;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<{if $data.type == 'qq'}>QQ客服<{else}>旺旺客服<{/if}></td>
+					<td class="textcenter" style="word-wrap:break-word;"><{$data.number}></td>
+                    <td class="textcenter" style="word-wrap:break-word;"><{if $data.is_defult == 1}>是<{else}>否<{/if}></td>
+                    <td align="center"><a href="javascript:defult_edit(<{$data.items_id}>);">设为默认</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<{link app=business ctl=site_webcall act=manage  arg0='edit' arg1=$data.items_id}>">编辑</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:remove(<{$data.items_id}>);">删除</a></td>
+                </tr>
+            </tbody>
+		<{/foreach}>
+        </table>
+     </div>
+</div>
+<script>
+$("add").addEvent('click',function(e){      
+     $('add_div').setStyle('display','inline');
+});
+$("unset").addEvent('click',function(e){
+     $('add_div').setStyle('display','none');
+});
+
+
+ function remove(item_id) {
+	 Ex_Dialog.confirm('<{t}>确定要删除该客服吗？<{/t}>', function(e){
+		if(!e) return;
+		new Request.JSON({
+			url:"<{link app=business ctl='site_webcall' act='toRemove' }>",
+			data:'item_id='+item_id,
+			method:'POST',
+			onSuccess:function(rs){
+			
+			Ex_Dialog.alert(rs.message);
+			setTimeout(function(){window.location.reload();},1000);
+			}
+		  }).send();
+	});
+ }
+
+  function defult_edit(item_id) {
+	 Ex_Dialog.confirm('<{t}>确定要设为默认吗？<{/t}>', function(e){
+		if(!e) return;
+		new Request.JSON({
+			url:"<{link app=business ctl=site_webcall act=defult_edit}>",
+			data:'item_id='+item_id,
+			method:'POST',
+			onSuccess:function(rs){
+			
+			Ex_Dialog.alert(rs.message);
+			setTimeout(function(){window.location.reload();},1000);
+			}
+		  }).send();
+	});
+ }
+
+</script>

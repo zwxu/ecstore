@@ -1,0 +1,58 @@
+<services>
+     
+    <service id="b2c_promotion_solution_tpl_apps">
+        <class>gift_promotion_solutions_gift</class>
+    </service>
+
+    
+    <service id="desktop_finder.gift_mdl_cat">
+        <class>gift_finder_cat</class>
+    </service>
+    
+    <service id="desktop_finder.gift_mdl_ref">
+        <class>gift_finder_goods</class>
+    </service>
+    
+    
+    <service id="b2c_cart_object_apps">
+        <class>gift_cart_object_gift</class>
+    </service>
+    
+    <service id="b2c_cart_render_items_apps">
+        <class>gift_cart_render_item_gift</class>
+    </service>
+ <!--
+   <service id="b2c_cart_render_items_other_apps">
+        <class>gift_cart_render_item_other_gift</class>
+    </service>
+ -->
+    
+    
+    <service id="b2c_cart_render_items_goods_apps">
+        <class>gift_cart_render_item_goods_gift</class>
+    </service>
+    
+    <!--
+    <service id="desktop_backup.gift">
+        <class>gift_mdl_cat</class>
+        <class>gift_mdl_goods</class>
+    </service>
+    -->
+    
+    <service id="order_goodstype_operation">
+        <class>gift_order_service_gift</class>
+    </service>
+    
+    <service id="b2c.exchange_gift">
+        <class>gift_exchange_gift</class>
+    </service>
+    
+    <service id="b2c_allow_delete_goods">
+        <class>gift_delete_check</class>
+    </service>
+	
+	<service id="site_view_helper">   
+        <class orderby="20">gift_site_view_helper</class>
+    </service>
+    
+</services>

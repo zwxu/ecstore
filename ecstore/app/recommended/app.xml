@@ -1,0 +1,19 @@
+<app>
+    <name>买了这些商品的用户还买了</name>
+    <description>recommended 买了这些商品的用户还买了</description>
+
+    <author>
+        <name>BBC 开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>0.2</version>
+    <license>BBC license</license>
+    <parent_model_class>dbeav_model</parent_model_class>
+
+	<depends>
+        <app>b2c</app>
+        <app>site</app>
+	</depends>
+</app>

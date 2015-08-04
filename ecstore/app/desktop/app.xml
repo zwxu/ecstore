@@ -1,0 +1,19 @@
+<app>
+    <name>设置管理员账户</name>
+    <description>提供一个带有权限和工作流的操作环境。</description>
+
+    <author>
+        <name>BBC 开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>0.1</version>
+    <license>BBC license</license>
+   
+	<depends>
+		<app>pam</app>
+	</depends>
+
+    <optional app="dev">开发者工具</optional>
+</app>

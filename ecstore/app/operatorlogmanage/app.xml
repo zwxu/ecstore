@@ -1,0 +1,20 @@
+<app version="1.0">
+  <name>管理员操作日志</name>
+
+  <description>管理员操作日志管理界面</description>
+
+  <author>
+	  <name>BBC 开发团队</name>
+	  <email></email>
+	  <url></url>
+  </author>
+
+  <version>0.1</version>
+
+  <license>Commercial</license>
+
+	<depends>
+		<app>desktop</app>
+	</depends>
+
+</app>

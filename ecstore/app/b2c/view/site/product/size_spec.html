@@ -1,0 +1,20 @@
+<!-- 尺码-->
+<div class="speci">
+  <{foreach from=$goods.spec key=key item=goodsFlatSpecDesc}>
+  <{if $goodsFlatSpecDesc.spec_show_type != 'flat'}><{assign var=hasSelSpec value='true'}><{continue}><{/if}>
+  <div class='spec-item specItem clearfix'>
+    <div class="spec-label"><span><em><{$goodsFlatSpecDesc.spec_name}></em>：</span></div>
+    <div class="spec-values">
+      <ul>
+        <{foreach from=$goodsFlatSpecDesc.option key=skey item="subDesc"}>
+        <{if $goods.used_spec.$skey}>
+        <{if $goodsFlatSpecDesc.display!="block"}>
+        <li> <a href="<{link app=b2c ctl=site_product act=index arg0=$goods.goods_id arg1=$subDesc.spec_goods_images}>" specvid="<{$skey}>" specid="<{$key}>" > <{if $goodsFlatSpecDesc.spec_type=='text'}> <span><nobr><{$subDesc.spec_value}></nobr></span> <{else}> <img src="<{if $subDesc.spec_image}><{$subDesc.spec_image|storager}><{else}><{$spec_default_pic|storager}><{/if}>"  alt="<{$subDesc.spec_value}>" title="<{$subDesc.spec_value}>" width="<{$specimagewidth}>" height="<{$specimageheight}>"> <{/if}> <i title='<{t}>点击取消选择<{/t}>'>&nbsp;</i> </a> </li>
+        <{/if}>
+        <{/if}>
+        <{/foreach}>
+      </ul>
+    </div>
+  </div>
+  <{/foreach}>
+</div>

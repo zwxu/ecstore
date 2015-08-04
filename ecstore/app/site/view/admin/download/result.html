@@ -1,0 +1,13 @@
+<div class="note">
+<{$img}>
+<{$msg}>
+</div>
+<script>
+window.addEvent('domready', function(){
+	<{if $env.get.finder_id}>
+	opener.window.finderGroup['<{$env.get.finder_id}>'].refresh();
+	<{/if}>
+
+   window.close();
+});
+</script>

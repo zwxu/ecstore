@@ -1,0 +1,5 @@
+<{if $goods.nostore_sell ||count($goods.products)>0 || $goods.store-$goods.product_freez>0 || $goods.store==='' || $goods.store===null }>
+  <{if $env.conf.system.goods.fastbuy}>
+    <input class="actbtn btn-fastbuy" action="<{link app=b2c ctl=site_cart act=add arg0=goods}>" value="<{t}>立即购买<{/t}>" type="button" />
+  <{/if}>
+<{/if}>

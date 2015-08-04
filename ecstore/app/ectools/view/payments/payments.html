@@ -1,0 +1,28 @@
+<div class="tableform">
+<div class="division">
+	<form method='post' action='index.php?app=ectools&ctl=admin_payment&act=edit' target="{update:'payment_info'}">
+		<input type='hidden' name='payment_id' value='<{$payments.payment_id}>'>
+        <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+        <th><label><{t}>收款单号：<{/t}></label></th><td><{$payments.payment_id}></td>
+        <th><label><{t}>订单号：<{/t}></label></th><td><{$payments.order_id}></td>
+        <th><label><{t}>支付方式：<{/t}></label></th><td><{$payments.pay_app_id|pay_name}></td>
+        <th><label><{t}>货币：<{/t}></label></th><td><{$payments.currency}></td>
+        </tr> 
+         <tr>
+        <th><label><{t}>生成时间：<{/t}></label></th><td><{$payments.t_begin|cdate}></td>
+        <th><label><{t}>收款方式：<{/t}></label></th><td><{if $payments.pay_type == 'online'}><{t}>在线支付<{/t}><{elseif $payments.pay_type == 'offline'}><{t}>线下付款<{/t}><{elseif $payments.pay_type == 'deposit'}><{t}>预存款支付<{/t}><{/if}></td>
+        <th><label><{t}>收款帐号：<{/t}></label></th><td><{$payments.account}></td>
+        <th><label><{t}>收款银行：<{/t}></label></th><td><{$payments.bank}></td>
+        </tr>
+        <tr>
+        <th><label><{t}>付款金额：<{/t}></label></th><td><{$payments.money|cur:$payments.currency}></td>
+        <th><label><{t}>付款时间：<{/t}></label></th><td><{$payments.t_payed|cdate}></td>
+        <th><label><{t}>操作员：<{/t}></label></th><td><{$payments.op_id}></td>
+         <th><label><{t}>付款人：<{/t}></label></th><td><{$payments.pay_account}></td>
+        </tr>
+        <tr><th><{t}>备注：<{/t}></th><td><{$payments.memo}></td></tr>
+        </table>
+	</form>
+</div>
+</div>

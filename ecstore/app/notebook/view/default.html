@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>Notebook</title>
+        <link rel="stylesheet" type="text/css"
+                href="<{$env.app.res_url}>/style.css" media="screen" />
+    </head>
+    <body>
+        <h1>Notebook</h1>
+        <dl>
+            <{foreach from=$items item=item}>
+            <dt>
+            <{$item.item_subject}>
+            <span class="date">日期: <{$item.item_posttime|cdate}></span>
+            </dt>
+            <dd>
+           <!--  
+	<img src="<{$item.avatar}>" style="float:left;margin-right:10px" />
+	 -->
+	 <!-- 变化的区域开始 -->
+    <{foreach from=$item.addon item=block}>
+        <{$block}>
+    <{/foreach}>
+    <!-- 变化的区域结束 -->
+            <{$item.item_content}>
+            </dd>
+            <{/foreach}>
+            <div style="margin-bottom:20px;clear:both" />&nbsp;</div>
+        </dl>
+
+        <form id="writer" method="post" action="<{link ctl='site_default' act='addnew' app='notebook'}>">
+            <input id="writer-subject" type="text" value=""
+                    name="subject" placeholder="请输入留言的标题" />
+            <input id="writer-email" type="text" value=""
+                    name="email" placeholder="请输入邮箱地址" />
+            <textarea name="content" placeholder="留言正文"></textarea>
+            <input type="submit" value="发布新留言" id="writer-submit" />
+        </form>
+    </body>
+</html>

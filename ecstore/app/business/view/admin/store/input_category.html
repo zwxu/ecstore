@@ -1,0 +1,23 @@
+<div id="gEditor-GCat-category" class="object-select clearfix">	
+	<div class="label" id="<{$id}>">
+	<{if $category}>
+	<{$category.cat_name}>
+	<{else}>
+	<{t}>分类不限<{/t}>
+	<{/if}>
+	
+	</div>
+	<div class="handle">&nbsp;</div><input type="hidden"  id="gEditor-GCat-input" name=<{$params.name}> value="<{$category.cat_id}>" />
+</div>					
+<script>
+	$('gEditor-GCat-category').addEvent('click',function(){
+		var handle = $('gEditor-GCat-category'),cat_id= handle.getElement('input').value;
+		new Dialog('index.php?app=business&ctl=<{$controller}>&act=get_subcat&p[0]='+cat_id,{
+			title:'选择分类',
+			width:600,height:420,resizeable:false,
+			onShow:function(){
+				this.handle=handle;
+			}
+		});
+	});
+</script>

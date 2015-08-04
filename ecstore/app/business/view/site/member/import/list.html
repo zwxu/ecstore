@@ -1,0 +1,48 @@
+<div class="personal-rating" style="padding:10px;line-height:20px;">
+<h3>宝贝导入：</h3>
+<span style="padding-left:30px;display:block;padding-top:10px;">
+<p>1.请根据验证码和模板编号选择需要导入的文件（文件名为：<em style='color:#FF0000;'>goods_模板编号_验证码.csv</em>）。</p>
+<p>2.请确保导入的CSV模板文件格式为从该分类导出时的格式。</p>
+<p>3.请确保CSV中填写的规格、属性、品牌、运费等是根据导出时的可选项填写。（填写错误，容易导致导入失败。）</p>
+</span>
+</div>
+<table cellspacing="0" cellpadding="0" border="0" class="gridlist table-goods-list">
+  <colgroup>
+    <col width="200px">
+    <col width="500px">
+    <col width="100px">
+    <col width="200px">
+  </colgroup>
+  <thead>
+    <tr>
+      <th class="comment first">模板编号</th>
+      <th class="ratee">所选分类</th>
+      <th class="things">验证码</th>
+      <th class="operate">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+  <{foreach from=$tpl_list item=tpl name=tname}>
+     <tr>
+      <input type="hidden" value="<{$tpl.tpl_id}>" name="tmpl_id">
+      <td valign="middle">
+        <{$tpl.tpl_id}>
+      </td>
+      <td valign="middle" style="text-align:left;">
+         <{$tpl.cat_name}>
+      </td>
+      <td valign="middle">
+        <{$tpl.vcode}>
+      </td>
+      <td valign="middle">
+        <button class="btn btn_download" type="button" onclick="if(CatSelect){CatSelect.download(this,'<{$tpl.tpl_id}>')};" ><span><span>下载模板</span></span></button>
+        <button class="btn" type="button" onclick="if(CatSelect){CatSelect.import_csv(this,'<{$tpl.tpl_id}>')};"><span><span>导入宝贝</span></span></button>
+      </td>
+    </tr>
+    <{/foreach}>
+      
+  </tbody>
+</table>
+<div style='float:right;'><div style="float:auto;">
+ <{pagers data=$pager}></div>
+</div>

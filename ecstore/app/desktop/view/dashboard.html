@@ -1,0 +1,192 @@
+<div class="notice clearfix tableform" id="browser_notice" style="display:none;">
+<div class="flt">
+<b class="f-14">	我们强烈建议您升级或更换到新型浏览器，提升后台操作体验（响应速度更快、视觉效果更佳）!</b>
+<p>被推荐的浏览器有：
+	Google <a href="http://www.google.com/chrome?hl=zh-cn" target="_blank"><b class="c-blue">Chrome</b></a>、
+	Apple  <a href="http://www.apple.com.cn/safari/download/" target="_blank"><b class="c-blue">Safari</b></a>、
+	Mozilla <a href="http://www.mozillaonline.com/" target="_blank"><b class="c-blue">Firefox</b></a>、
+	Microsoft <a href="http://www.microsoft.com/china/windows/internet-explorer/" target="_blank"><b class="c-blue">最新版IE</b></a>
+</p>
+</div>
+<div class="frt">
+	<span class="btn pointer close" onclick="$('browser_notice').dispose();"><span><span>知道了</span></span></span>
+</div>
+</div>
+
+<script>
+void function(){
+	if(window.ie6){
+		if('know'==Cookie.read('browser-notice'))return;
+		$('browser_notice').show();
+		$$('#browser_notice .close').addEvent('click',function(){
+				Cookie.write('browser-notice','know',{duration:1});
+		});
+
+
+	}
+}();
+</script>
+<div class="widgets clearfix">
+	<div id="t-1" class="wcol t-1 clearfix" layout="top">
+		<{foreach from=$top item=widget name="widget"}>
+		  <div class="item widget <{$widget.className}>" id="<{$widget.class_full_name}>">
+			 <div class="dashbd-action"></div>
+			 <div class="dashbd-bd">
+				 <div class="dashbd-head clearfix">
+					<div class="dashbd-headl span-auto"><{$widget.title}></div>
+					<div class="flt sort">
+						<div class="span-auto">
+							<{img src="bundle/icon_asc.gif" class="move up" app='desktop' stye="cursor:pointer;float:left"}>
+						</div>
+						<div class="flt">
+							<{img src="bundle/icon_desc.gif" class="move down" app='desktop' stye="cursor:pointer;float:left"}>
+						</div>
+					</div>
+				</div>
+				<div class="dashbd-list">
+					<{$widget.html}>
+				</div>
+			 </div>
+		   </div>
+		<{/foreach}>
+	</div>
+    <div id="l-1" class="wcol l-1 flt" layout="left">
+		<{foreach from=$left item=widget name="widget"}>
+		  <div class="item widget <{$widget.className}>" id="<{$widget.class_full_name}>">
+			 <div class="dashbd-action"></div>
+			 <div class="dashbd-bd">
+				 <div class="dashbd-head clearfix">
+					<div class="dashbd-headl span-auto"><{$widget.title}></div>
+					<div class="flt sort">
+						<div class="span-auto">
+							<{img src="bundle/icon_asc.gif" class="move up" app='desktop' stye="cursor:pointer;float:left"}>
+						</div>
+						<div class="flt">
+							<{img src="bundle/icon_desc.gif" class="move down" app='desktop' stye="cursor:pointer;float:left"}>
+						</div>
+					</div>
+				</div>
+				<div class="dashbd-list">
+					<{$widget.html}>
+				</div>
+			 </div>
+		   </div>
+		<{/foreach}>
+	</div>
+	<div id="l-2" class="wcol l-2 flt" layout="right">
+		<{foreach from=$right item=widget name="widget"}>
+		  <div class="item widget <{$widget.className}>" id="<{$widget.class_full_name}>">
+			 <div class="dashbd-action"></div>
+			 <div class="dashbd-bd">
+				 <div class="dashbd-head clearfix">
+					<div class="dashbd-headl span-auto"><{$widget.title}></div>
+					<div class="flt sort">
+						<div class="span-auto">
+							<{img src="bundle/icon_asc.gif" class="move up" app='desktop' stye="cursor:pointer;float:left"}>
+						</div>
+						<div class="flt">
+							<{img src="bundle/icon_desc.gif" class="move down" app='desktop' stye="cursor:pointer;float:left"}>
+						</div>
+					</div>
+				</div>
+				<div class="dashbd-list">
+					<{$widget.html}>
+				</div>
+			 </div>
+		   </div>
+		<{/foreach}>
+	</div>
+    	<div id="b-1" class="wcol b-1 clearfix" layout="bottom">
+		<{foreach from=$bottom item=widget name="widget"}>
+		  <div class="item widget <{$widget.className}>" id="<{$widget.class_full_name}>">
+			 <div class="dashbd-action"></div>
+			 <div class="dashbd-bd">
+				 <div class="dashbd-head clearfix">
+					<div class="dashbd-headl span-auto"><{$widget.title}></div>
+					<div class="flt sort">
+						<div class="span-auto">
+							<{img src="bundle/icon_asc.gif" class="move up" app='desktop' stye="cursor:pointer;float:left"}>
+						</div>
+						<div class="flt">
+							<{img src="bundle/icon_desc.gif" class="move down" app='desktop' stye="cursor:pointer;float:left"}>
+						</div>
+					</div>
+				</div>
+				<div class="dashbd-list">
+					<{$widget.html}>
+				</div>
+			 </div>
+		   </div>
+		<{/foreach}>
+	</div>
+</div>
+
+<input type="hidden" id="dashboard-side-r-trigger"/>
+<script>
+	
+   
+  
+
+   new Side_R('index.php?app=desktop&ctl=dashboard&act=advertisement',{width:250,title:'<span class="font9px">advertisement</span>',trigger:$('dashboard-side-r-trigger'),
+		onShow:function(){this.container.setStyle('overflow-y','hidden');},
+        onHide:function(){this.container.setStyle('overflow-y','auto');}
+   });
+
+	$$('.head-nav .wg').removeClass('current');
+	
+	(function(){
+		var syncMoveState = (function(){
+			$$('.widget .dashbd-head .move').hide().each(function(item){
+				var _widget = item.getParent('.widget');
+				var _p = _widget.getPrevious('.widget');
+				var _n = _widget.getNext('.widget');
+					if(item.hasClass('up')){
+						item.setOpacity(_p?1:.2).store('disabled',_p?0:1);
+					}else{
+						item.setOpacity(_n?1:.2).store('disabled',_n?0:1);
+					}
+			});
+			
+			var leftItems = $$('#l-1 .widget').setStyle('height','');
+			var rightItems = $$('#l-2 .widget').setStyle('height','');
+
+			leftItems.each(function(item){
+				var r =rightItems.shift();
+				if(r){
+					new Equalizer($$(item,r)).equalize('height');
+				}
+			});
+			
+			return arguments.callee;
+		})();
+		
+		$$('.widget .dashbd-head .move').addEvent('click',function(){
+			if(!!this.retrieve('disabled'))return;
+			var _wcol = this.getParent('.wcol');
+			var _widget = this.getParent('.widget');
+			var _p = _widget.getPrevious('.widget');
+			var _n = _widget.getNext('.widget');
+			
+			if(this.hasClass('up')){
+				_widget.injectBefore(_p);
+			}else{
+				_widget.injectAfter(_n);
+			}
+			new Request().get('<{link app="desktop" ctl="dashboard" act="dashboard_sort"}>&sort='+_wcol.get('layout')+':'+_wcol.getElements('.widget').get('id').join(','));
+			syncMoveState();
+		});
+		
+		$$('.widget .dashbd-head').addEvents({
+			mouseenter:function(){
+				this.getElements('.move').show();
+			},mouseleave:function(){
+				this.getElements('.move').hide();
+			}
+		});
+		
+	
+		
+	})();
+	
+	
+</script>

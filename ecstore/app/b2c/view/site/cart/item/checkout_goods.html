@@ -1,0 +1,51 @@
+<{if $aCart.object.goods}>
+<{foreach from=$slip.object.goods.obj_ident item=obj key=_obj_key}>
+<{assign var='goods' value=$aCart.object.goods[$_obj_key]}>
+<tr chlid_id="del-<{$goods.obj_items.products.0.product_id}>" urlupdate="<{link app=b2c ctl='site_cart' act='update' arg0='goods' arg1=$item.link_key}>" urlremove="<{link app=b2c ctl='site_cart' act='remove' arg0='goods'}>" number="<{$goods.store.real}>" g_name="<{$goods.store.name}>" floatstore="<{$goods.obj_items.products.0.floatstore}>" buy_price="<{$goods.obj_items.products.0.price.buy_price}>" buy_store="<{$goods.quantity}>" buy_store_id="<{$goods.store_id}>">
+    <td>
+        <div class='cart-product-img goodpic spmc_l' isrc="<{$goods.obj_items.products.0.default_image.thumbnail|default:$env.conf.site.default_thumbnail_pic|storager:'s'}>" ghref='<{link app=b2c ctl=site_product act="index" arg0=$goods.obj_items.products.0.goods_id}>'>
+            <img src='<{$res_url}>/images/loading.gif'/>
+        </div>
+        <div class="spmc_r">
+            <a target="_blank" class="item_title" href="<{link app=b2c ctl=site_product arg0=$goods.obj_items.products.0.goods_id }>"><{$goods.obj_items.products.0.name}></a>
+            <!--<span><{$goods.obj_items.products.0.spec_info}></span>-->
+        </div>
+    </td>
+    <td class="goods_price textcenter" >
+        <span><{if $goods.obj_items.products.0.spec_info}><{$goods.obj_items.products.0.spec_info}><{else}>无<{/if}></span>
+    </td>
+    <td class="goods_price textcenter" >
+        <p class="del_price"><{if $aCart.inAct}><{$goods.obj_items.products.0.json_price.price|cur_odr}><{else}><{$goods.obj_items.products.0.price.mktprice|cur_odr}><{/if}></p> 
+        <p class="now_price"><{$goods.obj_items.products.0.price.buy_price|cur_odr}></p>
+		<{if $aCart.inAct}>
+		<{if ($goods.obj_items.products.0.json_price.price-$goods.obj_items.products.0.price.buy_price)>0}>
+          <p class="pie_price">省<{$goods.obj_items.products.0.json_price.price-$goods.obj_items.products.0.price.buy_price|cur_odr}>
+          </p>
+        <{/if}>
+		<{else}>
+        <{if ($goods.obj_items.products.0.price.mktprice-$goods.obj_items.products.0.price.buy_price)>0}>
+          <p class="pie_price">省<{$goods.obj_items.products.0.price.mktprice-$goods.obj_items.products.0.price.buy_price|cur_odr}>
+          </p>
+        <{/if}>
+		<{/if}>
+    </td>
+    <td class="textcenter">
+        <{$goods.quantity}>
+        <{if $goods.store.less<$goods.obj_items.products.0.min_buy}><h6 class="font-red">(<{t}>提示<{/t}>:<{t}>该商品不足起订量!起订量为：<{/t}><{$goods.obj_items.products.0.min_buy}>)</h6><{/if}>
+    </td>
+    <td class="textcenter" >
+        <{if $goods.obj_items.products.0.act_type != 'normal'}><span class="cx_cart">卖家促销</span><{else}>&nbsp<{/if}>
+    </td>
+    <td class="goods_price textcenter buy_price xj_p" style='padding:0 20px;'><{$goods.obj_items.products.0.price.buy_price*$goods.quantity|cur_odr}></td>
+    
+    
+</tr>
+    <{if $item_goods_section}>
+    <{foreach from=$item_goods_section item=section}>
+    <{if $section.app != 'package'}>
+    <{include file=$section.file app=$section.app }>
+    <{/if}>
+    <{/foreach}>
+    <{/if}>
+<{/foreach}>
+<{/if}>

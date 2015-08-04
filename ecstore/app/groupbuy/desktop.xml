@@ -1,0 +1,15 @@
+<desktop>
+    <permissions>
+        <permission id="group_buy" display='true'>团购活动列表</permission>
+        <permission id="group_activity" display='true'>团购申请列表</permission>
+    </permissions>
+
+    <workground name="营销" id="b2c.wrokground.sale" controller="admin_sales_coupon" action="index" order="40">
+        <menugroup name="活动列表">
+            <menu controller='admin_group' action='index' permission='group_buy' display='true' order='10'>团购活动列表</menu>
+        </menugroup>
+        <menugroup name="活动申请列表">
+            <menu controller='admin_groupapply' action='index' permission='group_activity' display='true' order='20' >团购申请列表</menu>
+        </menugroup>
+    </workground>
+</desktop>

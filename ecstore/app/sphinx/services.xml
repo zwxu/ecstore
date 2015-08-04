@@ -1,0 +1,5 @@
+<services>
+	<service id="search_server.search_goods" >
+		<class>sphinx_search</class>
+	</service>
+</services>

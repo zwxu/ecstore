@@ -1,0 +1,64 @@
+<style>
+.recommend {
+    margin: 10px 0;
+}
+.recommend-hd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #EAE5E1;
+    border-image: none;
+    border-style: solid;
+    border-width: 1px 1px 0;
+    color:#EA0000;
+    font-size: 12px;
+    height: 12px;
+    line-height: 12px;
+    padding: 8px 10px 9px;
+    vertical-align: middle;
+}
+.recommend-con {
+    border: 1px solid #E6E2E1;
+    height: 260px;
+    overflow: hidden;
+}
+.recommend-con .product {
+    display: block;
+    float: left;
+    padding: 30px 19px 20px 18px;
+    position: static;
+    width: 160px;
+}
+.recommend .productImg {
+    display: block;
+    float: none;
+    height: 160px;
+    overflow: hidden;
+    width: 160px;
+}
+.recommend-con .productPrice {
+    clear: both;
+    text-align: center;
+}
+</style>
+<div class="recommend dis_bl">
+<div class="recommend-hd"><span>精选商品</span></div>
+  <div class="recommend-con clearfix recommend-con-7">
+    <{foreach from=$data.goods item=linklist}>
+    <div class="product">        
+    <a class="productImg" target="_blank" href="<{link app=b2c ctl=site_product act=index arg=$linklist.id}>">
+        <{if $linklist.udfimg == 'true'}>
+        <{assign var="gimage" value=$linklist.thumbnail_pic}>
+        <{else}>
+        <{assign var="gimage" value=$linklist.pic|default:$data.defaultImage}>
+        <{/if}>
+     <img src="images/transparent.gif" lazyload="<{$gimage|storager:'m'}>" class="img-lazyload"  alt=<{$linklist.nice|escape:html}>>
+    </a>
+    <p class="productPrice ui-price"><{$linklist.price|cur_odr}></p>
+    <p class="productTitle">
+    <a target="_blank" href="<{link app=b2c ctl=site_product act=index arg=$linklist.id}>" alt='<{$linklist.nice}>'><{$linklist.nice|cut:60}></a></p>
+    </div>
+    <{/foreach}>
+  </div>
+</div>

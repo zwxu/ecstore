@@ -1,0 +1,104 @@
+<!-- right-->
+
+<div class="member-main">
+    <div class="orderlist-warp">
+        <div class="title"><{t}>模版设置<{/t}></div>
+        <table class="gridlist table-goods-list" style="border-bottom:none" width="100%" border="0" cellspacing="0"  cellpadding="0">
+            <tr>
+                <th class="first"><{t}>&nbsp;<{/t}></th>
+                <th><{t}>模版信息<{/t}></th>
+                <th><{t}>操作<{/t}></th>
+            </tr>
+            <tbody>
+                <tr>
+                    <{if $cur_theme}>
+                        <td colspan="3"><a href="<{link app=business ctl="site_theme" act="closetheme"}>"  class="btn-bj-hover"><{t}>关闭所有模板（会删除所有挂件数据，谨慎选择！）<{/t}></a></td>
+                    </tr>
+                    <tr>
+                    <td class="horizontal-m"><div class="clearfix">
+                        <div class='product-list-img member-gift-pic goodpic' isrc="<{$cur_theme.image|storager:'m'}>" > <img src="<{$cur_theme.image|storager:'s'}>"/> </div>
+                    </td>
+                        <td class="vt" >
+                        名称:<{$cur_theme.name}>[使用中]<br/>
+                        </td>
+                    <td><a target="_blank" href="<{link app=business ctl="site_theme" act="widgettheme"}>" class="btn-bj-hover operate-btn" ><{t}>编辑模版<{/t}></a>
+                    <{else}>
+                    <td colspan="3">您还没启用模版哦</td>
+                    <{/if}>
+                </tr>
+                <{foreach from=$themes item="theme"  key="key"}>
+                <tr
+                    <{if ($key+1)%2 == 1}>class="order-list-tr"<{/if}>>
+                    <td class="horizontal-m"><div class="clearfix">
+                            <div class='product-list-img member-gift-pic goodpic' isrc="<{$theme.image|storager:'m'}>" > <img src="<{$theme.image|storager:'s'}>"/> </div>
+                    </td>
+                    <td class="vt" >
+                        名称:<{$theme.name}><br/>
+                   </td>
+                    <td><!--a href="<{link app=b2c ctl="site_member" act="orderPayments" arg0=$order.order_id}>" class="btn-bj-hover operate-btn" ><{t}>预览模版<{/t}></a>-->
+                    <a href="<{link app=business ctl="site_theme" act="usetheme" arg0=$theme.theme_id}>"  class="btn-bj-hover operate-btn"><{t}>启用模版<{/t}></a></td>
+                </tr>
+                <{/foreach}>
+            </tbody>
+
+        </table>
+        <{pagers data=$pager}> </div>
+</div>
+<!-- right-->
+
+<script>
+    /*小图mouseenter效果*/
+    window.addEvent('domready',function(){
+
+        var cart_product_img_viewer=new Element('div',{styles:{'position':'absolute','zIndex':500,'opacity':0,'border':'1px #666 solid'}}).inject(document.body);
+
+        var cpiv_show=function(img,event){
+            if(!img)return;
+            var newimg = $(img).clone().removeProperties('width','height').setStyle('border','1px #fff solid');
+            var newwidth = newimg.width;
+            if(newwidth > 500) newwidth = 500;
+            cart_product_img_viewer.empty().adopt(newimg.setStyle('width',newwidth)).fade(1);
+            var size = window.getSize(), scroll = window.getScroll();
+            var tip = {x: cart_product_img_viewer.offsetWidth, y: cart_product_img_viewer.offsetHeight};
+            var props = {x: 'left', y: 'top'};
+            for (var z in props){
+                var pos = event.page[z] + 10;
+                if ((pos + tip[z]) > size[z] && z == 'y') {
+                    if(size[z] >  tip[z]){
+                        pos = (size[z] - tip[z])/2;
+                    }else{
+                        pos = 0;
+                    }
+                        
+                }
+                if(z == 'x'){
+                    pos += 20;
+                }
+                cart_product_img_viewer.setStyle(props[z], pos);
+            }
+        };
+
+        $$('.gridlist .product-list-img').each(function(i){
+
+            new Asset.image(i.get('isrc'),{onload:function(img){
+                    if(!img)return;
+                    var _img=img.zoomImg(50,50);
+                    if(!_img)return;
+                    _img.setStyle('cursor','pointer').addEvents({
+                        'mouseenter':function(e){
+                            cpiv_show(_img,e);
+                        },
+                        'mouseleave':function(e){
+                            cart_product_img_viewer.fade(0);
+                        }
+                    });
+                    i.empty().adopt(new Element('a',{href:i.get('ghref'),target:'_blank',styles:{border:0}}).adopt(_img));
+                    },onerror:function(){
+                    i.empty();
+
+            }});
+
+        });
+
+    });
+</script>

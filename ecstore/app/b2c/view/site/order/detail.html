@@ -1,0 +1,62 @@
+<div class='cart-wrap'>
+      <div class="cart-nav stepbj3"><span class="step1"><{t}>购物车<{/t}></span><span class="step2"><{t}>填写订单并确认<{/t}></span><span class="step3"><{t}>成功提交订单<{/t}></span><span class="my-cart"><{t}>我的购物车<{/t}></span></div>
+    </div>
+<form action="<{$form_action}>" method="post" id="f_order_pay">
+<{include file="site/common/orderinfo.html"}>
+<input type="hidden" name="payment[order_id]" value="<{$order.order_id}>" />
+<input type="hidden" name="payment[money]" value="<{$order.total_amount-$order.payed}>" id="hidden_money"/>
+<input type="hidden" name="payment[currency]" value="<{$order.currency}>" />
+<input type="hidden" name="payment[cur_money]" value="<{$order.cur_money}>" id="hidden_cur_money"/>
+<input type="hidden" name="payment[cur_rate]" value="<{$order.cur_rate}>" />
+<input type="hidden" name="payment[cur_def]" value="<{$order.cur_def}>" />
+<input type="hidden" name="payment[cost_payment]" value="<{$order.payinfo.cost_payment}>" />
+<input type="hidden" name="payment[cur_amount]" value="<{$order.cur_amount}>" />
+<input type="hidden" name="payment[memo]" value="<{$order.memo}>" />
+<!--<input type="hidden" name="payment[return_url]" value="<{$return_url}>" />-->
+</form>
+
+<script>
+        void function(){
+        var form= $('f_order_pay');
+            Order ={
+
+                paymentChange:function(target){
+                         if(!target)return;
+                         target = $(target);
+                     var money  = target.get('moneyamount');
+					 var cur_money = target.get('curmoney');
+                     var fmoney = target.get('formatmoney');
+                     var paytype= target.get('paytype');
+
+                     $('hidden_money').set('value',money);
+                     $('hidden_cur_money').set('value',cur_money);
+                     //$('span_amount').set('text',fmoney);
+					 var btn_odr = form.getElement('button[type=submit]');
+                     btn_odr.getElement('span span').innerHTML = paytype!='offline'?'<{t}>立刻支付<{/t}><i class="btn-icon"> <img src="<{$res_url}>/bundle/set-arrow.gif" /></i>':'<{t}>确定<{/t}>';
+
+                     if (paytype!='offline'){
+						btn_odr.set('class', 'btn order-btn btn-has-icon');
+					 }else{
+						btn_odr.set('class', 'btn order-btn');
+					 }
+                     /* $$('#_normal_payment th .ExtendCon input[type=radio]').fireEvent('checkedchange');*/
+                }
+
+            };
+
+            if($('f_order_pay').getElement('.select-paymethod')){
+                Order.paymentChange($('f_order_pay').getElement('.select-paymethod input[checked]'));
+
+                if(form&&form.getElement('input[type=submit]')){
+                    form.getElement('input[type=submit]').addEvent('click',function(e){
+
+                        if(!$('f_order_pay').getElement('.select-paymethod input[checked]')){
+                        Message.error('<{t}>请选择支付方式<{/t}>');
+                        return e.stop();
+                        }
+
+                    });
+                }
+            }
+        }();
+</script>

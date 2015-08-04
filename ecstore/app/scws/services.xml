@@ -1,0 +1,7 @@
+<services>
+
+	<service id="search_segment">
+		<class>scws_model</class>
+	</service>
+
+</services>

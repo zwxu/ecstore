@@ -1,0 +1,15 @@
+
+
+<div class="spage-main-box">
+    <{if $order}>
+        <{if $order.is_has_remote_pdts!=='true'}>
+            <{include file="admin/order/order_edit.html"}>
+        <{elseif $order.is_has_remote_pdts=='true'}>
+        
+            <{include file="admin/order/edit_po.html"}> 
+            
+        <{/if}>   
+	<{else}>   
+        <{include file="admin/order/detail/detail.html"}> 
+    <{/if}>   
+</div>

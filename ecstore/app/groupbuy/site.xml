@@ -1,0 +1,27 @@
+<site>
+    <module controller='site_activity' >
+        <name>group</name>
+        <title>团购活动</title>
+        <disable>false</disable>
+    </module>
+    <module controller='site_product' >
+        <name>groupProduct</name>
+        <title>团购列表</title>
+        <disable>false</disable>
+    </module>
+    <module controller='site_cart' >
+        <name>groupCart</name>
+        <title>团购购物车</title>
+        <disable>false</disable>
+    </module>
+    <module controller='site_order' >
+        <name>groupOrder</name>
+        <title>团购订单</title>
+        <disable>false</disable>
+    </module>
+	 <module controller='site_grouplist' >
+        <name>grouplist</name>
+        <title>团购</title>
+        <disable>false</disable>
+    </module>
+</site>

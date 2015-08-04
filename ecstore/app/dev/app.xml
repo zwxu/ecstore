@@ -1,0 +1,18 @@
+<app>
+    <name>开发者工具</name>
+    <description>帮助你进行模板和应用的开发，请不要在正式运营的系统上使用。</description>
+
+    <author>
+        <name>BBC 开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>0.1</version>
+    <license>BBC license</license>
+
+   <depends>
+      <app>desktop</app>
+    </depends>
+
+</app>

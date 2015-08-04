@@ -1,0 +1,7 @@
+<services>
+
+    <service id="b2c_register_after">
+        <class>proregister_member_create</class>
+    </service>
+
+</services>

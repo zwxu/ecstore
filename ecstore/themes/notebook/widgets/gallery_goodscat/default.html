@@ -1,0 +1,73 @@
+<div class="allkind_nei js_ul_div_<{$widgets_id}>">
+<ul class="js_menu allkind_menu_nei">
+    <{foreach from=$data.cat item=parent key=parentId name=catlist}>
+    <{if $parent.hidden=='false'}>
+    <li  id="<{$parent.cat_id}>">
+    <a href="<{link app=b2c ctl=site_gallery act=index arg0=$parent.cat_id}>" class="one_a"><{$parent.cat_name}></a>
+      <p>
+        <{foreach from=$parent.top_link_title item=children key=childrenId name=subcatslist}>
+            <{if $smarty.foreach.subcatslist.iteration <= 6}>
+            <a href="<{$children.url}>"><{$children.title}></a>
+            <{/if}>
+        <{/foreach}>
+      </p>
+      <div id="js_three_menu_<{$smarty.foreach.catlist.iteration-1}>" class="a_mc" style="display:none;"></div> 
+   </li>
+   <{/if}>
+   <{/foreach}>
+</ul>
+</div>
+<script>
+window.addEvent('domready',function(){
+    var menu_li_h = 0;
+    var max_h = $E('.js_ul_div_<{$widgets_id}>').getHeight();
+    $E('.js_menu').getChildren('li').each(function(item,index){
+        menu_li_h += item.getHeight();
+        if(menu_li_h > max_h){
+            //item.setStyle('display','none');
+            item.destroy();
+        }else{
+
+            item.addEvent('mouseenter',function(){
+                $E('.js_menu').getElements('li').removeClass('menu_bg').each(function(o,i){
+                    o.getChildren('a').removeClass('hover');
+                });
+                item.addClass('menu_bg').getChildren('a').addClass('hover');
+
+                if($('js_three_menu_'+index).get('getSub') != 'true'){
+                  var remoteUrl="<{link app=b2c ctl=site_product act=show_3menu}>";
+                  new Request({
+                      url:remoteUrl,
+                      async:false,
+                      onComplete:function(response){
+                        if(response){
+                          $('js_three_menu_'+index).innerHTML = response;
+                          if(response.trim()!=''){
+                            $('js_three_menu_'+index).style.display="block";
+                          }
+                        }
+                        $('js_three_menu_'+index).set('getSub', 'true');
+                      },
+                      data:'cat_id='+item.id+'&sel_cats='+<{$setting.sel_cats}>
+                  }).send();
+                }else{
+                  if($('js_three_menu_'+index).innerHTML.trim()!=''){
+                    $('js_three_menu_'+index).style.display="block";
+                  }
+                }
+            });
+            
+           item.addEvent('mouseleave',function(){
+                $E('.js_menu').getElements('li').removeClass('menu_bg').each(function(o,i){
+                    o.getChildren('a').removeClass('hover');
+                    o.getChildren('div').setStyle('display','none');
+                });
+                // $('js_three_menu_'+index).style.display="none";
+            });
+
+        }
+    });
+
+});
+
+</script>

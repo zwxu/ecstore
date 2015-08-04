@@ -1,0 +1,30 @@
+<style>
+.gallery_ri .avg_percent:hover{color:#666666}
+</style>
+<div class="gallery_ri mt10">
+      <div class="gallery_ri_tit">店铺推荐</div>
+	    <ul class="shop_ul">
+      <{foreach from=$data.storelist item=store key=skey name=nstore}>
+		  <li>
+		   <h4><a href="<{link app='business' ctl=site_shop act=view args0=$store.store_id}>" ><{$store.store_name|cut:30}></a></h4>
+		   <div class="row"><span><{$store.avg_point|default:0}>分</span>
+		     <a class='avg_percent'>
+         <{if $store.avg_percent==0}>
+         <span>持平</span>于同行业
+         <{else}>
+        <{if $store.avg_percent<0}>
+          <span>高于</span>同行业<{$store.avg_percent|number:0|abs}>%
+        <{else}>
+          <span>低于</span>同行业<{$store.avg_percent|number:0|abs}>%
+        <{/if}>
+         <{/if}>
+         </a>
+			 <div class="cl_zhi"></div>
+		   </div>
+		    <p>月销量：<span class="span_c49173"><{$store.buy_m_count}></span></p>
+		  </li>
+      <{/foreach}>
+		</ul><!--不知道连接到哪儿去。先删除-->
+		<!--<div class="gallery_ri_more"><a href="#" >更多》</a></div>-->
+		  <div class="cl_zhi"></div>
+   </div>

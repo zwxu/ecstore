@@ -1,0 +1,19 @@
+<app>
+    <name>分词索引</name>
+    <description>分词+索引</description>
+
+    <author>
+        <name>BBC 开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>0.1</version>
+    <license>BBC license</license>
+
+	<depends>
+		<app>base</app>
+		<app>desktop</app>
+	</depends>
+
+</app>

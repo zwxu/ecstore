@@ -1,0 +1,121 @@
+    <{input type='hidden' value=$coupon.cpns_id name='coupon[cpns_id]'}>
+    <{input type='hidden' value=$rule.rule_id name='coupon[rule_id]'}>
+    <{input type='hidden' value=$coupon.cpns_key name='coupon[cpns_key]'}>
+
+    <div class="division">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th width="10%"><em class="red">*</em><{t}>名称：<{/t}></th>
+        <td><{input type='text' value=$coupon.cpns_name name='coupon[cpns_name]' required='true'}></td>
+      </tr>
+      </table>
+    </div>
+
+    <div class="division">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="liststyle2">
+      <tr>
+        <th><em class="red">*</em><{t}>号码：<{/t}></th>
+      <{if $coupon.cpns_id}><{assign var="disabledElement" value=true}><{/if}>
+        <td><span id='c_p'></span><{input type='alphaint' value=$coupon.cpns_prefix name='coupon[cpns_prefix]' disabled=$disabledElement required='true'}></td>
+      <{if $coupon.cpns_id}><{assign var="disabledElement" value=false}><{/if}>
+      </tr>
+      <tr>
+        <th><{t}>状态：<{/t}></th>
+        <td><label><input type='radio' name='coupon[cpns_status]' value=1  <{if $coupon.cpns_status eq 1}>checked="checked"<{/if}>/><{t}>启用<{/t}></label>
+            <label><input type='radio' name='coupon[cpns_status]' value=0  <{if $coupon.cpns_status eq 0}>checked="checked"<{/if}>/><{t}>禁用<{/t}></label></td>
+      </tr>
+      <tr>
+         <th><em class="red">*</em><{t}>优先级：<{/t}></th>
+         <td><{input type="digits" value=$rule.sort_order name="rule[sort_order]" maxlength="5" size="5"  required="true" vtype='required&&number' }></td>
+      </tr>
+      <tr>
+         <th><em class="red">*</em><{t}>排他：<{/t}></th>
+         <td>
+            <label><input type='radio' name='rule[stop_rules_processing]' value='true'  <{if $rule.stop_rules_processing=='true'}>checked="checked"<{/if}>/><{t}>是<{/t}></label>
+            <label><input type='radio' name='rule[stop_rules_processing]' value='false' <{if $rule.stop_rules_processing!='true'}>checked="checked"<{/if}>/><{t}>否<{/t}></label></td>
+         </td>
+      </tr>
+      <tr>
+         <th><em class="red">*</em><{t}>线上发放数量：<{/t}></th>
+         <td><{input type="digits" value=$coupon.num_online name="coupon[num_online]" maxlength="5" size="5"  required="true" vtype='required&&number' }></td>
+      </tr>
+      <tr>
+         <th><em class="red">*</em><{t}>线上用户领取数量限制：<{/t}></th>
+         <td><{input type="digits" value=$coupon.num_online_limit name="coupon[num_online_limit]" maxlength="5" size="5"  required="true" vtype='required&&number'}></td>
+      </tr>
+      <tr>
+        <th><{t}>优惠券类型：<{/t}></th>
+        <td id='c_t'>
+        <!--
+            <label><input id="c_t" type='radio' name='coupon[cpns_type]' value=0  <{if $coupon.cpns_type eq 0}>checked="checked"<{/if}> <{if $coupon.cpns_id}>disabled='disabled'<{/if}>/><{t}>A类优惠券<{/t}>&nbsp;&nbsp;<span class="font-gray"><{t}>说明：此类优惠券，顾客只需获得一张，即可在规定的时间内重复使用。<{/t}></span></label><br>
+            -->
+            <label><input type='radio' name='coupon[cpns_type]' value=1 checked="checked" <{if $coupon.cpns_id}>disabled='disabled'<{/if}>/><{t}>B类优惠券<{/t}>&nbsp;&nbsp;<span class="font-gray"><{t}>说明：此类优惠券，顾客可一次获得多张，但在规定时间内每张只能使用一次，无法重复使用。 只限会员使用<{/t}></span></label>
+        </td>
+      </tr>
+    </table>
+    </div>
+
+    <div class="division b-tp">
+        <table border="0" cellpadding="0" cellspacing="0" class="liststyle2">
+            <tr>
+                <th><em class="red">*</em><{t}>规则描述<{/t}>：</th>
+                <td><{input type="textarea" class="inputstyle" value=$rule.description name="rule[description]" cols="80" rows="10" vtype='required'}></td>
+            </tr>
+            <tr>
+                <th><{t}>开始时间<{/t}>：</th>
+                <td>
+                    <{input type="time" required="true" value=$rule.from_time name="from_time"}>
+                </td>
+            </tr>
+            <tr>
+                <th><{t}>结束时间<{/t}>：</th>
+                <td>
+                    <{input type="time" required="true" value=$rule.to_time name="to_time"}>
+                </td>
+            </tr>
+            <tr>
+                <th><em class="red">*</em><{t}>会员级别<{/t}>：</th>
+                <td id="mLev">
+                <{if $coupon.cpns_type != 1}>
+                   <span id="b2c-coupon-mlv"><input type="checkbox" name="rule[member_lv_ids][]" value="-1" <{if ($rule.member_lv_ids != '') && in_array(-1,$rule.member_lv_ids)}>checked<{/if}> ><{t}>非会员<{/t}></span>
+                <{/if}>
+                   <{foreach from=$member_level item=ml}>
+                        <lable><input type="checkbox" value="<{$ml.member_lv_id}>" name="rule[member_lv_ids][]" <{if ($rule.member_lv_ids != '') && in_array($ml.member_lv_id,$rule.member_lv_ids)}>checked<{/if}>/><{$ml.name}></label>
+                   <{/foreach}>
+                   <span id="mleverror"></span>
+                </td>
+            </tr>
+           
+        </table>
+    </div>
+
+
+
+
+
+<script>
+  $ES('input', 'c_t').each(function(item){
+    if(item.checked) {
+      if (item.value==0){
+        $('c_p').setHTML('A');
+      }else if (item.value==1){
+        $('c_p').setHTML('B');
+      }
+    }
+  });
+
+  $ES('input', 'c_t').each(function(item){
+    item.addEvent('click',function(e){
+      if (item.value==0){
+        $('b2c-coupon-mlv').setStyle('display','');
+        $('c_p').setHTML('A');
+      }else if (item.value==1){
+        $('b2c-coupon-mlv').setStyle('display','none');
+        $('c_p').setHTML('B');
+      }
+    });
+  });
+
+  
+  
+</script>

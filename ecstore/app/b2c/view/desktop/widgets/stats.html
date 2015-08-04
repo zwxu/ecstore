@@ -1,0 +1,95 @@
+<div class="clearfix dashbd-row">
+
+    <h4><{t}>订单：<{/t}></h4>
+    <table cellpadding="0" cellspacing="0"><tr>
+        <td class="<{if $today_order==0}> figure-zero<{/if}>">
+            <a href="index.php?app=b2c&ctl=admin_order&act=index&view=9&optional_view=9&view_from=dashboard"><{t}>今日订单<{/t}><span class="dashbd-figure">(<{$today_order}>)</span></a>
+        </td>
+        <td class="<{if $yesterday_order==0}> figure-zero<{/if}>">
+
+            <a href="index.php?app=b2c&ctl=admin_order&act=index&view=10&optional_view=10&view_from=dashboard"><{t}>昨日订单<{/t}><span class="dashbd-figure">(<{$yesterday_order}>)</span></a>
+
+        </td>
+        <td class="<{if $today_payed==0}> figure-zero<{/if}>">
+
+            <a href="index.php?app=b2c&ctl=admin_order&act=index&view=11&optional_view=11&view_from=dashboard"><{t}>今日已付款<{/t}><span class="dashbd-figure">(<{$today_payed}>)</span></a>
+
+        </td>
+        <td class="<{if $yesterday_payed==0}> figure-zero<{/if}>">
+
+            <a href="index.php?app=b2c&ctl=admin_order&act=index&view=12&optional_view=12&view_from=dashboard"><{t}>昨日已付款<{/t}><span class="dashbd-figure">(<{$yesterday_payed}>)</span></a>
+
+        </td>
+    </tr></table>
+
+</div>
+<div class="clearfix dashbd-row">
+
+    <h4><{t}>会员：<{/t}></h4>
+    <table cellpadding="0" cellspacing="0"><tr>
+        <td class="<{if $today_reg==0}> figure-zero<{/if}>">
+
+            <a href="index.php?app=b2c&ctl=admin_member&act=index&view=0&optional_view=0&view_from=dashboard"><{t}>今日新增<{/t}><span class="dashbd-figure">(<{$today_reg}>)</span></a>
+
+        </td>
+        <td class="<{if $yesterday_reg==0}> figure-zero<{/if}>">
+
+            <a href="index.php?app=b2c&ctl=admin_member&act=index&view=1&optional_view=1&view_from=dashboard"><{t}>昨日新增<{/t}><span class="dashbd-figure">(<{$yesterday_reg}>)</span></a>
+
+        </td>
+        <td class="<{if $member_count==0}> figure-zero<{/if}>">
+            <a href="index.php?app=b2c&ctl=admin_member&act=index"><{t}>会员总数<{/t}><span class="dashbd-figure">(<{$member_count}>)</span></a>
+        </td><!--
+        <td>
+            <a href="javascript:void(0)">新消息</a><sup></sup>
+        </td>-->
+    </tr></table>
+
+</div>
+<div class="clearfix dashbd-row">
+
+    <h4><{t}>商品：<{/t}></h4>
+    <table cellpadding="0" cellspacing="0"><tr>
+        <td class="<{if $goods_count==0}> figure-zero<{/if}>">
+            <a href="index.php?app=b2c&ctl=admin_goods&act=index"><{t}>商品总数<{/t}><span class="dashbd-figure">(<{$goods_count}>)</span></a>
+        </td>
+        <td class="<{if $market_count==0}> figure-zero<{/if}>">
+            <a href="index.php?app=b2c&ctl=admin_goods&act=index&view=1&view_from=dashboard"><{t}>已下架商品<{/t}><span class="dashbd-figure">(<{$market_count}>)</span></a>
+        </td>
+        <td class="<{if $lack_goods==0}> figure-zero<{/if}>">
+            <a href="index.php?app=b2c&ctl=admin_goods&act=index&view=2&view_from=dashboard"><{t}>缺货商品<{/t}><span class="dashbd-figure">(<{$lack_goods}>)</span></a>
+        </td>
+        <td class="<{if $lack_goods==0}> figure-zero<{/if}>">
+            <a href="index.php?app=b2c&ctl=admin_goods&act=index&view=3&view_from=dashboard"><{t}>库存报警<{/t}><span class="dashbd-figure">(<{$lack_store}>)</span></a>
+        </td>
+    </tr></table>
+
+</div>
+<div class="clearfix dashbd-row last">
+
+    <h4><{t}>促销：<{/t}></h4>
+    <table cellpadding="0" cellspacing="0"><tr>
+        <td class="<{if $rule_goods_count==0}> figure-zero<{/if}>">
+            <a href="index.php?app=b2c&ctl=admin_sales_goods&act=index"><{t}>商品促销<{/t}><span class="dashbd-figure">(<{$rule_goods_count}>)</span></a>
+        </td>
+        <td class="<{if $rule_orders_count==0}> figure-zero<{/if}>">
+            <a href="index.php?app=b2c&ctl=admin_sales_order&act=index"><{t}>订单促销<{/t}><span class="dashbd-figure">(<{$rule_orders_count}>)</span></a>
+        </td>
+        <td class="<{if $coupons_count==0}> figure-zero<{/if}>">
+            <a href="index.php?app=b2c&ctl=admin_sales_coupon&act=index"><{t}>优惠券<{/t}><span class="dashbd-figure">(<{$coupons_count}>)</span></a>
+        </td>
+        <td class="<{if $score_coupons_count==0}> figure-zero<{/if}>">
+            <{if $gift_is_installed}>
+            <a href="index.php?app=gift&ctl=admin_gift&act=index"><{t}>积分兑换赠品<{/t}><span class="dashbd-figure">(<{$score_coupons_count}>)</span></a>
+            <{/if}>
+
+        </td>
+    </tr></table>
+
+</div>
+
+<script>
+$$('div.figure-zero a').each(function(el){
+    el.set('href','javascript:void(0)');
+});
+</script>

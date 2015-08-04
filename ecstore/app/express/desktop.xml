@@ -1,0 +1,17 @@
+<desktop>
+    <permissions>
+        <permission id="express" display='true' workground='ectools.wrokground.order'>快递单管理</permission>
+    </permissions>
+     <workground name="订单" id="ectools.wrokground.order">
+        <menugroup name="快递单管理">
+            <menu controller='admin_delivery_printer' action='index' permission='express' display='true' order='90'>快递单模板</menu>
+			<menu controller='admin_delivery_printer' action='add_tmpl' permission='express' display='false' order='91'>添加模版</menu>
+			<menu controller='admin_delivery_printer' action='import' permission='express' display='false' order='91'>导入模版</menu>
+            <menu controller='admin_delivery_center' action='index' permission='express' display='true' order='100'>发货信息管理</menu>
+        	<menu controller='admin_delivery_printer' action='edit_tmpl' permission='express' display='false' order='110'>编辑模版</menu>
+			<menu controller='admin_delivery_printer' action='add_same' permission='express' display='false' order='120'>添加相似模版</menu>
+		
+        </menugroup>
+    </workground>
+
+</desktop>

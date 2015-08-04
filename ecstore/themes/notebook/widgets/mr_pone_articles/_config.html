@@ -1,0 +1,17 @@
+
+    <div class="tableform widgetconfig" >
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <th><{t app='content'}>标题:<{/t}> </th>
+        <td>
+            <{input type='text' name='title' value=$setting.title  size=8}>
+        </td>
+      </tr>
+      <tr>
+        <th><{t app='content'}>选择文章:<{/t}> </th>
+        <td >
+            <{input type="object" object="article_indexs@content" textcol="title" name="articleId" value=$setting.articleId}>
+        </td>
+      </tr>
+    </table>
+    </div>

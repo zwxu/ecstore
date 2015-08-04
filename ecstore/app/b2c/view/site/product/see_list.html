@@ -1,0 +1,25 @@
+<{if !!$goods.list}>
+<{foreach from=$goods.list item=linklist}>
+<li class="ald-wf-li">
+  <{if $linklist.udfimg == 'true'}>
+  <{assign var="gimage" value=$linklist.thumbnail_pic}>
+  <{else}>
+  <{assign var="gimage" value=$linklist.image_default_id|default:$defaultImage}>
+  <{/if}>
+  <a href='<{link app=b2c ctl=site_product act=index arg0=$linklist.goods_id}>' class="ald-wf-pic" target="_blank">
+    <img lazyload="<{$gimage|storager:'m'}>"  style="height: 232px;width: 232px;"/>
+    <em class="ald-wf-em "></em>
+    <span class="ui-price"><{$linklist.price|cur_odr:$order.currency}></span>
+  </a>
+  <{if $linklist.comments}>
+    <{foreach from=$linklist.comments item=com }>
+    <p><b>
+      <{if $com.addon.hidden_name =='YES' && ($com.author_id !=0 || $com.author_id !=1)}>匿名
+      <{else}><{$com.author}>
+      <{/if}>
+     </b><{$com.comment}></p>
+    <{/foreach}>
+  <{/if}>
+</li>
+<{/foreach}>
+<{/if}>

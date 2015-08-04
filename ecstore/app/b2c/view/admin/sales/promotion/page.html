@@ -1,0 +1,73 @@
+
+<{capture name="sidebar"}>
+<div class="side-bx spage-side">
+    <div class="spage-side-nav">
+        <ul>
+            <li class="l-handle all" ><span><{if $promotion_type == 'goods'}><{t}>商品促销规则<{/t}><{else}><{t}>订单促销规则<{/t}><{/if}></span></li>
+            <{foreach from=$sections item=section name="sec"}>
+                <{if $env.foreach.sec.iteration neq 1}>
+                <li class="l-handle" ><span><{$section.label}></span></li>
+                <{/if}>
+            <{/foreach}>
+        </ul>
+    </div>
+</div>
+
+<{/capture}>
+
+
+<{foreach from=$sections item=section}>
+<div class="spage-main-box">
+  <{include file=$section.file app=$section.app}>
+</div>
+<{/foreach}>
+<{capture name='footbar'}>
+<table cellspacing="0" cellpadding="0" class="table-action">
+      <tbody><tr valign="middle">
+        <td>
+        <{assign var="___a"  value="关  闭"}>
+        <{assign var="___c"  value=$___b2c='确定退出?'|t:'b2c'}>
+            <{button label=$___b2c="保存并关闭窗口"|t:'b2c' class="btn-primary" type="button" id="submitForm" onclick="submitForm(event,2)"}>
+            <!--<{button label="保  存" class="btn-primary" onclick="submitForm(event,1)"}>-->
+            <{button label=$___content=$___a|t:'content' class="btn-secondary" type="button" onclick="if(confirm('{$___c}'))window.close()"}>
+        </td>
+        </tr>
+        </tbody>
+</table>
+
+<script>
+validatorMap['requiredradio'] = [LANG_Validate['requiredonly'], function(element) {
+    var parent =  element.getParent('ul'),radio;
+    if(element.get('name')) radio = parent.getElements('input[type=radio][name="'+element.get('name')+'"]');
+    else radio = parent.getElements('input[type=radio]');
+    return radio.some(function(rd) {
+        return rd.checked == true;
+    });
+}];
+var submitForm = function (event,sign){
+       var _form=$('promotion_form');
+       
+        switch (sign){
+            case 1:
+                var target={
+                    onComplete:function(){
+                        location.reload();
+                }};
+            break;
+            case 2:
+                var target={
+                    onComplete:function(rs){
+                        if(rs&&!!JSON.decode(rs).success){
+                          try{
+                              window.opener.finderGroup['<{$env.get.finder_id}>'].refresh();
+							  window.close();
+                          }catch(e){}
+                        }
+                    }};
+            break;
+       }
+       _form.store('target',target);
+       _form.fireEvent('submit',new Event(event));
+    };
+</script>
+<{/capture}>

@@ -1,0 +1,26 @@
+<div class="member-main">
+  <{include file="site/member/activity_tab.html" app=business }>
+  <div class="orderlist-warp">
+        <div class="title"><{t}>活动列表<{/t}></div>
+        <table class="gridlist table-goods-list" style="border-bottom:none" width="100%" border="0" cellspacing="0"  cellpadding="0">
+            <tr>
+                <th class="first"><{t}>活动名称<{/t}></th>
+                <th><{t}>活动开始时间<{/t}></th>
+                <th><{t}>活动结束时间<{/t}></th>
+                <th><{t}>状态<{/t}></th>
+                <th><{t}>操作<{/t}></th>
+            </tr>
+            <tbody>
+                <{foreach from=$activity item=item name="activity" key=key}>
+                    <tr style="text-align:center;">
+                        <td class="horizontal-m"><{t}><{$item.name}><{/t}></td>
+                        <td><{t}><{$item.start_time}><{/t}></td>
+                        <td><{t}><{$item.end_time}><{/t}></td>
+                        <td><{t}><{if $item.act_open=='true'}>开启<{else}>未开启<{/if}><{/t}></td>
+                        <td><{t}><a  href="<{link app=scorebuy ctl='site_activity' act='toAttend' arg0=$item.act_id}>">申请参加</a><{/t}></td>
+                    </tr>
+                <{/foreach}>
+            </tbody>
+        </table>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+  <div class="promotion-info clearfix">
+    <div class="fl product-pro">
+      <h3><{t}>【商品促销】<{/t}></h3>
+      <ul class="promotion-list">
+        <li class="sale-info clearfix">
+          <{if $promotionMsg}>
+          <{foreach from=$promotionMsg item=pm}>
+            <div class="pitem"><{$pm.name}><br>
+              <{if $pm.member}><i>此优惠限于</i><{$pm.member}>
+              <{/if}>
+            </div>
+          <{/foreach}>
+          <{else}>
+          暂无！
+          <{/if}>
+        </li>
+      </ul>
+    </div>
+    <div class="fl order-pro">
+      <h3><{t}>【订单促销】<{/t}></h3>
+      <ul class="promotion-list">
+        <li class="sale-info clearfix">
+          <{if $promotionOrder}>
+          <{foreach from=$promotionOrder item=pm}>
+            <div class="pitem"><{$pm.name}><br>
+              <{if $pm.member}><i>此优惠限于</i><{$pm.member}>
+              <{/if}>
+            </div>
+          <{/foreach}>
+          <{else}>
+          暂无
+          <{/if}>
+        </li>
+      </ul>
+    </div>
+  </div>

@@ -1,0 +1,58 @@
+<div class="dialog-content-head">
+    <select name="recyle_type" id="recyle_type">
+        <option value="_ALL_"><{t}>选择所有<{/t}></option>
+        <{foreach from=$item_type item=item}>
+        <option value="<{$item.item_type}>"><{$item.item_type}></option>
+        <{/foreach}>
+    </select>    
+</div>&nbsp;
+
+<form class="tableform" id="recycle_form" action="index.php?ctl=recycle&act=action_recycle" method="POST">
+	<table class="gridlist">
+	<col class="col-select" />
+	<col />
+	<col />
+	<col />
+	<thead>
+    	<tr>
+    		<th><input class="sellist" type="checkbox" onclick="this.blur()"/></th>
+    		<th><{t}>标题<{/t}></th>
+    		<th><{t}>类型<{/t}></th>
+    		<th><{t}>删除时间<{/t}></th>
+    	</tr>
+	</thead>
+	<tbody>
+	<{foreach from=$items item=item}>
+	<tr>
+		<td><input type="checkbox" value="<{$item.item_id}>" name="item_id[]" class="sel"></td>
+		<td><{$item.item_title}></td>
+		<td><{$item.item_type}></td>
+		<td><{$item.drop_time|date_format:"%Y-%m-%d %H:%I:%S"}></td>
+		<td></td>
+	</tr>
+	<{/foreach}>
+	</tbody>
+	</table>
+</form>
+
+<{pagers data=$pager}>
+
+<div class="table-action">
+    <{button label=$___dekstop="恢复所选"|t:'desktop' onclick="recycle(event,1);"}>
+    <{button label=$___dekstop="彻底删除"|t:'desktop' onclick="recycle(event,2);"}>
+</div>
+<script>
+	function recycle(event,case_){
+		var form = $('recycle_form');
+		if(case_==1){
+			form.set('action','index.php?app=desktop&ctl=recycle&act=recycle_restore');
+		}else{
+			form.set('action','index.php?app=desktop&ctl=recycle&act=recycle_delete');
+		}
+		form.fireEvent('submit',new Event(event));
+		
+	}
+$$('#recyle_type','option').addEvent('change',function(e){
+	new Request({url:'index.php?ctl=recycle&act=recycle_show&p[0]='+this.value+'&p[1]=1',update:this.getParent('.dialog-box')}).send();
+});
+</script>

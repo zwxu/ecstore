@@ -1,0 +1,7 @@
+<h3></h3>
+<ul>
+<{foreach from=$data.href item=toplink key=top_key}>
+<li><a href="<{$toplink.top_link_url}>"><{$toplink.top_link_title}></a></li>
+<li>|</li>
+<{/foreach}>
+</ul>

@@ -1,0 +1,175 @@
+<{capture name="header"}>
+<{lang_script src="lang.js" app='b2c'}>
+<{script src="coms/pager.js" app='desktop'}>
+<{script src="coms/datapicker.js"  app='desktop'}>
+<{/capture}>
+<script>
+       var goodsEditFrame = (function(){
+            /******************************************/
+            /*
+             *  sign:{
+                   1:保存并增加相似商品,
+                   2:保存并返回,
+                   3:保存当前不返回，
+             *    }
+             */
+       var _form=$('gEditor'),_formActionURL=_form.get('action');
+
+             subShopinfoForm = function (event,sign){
+             /*
+              var _default_disabled_bn = false;
+               $$('.class-bn').each(function(item,index){
+                  if($(item).get('disabled')) {
+                    _default_disabled_bn = true;
+                    $(item).set('disabled', false);
+                  }
+               });
+               */
+           
+             //if($('gEditor-GCat-input').value==''){
+             if($$('select[name=violation[cat_id]]')[0].value==''){
+                MessageBox.error('<{t}>请选择违规类型。<{/t}>');
+                return;
+             }
+
+             if($('news_days_value').value >100){
+                MessageBox.error('<{t}>请输入小于100的整数。<{/t}>');
+                return;
+             }
+            
+
+            switch (sign){
+                    case 1:
+                    
+                    var target={
+                            onComplete:function(){
+                                location.reload();
+                                //if( _default_disabled_bn ) {
+                                //  $$('.class-bn').set('disabled', true);
+                                //}
+                               
+                        }};
+                    break;
+                    case 2:
+                    var target={
+                            onComplete:function(rs){
+                                if(JSON.decode(rs).error) {
+                                    return ;
+                                }
+                                if(window.opener.finderGroup&&window.opener.finderGroup['<{$env.get.finder_id}>']){
+                                    window.opener.finderGroup['<{$env.get.finder_id}>'].refresh();
+                                }
+                                window.close();
+                                //if( _default_disabled_bn ) {
+                                //  $$('.class-bn').set('disabled', true);
+                                //}
+
+                            }};
+                    break;
+                    case 3:
+                    var target={           //保存当前
+                            onComplete:function(rs){
+                                var id = JSON.decode(rs).store_id;
+                                if(id > 0){
+                                    $('newshopinfo-edit-form-GId-input').value =id;
+                                    $('gEditor-g-type').value ='edit';
+                                    //if( _default_disabled_bn ) {
+                                    //    $$('.class-bn').set('disabled', true);
+                                    //}
+                                  
+                                }
+                              
+                            }};
+                    break;
+               }
+
+               _form.store('target',target);
+               _form.fireEvent('submit',new Event(event));
+
+       };
+    });
+
+    goodsEditFrame();
+
+</script>
+
+<form name="gEditor" id="gEditor" method='post'  action="index.php?app=business&ctl=admin_violation&act=toAdd">
+<input name="__type" value="<{$violation.violation_id ? 'edit' : 'add'}>" id="gEditor-g-type" type="hidden">
+<div class="tableform">
+    <div class="division">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr><th style="width:10%;"><em class="red">*</em><{t}>违规类型：<{/t}></th>
+            <input name="violation[violation_id]" value="<{$violation.violation_id}>" id="newshopinfo-edit-form-GId-input" type="hidden" value=$violation.violation_id>
+            <td> 
+
+            <{input type="select" name='delivery' rows=$arycat_id valueColumn="cat_id" labelColumn="cat_name" value=$violation.cat_id  name="violation[cat_id]"}>
+            </td>
+        </tr>
+
+        <tr><th style="width:10%;"><em class="red">*</em><{t}>处理节点：<{/t}></th>
+            <td><{input vtype="required&&unsignedint" id=score_value name="violation[score_value]" size="10"  value=$violation.score_value  }>&nbsp;&nbsp;<{t}>分<{/t}></td>
+        </tr>
+
+        <tr><th style="width:10%;"><{t}>限制发布商品天数：<{/t}></th>
+            <td><{input vtype="unsigned" id=goods_days  name="violation[goods_days]" size="10"  value=$violation.goods_days}>&nbsp;&nbsp;<{t}>天<{/t}></td>
+        </tr>
+
+        <tr><th style="width:10%;"><{t}>下架店铺内所有商品天数：<{/t}></th>
+            <td><{input vtype="unsigned" id=goodsdown_days name="violation[goodsdown_days]" size="10"  value=$violation.goodsdown_days}>&nbsp;&nbsp;<{t}>天<{/t}></td>
+        </tr>
+
+        <tr><th style="width:10%;"><{t}>商品降权天数：<{/t}></th>
+            <td><{input vtype="unsigned" id=news_days name="violation[news_days]" size="10"  value=$violation.news_days}>&nbsp;&nbsp;<{t}>天<{/t}></td>
+        </tr>
+
+        <tr><th style="width:10%;"><{t}>商品降权值：<{/t}></th>
+            <td><{input maxlength=3 vtype="unsigned" id=news_days_value name="violation[news_days_value]" size="10"  value=$violation.news_days_value}>&nbsp;&nbsp;<{t}>%<{/t}></td>
+        </tr>
+
+        <tr><th style="width:10%;"><{t}>店铺屏蔽天数：<{/t}></th>
+            <td><{input vtype="unsigned" id=store_days name="violation[store_days]" size="10"  value=$violation.store_days}>&nbsp;&nbsp;<{t}>天<{/t}></td>
+        </tr>
+
+        <tr><th style="width:10%;"><{t}>关闭店铺天数：<{/t}></th>
+            <td><{input vtype="unsigned" id=storedown_days name="violation[storedown_days]" size="10"  value=$violation.storedown_days}>&nbsp;&nbsp;<{t}>天<{/t}></td>
+        </tr>
+
+        <tr><th style="width:10%;"><{t}>限制参加营销活动天数：<{/t}></th>
+            <td><{input vtype="unsigned" id=sales_days name="violation[sales_days]" size="10"  value=$violation.sales_days}>&nbsp;&nbsp;<{t}>天<{/t}></td>
+        </tr>
+       
+        <tr><th style="width:10%;"><{t}>支付违约金：<{/t}></th>
+            <td><{input type="money" id=earnest_money name="violation[earnest_money]" size="10"  value=$violation.earnest_money }>&nbsp;&nbsp;<{t}>万元<{/t}></td>
+        </tr>
+        
+        <tr><th style="width:10%;"><{t}>备注：<{/t}></th>
+            <td> <{input  type='textarea' cols=25 rows=2 id=remark  name="violation[remark]" value=$violation.remark}></td>
+        </tr>
+        </table>
+    </div>
+
+</div>
+<{capture name="footbar"}>
+<table cellspacing="0" cellpadding="0" class="table-action">
+      <tbody>
+        <tr valign="middle">
+        <td>
+            <{button label=$___b2c="保存并关闭窗口"|t:'b2c' class="btn-primary" onclick="subShopinfoForm(event,2)"}>
+            <{if !$violation.violation_id}>
+            <{button label=$___b2c="保存并添加相似"|t:'b2c' class="btn-primary" onclick="subShopinfoForm(event,1)"}>
+            <{/if}>
+            <{button label=$___b2c="保存当前"|t:'b2c' class="btn-primary" onclick="subShopinfoForm(event,3)"}>
+            <{assign var=bcclose value=$___b2c='确定退出?'|t:'b2c'}>
+            <{assign var=bclose value="关  闭"}>
+            <{button label=$___b2c=$bclose|t:'b2c' class="btn-secondary" onclick="if(confirm('{$bcclose}'))window.close()"}>
+        </td>
+        </tr>
+        </tbody>
+</table>
+<{/capture}>
+</form>
+
+
+
+
+

@@ -1,0 +1,36 @@
+<div id='goods-products-list' class='goods-products-list'>
+  <div class="returnclose  h25 lh25 goods-products-action" align="right"><a href='javascript:void(0)'><{t}>规格列表<{/t}></a></div>
+  <div class="scroll-lists">
+    <table width="100%" cellpadding="3" cellspacing="0" class="liststyle border-all" style="border-bottom:none">
+      <{foreach from=$goods.spec item=spec}>
+      <col></col>
+      <{/foreach}>
+      <col></col>
+      <col></col>
+      <col></col>
+      <thead>
+        <tr>
+          <{foreach from=$goods.spec item=spec key=key}>
+          <th><{$spec.spec_name}></th>
+          <{/foreach}>
+          <th><{t}>货号<{/t}></th>
+          <th><{t}>价格<{/t}></th>
+          <{if $env.conf.site.show_storage=="true"}>
+          <th><{t}>库存<{/t}></th><{/if}>
+        </tr>
+      </thead>
+      <tbody>
+        <{foreach from=$goods.product item=item}>
+        <tr class="bg" productId="<{$item.product_id}>" <{if $item.store!==null && $item.store !=='' && ($item.store - $item.freez <= 0)}>class='nostore' title='<{t}>此货品缺货<{/t}>'<{/if}>>
+          <{foreach from=$item.spec_desc.spec_value key=key item=value}>
+          <td class="textcenter"><{$value}></td>
+          <{/foreach}>
+          <td class="ident textcenter"><{$item.bn}></td>
+          <td class="textcenter font-orange"><{$item.price.price.current_price|cur_odr}></td>
+          <{if $env.conf.site.show_storage=="true"}><td class="store"><{if $item.store!==null && $item.store !=='' && ($item.store - $item.freez <= 0)}><{t}>缺货<{/t}><{else}><{$item.store}><{/if}></td><{/if}>
+        </tr>
+        <{/foreach}>
+      </tbody>
+    </table>
+  </div>
+</div>

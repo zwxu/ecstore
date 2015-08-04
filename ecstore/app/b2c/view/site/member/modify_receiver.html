@@ -1,0 +1,111 @@
+<!-- right-->
+<div class="member-main">
+<div >
+
+<div class="title title2"><{t}>修改收货地址<{/t}></div>
+<form method='post' action='<{link app=b2c ctl="site_member" act="save_rec"}>' extra="subMemAddr" id="Member_addr">
+  <input type="hidden" name="addr_id" value="<{$addr_id}>">
+  <div class="FormWrap" style="background:none">
+       <table width="100%" border="0" cellspacing="0" cellpadding="0" class="liststyle data" style="border:none">
+       <col class="span-4 bg-gray"/>
+       <col class="span-auto"/>
+        <tr>
+          <th><{t}>默认收货地址：<{/t}></th>
+          <td><span><{input type="radio" name="default" options=$defOpt value=$default}></span></td>
+        </tr>
+        <tr>
+          <th><em>*</em><{t}>姓名：<{/t}></th>
+          <td><{input class="inputstyle" name="name" type="text" vtype=required value=$name}></td>
+        </tr>
+        <tr>
+          <th><{t}>电话：<{/t}></th>
+          <td><{input class="inputstyle" name="phone[telephone]" type="order_tel" value=$phone.telephone}><span class="infotips"><{t}>其中联系电话和联系手机必须填写一项<{/t}></span></td>
+        </tr>
+        <tr>
+          <th><{t}>手机：<{/t}></th>
+          <td><{input class="inputstyle" name="phone[mobile]" vtype="number" value=$phone.mobile}></td>
+        </tr>
+        <tr>
+          <th><em>*</em><{t}>地区：<{/t}></th>
+          <td><span id="checkout-select-area"><{input type="region" name="area" vtype=area app="ectools" value=$area callback="selectArea"}></span></td>
+        </tr>
+        <tr>
+          <th><{t}>地址：<{/t}></th>
+          <td><{input id="addr" class="inputstyle" type="textarea"  name="addr" cols="30" rows="3" value=$addr}></td>
+        </tr>
+        <tr>
+          <th><em>*</em><{t}>邮编：<{/t}></th>
+          <td><{input class="inputstyle" name="zipcode"  vtype="required&&number&&check_zipcode" value=$zipcode}></td>
+        </tr>
+        <tr>
+          <th></th>
+          <td>
+          <{button onclick="subMember_addrForm(event,2);" class="submit-btn" type="button" rel="_request" label=$___b2c="提交"|t:'b2c'}>
+          <button  onclick="Ex_Dialog.confirm('<{t}>确定退出?<{/t}>',function(e){if(e)window.close();});" class="btn" type="button"> <span><span> <{t}>取消<{/t}></span></span> </button>
+          </td>
+      </tr>
+      </table>
+  </div>
+</form>
+<script>
+var button_valiate = function(element_node){
+            // el element id.
+            var _validate_return = element_node.getElements('[vtype]').every(function(el){
+                    return validate(el);
+              });
+            return _validate_return;
+        };
+
+subMember_addrForm = function (event,sign){
+           if ($('Member_addr')){
+                _formActionUrl = $('Member_addr').get('action');
+
+                if ($('Member_addr')){
+                _return = button_valiate($('Member_addr'));
+                }
+
+                if (_return){
+                    new Request({
+                      url:_formActionUrl,
+                        method:'post',
+                        data:$('Member_addr').toQueryString(),
+                        onComplete:function(response){
+                            var result = JSON.decode(response);
+                            if(result.status == 'success'){
+                                window.opener.location.reload();
+                                window.close();
+                            }
+                            else{
+                                Message.error(result.msg)
+                            }
+
+                        }
+                    }).send();
+                }
+           }
+        };
+</script>
+
+<script>
+(function(){
+    selectArea = function(sels) {
+		var selected = [];
+		sels.each(function(s){
+		   if(s.getStyle('display') != 'none') {
+			   var text = s[s.selectedIndex].text.trim().clean();
+			   if(['<{t}>北京<{/t}>','<{t}>天津<{/t}>','<{t}>上海<{/t}>','<{t}>重庆<{/t}>'].indexOf(text)>-1)return;
+			   selected.push(text);
+			}
+		});
+		var selectedV = selected.join('');
+        if($('addr').value.indexOf(selectedV)>-1){
+        
+        }else{
+            $('addr').value = selectedV;
+        }
+	};
+})();
+</script>
+</div>
+</div>
+<!-- right-->

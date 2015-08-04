@@ -1,0 +1,387 @@
+<div id="member-main" class="member-main tk">
+    <h1 class="title"><{t}>申请退款<{/t}></h1>
+    <form action="<{link app=aftersales ctl=site_member act=return_save_mai}>" enctype="multipart/form-data" encoding="multipart/form-data" method="post" name="return_save" id='x-return-form'>
+        <ul class="je_ac_limtime" id="timecount">
+         <li><strong>距离同意申请还有：</strong></li>
+         <li><a href="#" class="day">00</a>天</li>
+         <li><a href="#" class="hour">00</a>小时</li>
+         <li><a href="#" class="minute">00</a>分</li>
+         <li><a href="#" class="second">00</a>秒</li>
+         <div class="cl_zhi"></div>
+        </ul>
+			<div class="division2 division22">
+                <h4 class="fontnormal"><{t}>退款金额：<span class="color1"><{$return_products.0.amount}></span><{/t}></h4>
+                <h4 class="fontnormal"><{t}>退款原因：<span class="color1"><{if $return_products.0.comment}><{$return_products.0.comment}><{if $return_item.safeguard_require}>,<{$return_item.safeguard_require}><{/if}><{else}><{$return_item.safeguard_type}><{/if}></span><{/t}></h4>
+                <input type="hidden" name="gorefund_price" value="<{$return_products.0.amount}>"/>
+				<{foreach from=$order.items item=item key=key}>
+					<input type="hidden" name="product_item_nums[<{$item.products.product_id}>]" value="<{$item.quantity}>">
+					<input type="hidden" name="products[<{$key}>]" value="<{$item.products.product_id}>">
+					<input type="hidden" name="product_bn[<{$item.products.product_id}>]" value="<{$item.bn}>">
+					<input type="hidden" name="product_nums[<{$item.products.product_id}>]" value="<{$item.sendnum}>">
+					<input type="hidden" name="product_name[<{$item.products.product_id}>]" value="<{$item.name}>">
+				<{/foreach}>
+            
+			<div class="note clearfix mt_10">
+			<h3><{$return_item.title}></h3>
+			<div class="clearfix">
+				<div class="span-auto colborder pl10"><{t}>订单编号：<{/t}><span ><{$return_item.order_id}></span></div>
+				<div class="span-auto colborder"><{t}>订单状态：<{/t}>
+					<span >
+						<{$return_item.status}>
+				</span></div>
+				<div class="span-auto last"><{t}>退货时间：<{/t}><span ><{$return_item.add_time|cdate:'FDATE_FTIME'}></span></div></div>
+		</div>
+		</div>
+        <{if $return_item.product_data }>
+		<h3 class="lineheight-30"><{t}>需要售后服务的商品<{/t}></h3>
+		<table cellspacing="0" cellpadding="3" width="100%" class="gridlist border-all">
+			<col class="span-4"></col>
+			<col class="span-auto"></col>
+			<col class="span-4"></col>
+			<thead>
+				<tr>
+					<th class="first"><{t}>货号<{/t}></th>
+					<th><{t}>商品名称<{/t}></th>
+					<th><{t}>退货数量<{/t}></th>
+				</tr>
+			</thead>
+			<tbody>
+				
+				<{foreach from=$return_item.product_data item="product_item" name=product_data}>
+				<tr>
+					<td class="textcenter"><{$product_item.bn}></td>
+					<td class="textcenter"><{$product_item.name}></td>
+					<td class="textcenter"><{$product_item.num}></td>
+				</tr>
+				<{/foreach}>
+				
+			</tbody>
+		</table>
+        <{/if}>
+		<{if $return_item.image_file || $return_item.image_file1 || $return_item.image_file2}>
+		<h3 class="lineheight-30"><{t}>关于退货附件<{/t}></h3>
+		<div class="thumbnailPic clearfix division division22">
+		<{if $return_item.image_file}>		
+				<a class="margin10" href="javascript:file_download()"><{t}>请点击下载该附件<{/t}></a>		
+		<{/if}>
+		<{if $return_item.image_file1}>
+				<a class="margin10" href="javascript:file_download1()"><{t}>请点击下载该附件<{/t}></a>
+		<{/if}>
+		<{if $return_item.image_file2}>
+				<a class="margin10" href="javascript:file_download2()"><{t}>请点击下载该附件<{/t}></a>
+		<{/if}>
+		</div>
+		<{/if}>
+
+		<{if $return_item.content}>
+		<h3 class="lineheight-30"><{t}>详细说明<{/t}></h3>
+		<div class="division2 division22">
+			<{$return_item.content}>
+		</div>
+		<{/if}>
+
+		<{if $return_item.refund_address}>
+		<h3 class="lineheight-30"><{t}>退货地址<{/t}></h3>
+		<div class="division2 division22">
+			<{$address.region}>,<{$address.address}>,<{$address.uname}>,<{$address.phone}>,<{$address.mobile}>
+		</div>
+		<{if $is_shop}>
+			<input type="hidden" name="return_id" value="<{$return_id}>"/>
+			<td><button name="submit" id="button" >已经收到退货</button>点击此按钮后台将会退款给买家</td>
+		<{/if}>
+		<{/if}>
+
+	<div class="textcenter p10">
+    <input type="hidden" name="order_id" value="<{$order_id}>">
+	<input type="hidden" name="member_id" value="<{$order.member_id}>">
+	<input type="hidden" name="refund_type" value="<{$refund_type}>">
+    <div style="width:500px; margin:10px auto">
+    <{if $return_products.0.is_safeguard == '2'}>
+        <{if $return_products.0.safeguard_require == '2'}>
+            <span class="color1 font14px">该订单已结算，同意退款申请，您将承担部分退款。</span>
+        <{/if}>
+        <{if $return_products.0.safeguard_require == '1' || $return_products.0.safeguard_require == '5' || $return_products.0.safeguard_require == '6'}>
+            <span class="color1 font14px">点击已收到退款，需将承担的<{$return_products.0.seller_amount}>元退款金额通过转账至平台账号，并上传交易流水号以及截图，系统将完成售后退款</span>
+        <{/if}>
+    <{/if}>
+    </div>
+    <div style="width:180px; margin:10px auto">
+	<{button class="" onclick="do_agree();" type="button" label=$___b2c="同意"|t:'b2c'}>
+    <{button class="" onclick="do_send();" type="button" label=$___b2c="拒绝"|t:'b2c'}>
+    </div>
+    <div style="width:500px; margin:10px auto">
+    <{if $return_products.0.comment == '虚假发货'}>
+        <span class="color1 font14px">买家选择的是虚假发货，同意的话需要赔偿商品价格30%的赔付金！</span>
+    <{/if}>
+    </div>
+	</div>
+    <h4 class="lineheight-30"><{t}>退款记录<{/t}></h4>
+    <{foreach from=$log_info item="log_info_item"}>
+            <div class="division">
+                <{if $log_info_item.role == 'member'}>买家：<{elseif $log_info_item.role == 'seller'}>我：<{else}>管理员：<{/if}><{$log_info_item.log_text}><br/>
+                日期：<{$log_info_item.alttime|cdate:'FDATE_FTIME'}>
+            </div>
+    <{/foreach}>
+</form>
+</div>
+<script>
+function do_agree(){
+	new Request.HTML({
+		url:'<{link app=aftersales ctl=site_member act=select_address}>',
+		method:'post',
+		data:'return_id=<{$return_products.0.return_id}>&refund_type=<{$refund_type}>&order_id=<{$return_products.0.order_id}>&comment=<{$return_products.0.comment}>',
+		update:$('member-main')
+}).send();
+}
+
+function do_send(){
+	new Request.HTML({
+		url:'<{link app=aftersales ctl=site_member act=do_no_return}>',
+		method:'post',
+		data:'return_id=<{$return_products.0.return_id}>&order_id=<{$return_products.0.order_id}>',
+		update:$('member-main')
+}).send();
+}
+</script>
+<{if $refund_type == '2'}>
+    <script>
+        (function() {
+            var timestamp_statues = (new Date()).valueOf();
+            var timeCount=timestamp_statues;
+            var timeCount = this.timeCount = {
+                init:function(nowtime,endtime,dom){
+                    var diff = Math.abs((nowtime.getTime() - endtime.getTime())/1000);
+                    var secondDiff = diff % 60;
+                    var minuteDiff = ((diff - secondDiff)/60) % 60;
+                    var hourDiff = ((diff - secondDiff  - minuteDiff*60)/3600) % 24;
+                    var dayDiff = (diff - secondDiff  - minuteDiff*60 - hourDiff*3600) / 86400;
+                    var timeDiff = [dayDiff,hourDiff,minuteDiff,secondDiff];
+                    this.s = (function(){this.calcTime.periodical(1000,this,{
+                            time:timeDiff,
+                            dom:dom
+                        })}).delay(100,this);
+                },
+                addZero:function(timeDiff){
+                    for(var i=0;i<timeDiff.length;i++){
+                        if(timeDiff[i].toString().length<2){
+                            timeDiff[i] = "0" + timeDiff[i].toString();
+                            return timeDiff;
+                        }
+                    }
+                },
+                formatToInt : function(timeDiff){
+                    for(var i=0;i<timeDiff.length;i++){
+                        parseInt(timeDiff[i]);
+                    };
+                    return timeDiff;
+                },
+                judgeTime : function(timeDiff){
+                    if(timeDiff[3]< 0  && timeDiff[2]>0){
+                        timeDiff[3] = 59;
+                        timeDiff[2]--;
+                        return timeDiff;
+                    }else if(timeDiff[3] <0 && timeDiff[2]==0 && timeDiff[1]>0){
+                        timeDiff[3] = 59
+                        timeDiff[2] = 59;
+                        timeDiff[1]--;
+                        return timeDiff;
+                    }else if(timeDiff[3] <0 && timeDiff[2]==0 && timeDiff[1]==0 && timeDiff[0]>0){
+                        timeDiff[3] = 59
+                        timeDiff[2] = 59;
+                        timeDiff[1] = 23;
+                        timeDiff[0]--;
+                        return timeDiff;
+                    }else if(timeDiff[3]==0 && timeDiff[2]==0 && timeDiff[1]==0 && timeDiff[0]==0){
+                        new Request.HTML({
+                                url:'<{link app=business ctl=site_member act=js_function_do_refund_pass}>',
+                                method:'post',
+                                data:'return_id=<{$return_products.0.return_id}>&order_id=<{$return_products.0.order_id}>'
+                        }).send();
+                        $clear(this.s);
+                        $('timecount').innerHTML='<p>自动同意申请！</p>';
+                        $('scarebuyingprice').display='none';
+                        $('scarebuyingsucc').display='';
+                        return;
+                    }
+                },
+                calcTime : function (obj){
+                    if(!obj.dom) return;
+                    var _timeDiff = obj.time;
+                    this.addZero(_timeDiff);
+                    this.formatToInt(_timeDiff);
+                    _timeDiff[3]--;
+                    this.judgeTime(_timeDiff);
+                    this.addZero(_timeDiff);
+                    var dom = obj.dom;
+                    dom.second.innerHTML = _timeDiff[3];
+                    dom.minute.innerHTML = _timeDiff[2];
+                    dom.hour.innerHTML = _timeDiff[1];
+                    dom.day.innerHTML = _timeDiff[0];
+                },
+                calcDesc:function(){
+                    new Request.HTML({
+                            url:'<{link app=business ctl=site_member act=js_function_do_refund_pass}>',
+                            method:'post',
+                            data:'return_id=<{$return_products.0.return_id}>&order_id=<{$return_products.0.order_id}>'
+                    }).send();
+                    $clear(this.s);
+                    $('timecount').innerHTML='<p>自动同意申请！</p>';
+                    $('scarebuyingprice').display='none';
+                    $('scarebuyingsucc').display='';
+                    return;
+                }
+            }
+        })();
+        (function(){
+            var timeNow;
+            var timeEnd= new Date(<{$time}>);
+            var dom = {
+                second: $E('.second'),
+                minute:$E('.minute'),
+                hour:$E('.hour'),
+                day:$E('.day')
+            };
+            new Request({
+                url:'<{$scarebuyings_data.js_url}>',
+                onComplete:function(re){
+                    timeNow=new Date(<{$now_time}>); 
+                    if(timeEnd.getTime() > timeNow.getTime()){
+                        timeCount.init(timeEnd,timeNow,dom);
+                    }else{
+                        
+                    }
+                }
+            }).send();
+        })();
+     </script>
+<{else}>
+    <script>
+        (function() {
+            var timestamp_statues = (new Date()).valueOf();
+            var timeCount=timestamp_statues;
+            var timeCount = this.timeCount = {
+                init:function(nowtime,endtime,dom){
+                    var diff = Math.abs((nowtime.getTime() - endtime.getTime())/1000);
+                    var secondDiff = diff % 60;
+                    var minuteDiff = ((diff - secondDiff)/60) % 60;
+                    var hourDiff = ((diff - secondDiff  - minuteDiff*60)/3600) % 24;
+                    var dayDiff = (diff - secondDiff  - minuteDiff*60 - hourDiff*3600) / 86400;
+                    var timeDiff = [dayDiff,hourDiff,minuteDiff,secondDiff];
+                    this.s = (function(){this.calcTime.periodical(1000,this,{
+                            time:timeDiff,
+                            dom:dom
+                        })}).delay(100,this);
+                },
+                addZero:function(timeDiff){
+                    for(var i=0;i<timeDiff.length;i++){
+                        if(timeDiff[i].toString().length<2){
+                            timeDiff[i] = "0" + timeDiff[i].toString();
+                            return timeDiff;
+                        }
+                    }
+                },
+                formatToInt : function(timeDiff){
+                    for(var i=0;i<timeDiff.length;i++){
+                        parseInt(timeDiff[i]);
+                    };
+                    return timeDiff;
+                },
+                judgeTime : function(timeDiff){
+                    if(timeDiff[3]< 0  && timeDiff[2]>0){
+                        timeDiff[3] = 59;
+                        timeDiff[2]--;
+                        return timeDiff;
+                    }else if(timeDiff[3] <0 && timeDiff[2]==0 && timeDiff[1]>0){
+                        timeDiff[3] = 59
+                        timeDiff[2] = 59;
+                        timeDiff[1]--;
+                        return timeDiff;
+                    }else if(timeDiff[3] <0 && timeDiff[2]==0 && timeDiff[1]==0 && timeDiff[0]>0){
+                        timeDiff[3] = 59
+                        timeDiff[2] = 59;
+                        timeDiff[1] = 23;
+                        timeDiff[0]--;
+                        return timeDiff;
+                    }else if(timeDiff[3]==0 && timeDiff[2]==0 && timeDiff[1]==0 && timeDiff[0]==0){
+                        new Request.HTML({
+                                url:'<{link app=business ctl=site_member act=js_function_do_agrees}>',
+                                method:'post',
+                                data:'return_id=<{$return_products.0.return_id}>&order_id=<{$return_products.0.order_id}>'
+                        }).send();
+                        $clear(this.s);
+                        $('timecount').innerHTML='<p>自动同意申请！</p>';
+                        $('scarebuyingprice').display='none';
+                        $('scarebuyingsucc').display='';
+                        return;
+                    }
+                },
+                calcTime : function (obj){
+                    if(!obj.dom) return;
+                    var _timeDiff = obj.time;
+                    this.addZero(_timeDiff);
+                    this.formatToInt(_timeDiff);
+                    _timeDiff[3]--;
+                    this.judgeTime(_timeDiff);
+                    this.addZero(_timeDiff);
+                    var dom = obj.dom;
+                    dom.second.innerHTML = _timeDiff[3];
+                    dom.minute.innerHTML = _timeDiff[2];
+                    dom.hour.innerHTML = _timeDiff[1];
+                    dom.day.innerHTML = _timeDiff[0];
+                },
+                calcDesc:function(){
+                    new Request.HTML({
+                            url:'<{link app=business ctl=site_member act=js_function_do_agrees}>',
+                            method:'post',
+                            data:'return_id=<{$return_products.0.return_id}>&order_id=<{$return_products.0.order_id}>'
+                    }).send();
+                    $clear(this.s);
+                    $('timecount').innerHTML='<p>自动同意申请！</p>';
+                    $('scarebuyingprice').display='none';
+                    $('scarebuyingsucc').display='';
+                    return;
+                }
+            }
+        })();
+        (function(){
+            var timeNow;
+            var timeEnd= new Date(<{$time}>);
+            var dom = {
+                second: $E('.second'),
+                minute:$E('.minute'),
+                hour:$E('.hour'),
+                day:$E('.day')
+            };
+            new Request({
+                url:'<{$scarebuyings_data.js_url}>',
+                onComplete:function(re){
+                    timeNow=new Date(<{$now_time}>); 
+                    if(timeEnd.getTime() > timeNow.getTime()){
+                        timeCount.init(timeEnd,timeNow,dom);
+                    }else{
+                        new Request.HTML({
+                                url:'<{link app=business ctl=site_member act=js_function_do_agrees}>',
+                                method:'post',
+                                data:'return_id=<{$return_products.0.return_id}>&order_id=<{$return_products.0.order_id}>'
+                        }).send();
+                    }
+                }
+            }).send();
+        })();
+     </script>
+ <{/if}>
+
+ <script>
+ function file_download(){
+    var ifm=new IFrame({src:'<{link app=aftersales ctl=site_member act=file_download arg0=$return_item.return_id arg1=image_file}>'});
+    ifm.inject(document.body);
+}
+function file_download1(){
+    var ifm=new IFrame({src:'<{link app=aftersales ctl=site_member act=file_download arg0=$return_item.return_id arg1=image_file1}>'});
+    ifm.inject(document.body);
+}
+function file_download2(){
+    var ifm=new IFrame({src:'<{link app=aftersales ctl=site_member act=file_download arg0=$return_item.return_id arg1=image_file2}>'});
+    ifm.inject(document.body);
+}
+ </script>

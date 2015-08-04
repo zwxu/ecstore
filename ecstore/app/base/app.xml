@@ -1,0 +1,13 @@
+<app>
+    <name>基础系统</name>
+	<description>基本的MVC框架。带有队列，key-value存储接口。类smarty的模版系统</description>
+
+    <author>
+        <name>BBC 开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>0.16</version>
+    <license>BBC license</license>
+</app>

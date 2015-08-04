@@ -1,0 +1,54 @@
+<!-- right-->
+<div class="member-main">
+  <div>
+    <form method="post" action="<{link app=business ctl='site_brand'  act='save'}>" class="section" id="Member_addr">
+      <div class="FormWrap" style="background:none; border:none; padding:0; margin:0;">
+        <div class="title"><{t}>修改品牌申请<{/t}></div>
+        <div class="division" style="border:none; border-bottom:1px dashed #ddd">
+                <{input type="hidden" name="edit" value=$edit}>
+                <table width="100%" border="0" cellpadding="0" cellspacing="0" class="pplist">
+                <tr>
+                <th width="80" class="textright"><{t}>品牌名称：<{/t}></th>
+                <td>
+                <input type="text" name="brand_name" id="brand_name" style="width:120px" required="true" value=<{$brand_name}>
+                readonly="readonly" onchange="nameCheck(this);" ><span id="check"></span>
+                </td>
+                </tr>
+                <!--添加经营范围-->
+                <tr>
+                <th width="80" class="textright"><{t}>所属分类： <{/t}></th>
+                <td>
+                <{input type="select" name="store_cat" options=$storeregion value=$shopinfo.store_region  required="true"  }>
+                </td>
+                <td></td>
+                </tr>
+                <!--经营范围-->
+
+                <tr>
+                <th width="80" class="textright"><{t}>网址：<{/t}></th>
+                <td><{input type="text" name="brand_url" style="width:120px" value=$brand_url}></td>
+                </tr>
+                <tr>
+                <th width="80" class="textright">LOGO：</th>
+                <td>
+                <{input type='vimage' name='brand_logo' width=200 height=100 value=$brand_logo}>
+                </td>
+                </tr>
+
+                <tr>
+                <th width="80" class="textright"><{t}>详细说明：<{/t}></th>
+                <td><{input type="textarea" name="brand_desc" value='' width='400px' height='200px' value=$brand_desc}></td>
+                </tr>
+                </table>
+                </div>
+        <div style="padding-left:96px">
+           <{button class="submit-btn" type="submit" rel="_request" label=$___b2c="提交"|t:'b2c'}>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+ 
+</script>
+<!-- right-->

@@ -1,0 +1,21 @@
+<form action='index.php?app=desktop&ctl=debug&act=cleardata' method='POST' class="tableform">
+  <div class="notice"><{t}>您可以通过此功能将安装系统时所安装的体验数据全部删除，清除的数据包括商品分类、商品类型、商品品牌、商品等相关数据。<{/t}><br><br><span color="red"><{t}>注意：<{/t}></span><{t}>您最新添加的数据也会一起删除，请慎重使用此功能，建议先做好数据备份。<{/t}>
+  </div>
+  <div class="division">
+    <table>
+      <tr>
+        <th><{t}>请输入管理员用户名：<{/t}></th>
+        <td><{input type='text' name='uname' value="" required="true" size=20}>
+      </tr>
+      <tr>
+        <th><{t}>请输入管理密码：<{/t}></th>
+        <td><{input type='password' name='password' value=""  size=20}>
+      </tr>
+    </table>
+  </div>
+
+    <div class="table-action" >
+<{button type="submit" onclick='if(!confirm("<{t}>清除操作也会删除您最新添加的数据，建议先做好数据备份，确定要清除吗？<{/t}>")){return new Event(event).stop();this.form.fireEvent("submit");$(this).set("disabled",true);}else{$(this).set("disabled",false);}' label=$___b2c="清除体验数据"|t:'b2c'}>
+</div>
+
+</form>

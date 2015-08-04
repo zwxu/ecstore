@@ -1,0 +1,18 @@
+<app>
+    <name>sphinx搜索</name>
+    <description>sphinx搜索引擎</description>
+
+    <author>
+        <name>BBC 开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>0.1</version>
+    <license>BBC license</license>
+
+    <depends>
+		<app>search</app>
+	</depends>
+
+</app>

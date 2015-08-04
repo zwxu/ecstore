@@ -1,0 +1,50 @@
+<div class="member-main">
+<div class="title"><{t}>虚拟卡管理<{/t}></div>
+<table class="gridlist border-all" width="100%" cellpadding="3" cellspacing="0">
+<thead>
+<tr>
+<th class="first"><{t}>商品编号<{/t}></th>
+  <th><{t}>商品名称<{/t}></th>
+  <th><{t}>卡号<{/t}></th>
+  <th><{t}>密码<{/t}></th>
+  <th><{t}>是否发放<{/t}></th>
+  <th><{t}>使用订单<{/t}></th>
+  <th><{t}>发放时间<{/t}></th>
+</tr>
+</thead>
+<tbody>
+<{if count($entityGoods)>0}>
+<{foreach from=$entityGoods item=adv}>
+<tr>
+  <td align="center">
+  <{$adv.goods_id}>
+  </td>
+  <td class="textcenter"><{$adv.goods_name.name}></td>
+  <td class="textcenter"><{$adv.card_id}></td>
+  <td class="textcenter"><{if $adv.card_psw}><{$adv.card_psw}><{else}>-<{/if}></td>
+  <td class="textcenter"><{if $adv.is_used == '1'}>否<{else}>是<{/if}></td>
+  <td align="center">
+  <{if $adv.order_id}>
+  <a href="<{link app="business" ctl="site_member" act="orderdetail" arg0=$adv.order_id}>"><{$adv.order_id}></a>
+  <{else}>
+  未使用
+  <{/if}>
+  </td>
+  <td class="textcenter"><{if $adv.send_time}><{$adv.send_time|cdate:'FDATE_FTIME'}><{else}>-<{/if}></td>
+ </tr>
+<{/foreach}>
+<{else}>
+<tr>
+<td height="60" colspan="6">
+  <{t}>尚无虚拟物品<{/t}>
+</td>
+</tr>
+<{/if}>
+</tbody>
+</table>
+
+<{pagers data=$pager}>
+
+  </div>
+  </div>
+<!-- right-->

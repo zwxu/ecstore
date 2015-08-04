@@ -1,0 +1,109 @@
+<{area inject='.mainHead'}>
+ <div id='swf-uploader-container' style='height:100px;'>
+  <div class='table-action' style="border:0">
+   <div class='division no-align-center' style="margin:0">
+     <h5><{t}>批量上传模板<{/t}></h5>
+     <{button type="button" label="浏览本地模板文件"|t:'site' id='swf-uploader-btn' app='desktop'  icon='image_new.gif'}>
+	 <div class="std-upload-txt" style="top:80px;left:170px;">
+		<span><{t}>无法打开模板选择窗口？点此<{/t}></span>
+		<div class="browse">
+			<form target="upload" method="post" enctype="multipart/form-data" action="#">
+				<input type="file" name="Filedata" onChange="new StdUpload('index.php?app=site&ctl=admin_theme_manage&act=upload&sess_id=<{$ssid}>','theme_manage').start();" />
+			</form>
+			<a href="javascript:void(0);"><{t}>上传模板<{/t}></a>
+        </div>
+		<div class="std-loading-icon"></div>
+	</div>
+   </div>
+  </div>
+ </div>
+<{/area}>
+
+<div class='division'>
+<h5><{t}>本次上传的模版<{/t}>(<em style='color:#ff3300;'>0</em><{t}>个<{/t}>):</h5>
+<div class='clearfix image-list' style="height:auto;overflow:hidden" id='swf-uploader-result-container' >
+</div>
+<div style="height:1px; line-height:1px; clear:both"></div>
+</div>
+
+<{area inject='.mainFoot'}>
+<div class="table-action">
+	<{button class="btn-primary" label=$___a="确定"|t:'site' id="theme_upload" type="button"}>
+</div>
+<{/area}>
+
+<script>
+void function(){
+
+   $('theme_upload').addEvent('click',function(e){
+		if(!$ES('#swf-uploader-result-container div').length)return;
+		$('swf-uploader-result-container').getParent('.dialog').retrieve('instance').close();
+		window.finderGroup['<{$env.get.finder_id}>']?window.finderGroup['<{$env.get.finder_id}>'].refresh():W.page('?app=site&ctl=admin_theme_manage&act=index');
+   });
+
+   var cd = $('swf-uploader-result-container').getParent('.division');
+
+   Ex_Loader('uploader',function(){
+
+   new Swiff.Uploader( {
+            verbose: true,
+            container:'swf-uploader-container',
+            zIndex:65535,
+            url:'index.php?app=site&ctl=admin_theme_manage&act=upload&sess_id=<{$ssid}>',
+            path: '<{$swf_loc}>/uploader.swf',
+            typeFilter: {
+                'Images (*.tgz, *.tar.gz, *.theme)': '*.tgz;*.tar.gz;*.theme'
+            },
+            fileSizeMax:<{$upload_max_filesize}>,
+            target:'swf-uploader-btn',
+			onSelect:function(rs){
+				if(rs)
+				rs.each(function(v){
+					if(v.size>this.fileSizeMax){
+						alert(v.name+'<{t}>\n\n文件超出大小<{/t}>');
+					};
+				},this);
+			},
+            onSelectFail:function(rs){
+               rs.each(function(v){
+                    if(v.validationError=='sizeLimitMax'){
+                        alert(v.name+'\n\n<{t}>文件超出大小限制<{/t}>'+': '+<{$upload_max_filesize}>+'K');
+                    };
+                });
+            },
+            onSelectSuccess:function(rs){
+				rs.each(function(v,i){
+				    new Element('div',{'class':'span-auto','id':'uping-'+v.id,styles:{
+                        width:45,
+                        height:45,
+                        border:'1px #ccc solid',
+                        padding:1,
+                        'line-height':45,
+                        'text-align':'center',
+                        marginBottom:10
+                    }}).inject('swf-uploader-result-container');
+			    });
+                this.start();
+            },
+            onFileOpen:function(e){
+                $('uping-'+e.id).set('html','<{t}>正在连接...<{/t}>');
+            },
+            onFileProgress:function(e){
+                var pt=Number(e.progress.bytesLoaded*100/e.size).toFixed()+'%';
+                 $('uping-'+e.id).set('text',pt);
+            },
+            onFileComplete: function(res){
+               if(res.response.error){
+                    return  new MessageBox('<{t}>文件<{/t}>'+res.name+'<{t}>上传失败<{/t}>',{type:'error',autohide:true});
+               }
+			   $('uping-'+res.id).set('html',res.response.text);
+               cd.getElement('h5 em').set('text',cd.getElement('h5 em').get('text').toInt()+1);
+			   if(!cd.isDisplay())cd.show();
+            }
+        });
+	});
+}();
+
+
+</script>
+

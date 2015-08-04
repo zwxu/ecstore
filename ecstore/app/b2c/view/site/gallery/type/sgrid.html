@@ -1,0 +1,94 @@
+
+<div class='bai960 grid clearfix' id="gallery-grid-list">
+  <{if count($products) > 0}>
+  <ul>
+    <{foreach from=$products key=key item=product name=goods}>
+    <li class="items-gallery <{$mask_webslice}> itemsList" product="<{$product.goods_id}>" style="margin:0 0 5px 0;height:80px;border:3px solid #FFFFFF;padding:2px;width:310px;position:relative">
+    
+    <div class="goodpic" style="width:78px;position:relative; margin:0 auto;height:78px;float:left;border: 1px solid #D7D7D7;">
+      <{if $product.tags}>
+      <{foreach from=$product.tags item=tags}>
+      <{assign var="tagImage" value=$tags.params.tag_image}>
+      <{if $tagImage}>
+      <div style="margin: 0 auto;">
+        <div class="goods-tip" style="filter:alpha(opacity=<{$tags.params.tag_opacity}>);position:absolute;">
+          <img src="<{$tagImage|storager}>" style="opacity:<{$tags.params.tag_opacity/100}>;filter:alpha(opacity=<{$tags.params.tag_opacity}>);" pos="<{$tags.params.pic_loc}>"/>
+        </div>
+      </div>
+      <{/if}>
+      <{/foreach}>
+      <{/if}>
+      <a target="_blank" href='<{if $product.goods_url}><{$product.goods_url}><{else}><{link app=b2c ctl=site_product act=index arg=$product.goods_id}><{/if}>' style=' width:78px;display: table-cell; vertical-align: middle; text-align: center;height:78px;'>
+        <{if $product.udfimg == 'true'}>
+        <{assign var="gimage" value=$product.thumbnail_pic}>
+        <{else}>
+        <{assign var="gimage" value=$product.image_default_id|default:$defaultImage}>
+        <{/if}>
+        <{img src="images/transparent.gif" style="width:78px;height:78px;" app="b2c" lazyload=$gimage|storager:'s' class="img-lazyload"  alt=$product.name|escape:html}>
+      </a>
+    </div>
+
+    <div class="goods-main" style='float:left;padding:0;width:230px;'>
+    
+    <div class="goodinfo" style="padding:0 0 0 5px;width:230px;">
+        <h3 style='overflow:hidden;height:20px;line-height:20px;'>
+        <a target='_blank' href="<{if $product.goods_url}><{$product.goods_url}><{else}><{link app=b2c ctl=site_product act=index arg=$product.goods_id}><{/if}>" title="<{$product.name|escape:html}>" class="entry-title"><{$product.name|escape:"html"}></a>
+        <{if $product.tags}>
+        <{foreach from=$product.tags item=tags}>
+        <{if $tags.params.tag_showOnIndex}>
+        &nbsp;<span class="tag-label" style="background-color:<{$tags.tag_bgcolor}>;color:<{$tags.tag_fgcolor}>"><{$tags.tag_name}></span>
+        <{/if}>
+        <{/foreach}>
+        <{/if}>
+        </h3>
+    </div>
+      <div class="price-wrap" style='height:20px;display:block;padding:0 0 0 5px;'>
+      <em class="rush-price" style="font-weight: bolder;color:#e40303;font-family: 'arial','verdana',sans-serif !important;font-size: 14px;">
+        <{$product.price|cur_odr}>
+      </em>
+    </div>
+    <{if $showBuyCount=='true'||$env.conf.b2c.gallery.comment.time=='true'}>
+    <p class="productStatus" style='padding:0 0 0 5px;width:230px;color: #A7A7A7;display: block;margin-bottom: 1px;overflow: hidden;text-align:left'>
+    <{if $showBuyCount=='true'}>月销量:<em style='color: #C49173;font-weight: bolder;'><{$product.buy_m_count}></em><{/if}><{if $showBuyCount=='true' && $env.conf.b2c.gallery.comment.time=='true'}>|<{/if}><{if $env.conf.b2c.gallery.comment.time=='true'}><a style='color: #568396;' target="_blank" href="<{if $product.goods_url}><{$product.goods_url}><{else}><{link app=b2c ctl=site_product act=index arg=$product.goods_id}><{/if}>#discuss_all_info" >累计评价:<{$product.comments_count}></a><{/if}>
+    </p>
+    <{/if}>
+    <div class="productShop" style="padding:0 0 0 5px;">
+        <a target='_blank'  class="productShop-name" href="<{link app=business ctl=site_shop act=view arg=$product.store_id}>">
+        <{$product.store_name|cut:35}>
+        </a>
+        <!--<{input type='fixation' position=2 store_id=$product.store_id}>-->
+     </div>
+    </div>
+    <!--<hr style='-moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-image: none;
+    border-right: 0 none;
+    border-style:  none none dashed;
+    border-width:  0 0 1px;
+    clear: both;
+    display: block;
+    height: 0;
+    margin: 3px 0;'>-->
+    </li>
+    <{/foreach}>
+  </ul>
+  <{/if}>
+</div>
+<script>
+
+$$('#gallery-grid-list .items-gallery').each(function(el){
+        el.addEvents({
+            mouseenter:function(){
+               $(this).setStyles({'border-color':'#E4E4E4'});
+               $(this).getElement('h3').setStyle('height','100%');
+            }.bind(el),
+            mouseleave:function(){
+              $(this).setStyles({'border-color':'#FFFFFF'});
+               $(this).getElement('h3').setStyle('height','15px');
+            }.bind(el)
+        });
+});
+
+</script>

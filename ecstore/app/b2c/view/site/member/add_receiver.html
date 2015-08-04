@@ -1,0 +1,71 @@
+<!-- right-->
+  <div class="member-main">
+  <div >
+
+<div class="title"><{t}>添加收货地址<{/t}></div>
+<form method="post" action="<{link app=b2c ctl='site_member' act='insert_rec'}>" class="section" extra="subMemAddr" id="member_addr">
+<div class="FormWrap">
+<div class="division">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="forform">
+  <tr>
+    <th><em>*</em><{t}>姓名：<{/t}></th>
+    <td><{input class="inputstyle" name="name" type="text" required="true" id="name" size="30" vtype="required" value=$name|escape:'html'}></td>
+  </tr>
+  <tr>
+    <th><em>*</em><{t}>手机：<{/t}></th>
+    <td><{input class="inputstyle"  name="phone[mobile]" type="text" id="mobile" size="30" value=$mobile|escape:'html'}></td>
+  </tr>
+  <tr>
+    <th><{t}>固定电话：<{/t}></th>
+    <td><{input class="inputstyle" name="phone[telephone]" type="order_tel" size="30" value=$tel}><span class="infotips"><{t}>其中联系电话和联系手机必须填写一项<{/t}></span></td>
+  </tr>
+  
+</table>
+
+</div>
+<div class="division">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="forform">
+  <tr>
+     <th><em>*</em><{t}>地区：<{/t}></th>
+     <td><{input type="region" name="area" required="true" value='' app="ectools"}></td>
+  </tr>
+  <tr>
+    <th><{t}>地址：<{/t}></th>
+    <td><{input class="inputstyle" type="textarea"  name="addr" id="addr"  rows="2" cols="30" value=$addr|escape:'html'}></td>
+  </tr>
+  <tr>
+    <th><em>*</em><{t}>邮政编码：<{/t}></th>
+    <td><{input class="inputstyle" name="zipcode" size="30" required="true" value=$zipcode vtype="required"}></td>
+  </tr>
+  <tr>
+    <th></th>
+    <td><input  type="submit" name="submit" rel="_request" value="<{t}>保存<{/t}>"/><input type="button" onclick="window.location='<{link app=b2c ctl="site_member" act="receiver"}>'" value="<{t}>取消<{/t}>" /></td>
+  </tr>
+</table>
+</div>
+</div>
+</form>
+</div>
+</div>
+<script>
+if(!extra_validator['subMemAddr']){
+  extra_validator['subMemAddr'] ={
+    'order_tel':['<{t}>请至少输入联系电话和联系手机中的一项<{/t}>',function(f,i){
+        var tel = $('member_addr').getElement('input[name^=phone[telephone]').getProperty('value');
+        var mob = $('member_addr').getElement('input[name^=phone[mobile]').getProperty('value');
+        if(tel.trim() == '' && mob.trim() == ''){
+       
+        	  return false;
+        }else{
+            return true;
+        }
+      }]
+  };
+}
+</script>
+
+
+
+
+
+<!-- right-->

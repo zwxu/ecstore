@@ -1,0 +1,65 @@
+<div id="batchImage_rebulid">
+    <{toinput from=$filter}>
+    <input type="hidden" name="allcount" value="<{$goodscount}>">
+    <input type="hidden" name="present_id" value="0">
+    <div class="notice"><{t}>正在对<{/t}><strong><{$goodscount}></strong><{t}>个商品重新生成列表页缩略图、商品页详细图、商品相册图。<{/t}><br><{t}>1：此功能将会根据“商店配置--商品图片设置”中的图片尺寸重新生成商品的三种图片以及重新添加水印。<{/t}><br><{t}>2：重新生成新图片后，原有旧图片将被删除或覆盖。<{/t}><br>3：该处理过程可能会比较慢，请您耐心等候。
+    </div>
+
+    <div style="padding:10px 0 10px 120px">
+        <label>
+            <input type="radio" checked value="0" name="alter_link" />新图片仍使用原有图片文件名
+        </label><br />
+        <label>
+            <input type="radio" value="1" name="alter_link" />新图片使用新文件名
+        </label>
+    </div>
+
+    <div class="progessarea" align="center" style='visibility:hidden'></div>
+    <div class='lpb'style="border:1px solid #E3E9F1;display:none;">
+        <div class="loader lpp gener-bj"></div>
+    </div>
+    <div>
+        <table cellspacing="0" cellpadding="0" border="0" align="center" class="table-action">
+            <tr>
+                <td>
+                    <{button class="btnbuild" type="button" label="开始生成"}>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script>
+function batchImage_rebulidRequest(data){
+   if($('batchImage_rebulid'))
+   return new Request.HTML({url:'index.php?app=b2c&ctl=admin_goods&act=nextImage&p[0]='+($E('#batchImage_rebulid input[name=alter_link]').checked?'1':'0'),update:$E('.progessarea','batchImage_rebulid'),
+	   onComplete:function(rs){
+		   var step=data['present_id'],allcount=data['allcount'], loader= $E('#batchImage_rebulid .loader');
+           if(!loader)return;
+		   loader.getParent().setStyle('display','');
+		   if(!step)return;
+		   var num=step/allcount*100;
+		   loader.setStyle('width',num+'%');
+	   },
+   evalResponse:true}).post(data);
+}
+(function(){
+
+     var batchImage_rebulid=$('batchImage_rebulid');
+     var dialogCloseBtn= batchImage_rebulid.getParent('.dialog').getElement('.btn-close');
+		 batchImage_rebulid.store('closebtn',dialogCloseBtn);
+
+     batchImage_rebulid.getElement('.btnbuild').addEvent('click',function(){
+      batchImage_rebulid.getElement('.progessarea').setStyle('visibility','visible').set('text','生成中...');
+      //  dialogCloseBtn.setStyle('visibility','hidden');
+      var cancelBtn = this.set('html','<span><span>取消</span></span>');
+        cancelBtn.addEvent('click',function(){
+            this.getParent('.dialog').retrieve('instance').close();
+        });
+        batchImage_rebulidRequest(batchImage_rebulid);
+        this.removeEvent('click',arguments.callee);
+     });
+
+})();
+
+
+</script>

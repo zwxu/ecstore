@@ -1,0 +1,27 @@
+  
+<div class="tableform">
+<form action="index.php?<{$env.server.QUERY_STRING}>" method="post">
+<div class="division">
+    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+      <tbody>		
+          <th><{t}>当前保证金:<{/t}></th>
+          <td><span class="price0"><{$store.total}>元</span></td>
+        </tr>
+        <tr>
+          <th><{t}>保证金(增/减):<{/t}></th>
+          <td><{input type="number" vtype="required&&number" maxlength="10" name="modify_earnest" style="float:left;" }>元<span class="notice-inline"><{t}>输入负值即可减少保证金<{/t}></span></td>
+        </tr>
+        <tr>
+          <th><{t}>备注:<{/t}></th>
+          <td><input type="text" class="inputstyle" size="30" name="modify_remark"/></td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+<div class="table-action"><{button type="submit" label=$___b2c="保存"|t:'b2c' }></div>
+</form>
+</div>
+
+<div>
+<{include file='admin/store/manger/page_earnest_list.html'}>
+</div>

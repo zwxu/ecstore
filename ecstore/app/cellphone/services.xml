@@ -1,0 +1,97 @@
+<services>
+    <service id="openapi.cellphone">
+        <class>cellphone_cellphone</class>
+    </service>
+    <service id="ectools_payment.ectools_mdl_payment_cfgs" optname="支付插件列表">
+        
+    </service>
+    <service id="image_set">
+        <class>cellphone_service_image</class>
+    </service>
+    <service id="openapi.cellphone.goods">
+        <class>cellphone_base_misc_goods</class>
+    </service>
+    <service id="openapi.cellphone.activities">
+        <class>cellphone_base_misc_activities</class>
+    </service>
+    <service id="openapi.cellphone.cart">
+        <class>cellphone_base_misc_cart</class>
+    </service>
+    <service id="cellphone_cart_object">
+        <class>cellphone_cart_goods</class>
+        <class>cellphone_cart_package</class>
+        <class>cellphone_cart_coupon</class>
+    </service>
+    <service id="openapi.cellphone.order">
+        <class>cellphone_base_misc_order</class>
+    </service>
+    <service id="desktop_finder.cellphone_mdl_activity">
+        <class>cellphone_finder_activity</class>
+    </service>
+    <service id="autotask">
+        <class>cellphone_misc_task</class>
+    </service>
+    <service id="openapi.cellphone.member.order">
+        <class>cellphone_base_member_order</class>
+    </service>
+    <service id="openapi.cellphone.member.coupon">
+        <class>cellphone_base_member_coupon</class>
+    </service>
+    <service id="openapi.cellphone.member.favorite">
+        <class>cellphone_base_member_favorite</class>
+    </service>
+    <service id="openapi.cellphone.member.history">
+        <class>cellphone_base_member_history</class>
+    </service>
+    <service id="openapi.cellphone.member.address">
+        <class>cellphone_base_member_address</class>
+    </service>
+    <service id="openapi.cellphone.member.feedback">
+        <class>cellphone_base_member_feedback</class>
+    </service>
+    <service id="openapi.cellphone.member">
+        <class>cellphone_base_member_passport</class>
+    </service>
+    <service id="openapi.cellphone.virtualcat">
+        <class>cellphone_goods_virtualcat</class>
+    </service>
+    <service id="openapi.cellphone.goods.search">
+        <class>cellphone_goods_search</class>
+    </service>
+     <service id="openapi.cellphone.payment.umpay">
+        <class>cellphone_base_payment_umpay</class>
+    </service>
+    <service id="openapi.cellphone.homepage.banner">
+        <class>cellphone_base_homepage_banner</class>
+    </service>
+	
+    <service id="openapi.cellphone.homepage.column">
+        <class>cellphone_base_homepage_column</class>
+    </service>
+
+    <service id="desktop_finder.cellphone_mdl_banner">
+        <class>cellphone_finder_banner</class>
+    </service>
+    <service id="desktop_finder.cellphone_mdl_columntype">
+        <class>cellphone_finder_columntype</class>
+    </service>
+    <service id="desktop_finder.cellphone_mdl_column">
+        <class>cellphone_finder_column</class>
+    </service>
+    <service id="openapi.cellphone.shop">
+        <class>cellphone_base_misc_shop</class>
+    </service>
+	<service id="openapi.cellphone.member.cusphone">
+        <class>cellphone_base_member_cusphone</class>
+    </service>
+   <service id="desktop_finder.cellphone_mdl_phone">
+    <class>cellphone_finder_phone</class>
+   </service>
+   <service id="openapi.cellphone.shop.search">
+        <class>cellphone_shop_search</class>
+    </service>
+   <service id="openapi.cellphone.shop.goods.search">
+        <class>cellphone_shop_goods_search</class>
+    </service>
+
+</services>

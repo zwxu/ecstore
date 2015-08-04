@@ -1,0 +1,110 @@
+<div class="member-main">
+    <h1 class="title"><{t}>等待商家处理退款申请<{/t}></h1>
+    <form action="<{link app=aftersales ctl=site_member act=return_save_mai}>" enctype="multipart/form-data" encoding="multipart/form-data" method="post" name="return_save" id='x-return-form'>
+        <div class="FormWrap">
+			<div class="division">
+                <h4 class="fontnormal"><{t}>退款金额：<{$return_products.amount}><{/t}></h4>
+                <input type="hidden" name="gorefund_price" value="<{$return_products.amount}>"/>
+
+            </div>
+			<div class="note clearfix">
+			<h3><{$return_item.title}></h3>
+			<div class="clearfix">
+				<div class="span-auto colborder pl10"><{t}>订单编号：<{/t}><span class="font14px fontbold font-orange"><{$return_item.order_id}></span></div>
+				<div class="span-auto colborder"><{t}>订单状态：<{/t}>
+					<span class="font14px font-orange fontbold">
+						<{$return_item.status}>
+				</span></div>
+				<div class="span-auto last"><{t}>退货时间：<{/t}><span class="font-orange "><{$return_item.add_time|cdate:'FDATE_FTIME'}></span></div></div>
+			<{if $return_item.comment }>
+			<{foreach from=$return_item.comment item="comment_item" name=comment}>
+			<div class="division mt5 clearfix">
+				<div class="border-bottom fontbold p2 clearfix textright">
+					<span class="flt"><{t}>店主反馈<{/t}></span><span class="font12px font-gray fontnormal "><{$comment_item.time|cdate:'FDATE_FTIME'}></span></div>
+				<p class="p2"><{$comment_item.content}></p>
+			</div>
+			<{/foreach}>
+			<{/if}>
+		</div>
+
+
+		<h4><{t}>需要售后服务的商品<{/t}></h4>
+		<table cellspacing="0" cellpadding="3" width="100%" class="gridlist border-all">
+			<col class="span-4"></col>
+			<col class="span-auto"></col>
+			<col class="span-4"></col>
+			<thead>
+				<tr>
+					<th class="first"><{t}>货号<{/t}></th>
+					<th><{t}>商品名称<{/t}></th>
+					<th><{t}>退货数量<{/t}></th>
+				</tr>
+			</thead>
+			<tbody>
+				<{if $return_item.product_data }>
+				<{foreach from=$return_item.product_data item="product_item" name=product_data}>
+				<tr>
+					<td class="textcenter"><{$product_item.bn}></td>
+					<td class="textcenter"><{$product_item.name}></td>
+					<td class="textcenter"><{$product_item.num}></td>
+				</tr>
+				<{/foreach}>
+				<{/if}>
+			</tbody>
+		</table>
+
+		<{if $return_item.image_file || $return_item.image_file1 || $return_item.image_file2}>
+		<h4><{t}>关于退货附件<{/t}></h4>
+		<div class="thumbnailPic clearfix division">
+		<{if $return_item.image_file}>		
+				<a class="margin10" href="javascript:file_download()"><{t}>请点击下载该附件<{/t}></a>		
+		<{/if}>
+		<{if $return_item.image_file1}>
+				<a class="margin10" href="javascript:file_download1()"><{t}>请点击下载该附件<{/t}></a>
+		<{/if}>
+		<{if $return_item.image_file2}>
+				<a class="margin10" href="javascript:file_download2()"><{t}>请点击下载该附件<{/t}></a>
+		<{/if}>
+		</div>
+		<{/if}>
+
+		<{if $return_item.content}>
+		<h4><{t}>详细说明<{/t}></h4>
+		<div class="division">
+			<{$return_item.content}>
+		</div>
+		<{/if}>
+
+		<{if $return_item.refund_address}>
+		<h4><{t}>退货地址<{/t}></h4>
+		<div class="division">
+			<{$address.region}>,<{$address.address}>,<{$address.uname}>,<{$address.phone}>,<{$address.mobile}>
+		</div>
+		<{if $is_shop}>
+			<input type="hidden" name="return_id" value="<{$return_id}>"/>
+			<td><button name="submit" id="button">已经收到退货</button>点击此按钮后台将会退款给买家</td>
+		<{/if}>
+		<{/if}>
+		</div>
+    </div>
+    <input type="hidden" name="order_id" value="<{$order_id}>">
+	<input type="hidden" name="member_id" value="<{$order.member_id}>">
+	<div class="member-main">
+	<a href="<{link app=aftersales ctl=site_member act=edit_returns arg0=$return_products.return_id}>">修改退款申请</a>
+</form>
+</div>
+
+<script>
+    function file_download(){
+        var ifm=new IFrame({src:'<{link app=aftersales ctl=site_member act=file_download arg0=$return_id arg1=image_file}>'});
+        ifm.inject(document.body);
+    }
+	function file_download1(){
+        var ifm=new IFrame({src:'<{link app=aftersales ctl=site_member act=file_download arg0=$return_id arg1=image_file1}>'});
+        ifm.inject(document.body);
+    }
+	function file_download2(){
+        var ifm=new IFrame({src:'<{link app=aftersales ctl=site_member act=file_download arg0=$return_id arg1=image_file2}>'});
+        ifm.inject(document.body);
+    }
+</script>

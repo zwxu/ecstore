@@ -1,0 +1,13 @@
+<{if $styles}>
+<div class="theme-colors clearfix">
+  <div class="arr arr-l" rel="left"></div>
+  <div class="colors">
+    <ul class="clearfix">
+      <{foreach from=$styles item=item name="item" key=key}>
+      <li<{if $active_color==$item.color}> class="act"<{/if}>><a href="index.php?app=site&ctl=admin_theme_manage&act=set_style&theme=<{$theme}>&style_id=<{$key}>" rel="<{$item.preview}>"><i style="background:<{$item.color}>;">&nbsp;</i></a></li>
+      <{/foreach}>
+    </ul>
+  </div>
+  <div class="arr arr-r" rel='right'></div>
+</div>
+<{/if}>

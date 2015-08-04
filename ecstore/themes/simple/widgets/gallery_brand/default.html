@@ -1,0 +1,18 @@
+<div class="gallery_ri mt10">
+      <div class="gallery_ri_tit">你可能喜欢的品牌</div>
+	    <ul class="shop_ul">
+      <{foreach from=$data item=brand key=brandId}>
+		  <li>
+		    <a href="<{$brand.brand_url}>">        
+        <img src="<{$brand.brand_logo|storager:'s'}>" alt="<{$brand.brand_name|escape:html}>" />
+        </a>
+			<div class="brand_info">
+			    <h4><{$brand.brand_name}></h4>
+				<p class="p_color_1">品牌人气：</p>
+				<p class="p_color_2"><{$brand.fav_count}></p>
+			</div>
+			<div class="cl_zhi"></div>
+		  </li>
+		<{/foreach}>
+		 </ul> 
+   </div>

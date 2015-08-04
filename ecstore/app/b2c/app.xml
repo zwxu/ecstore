@@ -1,0 +1,23 @@
+<app>
+    <name>网上商店系统</name>
+	<main_app exclusion="true">true</main_app>
+	<node_id>true</node_id>
+    <description>网上商店系统</description>
+
+    <author>
+        <name>开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>4.9</version>
+    <license>license</license>
+    <parent_model_class>dbeav_model</parent_model_class>
+    <optional app="dev">开发者工具</optional>
+	<depends>
+		<app>desktop</app>
+		<app>content</app>
+		<app>ectools</app>
+		<app>entermembercenter</app>
+	</depends>
+</app>

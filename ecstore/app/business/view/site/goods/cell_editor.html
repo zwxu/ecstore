@@ -1,0 +1,7 @@
+<div id='finder-list-col-editpanel' style='visilibity:hidden;overflow:hidden;' class='finder-list-col-editpanel' onclick='new Event(event).stopPropagation()'></div>
+<div action="index.php?ctl=<{$env.get.ctl}>&act=save_cell_value&p[0]=<{$env.post.id}>&p[1]=<{$env.post.key}>" class='cell-edit-action'>
+<{input params=$input}>
+<{button label="保存" type="submit" icon="ok.gif"}>
+<{button label="取消" type="button"}>
+</div>
+</div>

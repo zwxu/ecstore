@@ -1,0 +1,18 @@
+<app>
+    <name>信任登陆</name>
+    <description>提供一个多种方式的会员登陆</description>
+
+    <author>
+        <name>BBC 开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>0.2</version>
+    <license>BBC license</license>
+
+	<depends>
+		<app>pam</app>
+	</depends>
+
+</app>

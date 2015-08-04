@@ -1,0 +1,188 @@
+<form class="tableform" method='post' action='index.php?app=b2c&ctl=admin_order&act=dodelivery' id="order-delivery-form">
+  <input type='hidden' name='order_id' value='<{$order.order_id}>'>
+
+<{if $order.is_delivery eq "Y"}>
+<div class="division">
+<table cellpadding="0" cellspacing="0">
+<tr>
+    <th><{t}>订单号:<{/t}></th>
+    <td><{$order.order_id}> 【<{if $order.ship_status == 0}><{t}>未发货<{/t}><{elseif $order.ship_status == 1}><{t}>已发货<{/t}><{elseif $order.ship_status == 2}><{t}>部分发货<{/t}><{elseif $order.ship_status == 3}><{t}>部分退货<{/t}><{elseif $order.ship_status == 4}><{t}>已退货<{/t}><{/if}>】</td>
+    <th><{t}>下单日期:<{/t}></th>
+    <td><{$order.createtime|cdate:'SDATE_STIME'}></td>
+</tr>
+<{if $order.is_delivery eq "Y"}>
+<tr>
+  <th><{t}>配送方式:<{/t}></th>
+  <td><{input type="select" name='delivery' rows=$shippings valueColumn="dt_id" labelColumn="dt_name" value=$order.shipping.shipping_id}></td>
+  <th><{t}>配送费用:<{/t}></th>
+  <td><{$order.shipping.cost_shipping|cur_odr}></td>
+</tr>
+<tr><!--
+  <th><{t}>配送地区:<{/t}></th>
+  <td><{$order.shipping_area}></td> -->
+  <th><{t}>是否要求保价:<{/t}></th>
+  <td colspan="3"><{if $order.shipping.is_protect == 'true'}><{t}>是 （保价费用 ＋<{/t}><{$order.cost_protect}>）<{else}><{t}>否<{/t}><{/if}></td>
+</tr>
+<{/if}>
+    <tr>
+      <th><{t}>物流公司:<{/t}></th>
+    <td><{input id="dlycorp_list" type="select" name='logi_id' rows=$corplist valueColumn="corp_id" labelColumn="name" value=$corp_id onchange="$('dlycorp_list').get('value')=='other'?$('otherinput').show():$('otherinput').hide(this);"}>&nbsp;&nbsp;
+	<span id='otherinput' style="display:none"><input type="text" class='_x_ipt' vtype='text' required='true' size='10' name='other_name'></span>
+	</td>
+    <th><{t}>物流单号:<{/t}></th>
+    <td><{input type='text' name='logi_no' value=$order.account width="100"}></td>
+    </tr>
+  <tr>
+    <th><{t}>物流费用:<{/t}></th>
+    <td><{input type='text' name='money' value=$order.shipping.cost_shipping width="50"}></td>
+    <th><{t}>物流保价:<{/t}></th>
+    <td>
+      <{input name="is_protect" type="radio" options=$order.protectArr value=$order.shipping.is_protect}></td>
+  </tr>
+  <tr>
+        <th><{t}>保价费用:<{/t}></th>
+    <td colspan="3"><{input type='text' name='cost_freight' value=$order.shipping.cost_protect width="50"}></td>
+  </tr>
+    <tr>
+      <th><{t}>收货人姓名:<{/t}></th>
+    <td><{input type='text' name='ship_name' value=$order.consignee.name  width="80"}></td>
+    <th><{t}>电话:<{/t}></th>
+    <td><{input type='text' name='ship_tel' value=$order.consignee.telephone width="150"}></td>
+    </tr>
+  <tr>
+    <th><{t}>手机:<{/t}></th>
+    <td><{input type='text' name='ship_mobile' value=$order.consignee.mobile width="150"}></td>
+		<th><{t}>邮政编码:<{/t}></th>
+		<td><{input type='text' name='ship_zip' value=$order.consignee.zip  width="80"}></td>
+  </tr>
+    <tr>
+    <th><{t}>地区:<{/t}></th>
+		<td colspan="3"><{input type='region' vtype="area" app="ectools" name='ship_area' value=$order.consignee.area}></td>
+	</tr>
+  <tr>
+		<th><{t}>地址:<{/t}></th>
+		<td colspan="3"><{input type='text' name='ship_addr' value=$order.consignee.addr style="width:360px"}></td>
+  </tr>
+  <tr>
+    <th><{t}>发货单备注:<{/t}></th>
+    <td colspan="3"><{input type='textarea' name='memo' style="width:95%" value=$order.memo }></td>
+  </tr>
+</table>
+</div>
+<{/if}>
+
+<{if count($items) > 0}>
+<div class="division">
+<table cellpadding="0" cellspacing="0"  class="gridlist">
+					<col style="width:20%"></col>
+					<col style="width:35%"></col>
+					<col style="width:15%"></col>
+					<col style="width:10%"></col>
+					<col style="width:10%"></col>
+					<col style="width:10%"></col>
+      <thead>
+        <tr>
+          <th><{t}>货号<{/t}></th>
+          <th><{t}>商品名称<{/t}></th>
+          <th><{t}>当前库存<{/t}></th>
+          <th><{t}>购买数量<{/t}></th>
+          <th><{t}>已发货<{/t}></th>
+          <th><{t}>此单发货<{/t}></th>
+        </tr>
+      </thead>
+      <tbody>      <{foreach from=$items item=aProduct}>
+      <tr>
+        <td><{$aProduct.bn}></td>
+        <td><{$aProduct.name}>
+          <{foreach from=$aProduct.minfo.product_attr item=minfo key=name}>
+          <br><{$minfo.label}>：<{$minfo.value}>
+          <{/foreach}>
+          <!--<{$aProduct.addon.adjname}>--></td>
+        <td><{$aProduct.products.store}></td>
+        <td><{$aProduct.quantity}></td>
+        <td><{$aProduct.sendnum}></td>
+        <td><{assign var="nums" value=$aProduct.quantity}> 
+          <{assign var="sendnum" value=$aProduct.sendnum}> 
+          <{assign var="pid" value=$aProduct.product_id}>
+          <{assign var="item_id" value=$aProduct.item_id}>
+          <{if $aProduct.needsend > 0}><{input type="text" vtype="required&&number" name="send[{$item_id}]" value=$aProduct.needsend  width="50"}><{else}><{t}>已经发货<{/t}><{/if}></td>
+      </tr>
+      <{/foreach}>
+      </tbody>
+    </table>
+</div>
+<{/if}>
+
+<{if count($giftItems) > 0}>
+<div class="division">
+<table class="gridlist" cellpadding="0" cellspacing="0">
+      <thead>
+        <tr>
+          <th><{t}>赠品名称<{/t}></th>
+          <th><{t}>兑换积分<{/t}></th>
+		  <th><{t}>当前库存<{/t}></th>
+          <th><{t}>已发货/兑换量<{/t}></th>
+          <th><{t}>需发货<{/t}></th>
+        </tr>
+      </thead>
+      <tbody>      <{foreach from=$giftItems item=aGift}>
+      <tr>
+        <td><{$aGift.name}></td>
+        <td><{$aGift.point}></td>
+		<th><{$aGift.store}></th>
+        <td><{$aGift.sendnum}>/<{$aGift.nums}></td>
+        <td><{assign var="item_id" value=$aGift.item_id}>
+		<{if $aGift.needsend > 0}><input type="text" name="gift_send[<{$item_id}>]" value="<{$aGift.needsend}>" size="3"><{else}><{t}>已经发货<{/t}><{/if}></td>
+      </tr>
+      <{/foreach}>
+    </table>
+</div>
+<{/if}>
+
+<{if count($extendsItems) > 0}>
+<{foreach from=$extendsItems item=aExtend}>
+<div class="division">
+<table class="gridlist" cellpadding="0" cellspacing="0">
+      <thead>
+        <tr>
+          <th><{t}>名称<{/t}></th>
+          <th><{t}>兑换积分<{/t}></th>
+		  <th><{t}>当前库存<{/t}></th>
+          <th><{t}>已发货/兑换量<{/t}></th>
+          <th><{t}>需发货<{/t}></th>
+        </tr>
+      </thead>
+      <tbody>      
+	  <{foreach from=$aExtend item=aGift}>
+      <tr>
+        <td><{$aGift.name}></td>
+        <td><{$aGift.point}></td>
+		<th><{$aGift.nums}></th>
+        <td><{$aGift.sendnum}>/<{$aGift.nums}></td>
+        <td><{assign var="item_id" value=$aGift.item_id}>
+		<{if $aGift.needsend > 0}><input type="text" name="extend_send[<{$item_id}>]" value="<{$aGift.needsend}>" size="3"><{else}><{t}>已经发货<{/t}><{/if}></td>
+      </tr>
+      <{/foreach}>
+    </table>
+</div>
+<{/foreach}>
+<{/if}>
+
+</form>
+
+<{area inject='.mainFoot'}>
+<div class="table-action">
+	<{button label=$___b2c="发货"|t:'b2c' id="order-delivery-form-submit" class="order-action" type="button"}>
+</div>
+<{/area}>
+
+<script type="text/javascript">
+(function(){
+	var _form = $('order-delivery-form');
+	var btn =$('order-delivery-form-submit');
+	btn.addEvent('click',function(){
+		_form.fireEvent('submit',{stop:$empty});
+	});
+	
+})();
+</script>

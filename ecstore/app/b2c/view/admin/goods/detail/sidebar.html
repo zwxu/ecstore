@@ -1,0 +1,31 @@
+<div class="side-bx spage-side" style="border-top:none">
+    <div class="spage-side-nav">
+        <ul>
+            <{foreach from=$sections item=section name="sec"}>                
+                <li class="l-handle<{if $env.foreach.sec.iteration eq 1}> all<{/if}>" ><span><{if $env.foreach.sec.iteration eq 1}><{t}>商品总览<{/t}><{else}><{$section.label}><{/if}></span></li>                
+            <{/foreach}>
+            <!--tag_foreign_total_sections-->
+        </ul>
+    </div>
+</div>
+
+<div class="side-bx spage-side" style=''>
+    <div class="side-bx-title"><h3><{t}>商品标签<{/t}></h3></div>
+    <div class="side-bx-bd">
+        <div style="overflow: hidden;" class="tag-editor" id="finder-tag">
+            <ul class="tag-editor-group" style="overflow: hidden;">
+            <{foreach key=key from=$tagList item=aTag}>
+                <li><input type='checkbox' name='goods[tag][<{$aTag.tag_id}>][tag][tag_id]' value='<{$aTag.tag_id}>'
+                <{foreach from=$tag item=bTag}>
+                <{if $bTag[tag_id] == $aTag.tag_id}>checked<{/if}>
+                <{/foreach}>
+                />
+               <{$aTag.tag_name}>
+                </li>
+                    <input type='hidden' name='goods[tag][<{$aTag.tag_id}>][app_id]' value='<{$aTag.app_id}>' >
+                    <input type='hidden' name='goods[tag][<{$aTag.tag_id}>][tag_type]' value='<{$aTag.tag_type}>' >
+            <{/foreach}>
+            </ul>
+        </div>
+    </div>
+</div>

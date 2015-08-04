@@ -1,0 +1,69 @@
+<div class="tableform">
+<h4>活动信息</h4>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+  <col class="Colgoodsid"></col>
+  <col class="Colgoodsid"></col>
+  <col class="Colgoodsid"></col>
+  <col class="textleft"></col>     
+    <thead>
+      <th><{t}>活动名称<{/t}></th>
+      <th><{t}>开始时间<{/t}></th>
+      <th><{t}>结束时间<{/t}></th>
+      <th><{t}>状态<{/t}></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><{$activity.name}></td>
+      <td class="textleft"><{$activity.start_time}></td>
+      <td class="textleft"><{$activity.end_time}></td>
+      <td><{if $activity.act_open == 'true'}>开启<{else}>关闭<{/if}></td>
+    </tr>
+  </tbody>
+  </table>
+</div>
+<div class="tableform">
+<h4>活动商品信息</h4>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+  <col class="Colgoodsid"></col>
+  <col class="Colgoodsid"></col>
+  <col class="Colgoodsid"></col>
+  <col class="textleft"></col>
+    <thead>
+      <th><{t}>申请商家<{/t}></th>
+      <th><{t}>店铺名称<{/t}></th>
+      <th><{t}>店铺等级<{/t}></th>
+      <th><{t}>店铺类型<{/t}></th>
+      <th><{t}>商品总价<{/t}></th>
+      <th><{t}>活动数量<{/t}></th>
+      <th><{t}>每人限购<{/t}></th>
+      <th><{t}>商品名称<{/t}></th>
+      <th><{t}>商品编号<{/t}></th>
+      <th><{t}>审核状态<{/t}></th>
+    </tr>
+  </thead>
+  <tbody>
+    <{if $detail}>
+    <{foreach from=$detail item=info}>
+      <{if $info.goods_info}>
+      <{assign var="goods_sum" value=count($info.goods_info)}>
+      <{foreach from=$info.goods_info item=item name=goods}>
+      <tr>
+        <{if $smarty.foreach.goods.first}><td rowspan="<{$goods_sum}>"><{$info.store_info.login_name}></td><{/if}>
+        <{if $smarty.foreach.goods.first}><td rowspan="<{$goods_sum}>"><{$info.store_info.store_name}></td><{/if}>
+        <{if $smarty.foreach.goods.first}><td rowspan="<{$goods_sum}>"><{$info.store_info.store_gradename}></td><{/if}>
+        <{if $smarty.foreach.goods.first}><td rowspan="<{$goods_sum}>"><{$info.store_info.issue_typename}></td><{/if}>
+        <{if $smarty.foreach.goods.first}><td rowspan="<{$goods_sum}>"><{$info.last_price|default:$info.price|cur}></td><{/if}>
+        <{if $smarty.foreach.goods.first}><td rowspan="<{$goods_sum}>"><{$info.store}></td><{/if}>
+        <{if $smarty.foreach.goods.first}><td rowspan="<{$goods_sum}>"><{$info.personlimit}></td><{/if}>
+        <td><a href='<{$item.url}>' target="_blank"><{$item.name}></a></td>
+        <td><{$item.bn}></td>
+        <{if $smarty.foreach.goods.first}><td rowspan="<{$goods_sum}>"><{if $info.status==1}>待审核<{elseif $info.status==2}>审核通过<{else}>审核不通过<{/if}></td><{/if}>
+      </tr>
+      <{/foreach}>
+      <{/if}>
+    <{/foreach}>
+    <{/if}>
+  </tbody>
+  </table>
+</div>

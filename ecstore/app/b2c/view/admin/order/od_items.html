@@ -1,0 +1,88 @@
+<div class="tableform">
+  <{if count($goodsItems) > 0}>
+  <div class="division">
+    <div  class="table-grid">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+      <col class="Colgoodsid"></col>
+      <col class="textleft"></col>     
+      <col class="Colcategory"></col>          
+      <col span="3" class="Colamount"></col>
+        <thead>
+          <th><{t}>货号<{/t}></th>
+          <th><{t}>商品名称<{/t}></th>
+          <th><{t}>分类<{/t}></th>
+          <th><{t}>价格<{/t}></th>
+          <th><{t}>购买量<{/t}></th>
+          <th><{t}>已发货量<{/t}></th>
+        </tr>
+      </thead>
+      <tbody>
+        <{foreach from=$goodsItems item=aGoods name="item"}>
+        <tr>
+          <td><{$aGoods.bn}></td>
+          <td class="textleft">
+          <a <{if $aGoods.is_type == 'goods'}>href="../index.php?ctl=product&act=index&p[0]=<{$aGoods.goods_id}>"
+        <{else}>href="../index.php?ctl=package&act=index"<{/if}> target="_blank"><{$aGoods.name}>
+          <{if is_array($aGoods.minfo)}>
+          <{foreach from=$aGoods.minfo item=minfo key=name}>
+          <br><{$minfo.label}>：<{$minfo.value}>
+          <{/foreach}>
+          <{/if}></a><{if $aGoods.is_type == 'goods' && $aGoods.small_pic}>
+
+		  <a style='text-decoration:none;' class='x-view-img' href='javascript:void(0);' imgsrc='<{$aGoods.small_pic|storager}>'  title='<{$aGoods.name}>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+
+		  
+		  <{/if}>
+          </td>
+          <td><{$aGoods.cat_name}></td>
+          <td class="Colamount"><{$aGoods.price|cur_odr:$order.currency}></td>
+          <td class="Colamount"><{$aGoods.nums}></td>
+          <td class="Colamount"><{$aGoods.sendnum}></td>
+        </tr>
+        <{/foreach}>
+      </tbody>
+      </table>
+    </div>
+  </div>
+  <{/if}>
+  <{if count($giftItems) > 0}>
+  <div class="division">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+      <col></col>
+      <col class="Colamount"></col>
+      <col class="Colamount"></col>
+      <col class="Colamount"></col>
+        <thead>
+          <tr>
+            <th><{t}>赠品名称<{/t}></th>
+            <th><{t}>积分<{/t}></th>
+            <th><{t}>兑换量<{/t}></th>
+            <th><{t}>已发货量<{/t}></th>
+          </tr>
+        </thead>
+        <tbody>
+        <{foreach from=$giftItems item=aGift}>
+        <tr>
+          <td class="textleft">
+      <{$aGift.name}>
+
+	   <a style='text-decoration:none;' class='x-view-img' href='javascript:void(0);' imgsrc='<{$aGift.thumbnail_pic|default:$env.conf.site.default_thumbnail_pic|storager}>'  title='<{$aGift.name}>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+
+          </td>
+          <td class="Colamount"><{$aGift.point}></td>
+          <td class="Colamount"><{$aGift.nums}></td>
+          <td class="Colamount"><{$aGift.sendnum}></td>
+        </tr>
+        <{/foreach}>
+        </tbody>
+      </table>
+    </div>
+    <{/if}>
+</div> 
+
+<script> 
+$$('.x-view-img').each(function(item){
+		 item.store('tip:text','<div style="width:220px;height:220px;overflow:hidden;"><img  src="'+item.get('imgsrc')+'" onload="$(this).zoomImg(220,220);" /></div>');
+	     Xtip.attach(item);
+});
+</script>

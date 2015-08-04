@@ -1,0 +1,20 @@
+<{if $is_expired == 'true'}>
+<tr>
+  <th><{t}>设置过期时间：<{/t}></th>
+  <td>
+	<label>
+		<{if $is_expired_end == 'true'}>
+		<{if $lv.expiretime > 0}>
+			<{input type="date" name="expiretime" maxlength=20 readonly=true value=$lv.expiretime}>
+		<{else}>
+			<{input type="date" name="expiretime" maxlength=20 readonly=true value=$smarty.now}>
+		<{/if}>
+		<{/if}>
+		<{if $is_expired_interval == 'true'}>
+		<{input type="unsigned" name="expiretime" style="width:50px" size="20" vtype="number" value=$lv.expiretime}>
+		<{/if}>
+     </label>
+	<span class="notice-inline" style="margin:5px 0 0 5px; padding:0"><{if $is_expired_end == 'true'}><{t}>请选择过期结束日期<{/t}><{/if}><{if $is_expired_interval == 'true'}>设置结束的天数<{/if}></span>
+  </td>
+</tr>
+<{/if}>

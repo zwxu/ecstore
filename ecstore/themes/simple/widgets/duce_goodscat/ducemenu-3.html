@@ -1,0 +1,114 @@
+<h2 class="allkind_title f16 c_bold">全部分类</h2>
+<div class="allkind_menu_index" id="">
+    <ul class="menu_box c_bold" id="">
+        <{foreach from=$data.cat item=parent key=parentId name=catslist}>
+        <li class="js_depth-0">
+            <div class="one clb">
+                <h3><a href="<{link app=b2c ctl=site_gallery act=index arg0=$parent.cat_id}>"><{if $parent.title}><{$parent.title}><{else}><{$parent.cat_name}><{/if}></a></h3>
+
+                <!-- 二级虚拟分类分类 start -->
+                <{if $parent.virtualcat1}>
+                <ul>
+                  <{foreach from=$parent.virtualcat1 item=virtualcat}>
+                  <li><a href="<{$virtualcat.url}>"><{$virtualcat.virtual_cat_name}></a></li>
+                  <{/foreach}>
+                </ul>
+                <{/if}>
+                <!-- 二级虚拟分类分类 end -->
+            </div>
+
+            <!-- 弹出分类start -->
+            <div class="i_mc js_depth-3" style="display:none;">
+
+                <!--弹出左边-->
+                <div class="i_mc_l">
+
+                    <{foreach from=$parent.children item=child key=childId name=subcat}>
+                        <{if $child.hidden != 'true'}>
+                        <div class="i_mc_lbox">
+                            <h4><a href="<{link app=b2c ctl=site_gallery act=index arg0=$child.cat_id}>"><{$child.cat_name}></a></h4>
+                            <div class="i_mc_lbox_links">
+                                <{foreach from=$child.children item=gChild key=gChildId name=childnum}>
+                                    <{if $gChild.hidden != 'true'}>
+                                        <{if $smarty.foreach.childnum.iteration <= $setting.gshowmax || $setting.gshowmax == 0}>
+                                            <a href="<{link app=b2c ctl=site_gallery act=index arg0=$gChild.cat_id}>"><{$gChild.cat_name}></a>
+                                            <{else}>
+                                            <a href="<{$gChild.onSel}>" href="<{link app=b2c ctl=site_gallery act=index arg0=$child.cat_id}>">更多&gt;&gt;</a>
+                                            <{break}>
+                                        <{/if}>
+                                    <{/if}>
+                                <{/foreach}>
+                            </div>
+                        </div>
+                        <{/if}>
+                    <{/foreach}>
+
+                </div>
+
+                <!--弹出左边 start-->
+                <div class="i_mc_r">
+
+                    <!--弹出分类右边促销活动 start-->
+                    <{if $parent.ad}>
+                    <div class="i_mc_r_promotions">
+                        <h4>促销活动</h4>
+                        <{foreach from=$parent.ad item=ad key=adId}>
+                          <a href="<{$ad.link}>" target="_blank">
+                            <img class="img-lazyload" src="<{$ad.pic|storager}>"  alt="<{$ad.txt}>" <{if $ad.width}>width='<{$ad.width}>'<{/if}> <{if $ad.height}>height='<{$ad.height}>'<{/if}> />
+                          </a>
+                        <{/foreach}>
+                    </div>
+                    <{/if}>
+                    <!--弹出分类右边促销活动 end-->
+
+                    <!-- 弹出分类右边推荐品牌 start -->
+                    <{if $parent.brand}>
+                    <div class="i_mc_r_brand">
+                        <h4>推荐品牌</h4>
+                        <ul>
+                            <{foreach from=$parent.brand item=brand key=brandId}>
+                            <li>
+                                <a href='<{selector args=$brand.args2 filter=$brand.bfilter key=$brand.column_id value=$brand.brand_id pageIndex=1}>'><{$brand.brand_name}></a>
+                            </li>
+                            <{/foreach}>
+                        </ul>
+                    </div>
+                    <{/if}>
+                    <!-- 弹出分类右边推荐品牌 end -->
+
+                </div>
+                <!--弹出左边 end-->
+
+            </div>
+            <!-- 弹出分类end -->
+        </li>
+        <{/foreach}>
+    </ul>
+</div>
+<script language="javascript">
+  $ES('.js_depth-0').each(function(item,index){
+    if(item.getElement('.js_depth-3')){
+      item.addEvent('mouseenter',function(){
+        var div_h = 0;
+        item1 = item.getElement('.one');
+        item1.set('class','menuhover one clb');
+        if(index > 0){
+          for(var i=0;i<=index-1;i++){
+            div_h += $ES('.js_depth-0')[i].getHeight();
+          }
+          //item.getElement('.js_depth-3').setStyle('top',-div_h);
+        }
+        item.getElement('.js_depth-3').setStyle('display','');
+        if(item.getElement('.js_depth-3').getHeight() < (div_h+item.getHeight())){
+            item.getElements('.js_depth-3').setStyle('height',div_h+item.getHeight());
+        }
+      });
+      item.addEvent('mouseleave',function(){
+        item1 = item.getElement('.menuhover'); 
+        item1 = item.getElement('.one');
+        item1.set('class','one clb');
+        item.getElement('.js_depth-3').setStyle('display','none');
+      });
+    }
+  });
+</script>

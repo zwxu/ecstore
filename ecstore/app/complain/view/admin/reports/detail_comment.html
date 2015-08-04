@@ -1,0 +1,216 @@
+<style>
+.complain-comment .pic div{
+    float: left;
+    height: 70px;
+    margin: 0 8px 0 0;
+    overflow: hidden;
+    width: 70px;
+}
+.complain-comment .pic div img{
+    cursor: url("<{$res_url}>/images/cursor.swf"), auto;
+    float: left;
+    margin: 0 8px 8px 0;
+    min-height: 70px;
+    min-width: 70px;
+}
+/*
+ * import mixin
+ */
+.close-rt {
+  background-image: url(<{$res_url}>/images/msg_board.png);
+  background-repeat: no-repeat;
+}
+.img-dd-popup {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 10000;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.img-dd-popup .img-dd-opacity-bg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 10001;
+  background-color: black;
+  opacity: 0.5;
+  filter: alpha(opacity= 50 );
+}
+.img-dd-popup .img-dd-box {
+  position: absolute;
+  z-index: 10002;
+}
+.img-dd-popup .img-dd-box .box-bd {
+  text-align: center;
+}
+.img-dd-popup .img-dd-box .box-bd img {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  cursor: move;
+}
+.close-rt-wrap {
+  position: fixed;
+  right: 0;
+  top: -1px;
+  z-index: 100000;
+  _display: none;
+}
+.close-rt-wrap .close-rt {
+  position: fixed;
+  display: block;
+  right: 0;
+  top: -1px;
+  width: 44px;
+  height: 42px;
+  background-position: -161px -630px;
+  cursor: pointer;
+}
+.ie-popup-mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  z-index: 1;
+  background: none;
+  opacity: 0;
+  filter: alpha(opacity= 0 );
+}
+</style>
+<div class="tableform complain-comment">
+      <table width="100%" cellspacing="0" cellpadding="0" border="0" class="gridlist">
+	  <colgroup>
+    <col style="width:15%">
+	<col style="width:35%">
+	<col style="width:35%">
+	<col style="width:15%">
+      </colgroup><thead>
+
+      <tr>
+      <th>留言方</th><th>内容</th><th>凭证</th><th>时间</th></tr>
+      </thead>
+      <tbody>
+      <{foreach from=$complain.reports_comments item=comment name=comm}>
+			<tr>
+          <td><{if $comment.source =='seller'}><{$complain.store_info.store_name}><{elseif $comment.source=='buyer'}><{$complain.member_info.uname}><{else}>平台客服<{/if}></td>
+          <td style='text-align: left; vertical-align: top;'><{$comment.comment}></td>
+          <td class='pic'>
+          <{if $comment.image_0}>
+            <div>
+                <img style='width:76px;height:76px;' class="J_IMGDD"  src="<{$comment.image_0|storager:'s'}>" bimage="<{$comment.image_0|storager}>">
+            </div>
+            <{/if}>
+            <{if $comment.image_1}>
+            <div >
+                <img style='width:76px;height:76px;'  class="J_IMGDD"  src="<{$comment.image_1|storager:'s'}>" bimage="<{$comment.image_1|storager}>">
+            </div>
+            <{/if}>
+            <{if $comment.image_2}>
+            <div>
+                <img style='width:76px;height:76px;'  class="J_IMGDD"  src="<{$comment.image_2|storager:'s'}>" bimage="<{$comment.image_2|storager}>">
+            </div>
+            <{/if}>
+            <{if $comment.image_3}>
+            <div>
+                <img style='width:76px;height:76px;'  class="J_IMGDD"  src="<{$comment.image_3|storager:'s'}>" bimage="<{$comment.image_3|storager}>">
+            </div>
+            <{/if}>
+            <{if $comment.image_4}>
+            <div>
+                <img style='width:76px;height:76px;'  class="J_IMGDD"  src="<{$comment.image_4|storager:'s'}>" bimage="<{$comment.image_4|storager}>" >
+            </div>
+            <{/if}>
+          </td>
+          <td><{$comment.last_modified|cdate:FDATE_STIME}></td>
+        </tr>
+        <{/foreach}>
+      </tbody>
+      </table>
+</div>
+<script>
+(function(){    
+    BigImage=new Object();
+    Object.append(BigImage,{
+       init:function(){
+         this.initPop();
+          $$('.J_IMGDD').each(function(img){
+             img.addEvent('click',function(e){
+                   e.stop();
+                   BigImage.popup(this.get('bimage'),e);
+                   BigImage.hidden();
+             });
+          });
+          var pp=document.getElement('.img-dd-popup');
+          var img=pp.getElement('img');
+            img.addEvents({
+                'mousewheel':function(e){
+                    e.stop();
+                    var w=e.wheel*10;
+                    var coord=this.getCoordinates();
+                    var left=coord.left;
+                    var top=coord.top;
+                    var twidth=coord.width*((100+w)/100);
+                    var dleft=(twidth-coord.width)/2;
+                    left=left-dleft;
+                    if(twidth<100){
+                       return;
+                    }
+                    this.setStyle('width',twidth+'px');
+                    this.setStyle('left',left+'px');
+                    var theight=this.getSize().y;
+                    top=top-(theight-coord.height)/2;
+                    this.setStyle('top',top+'px');
+                }
+            });
+            new Drag(img);
+       },
+       popup:function(src,e){
+           var pp=document.getElement('.img-dd-popup');
+           var img=pp.getElement('img');
+           img.set('src',src);
+           img.setStyle('width','500px');
+           var coor=document.getScrollSize();
+           var sc=document.getScroll();
+           var dtop=(coor.x-500)/2;
+           img.setStyle('top',sc.y+20+'px');
+           img.setStyle('left',dtop+'px');
+           pp.setStyle('width',coor.x+'px');
+           pp.setStyle('height',coor.y+'px');
+           pp.show();
+           var pclose=document.getElement('.J_PopClose');
+           pclose.show();
+       },
+       initPop:function(){
+           if(!document.getElement('.img-dd-popup')){
+               var ppp=new Element('div');
+               ppp.addClass('img-dd-popup');
+               ppp.setStyle('display','none');
+               ppp.set('html','<div class="img-dd-opacity-bg"></div><div class="img-dd-box"><div class="box-bd"><img title="鼠标滚轮可以放大图片" class="G_K" style="overflow: hidden;" src=""></div><div class="box-bt"></div></div>');
+               ppp.inject(document.body);
+               var cpp=new Element('div');
+               cpp.addClass('box-hd close-rt-wrap J_PopClose');
+               cpp.setStyle('display','none');
+               cpp.set('html','<a href="#" title="按退出键，也可以关闭哦" class="close-rt J_Close" id="J_CloseImageDD"></a>');
+               cpp.inject(document.body);
+           }
+       },
+       hidden:function(){
+           var pclose=document.getElement('.J_PopClose');
+           pclose.addEvent('click',function(e){
+             e.stop();
+             this.hide();
+             var pp=document.getElement('.img-dd-popup');
+             pp.hide();
+           });
+       }
+    });
+    BigImage.init();
+})();
+</script>

@@ -1,0 +1,202 @@
+<div class="table-grid">  
+  <input type="hidden" name="order_id" value="<{$order.order_id}>" />
+<{if $order.items}>
+  <table width="100%" id="order_items" border="0" cellspacing="0" cellpadding="2" class="gridlist">
+  <col class="Colsn"></col>
+  <col></col>
+  <col class="Colamount"></col>
+  <col class="Colamount"></col>
+  <col class="Colamount"></col>
+  <col class="Coloption-1b"></col>
+    <thead>
+      <tr>
+        <th><{t}>货号<{/t}></th>
+        <th><{t}>商品名称<{/t}></th>
+        <th><{t}>价格<{/t}></th>
+        <th><{t}>购买数量<{/t}></th>
+        <th><{t}>小计<{/t}></th>
+        <th><{t}>操作<{/t}></th>
+      </tr>
+    </thead>
+    <tbody>
+    <{foreach from=$order.items item=aItems key=iLoop}>
+    <{assign var="itemid" value=$aItems.products.product_id}>
+	<{assign var="itemidGoodsid" value=$aItems.products.goods_id}>
+    <{assign var="itemprice" value=$aItems.price}>
+    <{assign var="itemnums" value=$aItems.quantity}>
+    <tr>
+      <input type="hidden" name='aItems[product_id][<{$aItems.products.product_id}>_<{$iLoop}>]' value='<{$aItems.products.product_id}>' />
+      <input type="hidden" name='aItems[object_id][<{$aItems.products.product_id}>_<{$iLoop}>]' value='<{$iLoop}>' />
+      <td><{$aItems.bn}></td>
+      <td><{$aItems.name}></td>
+      <td><{input type="unsigned" required="true" class="itemPrice_{$itemid}-{$iLoop} itemrow" name="aPrice[{$itemid}_{$iLoop}]" value=$itemprice size=8 }></td>
+      <td>
+      <!-- ajx 增加了表单正则验证【根据小数库存判断处理】start-->
+      <{if $aItems.numtype == "0"}>
+         <{input type="positive" required="true" vtype="digits&&positive" class="itemNum_{$itemid}-{$iLoop} itemrow" name="aNum[{$itemid}_{$iLoop}]" value=$itemnums size=4 }>
+       <{elseif $aItems.numtype == "1"}>
+         <{input type="positive" required="true" vtype="positive" class="itemNum_{$itemid}-{$iLoop} itemrow" name="aNum[{$itemid}_{$iLoop}]" value=$itemnums size=4 }>
+       <{/if}>
+       <!-- ajx  end-->
+       </td>
+      <td class="itemSub_<{$itemid}>-<{$iLoop}> itemCount Colamount"><{$aItems.amount}></td>
+      <td><{img src="bundle/delecate.gif"  title=$___b2c="删除"|t:'b2c' style=" cursor:pointer" onClick="delgoods(this)"  app='desktop'}></td>
+    </tr>
+    <{if $aItems.adjunct}>
+    	<tr>
+    	<td colspan="6">
+    	<table width="100%" id="order_items" border="0" cellspacing="0" cellpadding="2" class="gridlist">
+    	<tbody>
+		<thead>
+		<tr>
+			<td colspan="6">
+				<{t}>商品配件项<{/t}>
+			</td>
+		</tr>
+		</thead>
+	    <{foreach from=$aItems.adjunct item=ajunctItems key=ajunctILoop}>
+	    <{assign var="ajunctItemid" value=$ajunctItems.products.product_id}>
+	    <{assign var="ajunctItemprice" value=$ajunctItems.price}>
+	    <{assign var="ajunctItemnums" value=$ajunctItems.quantity}>
+		<input type="hidden" name='ajunctItems[goods_id]' value='<{$itemidGoodsid}>' />
+	    	<tr>
+				<input type="hidden" name='ajunctItems[product_id][<{$ajunctItems.products.product_id}>_<{$iLoop}>]' value='<{$ajunctItems.products.product_id}>' />
+	    		<input type="hidden" name='ajunctItems[object_id][<{$ajunctItems.products.product_id}>_<{$iLoop}>]' value='<{$iLoop}>' />
+	    		<td><{$ajunctItems.bn}></td>
+			    <td><{$ajunctItems.name}></td>
+			    <td><{input type="unsigned" required="true" class="itemPrice_{$ajunctItemid}-{$iLoop} itemrow" name="ajunctPrice[{$ajunctItemid}_{$iLoop}]" value=$ajunctItemprice size=8 }></td>
+			    <td><{input type="positive" required="true" class="itemNum_{$ajunctItemid}-{$iLoop} itemrow" name="ajunctNum[{$ajunctItemid}_{$iLoop}]" value=$ajunctItemnums size=4 }></td>
+			    <td class="itemSub_<{$ajunctItemid}>-<{$iLoop}> itemCount Colamount"><{$ajunctItems.amount}></td>
+			    <td><{img src="bundle/delecate.gif"  title=$___b2c="删除"|t:'b2c' style=" cursor:pointer" onClick="delgoods(this)"  app='desktop'}></td>
+	    	</tr>
+	    <{/foreach}>
+	    </tbody>
+	    </table>
+	    </td>
+	    </tr>
+    <{/if}>
+    <{if $aItems.gifts}>
+    	<tr>
+    	<td colspan="6">
+    	<table width="100%" id="order_items" border="0" cellspacing="0" cellpadding="2" class="gridlist">
+    	<tbody>
+		<thead>
+		<tr>
+			<td colspan="6">
+				<{t}>商品赠品项<{/t}>
+			</td>
+		</tr>
+		</thead>
+	    <{foreach from=$aItems.gifts item=giftsItems key=giftsILoop}>
+	    <{assign var="giftsItemid" value=$giftsItems.products.product_id}>
+	    <{assign var="giftsItemprice" value=$giftsItems.price}>
+	    <{assign var="giftsItemnums" value=$giftsItems.quantity}>
+	    	<tr>
+	    		<td><{$giftsItems.bn}></td>
+			    <td><{$giftsItems.name}></td>
+			    <td><{$giftsItemprice }></td>
+			    <td><{$giftsItemnums}></td>
+			    <td class="Colamount"><{$giftsItems.amount}></td>
+			    <td>&nbsp;</td>
+	    	</tr>
+	    <{/foreach}>
+	    </tbody>
+	    </table>
+	    </td>
+	    </tr>
+    <{/if}>
+    <{/foreach}>
+    </tbody>
+  </table>
+<{/if}>
+  <{if $order.gifts}>
+  <table width="100%" id="order_items" border="0" cellspacing="0" cellpadding="2" class="gridlist">
+  <col class="Colsn"></col>
+  <col></col>
+  <col class="Colamount"></col>
+  <col class="Colamount"></col>
+  <col class="Colamount"></col>
+  <col class="Coloption-1b"></col>
+    <thead>
+      <tr>
+        <th><{t}>货号<{/t}></th>
+        <th><{t}>商品名称<{/t}></th>
+        <th><{t}>价格<{/t}></th>
+        <th><{t}>购买数量<{/t}></th>
+        <th><{t}>小计<{/t}></th>
+        <th><{t}>操作<{/t}></th>
+      </tr>
+    </thead>
+    <tbody>
+    <{foreach from=$order.gifts item=aItems key=iLoop}>
+    <{assign var="itemid" value=$aItems.product_id}>
+    <{assign var="itemprice" value=$aItems.price}>
+    <{assign var="itemnums" value=$aItems.quantity}>
+    <tr>
+      <td><{$aItems.bn}></td>
+      <td><{$aItems.name}></td>
+      <td><{$itemprice }></td>
+      <td><{$itemnums }></td>
+      <td class="Colamount"><{$aItems.amount}></td>
+      <td>&nbsp;</td>
+    </tr>
+	 <{/foreach}>
+    </tbody>
+    </table>  
+  <{else}>
+	<div id="order_items_div"></div>
+  <{/if}>
+  <{if $order.extends_items}>
+	<table class="gridlist" cellpadding="0" cellspacing="0">
+		<thead>
+		<th><{t}>货号<{/t}></th>
+        <th><{t}>名称<{/t}></th>
+        <th><{t}>价格<{/t}></th>
+        <th><{t}>购买数量<{/t}></th>
+        <th><{t}>小计<{/t}></th>
+        <th><{t}>操作<{/t}></th>
+        </thead>
+	<{foreach from=$order.extends_items item=aExtends key=iLoop}>  	  
+		<{$aExtends}>
+		
+	<{/foreach}>
+	</table>
+  <{/if}>
+  <table width="100%" border="0" cellspacing="0" cellpadding="2" >
+    <tr>
+      <td style="text-align:left"><{t}>输入商品货号：<{/t}><{input type="text" id="txt_product_bn" name="newbn" }>
+        <{button type="button" label=$___b2c="添加"|t:'b2c' id="newbtn" class="btn" }></td>
+    </tr>
+  </table>
+<{$order.alertJs}>
+</div>
+<script type="text/javascript">
+$('newbtn').addEvent('click', function(){
+	if ($('txt_product_bn').get('value') == '')
+	{
+		alert('<{t}>商品货号不能为空！<{/t}>');
+	}
+	else
+		new Request({
+				url:'/index.php/openapi/b2c.iframe.order.edit/addItem',
+				onComplete:function(rs){
+				if(rs.substr(0,1)!='<'){
+					alert(rs);
+				}else{
+					if ($('order_items'))
+						$('order_items').getElement('tbody').set("html",$('order_items').getElement('tbody').get("html")+rs);
+					else{
+						var _table_head = '<table width="100%" id="order_items" border="0" cellspacing="0" cellpadding="2" class="gridlist"><col class="Colsn"></col><col></col><col class="Colamount"></col><col class="Colamount"></col><col class="Colamount"></col><col class="Coloption-1b"></col><thead><tr><th><{t}>货号<{/t}></th><th><{t}>商品名称<{/t}></th><th><{t}>价格<{/t}></th><th><{t}>购买数量<{/t}></th><th><{t}>小计<{/t}></th><th><{t}>操作<{/t}></th></tr></thead><tbody>';
+						_table_head += rs + '</tbody></table>';
+						$('order_items_div').set('html', _table_head);
+					}
+					$ES(".itemrow","moneyItems").each(function(item, index){
+						item.addEvent('change',function(e){count_change(this);});
+					  });	
+				   countF();
+				}
+			}}).post($('orderItemList'));
+		
+		return false;
+})
+</script>

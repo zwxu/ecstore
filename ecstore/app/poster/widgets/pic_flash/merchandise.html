@@ -1,0 +1,76 @@
+<style>
+    #ex_slide_<{$widgets_id}>{ 
+        width:<{$data.width}>px;
+        height:<{$data.height}>px;
+        overflow:hidden;
+        position:relative;
+    }
+    #ex_slide_<{$widgets_id}> ol li{
+        height:<{$data.height}>px;
+        width:<{$data.width}>px;
+        list-style:none; 
+        display:block;
+        overflow:hidden;
+        border:0;
+        margin:0;
+    }
+    #ex_slide_<{$widgets_id}> .slide-trigger{
+        position:absolute; 
+        z-index:555;
+    }
+	.slide-trigger {position:absolute; bottom:14px;right:20px}
+	.slide-trigger li{float:left; list-style:none;}
+	.slide-trigger li{width:13px; height:13px; line-height:38px; text-align:center; color:#fff;background:url(images/arrow-1.png) 0 0 no-repeat;display:block;margin-right:8px;opacity:0.5;}
+
+	.slide-trigger li.active{background:url(images/arrow-1.png) 0 -13px no-repeat;opacity:1;}
+    .slide-trigger li a,.slide-trigger li a:hover{display:none}
+</style>
+<div class="ex-slide1-box" style="width:<{$data.width}>px;height:<{$data.height}>px;">
+  <div id="ex_slide_<{$widgets_id}>" class="ex-slide1">
+    <ol class="switchable-content clearfix">
+    <{if $data.poster_imgurl}>
+          <{foreach from=$data.poster_imgurl item=pic key=k}>
+              <li class="switchable-panel">
+                  <{if $pic.linktarget}><a href="javascript:void(0);" posterurl="<{$pic.linktarget}>" posterid="<{$data.poster_id}>"   onclick="toclickcount_<{$widgets_id}>(this);" ><{/if}>
+          <img src="images/transparent.gif" lazyload=<{$pic.link|storager}> class="img-lazyload"  alt="<{$setting.ad_pic_txt}>" <{if $pic.width}>width='<{$pic.width}>'<{/if}> <{if $pic.height}>height='<{$pic.height}>'<{/if}>>
+          <{if $pic.linktarget}></a><{/if}>
+          </li>
+          <{/foreach}>
+    <{else}>
+          <li class="switchable-panel">
+          暂无数据或数据已过期，请联系管理员
+          </li>
+      <{/if}>
+    </ol>
+        <ul class="switchable-triggerBox slide-trigger">
+          <{foreach from=$data.poster_imgurl item=pic key=k}>
+                <li><a href="#"><{$pic.linkinfo}></a></li> 
+          <{/foreach}> 
+        </ul>
+  </div>
+</div>
+<script>
+new Switchable('ex_slide_<{$widgets_id}>',{
+    effect:'<{$data.poster_switcheffect}>',
+    autoplay:'<{$data.poster_autoplay}>'
+});
+
+
+function toclickcount_<{$widgets_id}>(e){
+    var rehref=e.getAttribute('posterurl');
+    var posterid=e.getAttribute('posterid');
+    new Request({
+        url:'<{link app=poster ctl=site_poster act=clickcount}>',
+        method:'get',
+        onComplete:function(a){
+           var newtarget=<{if $data.poster_isblank}>"_blank"<{else}>"_self"<{/if}>;
+            if(rehref){
+                window.open(rehref,newtarget);
+            }else{
+                
+            }
+        },
+    data:"posterid="+posterid
+    }).send();
+}
+</script>

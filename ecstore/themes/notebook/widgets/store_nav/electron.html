@@ -1,0 +1,32 @@
+<div class="shop2_nav">
+<ul class="shop2_nav_ul le_zhi">
+<li><a class="home" href="<{link app=business ctl=site_shop act=view  arg=$data.store.store_id}>">首页</a></li>
+<{if $data.nav}>
+<{foreach from=$data.nav item=nav_s key=nav_k name=nav_n}>
+   <li><a href="<{$nav_s.link}>" target="_blank"><{$nav_s.title}></a></li>    
+<{/foreach}>  
+<{/if}>
+ <div class="cl_zhi"></div>
+ </ul>
+ <form action="<{link app=business ctl=site_shop act=gallery arg0=$data.store.store_id}>" method="get">
+  <div class="nav_search le_zhi">
+  <input type="hidden" name='view' value='grid'>
+  <input type="hidden" name='sid' value='<{$data.store.store_id}>'>
+   <input id='navSearch' type="text" name="keyword" class="s_t" autocomplete='off' >
+   <input type="button" class="s_on">
+   </div>
+   </form>
+ <div class="cl_zhi"></div>
+</div>
+<script>
+ /*(function(){
+    if($('navSearch')){
+        $('navSearch').addEvent('keypress',function(e){
+          if(e.code==13 && this.value.trim()!=''){ 
+                 e.stop();
+                 this.getParent('form').submit();
+          }
+        });
+    }
+ })();*/
+</script>

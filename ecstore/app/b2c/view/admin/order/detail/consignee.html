@@ -1,0 +1,119 @@
+<table>
+  <tr>
+    <th><{t}>收货信息：<{/t}></th>
+    <td>
+        <div class="receiver" id="receiver">
+	<div class="division">
+       <div class="division" id='checkout-recaddr'>
+           <{include file="admin/order/detail/rec_addr.html"}>
+        </div>
+     </div>
+
+  <div class='receivermore'>
+     <{t}>订单附言：<{/t}><{input class="inputstyle" name="order[memo]" type="text" value="" style='width:400px'}>
+    <div style='margin-top:4px'>
+     <{t}>送货时间：<{/t}><select class="inputstyle" name="order[consignee][day]" onchange="$('specal_day').style.display=(this.value=='specal')?function(){Ex_Loader('picker',function(){$('specal_day').getFirst().makeCalable();}); return '';}():'none'">
+            <option selected="selected" value="任意日期"><{t}>任意日期<{/t}></option>
+            <option value="仅工作日"><{t}>仅工作日<{/t}></option>
+            <option value="仅休息日"><{t}>仅休息日<{/t}></option>
+            <option value="specal"><{t}>指定日期<{/t}></option>
+          </select>&nbsp;
+          <span id="specal_day" style="display:none">
+             <{input type="text" name="order[consignee][specal_day]" class="cal inputstyle" value=$dlytime real=true style="width:80px" readonly=true}>
+          </span>
+        <select class="inputstyle" name="order[consignee][time]">
+            <option value="任意时间段"><{t}>任意时间段<{/t}></option>
+            <option value="上午"><{t}>上午<{/t}></option>
+            <option value="下午"><{t}>下午<{/t}></option>
+            <option value="晚上"><{t}>晚上<{/t}></option>
+          </select>
+      </div>
+  </div>
+</div>
+ <{if $addrs}>
+<script>
+window.addEvent('domready',function(){
+
+<{if $trading.admindo}>
+    var url_area = 'index.php?app=b2c&ctl=admin_order/order&act=getAddr';
+<{else}>
+    var url_area = '<{link ctl="cart" act="getAddr"}>';
+<{/if}>
+
+
+   
+    var addlistRadios=$$('input[name^=delivery[addr_id]','receiver');
+    
+    if(addlistRadios.length){
+ 
+        addlistRadios.addEvent('click', function(e,edit){      
+                this.set('checked',true);             
+                var _value=this.value;
+                
+                if(_value!='0'){
+                   $('checkout-recaddr').hide();
+                }
+                
+                if(edit){
+                   $('checkout-recaddr').show();
+                }
+            
+                
+                new Request.HTML({
+                    url:url_area,
+                    update:'checkout-recaddr',
+                    onRequest:function(){
+                      $('checkout-recaddr').set('html','<div class="font-green">loading...</div>');
+                    },
+                    onComplete:function(){
+
+                     if(_value=='0'){
+                         
+                      $('shipping').set('html','<div class="valierror clearfix""><{t}>请先完善收货信息.<{/t}></div>');
+
+                         return;                      
+                     }
+                  
+                     /*$E('#checkout-recaddr .recsave td')
+                     .adopt(new Element('span',{'class':'bg-gray'})
+                     .set('html','&nbsp;&nbsp;(勾选保存将覆盖您之前保存的收货人信息)'));*/
+                  
+                      
+                      if(lastsel=$ES('#checkout-select-area select').getLast()){
+                          
+                          if(!lastsel.getValue()||lastsel.getValue()=='_NULL_'){
+                               $('shipping').set('html','<div class="valierror clearfix"><{t}>请先完善收货信息.<{/t}></div>');
+                               MessageBox.error('<{t}>请重新选择：收货地区.<{/t}>');
+                               $('checkout-recaddr').show();
+                          
+                          }
+                          
+                      }
+                    
+                    }}).get({'addr_id':_value});
+            });
+            
+       addlistRadios[0].fireEvent('click');
+       addlistRadios.getLast().addEvent('click',$('checkout-recaddr').show.bind($('checkout-recaddr')));
+   }
+
+  $$('.addredit','receiver').addEvent('click', function(e){
+            e.stop();
+            /*var ipt =this;
+            var addrRow = ipt.getPrevious('label');
+            var addrObj = addrRow.getElement('input[name^=delivery[addr_id]');*/
+            this.getPrevious('input[name^=delivery[addr_id]').fireEvent('click',[e,true]);
+        });
+
+        
+        
+});
+</script>
+<{/if}>
+    </td>
+  </tr>
+  <tr>
+    <th>&nbsp;</th>
+    <td><input type='button' value='<{t}>保存<{/t}>' class='box-submit'/></td>
+  </tr>
+</table>

@@ -1,0 +1,62 @@
+<{capture name="headbar"}>
+<{include file="site/theme/tmpl/pagehead.html" app="business"}>
+<div class="box-gray clearfix">
+  <div class="flt c-gray"><{$viewname}><{$view}> 编辑中...</div>
+  <div class="frt">
+    <{button type="button" class="btn-secondary" style="display:none" disabled="disabled" label="预览模板" id="preview_template"}>
+    <!--<a class="btn" href="<{$site_url}>" target="_blank"><span><span>浏览前台</span></span></a>-->
+    <{button type="button" class="btn-primary" disabled="disabled" label="保存" id="btn_save"}>
+  </div>
+</div>
+<{/capture}>
+<iframe id="themeFrame" frameborder="0" width="100%" allowtransparency="true" height="100%" onload="$('preview_template').disabled=false;this.removeClass('loading')" class="loading" src="<{link app=business ctl="site_theme" act="previewtheme" arg0=$theme arg1=$file}>"></iframe>
+<script>
+  var SHOPADMINDIR = '<{$shopadmin}>';
+  var THEME_NAME ='<{$theme}>';
+  var PREVIEW_URL = '<{$preview_url}>';
+
+  var themeFrame=$('themeFrame').contentWindow;
+  var shopWidgetsOBJ=themeFrame.shopWidgets;
+  function _addWeigets(args){
+    var themeFrame=$('themeFrame').contentWindow;
+    var shopWidgetsOBJ=themeFrame.shopWidgets;
+    shopWidgetsOBJ.widgetsDialog&&shopWidgetsOBJ.widgetsDialog.close();
+    shopWidgetsOBJ.widgetsDialog=null;
+    shopWidgetsOBJ.ghostDrop(args[0],args[1],args[2]);
+    themeFrame.focus();
+  }
+
+  function _showWidgetsDialog(url){
+    shopWidgetsOBJ.widgetsDialog=new Dialog(url,{width:770,height:500,title:'<{t}>选择挂件<{/t}>',modal:true,resizeable:false,onShow:function(e){
+        this.dialog_body.id='dialogContent';
+    }});
+
+  }
+
+  function _saveWidgets(fn,el){
+    return $("themeFrame").contentWindow.shopWidgets.saveAll(fn,el);
+  }
+
+  $('main').setStyle('overflow','hidden');
+
+  $('preview_template').addEvent('click',function(e){
+      $('themeFrame').contentWindow.shopWidgets.preview('<{$save_url}>',this);
+  });
+
+  $('btn_save').addEvent('click',function(e){
+      confirmDialog('<{t}>确定保存您对当前页面的修改吗？<{/t}>',function(){
+          _saveWidgets(function(){this.disabled=true},this);
+      }.bind(this));
+  });
+
+  $$('#editor_drop_menu a, .tab-head li a').addEvent('click',function(e){
+      if(!document.getElement('#btn_save:disabled')){
+          if(confirm('<{t}>当前页面暂未保存，是否现在保存？<{/t}>')) {
+              e.stop();
+              _saveWidgets(function(){location.href = this.get('href')},this);
+          }
+      }
+  });
+</script>
+
+

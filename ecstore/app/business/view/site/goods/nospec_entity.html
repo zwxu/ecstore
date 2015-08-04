@@ -1,0 +1,57 @@
+<{if $goods.product}>
+<{assign var=product value=$goods.product|current}>
+<{/if}>
+<input type='hidden' name='goods[product][0][status]' value='true'/>
+<table border="0" cellpadding="0" cellspacing="0" width="100%" id="nospec_body"  class="liststyle data" style="border:none">
+<tbody>
+  <tr>
+    <th width="98"><em><font color="red">*</font></em><{t}>销售价：<{/t}><input type='hidden' name='goods[product][0][product_id]' value='<{$product.product_id}>'></th>
+    <td>
+      <{input vtype="unsigned" key="price" class="inputstyle" value=$product.price.price.price name="goods[product][0][price][price][price]" style="width:60px" maxlength="25" }>
+      <{button type="button" label=$___b2c="编辑会员价格"|t:'b2c' onclick="goodsEditor.mprice.bind(goodsEditor)(this)" icon="btn_edit.gif" app='desktop'}>
+      <span>
+      <{foreach from=$mLevels item=lv }>
+        <input type="hidden" key="member_lv_price_<{$lv.member_lv_id}>" name="goods[product][0][price][member_lv_price][<{$lv.member_lv_id}>]" level="<{$lv.member_lv_id}>" value="<{if $product.price.member_lv_price[$lv.member_lv_id][custom] == 'true'}><{$product.price.member_lv_price[$lv.member_lv_id][price]}><{/if}>" type="money" vtype="mprice" />
+      <{/foreach}>
+      </span><!--tag_foreign_nospec-->
+    </td>
+  </tr>
+  <{if false}>
+  <tr>
+    <th><{t}>成本价：<{/t}></th>
+    <td>
+    <{input vtype="unsigned" key="cost" name="goods[product][0][price][cost][price]" maxlength="30" style="width:60px" value=$product.price.cost.price }>
+    <span class="notice-inline"><{t}>前台不会显示，仅供后台使用。<{/t}></span></td>
+  </tr>
+  <{/if}>
+  <tr>
+    <th><{t}>市场价：<{/t}></th>
+    <td>
+    <{input vtype="unsigned" key="mktprice" name="goods[product][0][price][mktprice][price]" maxlength="30" style="width:60px" value=$product.price.mktprice.price }>
+    </td>
+  </tr>
+  <tr>
+    <th><{t}>货号：<{/t}></th>
+    <td><{input type="text" value=$product.bn key="bn" name="goods[product][0][bn]" maxlength="25" }></td>
+  </tr>
+  <tr>
+    <th><{t}>重量：<{/t}></th>
+    <td><{input type="unsigned" key="weight" value=$product.weight name="goods[product][0][weight]" style="width:60px" maxlength="25" }><{t}>克(g)<{/t}></td>
+  </tr>
+  <{if $goods.type.is_physical || $gtype.0.is_physical}>
+  <tr>
+    <th><em><font color="red">*</font></em><{t}>库存：<{/t}></th>
+    <td>
+    <{input type="unsigned" vtype="required&&unsigned" id="p_store" key="store" value=$product.store name="goods[product][0][store]" style="width:60px" maxlength="25" readonly="true"}>
+    <{input type='hidden' id='p_store_real' value=0}>
+    </td>
+  </tr>
+  <{/if}>
+    <{if false}>
+    <tr>
+        <th><{t}>货位：<{/t}></th>
+        <td><{input type="text" key="store_place" value=$goods.store_place name="goods[product][0][store_place]" maxlength="25" }></td>
+    </tr>
+    <{/if}>
+</tbody>
+</table>

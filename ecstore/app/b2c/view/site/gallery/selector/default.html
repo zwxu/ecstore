@@ -1,0 +1,272 @@
+<{if $childnode && $show_cat == 'true'}>
+<div class="division boxBrown">
+  <dl class="clearfix">
+    <dt><{t}>分类名称：<{/t}></dt>
+    <dd>
+    <ul class="clearfix">
+      <{foreach from=$childnode item="item" key=value}>
+      <li>
+        <a href="<{$item.link}>"><{$item.cat_name}></a>
+      </li>
+      <{/foreach}>
+    </ul>
+    </dd>
+  </dl>
+</div>
+<{/if}>
+<{if $selector}>
+  <div class="division clearfix" id="selector_contents" style="padding:0px;">
+    <h2 class="off-screen">品牌分类</h2>
+    <h3 class="off-screen">品牌</h3>
+    <div width="100%" class="brand-table">
+      <{if $selector.ordernum}>
+        <{foreach from=$selectorExd item="column" key=column_id}>        
+          <{if count($column.options)>0 && !$column.value}>
+          <dl class="clearfix">
+            <dt style="background-color:#F7F5F5"><{$column.name}>：</dt>
+            <dd>
+            <ul class="clearfix">
+              <{foreach from=$column.options item="item" key=value}>
+              <li>
+                <a href="<{selector args=$args2 filter=$bfilter key=$column_id value=$value}>?scontent=<{$args1}>"><{$item}></a>
+              </li>
+              <{/foreach}>
+            </ul>
+            </dd>
+          </dl>
+          <{/if}>
+
+        <{/foreach}>
+        <{foreach from=$selector.ordernum item=pord key=key}>
+          <{if count($selector.$pord.options)>0 && !$selector.$pord.value}>
+          <dl class="clearfix">
+            <dt style="background-color:#F7F5F5"><{$selector.$pord.name}>：</dt>
+            <dd>
+            <ul class="clearfix">
+              <{foreach from=$selector.$pord.options item="item" key=value}>
+              <li>
+                <a href="<{selector args=$args2 filter=$bfilter key=$column_id value=$value}>"><{$item}></a>
+              </li>
+              <{/foreach}>
+            </ul>
+            </dd>
+          </dl>
+          <{/if}>
+        <{/foreach}>
+      <{else}>
+        <{foreach from=$selector item="column" key=column_id}>
+          <{if $column_id=='cat_id'}>
+          <{foreach from=$column item="ccolumn" key=ccolumn_id}>
+              <{if count($ccolumn.options)>0 && !$ccolumn.value}>
+              <dl class="clearfix">
+                <dt style="background-color:#F7F5F5"><{$ccolumn.name}>：</dt>
+                <dd>
+                <ul>
+                  <{foreach from=$ccolumn.options item="item" key=value}>
+                  <li>
+                    <a href="<{selector args=$args2 filter=$bfilter key=$column_id value=$value}>"><{$item}></a>
+                  </li>
+                  <{/foreach}>
+                </ul>
+                </dd>
+              </dl>
+           <{/if}>           
+           <{/foreach}>
+          <{else}>
+          <{if count($column.options)>0 && !$column.value}>
+          <dl class="clearfix">
+            <dt style="background-color:#F7F5F5"><{$column.name}>：</dt>
+            <dd>
+            <ul>
+              <{foreach from=$column.options item="item" key=value}>
+              <li>
+                <a href="<{selector args=$args2 filter=$bfilter key=$column_id value=$value}>"><{$item}></a>
+              </li>
+              <{/foreach}>
+            </ul><span style="float:right;padding-right:10px;">多选<{if $column_id=='brand_id'}>更多<{/if}></span>
+            </dd>
+          </dl>
+          <{/if}>
+          <{/if}>
+        <{/foreach}>
+      <{/if}>
+    </div>
+  </div>
+<{/if}>
+
+<{if $SpecFlatList}>
+<div class="division" id='goods-spec-content-flat'>
+  <div class='goods-spec' width='100%' >
+    <{foreach from=$SpecFlatList key=FlatKey item=FlatSpec}>
+    <dl class="clearfix">
+      <dt><{$FlatSpec.name}>：</dt>
+      <dd class="flatshow">
+      <ul class="clearfix">
+        <{foreach from=$SpecFlatList[$FlatKey].spec_value item=FlatSpecval key=FlatSkey}>
+        <{if $FlatSpec.spec_type=="image"}>
+        <li><a href="<{selector args=$args filter=$filter key=$FlatSpec.type value="{$FlatKey},{$FlatSkey}"}>" <{if $FlatSpecval.selected}>class="selected"<{/if}>>
+          <{if $FlatSpecval.spec_image}><img src="<{$FlatSpecval.spec_image|default:$env.conf.b2c.spec.default.pic|storager}>" alt="<{$FlatSpecval.spec_value}>" title="<{$FlatSpecval.spec_value}>" width="20" height="20">
+          <{else}>
+          <img width="20" height="20" title="" alt="" src="<{$default_spec_image_src}>">
+          <{/if}>
+          </a>
+        </li>
+        <{else}>
+        <li <{if $FlatSpecval.selected}>class="selected"<{/if}>>
+        <a href="<{selector args=$args filter=$filter key=$FlatSpec.type value="{$FlatKey},{$FlatSkey}"}>" <{if $FlatSpecval.selected}>class="selected"<{/if}>>
+          <span><{$FlatSpecval.spec_value}></span>
+        </a>
+        </li>
+
+        <{/if}>
+        <{/foreach}>
+      </ul>
+      </dd>
+    </dl>
+    <{/foreach}>
+  </div>
+</div>
+<{/if}>
+
+
+<{if $SpecSelList || $searchSelect}>
+<div class="division gallery-box clearfix" id="goods-spec-content">
+  <div class="goods-spec">
+    <ul class="clearfix">
+      <{if $SpecSelList}>
+      <{foreach from=$SpecSelList key=SelKey item=SelSpec}>
+      <li>
+        <div class="handle <{if $SelSpec.selected}>selected<{/if}>">
+          <em><{$SelSpec.name}></em>：
+          <{foreach from=$SpecSelList[$SelKey].spec_value key=SelSKey item=SelSpecval}>
+          <{if $SelSpecval.selected}>
+          <{assign var="selectValue" value=$SelSpecval.spec_value}>
+          <{/if}>
+          <{/foreach}>
+          <span class="select">
+            <{if $selectValue}><{$selectValue}><{else}><{t}>请选择<{/t}><{/if}>
+          </span>
+          <{assign var="selectValue" value=''}>
+        </div>
+        <div class="content">
+          <ul class="clearfix">
+            <{foreach from=$SpecSelList[$SelKey].spec_value item=SelSpecval key=SelSkey}>
+            <{if $SelSpec.spec_type=="image"}>
+            <li>
+              <a href="<{selector args=$args filter=$filter key=$SelSpec.type value="{$SelKey},{$SelSkey}"}>">
+                <{if $SelSpecval.spec_image}><img src="<{$SelSpecval.spec_image|default:$env.conf.b2c.spec.default.pic|storager}>" alt="<{$SelSpecval.spec_value}>" title="<{$SelSpecval.spec_value}>" width="20" height="20">
+                <{else}>
+                <img width="20" height="20" title="" alt="" src="<{$default_spec_image_src}>">
+                <{/if}>
+              </a>
+            </li>
+            <{else}>
+            <li>
+              <a href="<{selector args=$args filter=$filter key=$SelSpec.type value="{$SelKey},{$SelSkey}"}>">
+                <span><{$SelSpecval.spec_value}></span>
+              </a>
+            </li>
+            <{/if}>
+            <{/foreach}>
+          </ul>
+        </div>
+      </li>
+      <{/foreach}>
+      <{/if}>
+
+      <{if $searchSelect}>
+      <{foreach from=$searchSelect item=prop key=key}>
+
+      <li>
+        <{if !$property_select}>
+          <div class="handle <{if $prop.options[$prop.value]}>selected<{/if}>">
+            <{assign var="p_value" value=$prop.value}>
+            <em><{$prop.name}>：</em><span class="select"><{$prop.options[$p_value]|default:$___b2c='请选择'|t:'b2c'}></span>
+          </div>
+        <{else}>
+          <{if $prop.show}>
+          <span class="prop-name"><{$prop.name}>:</span>
+          <span class="prop-list">
+            <{foreach from=$searchSelect[$key].options key=skey item=suboptions}>
+
+              <{foreach from=$dprop[$key] key=dkey item=dv}>
+              <{foreach from=$dv item=dvs}>
+              <{if $dvs == $skey}>
+              <{assign var='control' value='1'}>
+              <{/if}>
+              <{/foreach}>
+              <{/foreach}>
+
+              <{foreach from=$prot item=uv}>
+              <{if $uv == $key}>
+              <{assign var='con' value=$key}>
+              <{/if}>
+              <{/foreach}>
+
+              <{if $nprop[$key][$skey]>0 || $con == $key || $prot == null || $control == '1'}>
+                <{if $proparg[$key][0] == $skey}>
+                <a class="selet" href='<{selector args=$args filter=$filter key=$key value=$skey del=1}>'><{$suboptions}></a>
+                <{else}>
+                <a href='<{selector args=$args filter=$filter key=$key value=$skey}>'><{$suboptions}></a>
+                <{/if}>
+                <{assign var='control' value='0'}>
+                <{assign var='con' value='0'}>
+              <{else}>
+                <a class="noplay"><{$suboptions}></a>
+              <{/if}>
+
+            <{/foreach}>
+          </span>
+          <{/if}>
+          <br>
+        <{/if}>
+
+        <div class="content">
+          <ul class="clearfix">
+            <li><a href='<{selector args=$args filter=$filter key=$key value=$skey del=1}>'><span>全部</span></a></li>
+            <{foreach from=$searchSelect[$key].options key=skey item=suboptions}>
+            <li><a href='<{selector args=$args filter=$filter key=$key value=$skey}>'><span><{$suboptions}></span></a></li>
+            <{/foreach}>
+          </ul>
+        </div>
+      </li>
+      <{/foreach}>
+      <{/if}>
+    </ul>
+  </div>
+</div>
+<script>
+  /*处理规格下拉模式的换行*/
+  window.addEvent('domready',function(){
+    var handles=$$('.GoodsSelector .goods-spec .handle');
+    if(!handles||!handles.length)return;
+    // var tempSelectLineTop=handles[0].getPosition().y;
+    // var tempSlipIndex=0;
+    var tempCurrentIndex=-1;
+    var contents=$$('.GoodsSelector .goods-spec .content');
+    var handleP = handles[0].getParent('ul');
+    Browser.ie6 && contents.setStyle('width',handleP.getSize().x - handleP.getPatch().x);
+    handles.each(function(select,index,selects){
+
+      /*var top=select.getPosition().y;
+      if(top>tempSelectLineTop+10){
+        $$(contents.slice(tempSlipIndex,index)).inject(select,'before');
+        tempSlipIndex=index;
+        tempSelectLineTop=top;
+      }*/
+
+      select.addEvent('click',function(e){
+        e.stop();
+        if(tempCurrentIndex>=0&&tempCurrentIndex!=index){
+          selects[tempCurrentIndex].removeClass('curr');
+          contents[tempCurrentIndex].removeClass('content-curr');
+        }
+        tempCurrentIndex=index;
+        this.toggleClass('curr');
+        contents[index].toggleClass('content-curr');
+
+      });
+    });
+  });
+</script>
+<{/if}>

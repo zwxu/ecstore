@@ -1,0 +1,18 @@
+
+<div id="catalog-x" class="catalog">
+    <div id="selectCat">
+        <{if $cat_path}>
+            <{foreach from=$cat_path item=item key=key}>
+                <h2 pid="<{$item.parent_id}>" class="subs"><span><{$item.cat_name}></span></h2>
+            <{/foreach}>
+        <{else}>
+        <h2 id="unlimit" class="cat-no-child subs"><strong><{t}>分类不限<{/t}></strong></h2>
+        <{/if}>
+    </div>
+    <ul class="cat-group">
+        <{foreach from=$cats item=item key=key}>
+        <li has_child="<{if $item.child_count>0}>1<{else}>0<{/if}>" type_id="<{$item.type_id}>" pid="<{$item.parent_id}>" id="<{$item.cat_id}>"><span class="cat-child"><{$item.cat_name}></span><{if $item.child_count>0}><a class="subs" id="<{$item.cat_id}>" title="<{t}>点击选择子类<{/t}>" href="javascript:void(0);">&nbsp;</a><{/if}></li>
+        <{/foreach}>
+    </ul>   
+</div>
+

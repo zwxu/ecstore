@@ -1,0 +1,50 @@
+<services> 
+    <service id="desktop_finder.spike_mdl_activity">
+        <class>spike_finder_spike</class>
+    </service>
+
+    <service id="desktop_finder.spike_mdl_spikeapply">
+        <class>spike_finder_spikeapply</class>
+    </service>
+
+    <service id="spike_spike_activity">
+      <class>spike_business_activity</class>
+    </service>
+
+    <service id="spike_products_index_info">
+        <class>spike_site_product_index_info</class>
+    </service>
+
+    <service id="spike_products_index_btn">
+        <class>spike_site_product_btn_fastbuy</class>
+    </service>
+
+    <service id="view_helper">
+        <class>spike_view_helper</class>
+    </service>
+
+    <service id="spike_order.create">
+        <class>spike_order_create_after</class>
+    </service>
+
+    <service id="b2c_cart_process_apps">
+        <class>spike_cart_process_goods</class>
+    </service>
+
+    <service id="spike_cart_object_apps">
+        <class>spike_cart_object_goods</class>
+        <class>spike_cart_object_coupon</class>
+    </service>
+
+    <service id="spike_addtocart_check">
+        <class>spike_cart_object_goods</class>
+    </service>
+
+    <service id="site_view_helper">   
+        <class>spike_view_helper</class>
+    </service>
+
+     <service id="spike_cart_render_items_apps">
+        <class>spike_cart_render_item_goods</class>
+    </service>
+</services>

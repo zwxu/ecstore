@@ -1,0 +1,102 @@
+﻿*{margin:0px;padding:0px;}
+ol li{ list-style:none; margin:0;}
+.le_zhi{float:left;}
+.ri_zhi{float:right;}
+.cl_zhi{clear:both;height:0px;line-height:0px;font-size:0px;}
+.main_center{width:1000px;margin:0 auto;}
+
+/*------------------------------卖家中心--------------------------*/
+.sell_h1{font-size:15px;margin:22px 0px 10px;}
+.sell_le>h2{background:url(../images/mem_03.gif) repeat-x;width:137px;border:1px solid #a00404;height:31px;line-height:31px;padding-left:10px;font-size:12px;color:#fff;}
+.sell_le_kind{border:1px solid #e9e9e9;width:147px;}
+.sell_le_kind>h3{background:url(../images/mem_07.gif) repeat-x;height:29px;border-bottom:1px solid #ededed;color:#333;line-height:30px;font-size:12px;}
+.sell_le_kind>h3>span{background:url(../images/mem_10.gif) 120px center no-repeat;display:inline-block;width:137px;height:30px;padding-left:10px;}
+.sell_le_kind>ul li{list-style:none;}
+.sell_le_kind>ul li a{height:25px;line-height:25px;text-decoration:none;padding-left:20px;font-size:12px;color:#333;}
+.sell_le_kind>ul li a:hover{color:#e40303;}
+.sell_le_kind>ul li a.hover{color:#e40303;}
+
+.sell_ri{width:960px; background:#fff; padding:10px 10px 20px 10px;}
+.sell_ri_top{background:#f4f4f4;border-bottom:1px solid #3698dc;padding:10px;display:block;overflow:hidden;}
+.sell_ri_top_le{width:130px;text-align:center;height:170px;}
+.sell_ri_top_le>a{display:block;width:130px;height:130px;background:#2A7FFF;-webkit-border-radius:2px;-moz-border-radius:2px;-ms-border-radius:2px;-o-border-radius:2px;border-radius:2px;}
+.sell_ri_top_le>a>img{border:0px;width:130px;height:130px;}
+.sell_ri_top_le>p{height:30px;line-height:30px;}
+.sell_ri_top_ri{width:800px;}
+.tit{ height:30px;line-height:30px;margin:5px 0px;color:#666;}
+.tit>span{ margin:0 10px;}
+.order_info_le{padding-right:10px;width:500px;padding:0px 10px 0px 0px;}
+.order_info_le > ul li{float:left;list-style:none;border:1px solid #d9d9d9;height:58px;line-height:30px; width:220px;padding:10px; margin:0 8px 10px 0; background:#fff; border-radius:5px;}
+.order_info_le > ul li strong{ width:85px; height:38px; margin-top:12px; float:left; display:inline-block;font-size:16px; color:#444444;}
+.order_info_le > ul li strong b{ width:35px; height:35px; display:inline-block; background:url(../images/sell_icon.gif) no-repeat; vertical-align:middle;}
+.order_info_le > ul li strong b.icon01{ background-position:0 0;}
+.order_info_le > ul li strong b.icon02{background-position:-95px 0;}
+.order_info_le > ul li strong b.icon03{background-position:0 -90px;}
+.order_info_le > ul li strong b.icon04{background-position:-95px -90px;}
+.order_info_le > ul li span{ display:block; color:#000;}
+.order_info_le > ul li span a{color:#000;}
+.order_info_le > ul li span font{ color:#006cd9;}
+.order_info_ri td,.order_info_ri th{border-bottom:1px solid #e5e5e5;width:120px;font-size:12px;height:30px;text-align:center;}
+.order_info_ri th{color:#000;font-weight:bold;}
+.order_info_ri{ width:280px; height:170px; background:#fff; border:1px solid #d9d9d9; border-radius:5px;}
+.order_info_ri td{}
+.order_info_le>ul lispan 
+.color_1{color:#666;}
+.color_2,.color_2 a{color:#0578b9;}
+.color_2>span,.color_2 a{color:#ff663d;}
+.width_472{width:472px;}
+.width_960{width:960px;}
+.p_tit{background:url(../images/s1.gif) left center no-repeat;height:27px;}
+.Plate>h4>div>span{background:url(../images/s2.gif) right center no-repeat;height:27px;padding-right:15px;display:inline-block;line-height:30px;color:#0578b9;font-size:12px;font-weight:bold;padding-left:11px;margin-left:4px;}
+.Plate>h4,.Plate2>h4{margin:0 0;}
+.Plate,.Plate2{margin:10px 0px 0 0;}
+.Plate_info{border:1px solid #e6e6e6;border-top:0;padding:10px 0px;min-height:180px;}
+.Plate2{background:url(../images/tu.gif) no-repeat 10px 70px;}
+.bind{background:url(../images/s_15.gif) no-repeat;width:91px;line-height:26px;height:26px;text-align:center;color:#fff;display:block;text-decoration:none;font-size:12px;}
+a.bind:hover{color:#ffffff;}
+.Plate_info_le>img{margin-top:20px;margin-bottom:20px;width:99px;height:79px;}
+.Plate_info_le{padding-left:20px;}
+.Plate_info_ri{width:218px;}
+.Plate_info_ri>p{line-height:25px;height:25px;}
+.mt20{margin-top:20px;}
+.Plate_info_ul{width:445px;margin-left:9px;}
+.Plate_info_ul li{height:30px;line-height:30px;*height:28px;*line-height:28px;display:block;overflow:hidden;}
+.Plate_info_ul li a{font-size:12px;height:30px;line-height:30px;*height:28px;*line-height:28px;display:block;overflow:hidden;}
+.Plate_info_ul li a>strong{font-weight:normal;color:#333;float:left;}
+.Plate_info_ul li a:hover>strong{color:#e40303;}
+.Plate_info_ul li a>span{color:#666;}
+.line{border-top:1px solid #3698dc;margin:10px 0px;}
+.Plate_info_table_div{display:block;overflow:hidden;margin-left:10px;width:445px;}
+.Plate_info_table{background:url(../images/numeral.gif) no-repeat 0 7px;padding-left:20px;display:block;overflow:hidden;}
+.Plate_info_table li{ height:30px; line-height:30px;}
+.Plate_info_table span{ float:right;}
+.Plate_info_table th{color:#666;width:80px;}
+.Plate_info_table th,.Plate_info_table td{height:20px;color:#666;}
+.Plate_info_table td>span{color:#a7a7a7;font-weight:bold;}
+.sell_mem_newslb{ margin-right:15px;}
+.push{padding-top:10px ;border-top:1px solid #dcdcdc;padding-left:25px;}
+.push li{float:left;list-style:none;font-size:12px;}
+.push li a{text-decoration:none;margin:0 5px;color:#646464;}
+.push li strong{color:#666;font-weight:bold;}
+.Plate_info_table_2{padding:15px 10px;display:block;overflow:hidden;}
+.Plate_info_table_2 tr td{border-bottom:1px solid #E6E6E6;height:40px;text-align:center;}
+.Plate_info_table_2 th{background:url(../images/b1.gif) repeat-x 0 -205px;height:38px;border:1px solid #BCC1A3;text-align:center;font-size:14px;}
+.Yellow_bg{position:absolute;background:url(../images/b1.gif) repeat-x 0 -248px;height:42px;border:1px solid #B1770B;text-align:center;font-size:14px;width:100px;top:21px;left:10px;line-height:42px;}
+.width_95{width:100px;}
+.width_70{width:70px;}
+.width_110{width:110px;}
+.width_210{width:210px;}
+.td_color_1{color:#ed0000;}
+.td_color_2{color:#019667;}
+.Plate_info_table_2 tr td>span{margin:0 5px;}
+.tac{text-align:center;}
+.Plate_info_p{margin:30px auto;color:#0579c6;}
+.Plate_info_p>span{font-size:16px;font-weight:bold;}
+.Plate_info_p>a{padding-left:15px;text-decoration:none;color:#0579c6;}
+.Plate_info_p>strong{color:#666;font-weight:normal;}
+.button_1,.button_2{background:#5AC559;width:118px;height:32px;line-height:32px;color:#fff;text-align:center;font-size:16px;
+-webkit-border-radius:50px;-moz-border-radius:50px;-ms-border-radius:50px;-o-border-radius:50px;border-radius:50px;}
+.button_2{background:#398DFF;}
+.button_1 a,.button_2 a,.button_1 a:hover,.button_2 a:hover{color:#fff;font-weight:bold;}
+
+.tac .width_210{margin:0 auto;}

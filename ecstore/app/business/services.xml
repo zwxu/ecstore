@@ -1,0 +1,127 @@
+<services> 
+    <service id="desktop_finder.business_mdl_storegrade">
+        <class>business_finder_storegrade</class>
+    </service>
+
+    <service id="desktop_finder.business_mdl_storecat">
+        <class>business_finder_storecat</class>
+    </service>
+
+    <service id="extend_filter_business_mdl_storemanger">
+        <class>business_finder_extend_storemanger</class>
+    </service>
+
+
+    <service id="desktop_finder.business_mdl_violation">
+        <class>business_finder_violation</class>
+    </service>
+
+    <service id="desktop_finder.business_mdl_storeviolation">
+        <class>business_finder_storeviolation</class>
+    </service>
+
+    <service id="desktop_finder.business_mdl_storeregion">
+        <class>business_finder_storeregion</class>
+    </service>
+
+    <service id="desktop_finder.business_mdl_storemanger">
+        <class>business_finder_storemanger</class>
+    </service>
+
+    <service id="business.api_verify_store">
+        <class>business_api_verify_store</class>
+    </service>
+
+
+
+    <service id="desktop_finder.business_mdl_storeroles">
+        <class>business_finder_storeroles</class>
+    </service>
+
+    <service id="html_input">
+        <class>business_view_input</class>
+    </service>
+    
+    <service id="b2c.footer.shop.set.extends">
+        <class>business_view_input</class>
+    </service>
+
+    <service id="desktop_finder.business_mdl_storemember">
+        <class>business_finder_storemember</class>
+    </service>
+
+    <service id="desktop_finder.business_mdl_storebrand">
+        <class>business_finder_storebrand</class>
+    </service>
+
+
+    <service id="business.member_menu_extends">
+        <class>business_member_menuextends</class>
+    </service>
+
+	<service id="business.business_menugoodcat">
+        <class>business_business_menugoodcat</class>
+    </service>
+
+    <service id="desktop_finder.business_mdl_brand">
+	    <class>business_finder_brand</class>
+    </service>
+
+    <service id="business.addshopid">
+	    <class>business_shopid</class>
+    </service>
+
+    <service id="b2c_cart_process_apps">
+        <class>business_cart_process_business</class>
+    </service>
+
+    <!-- <service id="b2c_cart_render_items_goods_apps">
+        <class>business_cart_render_item_goods_business</class>
+    </service> -->
+
+    <service id="b2c.checkout_recsave_checkbox">
+        <class>business_cart_checkout</class>
+    </service>
+
+   <service id="business.member_orders">
+	    <class>business_member_orders</class>
+   </service>
+    <service id="business.member_comment">
+	    <class>business_member_comment</class>
+   </service>
+   <service id="desktop_finder.ectools_mdl_refunds">
+	    <class>business_finder_balance</class>
+   </service>
+   <service id="firevent_type">
+	    <class>business_member_orders</class>
+   </service>
+  <service id="business_check_goods_isMy">
+	    <class>business_cart_objects</class>
+   </service>
+    <!-- <service id="b2c_site_goods_detail_block">
+        <class>business_site_goods_detail_block_promotion</class>
+    </service> -->
+    <service id="desktop_finder.business_mdl_theme">
+        <class>business_finder_theme</class>
+    </service>
+
+    <service id="business_activity_cat">
+        <class>business_activity_cat</class>
+    </service>
+    <service id="business_activity_apply_tag">
+        <class>business_activity_apply_tag</class>
+    </service>
+
+    <service id="b2c_mdl_orders.filter">
+		<class>business_service_order_filter</class>
+    </service>
+    <service id="b2c_mdl_goods.filter">
+		<class>business_service_goods_filter</class>
+    </service>
+    <service id="business_mdl_storemember.filter">
+		<class>business_service_store_member_filter</class>
+    </service>
+	<service id="site_display_errorpage.conf">
+        <class>business_errorpage_display</class>
+    </service>
+</services>

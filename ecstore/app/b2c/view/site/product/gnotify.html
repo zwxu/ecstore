@@ -1,0 +1,66 @@
+<div class="goods-info-wrap width_1200">
+    <table width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="1"><div class="goodspic"><a href="#" target="_blank"><img src="<{$goods.image_default|gimage:'small'}>" alt="<{$product.name}>" id="product_image" style="display:none" /></a></div></td>
+    <td valign="top"><h1 class="goodsname"><span><a class="font-blue" href="<{link app=b2c ctl=site_product act=index arg=$goods.goods_id }>"><{$goods.name}></a></span></h1>
+    <ul class="goodsprops clearfix">
+    <{if $goods.bn}>
+    <li><span><{t}>货号：<{/t}></span><span><{$goods.bn}></span></li>
+    <{/if}>
+    <{if $goods.brand_name}>
+    <li><span><{t}>商品品牌：<{/t}></span><span><{$goods.brand_name}></span></li>
+    <{/if}>
+    <{if $goods.weight}>
+    <li><span><{t}>商品重量：<{/t}></span><span><{$goods.weight}><{t}> 克(g)<{/t}></span></li>
+    <{/if}>
+    <{if $goods.score}>
+    <li><span><{t}>所得积分：<{/t}></span><span><{$goods.score}></span></li>
+    <{/if}>
+    <{if $trading.score && $trading.score <> $goods.score}>
+    <li><span><{t}>特价积分：<{/t}></span><span><{$trading.score}></span></li>
+    <{/if}>
+    <{if $goods.mktprice && $goods.setting.mktprice}>
+    <li><span><{t}>市场价：<{/t}></span><span class="mktprice1"><{$goods.mktprice|cur_odr}></span></li>
+    <{/if}>
+    <{if count($goods.products)<2}>
+    <li><span><{t}>销售价：<{/t}></span><span class="font-red fontbold"><{$goods.price|cur_odr}></span></li>
+    <{if $goods.mktprice > $goods.price && $goods.setting.mktprice && $goods.setting.saveprice > 0}>
+    <li><span></span><{if $goods.setting.saveprice == 1}><{t}>节省：<{/t}><{$goods.mktprice-$goods.price|cur_odr}>
+          <{elseif $goods.setting.saveprice == 2}><{t}>优惠:<{/t}><{$goods.price/$goods.mktprice*100|number:'2'}>%
+		  <{elseif $goods.setting.saveprice == 3}><{$goods.price/$goods.mktprice*10|number:'1'}><{t}>折<{/t}>
+		  <{/if}></li>
+         <{/if}>
+    <{/if}>
+    </ul>
+    <a class="btn-a" href="<{link app=b2c ctl=site_product act=index arg=$goods.goods_id }>"><span><{t}>查看详细<{/t}></span></a>
+
+  </td>
+  </tr>
+</table>
+<div class="FormWrap">
+<h4><{t}>缺货登记<{/t}></h4>
+<p style="padding:5px 0"><{t}>该货品暂时缺货，请在下面输入您的E-mail地址，当我们有现货供应时，我们会发送邮件通知您！<{/t}></p>
+<div class="division">
+
+<form method="POST" action="<{link app=b2c ctl=site_product act=toNotify}>">
+  <input type="hidden" name="item[0][goods_id]" value="<{$goods.goods_id}>">
+  <input type="hidden" name="item[0][product_id]" value="<{$goods.product_id}>">
+
+    <table border="0" cellspacing="0" cellpadding="0" class="forform">
+  <tr>
+    <th><{t}>您的邮箱:<{/t}></th>
+    <td><{input type='text' vtype="email" class="_x_ipt x-input inputstyle" name="email" size="30" value=$member.email}></td>
+    <td style="padding-top:3px">
+    <th><{t}>手机号:<{/t}></th>
+    <td><{input type='text' vtype="number" class="_x_ipt x-input inputstyle" name="cellphone" size="30" }></td>
+    <td style="padding-top:3px">
+	  <{button type="submit" label=$___b2c="提交"|t:'b2c' rel="_request"}>
+	</td>
+  </tr>
+</table>
+
+
+
+</form>
+</div></div>
+</div>

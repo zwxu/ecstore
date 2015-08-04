@@ -1,0 +1,22 @@
+<{assign var=tmp value=$goods.product}>
+<{assign var=product0bn value=$tmp|array_shift}>
+<div class="basic-info">
+  <ul class="goods-info-list clearfix">
+    <{if $goods.bn && $goodsBnShow != 'false'}><li><span><{t}>赠品编号：<{/t}></span><em><{$goods.bn}></em></li><{/if}>
+    <{if $goods.product_bn || $product0bn.bn}><li><span><{t}>货号：<{/t}></span><span id="goodsBn"><{if $goods.product_bn}><{$goods.product_bn}><{else}><{$product0bn.bn}><{/if}></span></li><{/if}>
+    <li><span><{t}>赠品分类：<{/t}></span><em><{$gift.cat.cat_name}></em></li>
+    <{if $goods.price && $goods.price != 0.00 }><li><span><{t}>赠品价格：<{/t}></span><span id="goodsWeight" class="price1"><{$goods.price|cur}></span></li><{/if}>
+    <li><span><{t}>兑换起始时间：<{/t}></span><em><{$gift.from_time|userdate}></em></li>
+    <{if $goods.store}><li><span><{t}>库存数量：<{/t}></span><em><{$goods.store}></em></li><{/if}>
+    <li><span><{t}>兑换截止时间：<{/t}></span><em><{$gift.to_time|userdate}></em></li>
+    <li><span><{t}>数量限制：<{/t}></span><em><{if empty($gift.max_buy_store) && $gift.max_buy_store!==0}><{t}>无数量限制<{/t}><{else}><{$gift.max_buy_store}><{/if}></em></li>
+    <li ><span><{t}>兑换所需积分：<{/t}></span><em class="price1"><{$gift.consume_score}></em></li>
+    <li class="spec" style="white-space:normal;"><span><{t}>兑换级别：<{/t}></span>
+       <{if is_array($member_lv)}>
+         <{foreach from=$member_lv item=level}><span class="font-blue"><{$level.name}></span>&nbsp;&nbsp;<{/foreach}>
+       <{else}>
+         <{t}>无<{/t}>
+       <{/if}>
+    </li>
+ </ul>
+</div>

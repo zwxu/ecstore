@@ -1,0 +1,214 @@
+<{area inject=".mainHead"}>
+<select id="filter-item-select-<{$finder_id}>" style="width:100%">
+  <option>筛选项设置</option>
+  <optgroup label="<{t}>筛选项<{/t}>">
+    <{foreach from=$columns item=item key=key}>
+    <{if $item.filtertype}>
+    <option value="<{$key}>">
+    <{$item.label}><{if $item.filtertype && $item.filterdefault}> √<{/if}>
+    </option>
+    <{/if}>
+    <{/foreach}>
+  </optgroup>
+  <optgroup label="<{t}>全部<{/t}>">
+    <option value="_UNSELECTALL_"><{t}>取消<{/t}></option>
+    <option value="_SELECTALL_"><{t}>使用<{/t}></option>
+  </optgroup>
+</select>
+<{/area}>
+
+<div id='filter-list-<{$finder_id}>' class="filter-list">
+  <{foreach from=$columns key=c item=v}>
+  <dl k="<{$c}>" <{if $v.filtertype && $v.filterdefault}><{else}>style="display:none;"<{/if}>>
+    <dt><{if $v.label}><{$v.label}><{$v.addon}>：<{/if}></dt>
+    <dd><{$v.inputer}></dd>
+  </dl>
+  <{/foreach}>
+</div>
+<script>
+  void function(){
+    /** 清空所有radio的值 **/
+    var radio_def = function(){
+      $$('#filter-list-<{$finder_id}> input[type=radio]').each(function(item){
+        $(item).checked = false;
+      });
+    }
+
+    radio_def();
+
+    var tmp_str = " √";
+
+    var filter_select = $('filter-item-select-<{$finder_id}>');
+    var fs_gp = filter_select.getElements('optgroup');
+
+    filter_select.addEvent('change',function(p_s){
+      var _fn = arguments.callee;
+      if($type(p_s)!='element')p_s = null;
+      var cur_sel = $pick(p_s,filter_select.getSelected()[0]);
+
+      var k = cur_sel.value;
+      var v = cur_sel.text;
+
+      if(k.match(/_([\s\S]+)ALL_/)){
+        if(k=='_UNSELECTALL_'){
+          fs_gp[0].getElements('option').each(function(_p_s){
+            if(_p_s.text.slice(-2)==tmp_str){_fn(_p_s);}
+          });
+        }
+        if(k=='_SELECTALL_'){
+          return fs_gp[0].getElements('option').each(function(_p_s){
+            if(_p_s.text.slice(-2)!=tmp_str){_fn(_p_s);}
+          });
+        }
+        }else{
+        if(v.slice(-2)==tmp_str){
+          $$('#filter-list-<{$finder_id}> dl[k='+k+']')[0]['hide']();
+          cur_sel.text = v.replace(tmp_str,'');
+          }else{
+          $$('#filter-list-<{$finder_id}> dl[k='+k+']')[0]['show']();
+          cur_sel.text +=tmp_str;
+        }
+
+      }
+
+      filter_select.selectedIndex = 0;
+
+    });
+
+
+    /*var filter_selects = $$('#filter-select-<{$finder_id}> input[type=checkbox]').addEvent('click',function(e){
+      if(e)
+      e.stopPropagation();
+      var _key = this.value;
+      var _check = this.checked;
+      var f_item = $$('#filter-list-<{$finder_id}> dl[k='+this.value+']')[0];
+      if(_check){
+        f_item.inject(f_item.getParent()).show();
+        }else{
+        f_item.hide();
+      }
+
+    });
+
+
+    $('filter-select-<{$finder_id}>').addEvents({
+
+      'selectall':function(){
+
+        filter_selects.set('checked',true);
+        filter_selects.fireEvent('click');
+      },
+      'unselectall':function(){
+
+        filter_selects.removeProperty('checked');
+        filter_selects.fireEvent('click');
+
+      }
+
+    });*/
+
+
+
+    var filter_<{$finder_id}> = new Filter('filter-list-<{$finder_id}>','<{$finder_id}>',{
+      onChange:function(){
+
+      }
+    });
+
+    //filter_<{$finder_id}>.retrieve();
+
+    $('filter-submit-<{$finder_id}>').addEvent('click',function(){
+      filter_<{$finder_id}>.update();
+    });
+
+    $('filter-reset-<{$finder_id}>').addEvent('click',function(){
+      reset($('filter-list-<{$finder_id}>'));
+      $('filter-list-<{$finder_id}>').getElements('input.cal').each(function(dpi){
+        dpi.makeCalable();
+      });
+      radio_def();
+    });
+
+    function reset(el){
+      el.getElements('input[type=text],input[type=hidden]').each(function(item){ item.value=''; });
+      el.getElements('select').each(function(item){
+        if(!$(item)) return;
+        var option = item.getElement('option');
+        if(option && !option.selected){
+          item.value = option.value;
+          if(item.getParent('[package]')){
+            selectArea(item,item.value,2);
+          }
+          item.fireEvent('change');
+        }
+      });
+
+      el.getElements('input[type=radio]').each(function(item){ item.checked=false; });
+      if(el.getElement('.object-select')){
+        var label = el.getElement('.object-select .label');
+        label.set('html',label.get('rel') || '');//.getNext('input[type=hidden]').set('value','');
+      }
+    }
+
+
+    Ex_Loader("picker",function(){
+      $$('#filter-list-<{$finder_id}> input[type=text]').addEvent('keyup',function(e){
+        if(e.code==13){
+          $('filter-submit-<{$finder_id}>').fireEvent('click');
+        }
+      });
+      $$('#filter-list-<{$finder_id}> input[vtype=date]').setStyles({'display':'block','margin':1});
+    });
+
+    /*
+    $$('#filter-list-<{$finder_id}> dl').addEvents({
+      'mouseenter':function(){this.addClass('over')},
+      'mouseleave':function(){this.removeClass('over')}
+    });
+    */
+
+    $ES('select[search^=1]','#filter-list-<{$finder_id}>').each(function(ipt){
+      ipt.addEvent('change',function(e){
+        var dl=this.getParent('dl'),field_name=$E('input[type=text]',dl).name;
+
+        if('between'==this.value){
+          var obj=dl.getElement('dd');
+          this.getParent('dl').store(':dd',obj.innerHTML);
+          var to= new Element('dd',{'html':'<{t}>小于等于<{/t}>'+obj.innerHTML}).inject(obj,'after');
+          var from=new Element('dd',{'html':'<{t}>大于等于<{/t}>'+obj.innerHTML}).inject(obj,'after');
+          replace_name(from,'_from');
+          replace_name(to,'_to');
+          new Element('input',{'type':'hidden','class':'ipt','name':field_name,'value':'1'}).inject(obj,'after');
+          obj.destroy();
+          }else{
+          if(dl.getElements('dd').length>1){
+            dl.getElements('dd').each(function(el){
+              el.empty().destroy();
+            });
+            if(dl.getElement('.ipt'))dl.getElement('.ipt').destroy();
+            new Element('dd',{'html':dl.retrieve(':dd')}).inject(dl);
+          }
+        }
+
+        $(dl).getElements('input.cal').each(function(dpi){
+          dpi.makeCalable();
+        });
+
+      });
+    });
+
+    var replace_name=function(box,nice){
+      var n=$E('input[type=text]',box).name;
+      $$(box.getElements('input'),box.getElements('select')).each(function(el){
+        el.name=el.name.replace(n,n+nice);
+      });
+    }
+  }();
+</script>
+
+<{area inject=".mainFoot"}>
+<div class="table-action" style="height:auto;padding:0;margin:0;line-height:normal">
+  <{button class="btn-primary" id="filter-submit-{$finder_id}" label=$___desktop="立即筛选"|t:'desktop'}>
+  <{button class="btn-secondary" id="filter-reset-{$finder_id}" label=$___desktop="清除条件"|t:'desktop'}>
+</div>
+<{/area}>

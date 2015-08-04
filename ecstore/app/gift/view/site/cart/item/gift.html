@@ -1,0 +1,65 @@
+<{if $aCart.object.gift}>
+  <{foreach from=$aCart.object.gift key=key item=gift}>
+    <{foreach from=$gift item=goods}>
+    <{if $goods.disabled==='true'}><{continue;}><{/if}>
+     <{if $key=='cart'}>
+      <tr urlupdate="<{link app=b2c ctl='site_cart' act='update' arg0="gift" }>" store="<{$goods.quantity}>" urlremove="<{link app=b2c ctl='site_cart' act='remove' arg0="gift"  }>" number="<{$goods.params.real}>" g_name="<{$goods.name}>" floatstore="0" consume_score="<{$goods.consume_score}>" store="<{$goods.store}>" buy_store="<{$goods.quantity}>" >
+     <{else}>
+      <tr order_rule_id="<{$goods.rule_id|implode:','}>" urlremove="<{link app=gift ctl='site_gift' act='remove_cart_to_disabled' arg0='gift' arg1='order' arg2=$goods.product_id }>" >
+     <{/if}>
+        <td>
+            <div class="ml50 horizontal-m clearfix">
+
+            <div class='cart-product-img goodpic' isrc="<{$goods.default_image.thumbnail|default:$defaultImage|storager:'s'}>" ghref='<{link app=gift ctl=site_gift arg0=$goods.goods_id }>' style='width:50px;height:50px;'>
+                <img src='<{$res_url}>/loading.gif'/>
+             </div>
+
+              <div class="goods-main">
+             <div style="width:69%" class="goodinfo">
+                 <a target="_blank" href="<{link app=gift ctl=site_gift arg0=$goods.goods_id }>"><{$goods.name}></a>
+                 <{$goods.spec_info}>
+                 <!-- 去掉<{$key!='cart时 不显示"赠"'}> -->
+                 <input type="button" name="button" id="button" value="<{t}>赠<{/t}>" class="present-btn" />
+             </div>
+            </div>
+        </td>
+        <td class="cart-goodsprice point">
+            <{$goods.price.buy_price|cur_odr}>
+        </td>
+        <td align="center">
+        <{if !$checkout && $key=='cart'}>
+            <div class="Numinput">
+                <input type="text" class="_x_ipt textcenter" numtype="<{if $goods.floatstore === '1'}>float<{else}>int<{/if}>"  name="modify_quantity[<{$goods.obj_ident}>]" size="3" value="<{$goods.quantity}>" onchange="if(Cart)Cart.ItemNumUpdate(this,this.value,event);"/>
+                <div class="numadjust-arr"><span class="numadjust increase" ></span>
+                <span class="numadjust decrease"></span></div><h3 class="t" style="display:none">(<{t}>提示<{/t}>:<{t}>需要备货<{/t}>)</h3>
+            </div>
+        <{else}>
+            <{$goods.quantity}>
+        <{/if}>
+        </td >
+        <{if $key!='cart'}>
+            <td  align="center"><{t}>订单赠送<{/t}></td>
+        <{else}>
+        <td class="buy_price" align="center">
+            <{t}>积分兑换<{/t}>
+        </td>
+        <{/if}>
+
+        <td class="consume_score" align="center"><{if $key!='cart'}>0<{else}>-<{$goods.quantity*$goods.consume_score}><{/if}></td>
+        <{if !$checkout}>
+        <td  align="vm">
+            <{if $key=='cart'}>
+            <ul class="cart-coll-ul">
+                <li><a class="CartNav_del delItem member-btn-bj "><i class="has-icon"> <img src='<{$env.app.res_url}>/bundle/delecate.gif' /></i><span style='cursor:pointer' class="delItem" ><{t}>删除<{/t}></span></a></li>
+            </ul>
+            <{else}>
+            &nbsp;
+            <{/if}>
+        </td>
+        <{/if}>
+       </tr>
+     <{/foreach}>
+   <{/foreach}>
+<{/if}>
+
+

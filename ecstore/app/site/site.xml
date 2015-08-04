@@ -1,0 +1,27 @@
+<site>
+    <module controller='default'>
+        <name>index</name>
+        <title>首页</title>
+        <disable>false</disable>
+        <allow_menu act='index'>首页</allow_menu>
+        <default_menu>
+            <title>首页</title>
+            <act>index</act>
+            <hidden>false</hidden>
+        </default_menu>
+    </module>
+
+    <module controller='sitemaps'>
+        <name>sitemaps</name>
+        <title>网站地图</title>
+		<extension>xml</extension>
+        <disable>false</disable>
+    </module>
+
+    <module controller='proinstance'>
+        <name>widgetsproinstance</name>
+        <title>挂件实例展示</title>
+        <disable>false</disable>
+    </module>
+
+</site>

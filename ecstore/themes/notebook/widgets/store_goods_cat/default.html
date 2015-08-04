@@ -1,0 +1,28 @@
+<h4><{$data.title}></h4>
+<div class="pro_kind">
+    <h5><!--<span class="plus"></span>--><a href='<{link app=business ctl=site_shop act=gallery arg0=$data.store_id}>'"><span>查看所有宝贝》</span><span class="cl_zhi"></span></a></h5>
+    <{foreach from=$data.cats item=cat}>
+    <p><span <{if $cat.child_cats}>class="plus"<{else}>class="mius"<{/if}>></span><a href='<{link app=business ctl=site_shop act=gallery arg0=$data.store_id arg1="c,{$cat.cat_id}"}>'><span><{$cat.cat_name}></span><span class="cl_zhi"></span></a>
+    <{foreach from=$cat.child_cats item=child_cat}><a href='<{link app=business ctl=site_shop act=gallery arg0=$data.store_id arg1="c,{$child_cat.cat_id}"}>' class="plus_2"><{$child_cat.cat_name}></a><{/foreach}>
+    </p>
+    <{/foreach}>
+</div>
+<script>
+    (function(){ 
+        $$("span.mius","span.plus").addEvent("click",function(){
+            if(this.hasClass("plus")){
+                this.removeClass("plus");
+                this.addClass("mius");
+                this.getParent("p").getChildren("a.plus_2").setStyle("display","none");
+                return;
+            }
+            if(this.hasClass("mius")){
+                this.removeClass("mius");
+                this.addClass("plus");
+                this.getParent("p").getChildren("a.plus_2").setStyle("display","");
+                return;
+            }
+
+        });
+    })();
+</script>

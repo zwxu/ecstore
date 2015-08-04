@@ -1,0 +1,11 @@
+<services>
+
+	<service id="setup_pre_installfinish">
+		<class>entermembercenter_setup_preinstallfinsh</class>
+	</service>
+	
+	<service id="app_pre_auth_use">
+		<class>entermembercenter_auth_use</class>
+	</service>
+
+</services>

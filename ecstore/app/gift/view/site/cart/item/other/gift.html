@@ -1,0 +1,26 @@
+<{if $aCart.object.gift.order}>
+<div id="cart-total-item" class="total-item"> 
+    <h3><{t}>订单获得的赠品<{/t}></h3>
+    <div class="division">
+    <table width="100%" cellspacing="0" cellpadding="3" class="liststyle data">
+        <thead>
+          <tr>
+            <th><{t}>赠品名称<{/t}></th>
+            <th><{t}>数量<{/t}></th>
+          </tr>
+        </thead>
+        <tr>
+
+            <{foreach from=$aCart.object.gift.order item=item}>
+        	<td>
+                <{$item.name}>
+            </td>
+            <td>
+                <{$item.quantity}>
+            </td>
+            <{/foreach}>
+        </tr>
+    </table>
+    </div>
+</div>
+<{/if}>

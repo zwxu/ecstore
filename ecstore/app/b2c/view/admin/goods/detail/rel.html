@@ -1,0 +1,4 @@
+<h3><{t}>相关商品<{/t}></h3>     
+<div class="tableform">
+<{input type="object" object="goods" filter=$goodslink_filter multiple="true" return_url="{$related_return_url}" rowselect="true"  textcol="name" name="linkid" value=$goods.glink.items view="b2c:admin/goods/detail/rel_items.html"}>
+</div>

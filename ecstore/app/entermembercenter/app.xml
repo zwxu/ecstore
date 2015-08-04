@@ -1,0 +1,19 @@
+<app version="0.1">
+    <name>企业用户中心</name>
+
+    <description>安装、验证、获取企业用户信息</description>
+
+    <author>
+        <name>BBC 开发团队</name>
+        <email></email>
+        <url></url>
+    </author>
+
+    <version>0.1</version>
+    <license>BBC license</license>
+
+	<depends>
+		<app>setup</app>
+		<app>desktop</app>
+	</depends>
+</app>

@@ -1,0 +1,15 @@
+<desktop>
+    <permissions>
+        <permission id="complain" display='true' parent='0'>投诉管理</permission>
+        <permission id="reports" display='true' parent='0'>举报管理</permission>
+    </permissions>
+    <workground name="客服" id="b2c.wrokground.complain" controller="admin_complain" action="index" order='30'>
+        <menugroup name="投诉管理">
+            <menu controller='admin_complain' action='index' permission='complain' display='true' order='20'>投诉管理</menu>
+        </menugroup>
+        <menugroup name="举报管理">
+            <menu controller='admin_reports_cat' action='index' permission='reports' display='true' order='20'>举报类型</menu>
+            <menu controller='admin_reports' action='index' permission='reports' display='true' order='30'>举报管理</menu>
+        </menugroup>
+    </workground>
+</desktop>

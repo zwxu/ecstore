@@ -1,0 +1,395 @@
+<div class="select-product">
+  <input type="hidden" id="product_id_ipt" class="product-id" value="<{$product_ids}>"/>
+  <ul class="search-product clearfix">
+    <li class="search-keyword search-item">
+    <input type="text" name="name" class="search-ipt select-obj"/>
+
+    <span href ="index.php?app=b2c&ctl=admin_goods&act=finder_goods_items&isgroupbuy=<{$isgroupbuy}>&istimedbuy=<{$istimedbuy}>" class="search-btn" rel="search" id="search-btn">搜索</span>
+
+    </li>
+    <li class="search-item">
+    <span class="search-tip search-item">请选择分类:</span>
+    <div class="select-obj search-item search-type">
+      <span class="search-key" data-search-key="pop">分类</span>
+      <ul class="search-pop">
+        <li class="active" data-search-type="cat" rel="sel"><a href="javascript:void(0)">分类</a></li>
+        <li data-search-type="tag" rel="sel"><a href="javascript:void(0)">标签</a></li>
+      </ul>
+      <span class="icon"><b></b></span>
+    </div>
+
+    <div class="select-obj search-item search-list">
+      <span class="search-key" data-search-key="cat">请选择</span>
+      <{if $cats}>
+      <ul class="search-cat search-pop">
+        <{foreach from=$cats item=item}>
+        <li>
+		<{if $cat_filter}>
+			
+				<a class="search-request" rel="request" href="index.php?app=b2c&ctl=admin_goods&act=finder_goods_items&cat_id=<{$item.cat_id}>&isgroupbuy=<{$isgroupbuy}>&istimedbuy=<{$istimedbuy}>&cat_filter=<{$cat_filter}>" target="{update:$$('.select-update')[0]}"><{$item.cat_name}></a>
+			
+		<{else}>
+			
+				<a class="search-request" rel="request" href="index.php?app=b2c&ctl=admin_goods&act=finder_goods_items&cat_id=<{$item.cat_id}>&isgroupbuy=<{$isgroupbuy}>&istimedbuy=<{$istimedbuy}>" target="{update:$$('.select-update')[0]}"><{$item.cat_name}></a>
+			 
+		<{/if}>
+        <{if $item.sub_cats}>
+        <ul class="search-sub-cat">
+          <{foreach from=$item.sub_cats item=sub_cat}>
+		  <{if $cat_filter}>
+			
+				<li><a class="search-request" rel="request" href="index.php?app=b2c&ctl=admin_goods&act=finder_goods_items&cat_id=<{$sub_cat.cat_id}>&isgroupbuy=<{$isgroupbuy}>&istimedbuy=<{$istimedbuy}>&cat_filter=<{$cat_filter}>" target="{update:$$('.select-update')[0]}"><{$sub_cat.cat_name}></a></li>
+			
+		  <{else}>
+			
+				<li><a class="search-request" rel="request" href="index.php?app=b2c&ctl=admin_goods&act=finder_goods_items&cat_id=<{$sub_cat.cat_id}>&isgroupbuy=<{$isgroupbuy}>&istimedbuy=<{$istimedbuy}>" target="{update:$$('.select-update')[0]}"><{$sub_cat.cat_name}></a></li>
+			
+		  <{/if}>
+		  	
+          <{/foreach}>
+        </ul>
+        <{/if}>
+        </li>
+        <{/foreach}>
+      </ul>
+      <{/if}>
+      <{if $tags}>
+      <ul class="search-tag search-pop search-key">
+        <{foreach from=$tags item=item}>
+		<{if $cat_filter}>
+			
+				<li><a class="search-request" rel="request" href="index.php?app=b2c&ctl=admin_goods&act=finder_goods_items&tag_id=<{$item.tag_id}>&isgroupbuy=<{$isgroupbuy}>&istimedbuy=<{$istimedbuy}>&cat_filter=<{$cat_filter}>" target="{update:$$('.select-update')[0]}"><{$item.tag_name}></a></li>
+			
+		<{else}>
+			
+				<li><a class="search-request" rel="request" href="index.php?app=b2c&ctl=admin_goods&act=finder_goods_items&tag_id=<{$item.tag_id}>&isgroupbuy=<{$isgroupbuy}>&istimedbuy=<{$istimedbuy}>" target="{update:$$('.select-update')[0]}"><{$item.tag_name}></a></li>
+			 
+		<{/if}>
+        <{/foreach}>
+      </ul>
+      <{/if}>
+      <span class="icon"><b></b></span>
+    </div>
+    </li>
+  </ul>
+
+  <div class="select-body clearfix">
+    <div class="select-content clearfix">
+      <div class="select-update">
+        <{include file="admin/goods/goods_select_items.html"}>
+        <div class="sel-opt">
+          <input class="sel all" rel="selectAll" type="checkbox"/><label>全选</label>
+        </div>
+        <{goods_pager data=$pager}>
+      </div>
+    </div>
+
+    <div class="select-opt">
+      <ul class="opt-btn">
+        <li class="add-product" rel="addProduct">添加</li>
+        <li class="remove-product" rel="removeProduct">移除</li>
+      </ul>
+    </div>
+
+    <div class="selected-content clearfix">
+      <div style="_height:332px;overflow:hidden;">
+        <ul class="product-body">
+          <{if $goods_selected}><{include file="admin/goods/goods_selected_items.html"}><{/if}>
+        </ul>
+      </div>
+      <div class="sel-opt">
+        <input class="sel all" type="checkbox" rel="selectAll" id="product_all"/><label for="product_all">全选</label>
+        <input class="sel other" rel="selectAll" type="checkbox"/><label>反选</label>
+      </div>
+      <p class="selected-tip">已添加<span class="num"><{$selected_cnt|default:0}></span>个商品</p>
+    </div>
+  </div>
+  <div class="table-action" style="border-top:0;padding:15px 0 0 0;margin-bottom:0;">
+    <{button class="btn-primary save-btn" label=$___b2c="确定"|t:'b2c'  type="submit"}>
+    <{button label=$___b2c="取消"|t:'b2c' isclosedialogbtn="true"}>
+  </div>
+</div>
+
+<script>
+window.addEvent('domready',function(){
+    var search_href = $('search-btn').get('href');
+    <{if $cat_filter}>
+        search_href +="&cat_filter=<{$cat_filter}>";
+    <{/if}>
+    <{if $goods_filter}>
+      search_href +="&goods_filter=<{$goods_filter}>";
+    <{/if}>
+    $('search-btn').set('href',search_href);
+
+    $E('.search-cat').getElements('li').each(function(item,index){
+        var aObj = item.getElement('a');
+        a_href = aObj.get('href');
+        <{if $cat_filter}>
+          a_href +="&cat_filter=<{$cat_filter}>";
+        <{/if}>
+        <{if $goods_filter}>
+          a_href +="&goods_filter=<{$goods_filter}>";
+        <{/if}>
+        aObj.set('href',a_href);
+
+    });
+
+    <{if $tags}>
+    $E('.search-tag').getElements('li').each(function(item,index){
+        var aObj = item.getElement('a');
+        a_href = aObj.get('href');
+        <{if $cat_filter}>
+          a_href +="&cat_filter=<{$cat_filter}>";
+        <{/if}>
+        <{if $goods_filter}>
+          a_href +="&goods_filter=<{$goods_filter}>";
+        <{/if}>
+        aObj.set('href',a_href);
+
+    });
+    <{/if}>
+});
+(function(){
+    var dialog = $('product_id_ipt').getParent('.dialog').retrieve('instance'),
+        body = dialog.dialog;
+
+    var Request_Cache = {
+        cache: {},
+        getCache: function(uid,body,fn) {
+            var text;
+            if(text=this.cache['cache_'+uid])
+            return this.progress(text,body, fn);
+            return false;
+        },
+        progress:function(text, body, fn) {
+            if (body) body.set('html',text);
+            if (fn) fn(text);
+            return text;
+        },
+        setCache: function(uid, value) {
+            this.cache['cache_'+uid]=value;
+        }
+    };
+
+
+    var SelectPro = {
+        init:function(){
+            this.addEvent();
+            this.complete();
+        },
+        select_content:$E('.select-content',body),
+        selected_content:$E('.selected-content',body),
+        add_btn:$E('.add-product',body),
+        remove_btn:$E('.remove-product',body),
+        numEl:$E('.num',body),
+        request:function(el,e){
+            e.stop();
+            el.getParent('.select-obj') && this.sel(el);
+            this.sync(el.get('href'));
+        },
+        sync:function(url,options){
+            this.ajax && this.ajax.cancel();
+            var update =$E('.select-update',body);
+
+            if (Request_Cache.getCache(url,update)) return this.complete();
+            this.ajax=new Request.HTML({
+                url:url,
+                update:update,
+                onSuccess:function(){
+                    Request_Cache.setCache(url,this.ajax.response.html);
+                    this.complete();
+                }.bind(this)
+            }).send();
+        },
+        popShow:function(el){
+            var handle = el.getElement('.search-key');
+            if(!handle)return;
+            var key = handle.get('data-search-key'),
+                cls = '.search-'+key;
+
+            el = el.getElements(cls);
+            el.length && el.setStyle('display','block');
+        },
+        popHide:function(el){
+            el = el.getElements('.search-pop');
+            el.length && el.hide();
+        },
+        sel:function(el){
+            var list_key = $E('.search-list .search-key',body),
+                obj = el.getParent('.select-obj'),
+                key = $E('.search-key',obj), cur = obj.getElement('.active'),
+                type = el.get('data-search-type');
+
+            cur && cur.removeClass('active');
+            el.addClass('active').getParent('.search-pop').hide();
+            if(el.getParent('.search-type'))
+            list_key.set('text','').set('data-search-key',type);
+
+            key.set('text',el.get('text'));
+            return this;
+        },
+        addProduct:function(btn){
+            if(this.length && this.length>=20){
+                return alert('最多选择20件商品');
+            }
+            if(!btn.hasClass('add-product-current'))return this;
+            var selected_body=$E('.product-body',this.selected_content),
+                proEls = $ES('.product-item.active',this.select_content);
+
+            proEls.each(function(el){
+                if(el.removeClass('active').hasClass('product-added'))return;
+                el.addClass('product-added').clone().inject(selected_body);
+            });
+            this.complete();
+        },
+        removeProduct:function(btn){
+            if(!btn.hasClass('remove-product-current'))return this;
+            var items=$ES('.active',this.selected_content);
+            items && items.destroy();
+            this.complete();
+        },
+        moveBtn:function(){
+            var item =$ES('.product-item',this.selected_content),
+                len = item.length;
+            if(!len)return this;
+
+            item.each(function(el,i){
+                el.removeClass('first').removeClass('last');
+                if(!i)el.addClass('first');
+                if(i==len-1)el.addClass('last');
+            });
+        },
+        move:function(target){
+            var el = target.getParent('.product-item'),
+                isUp = target.hasClass('up-btn'),
+                isDown = target.hasClass('down-btn'),
+                _this=this,
+                toEl =el[isDown ? 'getNext':'getPrevious']('.product-item');
+            if(el.hasClass('first') && isUp || el.hasClass('last') && isDown) return;
+
+                new Fx.Sort($ES('.product-item',this.selected_content),{
+                    duration: 250,
+                    mode: 'vertical',
+                    onCancel: function() {
+                        this.rearrangeDOM();
+                        _this.moveBtn();
+                    },
+                    link: 'chain',
+                    onComplete:function() {
+                        this.rearrangeDOM();
+                        _this.moveBtn();
+                    }
+                }).swap(el,toEl);
+
+            //toEl && el.inject(toEl,isDown ? 'after':'before');
+            //this.moveBtn();
+        },
+        complete:function(){
+            this.countNum().set().selected();
+            this.disabled();
+            this.moveBtn();
+        },
+        set:function(item){
+            var item = item || $ES('.product-item',this.selected_content), arr=[];
+            item.each(function(el){arr.push(el.get('data-id'));});
+            $E('.product-id',body).set('value',arr.join(','));
+            return this;
+        },
+        test:function(el){
+            var val = $E('.product-id',body).value,
+                id = el.get('data-id'), str = ','+val+',',
+                sid = ','+id+',';
+            return str.test(sid);
+        },
+        selected:function(){
+            $ES('.product-item',this.select_content).each(function(el){
+                if(this.test(el))el.addClass('product-added');
+                else el.removeClass('active').removeClass('product-added');
+            },this);
+        },
+        countNum:function(){
+            var item = $ES('.product-item',this.selected_content);
+            this.length = item.length||0;
+            this.numEl.set('text',this.length);
+            return this;
+        },
+        selectAll:function(el){
+            var body = el.getParent('.selected-content') ||el.getParent('.select-content') ,
+                item = $ES('.product-item',body),
+                isAll= el.hasClass('all'),isCheck= el.checked;
+
+            var checkEl = el.getParent('.sel-opt').getElement(isAll?'.other':'.all');
+            if(checkEl) checkEl.checked=false;
+
+            item.each(function(elem){
+                if(isAll){
+                    elem[isCheck ?'addClass':'removeClass']('active');
+                    this.disabled();
+                } else this.select(elem);
+            },this);
+            return this;
+        },
+        disabled:function(){
+            var items = $ES('.active.product-item',this.select_content),isSelected;
+            items.length && items.each(function(elem){
+                if(!this.test(elem))isSelected =true;
+            },this);
+            this.add_btn[isSelected ? 'addClass':'removeClass']('add-product-current');
+
+            var list = $ES('.active.product-item',this.selected_content);
+            this.remove_btn[list.length ? 'addClass':'removeClass']('remove-product-current');
+        },
+        select:function(el){
+            var active = el.hasClass('active');
+            el && el[active ?'removeClass':'addClass']('active');
+            this.disabled();
+        },
+        search:function(el,e){
+            e.stop();
+            var ipt = $E('.search-ipt',body);
+            return this.sync(el.get('href')+'&'+ipt.name+'='+encodeURIComponent(ipt.value));
+        },
+        setValue:function(){
+            var ipt = $E('.product-ids',dialog.options.handle),
+                ids = $E('.product-id',body).value;
+            this.set();
+            ipt.value = ids;
+        },
+        edit:function(target,e){
+            var el = target.getParent('.product-item'),
+                isEdit = e=='cancel' ? true : target.hasClass('cancel');
+           el[isEdit?'removeClass':'addClass']('editing');
+           el[isEdit?'removeClass':'addClass']('active');
+        },
+        save:function(target){
+            var el = target.getParent('.product-item'),
+                name = el.getElement('input[name=name]'),
+                nice= el.getElement('.product-nice');
+            nice.set('text',name.value);
+            this.edit(target,'cancel')
+        },
+        addEvent:function(){
+            var _this = this;
+            $ES('.select-obj',body).addEvents({'mouseenter':function(e){
+                _this.popShow(this);
+            },'mouseleave':function(e){
+               _this.popHide(this);
+            }});
+
+
+            $E('.select-product',body).addEvent('click',function(e){
+                var target = $(e.target),
+                    el = target.get('rel')? target:target.getParent('[rel]');
+                el && SelectPro[el.get('rel')](el,e);
+            }.bind(this));
+
+            $E('.save-btn',body).addEvent('click',function(e){
+                this.setValue();
+                dialog.options._callback();
+                dialog.close();
+            }.bind(this));
+        }
+    }
+    SelectPro.init();
+})();
+</script>

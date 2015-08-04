@@ -1,0 +1,18 @@
+<desktop>
+
+ 	<permissions>
+        <permission id="bdlink" display='true' workground='b2c.wrokground.sale'>推广链接</permission>
+    </permissions>
+    
+    <workground name="营销" id="b2c.wrokground.sale" controller="admin_sales_coupon" action="index" order="40">
+        <menugroup name="站外推广链接">
+            <menu controller='clink' action='lists' permission='bdlink' display='true'  order='120'>推广链接列表</menu>
+            <menu controller='clink' action='edit' permission='bdlink' display='false'  order='120'>修改链接</menu>
+            <menu controller='clink' action='index' permission='bdlink' display='false'  order='120'>创建链接</menu>
+        </menugroup>
+        
+    </workground>
+
+ 
+
+</desktop>

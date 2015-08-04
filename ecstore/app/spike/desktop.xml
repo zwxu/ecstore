@@ -1,0 +1,15 @@
+<desktop>
+    <permissions>
+        <permission id="spike_list" display='true'>秒杀活动列表</permission>
+        <permission id="spike_apply" display='true'>秒杀申请列表</permission>
+    </permissions>
+
+    <workground name="营销" id="b2c.wrokground.sale" controller="admin_sales_coupon" action="index" order="40">
+        <menugroup name="活动列表">
+            <menu controller='admin_spike' action='index' permission='spike_list' display='true' order='10'>秒杀活动列表</menu>
+        </menugroup>
+        <menugroup name="活动申请列表">
+            <menu controller='admin_spikeapply' action='index' permission='spike_apply' display='true' order='20' >秒杀申请列表</menu>
+        </menugroup>
+    </workground>
+</desktop>

@@ -1,0 +1,15 @@
+<{if !$login&&$mLevel && $env.conf.b2c.site.member_price_display != 2}>
+<div class='mprice'>
+  <h4 class="member-price"><{t}>会员价:<{/t}></h4>
+  <ul style="margin:0 0 0 10px">
+    <{if $env.b2c.conf.site.member_price_display == 1}>
+    <{assign var=aProduct value=$goods[product]|current}>
+    <{foreach from=$aProduct.price.member_lv_price item=lItem name=mlv}>
+    <li> <span class="font-black"><{$lItem.title}>:</span> <em class='mlvprice font-red lv-<{$lItem.level_id}>' mlv='<{$lItem.level_id}>'><{$lItem.price|cur_odr}></em> </li>
+    <{/foreach}>
+    <{elseif $env.conf.b2c.site.member_price_display == 0}>
+    <li> <span class="font-black"><{$aProduct[price][member_lv_price][$mLevel][title]}>:</span> <em class='mlvprice font-red lv-<{$aProduct[price][member_lv_price][$mLevel][level_id]}>' mlv='<{$aProduct[price][member_lv_price][$mLevel][level_id]}>'><{$aProduct[price][member_lv_price][$mLevel][price]|cur_odr}></em> </li>
+    <{/if}>
+  </ul>
+</div>
+<{/if}>

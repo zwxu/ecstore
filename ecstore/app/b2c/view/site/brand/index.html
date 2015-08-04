@@ -1,0 +1,132 @@
+<div class="BrandDetailWrap">
+<div class="branddetail">
+  <table width="100%" cellpadding="0" cellspacing="3" class="brandtitle">
+    <tr>
+      <td width="80"><{if $data.brand_logo}> <img src="<{$data.brand_logo|storager}>"> <{/if}> </td>
+      <td class="pr40"><div class="info">
+          <h1><{$data.brand_name}></h1>
+          <{t}>官方站点:<{/t}><a href="<{$data.brand_url}>" target="_blank"><{$data.brand_url}></a> </div></td>
+    </tr>
+  </table>
+</div>
+<div class="GoodsSearchWrap">
+<{if $searchtotal}>
+<p class="search_total">
+  <!--<span class="flt"><{t}>首页 > 所有商品 > 品牌女装 > 女装T恤<{/t}></span>-->
+ <{t}>总共找到<{/t}><span class="font-orange"><{$searchtotal}></span><{t}>个商品<{/t}>
+</p>
+<{/if}>
+<div class="title clearfix lh25" id='gallerybar' >
+    <{if count($views)>1}>
+       <div class="display-warp">
+              <div class="listmode clearfix"> <{foreach from=$views key=label item=view}>
+                <{if $curView==$view.3}> <a class="list-<{$view.3}> current"><i></i><span><{$label}></span></a> <{else}> <a href="<{link app=b2c ctl=site_brand act=index args=$view }>?scontent=<{$args1}>" title="<{$label}>" class="list-<{$view.3}>"><i></i><span><{$label}></span></a> <{/if}>
+                <{/foreach}> </div>
+            </div>
+          <{/if}>
+
+          <span class='filtmode fl' align="center"> <{t}>排序方式:<{/t}>
+              <select class="border-all" onchange="if(this.value!='_')window.location=this.value">
+                <optgroup label="<{t}>排序<{/t}>"> <{foreach from=$orderBy item=item key=order}> <option value="<{link link app=b2c ctl=site_brand act=index args=$args arg2=$order}>"<{if $order eq $args.2}> class="selected" selected="selected"<{/if}>><{$item.label}>
+                </option>
+                <{/foreach}> </optgroup>
+                <{*
+
+                <optgroup label="<{t}>显示<{/t}>"> <{foreach from=$views key=label item=view}> <option value="<{link app=b2c ctl=site_brand act=$view  args=$args}>"<{if $curView==$view}> class="selected"<{/if}>><{$label}>
+                </option>
+                <{/foreach}> </optgroup>
+                *}>
+              </select>
+            </span>
+        <div class="listorder fl pl10 pr10">
+		<{if $args.2 == 4}>
+	  <a class="list-desc-on" href="<{link app=b2c ctl=site_brand act=index args=$args arg2=5}>"><i></i><span><{t}>价格<{/t}></span></a>
+	  <a class="list-desc" href="<{link app=b2c ctl=site_brand act=index args=$args arg2=9}>"><i></i><span><{t}>销量<{/t}></span></a>
+	  <a class="list-desc" href="<{link app=b2c ctl=site_brand act=index args=$args arg2=7}>"><i></i><span><{t}>人气<{/t}></span></a>
+	  <{elseif $args.2 == 5}>
+	  <a class="list-asc-on" href="<{link app=b2c ctl=site_brand act=index args=$args arg2=4}>"><i></i><span><{t}>价格<{/t}></span></a>
+	  <a class="list-desc" href="<{link app=b2c ctl=site_brand act=index args=$args arg2=9}>"><i></i><span><{t}>销量<{/t}></span></a>
+	  <a class="list-desc" href="<{link app=b2c ctl=site_brand act=index args=$args arg2=7}>"><i></i><span><{t}>人气<{/t}></span></a>
+	  <{elseif $args.2 == 7}>
+	  <a class="list-desc" href="<{link app=b2c ctl=site_brand act=index args=$args arg2=4}>"><i></i><span><{t}>价格<{/t}></span></a>
+	  <a class="list-desc" href="<{link app=b2c ctl=site_brand act=index args=$args arg2=9}>"><i></i><span><{t}>销量<{/t}></span></a>
+	  <a class="list-desc-on"><i></i><span><{t}>人气<{/t}></span></a>
+	  <{elseif $args.2 == 9}>
+	  <a class="list-desc" href="<{link app=b2c ctl=site_brand act=index args=$args arg2=4}>"><i></i><span><{t}>价格<{/t}></span></a>
+	  <a class="list-desc-on"><i></i><span><{t}>销量<{/t}></span> </a>
+	  <a class="list-desc" href="<{link app=b2c ctl=site_brand act=index args=$args arg2=7}>"><i></i><span><{t}>人气<{/t}></span></a>
+	  <{else}>
+	  <a class="list-asc" href="<{link app=b2c ctl=site_brand act=index args=$args arg2=5}>"><i></i><span><{t}>价格<{/t}></span></a>
+	  <a class="list-desc" href="<{link app=b2c ctl=site_brand act=index args=$args arg2=9}>"><i></i><span><{t}>销量<{/t}></span></a>
+	  <a class="list-desc" href="<{link app=b2c ctl=site_brand act=index args=$args arg2=7}>"><i></i><span><{t}>人气<{/t}></span></a>
+	  <{/if}>
+	  </div>
+        <div class="page"><{pagers data=$pager type=mini}> </div>
+
+</div>
+
+<div class="intro uarea-output p5"> <{$data.brand_desc}> </div>
+<div class="GoodsSearchWrap"> <{include file=$brandview}> </div>
+<div class='clearfix' style="clear:both;"> <{pagers data=$pager}> </div>
+
+</div>
+</div>
+<!--center>
+<{if $count>20}>
+<a href="<{$link}>" title="全部 <{$data.brand_name}> 商品"><{t}>查看更多 <{/t}><{$data.brand_name}><{t}> 商品 共<{/t}><{$count}><{t}>件...<{/t}></a>
+<{else}>
+已显示所有<{$count}>件 <{$data.brand_name}> 商品</>
+<{/if}></center-->
+<script>
+window.addEvent('domready', function(){
+	new DataLazyLoad({lazyDataType:'img',img:'lazyload'});
+    try{
+        /*关键字高亮*/
+        (function(replace_str){
+            var replace=replace_str.split("+");
+            if(replace.length){
+              $$('.entry-title').each(function(r){
+                for(i=0;i<replace.length;i++){
+                  if(replace[i]){
+                    var reg=new RegExp("("+replace[i].escapeRegExp()+")","gi");
+                    r.set('text',r.get('text').replace(reg,function(){
+                      return "{0}"+arguments[1]+"{1}";
+                    }));
+                  }
+                }
+                r.set('html',r.get('text').format("<span style='color:red'>","</span>"));
+              });
+            }
+        })('<{$search_array}>');
+    }catch(e){}
+    //Gallery bar 滚动定位 -- by Tyler Chao
+    var gallerybar = $('gallerybar');
+    var gallerybarSize = {
+      x:gallerybar.outerSize().x - gallerybar.getPatch().x,
+      y:gallerybar.outerSize().y - gallerybar.getPatch().y
+    };
+    var gallerybarPos  = gallerybar.getPosition();
+    var fixedStart = gallerybarPos.y;
+
+    var fixGalleryBar = function(){
+      if(fixedStart<this.getScrollTop()){
+        if(Browser.ie6) {
+          gallerybar.setStyles({'width':gallerybarSize.x - gallerybar.getPatch().x,'position':'absolute','top':this.getScrollTop()})}
+        else{
+          gallerybar.addClass('fixed').setStyles({'width':gallerybarSize.x - gallerybar.getPatch().x});
+        }
+      }else{
+        if(Browser.ie6) {
+          gallerybar.setStyles({'position':'','top':'','width':''});
+        };
+        gallerybar.removeClass('fixed').setStyle('width','');
+      }
+    };
+
+    window.addEvents({
+       'resize':fixGalleryBar,
+       'scroll':fixGalleryBar
+    });
+});
+</script>
+<!--<{script src='goodscupcake.js' app='b2c'}>-->

@@ -1,0 +1,52 @@
+<div class="sj_info mt_10">
+	<!--<div class="info_title">热门推荐</div>-->
+	 <div class="hot_kind">
+	    <ul class="hot_kind_ul">
+		   <li class="le_zhi"><a href="#" class="hover" id="t_1"><{$setting.tag0|default:'热门推荐'}></a></li>
+		   <li class="ri_zhi"><a href="#" id="t_2"><{$setting.tag1|default:'新品上架'}></a></li>
+		   <div class="cl_zhi"></div>
+		 </ul>
+      <{foreach from=$data.tag item=list key=key name=foo}>
+	    <ul class="hot_kind_ul_list"
+        <{if $smarty.foreach.foo.iteration == 1}>id="tag1" style="display:block"<{/if}>
+        <{if $smarty.foreach.foo.iteration == 2}>id="tag2" style="display:none"<{/if}>>
+        <{foreach from=$list.goodsdata item=goodsdemo}>
+          <li>
+            <a target='_blank' href="<{link app=b2c ctl=site_product act=index arg=$goodsdemo.goods_id}>">
+            <{if $goodsdemo.udfimg == 'true'}>
+            <{assign var="gimage" value=$goodsdemo.thumbnail_pic}>
+            <{else}>
+            <{assign var="gimage" value=$goodsdemo.image_default_id|default:$data.defaultImage}>
+            <{/if}>
+            <img class="img-lazyload" src="images/transparent.gif" lazyload="<{$gimage|storager}>" alt="<{$goodsdemo.name}>"></a>
+          <p class="clo_info">
+            <a target='_blank' href="<{link app=b2c ctl=site_product act=index arg=$goodsdemo.goods_id}>"><{$goodsdemo.name}></a></p>
+          <p class="price"><strong class="le_zhi"><{$goodsdemo.price|cur}></strong> 
+          <span class="ri_zhi">已售出<span><{$goodsdemo.buy_count}></span>笔</span>
+          <span class="cl_zhi"></span>
+          </p>
+          </li>
+        <{/foreach}>
+      </ul>
+      <{/foreach}>
+	 </div>
+</div>          
+<script>
+window.addEvent('domready', function() {
+    $E('.hot_kind_ul').getChildren('li').each(function(item,index){
+      item.addEvent('mouseenter',function(){
+          $('t_1').removeClass('hover');
+          $('t_2').removeClass('hover');
+          if(index == 0){
+            $('t_1').addClass('hover');
+            $('tag1').setStyle('display','block');
+            $('tag2').setStyle('display','none');
+          }else if(index == 1){
+            $('t_2').addClass('hover');
+            $('tag1').setStyle('display','none');
+            $('tag2').setStyle('display','block');
+          }
+      });
+    });
+});
+</script>

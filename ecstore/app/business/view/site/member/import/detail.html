@@ -1,0 +1,20 @@
+<div class="cate-container" style="width:977px;">
+   <form enctype="multipart/form-data" class="tableform" action="<{link app='business' ctl='site_member' act='goods_export_csv'}>" method="post" target="uploadframe" id="export_detail_form">
+    <input type='hidden' value='<{$tpl.cat_id}>' name='cat_id' id="selectCat"/>
+    <input type='hidden' value='<{$tpl.cat_name}>' name='cat_name' id="selectCatName"/>
+    <div id="cate-cascading">
+    <input type='hidden' value="<{$tpl.type_id}>" name="type_id">
+        <div style="height:auto;top:0px;" class="search-result" id="J_SearchResult">
+            <div class="result-note" style="margin:0;">
+                <span class="note" style='background:none;'>(以下内容是商品规格、商品属性和品牌的可选值。对于具有可选值的项请使用可选值，以防导入失败。)</span>
+            </div>
+            <TEXTAREA NAME="TALK" COLS="20" ROWS="3" id="J_Propoty" style="height:258px;width:910px;resize:none"><{$result}></TEXTAREA>
+        </div>
+    </div>
+</form>
+</div>
+<div style='padding:10px 10px 10px 0;'>
+<button rel="_request" type="button" class="btn submit-btn" onclick="$(this).set('disabled',true);$('export_detail_form').submit();">
+<span><span>导出CSV模板</span></span>
+</button>
+</div>

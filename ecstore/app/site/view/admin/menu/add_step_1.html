@@ -1,0 +1,33 @@
+
+<form id="menu_select" action='index.php?app=site&ctl=admin_menu&act=add&step=2' method="GET">
+   <div class="tabs-wrap">
+        <ul>
+            <li class="tab<{if $pre['type'] != 'url'}> current<{/if}>" mtype="module"><span><{t}>系统页面<{/t}></span></li>
+            <li class="tab" mtype="url"><span><{t}>自定义链接<{/t}></span></li>
+        </ul>
+    </div>
+ </form>
+    
+ <div class="division hide">
+    <div id="step_2_content">
+    </div>
+
+</div>
+
+<script>
+(function(){
+    var tabs = $$('#menu_select .tab');
+    tabs.addEvent('click',function(){
+	    var value = this.getProperty('mtype'),
+	        url = $('menu_select').getProperty('action');
+	    $$('#menu_select .tab').removeClass('current');
+	    this.addClass('current');
+		W.page(url, {update:'step_2_content',method:'get',data:'type='+value});
+	    $('step_2_content').getParent().removeClass('hide');
+	});
+	
+	<{if $pre['type'] != 'url'}>
+    tabs[0].fireEvent.delay(10, tabs[0], 'click');
+    <{/if}>
+})();
+</script>

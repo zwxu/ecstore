@@ -1,0 +1,32 @@
+
+<div class="feed-back">
+<div class="success clearfix">
+  <div class="span-1 pic"></div>
+  <div class="span-11 ">
+    <h1><{$msg}></h1>
+    <{if $error_info}>
+        <ol><{foreach from=$error_info item=item}>
+    <li>[<{$item[0]}>]<{$item[1]}>
+    <{if $env.const.debug_code}>
+    (<{$item[2]}>:<{$item[3]}>)
+    <{/if}>    </li>
+    <{/foreach}>
+    </ol>
+       <{/if}>
+
+        <{if $wait>0}>
+        <a class="jumpurl" onclick="javascript:clearTimeout(SiteSplash);" href="<{if $jumpto=='back'}>javascript:history.back()<{else}><{$jumpto}><{/if}>"><{$wait}><{t app='site'}>秒后系统会自动跳转，也可点击本处直接跳转<{/t}></a>
+        <{/if}>
+
+        </div>
+</div>
+</div>
+
+<{if $wait>0}>
+<script>
+function jumpurl(){
+  <{if $jumpto=='back'}>history.back()<{else}>location='<{$jumpto}>'<{/if}>;
+}
+var SiteSplash = setTimeout('jumpurl()',<{$wait*1000}>);
+</script>
+<{/if}>

@@ -1,0 +1,26 @@
+<style>
+
+.basic-comment .fl{width:80px;}
+.basic-comment .fr{width:140px;color:#888888}
+.basic-comment h5{height:26px;line-height:26px;border-bottom:2px solid #373737;}
+.basic-comment-con{padding:10px;border:1px solid #ececec;}
+.basic-comment-con b{font-weight:bolder;height:16px;line-height:16px;overflow:hidden;display:block;margin-bottom:5px;}
+.basic-comment-con p{line-height:18px;height:54px;overflow:hidden;text-indent:24px;}
+</style>
+<div class="basic-comment">
+		<h5 class="btm10"><{$setting.title}></h5>
+		<div class="basic-comment-con">
+			<ul>
+				<{foreach from=$data item=item key=key}>
+					<li class="clearfix btm10">
+						<div class="fl"><img src="images/transparent.gif" lazyload="<{$item.goodsPic}>" class="img-lazyload"  alt="<{$item.goodsName}>" width="80" height="80">
+            <!-- <img src="<{$item.goodsPic}>" width="80" height="80" alt="<{$item.goodsName}>" /> --></div>
+						<div class="fr">
+								<b><{$item.commentAuthor}></b>
+								<p><{$item.comment}></p>
+						</div>
+					</li>
+				<{/foreach}>
+			</ul>
+		</div>
+</div>

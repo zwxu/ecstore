@@ -1,0 +1,18 @@
+<div class="finder-packet chart-tabs">
+  <ul class="over">
+    <{foreach from=$graph key=key item=item}>
+        <li class='<{if $target==$key}> current<{/if}>'>
+            <a href="javascript:void(0);"><span><{$item.name}></span></a>
+        </li>
+    <{/foreach}>
+  </ul>
+</div>
+<div style="height:<{$iframe_height}>px;overflow:hidden" class="gridlist">
+    <{foreach from=$graph key=key item=item}>
+    <div class="loading chart-items" >
+        <textarea class="textarea-lazyload dis_n">
+            <iframe frameborder="0" src="index.php?app=ectools&ctl=admin_analysis&act=chart_view&show=line&target=<{$key}><{$ext_url}>" scrolling="no"  width="100%" height="100%" ></iframe>
+        </textarea>
+    </div>
+    <{/foreach}>
+</div>

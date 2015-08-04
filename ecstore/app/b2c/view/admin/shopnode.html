@@ -1,0 +1,26 @@
+<div class="notice"><{t}>网店对应的节点描述文字....<{/t}></div>
+
+<div class="tableform">
+<{tabber}>
+    <{tab name=$___b2c="网店节点"|t:'b2c'}>
+        <{if $node_id}>
+        <div class="division">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <th><{t}>当前节点:<{/t}></th>
+                <td><{$node_id}></td>
+              </tr>
+			  <tr>
+                <th><{t}>节点类型:<{/t}></th>
+                <td><{$node_type}></td>
+              </tr>
+            </table>
+		</div>
+        <{else}>
+            <div class="notice">
+            <{t}>无网店节点对应的文字....<{/t}>
+            </div>
+        <{/if}>
+    <{/tab}>
+<{/tabber}>
+</div>

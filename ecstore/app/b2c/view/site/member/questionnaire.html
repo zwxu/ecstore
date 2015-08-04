@@ -1,0 +1,64 @@
+<form action="<{link app=b2c ctl=site_comment act=to_question}>" method="post" id="ask-create">
+  <div>
+    <h4 class="review-title"><{t}>平台咨询<{/t}></h4>
+    <table class="gridlist bbn" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+      <td colspan=2>
+        <{assign var="placeholder" value="欢迎发表咨询（最多1000字）"}>
+        <{input type="textarea" class="x-input inputstyle font12px db mb5" onfocus="this.value=''" onblur="if(this.value==''){this.value='欢迎发表评论（最多1000字）'}" value="欢迎发表评论（最多1000字）" vtype="sendcomments" rows="5" name="comment" style="width:97%"}>
+      </td>
+    </tr>
+    <tr>
+      <th><{t}>验证码：<{/t}></th>
+      <td><{input type="text" vtype=required disabled=$disb size="4" maxlength="4" class="showdisaskvcode" name="askverifyCode"}>&nbsp;<img id="askimgVerifyCode" style="display:none" codesrc="<{link app=b2c ctl=site_comment act=gen_askvcode}>"/><a onclick="javascript:changeimg('askimgVerifyCode','ask');" class="no-unl">&nbsp;<{t}>点击更换新图片<{/t}></a><span></span></td>
+    </tr>
+    </table>
+  </div>
+  <div class="mainFoot">
+    <div class="table-action">
+      <{button class="submit-btn" type="submit" label=$___b2c="确定"|t:'b2c'}>
+      <{button class="btn btn-quit" type="button" label=$___b2c="退出"|t:'b2c'}>
+    </div>
+  </div>
+</form>
+<script>
+  validatorMap['sendcomments']= ['<{t}>字数应该在1-1000个字之内<{/t}>', function() {
+    var _is_validate = false;
+    var obj = $ES('input[type^=textarea]','#ask-create')||'';
+    if (obj.get('value') == '' || obj.get('value').length < 1 || obj.get('value').length > 1000) _is_validate = true||_is_validate;
+    return _is_validate;
+  }];
+  function changeimg(id,type){
+    if(type == 'ask'){
+      $(id).set('src','<{link app="b2c" ctl="site_comment" act="gen_askvcode" arg0="s"}>?'+(+new Date()));
+    }
+  }
+  window.addEvent('domready',function(){
+    var f=$('ask-create');
+    f.removeEvents('submit').addEvent('submit', function(e){
+      var _form = this;
+      var _button = _form.getElement('button[type^=submit]');
+      if (_button.retrieve('submiting')) {
+        return e.stop();
+      }
+      if (!validate(_form)) {
+          e.stop();
+          return Message.error('表单验证失败');
+      }
+      _button.store('submiting',true);
+    });
+    var quit = $ES('.btn-quit', '#ask-create')||'';
+    if(quit) quit.removeEvents('click').addEvent('click',function(e){
+      if(confirm('确定退出?'))window.location='<{$return_url}>';
+    });
+    $$('.showdisaskvcode').addEvent('focus',function(){
+      if (this.retrieve('showdisaskvcode',false)) return;
+      var vcodeImg = this.getNext('img');
+      vcodeImg.src = vcodeImg.get('codesrc')+'?'+(+new Date());
+      vcodeImg.show();
+      this.store('showdisaskvcode',true);
+    });
+
+		$$('.showdisaskvcode').fireEvent('focus');
+  });
+</script>

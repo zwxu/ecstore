@@ -1,0 +1,36 @@
+<div id='goods-adjunct' class='hightline choose'>
+
+    <{foreach from=$goods.adjunct item=adj key="adj_key"}>
+	<{if is_array($adj)}>
+
+    <h5 class="adjtitle fontnormal"><{$adj.name}><{if $adj.min_num || $adj.max_num}><{t}>可选 <{/t}><em class="price-normal fontbold"><{if $adj.min_num == $adj.max_num}><{$adj.min_num}><{else}><{$adj.min_num|default:1}>-<{$adj.max_num}><{/if}></em><{t}> 件<{/t}><{/if}><span adj="<{$adj.name}>"></span></h5>
+    <table width="100%" cellpadding="0" cellspacing="0">
+      <tbody class="goods-adjunct-row" adjkey="<{$adj_key}>" adjname="<{$adj.name}>" min_num="<{$adj.min_num|default:1}>" max_num="<{$adj.max_num|default:-1}>" >
+    <{foreach from=$adj.items item=items key="key" name=adjitems}>
+      <tr price="<{if $items.adjprice > 0}><{$items.adjprice|cur_odr:null:true}><{else}>0<{/if}>" product="<{$items.goods_id}>" <{if $smarty.foreach.adjitems.last}>class="last"<{/if}>>
+        <td width="5%" valign="top">
+          <input type="checkbox" name='check_<{$items.product_id}>' value="<{if $items.adjprice > 0}><{$items.adjprice|cur_odr:null:true}><{else}>0<{/if}>" product="<{$items.goods_id}>"/>
+        </td>
+        <td width="55%">
+          <h3 class="fontnormal adjpc"><a<{if $items.marketable == 'true' }> href="<{link app=b2c ctl="site_product" act="index" arg0=$items.goods_id}>" target="_blank" title="<{$items.name}>"<{/if}>>
+          <{$items.name}><{if $items.spec_info}>[<{$items.spec_info}>]<{/if}></a></h3>
+                 <{if $items.price != $items.adjprice}>
+             <p><span><{t}>原价格：<{/t}></span><del class="mktprice"><{$items.price|cur_odr}></del></p>
+            <{/if}>
+            <p class="memberprice"><{t}>配件价格：<{/t}><i class="font-orange fontbold"><{if $items.adjprice > 0}><{$items.adjprice|cur_odr}><{else}>0<{/if}></i></p>
+        </td>
+        <td><{t}>数量：<{/t}><input size="2" maxlength='10' class="inputstyle textcenter" type="text" min="0" autocomplete="off" value="<{if $adj.min_num == 0}>1<{else}><{$adj.min_num|default:1}><{/if}>" name="count_check_<{$items.product_id}>" /></td>
+
+
+        <td<{if $items.marketable == 'false' || $items.disabled == 'true'}> style="display:none"<{/if}>><a title="<{t}>您可以单把独这个商品加入购物车<{/t}>" buy="<{$items.goods_id}>" product="<{$items.product_id}>" type="g" href="<{link app="b2c" ctl="site_cart" act="add" arg0='goods' arg1=$items.goods_id arg2=$items.product_id arg3='{num}'}>" <{if $goods.setting.buytarget==2}> target="_blank_cart"<{elseif $goods.setting.buytarget==3}> target="_dialog_minicart"<{/if}> class="addtocart orangebtn" rel="nofollow"><span>单独购买</span></a>
+        <input type="hidden" name="goods[adjunct][<{$adj_key}>][<{$items.product_id}>]" value="" disabled="disabled"/>
+        </td>
+      </tr>
+    <{/foreach}>
+    </tbody>
+    </table>
+
+	<{/if}>
+    <{/foreach}>
+    <p class="textright fontbold"><{t}>配件总价:<{/t}><span class="font-orange fontbold ml5 spare-price">0.00</span></p>
+    </div>

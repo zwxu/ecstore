@@ -1,0 +1,24 @@
+<div class="quick_link fl" id="loginBar_<{$widgets_id}>">
+请<a href="<{link app=b2c ctl=site_passport act=login}>">登录</a>或<a href="<{link app=b2c ctl=site_passport act=signup}>">免费注册</a>
+</div>
+<div class="quick_link fl" id="memberBar_<{$widgets_id}>" style="display:none">
+<span>您好！<span id="uname_<{$widgets_id}>"></span><{$setting.welcome}></span>
+<a href="<{link app=b2c ctl=site_passport act=logout}>">[退出]</a>
+</div>
+
+<script>
+var e = Cookie.read('UNAME')?Cookie.read('UNAME'):'';
+var seller = Cookie.read('SELLER')?Cookie.read('SELLER'):'';
+
+if(e){
+    $("uname_<{$widgets_id}>").innerHTML = e+',';
+    $("memberBar_<{$widgets_id}>").setStyle('display','block');
+    if($("loginBar_<{$widgets_id}>"))
+    $("loginBar_<{$widgets_id}>").setStyle('display','none');
+}
+else{
+    $("loginBar_<{$widgets_id}>").setStyle('display','block');
+    if($("memberBar_<{$widgets_id}>"))
+    $("memberBar_<{$widgets_id}>").setStyle('display','none');
+}
+</script>

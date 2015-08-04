@@ -1,0 +1,81 @@
+<form action="index.php?app=b2c&ctl=admin_goods&act=saveBatchEdit" method="post" id="form01">
+<textarea name="filter" style="display:none"><{$filter}></textarea>
+<div class="division">
+<div class="notice"><{t}>正在编辑<{/t}><strong><{$editInfo.count}></strong><{t}>条数据。<{/t}>
+<br/>小技巧:
+1、不可输入小数点、负数和非数字内容。<br/>
+2、“将原库存修改为”是指将所选商品的库存统一修改某个值。<br/>
+3、“公式调库存”是指在每个商品原有库存的基础上同幅度增加或者同幅度减少。
+
+</div>
+<table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <th style="width:20px">
+      <input type="radio" name="updateType" value="uniformStore" id="ipt_enable_uniformStore" checked>
+      </th>
+      <th><label for="bated_ipt_uniformStore"><{t}>将原库存修改为：<{/t}></label><input type="hidden" name="updateName[uniformStore]" value="store"/>
+      </th>
+      <td><{input onfocus=";$('ipt_enable_uniformStore').checked=true"  vtype="unsigned" id="bated_ipt_uniformStore" type=$item.type value=$item.value inputType=$item.inputType options=$item.options name="set[uniformStore]" }></td>  
+    </tr>
+    
+    <tr>
+      <th style="width:20px">
+      <input type="radio" name="updateType" value="uniformStoreByOperator" id="ipt_enable_uniformStoreByOperator" >
+      </th>
+      <th><label for="bated_ipt_uniformStoreByOperator"><{t}>公式调库存：<{/t}></label><input type="hidden" name="updateName[uniformStoreByOperator]" value="store"/>
+      </th>
+      <td><{t}>调整后库存&nbsp;=&nbsp;当前库存&nbsp;&nbsp;<{/t}><{input name="operator[uniformStoreByOperator]" type="select" id="updateOperator" value="+" options=$operator}> <{input onfocus=";$('ipt_enable_uniformStoreByOperator').checked=true" vtype="unsigned" id="bated_ipt_uniformStoreByOperator" style='width:80px' type=$item.type value=$item.value inputType=$item.inputType options=$item.options name="set[uniformStoreByOperator]" }></td>  
+    </tr>
+
+</table>
+<input type="hidden" name="updateAct" value="uniformStore"/>
+</div>
+<div class="mainFoot">
+<table cellspacing="0" cellpadding="0" border="0" align="center" class="table-action">
+  <tr>
+  <td>
+    </td>
+  </tr>
+</table></div>
+</form>
+<{area inject=".mainFoot"}>
+   <div class="table-action">
+        <{button label="保存" type="button" id="btn01" class="btn-primary"}>
+   </div>
+<{/area}>
+<script>
+  $('btn01').addEvent('click',function(){
+
+      $('form01').store('target',{onComplete:function(re){
+           re = JSON.decode(re);
+
+           if(re.error)return;
+           $('form01').getParent('.dialog').retrieve('instance').close();
+      }});
+      $('form01').fireEvent('submit',{stop:$empty});
+  
+  });
+</script>
+
+<script>
+/*(function(){
+	$('saveEdit').addEvent('click',function(e){
+        confirmStr = '';
+        var operatorStr = [];
+        operatorStr['+'] = "增加";
+        operatorStr['-'] = "减少";
+        if($('ipt_enable_uniformStore').checked)
+            confirmStr = '系统将<{$editInfo.count}>个商品的库存统一调整为'+$('bated_ipt_uniformStore').value+'，本操作不可逆。';
+
+        if($('ipt_enable_uniformStoreByOperator').checked)
+            confirmStr = '系统将调整<{$editInfo.count}>个商品的库存为：每个商品原有库存的基础上'+operatorStr[$('updateOperator').value]+$('bated_ipt_uniformStoreByOperator').value+'，本操作不可逆。';
+            
+        if(  confirm(confirmStr) )
+        {
+            batchEdit(<{$finder}>,t);
+            return true;
+        }
+        return false;
+	});
+})();*/
+</script>

@@ -1,0 +1,68 @@
+<table border="0" cellpadding="0" cellspacing="0" width="100%" class="liststyle">
+<col class="span-5">
+<col class="span-3">
+<col class="span-3">
+<col class="span-3">
+<col class="span-3">
+  <col class="span-3">
+<thead>
+    <tr>
+        <th><{t}>买家<{/t}></th>
+        <th><{t}>宝贝名称<{/t}></th>
+        <th><{t}>价格<{/t}></th>
+        <th><{t}>购买数量<{/t}></th>
+        <th><{t}>成交时间<{/t}></th>
+        <th><{t}>状态<{/t}></th>
+    </tr>
+    </thead>
+    <tbody>
+    <{foreach from=$sellLogList.data item=sellLogListData key=key}>
+    <tr>
+        <td ><{if $login || $env.cookie.S.MEMBER != $sellLogListData.member_id}><{$sellLogListData.alias}><{else}><{$sellLogListData.name}><{/if}></td>
+        <td><{$sellLogListData.product_name}><{if $sellLogListData.pdt_desc}><span class="fontcolorGray">( <{$sellLogListData.pdt_desc}> )</span><{/if}></td>
+        <td><{$sellLogListData.price|cur_odr}></td>
+        <td><{$sellLogListData.number}>  </td>
+        <td><{$sellLogListData.createtime|cdate:'SDATE_STIME'}></td>
+        <td><span>成交</span></td>
+    </tr>
+    <{/foreach}>
+    </tbody>
+</table>
+<div class="page-discuss" >
+<{if $sellLogList.total>1}>
+  <div class="discusspager">
+   <div class="discuss-pagernum"><a href="javascript:;" class="discussfirst discusspage">首页</a> <a href="javascript:;" class="discusspage discussfront">上一页</a><a href="javascript:;" class="discusspage discussfront"><<</a>
+  <{foreach from=$sellLog.page item="discussPage"}>
+    <a <{if $sellLogList.current_page == $discussPage+1}>class="current discusspage"<{else}>class="discusspage"<{/if}> href="javascript:;" value='<{$discussPage+1}>' ><{$discussPage+1}></a>
+  <{/foreach}>
+     <a href="javascript:;" class="discusspage discussnext">下一页</a><a href="javascript:;" class="discusspage discussnext">>></a> <a href="javascript:;" class="discusspage discusslast">末页</a></div>
+  </div>
+<{/if}>
+</div>
+<script>
+$$('#selllog_content .discusspage').removeEvents('click').addEvent('click',function(){
+	if(this.hasClass('current')) return ;
+	var nextpage = this.get('text');
+	if(this.hasClass('discussnext')){
+		nextpage = parseInt(<{$sellLogList.current_page}>,10)+1;
+		if(nextpage>parseInt(<{$sellLogList.total}>,10)) return;
+	}
+	if(this.hasClass('discussfront')){
+		nextpage = parseInt('<{$sellLogList.current_page}>',10)-1;
+		if(nextpage<1) return;
+	}
+	if(this.hasClass('discussfirst')){
+		nextpage = 1;
+		if(parseInt('<{$sellLogList.current_page}>',10) == 1) return;
+	}
+	if(this.hasClass('discusslast')){
+		nextpage = parseInt('<{$sellLogList.total}>',10);
+		if(parseInt('<{$sellLogList.current_page}>',10) == nextpage) return;
+	}
+	new Request.HTML({
+		  url:'<{link app="b2c" ctl="site_product" act="ajax_selllog"}>',
+		  update:$('selllog_content'),method:'post',
+		  data:'goods_id=<{$goods.goods_id}>&page='+nextpage
+	  }).send();
+});
+</script>

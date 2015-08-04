@@ -1,0 +1,97 @@
+<div class="orderInfo" id="comment_discuss_<{$comment.comment_id}>" >
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="270px"  style="vertical-align:top;">
+          <div class="tableform"><ul>
+            <li>
+              <label><{t}>评论人：<{/t}></label>
+              <{if $comment.author_id}><a href="index.php?ctl=member/member&act=detail&p[0]=<{$comment.author_id}>" target="_blank"><{$comment.author}> <{if $comment.levelname!=""}> [<{$comment.levelname}>]<{/if}></a><{else}><{$comment.author}> <{if $comment.levelname!=""}> [<{$comment.levelname}>]<{/if}><{/if}></li>
+              <li class="amount">
+              <label><{t}>评论商品：<{/t}></label>
+              <a href="<{$comment.url}>" target="_blank"><{$comment.goods_name}></a></li>
+
+            <li >
+              <label><{t}>联系方式：<{/t}></label>
+              <{$comment.contact|escape:'html'}></li>
+            <li>
+              <label><{t}>发表时间：<{/t}></label>
+              <{$comment.time|cdate:SDATE_STIME}></li>
+            <li>
+              <label><{t}>评论人IP：<{/t}></label>
+              <{$comment.ip}></li>
+
+            <{foreach from=$tree item=contact name=contact}>
+
+      <li>
+         <label><{$contact.attr_name}>：</label>
+     <{if $contact.attr_tyname eq 'QQ' && $contact.value !=''}>
+      <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=<{$contact.value}>&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:<{$contact.value}>:51" alt="点击这里给我发消息" title="点击这里给我发消息"/></a>
+
+
+
+      <{/if}><{if $contact.attr_tyname eq 'MSN' && $contact.value !=''}>
+      <a  target="_self" href="msnim:chat?contact=<{$contact.value}>"><img width="16" height="16" border="0" src="http://www.wlmessenger.net/static/img/presence/Online.gif" title='<{$contact.value}>'/></a>
+
+
+      <{/if}>
+      <{if $contact.attr_tyname eq $___b2c='旺旺'|t:'b2c' && $contact.value !=''}>
+     <a target="_blank" href="http://amos1.taobao.com/msg.ww?v=2&uid=<{$contact.value}>&s=1" ><img border="0" src="http://amos1.taobao.com/online.ww?v=2&uid=<{$contact.value}>&s=1" title='<{$contact.value}>' /></a>
+
+      <{/if}>
+
+      <{if $contact.attr_tyname eq 'Skype' && $contact.value !=''}>
+     <a href="skype:<{$contact.value}>?call"  target="_self"onclick="return skypeCheck();"><img src="http://mystatus.skype.com/smallclassic/<{$contact.value}>" style="border: none;" alt="Call me!" title='<{$contact.value}>' /></a>
+
+      <{/if}>
+
+
+        </li>
+
+
+
+
+
+
+
+
+
+        <{/foreach}>
+
+
+
+          </ul></div></td>
+        <td class="OtherInfo">
+        <div class="tableform">
+        <h5><{t}>评论内容：<{/t}><span>[<a href="index.php?ctl=goods/discuss&act=toDisplay&p[0]=<{$comment.comment_id}>&p[1]=<{$comment.display}>"><{if $comment.display=='true'}><{t}>关闭显示<{/t}><{else}><{t}>显示到商品页<{/t}><{/if}></a>] [<a href="index.php?ctl=goods/discuss&act=delete&comment_id[]=<{$comment.comment_id}>" target="{update:'main'}"><{t}>删除<{/t}></a>]</span></h5>
+            <div class="division">
+              <h5><{$comment.title|escape:'html'}></h5>
+              <{$comment.comment|escape:'html'}> </div>
+
+        <div class="division">
+       <h5><{t}>回复用户评论：<{/t}></h5>
+        <{input type="textarea" class="inputstyle" name="reply_content" cols=100 rows=7}>
+ </div>
+
+ <table cellspacing="0" cellpadding="0" border="0" align="center" class="table-action">
+      <tbody><tr>
+    <td><b class="submitBtn" ><input type="button" onclick="W.page('index.php?ctl=goods/discuss&act=toReply&p[0]=<{$comment.comment_id}>', {data:$('comment_discuss_<{$comment.comment_id}>'),method:'post'}, this)" value="<{t}>立即回复<{/t}>"></b>
+</td>
+      </tr>
+    </tbody></table>
+
+
+
+        </div>
+        <{if count($reply) > 0}>
+        <div class="tableform">
+            <{foreach from=$reply item=items}>
+            <h5><{$items.author}><{if $items.levelname!=""}> [<{$items.levelname}>]<{/if}><{t}>于<{/t}><b class="assis">[<{$items.time|cdate:SDATE_STIME}>]</b><{t}>回复：<{/t}><span>[<a href="index.php?ctl=goods/discuss&act=toDisplay&p[0]=<{$items.comment_id}>&p[1]=<{$items.display}>&p[2]=<{$comment.comment_id}>"><{if $items.display=='true'}><{t}>关闭显示<{/t}><{else}><{t}>显示到商品页<{/t}><{/if}></a>] [<a href="index.php?ctl=goods/discuss&act=delete&comment_id[]=<{$items.comment_id}>&f_id=<{$comment.comment_id}>"><{t}>删除<{/t}></a>]</span></h5>
+			<{if $items.contact}><div class="division"><{t}>联系方式:<{/t}><{$items.contact|escape:'html'}></div><{/if}>
+            <div class="division"><{$items.comment|escape:'html'}></div>
+            <{/foreach}> </div>
+        <{/if}>
+
+         </td>
+      </tr>
+    </table>
+</div>

@@ -1,0 +1,18 @@
+<{if $item_section}>
+<div id="GoodsList" class="clearfix">
+    <{foreach from=$item_section item=section}>
+      <{include file=$section.file app=$section.app }>
+    <{/foreach}>
+</div>
+<{else}>
+<div class="nocommod nodisplay"><{t}>暂无商品数据<{/t}></div>
+<{/if}>
+<div class="boxGray CartInfoItems">
+    <div class="clearfix sum-n-go textright">
+        <h4 class="micolor1"><{t}>共<{/t}><span class="item_quantity micolor2"><{$aCart.items_quantity}></span><{t}>件商品<{/t}><br/><{t}>金额总计<{/t}><span class="subtotal micolor2 fontbold"><{$aCart.subtotal|cur_odr}></span></h4>
+		<div style="height:28px;">
+			<a href="<{link app=b2c ctl=site_cart act=index}>" class="go"><{t}>去结算<{/t}></a>
+		</div>
+		<!--button class="btn order-btn go" onclick="location.href='<{link app=b2c ctl=site_cart act=index}>'" type="button"><span><span>去结算</span></span></button-->
+    </div>
+</div>

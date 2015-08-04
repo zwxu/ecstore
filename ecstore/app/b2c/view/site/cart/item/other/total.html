@@ -1,0 +1,9 @@
+<table width="100%">
+    <tr>
+        <td align="right" cols="2">
+            <{t}>原始总额:<{/t}><{$aCart.subtotal}><br>
+            <{t}>优惠金额:<{/t}><{$aCart.discount_amount}><br />
+            <{t}>总额:<{/t}><{($aCart.subtotal - $aCart.discount_amount)}>
+        </td>
+    </tr>
+</table>

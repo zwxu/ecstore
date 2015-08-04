@@ -1,0 +1,81 @@
+<{if $payments_num > 1}>
+<table id="_pay_cod" width="100%" cellpadding="0" cellspacing="0" style="display:<{if $def_payments != -1}>none<{else}>block<{/if}>" class="tableform">
+    <col class="span-5"></col>
+    <col class="span-auto"></col>
+    <tbody>
+        <tr>
+            <th style="text-align:left; "><input type="radio" name="payment[pay_app_id]" value="-1" paytype="offline" id="payment_bank" class="x-payMethod" <{if $def_payments == '-1'}> checked<{/if}> /><strong><{t}>货到付款<{/t}></strong></th>
+            <td><{t}>由我们的快递人员在将货物送到时收取货款。<{/t}></td>
+        </tr>
+    </tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0"  id="_normal_payment" style="display:<{if $def_payments != -1}>block<{else}>none<{/if}>" class="tableform">
+    <col class="span-2"></col>
+    <col class="span-auto"></col>
+    <{foreach from=$payments item="payment" key="key" name="payments"}>
+    <tr <{if $smarty.foreach.payments.last}>class="last"<{/if}>>
+        <th style="text-align:left;width:150px;">
+            <label <{if $payment.extend}>class="ExtendCon"<{/if}>>
+                <input class="x-payMethod" type="radio" name="payment[pay_app_id]" paytype="<{$payment.pay_type}>" value="<{$payment.app_id}>"<{if $arr_def_payment.pay_app_id && $arr_def_payment.pay_app_id==$payment.app_id}> checked="checked"<{/if}> moneyamount="<{$payment.money}>" formatmoney ="<{$payment.money}>" />
+                <input type="hidden" id="hid_payment_<{$payment.app_id}>" vtype="paymentradiorequired" />
+                <{$payment.app_display_name}><{if $payment.config.method=="1" || $payment.config.method==" "}><{if $payment.fee>0}><{t}> (支付费率: +<{/t}><{$payment.fee*100}>%)<{/if}><{else}><{if $payment.config.fee>0}><{t}> (支付费用: +<{/t}><{$payment.config.fee}>)<{/if}><{/if}></label>
+        </th>
+        <td>
+            <{$payment.app_des|default:'&nbsp;'}>
+            <{if $payment.extend}>
+            <{foreach from=$payment.extend item="extvalue" key="extkey"}>
+            <div class="division paymentextend <{$extvalue.extconId}> clearfix">
+                <hr />
+                <{if $extvalue.fronttype<>'select'}>
+                <ul>
+                    <{foreach from=$extvalue.value name="bank" item=extsval key=extskey}>
+                    <li style='float:left;'>
+                    <{if $extvalue.fronttype=="radio"}>
+                    <input <{$extsval.checked}> type=<{$extvalue.fronttype}> name=<{$extvalue.name}> value=<{$extsval.value}>>
+                    <{if $extsval.imgurl}><{$extsval.imgurl}><{else}><{$extsval.name}><{/if}>
+                    <{else if $extvalue.fronttype=="checkbox"}>
+                    <input <{$extsval.checked}> type="<{$extvalue.fronttype}>" name="<{$extvalue.name}>[]" value="<{$extsval.value}>">
+                    <{if $extsval.imgurl}><{$extsval.imgurl}><{else}><{$extsval.name}><{/if}>
+                    <{/if}>
+                    </li>
+                    <{/foreach}>
+                </ul>
+                <{else}>
+                <select name=$extvalue.name>
+                    <{foreach from=$extvalue.value item=extsval key=extskey}>
+                    <option value=<{$extsval.value}> <{if $extsval.checked}>selected<{/if}>><{$extsval.name}></option>
+                    <{/foreach}>
+                    <select>
+                        <{/if}>
+                    </div>
+                    <{/foreach}>
+                    <{/if}>
+                </td>
+            </tr>
+            <{/foreach}>
+
+        </table>
+        <script>
+
+            if(_checked =$('_normal_payment').getElement('th input[checked]')){
+                _checked.fireEvent('click');
+            }
+
+            (function(){
+                if ($('_pay_cod').get('style').toLowerCase().replace(' ', '') == 'display:block;'){
+                    var _input = $('_pay_cod').getElements('input[name^="payment[pay_app_id]"]:checked');
+                    if (_input == null) $('_pay_cod').getElement('input[name^="payment[pay_app_id]"]').checked = true;
+                }
+
+                if ($('_normal_payment').get('style').toLowerCase().replace(' ', '') == 'display:block;'){
+                    var _input = $('_normal_payment').getElements('input[name^="payment[pay_app_id]"]:checked');
+                    if (_input.length < 1) $('_normal_payment').getElement('input[name^="payment[pay_app_id]"]').checked = true;
+                }
+            })();
+        </script>
+<{else}>
+    <{foreach from=$payments item="payment" key="key" name="payments"}>
+        <input class="x-payMethod" type="radio" name="payment[pay_app_id]" paytype="<{$payment.pay_type}>" value="<{$payment.app_id}>" checked="checked" moneyamount="<{$payment.money}>" formatmoney ="<{$payment.money}>" style="display:none"/>
+        <input type="hidden" id="hid_payment_<{$payment.app_id}>" vtype="paymentradiorequired" />
+    <{/foreach}>
+<{/if}>

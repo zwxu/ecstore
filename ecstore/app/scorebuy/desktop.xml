@@ -1,0 +1,15 @@
+<desktop>
+    <permissions>
+        <permission id="score_buy" display='true'>积分换购活动列表</permission>
+        <permission id="score_activity" display='true'>积分换购申请列表</permission>
+    </permissions>
+
+    <workground name="营销" id="b2c.wrokground.sale" controller="admin_sales_coupon" action="index" order="40">
+        <menugroup name="活动列表">
+            <menu controller='admin_score' action='index' permission='score_buy' display='true' order='10'>积分换购活动列表</menu>
+        </menugroup>
+        <menugroup name="活动申请列表">
+            <menu controller='admin_scoreapply' action='index' permission='score_activity' display='true' order='20' >积分换购申请列表</menu>
+        </menugroup>
+    </workground>
+</desktop>

@@ -1,0 +1,8 @@
+<services>
+    <service id="tags_special.add">
+        <class>tags_special</class>
+    </service>
+	<service id="desktop.tags.setting">
+		<class>tags_desktop_setting</class>
+    </service>
+</services>

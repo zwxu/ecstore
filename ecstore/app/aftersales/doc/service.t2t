@@ -1,0 +1,3 @@
+aftersales 所有service说明
+api.aftersales.request：把售后服务信息发送到中心
+order_goodstype_operation：获得订单所有商品类型

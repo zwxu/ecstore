@@ -1,0 +1,109 @@
+
+        <div id='mce_handle_htmledit_<{$id}>' style='display:none' class='mce_style_1'>
+			<ul>
+				<li class='returnwyswyg' style="cursor:pointer"><span>&laquo;<{t}>返回可视化编辑模式<{/t}></span></li>
+			</ul>
+            <!--<{*
+			<span class='arrow-left'>&nbsp;</span>
+  			<span class='returnwyswyg' style='color:#000;cursor:pointer;'><{t}>返回可视化编辑<{/t}></span>
+            <span class='btn-flat' title='<{t}>粗体<{/t}>' htmltp='b'><strong><{t}>B<{/t}></strong></span>
+            <span class='btn-flat' title='<{t}>斜体<{/t}>' htmltp='i'><i><{t}>i<{/t}></i></span>
+            <span class='btn-flat' title='<{t}>下划线<{/t}>' htmltp='u'><u><{t}>U<{/t}></u></span>
+            <span class='btn-flat' title='<{t}>超链接<{/t}>' htmltp='link'><{t}>LINK<{/t}></span>
+            <span class='btn-flat' title='<{t}>DIV层<{/t}>' htmltp='div'><{t}>DIV<{/t}></span>
+            <span class='btn-flat' title='<{t}>段落<{/t}>' htmltp='p'>P</span>
+            <span class='btn-flat' title='<{t}>LI<{/t}>' htmltp='li'><{t}>li<{/t}></span>
+            <span class='btn-flat' title='<{t}>BR<{/t}>' htmltp='br'><{t}>换行<{/t}></span>
+            <span class='btn-flat' title='<{t}>HR<{/t}>' htmltp='hr'><{t}>分割线<{/t}></span>
+            <span class='btn-flat' title='<{t}>图片<{/t}>' htmltp='img'><{t}>插入图片<{/t}></span>*}>-->
+        </div>
+<!--<{*
+<script>
+void function(){
+        var textareaEditor_<{$id}>=new Abstract({
+             element:$E('#mce_body_<{$id}> textarea'),
+             getRange:function(){
+               if(!!document.selection){
+                  return document.selection.createRange();
+               }
+               return false;
+             },
+             getSelection:function () {
+                if(!!document.selection){
+                         if(this.range){
+                            return this.range.text;
+                        }
+                    return document.selection.createRange().text;
+                }else if(!!this.element.setSelectionRange){
+                    return this.element.value.substring(this.element.selectionStart,this.element.selectionEnd);
+                }else{return false};
+             },replaceSelection:function (text) {
+                var scrollTop=this.element.scrollTop;
+                if(!!document.selection) {
+                    this.element.focus();
+                   var old=document.selection.createRange().text;
+                   var range=this.range||document.selection.createRange();
+                   range.text=text;
+                   range-=old.length-text.length;
+                }else if(!!this.element.setSelectionRange) {
+                    var selection_start=this.element.selectionStart;
+                    this.element.value=this.element.value.substring(0,selection_start)+text+this.element.value.substring(this.element.selectionEnd);            this.element.setSelectionRange(selection_start+text.length,selection_start+text.length);
+                }
+                this.element.focus();
+                this.element.scrollTop=scrollTop;
+             },wrapSelection:function (before,after) {
+                this.replaceSelection(before+this.getSelection()+after);
+                this.range=null;
+             }
+          });
+         $$('#mce_body_<{$id}> textarea').addEvent('mouseup',function(){
+             textareaEditor_<{$id}>.range=textareaEditor_<{$id}>.getRange();
+         });
+         $$('#mce_handle_htmledit_<{$id}> span[htmltp]').addEvent('click',function(e){
+             var htmltp=this.get('htmltp');
+             var B="";var A="";
+             if(htmltp=='img'){
+                var url='index.php?app=desktop&act=alertpages&goto='+encodeURIComponent("index.php?app=image&ctl=admin_manage&act=image_broswer&type=b");
+
+            return  new imgDialog(url,{onCallback:function(image_id,image_src){
+                    var img=new Element('img',{src:image_src});
+                    var d=new Element('div').adopt(img);
+                    textareaEditor_<{$id}>.wrapSelection(d.get('html'),A);
+                }});
+             }
+             switch (htmltp){
+                         case 'b':B="<b>";A="</b>";break;
+                         case 'i':B="<i>";A="</i>";break;
+                         case 'u':B="<u>";A="</u>";break;
+                         case 'img':B="<img src='#'/>";break;
+                         case 'link':B="<a href='#'>";A="</a>";break;
+                         case 'div':B="<div>";A="</div>";break;
+                         case 'p':B="<p>";A="</p>";break;
+                         case 'br':B="<br/>";break;
+                         case 'hr':B="<hr/>";break;
+                         case 'li':B="<li>";A="<li/>";break;
+             };
+             textareaEditor_<{$id}>.wrapSelection(B,A);
+         });
+        }();
+</script>
+*}>-->
+<div id="mce_body_<{$id}>" class='wysiwyg_body' style="height:300px;">
+    <textarea name="<{$params.name}>" style="display:none" style="height:300px;"><{$params.value|htmlspecialchars}></textarea>
+    <div id='mce_body_<{$id}>_frm_container' style="height:100%;"></div>
+</div>
+<div align='left' style='font-size:14px;font-weight:bold;padding:2px;'>
+  <script>
+  var mce_body_<{$id}>_Height=function(v){
+     v=v?$('mce_body_<{$id}>').getStyle('height').toInt()+100:$('mce_body_<{$id}>').getStyle('height').toInt()-100;
+     if(v<100)return MessageBox.error("<{t}>不能再小<{/t}>");
+     $('mce_body_<{$id}>').setStyle('height',(v));
+     if($E('iframe','mce_body_<{$id}>'))
+     $E('iframe','mce_body_<{$id}>').setProperty('height',v);
+     if($E('textarea','mce_body_<{$id}>'))
+     $E('textarea','mce_body_<{$id}>').setStyle('height',v);
+  };
+  </script>
+  <{button label=$___desktop="更大" icon='arrow-down.gif' type="button" onclick="mce_body_{$id}_Height(true);this.blur();"}>
+  <{button label=$___desktop="更小" icon='arrow-up.gif' type="button" onclick="mce_body_{$id}_Height(false);this.blur();"}>
+</div>

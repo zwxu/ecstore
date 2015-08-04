@@ -1,0 +1,10 @@
+<div></div>
+<div id="theme_explorer">
+loading...
+</div>
+<div></div>
+<{if $init_url}>
+<script type="text/javascript">
+W.page('<{$init_url}>&finder_id=<{$finder_id}>', {'update':$('theme_explorer')});
+</script>
+<{/if}>

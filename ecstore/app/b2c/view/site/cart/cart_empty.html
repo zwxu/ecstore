@@ -1,0 +1,17 @@
+<div class="cart-empty" id="goodsbody">
+	<div class="w400 ma clearfix">
+		<img src='<{$res_url}>/bundle/empty_pic.gif' class="flt m5"/>
+         <p class="pt10">
+			<{t}>您的购物车里还没有商品,您可以：<{/t}><br />
+			<{t}>将收藏夹中的商品添加进来<{/t}><br />
+			<{t}>或者去看看<{/t}>&nbsp;<a href="./" class="font-orange"><{t}>首页>><{/t}></a>
+         </p>
+    </div>
+</div>
+
+<{if $ajax_html}>
+<script>
+    //$('goodsbody').destroy();
+    //$$('cart-index .CartNav').destroy();
+</script>
+<{/if}>

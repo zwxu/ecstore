@@ -1,0 +1,469 @@
+<div class="member-main">
+    <h1 class="title title2"><{t}>售后维权<{/t}></h1>
+    <form action="<{link app=aftersales ctl=site_member act=return_save}>" enctype="multipart/form-data" encoding="multipart/form-data" method="post" name="return_save" id='x-return-form'>
+        <div class="FormWrap">
+            <div class="division">
+                <h4 class="fontnormal"><{t}>售后服务类型：<{/t}></h4>
+                <{input id="type" type="select" name='type' rows=$type valueColumn="id" labelColumn="name" onchange="showRequire();"}>
+            </div>
+            <div class="division" id="require_1" style="display:none">
+                <h4 class="fontnormal"><{t}>售后要求：<{/t}></h4>
+                <{input id="required_1" type="select" name='required_1' rows=$require_1 valueColumn="id" labelColumn="name" onchange="showPrice('required_1');"}>
+            </div>
+            <div class="division" id="require_2" style="display:none">
+                <h4 class="fontnormal"><{t}>售后要求：<{/t}></h4>
+                <{input id="required_2" type="select" name='required_2' rows=$require_2 valueColumn="id" labelColumn="name" onchange="showPrice('required_2');"}>
+            </div>
+            <div class="division" id="x-return-item-list-div" style="display:none">
+                <h4 class="fontnormal"><{t}>请勾选需要售后服务的商品及数量<{/t}></h4>
+
+                <div id="x-return-item-list">
+                    <{include file="site/member/return_list_item.html" app=aftersales}>
+                    <input type="hidden" vtype="product_nums_required" />
+                </div>
+
+                <div class="p5">
+                    <ul id="x_return_item_ul" class="return-list">
+                    </ul>
+                </div>
+            </div>
+			<div class="division" id="x-return-price" style="display:none">
+                <h4 class="fontnormal"><{t}>请填写需要卖家退还的邮费<{/t}></h4>
+				<{input type="text" id="amount" name="amount" style="width:20%" value=0}><span id="biggest_price">(最多可以退<{$order.shipping.cost_shipping}>元)</span>
+				<input type="hidden" id="biggest_price_hid" value="<{$order.shipping.cost_shipping}>" />
+            </div>
+
+            <div class="division" id="x-price" style="display:none"> 
+                <h4 class="fontnormal"><{t}>退款金额：<{/t}></h4>
+				<{input type="text" id="gorefund_price" name="gorefund_price" style="width:20%"}>(最多<{$gorefund_price}>)
+                <input type="hidden" id="gorefund_price_big" value="<{$gorefund_price}>">
+            </div>
+            <div class="division">
+                <h4 class="fontnormal"><{t}>如果您有相关附件，可以在此提交，格式:jpg,gif,jpeg,png，文件不超过2M，否则会上传失败<{/t}></h4>
+                <input type="hidden" name="MAX_FILE_SIZE" value="2097152" />
+                <input type="file" class="x-input x-inputs" name="file" id="fileField" />
+				<input type="file" class="x-input x-inputs" name="file1" id="fileField1" />
+				<input type="file" class="x-input x-inputs" name="file2" id="fileField2" />
+            </div>
+			<div class="division" style="border-top:none">
+            <h4 class="fontnormal"><{t}>申请售后的详细原因描述<{/t}></h4>
+            <{input type="textarea" id="x-return-content" name="content" class='x-inputs x-input' cols="80" rows="5" style="width:98%"}>
+            <input type="hidden" vtype="return_content_required&&return_content_weight" />
+          </div>
+	       <div class="textcenter p10 division">
+                <{button class="order-btn" type="submit" label=$___b2c="提交申请"|t:'b2c'}>
+            </div>
+        </div>
+    <input type="hidden" name="order_id" value="<{$order_id}>">
+	<input type="hidden" name="member_id" value="<{$order.member_id}>">
+    <input type="hidden" id="cost_shipping" value="<{$order.shipping.cost_shipping}>">
+    <input type="hidden" id="payed" value="<{$order.payed}>">
+</form>
+</div>
+<script>
+    String.extend({
+        format:function(){
+            if(arguments.length === 0) return this;
+            var reg = /{(\d+)?}/g;
+            var args = arguments;
+            var string=this;
+            var result = this.replace(reg,function($0, $1) {
+                return  args[$1.toInt()]||"";
+            });
+            return result;
+        }
+    });
+    function init_returnlist(){
+        $$('#x-return-item-list input[type="checkbox"]').addEvent('change',function(e){
+            e = this;
+            var parent = e.getParent('tr');
+            var ol = $('x_return_item_ul');
+            var s = '<span class="fl" style="width:300px">{0}<input type="hidden" name="products[]" value="{1}">&nbsp;&nbsp;x&nbsp;&nbsp;</span><span class="fl"><{input type="text" product_nums="{2}" class="x-product-nums" id="product_info[{1}]" name="product_nums[{1}]" value="{3}" size="2" onchange="changenum(this,{1});"}></span><{t}> <span class="fl">&nbsp;&nbsp;件</span><{/t}><span class="fl forforma-btn"><button type="button" class="btn"><span><span><{t}>删除<{/t}></span></span></button></span><span class="fl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;退款金额<input type="test" name="products_refund[{1}]" id="products_refund[{1}]" size="2" onchange="changeRefundPrice(this,{1});" value=0 />元(维修换货请填0)</span><input type="hidden" name="product_name[{1}]" value="{4}"><input type="hidden" name="product_bn[{1}]" value="{5}"><input type="hidden" vtype="rtn_digits&&nominus&&product_nums" /><input type="hidden" id="error[{1}]" class="error" value="0"/><span id="error_info[{1}]" style="color:red"></span>';
+            var el = $('x-item-'+e.value);
+            if(e.checked){
+                var li = new Element('li',{id:'x-item-'+e.value,'class':'p5 clearfix'}).set('html', s.format(parent.getElement('.x-pdt-name').innerHTML,e.value,parent.getElement('.x-pdt-num').innerHTML,parent.getElement('.x-pdt-num').innerHTML,parent.getElement('.x-pdt-name').innerHTML,parent.getElement('.x-pdt-bn').innerHTML)).inject(ol);
+                li.getElements('button').addEvent('click',function(){
+                    del_return_item(this,e);
+                });
+                $$('#x-return-form .x-input[name^=product_nums]').addEvent('mouseover',function(e){
+                    var _li = this.getParent('li');
+                    if (_li){
+                        var error_el = _li.getElement('.x-product-nums-error');
+                        if(error_el){
+                            error_el.destroy();
+                        }
+                    }
+                }); 
+                var error_el = $('x-return-item-list-error');
+                if(error_el){
+                    error_el.destroy();
+                }
+				//计算可以退款的最大金额
+				/*var big_price = parseFloat($('cost_shipping').value);
+                $$('#x_return_item_ul .x-product-nums').each(function(item,index){
+                    var p_id = item.id;            
+                    var p_price = $(p_id+'[price]').value;
+                    var p_nums = $(p_id).value;
+                    big_price = big_price + p_price*p_nums;
+                });
+                var payed = $('payed').value;
+                if(parseFloat(big_price)>parseFloat(payed)){
+                    big_price = payed;
+                }
+                $('biggest_price_hid').value = big_price;
+                str = '(最多'+big_price+'元)';
+                $('biggest_price').innerHTML = str;*/
+
+				}else{
+				if(el){
+				    el.destroy();
+                    /*//计算可以退款的最大金额
+                    var big_price = parseFloat($('cost_shipping').value);
+                    $$('#x_return_item_ul .x-product-nums').each(function(item,index){
+                        var p_id = item.id;            
+                        var p_price = $(p_id+'[price]').value;
+                        var p_nums = $(p_id).value;
+                        big_price = big_price + p_price*p_nums;
+                    });
+                    var payed = $('payed').value;
+                    if(parseFloat(big_price)>parseFloat(payed)){
+                        big_price = payed;
+                    }
+                    $('biggest_price_hid').value = big_price;
+                    str = '(最多'+big_price+'元)';
+                    $('biggest_price').innerHTML = str;*/
+				}
+            }
+            ol.getElements('li.clearfix').each(function(item,index){
+                var num = item.getElement('.item-num');
+                if(num){
+                    num.set('html',index+1+'.&nbsp;');
+                }else{
+                    new Element('span',{'class':'flt item-num','html':index+1+'.&nbsp;'}).inject(item,'top');
+                }
+            });
+        });
+
+    }
+
+    function jump_to_return_list(page){
+        new Request.HTML({
+            url:'<{$url}>',
+            method:'post',
+            update:$('x-return-item-list'),data:'page='+page,
+            onSuccess:function(){
+                init_returnlist();
+                var el = $('x-return-item-list');
+                var chk_arr = el.getElements('input[type=checkbox]');
+                chk_arr.each(function(item,index){
+                    var elol = $('x_return_item_ul');
+                    var inol_arr = elol.getElements('input[type=hidden]');
+                    inol_arr.each(function(itemol,indexol){
+                        if(item.value == itemol.value){
+                            item.checked = true;
+                        }
+                    });
+                })
+        }}).send();
+    }
+
+    function del_return_item(e,t){
+        var el = e.getParent('li');
+        var product_list = $("x-return-item-list");
+        var elchk = t;
+        if(elchk){
+            var checked = elchk.checked;
+            if(checked){
+                elchk.checked = false;
+            }
+        }
+
+        $(el).destroy();
+        //计算可以退款的最大金额
+		/*var big_price = parseFloat($('cost_shipping').value);
+        $$('#x_return_item_ul .x-product-nums').each(function(item,index){
+            var p_id = item.id;            
+            var p_price = $(p_id+'[price]').value;
+            var p_nums = $(p_id).value;
+            big_price = big_price + p_price*p_nums;
+        });
+        var payed = $('payed').value;
+        if(parseFloat(big_price)>parseFloat(payed)){
+            big_price = payed;
+        }
+        $('biggest_price_hid').value = big_price;
+        str = '(最多'+big_price+'元)';
+        $('biggest_price').innerHTML = str;*/
+
+        return false;
+    }
+    init_returnlist();
+
+
+    $$('#x-return-form .x-inputs').addEvent('mouseover',function(e){
+    e = e.target;
+    var id = e.get('id');
+    var error_el = $(id+'-error');
+    if(error_el){
+    error_el.destroy();
+    }
+    });
+
+    $('fileField').addEvent('change',function(e){
+    var ext=this.value.substring(this.value.lastIndexOf(".")+1).toUpperCase();
+    if(!(/jpg|gif|png/i).test(ext)){
+    Ex_Dialog.alert('只能上传gif,jpg,png格式的文件');
+    this.value='';
+    return false;
+    }
+
+    if(this.files){
+    var file = this.files[0];
+    if(file.fileSize>2*1024*1024){
+    Ex_Dialog.alert('文件上传大小超过限制');
+    this.value='';
+    return false;
+    }
+    }else if(Browser.ie){
+    var src=this.value.replace(/\\/g,"/");
+    src="file:///"+src;
+
+    var img=new Image();
+    img.onload=function(){
+    if(img.fileSize>2*1024*1024){
+    Ex_Dialog.alert('文件上传大小超过限制');
+    this.value='';
+    return false;
+    }
+    };
+    img.src=src;
+    }else{
+    }
+    });
+
+    $('fileField1').addEvent('change',function(e){
+    var ext=this.value.substring(this.value.lastIndexOf(".")+1).toUpperCase();
+    if(!(/jpg|gif|png/i).test(ext)){
+    Ex_Dialog.alert('只能上传gif,jpg,png格式的文件');
+    this.value='';
+    return false;
+    }
+
+    if(this.files){
+    var file = this.files[0];
+    if(file.fileSize>2*1024*1024){
+    Ex_Dialog.alert('文件上传大小超过限制');
+    this.value='';
+    return false;
+    }
+    }else if(Browser.ie){
+    var src=this.value.replace(/\\/g,"/");
+    src="file:///"+src;
+
+    var img=new Image();
+    img.onload=function(){
+    if(img.fileSize>2*1024*1024){
+    Ex_Dialog.alert('文件上传大小超过限制');
+    this.value='';
+    return false;
+    }
+    };
+    img.src=src;
+    }else{
+    }
+    });
+
+    $('fileField2').addEvent('change',function(e){
+    var ext=this.value.substring(this.value.lastIndexOf(".")+1).toUpperCase();
+    if(!(/jpg|gif|png/i).test(ext)){
+    Ex_Dialog.alert('只能上传gif,jpg,png格式的文件');
+    this.value='';
+    return false;
+    }
+
+    if(this.files){
+    var file = this.files[0];
+    if(file.fileSize>2*1024*1024){
+    Ex_Dialog.alert('文件上传大小超过限制');
+    this.value='';
+    return false;
+    }
+    }else if(Browser.ie){
+    var src=this.value.replace(/\\/g,"/");
+    src="file:///"+src;
+
+    var img=new Image();
+    img.onload=function(){
+    if(img.fileSize>2*1024*1024){
+    Ex_Dialog.alert('文件上传大小超过限制');
+    this.value='';
+    return false;
+    }
+    };
+    img.src=src;
+    }else{
+    }
+    });
+
+    // 退货数量的验证
+    validatorMap['product_nums'] = ['<{t}>申请售后商品的数量不能大于订购数量<{/t}>', function(element, v) {
+    var item = $(element).getParent('li').getElement('input[name^=product_nums]');
+
+    if  (parseFloat(item.value) > parseFloat(item.get('product_nums')))
+    return false;
+    else
+    return true;
+    }];
+
+    validatorMap['nominus'] = ['<{t}>退货数量不能小于0<{/t}>', function(element, v) {
+    var item = $(element).getParent('li').getElement('input[name^=product_nums]');
+
+    if  (item.value <= 0)
+    return false;
+    else
+    return true;
+    }];
+
+    validatorMap['rtn_digits'] = ['<{t}>请输入整数<{/t}>', function(element, v) {
+    var item = $(element).getParent('li').getElement('input[name^=product_nums]');
+
+    return !/[^\d]/.test(item.value);
+    }];
+
+    validatorMap['product_nums_required'] = ['<{t}>您没有选择商品，请先选择商品。<{/t}>', function(element, v) {
+    var item = $('x_return_item_ul').getElements('input[name^=product_nums]');
+
+    return item.length > 0;
+    }];
+
+    validatorMap['title_required'] = ['<{t}>请填写售后服务标题<{/t}>', function(element, v) {
+    var item = $(element).getParent('div').getElement('input[name^=title]');
+
+    return item.value.length != 0;
+    }];
+
+    validatorMap['title_weight'] = ['<{t}>您的填写有误，标题2—20字数之内<{/t}>', function(element, v) {
+    var item = $(element).getParent('div').getElement('input[name^=title]');
+
+    return item.value.length >= 2 && item.value.length <= 30;
+    }];
+
+    validatorMap['return_content_required'] = ['<{t}>请填写售后服务详细原因<{/t}>', function(element, v) {
+    var item = $(element).getParent('div').getElement('#x-return-content');
+
+    return item.value.length != 0;
+    }];
+
+    validatorMap['return_content_weight'] = ['<{t}>您的填写有误，详细原因应不小于10个字数<{/t}>', function(element, v) {
+    var item = $(element).getParent('div').getElement('#x-return-content');
+
+    return item.value.length >= 10;
+    }];
+    /** end **/
+    
+    function changenum(e,id){
+        var p_nums = $('product_info['+id+']').value;
+        var p_real_num = $('product_info['+id+'][num]').value;
+        if(p_nums > p_real_num){
+            $('error['+id+']').value = 1;
+            str = '所填数量超过发货数量，请修改！';
+            $('error_info['+id+']').innerHTML = str;
+        }else{
+            /*var big_price = parseFloat($('cost_shipping').value);
+            $$('#x_return_item_ul .x-product-nums').each(function(item,index){
+                var p_id = item.id;            
+                var p_price = $(p_id+'[price]').value;
+                var p_nums = $(p_id).value;
+                big_price = big_price + p_price*p_nums;
+            });
+            var payed = $('payed').value;
+            if(parseFloat(big_price)>parseFloat(payed)){
+                big_price = payed;
+            }
+            $('biggest_price_hid').value = big_price;
+            str = '(最多'+big_price+'元)';
+            $('biggest_price').innerHTML = str;*/
+            $('error['+id+']').value = 0;
+            str = '';
+            $('error_info['+id+']').innerHTML = str;
+        }
+    }
+
+    function changeRefundPrice(e,id){
+        var p_nums = $('product_info['+id+']').value;
+        var p_refund = $('products_refund['+id+']').value;
+        var p_real_refund = $('product_info['+id+'][price]').value;
+        var p_amount = p_nums*p_real_refund;
+        if(p_refund > p_amount){
+            $('error['+id+']').value = 1;
+            str = '所填金额大于实际可退金额，请修改！';
+            $('error_info['+id+']').innerHTML = str;
+        }else{
+            $('error['+id+']').value = 0;
+            str = '';
+            $('error_info['+id+']').innerHTML = str;
+        }
+    }
+
+    $('x-return-form').getElement('button[type=submit]').addEvent('click',function(e){
+        var sign = false;
+        $$('#x_return_item_ul .error').each(function(item,index){
+            if(item.value == '1'){
+                sign = true;
+                
+            }
+        });
+        if(sign){
+            Message.error('退款数量大于发货数量或可退金额大于填写金额，请修改！');
+            return false;
+        }else{
+            var amount=$('amount').value;
+            var biggest_price=$('biggest_price_hid').value;
+            var gorefund_price=$('gorefund_price').value;
+            var gorefund_price_big=$('gorefund_price_big').value;
+
+            if(parseFloat(amount) > parseFloat(biggest_price) || parseFloat(gorefund_price) > parseFloat(gorefund_price_big)){
+                Message.error('退款金额大于可用金额，请修改！');
+                return false;
+            }else{
+                if(reason == ''){
+                    Message.error('请选择退款原因！');
+                    return false;
+                }
+            }
+        }
+    });
+
+
+    function showRequire(){
+        var typeval = $('type').get('value');
+        if(typeval == '1' || typeval == '2'){
+            $('require_1').show();
+            $('require_2').hide();
+        }
+        if(typeval == '3' || typeval == '4'){
+            $('require_1').hide();
+            $('require_2').show();
+        }
+    }
+
+    function showPrice(name){    
+        var requireval = $(name).get('value');
+        if(requireval == '1' || requireval == '2' || requireval == '5'){ 
+            $('x-price').show();
+            $('x-return-price').hide();
+            $('x-return-item-list-div').hide();
+            if(requireval == '2'){
+                $('x-price').hide();
+                $('x-return-price').show();
+                $('x-return-item-list-div').show();
+            }
+        }
+        if(requireval == '3' || requireval == '4'){
+            $('x-price').hide();
+            $('x-return-price').hide();
+            $('x-return-item-list-div').show();
+        }
+    }
+      
+</script>

@@ -1,0 +1,70 @@
+
+<form action='index.php?app=site&ctl=admin_seo&act=saveseo&p[0]=default' method='post' class="settingform" id="site_basic" target="{update:'messagebox'}">
+<div class="tableform">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" >
+
+    </table>
+    <div class="division" style="position:static;">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0"  class="shop-setting">
+            <tr>
+                <th><{t}>TITLE(页面标题)：<{/t}></th>
+                <td>
+                          <input type="text" name="seo_title" value="<{$param.seo_title}>" vtype="required" class="_x_ipt inputstyle" size="40%" >
+                          <div class="seo-tip" style="display:none">
+							<{if count($config) > 0}>
+                                <{foreach from=$config item=item}>
+                                    <button class="span1" title="<{$item.value}>" type="button" svalue="<{$item.id}>" style="color:#1b4d91;border:1px solid #98bbd2;line-height:20px; height:24px; margin:2px; cursor:pointer; background:#d6edf4;"><{$item.value}></button>
+                                <{/foreach}>
+                                <div class="tipline" style="height:1px; background:#98bbd2; overflow:hidden; margin:5px 2px;"></div>
+                                <{button style='font-size:12px;' type="button" label=$___a="恢复默认值"|t:'site' }>
+                                <span value="<{$param.seo_title}>"></span>
+                            <{/if}>
+
+                        </div>
+                </td>
+            </tr>
+            <tr>
+                <th>META_KEYWORDS<br /><{t}>(关键词)：<{/t}></th>
+                <td>
+
+                          <input type="text" name="seo_keywords" value="<{$param.seo_keywords}>" vtype="required" class="_x_ipt inputstyle"  size="40%" >
+                          <div class="seo-tip" style="display:none">
+                          <{if count($config) > 0}>
+                                <{foreach from=$config item=item}>
+                                    <button class="span1" title="<{$item.value}>" type="button" svalue="<{$item.id}>" style="color:#1b4d91;border:1px solid #98bbd2;line-height:20px; height:24px; margin:2px; cursor:pointer; background:#d6edf4;"><{$item.value}></button>
+                                <{/foreach}>
+                                <div class="tipline" style="height:1px; background:#98bbd2; overflow:hidden; margin:5px 2px;"></div>
+                                <{button style='font-size:12px;' type="button" label=$___a="恢复默认值"|t:'site' }>
+                                <span value="<{$param.seo_keywords}>"></span>
+                            <{/if}>
+
+
+
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>META_DESCRIPTION<br /><{t}>(页面描述)：<{/t}></th>
+                <td>
+                    <textarea style="width:90%" name="seo_content" class="inputstyle" rows="6"><{$param.seo_content}></textarea>
+                    </div>
+                         <div class="seo-tip" style="display:none">
+                             <{if count($config) > 0}>
+                                <{foreach from=$config item=item}>
+                                    <button class="span1" title="<{$item.value}>" type="button" svalue="<{$item.id}>" style="color:#1b4d91;border:1px solid #98bbd2;line-height:20px; height:24px; margin:2px; cursor:pointer; background:#d6edf4;"><{$item.value}></button>
+                                <{/foreach}>
+                                <div class="tipline" style="height:1px; background:#98bbd2; overflow:hidden; margin:5px 2px;"></div>
+                                <{button style='font-size:12px;' type="button" label=$___a="恢复默认值"|t:'site' }>
+                                <span value="<{$param.seo_content}>"></span>
+                            <{/if}>
+                         </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+        </div>
+    <div class="table-action">
+        <{button type="submit" label=$___a="保存"|t:'site' id="btn_seo_default_submit" }>
+    </div>
+</div>
+</form>

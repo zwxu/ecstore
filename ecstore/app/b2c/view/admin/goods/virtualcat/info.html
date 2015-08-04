@@ -1,0 +1,53 @@
+<form method="post" action="index.php?app=b2c&ctl=admin_goods_virtualcat&act=doAdd" id="virtualcat_form">
+<div class="tableform">
+<{help docid="75" type="link-mid"}><{t}>点击查看帮助<{/t}><{/help}>
+<div class="division">
+<table cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <th><{t}>分类名称:<{/t}><input type="hidden" value="<{$cat.virtual_cat_id}>" name="cat[virtual_cat_id]" /></th>
+    <td><input type="text" value="<{$cat.virtual_cat_name|escape:'html'}>" name="cat[virtual_cat_name]"  vtype='required' class='x-input'/></td>
+  </tr>
+  <tr>
+    <th><{t}>上级虚拟分类:<{/t}></th>
+    <td>
+    <{input type="select"  required='true' name="cat[parent_id]" style="font-size:12px;" value=$cat.parent_id rows=$catList valueColumn="cat_id" labelColumn="cat_name" }><span class="notice-inline"><{t}>顶级分类请选择“无”<{/t}></span></td>
+  </tr>
+  <!--tr>
+    <th><{t}>虚拟分类模板:<{/t}></th>
+    <td>
+    <{template_filter type="gallery" id=$cat.virtual_cat_id name="virtualcat_template" source_type="virtualcat"}></td>
+  </tr-->
+  <tr>
+    <th><{t}>排序:<{/t}></th>
+    <td><input style="width:50px;" vtype="number" value="<{$cat.p_order}>" name="cat[p_order]" size="2"/><{t}><span class="notice-inline"><{t}>数字越小越靠前<{/t}></span><{/t}></td>
+  </tr>
+  
+  <tr>
+    <th><{t}>是否隐藏:<{/t}></th>
+    <td><input style="width:50px;" type="checkbox" name="cat[disabled]" value='true' <{if $cat.disabled == 'true'}> checked<{/if}>/></td>
+  </tr>
+
+  <tr>
+    <th><{t}>筛选条件:<{/t}></th>
+    <td ><{input type="goodsfilter" value=$cat.filter.items}></td>
+  </tr>
+</table>
+
+</div>
+
+
+<div class="table-action">
+<{button class="btn-primary" label=$___b2c="保存"|t:'b2c' type="submit"}>
+<{button class="btn-secondary" label=$___b2c="取消"|t:'b2c' type="button" isclosedialogbtn="true"}>
+</div>
+
+</div>
+</form>
+<script>
+$('virtualcat_form').store('target',{
+		onComplete:function(){
+			if($('virtualcat_form').getParent('.dialog'))
+			$('virtualcat_form').getParent('.dialog').retrieve('instance').close();
+		}
+});
+</script>

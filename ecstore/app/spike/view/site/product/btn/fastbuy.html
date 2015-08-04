@@ -1,0 +1,151 @@
+<{css src="style.css" app="spike"}>
+<{script src="wpage.js" app="spike" pdir="js"}>
+<script>
+  var W = new Wpage({});
+  var MODALPANEL = {
+    createModalPanel:function(){
+      var mp = new Element('div',{'id':'MODALPANEL'});
+      var mpStyles = {
+        'position': 'absolute',
+        'background': '#333333',
+        'width': '100%',
+        'display':'none',
+        'height': window.getScrollSize().y,
+        'top': 0,
+        'left': 0,
+        'zIndex': 65500,
+        'opacity': .4
+      };
+      this.element = mp.setStyles(mpStyles).inject(document.body);
+      return this.element;
+    },
+    show:function(){
+      var panel = this.element = this.element||this.createModalPanel();
+      panel.setStyles({
+        'width': '100%',
+        'height': window.getScrollSize().y
+      }).show();
+    },hide:function(){
+      if(this.element)this.element.hide();
+    }
+  };
+
+var BREADCRUMBS ='0:0';
+var LAYOUT = {
+  container: $('container'),
+  side: $('side'),
+  workground: $('workground'),
+  content_main: $('main'),
+  content_head: $E('#workground .content-head'),
+  content_foot: $E('#workground .content-foot'),
+  side_r: $('side-r'),
+  side_r_content:$('side-r-content')
+};
+</script>
+<div id="group-btn">
+<{script src="dialog.js" app="spike" pdir="js"}>
+<{if ($goods.nostore_sell ||count($goods.products)>0 || $goods.store-$goods.product_freez>0 || $goods.store==='' || $goods.store===null ) && ($nowtime>= $activity.start_time && $nowtime<= $activity.end_time && $activity.act_open == 'true')}>
+   <input class="actbtn btn-spikebuy" id="btn_lj" value="<{t}>立即秒杀<{/t}>" type="button"/>
+<{else}>
+    <span class="btn-hui">立即秒杀</span>
+<{/if}>
+</div>
+<script>
+window.addEvent('domready', function() {
+    buyljBtn=$('btn_lj');
+    if (buyljBtn) buyljBtn.store('tip:text','');
+    if (buyljBtn) new Tips(buyljBtn, {
+            showDelay: 0,
+            hideDelay: 0,
+            className: 'cantbuy',
+            onShow: function(tip) {
+                if (!tip.getElement('.tip-text') || ! tip.getElement('.tip-text').get('text')) {
+                    buyljBtn.setStyle('cursor', 'pointer');
+                    return tip.setStyle('visibility', 'hidden');
+                } else {
+                    buyljBtn.setStyle('cursor', 'not-allowed');
+                }
+
+                tip.setStyle('visibility', 'visible');
+            }
+        });
+
+    if (buyljBtn){
+        buyljBtn.removeEvent('click');
+        buyljBtn.addEvent('click', function(e) {
+            var msg = '请选择规格：';
+            var specCheck = false;
+            if($$('.spec-item.specItem')){
+              $$('.spec-item.specItem').each(function(item,index){
+                var spec_label = item.getChildren('div.spec-label');
+                label = spec_label[0].getChildren('span');
+                var specName = label[0].firstChild.innerHTML;
+                var spec_values = item.getChildren('div.spec-values');
+                var specValue = spec_values[0].getChildren('ul');
+                var specOne  = false;
+                specValue[0].getChildren('li').each(function(el){
+                  if(el.getChildren('a.selected').length!=0){
+                    specOne = true;
+                  }
+                });
+                if(!specOne){
+                  if(msg=='请选择规格：'){
+                    msg = msg + specName;
+                  }else{
+                    msg = msg + ','+specName;
+                  }
+                  specCheck = true;
+                }
+                
+              });
+            }
+            if(specCheck){
+              Message.error(msg);
+            }else{
+                msg = '';
+                e.stop();
+                this.blur();
+                if (this.retrieve('tip:text')) return false;
+                var form=buyljBtn.getParent('form');
+                var backup =form.action;
+                var sign = false;
+                new Request({
+                  url:"<{link app=spike ctl=site_cart act=addCheck arg0='goods' arg1='fastbuy'}>",
+                  async:false,
+                  method:'post',
+                  data:form,
+                  onSuccess:function(re){
+                    re = JSON.decode(re);
+                    if(re.status=='succ'){
+                        sign = true;
+                    }else if(re.status=='nologin'){
+                        msg = re.error;
+                        Message.error(msg);
+                        window.location = '<{link app=b2c ctl=site_passport act=login}>';
+                    }else{
+                        msg = re.error;
+                        Message.error(msg);
+                    }
+                  }
+                }).send();
+                if(sign){
+                  form.action="<{link app=spike ctl='site_cart' act='add' arg0='goods' arg1='fastbuy'}>";
+                  var url = "<{link app=spike ctl='site_product' act='joinspike'}>";
+
+                  var dialog = new Dialog(url,{
+                       title:'<{t}>秒杀<{/t}>',
+                       width:400,
+                       height:200,
+                       modal:false,
+                       _callback:function(){
+                          form.submit();
+                          form.action=backup;
+                      }
+                  });
+
+                }
+            }
+        });
+    }
+});
+</script>

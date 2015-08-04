@@ -1,0 +1,119 @@
+@charset "utf-8";
+/*---------------------------------------------------------
+ 礼包前台样式
+----------------------------------------------------------*/
+.IndexMainContent{width:auto;}
+#GiftSide{margin-right:8px;width:202px;float:left;display:inline}
+#GiftSide h2{font-size:12px;line-height:30px;color:#e40303;}
+.GiftBorder{width:200px;border:1px solid #ddd; position:relative;z-index:800}
+.GiftBorder .floatbox{visibility:hidden;width:243px; height:60px; border:1px solid #FFCC99; background:#FFFFD9; font-size:12px; color:#333;position:absolute;z-index:9000; top:150px; left:180px}
+.GiftBorder .floatbox .Inner{ position:relative; padding:3px}
+.GiftBorder .floatbox .Inner .arr_icon{ width:5px; height:9px; position:absolute; background:url(arrow_icon1.gif) no-repeat;left:-5px; _left:-8px; top:20px;}
+.GiftBorder .floatbox .del{ width:8px; height:8px; background:url(del_icon.gif) no-repeat; float:right}
+.GiftBorder .floatbox p{ padding:10px 8px; clear:right;line-height:20px;}
+.GiftBorder .floatbox .selected{display:none}
+.GiftBorder .floatSelected .textinfo{display:none}
+.GiftBorder .floatSelected .selected{display:block}
+.gift-single .btn span span {
+	*line-height:22px;
+}
+.GiftBody{float:right;height:auto;width:77%;display:inline}
+.GiftHead{height:200px;}
+.GiftBuy{padding:5px 0px;margin:5px;*margin:5px 3px;z-index:9899}
+.GiftBuy p{font-size:14px;line-height:30px;color:black;margin-bottom:10px;}
+
+.GiftBuy .Msg{color:red;font-size:12px;display:block}
+.GiftBuy .gift-info{display:none;}
+
+.GiftInfo .Msg{display:none}
+.GiftInfo .gift-info{display:block}
+.GiftInfo .selectedNum{display:inline}
+
+.GiftSuccess .Msg{display:none}
+.GiftSuccess .gift-info{display:block}
+.GiftSuccess .selectedNum{display:none}
+
+.GiftBuy a{font-size:12px;}
+.GiftBuy .has-icon{padding:0px;}
+.GiftBuy-btn{height:33px;line-height:33px;_line-height:37px;float:right;cursor:pointer;padding:0 1px 0 20px;background:url(../statics/bundle/shop_icon.gif) no-repeat 0 10px}
+.spanhover{color:#ff6600}
+.spanout{color:#000}
+.btn .btn-icon{ margin-left:3px}
+.GiftBuy-btn img{ margin:0 3px 0 0;vertical-align:middle}
+.IndexSide{display:none}
+.giftGroup {width:100%; margin:3px 0}
+.giftGroup ul{_overflow:hidden; padding:0; margin:0}
+.giftGroup li{clear:both; height:auto; margin:0 3px}
+.giftGroup li .gift-items{width:100px;border:1px solid #ccc;padding:2px;background:#fff;text-align:center;margin:auto;margin-top:10px}
+.giftGroup li .gift-box{padding:2px;background:#ececec;margin:auto}
+.GiftList{border:1px solid #ccc; border-top:none; padding:10px 5px 10px 7px;_padding:10px 5px 10px 10px; z-index:10}
+.GiftList dl{ margin:0 5px 10px 6px;_margin:0 4px 10px 4px;display:inline; width:168px; _width:166px;height:auto; padding:0; float:left; position:relative}
+.GiftList dt{ height:156px; background:#fff; margin-bottom:3px; text-align:center; border:1px solid #ddd; padding:5px 0}
+.GiftList dt img{ height:154px;width:145px}
+.GiftList dd{ height:auto;padding:2px 0; text-align:center}
+.GiftList dd p{ padding:0; margin:0}
+.GiftList dd.left{ text-align:left;overflow: hidden}
+.giftGroup .gift-null span{font-size:40px;color:#ccc;margin:auto;}
+.giftGroup .gift-null p{font:12px/14px bold; padding:2px;}
+.giftGroup li img{margin:0 auto;}
+.gift-image{ position:relative}
+.have_select{ position:absolute; width:60px; height:20px; line-height:20px; left:0; top:0; font-size:12px; text-align:center; background:#F00; color:#FFF}
+
+.have_select.nodisplay{ display:none}
+.gift-null{height:auto; padding:5px 0;border-bottom:1px dotted #ddd;text-align:center;}
+.gift-has{height:113; padding:0 0 5px 0;_z-index:100;_position:relative;_margin-left:-30px; margin:5px;margin-top:10px;text-align:left;}
+.gift-has p{font:12px/14px bold;margin:0 0 5px 10px;text-align:left}
+.GiftHelp{font-size:12px;line-height:20px;height:auto;width:730px}
+#GiftHelp-img img{ width:102px; height:102px}
+.gift-about{float:right;width:610px}
+.gift-about p img{ width:62px; height:62px; float:left; margin:3px 5px 3px 3px}
+#GiftHead{font:12px;line-height:30px;}
+.Gift-title{font-size:14px;color:black;line-height:29px; background:url(gift_title_bj.jpg) repeat-x}
+.gift_specbox{width:216px; float:right; height:126px; overflow-y:auto;position:relative}
+.gift-single .gift-dec{height:auto;overflow:hidden;}
+.gift-single .gift-dec p{ height:auto;font-size:12px;padding:0 5px;color:#000; line-height:15px; width:160px; height:34px; position:relative; z-index:0}
+.gift-single .gift-btn{height:28px;text-align:center;position:relative; z-index:0}
+.dialog_gift{}
+.arrowleft,.arrowright{width:8px; height:12px; line-height:12px; position:absolute;background:url(arrow_icon.gif) no-repeat}
+.dialog_gift .arrowleft{left:-17px; top:30px;zoom:1; position:absolute}
+.dialog_gift .arrowright{right:-21px; top:8px; background-position:0 -12px}
+.dialog_gift .gift-btn{ text-align:right; padding:9px 9px 0 0; width:300px;}
+.dialog_gift .goodsname{ font-size:12px}
+.dialog-content .gift{ width:95px; height:79px; float:left; margin:0 5px 0 0;position:relative}
+.dialog-content .gift img{ height:80px; width:80px;margin-bottom:6px}
+.dialog-title{ background:#F3F3F3}
+.dialog-close-btn span{ display:block; width:16px; height:16px; margin:2px 2px 0 0; background:url(gift_del.gif) no-repeat}
+.add_over .gift-addOk{ display:none}
+.addinfo{ position:absolute;z-index:9000; right:0; top:172px; width:100%; height:64px;}
+.gift-addOk{font-size:14px;color:red; padding:5px 0;font-weight:bold; background:#fff;border:4px solid #eee;vertical-align:middle;height:46px;position:relative;z-index:9999}
+.gift-addOk .center{position:absolute;top:50%;left:50%;margin-left:-80px;margin-top:-20px;white-space:nowrap;font-size:14px;}
+.gift-addOk img{vertical-align:middle;margin-left:10px;}
+.Gift-title h2{float:left;margin:0;padding:0;font-size:14px;}
+.Gift-title li{background:url(main_bg.gif) no-repeat  -250px -1045px ;cursor:pointer;float:left;text-align:center;display:block;height:28px;line-height:28px;padding:0 0 0 3px;width:52px;}
+.gift-chose img.gift{margin-top:8px;}
+.Gift-title li span{background:url(main_bg.gif) no-repeat  right -1045px ; height:28px;line-height:28px; display:block;padding:0 3px 0 0;font-size:12px;}
+#GiftSide a{cursor:pointer;display:block;width:24px;}
+.Gift-title li.active{ background-position:-250px -1090px ;font-weight:bold;cursor:pointer; height:29px;line-height:29px}
+.Gift-title li.active span{background:url(main_bg.gif) no-repeat right -1090px;font-weight:bold;height:29px; line-height:29px}
+.gift-chose a{text-decoration:underline;cursor:pointer;}
+.gift_dele{font:12px/20px bold;text-align:right; padding:0 10px}
+.gift_tit{font:12px/20px bold;color:#000;margin-bottom:10px;text-align:left;}
+.gift-chose .small_box li.gift_tit{ height:40px; overflow:hidden;}
+.gift-chose .small_box li.goodsprice{ color:#FF3300;}
+.gift-chose{ margin:5px}
+.gift-chose .small-pic{float:left;width:65px;height:65px;overflow:hidden;text-align:center; border:1px solid #ddd}
+.gift-chose .small-pic img{ width:65px; height:65px}
+.gift-chose .small_box{ float:left;font-size:12px;width:115px;white-space:nowrap; height:66px}
+.gift-chose .small_box ul{ margin:0; padding:0; list-style-type:none}
+.gift-chose .small_box li{ height:20px; line-height:20px; text-align:left; padding-left:5px}
+.gift-chose .small_box li span{ font-size:12px; height:20px; color:#F00}
+.message{position:absolute;top: 0;left:0;background-color:red;color:#fff;line-height:20px;text-align:center;width:40px;}
+#GiftHelp-img{float:left;border:1px solid #ddd;width:104px;height:104px; text-align:center;padding:1px;}
+.giftname{font-size:14px;color:#e40303}
+.giftGroup .remove{color:#3366cc}
+
+.shop-over{background:url(shopover-btn.jpg) no-repeat;width:100px;height:32px;margin:0 auto;margin-left:20%;text-indent:-9999px;}
+.cart-bj{padding:0;height:25px;cursor:pointer;text-indent:-999px;width:87px;margin-top:3px;*margin:5px 0 0 3px;background:url(gift-cart-bj.jpg) no-repeat;border:none}
+.btn-icon img {*margin: 1px 3px 0 1px;}
+.delet-gift a{margin-left:20px;}
+

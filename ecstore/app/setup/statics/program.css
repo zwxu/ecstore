@@ -1,0 +1,62 @@
+/*---------setup--------*/
+*{ margin:0 auto; padding:0;}
+ul,h1,h2,h3,h4,h5,h6,p,dd,dl,dt,img,li { margin:0; padding:0; border:0;}
+h3 { font-size:12px;}
+li { list-style:none; text-align:left;}
+font { color:#F00; font-size:12px;}
+body {margin:0px; padding:0; font-size:12px; text-align:center; font-family:Arial, Helvetica, sans-serif,"宋体"; background:url(bg.gif) repeat-x; background-color:#fff;}
+.contant { width:850px; height:auto; margin:70px auto;}
+.logo { width:90%; height:33px; float:left; padding-bottom:4px; padding-left:12px; }
+.logo-image { width:90%; height:33px; float:left; background:url(logo.png) no-repeat; }
+.main { width:850px; height:auto; float:left;}
+.left { width:239px; height:auto; float:left;}
+.left-top { width:229px; height:38px; float:right; background:url(setup_03.gif) no-repeat; }
+.left-nav { width:239px; height:281px; float:right; background:url(setup_11.gif) no-repeat top right; font-size:14px; font-weight:bold;}
+.nav-current { width:215px; height:34px; background:url(navtab.png) no-repeat; float:left; color:#5277A5; padding:14px 0px 0px 24px;}
+.nav-unselected { width:215px; height:28px; background:url(navline.gif) no-repeat bottom center; float:left; color:#fff; padding:12px 0px 0px 24px;}
+.left-bottom { width:217px; height:29px; float:right; background:url(setup_12.gif) repeat-x; font-size:14px; color:#fff; text-align:left; padding:12px 0px 0px 12px; overflow:hidden; }
+.left-bottom a{font-size:14px; color:#fff; text-decoration:none; }
+.left-bottom a:hover{font-size:14px; color:#fff; text-decoration:underline;}
+.left-bottom span { font-size:12px; color:#FCD653; padding-left:3px;}
+.right { width:611px; max-height:auto; float:left; background:url(setup_09.gif) repeat-y top right; }
+.right-top { width:611px; height:10px; float:left; background:url(setup_04.gif) repeat-x;}
+.right-topangle { width:7px; height:10px; float:right; background:url(setup_06.gif) no-repeat;}
+.right-bottom{ width:611px; height:8px; float:left; background:url(setup_18.gif) repeat-x;}
+.right-bottomangle { width:7px; height:8px; float:right; background:url(setup_19.gif) no-repeat;}
+.right-main { width:600px; height:auto; float:left; padding-left:11px;}
+.right-main-title { width:600px; height:22px; float:left; overflow:hidden; font-size:18px; color:#333333; text-align:left; padding-top:3px; padding-bottom:4px;}
+.right-main-info { width:579px; height:250px; border-bottom:1px solid #A8BCD5; border-top:1px solid #A8BCD5; float:left; padding:12px 4px 12px 4px;}
+.info-license{ width:579px; height:250px; float:left; overflow:scroll; }
+.right-main-btn { width:141px; height:29px; padding-top:8px; padding-left:226px; float:left;}
+.copyright { width:100%; float:left; text-align:center; color:#666; font-size:12px; padding-top:26px;}
+.copyright span{ color:#3367AC; padding-left:6px;}
+
+
+/*---------signup--------*/
+.signup-contant { width:817px; height:auto; margin:70px auto;}
+.signup-contant-main{ width:734px; height:auto; }
+.signup { width:734px; height:326px; float:left; background:url(signup_05.gif) repeat-x;}
+.signup-left { width:12px; height:326px; float:left; background:url(signup_03.gif) repeat-x;}
+.signup-right { width:11px; height:326px; float:right; background:url(signup_07.gif) repeat-x;}
+.signip-main { width:711px; height:326px; float:left;}
+.ifram { width:315px; padding:36px 20px 36px 12px; float:left; text-align:left; line-height:22px; color:#333333; font-size:12px; overflow:hidden;}
+.window { width:356px; height:277px; float:left; padding-top:13px;}
+.window-tab { width:344px; height:28px; float:left; background:url(signup_10.gif) repeat-x; padding-left:12px; color:#3F4C68; font-size:14px;}
+.window-tab li{ float:left;}
+.window-main {width:318px; height:232px; float:left; border-left:1px solid #C1CFE2; padding:26px 0px 0px 38px;}
+.window-tab-current { width:auto; height:28px; float:left; }
+.window-tabcurrent-left { width:4px; height:28px; float:left; background:url(signup_12.gif) no-repeat;}
+.window-tabcurrent-mid { width:auto; height:19px; float:left; padding:9px 6px 0px 7px; background:url(signup_14.gif) repeat-x; font-weight:bold; }
+.window-tabcurrent-right { width:5px; height:28px; float:left; background:url(signup_16.gif) no-repeat;}
+.window-tab-unselected { width:auto; height:19px; padding-left:20px; padding-top:9px; float:left;}
+.window-info { width:260px; height:24px; float:left; padding:5px 0px 5px 0px;}
+.window-info-title { width:56px; height:24px; float:left; padding-right:6px; padding-top:6px; overflow:hidden; font-size:14px; color:#3F4D69; text-align:right;}
+.window-info-input { width:182px; height:24px; float:left; text-align:left;}
+.window-info-inputcode{ width:112px; height:24px; float:left; text-align:left;}
+.signup-input { width:176px; height:18px; padding:0; margin:0px; border:1px solid #C1CFE2; padding-top:2px; padding-left:2px;}
+.signup-input-code { width:106px; height:18px; padding:0; margin:0px; border:1px solid #C1CFE2; padding-top:2px; padding-left:2px;}
+.code { width:65px; height:22px; float:left;}
+.check-txt { width:78px; height:17px; float:left; font-size:12px; color:#3F4C68; padding-top:5px; text-align:left; padding-left:2px;}
+.check { width:auto; height:22px; float:left; text-align:left; padding-left:58px;}
+.window-btn { width:79px; height:29px; float:left; padding-left:62px;}
+.inverted-image {width:817px; height:24px; background:url(signup_31.gif) no-repeat; float:left; clear:both;}

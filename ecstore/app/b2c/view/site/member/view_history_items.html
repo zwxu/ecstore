@@ -1,0 +1,84 @@
+<table class="gridlist gridlist_member border-left border-right" width="100%" border="0" cellspacing="0" cellpadding="0">
+
+	<th class="blrn" width="66">&nbsp;</th>
+	<th ><{t}>商品编号<{/t}></th>
+    <th><{t}>商品名称<{/t}></th>
+    <th><{t}>商品单价<{/t}></th>
+	<th><{t}>浏览时间<{/t}></th>
+    <th><{t}>操作<{/t}></th>
+    </tr>
+<{foreach from=$view_history item="good"}>
+      <tr id="goods_<{$good.goods_id}>" class="itemsList" product="<{$good.goods_id}>">
+	  <td><input type="checkbox" name="chk[]" value="<{$good.goods_id}>"/></td>
+	  <td><a target="_blank" href="<{link app="b2c" ctl="site_product" act="index" arg0=$good.goods_id}>" ><{$good.bn}></a></td>
+	   <td style="white-space:normal" class="horizontal-m">
+        <{if $good.udfimg == 'true'}>
+  <{assign var="gimage" value=$good.thumbnail_pic|default:$defaultImage}>
+  <{else}>
+  <{assign var="gimage" value=$good.image_default_id|default:$defaultImage}>
+  <{/if}>
+  <div class="goodpic"><a target="_blank" style='<{if $env.conf.site.thumbnail_pic_width !=0 && $env.conf.site.thumbnail_pic_height !=0}> width:<{$env.conf.site.thumbnail_pic_width}>px;height:<{$env.conf.site.thumbnail_pic_height}>px;<{/if}>' href="<{link app=b2c ctl=site_product act=index arg=$good.goods_id}>">
+    <img  style="width:50px; height:58px;" src="<{$gimage|storager:'s'}>"  alt="<{$good.name|escape:html}>"/>
+
+  </a></div>
+  <div class="goods-main">
+  <div class="goodinfo" >
+  <h6><a target="_blank" href="<{link app="b2c" ctl="site_product" act="index" arg0=$good.goods_id}>" title="<{$good.name}>"><{$good.name}></a></h6>
+   <p><{$good.brief}></p></div>
+  </div>
+  </td>
+   <td class='price-button' align="center">
+        <ul>
+            <li><span class="font-red font13px fontbold"><{$good.price|cur_odr}></span><{if $good.mktprice && $setting.mktprice}><span class="mktprice1"><{t}>市场价: <{/t}><{$good.mktprice|cur_odr}></span><{/if}></li>
+            <{if $good.mktprice > $good.price && $setting.mktprice && $setting.saveprice > 0}>
+            <li style="padding-left:4px; padding-top:8px;">
+			<span class="saveprice1"> <{if $setting.saveprice == 1}><{t}>节省:<{/t}><{$good.mktprice-$good.price|cur_odr}>
+              <{elseif $setting.saveprice == 2}><{t}>优惠:<{/t}><{$good.price/$good.mktprice*100|number:'2'}>%
+              <{elseif $setting.saveprice == 3}><{$good.price/$good.mktprice*10|number:'1'}><{t}>折<{/t}>
+			  <{/if}></span></li>
+            <{/if}>
+          </ul>
+          </td>
+    <td><{$good.last_modify|cdate:FDATE_FTIME}></td>
+  <td align="left" style="vertical-align:middle" class="member-fav">
+<ul class="fav-Operator">
+<li><{goodsmenu product=$good compare=true setting=$setting z-index=9999 showtextbuy=false member=2}></li>
+<li class="icon2" style="clear:both"><a class="btn-bj-hover operate-btn" gid="<{$good.goods_id}>" onclick="ajax_del_fav($(this),event);"><span><{t}>删除<{/t}></span></a></li>
+</ul>
+        </td>
+      </tr>
+  <{/foreach}>
+    </table>
+<div  style="padding-left:28px;background:#f9f9f9;height:31px;line-height:31px;"><input type="checkbox" id='all'/>&nbsp;&nbsp;<{t}>全选<{/t}>&nbsp;&nbsp;<a href="javascript:removeSel();"><{t}>删除<{/t}></a></div>
+
+<script>
+
+function removeSel(){
+    var reqs = $$('input[name^=chk]:checked').length;
+        if(reqs == 0){
+        Ex_Dialog.alert('<{t}>请选择要删除的选项！<{/t}>');
+    }else{
+        Ex_Dialog.confirm('<{t}>确定要删除所选项吗？<{/t}>', function(e){
+            if(!e) return;
+            $('return-form').submit();
+        });
+    }
+}
+
+window.addEvent('domready',function() { 
+ $('all').addEvent('click',function(){
+     
+	     $$('input[name^=chk]').each(function(item){
+		 if($('all').checked == true){
+            item.checked = true;
+		 }else{
+		    item.checked = false;
+		 }
+		});
+
+ 
+ })
+
+});
+
+</script>

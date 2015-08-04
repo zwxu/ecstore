@@ -1,0 +1,5 @@
+<desktop>
+
+    <adminpanel group="desktop_user" permission="users" controller="default" display='true'>操作日志</adminpanel>
+
+</desktop>

@@ -1,0 +1,42 @@
+<{if count($products) > 0}>
+<ul class="shop-list">
+  <{foreach from=$products key=key item=product name=goods}>
+  <li>
+    <div class="item  item_list">
+      <div class="pic pic_list">
+        <a target="_blank" href='<{link app=b2c ctl=site_product act=index arg=$product.goods_id}>' style='width:220px;display: table-cell;  text-align: center; margin:0 auto;'>
+        <{if $product.udfimg == 'true'}>
+        <{assign var="gimage" value=$product.thumbnail_pic}>
+        <{else}>
+        <{assign var="gimage" value=$product.image_default_id|default:$defaultImage}>
+        <{/if}>
+        <{img src="images/transparent.gif" style="width:220px;height:220px;" app="b2c" lazyload=$gimage|storager:'s' class="img-lazyload"  alt=$product.name|escape:html}>
+        </a>
+      </div>
+      <div class="desc desc_list">
+        <a class="permalink" style="" href="<{link app=b2c ctl=site_product act=index arg=$product.goods_id}>" target="_blank">
+        <{$product.name|escape:"html"}></a>
+      </div>
+      <div class="price price_list">
+      <span> 一口价 </span>
+        <strong><{$product.price|cur_odr}></strong>
+      </div>
+      <div class="selled_list">
+        已销售：<em><{$product.buy_count}></em>件
+      </div>
+      <div class="ping_list">
+        <span class="c-value-no" title="<{$product.avg_point}>分">
+        <i style="width: <{$product.avg_point}>em"></i>
+        </span>
+        <span class="small">
+        (
+        <a href="<{link app=b2c ctl=site_product act=index arg=$product.goods_id}>#consultnlist" target="_blank">已有<{$product.comments_count}>人评论</a>
+        )
+        </span>
+      </div>
+    </div>
+	<div class="cl_zhi"></div>
+  </li>
+  <{/foreach}>
+</ul>
+<{/if}>

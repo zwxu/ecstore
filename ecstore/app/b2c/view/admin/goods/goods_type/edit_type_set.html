@@ -1,0 +1,62 @@
+<form action='index.php?app=b2c&ctl=admin_goods_type&act=edit' method='post'>
+    <div class="tableform">
+        <div class="division">
+            <table width="100%">
+                <tr>
+                    <th><{t}>是否为实体商品<{/t}></th>
+                    <td >
+                        <label><input type="radio" value="1" name="gtype[is_physical]"<{if $gtype.is_physical}> checked="checked"<{/if}>><{t}>是<{/t}></label> &nbsp; &nbsp; 
+                        <label><input type="radio" value="0" name="gtype[is_physical]"<{if !$gtype.is_physical}> checked="checked"<{/if}>><{t}>否<{/t}></label>
+                    </td>
+                </tr>
+                <tr>
+                    <th><{t}>是否与品牌关联<{/t}></th>
+                    <td >
+                        <label><input type="radio" value="1" name="gtype[setting][use_brand]"<{if $gtype.setting.use_brand}> checked="checked"<{/if}>><{t}>是<{/t}></label> &nbsp; &nbsp; 
+                        <label><input type="radio" value="0" name="gtype[setting][use_brand]"<{if !$gtype.setting.use_brand}> checked="checked"<{/if}>><{t}>否<{/t}></label>
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <div class="notice"><{t}>注意：如果不关联品牌，在前台商品列表页该类型商品将无法使用品牌进行筛选<{/t}></div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><{t}>是否启用商品扩展属性<{/t}></th>
+                    <td >
+                        <label><input type="radio" value="1" name="gtype[setting][use_props]"<{if $gtype.setting.use_props}> checked="checked"<{/if}>><{t}>是<{/t}></label> &nbsp; &nbsp; 
+                        <label><input type="radio" value="0" name="gtype[setting][use_props]"<{if !$gtype.setting.use_props}> checked="checked"<{/if}>><{t}>否<{/t}></label>
+                    </td>
+                </tr>
+                <tr>
+                    <th><{t}>是否启用商品参数表<{/t}></th>
+                    <td >
+                        <label><input type="radio" value="1" name="gtype[setting][use_params]"<{if $gtype.setting.use_params}> checked="checked"<{/if}>><{t}>是<{/t}></label> &nbsp; &nbsp; 
+                        <label><input type="radio" value="0" name="gtype[setting][use_params]"<{if !$gtype.setting.use_params}> checked="checked"<{/if}>><{t}>否<{/t}></label>
+                    </td>
+                </tr>
+                <tr>
+                    <th><{t}>是否启用购物必填信息<{/t}></th>
+                    <td>
+                        <label><input type="radio" value="1" name="gtype[setting][use_minfo]"<{if $gtype.setting.use_minfo}> checked="checked"<{/if}>><{t}>是<{/t}></label> &nbsp; &nbsp; 
+                        <label><input type="radio" value="0" name="gtype[setting][use_minfo]"<{if !$gtype.setting.use_minfo}> checked="checked"<{/if}>><{t}>否<{/t}></label>
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <div class="notice"><{t}>必填信息是指前台下订单时店主要求购买此类型商品的顾客必须提供的指定信息，如：购买鲜花送人时提供的贺卡附言<{/t}></div>
+                    </td>
+                </tr>
+                <{foreach from=$addOptions item=item}>
+                <{$item}>
+                <{/foreach}>
+            </table>
+            <input type='hidden' name='gtype[type_id]' value='<{$gtype.type_id}>'/>
+        </div>
+    </div>
+    <div class="table-action">
+        <{button label=$___b2c="下一步"|t:'b2c' type="submit" class="btn-primary"}>
+    </div>
+</form>

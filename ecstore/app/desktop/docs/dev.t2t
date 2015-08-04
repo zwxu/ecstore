@@ -1,0 +1,454 @@
+desktop开发手册
+
+since   :   %%date(%Y-%m-%d)  $Rev$
+
+%!target:html
+%!postproc(tex): '\.gif' '.eps'
+%!preproc(html): '\.dot' '.gif'
+%!preproc(tex): '\.dot' '.pdf'
+%!encoding:utf-8
+=desktop简介=
+desktop提供一个带有权限和工作流的操作环境，一个网站一般分为前台和后台，它提供了常用的后台操作实现机制，这大大节省了你后台开发的时间。
+desktop作为ecos的一个基础app一般不单独存在，是其他app操作流程的载体。BBC是基于ecos的开源商城系统，亦依赖desktop，它使用了绝大部分desktop的功能，建议使用desktop开发新的应用时，多参照下BBC，为便于理解，本手册亦以BBC为例讲解。
+=此手册目标人群=
+开发者：开发基于ecos的新应用或扩展已有应用功能时，需开发后台功能的会用到desktop
+
+
+=desktop提供了下列功能：=
+- 权限管理
+- 回收站
+- 显示app提供的菜单项或控制面板项
+- finder功能
+
+
+==desktop.xml说明==
+
+装了desktop这个app，就能识别其他app目录下的desktop.xml文件，这个文件必须列出所有后台看见或看不见的控制器，否则除非是超级管理员，任何其他非超级管理员desktop用户无法访问这些控制器。
+desktop.xml的结构大概是这样的：
+
+
+```
+<desktop>
+
+	<panelgroup id="other" icon="panel-other.png" order="100">其他</panelgroup>
+	...
+	<adminpanel group="desktop_other" permission="other" controller='admin_member_attr' action='index' display='true'>会员注册项</adminpanel>
+	...
+	<permissions>
+		<permission id="shipment" display='true'>配送设置</permission>
+		...
+	</permissions>
+
+	<workground name="商品" id="b2c.wrokground.goods" controller="admin_goods" action="index" order="20">
+		<menugroup name="商品管理">
+		    <menu controller='admin_goods_editor' action='add' permission='goods' display='false' order='10'>添加商品</menu>
+		    ...
+		</menugroup>
+		...
+	</workground>
+	...
+</desktop>
+
+```
+desktop.xml不一定包含上面的所有标签，各个标签及属性含义如下：
+
+- ``desktop ``
+
+	每个 desktop.xml 的根标签
+- ``panelgroup``  
+
+	控制面板里的组
+	其属性含义如下：
+	
+	1. ``id:``控制面板里组的唯一标识
+
+	2. ``icon:`` 控制面板里组的图标，路径默认的起点是app下的static，假如此desktop.xml是desktop这个app的，则图标的路径会自动解析成/app/desktop/static/panel-other.png
+
+	3. ``order:`` 组的显示顺序
+
+- ``adminpanel``  
+
+	控制面板里的项
+	其属性含义如下：
+	
+	1. ``group:`` 指属性那个控制面板组，其值是panelgroup的id属性值加app前缀，例如group="desktop_other"
+
+	2. ``permission:`` 指此控制面板里的项属性那个权限（下面讲到权限）
+
+	3. ``controller:`` controller和action(构成点此控制面板项时的去处，如果action属性未写则默认值为index) 
+
+	4. ``action:`` controller和action(构成点此控制面板项时的去处，如果action属性未写则默认值为index)
+
+	5. ``display:`` 是否显示在控制面板组里，true为显示，false为不显示
+
+
+- ``permissions``
+	权限被包括在它里面
+	
+- ``permission``
+	包含在permissions标签里，每一个都是一个权限
+	其属性含义如下：
+
+	1. ``id:`` 权限的唯一标识，全局唯一
+
+	2. ``display:`` 新建角色时，是否显示在角色权限列表里，true为显示，false为不显示
+
+
+
+- ``workground``  
+	
+	可以包含多个menugroup，看【图 desktop.png】  
+	其属性有:
+
+	1.``name:`` 1区显示出来的label
+	
+	2.``id:``(workground的唯一标识)
+	
+	3.``controller:`` 构成点此workground tab时的去处，如果action属性未写则默认值为index
+	
+	4.``action:`` 构成点此workground tab时的去处，如果action属性未写则默认值为index
+
+	5.``order:`` 此workground在tab列表中的排序
+
+- ``menugroup``  
+
+	可以包含多个``menu``，看【图 desktop.png】  2区
+
+- ``menu``  
+
+	看【图 desktop.png】为3区提供菜单,除了拥有跟workground一样的属性外，此标签还有另外两个属性:
+	
+	``permission:`` 权限,为标签permission里的id属性的值
+	
+	``display:`` 是否显示,有些控制器里的方法是不必显示成菜单的，比如得到post数据保存商品的控制器等，这时需把display设成false的
+
+
+=先来看下，一个典型的desktop的列表页包含了哪些内容=
+
+
+【图 desktop.png】
+[images/desktop.png]
+
+=接下来我们看各个区里的内容是如何增删及展示出来的=
+
+- 1、2、3区都是根据app下的``desktop.xml``产生，如何填充，可以参照desktop.xml的介绍试试看
+
+
+
+- 5区顶部菜单产生是靠往服务id为desktop_menu里注册服务实现
+
+在``service.xml``里添加
+```
+     <service id="desktop_menu">
+        <class>b2c_service_view_menu</class>
+    </service>
+```
+
+``b2c_service_view_menu``内容如下
+```
+class b2c_service_view_menu{
+    function function_menu(){
+        $shop_base = app::get('site')->router()->gen_url(array('app'=>'site', 'ctl'=>'default'));
+        $html[] = "<a href='$shop_base' target='_blank'>浏览商店</a>";
+        return $html;
+	
+    }
+}
+```
+说明：``desktop_menu``的服务，必须定义名字为function_menu的方法,它的返回值即为5区的菜单项
+
+- 4区finder,先看下细分图 
+
+【图 finder.png】
+
+[images/finder.png]
+
+
+finder说明：下面对finder各个区的内容的来龙去脉做解释，我们平时做任何web应用大概都少不了，后台管理功能，这之中最常看到的大概就是：数据列表，对数据进行单条查看，删除，搜索列表数据。finder就是做这样工作的，要做到这些事情只需简单的给一个方法传几个参数而已。
+
+例如：
+```
+    function index(){
+        $this->finder('b2c_mdl_goods',array(
+		'title'=>app::get('b2c')->_('商品列表'),
+		'actions'=>array(array('label'=>app::get('b2c')->_('添加商品'),'href'=>'index.php?app=b2c&ctl=admin_goods_editor&act=add','target'=>'_blank'),),
+		'use_buildin_set_tag'=>true,
+		'use_buildin_filter'=>true,
+		'use_buildin_export'=>true,
+		'allow_detail_popup'=>true,
+		'use_view_tab'=>true,
+		'finder_aliasname'=>'xxxx',
+            ));
+    }
+```
+后台的控制器必须继承desktop_controller，继承后才有finder方法，下面介绍下finder方法的几个参数：
+
+- 第一个参数是字符串，（上例中是b2c_mdl_goods），是model里的class名，它决定了finder列表的数据源，默认情况下是b2c_mdl_goods类里的getlist方法返回的数据
+
+- 第二个参数是数组，这个数组内涵相当丰富，解释如下：
+
+``title:`` 【图 finder.png】中的1区显示出来的内容
+
+``actions:`` 【图 finder.png】2区里的内容除了显示内置的操作以外(use_buildin_set_tag,use_buildin_filter这些是控制项)，还可以自定义添加新操作，参照上面格式。
+
+``allow_detail_popup：`` allow_detail_popup和其下面的其他项，是上面所说的内置的操作的控制项，其值为true时，显示此内置项。完整的内置操作及含义如下(可到desktop_finder_builder_view类里查看)：
+
+	**use_buildin_new_dialog:** 是否显示新建操作
+
+	**use_buildin_set_tag:** 是否显示设置标签操作
+
+	**use_buildin_recycle:** 是否显示删除操作
+
+	**use_buildin_export:** 是否显示导出操作
+	
+	**use_buildin_import:** 是否显示导入操作
+	
+	**use_buildin_tagedit:** 是否显示标签管理操作
+	
+
+	
+	下面几个控制项不是控制【图 finder.png】2区里的内容
+
+	**use_view_tab:**  是否显示finder中的tab（如果有），有无需看控制器中是否有_views方法。
+
+	**use_buildin_filter:** 是否使用高级赛选 【图 finder.png】6区
+	
+	**use_buildin_refresh:**  是否显示刷新操作(高级赛选旁)
+	
+	**use_buildin_setcol:** 是否显示列配置 
+	
+	**use_buildin_selectrow:** 是否显示每条记录前的复选按钮
+	
+	**allow_detail_popup:** 是否显示查看列中的弹出查看图标（【图 finder.png】4区第二个图标）
+
+	**finder_aliasname:** 此finder的别名，用于保存此finder的
+
+=下面对几个重点区域内容的填充做详细讲解=
+
+-
+==增加finder列表的自定义列==
+
+
+finder列表的列分为以下三种：
+
+1.查看列 (分为下列查看和弹出查看)
+
+2.自定义列(也可称函数列)，可以通过一种方法扩展
+
+3.普通列(数据表里有的字段，也即dbschema里有的字段)
+
+
+【图 finder.png】5区的两列操作和标签都不是dbschema里的字段，还能显示出来是因为他们是自定义列，通过下面的步骤实现：
+
+	1.注册一个service，其id是desktop_finder.xxx,xxx是finder方法的第一个参数，上例中是b2c_mdl_goods，最终结果在相应的应用中services.xml中如下样子：
+
+```
+    <service id="desktop_finder.b2c_mdl_goods">
+        <class>b2c_finder_goods</class>
+    </service>
+
+```
+
+b2c_finder_goods类里有两种方法，两种属性，属性和方法成对出现：
+
+第一种 属性以detail_开头，对应的方法也以detail_开头 例如：
+```
+
+	var $detail_basic = '基本信息';
+	function detail_basic($gid){
+		...
+		return $str;
+	}
+```
+
+
+属性detail_basic是作为列头显示的，方法detail_basic的返回值是点击查看里出现的内容[如果有多个detail_开头的方法，则显示第一个里面的内容]
+
+
+
+第二种：属性以column_开头，对应的方法也以column_开头
+
+
+```
+	var $column_editbutton = '操作';
+	public function column_editbutton($row)
+	{
+		...
+		return $str;
+	}
+```
+
+属性column_editbutton是作为列头显示的，方法column_editbutton的返回值是每行此列的显示内容，方法column_editbutton的参数是当前行的数组。
+
+补充：自定义列后来又加了一个属性，属性名规则是列变量加_order 例如 var $column_editbutton_order = **order**
+ order 可以是COLUMN_IN_HEAD[放在普通列前面]或COLUMN_IN_TAIL[放在普通列后面]
+
+
+-
+==高级赛选==
+
+高级赛选中的搜索项大部分来自dbschema中，搜索类型[单选或下拉或输入关键词]也定义在dbschema
+
+除此之外，高级赛选中的搜索项还可以通过注册service扩展，id为extend_filter_xxx,xxx为finder方法的第一个参数，例如：
+
+
+```
+    <service id="extend_filter_b2c_mdl_orders">
+        <class>b2c_finder_extend_orders</class>
+    </service>
+
+```
+
+b2c_finder_extend_orders 类如下：
+
+```
+
+class b2c_finder_extend_members{
+    function get_extend_colums(){
+            $db['members']=array (
+              'columns' => 
+              array (
+                'refer_id' => 
+                array (
+                  'type' => 'varchar(200)',
+                  'required' => true,
+                  'default' => 0,
+                  'label' => '首次来源ID',
+                  'width' => 75,
+                  'editable' => true,
+                  'filtertype' => 'yes',
+                  'filterdefault' => true,
+                  'in_list' => true,
+                  'default_in_list' => true,
+                ),
+		
+		...
+
+                 'refer_url' => 
+                array (
+                  'type' => 'varchar(200)',
+                  'required' => true,
+                  'default' => 0,
+                  'label' => '首次来源URL',
+                  'width' => 75,
+                  'editable' => true,
+                  'filtertype' => 'yes',
+                  'filterdefault' => true,
+                  'in_list' => true,
+                  'default_in_list' => true,
+                )))
+    }
+}
+
+```
+
+class里必须包含get_extend_colums方法，它的返回值跟dbschema里的一样，如果扩展了高级搜索，一般需要在model里重定义_filter方法，以便使用上扩展过滤字段
+
+-
+==快捷搜索==
+
+有两个地方影响快捷搜索，dbschema中定义的字段中，searchtype这一项，如果有这项则会在快捷搜索里出现，还有就是在model里定义searchOptions函数，返回值的数组就为快速搜索里的项，例如：
+
+```
+    function searchOptions(){
+        $arr = parent::searchOptions();
+        return array_merge($arr,array(
+                'bn'=>__('货号'),
+                'keyword'=>__('商品关键字'),
+            ));
+    }
+```
+
+-
+
+==finder上的tab==
+
+需要在调用了finder的控制器里定义_views方法，_views方法的返回值格式如下：
+
+```
+
+$sub_menu = array(
+            0=>array('label'=>app::get('b2c')->_('全部'),'optional'=>false,'filter'=>"",'addon'=>1,'href'=>'xxx.xxx','finder'=>'xxxx'),
+	    ...
+            7=>array('label'=>app::get('b2c')->_('已作废'),'optional'=>false,'filter'=>array('status'=>'dead'),'addon'=>1,'href'=>'xxx.xxx'),
+        );
+
+```
+
+``label:`` tab的标题文字
+
+``optional:`` 此tab是否可选
+
+``filter:`` 此tab的过滤条件
+
+``addon:`` 此过滤条件下有多少条记录
+
+``href:`` 此tab的链接地址
+
+
+
+=回收站=
+
+如果finder方法第二个参数中使用了use_buildin_recycle，则此finder列表的actions区就有了内置的删除按钮，有时需要在删除前和删除后做一些检测工作，比方记录不准删除，或删除记录时需删除资源文件等。
+实现这一功能机制是在model里定义pre_recycle[删除前执行]和suf_recycle[删除后执行]方法
+
+
+=桌面=
+
+登录后台首先看到的界面，其内容由各个app通过service注册进来，里面每一块都是一个wigets，下面是b2c的service.xml里桌面内容相关的一段
+
+```
+    <service id="desktop.widgets">
+        <class>b2c_desktop_widgets_workcount</class>
+        <class>b2c_desktop_widgets_stats</class>
+        <class>b2c_desktop_widgets_exstatistics</class>
+    </service>
+    
+```
+
+每个class就是一个wigets，每个class里面的内容为以下格式[以b2c_desktop_widgets_workcount为例]：
+
+```
+
+class b2c_desktop_widgets_workcount implements desktop_interface_widget{
+    
+    
+    function __construct($app){
+        $this->app = $app; 
+        $this->render =  new base_render(app::get('b2c'));  
+    }
+    
+    function get_title(){
+            
+        return app::get('b2c')->_("统计分析");
+        
+    }
+    function get_html(){
+	...
+        return $render->fetch('desktop/widgets/workcount.html');
+    }
+    function get_className(){
+        
+          return " valigntop";
+    }
+    function get_width(){
+          
+          return "l-1";
+        
+    }
+    
+}
+
+```
+
+函数说明
+
+`` function get_title():`` desktop widgets标题 
+
+`` function get_title():`` desktop widgets 内容
+
+`` function get_className():`` 给desktop widgets 区块添加class name
+
+`` function get_width():`` 返回值为l-1显示在左侧，值为l-2显示在左侧
+
+

@@ -1,0 +1,83 @@
+<deploy>
+	
+	<licence file="license.txt" />
+
+	<product_name>BBC</product_name>
+	<product_version>1.2.10</product_version>
+	<product_key>ecos.ecstore.standard</product_key>
+	<product_desc>The future of shopping</product_desc>
+
+	<installer>
+		
+		<title>BBC 安装</title>
+		
+		<banner><![CDATA[
+		<h1 id="ECstore-ver">BBC<sup style="color:red;font-size:12px"></sup></h1>
+		]]></banner>
+
+		<style><![CDATA[
+		]]></style>
+
+		<finish>
+			<message><![CDATA[
+			<div>安装顺利完成！
+             <p style="margin-top:20px;">访问网店:</p>
+			 <p><a href="%BASE_URL%">%BASE_URL%/index.php</a></p>
+             <p>管理网店:</p>
+			 <p><a href="%BASE_URL%/index.php/shopadmin">%BASE_URL%/index.php/shopadmin</a></p>
+            </div>
+
+			]]></message>
+		</finish>
+		<writeable_check>
+			<dir>config</dir>
+			<dir>data</dir>
+			<dir>public</dir>
+			<dir>public/files</dir>
+			<dir>public/images</dir>
+			<dir>themes</dir>
+			<dir>app</dir>
+		</writeable_check>
+	</installer>
+
+	<package>
+		<app id="b2c" default="true" locked="true" hidden="false" autostart="true" />
+		<app id="express" default="true" locked="true" hidden="false" autostart="true" />
+		<app id="gift" default="true" locked="true" hidden="false" autostart="true" />
+		<app id="bdlink" default="true" locked="true" hidden="false" autostart="true" />
+		<app id="aftersales" default="true" locked="true" hidden="false" autostart="true" />
+		<app id="recommended" default="true" locked="true" hidden="false" autostart="true" />
+		<app id="proqgoods" default="true" locked="true" hidden="false" autostart="true" />
+		<app id="progetcoupon" default="true" locked="true" hidden="false" autostart="true" />
+		<app id="couponlog" default="true" locked="true" hidden="false" autostart="true" />
+		<app id="proregister" default="true" locked="true" hidden="false" autostart="true" />
+		<app id="operatorlogmanage" default="true" locked="true" hidden="false" autostart="true" />
+		<app id="operatorlog" default="true" locked="true" hidden="false" autostart="true" />
+		<app id="openid" default="true" locked="true" hidden="false" autostart="true" />
+		<app id="goodsapi" default="true" locked="true" hidden="false" autostart="true" />
+		<!-- <app id="sradar" default="true" locked="true" hidden="false" autostart="true" /> -->
+		<app id="proundefined" default="true" locked="true" hidden="false" autostart="true" />
+		<app id="logisticstrack" default="true" locked="true" hidden="false" autostart="true" />
+		<app id="pointprofessional" default="true" locked="true" hidden="false" autostart="true" />
+		<app id="commenterprise" default="true" locked="true" hidden="false" autostart="true" />
+		<app id="tags" default="true" locked="true" hidden="false" autostart="true" />
+	</package>
+	
+	<demodatas>
+		<demodata>
+			<name>BBC</name>			
+			<type>select</type>
+			<default>2</default>
+			<vtype>required</vtype>
+			<required>true</required>
+			<options key="1" value="不安装体验数据"></options>
+			<options key="2" value="安装体验数据"></options>			
+			<title>是否安装体验数据</title>
+		</demodata>
+	</demodatas>
+	
+	<setting app="desktop" key="banner">BBC</setting>
+	<setting app="desktop" key="logo">BBC</setting>
+	<setting app="desktop" key="logo_desc">The future of shopping</setting>
+
+</deploy>

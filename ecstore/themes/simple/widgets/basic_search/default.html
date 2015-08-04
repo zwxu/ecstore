@@ -1,0 +1,111 @@
+<form action="<{link app=b2c ctl=site_search act=result }>"  class="SearchBar  searchBar_<{$widgets_id}>" >
+<{if $data.st=='s'}>
+    <input type="hidden" name='view' value='index'>
+    <input type="hidden" name='st' value='s'>
+<{else}>     
+    <input type="hidden" name='view' value='grid'>
+    <input type="hidden" name='st' value='g'>
+<{/if}>
+<div class="search_three dis_bl">
+    <div class="search_box fl">
+         <{if $data.search_key}>
+          <{if $data.search_key !=$env.conf.b2c.search.goods.tip}>
+            <{assign var=showtip value=false}>
+          <{/if}>
+         <{/if}>
+         <!-- <label id='J_Fsk_top_tip' <{if $showtip==false}>style='display:none;'<{/if}>><{$env.conf.b2c.search.goods.tip}></label> -->
+         <input type="text" placeholderd="<{$env.conf.b2c.search.goods.tip}>" id='J_Fsk' name="name[]" value="<{$data.search_key}>" autocompleter="associate_autocomplete_goods:name,goods_id" ac_options="{}" class="search_keyword dis_bl" tabindex="0" autocomplete="off"/>
+        <!-- <input type="text"  value="" class="search_keyword dis_bl" > -->
+    </div>
+    <div class="search_button fl">
+        <!-- <input type="submit" onfocus="" class="btn_search" value="搜 索">
+        <input type="submit"  class="btn_search"  onfocus='this.blur();' view="index" st="s" value="搜 索"/> -->
+        <input type="submit"  class="btn_search" onfocus='this.blur();' view="grid" st="g" value="搜 索"/>
+    </div>
+</div>
+</form>
+
+<{ if $data.search}>
+<div class="search_hots dis_bl clb">
+    <!--热门搜索词好像没有呀。-->
+    <{if $setting.hotkey}><{$setting.hotkey}><{/if}>
+    <{foreach from=$data.search item=toplink key=top_key}>
+        <a href="<{$toplink.top_link_url}>"><{$toplink.top_link_title}></a>
+    <{/foreach}>
+</div>
+<{/if}>
+
+<script>
+(function(scope){
+	if(scope){
+    var hview=scope.getElement('input[name="view"]');
+    var hst = scope.getElement('input[name="st"]');
+    var subBtn=scope.getElements('.btn_search');
+    subBtn.addEvent('click',function(e){
+    var j_fsk=$('J_Fsk');
+       if(j_fsk.value.trim()==''){
+          e.stop();
+          j_fsk.value='';
+          //$('J_Fsk_top_tip').set('html','请输入关键字');
+          j_fsk.focus();
+       }else{
+          e.stop();
+          hview.value = this.get('view');
+          hst.value = this.get('st');
+          this.form.submit();
+       }
+    });
+    // scope.getElements('a').each(function(el,index,arr){
+    //    if(el.get('view')==hview.value){
+    //       el.removeClass('shop_sear');
+    //       if(!el.hasClass('prod_sear')){
+    //          el.addClass('prod_sear');
+    //       }
+    //    }else{
+    //       el.removeClass('prod_sear');
+    //      if(!el.hasClass('shop_sear')){
+    //       el.addClass('shop_sear');
+    //      }
+    //    }
+    //    el.addEvent('click',function(e){
+    //      e.stop();
+    //      var st=el.get('view');
+    //        if(hview.value==st){
+    //           return;
+    //        }
+    //        hview.value=st;
+    //        hst.value=el.get('st');
+    //        $('J_Fsk_top_tip').show();
+    //        $('J_Fsk').value='';
+    //        $('J_Fsk_top_tip').set('html',$(this).get('tip'));
+    //        arr.map(function(ell){
+    //            ell.toggleClass('prod_sear');
+    //            ell.toggleClass('shop_sear');
+    //        });
+    //    });
+    // });
+//    $(scope).getElements('input[autocompleter]').each(function(item) {
+//         item.addEvents({
+//         'focus':function(e){
+//            $('J_Fsk_top_tip').setStyle('color','#CCCCCC');
+//         },
+//         'blur':function(e){
+//            if($(this).value==''){
+//                $('J_Fsk_top_tip').setStyle('color','#666666');
+//                $('J_Fsk_top_tip').show();
+//            }else{
+//                $('J_Fsk_top_tip').hide();
+//            }
+//         },
+//         'keydown':function(e){
+//            $('J_Fsk_top_tip').hide();
+//         },
+//         'change':function(e){
+//            $('J_Fsk_top_tip').hide();
+//         }
+//         });
+//    });
+}
+})(document.getElement('.searchBar_<{$widgets_id}>'));
+</script>
+<!-- <{if $data.bottom_html}><{$data.bottom_html|regex_replace:'/widgets_id/':$widgets_id}><{/if}> -->

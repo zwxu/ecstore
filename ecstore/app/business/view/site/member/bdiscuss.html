@@ -1,0 +1,223 @@
+<div class="member-main">
+<div class="title"><{t}>评论管理<{/t}></div>
+  <div id="tab-sdiscus" class="section switch">
+    <div class="personal-rating">
+      <table class="seller-rate-info comment_280" width="100% "cellpadding="0" cellspacing="0" border="0" >
+        <{foreach from=$_all_point item="b_all_point"}>
+        <tr>
+          <td class="scores-wrap">
+          <ul class="out">
+            <li class="flt"><{$b_all_point.name}>：</li>
+            <li>
+              <div class="star-div flt " style="padding-top:2px;padding-top:0\9">
+                <ul>
+                  <li class="star<{$b_all_point.avg}>"></li>
+                </ul>
+              </div>
+              <span class="scores_size"><{$b_all_point.avg_num}></span>
+            </li>
+            <li style="clear:both">(<{t}>共<{/t}><span class="value-color"><{$b_all_point.total|default:0}></span><{t}>人评分<{/t}>)</li>
+          </ul>
+          </td>
+          <td class="scores-item">
+            <ul class="scroller" style="width: 630px;background-position: 15px bottom;">
+              <p style="margin: 0;padding: 0 0 0 30px;width: 600px;"><span style="<{if $b_all_point.avg_num}>width:<{$b_all_point.avg_num*100/5}>%;<{else}>display:none;<{/if}>"><em><{$b_all_point.avg_num}></em></span></p>
+            </ul>
+          </td>
+        </tr>
+        <{/foreach}>
+        <tr>
+          <td class="desc" colspan="2">
+            <div>
+              <ul>
+                <li>1分<br>非常不满</li>
+                <li>2分<br>不满意</li>
+                <li>3分<br>一般</li>
+                <li>4分<br>满意</li>
+                <li>5分<br>非常满意</li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+        <ul class="switchable-triggerBox clearfix">
+            <li class="active"><a href="#"><{t}>来自买家的评论<{/t}></a></li>
+            <{if false}><li><a href="<{link app=business ctl='site_comment' act='selfdiscuss'}>"><{t}>我的评论<{/t}></a></li><{/if}>
+        </ul>
+        <div class="switchable-content" >
+            <div class="switchable-panel">
+                <{if !$commentList}>
+                <div class="noinfo"><{t}>暂无评论<{/t}></div>
+                <{/if}>
+                <table width="100% "cellpadding="0" cellspacing="0" border="0" class="switchable gridlist">
+                  <colgroup>
+                    <col width="320">
+                    <col width="120">
+                    <col width="150">
+                    <col width="100">
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th class="comment first">
+                      <select onchange="showContent(this.value);">
+                        <option value="" <{if !$myfilter}> selected="selected"<{/if}>>评论</option>
+                        <option value="1" <{if !!$myfilter && $myfilter eq '1'}> selected="selected"<{/if}>>有评论内容</option>
+                        <option value="0" <{if !$myfilter && $myfilter eq '0'}> selected="selected"<{/if}>>无评论内容</option>
+                        <option value="2" <{if !!$myfilter && $myfilter eq '2'}> selected="selected"<{/if}>>有追加评论内容</option>
+                      </select>
+                      </th>
+                      <th class="ratee">评价人</th>
+                      <th class="things">宝贝信息</th>
+                      <th class="operate">操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <{foreach from=$commentList item='commentList'}>
+                    <tr>
+                      <input type="hidden" name="comment_id" value="<{$commentList.comment_id}>">
+                      <td valign="middle">
+                        <ul>
+                          <li><{$commentList.comment}></li>
+                          <li class="clearfix"><span style="float:left; color:#999;margin-top:10px">[<{$commentList.time|cdate:SDATE_STIME}>]</span></li>
+                          <li>
+                          <ul style="margin-top:8px;" id="reply_<{$commentList.comment_id}>">
+                            <{foreach from=$commentList.items item="reply"}>
+                            <li class="doshed-line clearfix">
+                            <div class="clearfix">
+                              <span><{if $reply.addon.hidden_name =='YES' && ($reply.author_id !=0 || $reply.author_id !=1)}>匿名<{else}><{$reply.author}><{/if}></span>
+                              <span>[<{$reply.time|cdate:SDATE_FTIME}>]</span>
+                            </div>
+                            <div><{$reply.comment}></div>
+                            </li>
+                            <{/foreach}>
+                          </ul> </li>
+                      </ul></td>
+                      <td>
+                        <ul>
+                          <li style=" width:120px;word-break: break-all; word-wrap:break-word;text-align:left;"><{t}>买家：<{/t}><a href="#" target="_blank"><{$commentList.author}></a></li>
+                          <li></li>
+                        </ul>
+                      </td>
+                      <td valign="middle"  style="width:240px">
+                        <dl>
+                        
+                          <dd><a href="<{link app=b2c ctl='site_product' act='index' arg=$commentList.type_id}>"><{$commentList.name}></a></dd>
+                          <dt><{$commentList.price|cur_odr}></dt>
+                        </dl></td>
+                      <td>
+                        <li class="clearfix">
+                          <{button type="button" label=$___b2c="解释"|t:'b2c' onclick="cEditor.reply.bind(cEditor)(this)" icon="btn_edit.gif" app='desktop'}>
+                          <{if $commentList.display == 'true'}>
+                          <{button type="button" label=$___b2c="显示"|t:'b2c' onclick="dis('{$commentList.comment_id}');" icon="btn_edit.gif" app='desktop' id="dis_{$commentList.comment_id}" style="display:none;"}>
+                          <{button type="button" label=$___b2c="关闭"|t:'b2c' onclick="none('{$commentList.comment_id}');" icon="btn_edit.gif" app='desktop' id="none_{$commentList.comment_id}" style="display:none;"}>
+                          <{else}>
+                          <{button type="button" label=$___b2c="显示"|t:'b2c' onclick="dis('{$commentList.comment_id}');" icon="btn_edit.gif" app='desktop' id="dis_{$commentList.comment_id}"}>
+                          <{button type="button" label=$___b2c="关闭"|t:'b2c' onclick="none('{$commentList.comment_id}');" icon="btn_edit.gif" app='desktop' id="none_{$commentList.comment_id}" style="display:none;"}>
+                          <{/if}>
+                        </li>
+                      </td>
+                    </tr>
+                    <{foreach from=$commentList.addition item="add"}>
+                      <tr>
+                        <input type="hidden" name="comment_id" value="<{$add.comment_id}>">
+                        <td valign="middle">
+                          <ul>
+                            <li><{t}>追加：<{/t}><{$add.comment}></li>
+                            <li class="clearfix"><span style="float:left; color:#999;margin-top:10px;">[<{$add.time|cdate:SDATE_STIME}>]</span></li>
+                            <li>
+                            <ul style="margin-top:8px;" id="reply_<{$add.comment_id}>">
+                              <{foreach from=$add.items item="reply"}>
+                              <li class="doshed-line clearfix">
+                              <div class="clearfix">
+                                <span><{if $reply.addon.hidden_name =='YES' && ($reply.author_id !=0 || $reply.author_id !=1)}>匿名<{else}><{$reply.author}><{/if}></span>
+                                <span>[<{$reply.time|cdate:SDATE_FTIME}>]</span>
+                              </div>
+                              <div><{$reply.comment}></div>
+                              </li>
+                              <{/foreach}>
+                            </ul> </li>
+                        </ul></td>
+                        <td>
+                          <ul>
+                            <li><{t}>买家：<{/t}><a href="#" target="_blank"><{$add.author}></a></li>
+                            <li></li>
+                          </ul>
+                        </td>
+                        <td valign="middle" style="width:240px">
+                          <dl>
+
+                            <dd><a href="<{link app=b2c ctl='site_product' act='index' arg=$commentList.type_id}>"><{$commentList.name}></a></dd>
+                            <dt><{$commentList.price|cur_odr}></dt>
+                          </dl></td>
+                        <td>
+                          <li class="clearfix">
+                            <{button type="button" label=$___b2c="解释"|t:'b2c' onclick="cEditor.reply.bind(cEditor)(this)" icon="btn_edit.gif" app='desktop'}>
+                            <{if $add.display == 'true'}>
+                            <{button type="button" label=$___b2c="显示"|t:'b2c' onclick="dis('{$add.comment_id}');" icon="btn_edit.gif" app='desktop' id="dis_{$add.comment_id}" style="display:none;"}>
+                            <{button type="button" label=$___b2c="关闭"|t:'b2c' onclick="none('{$add.comment_id}');" icon="btn_edit.gif" app='desktop' id="none_{$add.comment_id}" style="display:none;"}>
+                            <{else}>
+                            <{button type="button" label=$___b2c="显示"|t:'b2c' onclick="dis('{$add.comment_id}');" icon="btn_edit.gif" app='desktop' id="dis_{$add.comment_id}"}>
+                            <{button type="button" label=$___b2c="关闭"|t:'b2c' onclick="none('{$add.comment_id}');" icon="btn_edit.gif" app='desktop' id="none_{$add.comment_id}" style="display:none;"}>
+                            <{/if}>
+                          </li>
+                        </td>
+                      </tr>
+                    <{/foreach}>
+                    <{/foreach}>
+                  </tbody>
+                </table>
+                <{pagers data=$pager}>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+  var ContentEditor = new Class({
+    Implements:[Options],
+    options: {
+      periodical: false,
+      delay: 500,
+      postvar:'finderItems',
+      varname:'items',
+      width:500,
+      height:400
+    },
+    initialize: function(el, options){
+      this.el = $(el);
+      this.setOptions(options);
+    },
+    reply:function(e){
+      for(var dom=$(e).getParent(); dom.tagName!='TR';dom=dom.getParent()){;}
+      var info = {};
+      dom.getElements('input').each(function(el){
+          if(el.name == 'comment_id')
+              info['comment_id']=el.value;
+      });
+      window.fbox = new Dialog('<{link app=business ctl=site_comment act=set_reply}>',{title:'解释',width:300,height:165, ajaxoptions:{data:info,method:'post'},modal:true});
+      window.fbox.onSelect = function(arr){
+        dom.getElementById('reply_'+info['comment_id']).set('html',arr);
+      }
+    }
+  });
+  cEditor = new ContentEditor('tab-sdiscus',{});
+  function showContent(value){
+    var url = '<{link app=business ctl=site_member act=comment_filter}>?arg0='+value+'&arg1=discuss';
+    window.location=url;
+    //new Request({url:url,method:'get'}).send();
+  }
+  function dis(comment_id){
+    var url = '<{link app=business ctl=site_comment act=set_show}>?arg0='+comment_id+'&arg1=discuss';
+    new Request({url:url,method:'get'}).send();
+    $('dis_'+comment_id).setStyle('display','none');
+    $('none_'+comment_id).setStyle('display','block');
+  }
+  
+  function none(comment_id){
+    return false;
+    var url = '<{link app=business ctl=site_comment act=set_noshow}>?arg0='+comment_id+'&arg1=discuss';
+    new Request({url:url,method:'get'}).send();
+    $('dis_'+comment_id).setStyle('display','block');
+    $('none_'+comment_id).setStyle('display','none');
+  }
+</script>

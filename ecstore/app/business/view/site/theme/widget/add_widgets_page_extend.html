@@ -1,0 +1,19 @@
+<ul class="commenwgt">
+  <{foreach from=$widgetsLib.list item=widgets key=key}>
+  <li class="clearfix" data-widgets='<{json from=$widgets}>'>
+  <dl><dt><q><{$widgets.label}>(<{$widgets.folder}>)</q><i><img src="<{$widgets.bimg}>"></i><b class="close">×</b></dt><dd><img src="<{$widgets.img}>"></dd></dl>
+    <div class="fl">
+      <h2><{$widgets.label}>(<{$widgets.folder}>)</h2>
+      <div class="clearfix">
+        <div class="desc">
+          <div>
+            <{t}><{$widgets.description}><{/t}>
+          </div>
+          <a href="javascript:void(0);" class="more" style="display:none;"><{t}>更多<{/t}></a>
+        </div>
+      </div>
+    </div>
+    <div class="fr"><{button type="button" label="添加" icon="btn_add.gif" app="desktop"}></div>
+  </li>
+  <{/foreach}>
+</ul>

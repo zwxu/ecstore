@@ -1,0 +1,16 @@
+<div class="sj_info mt_10">
+<div class="info_title"><{$data.title}></div>
+
+<ul class="hot_kind_ul_list" style="display:block">
+  <{foreach from=$data.goods item=good key=key name="_good"}>
+  <li>
+  <a target="_blank" href="<{link app=b2c ctl="site_product" act="index" arg0=$good.goods_id}>">
+  <img class="img-lazyload" src="images/transparent.gif" lazyload="<{$good.image_default_id|default:$data.defaultImage|storager}>" alt="<{$good.name|cut:72}>" /></a>
+     <p><a target="_blank" href="<{link app=b2c ctl="site_product" act="index" arg0=$good.goods_id}>"><{$good.name}></a></p>
+   <p class="red"><span class="shop_zhi">￥</span><span class="shop_price"><{$good.price}></span></p>
+  </li>
+  <{/foreach}>
+  <div class="cl_zhi"></div>
+</ul>
+<div class="cl_zhi"></div>
+</div>

@@ -1,0 +1,16 @@
+<div class="tableform widgetconfig">
+<div class="division">
+<table>
+<tr>
+  <th><{t app='gift'}>显示赠品<{/t}></th>
+  <td><{t app='gift'}>显示：<{/t}><input type="radio" name="showson" value="enable" <{if $setting.showson=="enable"}>checked<{/if}>> <{t app='gift'}>不显示：<{/t}><input type="radio" name="showson" value="disable" <{if $setting.showson!="enable"}>checked<{/if}>></td>
+</tr>
+
+<tr>
+  <th><{t app='gift'}>最长字数<{/t}></th>
+  <td><{input name="maxlength" value=$setting.maxlength|default:30}></td>
+</tr>
+
+</table>
+</div>
+</div>

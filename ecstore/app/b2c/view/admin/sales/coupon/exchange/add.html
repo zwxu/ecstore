@@ -1,0 +1,59 @@
+<{if $nodata}>
+<div class="tableform">
+    <p class="notice">
+
+        <{t}>没有可兑换的优惠券!只能兑换B类优惠券！<{/t}>
+
+    </p>
+</div>
+<{else}>
+<form id='doActivityInfoForm'  method='post' action='index.php?app=b2c&ctl=admin_sales_coupon_exchange&act=save' >
+  <input type="hidden" name="edit" value="<{if $cpns.cpns_id}>true<{else}>false<{/if}>" />
+  <div class="tableform">
+    <div class="division">
+      <table>
+        <tr>
+          <th><{t}>优惠券名称：<{/t}></th>
+          <td>      
+      <{if $cpns.cpns_id}>
+        <{$cpns.cpns_name}>
+      <{else}>
+      <select name="cpns_id" id="cpns-id-input">
+          <{foreach from=$cpns item=item }>
+          <{*<{if $item.cpns_point}><{continue;}><{/if}>*}>
+        <option value="<{$item.cpns_id}>"> <{$item.cpns_name}> 
+          <{/foreach}>
+          </select>
+      <{/if}> 
+      </td>
+        </tr>
+        <tr>
+          <th><{t}>兑换所需积分：<{/t}></th>
+           <td><{input type='unsignedint' value=$cpns.cpns_point style="width:50px" name='cpns_point' required='true'}> &nbsp; &nbsp; <{*<{help}><{t}>此处填写兑换上述优惠券需要的积分数量<{/t}><{/help}>*}></td>
+        </tr>
+      </table>
+    </div>
+    
+    <div class="table-action">
+<{button label=$___b2c="提交"|t:'b2c' type="submit"}>
+</div>
+
+
+  </div>
+  <{if $cpns.cpns_id}>
+  <input type="hidden" value='<{$cpns.cpns_id}>' name="cpns_id"/>
+  <{/if}>
+</form>
+
+ <script>
+ $('doActivityInfoForm').store('target',{
+    onComplete:function(){
+     
+     if($('doActivityInfoForm').getParent('.dialog'))
+     $('doActivityInfoForm').getParent('.dialog').retrieve('instance').close();
+
+     if(finder=finderGroup['<{$env.get._finder_id}>']) finder.refresh();
+    }
+ });
+ </script>
+<{/if}>

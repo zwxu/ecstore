@@ -1,0 +1,25 @@
+<style>
+
+</style>
+<div class="shop_show_pro_flo" style='margin-top:10px;margin-bottom:10px;'>
+    <ul  <{if $data.height}>style="height:<{$data.height}>px"<{/if}>>
+      
+       <li><a href="<{$data.pic.0.pic_link}>" title="<{$data.pic.0.pic_txt}>" target="_blank" >
+       <img src="images/transparent.gif" lazyload="<{$data.pic.0.pic|storager}>"  alt="<{$data.pic.0.pic_txt}>" <{if $data.height}>style="height:<{$data.height}>px"<{/if}>>
+       </a>
+       </li>
+       <li><a href="<{$data.pic.1.pic_link}>" title="<{$data.pic.1.pic_txt}>" target="_blank" >
+       <img src="images/transparent.gif" lazyload="<{$data.pic.1.pic|storager}>"  alt="<{$data.pic.1.pic_txt}>" <{if $data.height}>style="height:<{$data.height}>px"<{/if}>>
+       </a>
+       </li>
+       <li><a href="<{$data.pic.2.pic_link}>" title="<{$data.pic.2.pic_txt}>" target="_blank" >
+       <img src="images/transparent.gif" lazyload="<{$data.pic.2.pic|storager}>"  alt="<{$data.pic.2.pic_txt}>" <{if $data.height}>style="height:<{$data.height}>px"<{/if}>>
+       </a>
+       </li>
+       <li><a class="none" href="<{$data.pic.3.pic_link}>" title="<{$data.pic.3.pic_txt}>" target="_blank" >
+       <img src="images/transparent.gif" lazyload="<{$data.pic.3.pic|storager}>"  alt="<{$data.pic.3.pic_txt}>" <{if $data.height}>style="height:<{$data.height}>px"<{/if}>>
+       </a>
+       </li>
+       <div class="cl_zhi"></div>
+    </ul>
+</div>

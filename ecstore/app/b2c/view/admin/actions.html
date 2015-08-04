@@ -1,0 +1,18 @@
+<div class="optBtn">
+<{if $is_active == 'true'}>
+	<span class="opt-handle" dropmenu="x-drop-menu"><{$handle_title}><b></b></span>
+	<{if $arr_link}>
+	<ul class="x-drop-menu">
+		<{foreach from=$arr_link item=group_link name="group"}>
+			<{foreach from=$group_link item=link key="key" name="group_link"}>
+			<li<{if $smarty.foreach.group_link.last && !$smarty.foreach.group.last}> class="cur"<{/if}>><a href="<{$link.href}>"<{if $link.submit}> url="<{$link.submit}>"<{/if}> <{if $link.confirm}>confirm="<{$link.confirm}>"<{/if}> target="<{$link.target}>"><{$link.label}></a></li>
+			<{/foreach}>
+		<{/foreach}>
+	</ul>
+	<{/if}>
+<{else}>
+	<{if $arr_link}>
+		<a href="javascript:void(0);" onclick="finderGroup['<{$finder_id}>'].showDetail('<{$arr_link.finder.remark.submit}>',{},$(this).getParent('tr'));"><{$arr_link.finder.remark.label}></a> 
+	<{/if}>
+<{/if}>
+</div>

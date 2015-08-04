@@ -1,0 +1,114 @@
+<{*
+<div>
+<{t}>作者：<{/t}><{$detail['indexs']['author']}>
+</div>
+*}>
+
+<div class="ArticleDetailsWrap">
+
+  <h2 class="textcenter"><{$detail['indexs']['title']}></h2>
+
+  <div class=" textcenter fontnormal font-gray pubdate"><{t}>发布日期：<{/t}><{$detail['indexs']['pubtime']|date:'Y-m-d H:i'}></div>
+
+  <p><{$content}></p>
+
+
+<{*
+  <{if $goods}>
+<div class="section" tab="<{t}>相关商品<{/t}>">
+	<h2 ><{t}>相关商品<{/t}></h2>
+	<div class='num_left' style="width:12px;height:250px;margin-top:2px;border:1px solid #ccc;float:left;cursor:pointer;background:transparent url(statics/scollpicarrow.gif) no-repeat scroll 0 50%;"></div>
+	<div class="num_right" style="width:12px;height:250px;margin-top:2px;border:1px solid #ccc;float:right;cursor:pointer;;background:transparent url(statics/scollpicarrow.gif) no-repeat scroll 0 50%;background-position:100% 50%;"></div>
+<div class="body" id="goods-rels" style="overflow:hidden;height:260px;width:95%;">
+   <div class="GoodsSearchWrap">
+	<table class="grid" width="100%" cellspacing="0" cellpadding="0">
+		<tr valign="top">
+ 	 <{foreach from=$goods item=item name=goods}>
+   	 <td product="<{$item.goods_id}>" style="width:280px;">
+		<div class="items-gallery">
+            <dl class="goodinfo" style="overflow:hidden;zoom:1;">
+                <dt class="goodpic">
+                <a href="<{$item.goodspath}>" style='<{if $env.conf.site.thumbnail_pic_width !=0 && $env.conf.site.thumbnail_pic_width !=0}> width:<{$env.conf.site.thumbnail_pic_height}>px;height:<{$env.conf.site.thumbnail_pic_height}>px;<{/if}>;padding:0;margin:0 auto;'><img class="goods_pic" src="<{$item.thumbnail|default:$env.conf.site.default_thumbnail_pic|storager}>"/></a>
+                </dt>
+                <dd><h3 style="text-align:center;*height:24px;"><a href="<{$item.goodspath}>" title="<{$item.name}>"><{$item.name}></a></h3></dd>
+                <dd style="width:48%; float:left"><span class="price1"><{$item.price|cur}></span></dd>
+                <dd style="width:48%; float:right">
+                    <ul class="button">
+                    <{assign var="dddd" value="333"}>
+                    <{goodsmenu product=$item setting=$setting login=$LOGIN zindex=$zindex--}>
+                  </ul></dd>
+            </dl>
+		</div>
+     </td>
+  <{/foreach}>
+	</tr>
+	</table>
+  </div>
+	</div>
+</div>
+<{/if}>
+
+<script>
+void function(){
+/*橱窗放大镜
+  author:litie
+  [c]  BBC
+  last update : 2009年9月25日14:51:20
+*/
+    (new Image()).src = '<{$env.app.res_url}>/loading.gif';
+    var getAmongPos = function(size,to){
+                 var elpSize = $(to).getSize();
+                 return {
+                    'top':Math.abs((elpSize.y/2).toInt()-(size.height/2).toInt()+to.getPosition().y+elpSize.scroll.y),
+                    'left':Math.abs((elpSize.x/2).toInt()-(size.width/2).toInt()+to.getPosition().x+elpSize.scroll.x)
+                 };
+            };
+
+   $$('.grid .zoom a').addEvent('click',function(e){
+            e.stop();
+            if(this.retrieve('active'))return;
+            var _this = this;
+            _this.store('active',true);
+            var tpic = this.getParent('.items-gallery').getElement('.goodpic img');
+            var bpic_src = this.get('pic');
+
+            var loading = new Element('div',{
+                 styles:{'background':'#fff url(<{$env.app.res_url}>/loading.gif) no-repeat 50% 50%',
+                         'width':40,
+                         'height':40,
+                         'border':'1px #e9e9e9 solid',
+                         'opacity':.5}}).inject(document.body).position({target:tpic});
+
+            new Asset.image(bpic_src,{onload:function(img){
+
+                  loading.remove();
+                  var winsize = window.getSize();
+                  var imgSize = $(img).zoomImg(winsize.x,winsize.y,1);
+                  var fxv = Object.append(getAmongPos(imgSize,window),imgSize);
+                  var imgFx = new Fx.Morph(img,{link:'cancel'});
+                  img.setStyles(Object.append(tpic.getCis(),{opacity:0.5})).inject(document.body).addClass('img-zoom').addEvent('click',function(){
+                      imgFx.start(tpic.getCis()).chain(function(){this.element.remove();_this.store('active',false);});
+                  });
+                  imgFx.start(Object.append(fxv,{opacity:1}));
+                  document.addEvent('click',function(){
+
+                       img.fireEvent('click');
+                       document.removeEvent('click',arguments.callee);
+
+                  });
+
+            },onerror:function(){
+                _this.store('active',false);
+                loading.destroy();
+            }});
+
+
+   });
+
+
+   }();
+</script>
+*}>
+
+
+</div>

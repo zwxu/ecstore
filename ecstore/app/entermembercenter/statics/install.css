@@ -1,0 +1,152 @@
+html,
+body{background:#829AAC}
+img{
+	border:0;
+}
+ul,li{
+	list-style:none;
+	padding:0;
+	margin:0;
+}
+.skip-enter-member{
+	width:682px;
+  text-align:right;
+  margin:0 auto;
+  line-height:35px;
+  height:35px;
+  background:#8298AC;
+}
+.skip-enter-member a{
+  color:#FFFFFF;
+  font-size:15px;
+  font-weight:bold;
+}
+.main{
+	background:#829AAC;
+	width:885px;
+	margin:0 auto;
+}
+.main h1.title{
+	width:698px;
+	height:66px;
+	background:url(install-logo.png) no-repeat 0 40px;
+	text-indent:-999999px;
+	margin:0 auto;
+	padding:0;
+	padding-top:35px;
+	_padding:0;
+	_margin-top:35px
+}
+
+.content{
+	width:682px;
+	height:427px;
+	background:url(install-mainbg.png) no-repeat;
+	padding:8px;
+	margin:0 auto;
+	text-align:left;
+}
+.content-inner{height:410px;overflow:hidden;overflow-y:auto;padding:8px;}
+.button{
+	text-align:center;
+	margin:10px auto;
+}
+
+a.goinstall{
+	width:110px;
+	height:31px;
+	background:url(btn-install.png) no-repeat;
+	display:block;
+	text-indent:-99999px;
+	margin:0 auto;
+}
+a.reinstall{
+	width:110px;
+	height:31px;
+	background:url(btn-install.png) no-repeat 0 -31px;
+	display:block;
+	text-indent:-99999px;
+}
+
+
+
+
+.content .body{
+	position:absolute;
+	top:110px;
+	right:50px;
+	width:300px;
+}
+.content .body ul li{
+	margin:5px 0
+}
+
+.content .inputstyle{
+	border:none;
+	width:156px;
+	height:22px;
+	background:url(logininput.png) no-repeat;
+	padding:5px 3px 0 3px;
+	color:#999;
+
+}
+.content .inputstylefocus{
+	border:none;
+	width:156px;
+	height:22px;
+	background:url(logininput.png) no-repeat 0 -27px;
+	padding:5px 3px 0 3px;
+	color:#000;
+
+}
+.content .inputstyleyz{
+	border:none;
+	width:106px;
+	height:22px;
+	background:url(logininput.png) no-repeat -54px;
+	padding:5px 3px 0 3px;
+	color:#999;
+
+}
+.content .inputstyleyzfocus{
+	border:none;
+	width:106px;
+	height:22px;
+	background:url(logininput.png) no-repeat 0 -81px;
+	padding:5px 3px 0 3px;
+	color:#000;
+
+}
+.content .loginbtn{
+	border:none;
+	width:119px;
+	height:38px;
+	background:url(logininput.png) no-repeat 0 -111px;
+
+}
+.content .loginbtnfocus{
+	border:none;
+	width:119px;
+	height:38px;
+	background:url(logininput.png) no-repeat 0 -150px;
+
+}
+.message{
+	position:absolute;
+	right:30px;
+	bottom:120px;
+	width:290px;
+	height:37px;
+	background:url(loginmsgbg.png) no-repeat;
+	padding:15px 3px 0 45px;
+
+
+}
+.verifycodeimg{
+	height:18px;
+	width:60px;
+	position:absolute;
+	left:95px;
+	top:5px;
+	1border:1px double #ccc;
+}

@@ -1,0 +1,561 @@
+<div class="member-main">
+    <h1 class="title title2"><{t}>申请退款<{/t}></h1>
+    <form action="<{link app=aftersales ctl=site_member act=return_save}>" enctype="multipart/form-data" encoding="multipart/form-data" method="post" name="return_save" id='x-return-form'>
+        <ul class="je_ac_limtime" id="timecount">
+         <li><strong>您还有</strong></li>
+         <li><a href="#" class="day">00</a>天</li>
+         <li><a href="#" class="hour">00</a>小时</li>
+         <li><a href="#" class="minute">00</a>分</li>
+         <li><a href="#" class="second">00</a>秒</li>
+         <li><strong>时间来处理本次修改申请！</strong></li>
+         <div class="cl_zhi"></div>
+        </ul>
+        <div class="division">
+            <h4 class="fontnormal"><{t}>卖家拒绝原因：<{$return_item.seller_reason}><{/t}></h4>            
+        </div>
+        <div class="FormWrap">
+            <div class="division">
+                <h4 class="fontnormal"><{t}>请勾选需要售后服务的商品及数量<{/t}></h4>
+
+                <div id="x-return-item-list">
+                    <{include file="site/member/return_list_item.html" app=aftersales}>
+                    <input type="hidden" vtype="product_nums_required" />
+                </div>
+
+                <div class="p5">
+                    <ul id="x_return_item_ul" class="return-list">
+                    </ul>
+                </div>
+            </div>
+			<div class="division">
+                <h4 class="fontnormal"><{t}>请填写需要卖家退还的金额<{/t}></h4>
+				<{input type="text" id="amount" name="amount" style="width:20%"}><span id="biggest_price">(最多可以退<{$order.shipping.cost_shipping}>元)</span>
+				<input type="hidden" id="biggest_price_hid" value="<{$order.shipping.cost_shipping}>" />
+            </div>
+			<div class="division">
+                <h4 class="fontnormal"><{t}>退款原因：<{/t}></h4>
+                <select id="J_DelayDays" class="delay-days" name="comment">
+					<option value="">请选择退款原因</option>
+					<option value="七天无理由退换货" <{if $return_item.comment == "七天无理由退换货"}>selected<{/if}>>七天无理由退换货</option>
+					<option value="商品质量问题" <{if $return_item.comment == "商品质量问题"}>selected<{/if}>>商品质量问题</option>
+					<option value="收到的商品不符" <{if $return_item.comment == "收到的商品不符"}>selected<{/if}>>收到的商品不符</option>
+					<option value="退运费" <{if $return_item.comment == "退运费"}>selected<{/if}>>退运费</option>
+					<option value="发票问题" <{if $return_item.comment == "发票问题"}>selected<{/if}>>发票问题</option>
+					<option value="收到假货" <{if $return_item.comment == "收到假货"}>selected<{/if}>>收到假货</option>
+					<option value="其他" <{if $return_item.comment == "其他"}>selected<{/if}>>其他</option>
+				</select>
+            </div>
+            <div class="division">
+                <h4 class="fontnormal"><{t}>如果您有相关附件，可以在此提交，格式:jpg,gif,jpeg,png，文件不超过2M，否则会上传失败<{/t}></h4>
+                <input type="hidden" name="MAX_FILE_SIZE" value="2097152" />
+                <input type="file" class="x-input x-inputs" name="file" id="fileField" />
+				<input type="file" class="x-input x-inputs" name="file1" id="fileField1" />
+				<input type="file" class="x-input x-inputs" name="file2" id="fileField2" />
+            </div>
+			<div class="division" style="border-top:none">
+            <h4 class="fontnormal"><{t}>申请售后的详细原因描述<{/t}></h4>
+            <{input type="textarea" id="x-return-content" name="content" class='x-inputs x-input' cols="80" rows="5" style="width:98%" value=$return_item.content}>
+            <input type="hidden" vtype="return_content_required&&return_content_weight" />
+          </div>
+	       <div class="textcenter p10 division">
+                <{button class="" type="submit" label=$___b2c="提交申请"|t:'b2c'}>
+                <{button class="" type="button" onclick="refuse();" label=$___b2c="撤销申请"|t:'b2c'}>
+                <{if $return_item.is_intervene == '1'}>
+                    <{button class="" type="button" onclick="s_mall_intervene();" label=$___b2c="要求平台介入"|t:'b2c'}>
+                <{/if}>
+            </div>
+        </div>
+    <input type="hidden" name="return_id" value="<{$return_item.return_id}>">
+    <input type="hidden" name="order_id" value="<{$order_id}>">
+	<input type="hidden" name="member_id" value="<{$order.member_id}>">
+    <input type="hidden" id="cost_shipping" name="cost_shipping" value="<{$order.shipping.cost_shipping}>">
+    <input type="hidden" id="payed" name="payed" value="<{$order.payed}>">
+    <input type="hidden" id="edit" name="edit" value="edit">
+</form>
+<form action="<{link app=aftersales ctl=site_member act=return_refuse}>" enctype="multipart/form-data" encoding="multipart/form-data" method="post" name="return_save" id='x-return-form-refuse'>
+    <input type="hidden" name="order_id" value="<{$order_id}>">
+    <input type="hidden" name="return_id" value="<{$return_item.return_id}>">
+</form>
+<form action="<{link app=aftersales ctl=site_member act=s_mall_intervene}>" enctype="multipart/form-data" encoding="multipart/form-data" method="post" name="return_save" id='x-s_mall_intervene'>
+    <input type="hidden" name="return_id" value="<{$return_item.return_id}>">
+</form>
+</div>
+<script>
+    function s_mall_intervene(){
+        $('x-s_mall_intervene').submit();
+    }
+    function refuse(){
+        $('x-return-form-refuse').submit();
+    }
+
+    String.extend({
+        format:function(){
+            if(arguments.length === 0) return this;
+            var reg = /{(\d+)?}/g;
+            var args = arguments;
+            var string=this;
+            var result = this.replace(reg,function($0, $1) {
+                return  args[$1.toInt()]||"";
+            });
+            return result;
+        }
+    });
+    function init_returnlist(){
+        $$('#x-return-item-list input[type="checkbox"]').addEvent('change',function(e){
+            e = this;
+            var parent = e.getParent('tr');
+            var ol = $('x_return_item_ul');
+            var s = '<span class="fl">{0}<input type="hidden" name="products[]" value="{1}">&nbsp;&nbsp;x&nbsp;&nbsp;</span><span class="fl"><{input type="text" product_nums="{2}" class="x-product-nums" id="product_info[{1}]" name="product_nums[{1}]" value="{3}" size="2" onchange="changenum(this,{1});"}></span><{t}> <span class="fl">&nbsp;&nbsp;件</span><{/t}><span class="fl forforma-btn"><button type="button" class="btn"><span><span><{t}>删除<{/t}></span></span></button></span><input type="hidden" name="product_name[{1}]" value="{4}"><input type="hidden" name="product_bn[{1}]" value="{5}"><input type="hidden" vtype="rtn_digits&&nominus&&product_nums" /><input type="hidden" id="error[{1}]" class="error" value="0"/><span id="error_info[{1}]"></span>';
+            var el = $('x-item-'+e.value);
+            if(e.checked){
+                var li = new Element('li',{id:'x-item-'+e.value,'class':'p5 clearfix'}).set('html', s.format(parent.getElement('.x-pdt-name').innerHTML,e.value,parent.getElement('.x-pdt-num').innerHTML,parent.getElement('.x-pdt-num').innerHTML,parent.getElement('.x-pdt-name').innerHTML,parent.getElement('.x-pdt-bn').innerHTML)).inject(ol);
+                li.getElements('button').addEvent('click',function(){
+                    del_return_item(this,e);
+                });
+                $$('#x-return-form .x-input[name^=product_nums]').addEvent('mouseover',function(e){
+                    var _li = this.getParent('li');
+                    if (_li){
+                        var error_el = _li.getElement('.x-product-nums-error');
+                        if(error_el){
+                            error_el.destroy();
+                        }
+                    }
+                });
+                var error_el = $('x-return-item-list-error');
+                if(error_el){
+                    error_el.destroy();
+                }
+				//计算可以退款的最大金额
+				var big_price = parseFloat($('cost_shipping').value);
+                $$('#x_return_item_ul .x-product-nums').each(function(item,index){
+                    var p_id = item.id;            
+                    var p_price = $(p_id+'[price]').value;
+                    var p_nums = $(p_id).value;
+                    big_price = big_price + p_price*p_nums;
+                });
+                var payed = $('payed').value;
+                if(parseFloat(big_price)>parseFloat(payed)){
+                    big_price = payed;
+                }
+                $('biggest_price_hid').value = big_price;
+                str = '(最多'+big_price+'元)';
+                $('biggest_price').innerHTML = str;
+
+				}else{
+				if(el){
+				    el.destroy();
+                    //计算可以退款的最大金额
+                    var big_price = parseFloat($('cost_shipping').value);
+                    $$('#x_return_item_ul .x-product-nums').each(function(item,index){
+                        var p_id = item.id;            
+                        var p_price = $(p_id+'[price]').value;
+                        var p_nums = $(p_id).value;
+                        big_price = big_price + p_price*p_nums;
+                    });
+                    var payed = $('payed').value;
+                    if(parseFloat(big_price)>parseFloat(payed)){
+                        big_price = payed;
+                    }
+                    $('biggest_price_hid').value = big_price;
+                    str = '(最多'+big_price+'元)';
+                    $('biggest_price').innerHTML = str;
+				}
+            }
+            ol.getElements('li.clearfix').each(function(item,index){
+                var num = item.getElement('.item-num');
+                if(num){
+                    num.set('html',index+1+'.&nbsp;');
+                }else{
+                    new Element('span',{'class':'flt item-num','html':index+1+'.&nbsp;'}).inject(item,'top');
+                }
+            });
+        });
+
+    }
+
+    function jump_to_return_list(page){
+        new Request.HTML({
+            url:'<{$url}>',
+            method:'post',
+            update:$('x-return-item-list'),data:'page='+page,
+            onSuccess:function(){
+                init_returnlist();
+                var el = $('x-return-item-list');
+                var chk_arr = el.getElements('input[type=checkbox]');
+                chk_arr.each(function(item,index){
+                    var elol = $('x_return_item_ul');
+                    var inol_arr = elol.getElements('input[type=hidden]');
+                    inol_arr.each(function(itemol,indexol){
+                        if(item.value == itemol.value){
+                            item.checked = true;
+                        }
+                    });
+                })
+        }}).send();
+    }
+
+    function del_return_item(e,t){
+        var el = e.getParent('li');
+        var product_list = $("x-return-item-list");
+        var elchk = t;
+        if(elchk){
+            var checked = elchk.checked;
+            if(checked){
+                elchk.checked = false;
+            }
+        }
+
+        $(el).destroy();
+        //计算可以退款的最大金额
+		var big_price = parseFloat($('cost_shipping').value);
+        $$('#x_return_item_ul .x-product-nums').each(function(item,index){
+            var p_id = item.id;            
+            var p_price = $(p_id+'[price]').value;
+            var p_nums = $(p_id).value;
+            big_price = big_price + p_price*p_nums;
+        });
+        var payed = $('payed').value;
+        if(parseFloat(big_price)>parseFloat(payed)){
+            big_price = payed;
+        }
+        $('biggest_price_hid').value = big_price;
+        str = '(最多'+big_price+'元)';
+        $('biggest_price').innerHTML = str;
+
+        return false;
+    }
+    init_returnlist();
+
+
+    $$('#x-return-form .x-inputs').addEvent('mouseover',function(e){
+    e = e.target;
+    var id = e.get('id');
+    var error_el = $(id+'-error');
+    if(error_el){
+    error_el.destroy();
+    }
+    });
+
+    $('fileField').addEvent('change',function(e){
+    var ext=this.value.substring(this.value.lastIndexOf(".")+1).toUpperCase();
+    if(!(/jpg|gif|png/i).test(ext)){
+    Ex_Dialog.alert('只能上传gif,jpg,png格式的文件');
+    this.value='';
+    return false;
+    }
+
+    if(this.files){
+    var file = this.files[0];
+    if(file.fileSize>2*1024*1024){
+    Ex_Dialog.alert('文件上传大小超过限制');
+    this.value='';
+    return false;
+    }
+    }else if(Browser.ie){
+    var src=this.value.replace(/\\/g,"/");
+    src="file:///"+src;
+
+    var img=new Image();
+    img.onload=function(){
+    if(img.fileSize>2*1024*1024){
+    Ex_Dialog.alert('文件上传大小超过限制');
+    this.value='';
+    return false;
+    }
+    };
+    img.src=src;
+    }else{
+    }
+    });
+
+    $('fileField1').addEvent('change',function(e){
+    var ext=this.value.substring(this.value.lastIndexOf(".")+1).toUpperCase();
+    if(!(/jpg|gif|png/i).test(ext)){
+    Ex_Dialog.alert('只能上传gif,jpg,png格式的文件');
+    this.value='';
+    return false;
+    }
+
+    if(this.files){
+    var file = this.files[0];
+    if(file.fileSize>2*1024*1024){
+    Ex_Dialog.alert('文件上传大小超过限制');
+    this.value='';
+    return false;
+    }
+    }else if(Browser.ie){
+    var src=this.value.replace(/\\/g,"/");
+    src="file:///"+src;
+
+    var img=new Image();
+    img.onload=function(){
+    if(img.fileSize>2*1024*1024){
+    Ex_Dialog.alert('文件上传大小超过限制');
+    this.value='';
+    return false;
+    }
+    };
+    img.src=src;
+    }else{
+    }
+    });
+
+    $('fileField2').addEvent('change',function(e){
+    var ext=this.value.substring(this.value.lastIndexOf(".")+1).toUpperCase();
+    if(!(/jpg|gif|png/i).test(ext)){
+    Ex_Dialog.alert('只能上传gif,jpg,png格式的文件');
+    this.value='';
+    return false;
+    }
+
+    if(this.files){
+    var file = this.files[0];
+    if(file.fileSize>2*1024*1024){
+    Ex_Dialog.alert('文件上传大小超过限制');
+    this.value='';
+    return false;
+    }
+    }else if(Browser.ie){
+    var src=this.value.replace(/\\/g,"/");
+    src="file:///"+src;
+
+    var img=new Image();
+    img.onload=function(){
+    if(img.fileSize>2*1024*1024){
+    Ex_Dialog.alert('文件上传大小超过限制');
+    this.value='';
+    return false;
+    }
+    };
+    img.src=src;
+    }else{
+    }
+    });
+
+    // 退货数量的验证
+    validatorMap['product_nums'] = ['<{t}>申请售后商品的数量不能大于订购数量<{/t}>', function(element, v) {
+    var item = $(element).getParent('li').getElement('input[name^=product_nums]');
+
+    if  (parseFloat(item.value) > parseFloat(item.get('product_nums')))
+    return false;
+    else
+    return true;
+    }];
+
+    validatorMap['nominus'] = ['<{t}>退货数量不能小于0<{/t}>', function(element, v) {
+    var item = $(element).getParent('li').getElement('input[name^=product_nums]');
+
+    if  (item.value <= 0)
+    return false;
+    else
+    return true;
+    }];
+
+    validatorMap['rtn_digits'] = ['<{t}>请输入整数<{/t}>', function(element, v) {
+    var item = $(element).getParent('li').getElement('input[name^=product_nums]');
+
+    return !/[^\d]/.test(item.value);
+    }];
+
+    validatorMap['product_nums_required'] = ['<{t}>您没有选择商品，请先选择商品。<{/t}>', function(element, v) {
+    var item = $('x_return_item_ul').getElements('input[name^=product_nums]');
+
+    return item.length > 0;
+    }];
+
+    validatorMap['title_required'] = ['<{t}>请填写售后服务标题<{/t}>', function(element, v) {
+    var item = $(element).getParent('div').getElement('input[name^=title]');
+
+    return item.value.length != 0;
+    }];
+
+    validatorMap['title_weight'] = ['<{t}>您的填写有误，标题2—20字数之内<{/t}>', function(element, v) {
+    var item = $(element).getParent('div').getElement('input[name^=title]');
+
+    return item.value.length >= 2 && item.value.length <= 30;
+    }];
+
+    validatorMap['return_content_required'] = ['<{t}>请填写售后服务详细原因<{/t}>', function(element, v) {
+    var item = $(element).getParent('div').getElement('#x-return-content');
+
+    return item.value.length != 0;
+    }];
+
+    validatorMap['return_content_weight'] = ['<{t}>您的填写有误，详细原因应不小于10个字数<{/t}>', function(element, v) {
+    var item = $(element).getParent('div').getElement('#x-return-content');
+
+    return item.value.length >= 10;
+    }];
+    /** end **/
+    
+    function changenum(e,id){
+        var p_nums = $('product_info['+id+']').value;
+        var p_real_num = $('product_info['+id+'][num]').value;
+        if(p_nums > p_real_num){
+            $('error['+id+']').value = 1;
+            str = '所填数量超过发货数量，请修改！';
+            $('error_info['+id+']').innerHTML = str;
+        }else{
+            var big_price = parseFloat($('cost_shipping').value);
+            $$('#x_return_item_ul .x-product-nums').each(function(item,index){
+                var p_id = item.id;            
+                var p_price = $(p_id+'[price]').value;
+                var p_nums = $(p_id).value;
+                big_price = big_price + p_price*p_nums;
+            });
+            var payed = $('payed').value;
+            if(parseFloat(big_price)>parseFloat(payed)){
+                big_price = payed;
+            }
+            $('biggest_price_hid').value = big_price;
+            str = '(最多'+big_price+'元)';
+            $('biggest_price').innerHTML = str;
+            $('error['+id+']').value = 0;
+            str = '';
+            $('error_info['+id+']').innerHTML = str;
+        }
+    }
+
+    $('x-return-form').getElement('button[type=submit]').addEvent('click',function(e){
+        var sign = false;
+        $$('#x_return_item_ul .error').each(function(item,index){
+            if(item.value == '1'){
+                sign = true;
+                
+            }
+        });
+        if(sign){
+            Message.error('退款数量大于发货数量，请修改！');
+            return false;
+        }else{
+            var reason=$('J_DelayDays').value
+            var amount=$('amount').value;
+            var biggest_price=$('biggest_price_hid').value;
+            if(parseFloat(amount) > parseFloat(biggest_price)){
+                Message.error('退款金额大于可用金额，请修改！');
+                return false;
+            }else{
+                if(parseFloat(amount) < 0 || parseFloat(amount) == 0 || amount == ''){
+                    Message.error('退款金额必须大于0，请修改！');
+                    return false;
+                }else{
+                    if(reason == ''){
+                        Message.error('请选择退款原因！');
+                        return false;
+                    }
+                }
+            }
+        }
+    });    
+</script>
+
+<script>
+    (function() {
+        var timestamp_statues = (new Date()).valueOf();
+        var timeCount=timestamp_statues;
+        var timeCount = this.timeCount = {
+            init:function(nowtime,endtime,dom){
+                var diff = Math.abs((nowtime.getTime() - endtime.getTime())/1000);
+                var secondDiff = diff % 60;
+                var minuteDiff = ((diff - secondDiff)/60) % 60;
+                var hourDiff = ((diff - secondDiff  - minuteDiff*60)/3600) % 24;
+                var dayDiff = (diff - secondDiff  - minuteDiff*60 - hourDiff*3600) / 86400;
+                var timeDiff = [dayDiff,hourDiff,minuteDiff,secondDiff];
+                this.s = (function(){this.calcTime.periodical(1000,this,{
+                        time:timeDiff,
+                        dom:dom
+                    })}).delay(100,this);
+            },
+            addZero:function(timeDiff){
+                for(var i=0;i<timeDiff.length;i++){
+                    if(timeDiff[i].toString().length<2){
+                        timeDiff[i] = "0" + timeDiff[i].toString();
+                        return timeDiff;
+                    }
+                }
+            },
+            formatToInt : function(timeDiff){
+                for(var i=0;i<timeDiff.length;i++){
+                    parseInt(timeDiff[i]);
+                };
+                return timeDiff;
+            },
+            judgeTime : function(timeDiff){
+                if(timeDiff[3]< 0  && timeDiff[2]>0){
+                    timeDiff[3] = 59;
+                    timeDiff[2]--;
+                    return timeDiff;
+                }else if(timeDiff[3] <0 && timeDiff[2]==0 && timeDiff[1]>0){
+                    timeDiff[3] = 59
+                    timeDiff[2] = 59;
+                    timeDiff[1]--;
+                    return timeDiff;
+                }else if(timeDiff[3] <0 && timeDiff[2]==0 && timeDiff[1]==0 && timeDiff[0]>0){
+                    timeDiff[3] = 59
+                    timeDiff[2] = 59;
+                    timeDiff[1] = 23;
+                    timeDiff[0]--;
+                    return timeDiff;
+                }else if(timeDiff[3]==0 && timeDiff[2]==0 && timeDiff[1]==0 && timeDiff[0]==0){
+                    new Request.HTML({
+                            url:'<{link app=b2c ctl=site_member act=js_function_order_do_refund_atuo_cancel}>',
+                            method:'post',
+                            data:'return_id=<{$return_item.return_id}>&order_id=<{$return_item.order_id}>'
+                    }).send();
+                    $clear(this.s);
+                    $('timecount').innerHTML='<p>申请自动关闭！</p>';
+                    $('scarebuyingprice').display='none';
+                    $('scarebuyingsucc').display='';
+                    return;
+                }
+            },
+            calcTime : function (obj){
+                if(!obj.dom) return;
+                var _timeDiff = obj.time;
+                this.addZero(_timeDiff);
+                this.formatToInt(_timeDiff);
+                _timeDiff[3]--;
+                this.judgeTime(_timeDiff);
+                this.addZero(_timeDiff);
+                var dom = obj.dom;
+                dom.second.innerHTML = _timeDiff[3];
+                dom.minute.innerHTML = _timeDiff[2];
+                dom.hour.innerHTML = _timeDiff[1];
+                dom.day.innerHTML = _timeDiff[0];
+            },
+            calcDesc:function(){
+                new Request.HTML({
+                        url:'<{link app=business ctl=site_member act=js_function_order_do_refund_atuo_cancel}>',
+                        method:'post',
+                        data:'return_id=<{$return_item.return_id}>&order_id=<{$return_item.order_id}>'
+                }).send();
+                $clear(this.s);
+                $('timecount').innerHTML='<p>申请自动关闭！</p>';
+                $('scarebuyingprice').display='none';
+                $('scarebuyingsucc').display='';
+                return;
+            }
+        }
+    })();
+    (function(){
+        var timeNow;
+        var timeEnd= new Date(<{$time}>);
+        var dom = {
+            second: $E('.second'),
+            minute:$E('.minute'),
+            hour:$E('.hour'),
+            day:$E('.day')
+        };
+        new Request({
+            url:'<{$scarebuyings_data.js_url}>',
+            onComplete:function(re){
+                timeNow=new Date(<{$now_time}>); 
+                if(timeEnd.getTime() > timeNow.getTime()){
+                    timeCount.init(timeEnd,timeNow,dom);
+                }else{
+                    
+                }
+            }
+        }).send();
+    })();
+ </script>

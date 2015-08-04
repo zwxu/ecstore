@@ -1,0 +1,99 @@
+<form action="index.php?ctl=users&act=addnew&finder_id=a9b819" id="user-edit-form" method="post">
+  <div style="text-align:right;padding:3px 18px"><{help docid="101" type="link"}><{t}>点击查看帮助<{/t}><{/help}></div>
+  <div class="tableform">
+    <div class="division">
+      <table cellspacing="0" cellpadding="0" width="100%">
+        <tbody>
+          <tr><th><em class="red">*</em><label><{t}>用户名：<{/t}></label></th><td><input type="text" id="dom_el_ea78c40"  vtype="required"  name="pam_account[login_name]" title="<{t}>用户名：<{/t}>" class="x-input " autocomplete="off"/></td></tr>
+          <tr><th><em class="red">*</em><label><{t}>密码：<{/t}></label></th><td><input type="password" id="dom_el_ea78c41" vtype="required" name="pam_account[login_password]" title="<{t}>密码：<{/t}>" class="x-input " autocomplete="off"/></td></tr>
+          <tr><th><em class="red">*</em><label><{t}>确认密码：<{/t}></label></th><td><input type="password" id="dom_el_ea78c42" vtype="required" name="re_password" title="<{t}>确认密码：<{/t}>" class="x-input " autocomplete="off"/></td></tr>
+          <tr><th><em class="red">*</em><label><{t}>姓名：<{/t}></label></th><td><input type="text" id="dom_el_ea78c43" vtype="required"  name="name" title="<{t}>姓名：<{/t}>" class="x-input " autocomplete="off"/></td></tr>
+          <tr><th><em class="red">*</em><label><{t}>启用：<{/t}></label></th><td><select id="dom_el_ea78c45" required="1" name="status" type="select" title="<{t}>启用：<{/t}>" class="x-input-select inputstyle"><option value="0"><{t}>否<{/t}></option><option value="1"><{t}>是<{/t}></option></select></td></tr>
+          <tr><th><label><{t}>编号：<{/t}></label></th><td><input type="text" id="dom_el_ea78c46" required="" name="op_no" title="<{t}>编号：<{/t}>" class="x-input " autocomplete="off"/></td></tr>
+          <tr><th><label><{t}>备注：<{/t}></label></th><td><input type="text" id="dom_el_ea78c47" required="" name="memo" title="<{t}>备注：<{/t}>" class="x-input " autocomplete="off"/></td></tr>
+
+          <tr><th></th><td><input id="dom_el_ea78c44" value=0 name="super" type="hidden" title="<{t}>超级管理员：<{/t}>" class="x-input-select inputstyle"></input></td></tr>
+          <tr><th></th>
+            <td>
+              <div id="role"><{t}>角色:<{/t}>
+                <ul><{foreach from=$workgroup item=item}>
+                  <li><input class="role" type="checkbox" value="<{$item.role_id}>" name="role[<{$item.role_id}>]" <{if $item.checked=='true'}>checked='checked'<{/if}> />
+                  <{$item.role_name}></li>
+                  <{/foreach}>
+                </ul>
+              </div>
+              <div id="work"></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</form>
+<{area inject=".mainFoot"}>
+<div class="table-action">
+  <table width="100%" cellspacing="0" cellpadding="0">
+    <tbody>
+      <tr>
+        <td><{button class="btn-primary" id="user-edit-form-submit" type="submit" label=$___b2c="确定"|t:'b2c'}></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<{/area}>
+<script>
+(function(){
+	$$('.role').addEvent('click',function(e){
+	  var checkedEl = $ES('input.role:checked');
+
+	  var checkedName = [];
+	  checkedEl.each(function(cel,k){
+		checkedName[k] = encodeURIComponent(cel.value=cel.value.trim());
+	  });
+	  new Request.HTML({
+		  url:'index.php?app=desktop&ctl=users&act=detail_ground',
+		  update:$('work'),method:'post',
+		  data:'checkedName='+JSON.encode(checkedName)+'&name='+encodeURIComponent(this.value=this.value.trim())
+	  }).send();
+	  // $('work').setStyle('display','block');
+	});
+
+	$('dom_el_ea78c44').addEvent('change',function(e){
+	  value = $('dom_el_ea78c44').value;
+	  if(value==0){
+		$('role').setStyle('display','block');
+		$('work').setStyle('display','block');
+	  }
+	  else{
+		$('role').setStyle('display','none');
+		$('work').setStyle('display','none');
+	  }
+	});
+
+
+	var _form = $('user-edit-form');
+	var btn =$('user-edit-form-submit');
+	var finder = finderGroup['<{$env.get.finder_id}>'];
+	_form.store('target',{
+	  onComplete:function(){
+	  },
+	  onSuccess:function(response){
+		var hash_res_obj = JSON.decode(response);
+		if (hash_res_obj.success != undefined && hash_res_obj.success != ""){
+		  try{
+			var _dialogIns = btn.getParent('.dialog').retrieve('instance');
+		  }catch(e){}
+
+		  if(_dialogIns){
+			_dialogIns.close();
+
+		  }
+		}
+	  }
+	});
+
+	btn.addEvent('click',function(){
+	  _form.fireEvent('submit',{stop:$empty});
+	});
+})();
+</script>

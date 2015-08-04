@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<theme>
+	<name><{$name|escape:"html"}></name>
+	<id><{$id|escape:"html"}></id>
+	<version><{$version|escape:"html"}></version>
+	<info><{$info|escape:"html"}></info>
+	<author><{$author|escape:"html"}></author>
+	<site><{$site|escape:"html"}></site>
+	<update_url><{$update_url|escape:"html"}></update_url>
+
+	<borders>
+		<{foreach from=$config.borders item=borders}>
+		<set key="<{$borders.key|escape:"html"}>" tpl="<{$borders.tpl|escape:"html"}>" />
+		<{/foreach}>
+	</borders>
+	<views>
+		<{foreach from=$config.views item=views}>
+		<set app="<{$views.app|escape:"html"}>" view="<{$views.view|escape:"html"}>" tpl="<{$views.tpl|escape:"html"}>" />
+		<{/foreach}>
+	</views>
+	<config>	  
+		<{foreach from=$config.config item=configs}>
+		<set key="<{$configs.key|escape:"html"}>" value="<{$configs.value|escape:"html"}>" label="<{$configs.label|escape:"html"}>" />
+		<{/foreach}>
+	</config>
+
+	<widgets>
+		<{foreach from=$widgets item=widget}>
+		<widget app="<{$widget.app|escape:"html"}>" theme="<{$widget.theme|escape:"html"}>" file="<{$widget.core_file|escape:"html"}>" slot="<{$widget.core_slot|escape:"html"}>" type="<{$widget.widgets_type|escape:"html"}>" order="<{$widget.widgets_order|escape:"html"}>" title="<{$widget.title|escape:"html"}>" domid="<{$widget.domid|escape:"html"}>" border="<{$widget.border|escape:"html"}>" classname="<{$widget.classname|escape:"html"}>" tpl="<{$widget.tpl|escape:"html"}>" coreid="<{$widget.core_id|escape:"html"}>">
+		<{$widget.params|escape:'html'}>
+		</widget>
+		<{/foreach}>
+	</widgets>
+
+	<proinstances>
+		<{foreach from=$widgets_proinstance item=instance}>
+		<instance name="<{$instance.name|escape:"html"}>" memo="<{$instance.memo|escape:"html"}>" app="<{$instance.app|escape:"html"}>" theme="<{$instance.theme|escape:"html"}>" type="<{$instance.widgets_type|escape:"html"}>" title="<{$instance.title|escape:"html"}>" domid="<{$instance.domid|escape:"html"}>" border="<{$instance.border|escape:"html"}>" classname="<{$instance.classname|escape:"html"}>" tpl="<{$instance.tpl|escape:"html"}>">
+		<{$instance.params|escape:'html'}>
+		</instance>
+		<{/foreach}>
+	</proinstances>
+
+</theme>

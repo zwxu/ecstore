@@ -1,0 +1,17 @@
+<h4><{$data.title}></h4>
+<form action="<{link app=business ctl=site_shop act=gallery arg0=$data.store.store_id}>" method="get">
+<input type="hidden" value="all" name="searchRange">
+<p class="search_shop_p"><span class="width_55 tar">关键字：</span>
+    <span><input type="text" name="keyword" maxlength="8" class="shop_input width_125" /></span>
+    <div class="cl_zhi"></div>
+    </p>
+<p class="search_shop_p">
+  <span class="width_55 tar">价格：</span>
+    <span><input type="text" name="price1" maxlength="8" class="shop_input width_55" /></span>
+    <span>到</span>
+    <span><input type="text" name="price2" maxlength="8" class="shop_input width_55"/></span>
+    <div class="cl_zhi"></div>
+</p>
+<p class="search_shop_p_s">
+<input type="submit" class="sea_b" value="搜索"/></span></p>
+</form>

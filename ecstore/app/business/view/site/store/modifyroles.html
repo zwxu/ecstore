@@ -1,0 +1,70 @@
+<!-- right-->
+<div class="member-main">
+  <div>
+    <form method="post" action="<{link app=business ctl='site_store'   act='save_roles'}>" class="section" id="Member_addr">
+      <div class="FormWrap" style="background:none; border:none; padding:0; margin:0;">
+        <div class="title"><{t}>修改店员角色<{/t}></div>
+        <div class="division" style="border:none; border-bottom:1px dashed #ddd;">
+              <table  width="100%" border="0" cellspacing="0" cellpadding="0" class="forform">
+                  <tr>
+                  <th><{t}>当前用户名：<{/t}></th>
+                  <td><{$storemember.login_name}></td>
+                
+                  <{input class="inputstyle" name="member_id" type="hidden"  id="member_id" size="30"  value=$storemember.member_id }>
+                  </tr
+                   <tr>
+                  <th><{t}>当前用户姓名：<{/t}></th>
+                  <{input class="inputstyle"  name="store_id" type="hidden"     id="store_id" value=$storemember.store_id }>
+                  <{input class="inputstyle"  name="attach_id" type="hidden"     id="attach_id" value=$storemember.attach_id }>
+                  <td><{$storemember.name}></td>
+                  </tr>
+               </table>
+
+
+        </div> 
+
+
+        <div class="division" style="border:none; border-bottom:1px dashed #ddd;">
+          <table class="forform" width="100%" border="0" cellspacing="0" cellpadding="0" class="forform">
+               <tr>
+                                <th><{t}>角色: <{/t}></th>
+                                <td>
+                                    <{input type="select" name="roles_id" options=$roles   required="true"  value=$storemember.roles_id  }>
+                                </td>
+                                <td></td>
+                          </tr>
+          </table>
+        </div>
+        <div style="padding-left:140px">
+           <{button onclick="subMember_addrForm(event,2);" class="submit-btn" type="button" rel="_request" label=$___b2c="提交"|t:'b2c'}>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  subMember_addrForm = function (event,sign){
+           if ($('Member_addr')){
+                _formActionUrl = $('Member_addr').get('action');
+                    new Request({
+                      url:_formActionUrl,
+                        method:'post',
+                        data:$('Member_addr').toQueryString(),
+                        onComplete:function(response){
+                            var result = JSON.decode(response);
+                            if(result.status == 'success'){
+                                window.opener.location.reload();
+                                window.close();
+                            }
+                            else{
+                                Message.error(result.msg)
+                            }
+
+                        }
+                    }).send();
+               
+           }
+        };
+
+</script>
+<!-- right-->

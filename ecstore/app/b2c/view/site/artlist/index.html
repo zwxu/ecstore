@@ -1,0 +1,11 @@
+
+<div class="ArtListWrap">
+<{pagers data=$pager}>
+<h2><{$cat.cat_info}></h2>
+<ul class="list">
+  <{foreach from=$articles item=article key=key}>
+  <li><span class="date">[<{$article.uptime|userdate}>]</span><a href="<{link ctl=article act=index arg0=$article.article_id}>"><{$article.title}></a></li>
+  <{/foreach}>
+</ul>
+<{pagers data=$pager}>
+</div>

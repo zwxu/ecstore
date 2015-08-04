@@ -1,0 +1,23 @@
+<{if $aCart.promotion.order}>
+<div class="cart-order-solution-list">
+  <h3><{t}>使用的订单促销规则<{/t}></h3>
+  <div class="division">
+    <table width="100%" cellpadding="3" cellspacing="0" class="liststyle cart-list">
+      <thead>
+        <tr>
+          <th><{t}>描述<{/t}></th>
+        </tr>
+      </thead>
+      <tbody>
+        <{foreach from=$aCart.promotion.order item=item}>
+        <tr>
+          <td>
+            <{$item.desc}>
+          </td>
+        </tr>
+        <{/foreach}>
+      </tbody>
+    </table>
+  </div>
+</div>
+<{/if}>

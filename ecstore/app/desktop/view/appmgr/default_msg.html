@@ -1,0 +1,18 @@
+<{if $apps}>
+<{foreach from=$apps item=item}> 
+  <div class="clearfix row">
+   <div class="span-auto">
+    <{$item.app_name}> 
+   </div>
+<div class="span-auto">
+<{button label=$___desktop="立即更新"|t:'desktop' onclick="appmgr('{$item.app_id}').run(['download','update'])" }>
+</div>
+  
+  </div>
+  <{/foreach}>
+<div class="clearfix row">
+		<div class="span-auto"><{t}>是否要更新全部？<{/t}></div>
+	    <div class="span-auto"><{button type="link" href='index.php?ctl=appmgr&act=maintenance' label=$___desktop='立即更新全部'|t:'desktop' target="command::"}> </div>
+</div>
+
+<{/if}>

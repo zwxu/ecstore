@@ -1,0 +1,134 @@
+<style>
+.finder-list .tableform td {overflow:visible;}
+
+</style>
+<table width="100%" border="0" cellspacing="10" cellpadding="0">
+  <tr>
+    <td style="vertical-align:top;overflow:visible;" ><div class="tableform" >
+      <h4><{t}>发货单据列表<{/t}></h4>
+        <div class="division" >
+          <table cellspacing="0" cellpadding="0" border="0" class="gridlist">
+          <col class="Coldate"></col>
+            <thead>
+              <tr>
+                <th><{t}>建立日期<{/t}></th>
+                <th><{t}>发货单号<{/t}></th>
+                <th><{t}>物流单号<{/t}></th>
+                <th><{t}>收件人<{/t}></th>
+                <th><{t}>配送方式<{/t}></th>
+              </tr>
+            </thead>
+            <tbody>
+            <{foreach from=$consign item=aBill}>
+            <tr>
+              <td><{$aBill.t_begin|cdate:SDATE_STIME}></td>
+              <td><{$aBill.delivery_id}></td>
+              <td>
+			   <{if $aBill.logi_no && $services.logisticstrack}>
+			    <div style="position:relative;"><a deliveryid="<{$aBill.delivery_id}>" class="classless-logisticstrack" href="<{$aBill.logistictrack_url}>"><{$aBill.logi_no}></a>
+			   <div class="logistic-info_admin" id="logistic-<{$aBill.delivery_id}>" style="position:absolute;display:none;"></div>
+			   </div>
+			  <{else}>
+			    <{$aBill.logi_no}>
+			  <{/if}>
+              </td>
+              <td><{$aBill.ship_name}></td>
+              <td><{$aBill.delivery|ship_name}></td>
+            </tr>
+            <{/foreach}>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </td>
+    <td style="vertical-align:top;overflow:auto;">
+    <div class="tableform">
+      <h4><{t}>退货单据列表<{/t}></h4>
+        <div class="division">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0" class="gridlist">
+          <col class="Coldate"></col>
+            <thead>
+              <tr>
+                <th><{t}>建立日期<{/t}></th>
+                <th><{t}>退货单号<{/t}></th>
+                <th><{t}>物流单号<{/t}></th>
+                <th><{t}>退货人<{/t}></th>
+                <th><{t}>配送方式<{/t}></th>
+              </tr>
+            </thead>
+            <tbody>
+            <{foreach from=$reship item=aBill}>
+            <tr>
+              <td><{$aBill.t_begin|cdate:SDATE_STIME}></td>
+              <td><{$aBill.reship_id}></td>
+              <td>
+			   <div style="position:relative;">
+              <{if $aBill.logi_no && $services.logisticstrack}>
+				<a deliveryid="<{$aBill.reship_id}>" class="classless-logisticstrack" href="<{$aBill.logistictrack_url}>"><{$aBill.logi_no}></a>
+				<div class="logistic-info_admin_fahuo" id="logistic-<{$aBill.reship_id}>" style="position:absolute;display:none;"></div>
+			  <{else}>
+			    <{$aBill.logi_no}>
+			  <{/if}>
+			  </div>
+              </td>
+              <td><{$aBill.ship_name}></td>
+              <td><{$aBill.delivery|ship_name}></td>
+            </tr>
+            <{/foreach}>
+            </tbody>
+          </table>
+      </div>
+    </div>
+    </td>
+  </tr>
+</table>
+
+<style>
+.logistic-info_admin {position:absolute;background-color:#fafafa;z-index:999;top:0px;right:-405px;width:400px;}
+.logistic-info_admin_fahuo {position:absolute;background-color:#fafafa;z-index:999;top:30px;right:120px;width:400px;}
+.finder-list .finder-detail-colspan {overflow:visible!important;}
+.finder-detail-content,.division {overflow:visible!important;}
+</style>
+
+<script>
+
+<{if $services.logisticstrack}>
+
+var logistic_xhr,deliveryid,logisticdom;
+$$('.classless-logisticstrack').addEvents({
+	'mouseover': function(e){
+		var target=e.target, href = target.get('href');
+		deliveryid = 'logistic-'+target.get('deliveryid');
+		
+		e.stop();
+		if ( logistic_xhr && logistic_xhr.isRunning() ) {
+			logistic_xhr.cancel();
+		}
+		logistic_xhr = new Request({
+			url:href,noCache:true,async:false,
+			onSuccess:function(responseText){
+				logisticdom = $(deliveryid);
+				if ( !logisticdom ) return;
+				logisticdom.empty();
+				(new Element('div',{html:responseText})).getChildren().inject(logisticdom);
+				logisticdom.setStyle('display','block');
+			}
+		});
+		logistic_xhr.get();
+	},
+	'mouseout': function(e) {
+		if ( logisticdom ) {
+			logisticdom.setStyle('display','none');
+		}
+		if ( logistic_xhr.isRunning() ) {
+			logistic_xhr.cancel();
+		}
+	},
+	'click':function(e){
+		e.stop();
+	}
+});
+
+<{/if}>
+
+</script>

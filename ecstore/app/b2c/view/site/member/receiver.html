@@ -1,0 +1,190 @@
+<!-- right-->
+<div class="member-main">
+    <div>
+
+        <div class="title title2"><span style="float:left"><{t}>收货地址<{/t}><span class="disc">|</span> <span id='add' class="disc add-icon" ><a href="javascript:void(0);" ><{t}>添加新的收货地址<{/t}></a></span></span><{if !$is_allow}><span class="noticebox"><{t}>最多只能添加6个地址，请先删除一条地址之后再添加<{/t}></span><{/if}></div>
+
+        <{if !$receiver}>
+        <div class="noinfo"><{t}>暂无收货地址<{/t}></div>
+        <{/if}>
+        <!--<span><a href="<{link app=b2c ctl='site_member' act='add_receiver'}>" class="lnk"><img src="<{$res_url}>/btn-addaddress.gif" /></a></span>
+        -->
+        <div id='addr_div' style="display:none">
+            <form method="post" action="<{link app=b2c ctl='site_member' act='insert_rec'}>" id="Member_addr">
+                <div class="division" style="border:none; border-bottom:1px dashed #ddd">
+                    <table cellpadding="0" class="forform" cellspacing="0" border="0">
+                        <tr>
+                            <th><{t}>收货人：<{/t}></th><td><{input class="inputstyle" name="name" type="text" required="true" id="name" size="30" vtype="required" value=$name|escape:'html'}></td></tr>
+                        <tr><th><{t}>地区：<{/t}></th><td><span id="checkout-select-area"><{input type="region" name="area" required="true" value='' app="ectools" callback="selectArea"}></span></td></tr>
+                        <tr><th><{t}>地址：<{/t}></th><td><{input class="inputstyle" type="textarea"  name="addr" id="addr"  rows="2" cols="30" value=$addr|escape:'html'}></td></tr>
+                        <tr><th><{t}>邮编：<{/t}></th><td><{input class="inputstyle" name="zipcode" size="15" required="true" value=$zipcode vtype="required&&number&&check_zipcode"}></td></tr>
+                        <tr><th><{t}>手机：<{/t}></th><td><{input class="inputstyle"  name="phone[mobile]" vtype="number&&mobile" id="mobile" size="15" value=$mobile|escape:'html'}>&nbsp;<span class="infotips"><{t}>其中联系电话和联系手机必须填写一项<{/t}></span></td>
+                            <td style="padding:8px 0 0 0"><input type="hidden" vtype="mobile_or_phone" /></td>
+                        </tr>
+						<tr><th><{t}>固定电话：<{/t}>&nbsp;</th><td><{input class="inputstyle" vtype="phone" name="phone[telephone]" type="order_tel" size="15" value=$tel}></td></tr>
+                    </table>
+                </div>
+                <div style="padding-left:142px; "><span class="float-span" >
+                        <{button class="btn submit-btn" type="submit" rel="_request" label=$___b2c="保存"|t:'b2c'}></span>
+                    <span class="float-span" style="float:left; margin-left:8px">
+                        <{button id="unset" type="button" label=$___b2c="取消添加"|t:'b2c'}></span>
+                </div>
+            </form>
+        </div>
+        <{if $receiver}>
+        <table class="gridlist gridlist_member border-all mt10" width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout:fixed;">
+            <tr>
+                <th class="first" style="word-break: break-all; word-wrap:break-word;" width="40%"><{t}>地址<{/t}></th>
+                <th style="word-wrap:break-word;" width="15%"><{t}>收货人<{/t}></th>
+                <th><{t}>联系电话<{/t}></th>
+                <th><{t}>默认<{/t}></th>
+                <th><{t}>操作<{/t}></th>
+            </tr>
+
+            <tbody>
+                <{foreach from=$receiver item=items key=key}>
+                <tr>
+                    <td class="textwrap textleft" style="word-break: break-all; word-wrap:break-word;"><{$items.area|region}> <{$items.addr|escape:'html'}> , <{$items.zip|escape:'html'}></td>
+                    <td class="textcenter" style="word-break: break-all; word-wrap:break-word;"><span class="font-blue"><{$items.name|escape:'html'}></span></td>
+                    <td class="textcenter"><{if $items.mobile}><{$items.mobile|escape:'html'}><{else}><{$items.tel|escape:'html'}><{/if}></td>
+                    <td class="textcenter"><{if $items.def_addr}>
+                        <span class="set-tacitly"><a href='<{link app=b2c ctl=site_member act=set_default arg0=$items.addr_id arg1=1}>' rel="_request"><{t}>取消默认<{/t}></a></span>
+                        <{else}>
+                        <span class="tacitly-add"><a href='<{link app=b2c ctl=site_member act=set_default arg0=$items.addr_id arg1=2}>' rel="_request"><{t}>设为默认<{/t}></a></span>
+                        <{/if}>
+                    </td>
+                    <td align="center"><a href="###" class="btn-bj-hover operate-btn" onclick="edit('<{$items.addr_id}>');"><span><{t}>修改<{/t}></span></a><a class="btn-bj-hover operate-btn" href="<{link app=b2c ctl=site_member act=del_rec arg0=$items.addr_id}>" rel="_request"><span><{t}>删除<{/t}></span></a></td>
+                </tr>
+                <{/foreach}>
+            </tbody>
+
+        </table>
+
+
+    </div>
+</div>
+<{/if}>
+
+<script>
+    function edit(addrid){
+        new Request.HTML({
+        url:'<{link app=b2c ctl=site_member act=edit_addr}>',
+        update:$('Member_addr'),
+        data:'addrid='+addrid,
+        method:'post',
+        onComplete:function(rs){
+            $('addr_div').setStyle('display','block');
+            $('Member_addr').action='<{link app=b2c ctl="site_member" act="save_rec"}>';
+        }
+        }).send();
+            selectArea = function(sels) {
+            var selected = [];
+            sels.each(function(s){
+               if(s.getStyle('display') != 'none') {
+                   var text = s[s.selectedIndex].text.trim().clean();
+                   if(['<{t}>北京<{/t}>','<{t}>天津<{/t}>','<{t}>上海<{/t}>','<{t}>重庆<{/t}>'].indexOf(text)>-1)return;
+                   selected.push(text);
+                }
+            });
+            var selectedV = selected.join('');
+            if($('addr').value.indexOf(selectedV)>-1){
+            
+            }else{
+                $('addr').value = selectedV;
+            }
+        };
+         validatorMap['check_zipcode']= ['<{t}>请录入正确的邮编<{/t}>', function(element, v) {
+              var value = v.trim();
+              var _is_validate = true;
+              if(/^[1-9][0-9]{5}$/.test(value)){
+                _is_validate = true;
+              }else{
+                _is_validate = false;
+              }
+              return _is_validate;
+            }];
+         validatorMap['check_phone']= ['<{t}>请输入正确的电话号码<{/t}>', function(element, v) {
+              var value = v.trim();
+              var _is_validate = true;
+              if(/^0?1[3458]\d{9}$|^(0\d{2,3}-?)?[23456789]\d{5,7}(-\d{1,5})?$/.test(value)){
+                _is_validate = true;
+              }else{
+                _is_validate = false;
+              }
+              return _is_validate;
+            }];
+    }
+    function a(url,options){
+        if(!url) return;
+        options = Object.append({
+            width:window.getSize().x*0.8,
+            height:window.getSize().y*0.8
+        },options||{});
+        var params = 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width={width},height={height}';
+        params = params.substitute(options);
+
+        window.open(url,'_blank',params);
+    }
+
+</script>
+
+<script>
+    (function(){
+
+        $$(".delete_addr").addEvent('click',function(e){
+            if(!confirm('<{t}>确定删除?<{/t}>')) return false;
+        });
+        $("add").addEvent('click',function(e){
+            if(<{$is_allow}>)
+            {
+                $('addr_div').setStyle('display','inline');
+            }
+            else{
+                return false;
+            }
+        });
+
+        <{if $is_allow}>
+        selectArea = function(sels) {
+            var selected = [];
+            sels.each(function(s){
+                if(s.getStyle('display') != 'none') {
+                    var text = s[s.selectedIndex].text.trim().clean();
+                    if(['<{t}>北京<{/t}>','<{t}>天津<{/t}>','<{t}>上海<{/t}>','<{t}>重庆<{/t}>'].indexOf(text)>-1)return;
+                    selected.push(text);
+                }
+            });
+            var selectedV = selected.join('');
+            $('addr').value = selectedV;
+        };
+
+        validatorMap['mobile_or_phone'] = ['<{t}>手机或电话必填其一！<{/t}>', function(element, v) {
+            var _contacts = $(element).getParent('td').getPrevious('td').getElements('input');
+
+            var _is_validate = false;
+            _contacts.each(function(el){
+                if (el.value) _is_validate = true||_is_validate;
+            });
+
+            return _is_validate;
+        }];
+
+         validatorMap['check_zipcode']= ['<{t}>请录入正确的邮编<{/t}>', function(element, v) {
+          var value = v.trim();
+          var _is_validate = true;
+          if(/^[1-9][0-9]{5}$/.test(value)){
+            _is_validate = true;
+          }else{
+            _is_validate = false;
+          }
+          return _is_validate;
+        }];
+
+        $("unset").addEvent('click',function(e){
+            $('addr_div').setStyle('display','none');
+        });
+        <{/if}>
+    })();
+</script>
+
+<!-- right-->

@@ -1,0 +1,27 @@
+<{area inject=".mainHead"}>
+	<h3 class="head-title head-title"><{t}>APP功能模版编辑<{/t}><em class="num"></em></h3>
+	<div class='gridlist-head mainHead'>
+		<div class='span-2'><{t}>site_id<{/t}></div>
+		<div class='span-4'><{t}>title<{/t}></div>
+		<div class='span-4'><{t}>path<{/t}></div>
+		<div class='span-4'><{t}>view<{/t}></div>
+	</div>
+<{/area}>
+
+<div id="cat_tree" class='gridlist'>
+<{foreach from=$data item=item }>
+	 <div class='row-line'>
+		<div class='span-2'><{$item.app_id}></div>
+		<div class='span-4'><{$item.content_title}></div>
+		<div class='span-4'><{$item.content_path}></div>
+		<div class='span-4'></div>
+	 </div>
+<{/foreach}>
+</div>
+
+<{area inject=".mainFoot"}>
+	<div class="footer">
+		<div class="table-action">
+		</div>
+	</div>
+<{/area}>

@@ -1,0 +1,52 @@
+<services>
+	<service id="b2c_extension_settings">
+		<class>pointprofessional_extension_settings</class>
+	</service> 
+	
+	<service id="b2c_ext_member_level_field">
+		<class>pointprofessional_extension_member_level_field</class>
+	</service> 
+	
+	<service id="b2c_cart_point_discount">
+		<class>pointprofessional_point_discount</class>
+	</service>
+	
+	<service id="b2c_change_member_point">
+		<class>pointprofessional_point_change</class>
+	</service>
+	
+	<service id="autotask">
+		<class>pointprofessional_misc_task</class>
+	</service>
+	
+	<service id="pointprofessional_point_task_data">
+		<class>pointprofessional_point_task_order</class>
+		<class>pointprofessional_point_task_comment</class>
+		<class>pointprofessional_point_task_admincharge</class>
+	</service>
+	
+	<service id="b2c.order_total_change">
+		<class>pointprofessional_order_total_change</class>
+	</service>
+	
+	<service id="b2c.order_other_infomation">
+		<class>pointprofessional_order_otherinfo</class>
+	</service>
+	
+	<service id="b2c.order_point_operaction">
+		<class>pointprofessional_order_point_operaction</class>
+	</service>
+	
+	<service id="b2c.member_extend_point_info">
+		<class>pointprofessional_point_info</class>
+	</service>
+	
+	<!-- 会员中心菜单扩展 -->
+	<service id="b2c.member_menu_extends">
+		<class>pointprofessional_member_menuextends</class>
+	</service>
+	
+	<service id="member_lv_extends_validate">
+		<class>pointprofessional_member_lv_extends</class>
+	</service>
+</services>    

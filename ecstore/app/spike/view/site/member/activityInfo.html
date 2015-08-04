@@ -1,0 +1,46 @@
+<div class="member-main" style="float:left;width:100%">
+    <div class="orderlist-warp">
+        <div class="title"><{t}>活动详情<{/t}></div>
+        <table class="gridlist table-goods-list" style="border-bottom:none" width="100%" border="0" cellspacing="0"  cellpadding="0">
+            <tr>
+                <th class="first"><{t}>活动名称<{/t}></th>
+                <th><{t}>商品名称<{/t}></th>
+                <th><{t}>活动价格<{/t}></th>
+                <th><{t}>活动库存<{/t}></th>
+                <th><{t}>活动剩余库存<{/t}></th>
+                <th><{t}>申请状态<{/t}></th>
+                <th><{t}>活动状态<{/t}></th>
+            </tr>
+            <tbody>
+                <tr>
+                    <td><{$activityInfo.name}></td>
+                    <td><{$activityInfo.goods_name}></td>
+                    <td><{$activityInfo.last_price}></td>
+                    <td><{$activityInfo.act_store}></td>
+                    <td><{$activityInfo.remainnums}></td>
+                    <td><{$activityInfo.status}></td>
+                    <td><{$activityInfo.act_open}></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="title"><{t}>描述详情<{/t}></div>
+        <table class="gridlist table-goods-list" style="border-bottom:none" width="100%" border="0" cellspacing="0"  cellpadding="0">
+            <tr>
+                <th class="first"><{t}>平台活动描述<{/t}></th>
+                <th><{t}>店铺活动描述<{/t}></th>
+                <th><{t}>活动开始时间<{/t}></th>
+                <th><{t}>活动结束时间<{/t}></th>
+                <th><{t}>备注<{/t}></th>
+            </tr>
+            <tbody>
+                <tr>
+                    <td><{$activityInfo.description}></td>
+                    <td><{$activityInfo.act_desc}></td>
+                    <td><{$activityInfo.start_time}></td>
+                    <td><{$activityInfo.end_time}></td>
+                    <td><{$activityInfo.remark}></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

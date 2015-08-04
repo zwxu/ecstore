@@ -1,0 +1,173 @@
+<div class="goods-info-wrap">
+
+
+  <table width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+     <td class="goodpic" valign="middle" style='<{if $env.conf.site.thumbnail_pic_width !=0 && $env.conf.site.thumbnail_pic_height !=0}> width:<{$env.conf.site.thumbnail_pic_width}>px;<{/if}>'>
+        <{if $goods.udfimg == 'true'}>
+  <{assign var="gimage" value=$goods.thumbnail_pic}>
+  <{else}>
+  <{assign var="gimage" value=$goods.image_default_id|default:$defaultImage}>
+  <{/if}>
+  <a target="_blank" style='<{if $env.conf.site.thumbnail_pic_width !=0 && $env.conf.site.thumbnail_pic_height !=0}> width:<{$env.conf.site.thumbnail_pic_width}>px;height:<{$env.conf.site.thumbnail_pic_height}>px;<{/if}>' href="<{link app=b2c ctl=site_product act=index arg=$goods.goods_id}>">
+    <img  src="<{$gimage|storager:'s'}>"  alt="<{$product.name|escape:html}>"/>
+   </a>
+  </td>  <td valign="top"><h1 class="goodsname"><a class="lnk"  href="<{link app=b2c ctl=site_product act=index arg0=$goods.goods_id }>"><{$goods.name}></a></h1>
+    <ul class="goodsprops clearfix">
+    <{if $goods.bn}>
+    <li><span><{t}>货号：<{/t}></span><{$goods.bn}></li>
+    <{/if}>
+    <{if $goods.brand_name}>
+    <li><span><{t}>商品品牌：<{/t}></span><{$goods.brand_name}></li>
+    <{/if}>
+    <{if $goods.weight}>
+    <li><span><{t}>商品重量：<{/t}></span><{$goods.weight}><{t}> 克(g)<{/t}></li>
+    <{/if}>
+    <{if $goods.score}>
+    <li><span><{t}>所得积分：<{/t}></span><{$goods.score}></li>
+    <{/if}>
+    <{if $trading.score && $trading.score <> $goods.score}>
+    <li><span><{t}>特价积分：<{/t}></span><{$trading.score}></li>
+    <{/if}>
+    <{if $goods.mktprice && $goods.setting.mktprice}>
+    <li><span><{t}>市场价：<{/t}></span><{$goods.mktprice|cur_odr}></li>
+    <{/if}>
+    <{if count($goods.products)<2}>
+    <li><span><{t}>销售价：<{/t}></span><{$goods.price|cur_odr}></li>
+    <{if $goods.mktprice > $goods.price && $goods.setting.mktprice && $goods.setting.saveprice > 0}>
+    <li><span></span><{if $goods.setting.saveprice == 1}><{t}>节省：<{/t}><{$goods.mktprice-$goods.price|cur_odr}>
+          <{elseif $goods.setting.saveprice == 2}><{t}>优惠：<{/t}><{$goods.price/$goods.mktprice*100|number:'2'}>%
+          <{elseif $goods.setting.saveprice == 3}><{$goods.price/$goods.mktprice*10|number:'1'}><{t}>折<{/t}><{/if}>
+          </li>
+         <{/if}>
+    <{/if}>
+    </ul>
+    <a class="lnk"  href="<{link app=b2c ctl=site_product act=index arg0=$goods.goods_id }>"><{t}>查看详细<{/t}></a>
+
+  </td>
+  </tr>
+</table>
+
+
+ <h3 class="goodsname " style="margin-top:10px;"><span><a class="lnk" href="<{link app=b2c ctl=site_product act=index arg0=$goods.goods_id }>"><{$goods.name}></a><{t}>的<{/t}><{$comment.pagetitle}></span></h3>
+
+
+
+
+
+
+<div class="body Comments section FormWrap pdtdetail" style="border:none" id="goods-comment">
+
+<{foreach from=$commentData item=comlist name=comments}>
+
+  <div class="division boxBrown clearfix" >
+    <div class=" flt commentMain">
+    <span class="author font-orange"><{if $comlist.addon.hidden_name =='YES' && ($comlist.author_id !=0 || $comlist.author_id !=1)}>匿名<{else}><{$comlist.author}><{/if}><!--<{if $comlist.levelname!=""}> [<{$comlist.levelname}>]<{/if}> --></span> <{t}>说：<{/t}>
+    <span class="timpstamp font10px font-gray"><{$comlist.time|cdate:'SDATE_STIME'}></span>
+    <div><{$comlist.comment|nl2br}></div>
+</div><{if $base_setting.switch_reply eq 'on'}><a class="floatRight lnk " href="<{link app=b2c ctl=site_comment act=reply arg0=$comlist.comment_id}>" arg1="ask"><{t}>回复<{/t}></a><{/if}>
+    </div>
+    <div class="commentReply pl40">
+    <{foreach from=$comlist.items item=items}>
+    <div class="division  item " style=" margin-top:0;" >
+    <span class="author font-orange">
+    	<{if $items.addon.hidden_name =='YES' && $items.author_id!=0}>匿名<{else}><{$items.author}><{/if}>
+    	<!--<{if $items.levelname!=""}> [<{$items.levelname}>]<{/if}> --><{t}>回复：<{/t}></span>
+    <span class="timpstamp font10px font-gray"><{$items.time|cdate:'SDATE_STIME'}></span>
+    <div><{$items.comment|nl2br}></div>
+    </div>
+ <{/foreach}>
+ </div>
+
+
+
+
+<{/foreach}>
+
+ <{pagers data=$pager}>
+<script>
+/*验证码刷新*/
+function changeimg(id,type){
+    if(type == 'discuss'){
+        $(id).set('src','<{link app="b2c" ctl="site_comment" act="gen_dissvcode"}>#'+(+new Date()));
+    }
+    else{
+        $(id).set('src','<{link app="b2c" ctl="site_comment" act="gen_askvcode"}>#'+(+new Date()));
+    }
+
+}
+
+    var checkFormReqs =function(e){
+           e    = new Event(e);
+       var form= $(e.target);
+
+       var reqs = $$(form.getElements('input[type=text]'),form.getElements('textarea'));
+
+       if(reqs.some(function(req){
+
+            if(req.get('value').trim()==''){
+                       req.focus();
+                       Message.error('<{t}>请完善表单必填项.<{/t}>');
+                       return true;
+            }
+
+              return false;
+
+
+       })){
+
+           e.stop();
+
+       }
+
+    };
+ </script>
+<form  method="post" action='<{link app="b2c" ctl="site_comment" act="toComment" arg0=$goods.goods_id arg1=$comment.item}>' onsubmit='checkFormReqs(event);'>
+<h4><{t}>发表<{/t}><{$comment.pagetitle}><span><{t}>（已有<{/t}><em><{$comment.total|default:'0'}></em><{t}>条）<{/t}></span></h4>
+<div class="division">
+      <table border="0" width="100%" cellpadding="0" cellspacing="0" class="forform">
+          <tr>
+            <th><{t}>标题：<{/t}></th>
+                <td><{input type="text" class="inputstyle blur"  required="true" size=50 name="title" value=$title }></td>
+            </tr>
+             <{if $login eq 'NO'}>
+           <tr>
+           <th><{t}>联系方式：<{/t}></th>
+                <td><{input type="text" class="inputstyle"   size=20 name="contact"}><span class="infotips"><{t}>(可以是电话、email、qq等)<{/t}></span></td>
+            </tr>
+            <tr>
+            <{/if}>
+            <th><em>*</em><{$comment.pagetitle}><{t}>内容：<{/t}></th>
+              <td><{input type="textarea" class="inputstyle" required="true" rows="5" name="comment" style="width:70%;"}></td>
+            </tr>
+         	<{if $login != 'NO'}>
+			<tr>
+			<th><{t}>匿名发表：<{/t}></th>
+			<td><input type="checkbox" name="hidden_name" value="YES"/></td>
+			</tr>
+			<{/if}>
+            <{if $askshow == "on"}>
+           <tr>
+            <th><em>*</em><{t}>验证码：<{/t}></th>
+              <td><{input type="text" required="true" size="4" maxlength="4" name="askverifyCode"}>&nbsp;<img src="<{link app="b2c" ctl="site_comment" act="gen_askvcode" }>" align="absmiddle" id="askimgVerifyCode"/><a href="javascript:changeimg('askimgVerifyCode','ask')">&nbsp;<{t}>看不清楚?换个图片<{/t}></a></td></tr>
+            <{/if}>
+            <{if $discussshow == "on"}>
+             <tr>
+            <th><em>*</em><{t}>验证码：<{/t}></th>
+                <td><{input type="text" required="true" size="4" maxlength="4" name="discussverifyCode"}>&nbsp;<img src="<{link app="b2c" ctl="site_comment" act="gen_dissvcode" }>" align="absmiddle" id="discussimgVerifyCode"/><a href="javascript:changeimg('discussimgVerifyCode','discuss')">&nbsp;<{t}>看不清楚?换个图片<{/t}></a>
+                </td>
+            </tr>
+            <{/if}>
+            <tr>
+            <td></td>
+              <td><input class="buttonstyle" type="submit" value="<{t}>提交<{/t}><{$comment.pagetitle}>"></td>
+            </tr>
+        </table>
+  </div>
+
+
+
+
+</form>
+</div>
+</div>

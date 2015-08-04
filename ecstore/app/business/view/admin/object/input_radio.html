@@ -1,0 +1,49 @@
+<div id="handle_<{$params.domid}>" class="object-select clearfix" <{$addons}> >
+  <div class="label" id="<{$id}>" rel="<{$string}>">请选择</div>
+  <div class="handle">&nbsp;</div>
+  <input type="hidden" name="<{$params.name}>" class="object-ids" vtype="<{$params.vtype}>" value="<{$params.linkid}>" />
+  <input type="hidden" name="<{$params.obj_name|default:'goods'}>" class="params-obj" value='<{$params.obj_value|default:$params.value}>' />
+  <div class="object-select-tip">
+    共选择<span class="goods-count num" style="color:#ff3300;font-weight:bold;">0</span>件
+</div>
+</div>
+
+<script>
+  (function(){
+    var goodsCount = $E('input.object-ids','handle_<{$params.domid}>').value;
+          goodsCount = goodsCount==""?0:goodsCount.split(',').length;
+    $E('.goods-count','handle_<{$params.domid}>').set('text',goodsCount);
+    $('handle_<{$params.domid}>').getElements('.label,.handle').addEvent('click', function(e){
+      var v = $E('input.object-ids','handle_<{$params.domid}>').value;
+      var _widgets = $E('input.params-obj','handle_<{$params.domid}>').value;
+      var url = '<{$url}>';
+      if(v) url = url+'&ids='+v;
+
+      new Dialog(url, {
+        width:664,
+        height:634,
+        title:'添加',
+        resizeable:false,
+        handle:'handle_<{$params.domid}>',
+        onCallback:function(rs){<{if $callback}><{$callback}>(rs);<{/if}>$('handle_<{$params.domid}>').show();},
+        _callback:function(){
+          var item = $ES('.brands_namer .js_object_item',this.dialog_body),ids = [], obj = [];
+          item.each(function(el){
+            var id =el.get('data_id');
+            ids.push(id);
+            obj.push({id:id});
+          });
+
+          $('handle_<{$params.domid}>').getElement('.num').set('text',item.length);
+          $E('.params-obj','handle_<{$params.domid}>').value = JSON.encode(obj);
+          $E('.object-ids','handle_<{$params.domid}>').value = ids;
+        },
+        ajaxoptions:{
+          method: 'post',
+          data:'widgets='+_widgets+'&<{$object}>'
+        }
+      });
+
+    });
+  })();
+</script>

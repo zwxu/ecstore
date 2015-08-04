@@ -1,0 +1,25 @@
+<{lang_script src="lang.js" app="site"}>
+<{css src="b2c.css" app="b2c" pdir="css_mini"}>
+<{if defined("DONOTUSE_CSSFRAMEWORK")&&DONOTUSE_CSSFRAMEWORK}>
+<{else}>
+<{css src="framework.css" app="site" pdir="css_mini"}>
+<{/if}>
+<{if defined("DONOTUSE_JSFRAMEWORK")&&DONOTUSE_JSFRAMEWORK}>
+<{else}>
+	<{if defined("DEBUG_JS") && DEBUG_JS}>
+	    <{script src="mootools.js" app="site"}>
+	    <{script src="moomore.js" app="site"}>
+	    <{script src="patch.js" app="site"}>
+	    <{script src="lab.js" app="site"}>
+	    <{script src="formplus.js" app="site"}>
+	    <{script src="jstools.js" app="site"}>
+	    <{script src="coms/datapicker.js" app="site"}>
+	    <{script src="coms/popup.js" app="site"}>
+	    <{script src="coms/switchable.js" app="site"}>
+	<{else}>
+	    <{script src="moo_min.js" app="site" pdir="js_mini"}>
+	    <{script src="tools_min.js" app="site" pdir="js_mini"}>
+	    <{script src="ui_min.js" app="site" pdir="js_mini"}>
+	<{/if}>
+<{/if}>
+

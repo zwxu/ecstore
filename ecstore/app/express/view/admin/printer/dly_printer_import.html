@@ -1,0 +1,52 @@
+<form enctype="multipart/form-data" action="index.php?app=express&ctl=admin_delivery_printer&act=do_upload_pkg&_finder[finder_id]=<{$env.get.finder_id}>" id="form-express-uploadtpl" method="post">
+	<div class="tableform"> 
+		<div class="notice"><{t}>.dtp格式的快递单模板包<{/t}></div>
+	    <input name="dly_printer_id" type="hidden" value="<{$dly_printer_id}>" />
+	    <input name="finder_id" type="hidden" value="<{$env.get.finder_id}>" />
+		<table>
+	        <tr>
+	           <th><{t}>模板包：<{/t}></th>
+	           <td><input type="file" name="package"/></td>
+	   
+	        </tr>
+	    </table>
+	</div>
+	<div class="table-action">
+	   <{button type="submit" label=$___express="上传"|t:'express' id="form-express-upload_tpl-btn" class="btn-primary"}>
+	</div>
+</form>
+
+<script>
+(function(){
+	var _form = $('form-express-uploadtpl');
+	var btn =$('form-express-upload_tpl-btn');
+	var finder = finderGroup['<{$env.get._finder.finder_id}>'];
+
+	_form.store('target',{
+		onComplete:function(response){
+			var hash_res_obj = JSON.decode(response);
+
+			if (hash_res_obj.success != undefined && hash_res_obj.success != "")
+			{
+				try{
+					var _dialogIns = btn.getParent('.dialog').retrieve('instance');
+				}catch(e){}
+
+				if(_dialogIns)
+				{
+					_dialogIns.close();
+					window.finderGroup['<{$env.get._finder.finder_id}>'].refresh();
+				}
+			}
+
+		}
+	});
+
+	    btn.addEvent('click',function(){
+		    _form.fireEvent('submit',{stop:$empty});
+		});
+
+})();
+
+
+</script>

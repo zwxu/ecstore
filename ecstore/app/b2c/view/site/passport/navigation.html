@@ -1,0 +1,15 @@
+<{if $seller !='seller'}>
+<div class="site dis_bl clb">
+    <div class="login_title">
+    <span class="site_l fl">当前位置：<a href="/">首页</a> &gt; <a class="red" href="#">新用户注册</a></span> 
+    <span class="site_r fr">如果您已注册，请<a href="<{link app=b2c ctl=site_passport act=login}>" class="lan">登录</a></span> 
+    </div>
+</div>
+ <{else}>
+<div class="site dis_bl clb">
+    <div class="login_title">
+    <span class="site_l fl">当前位置：<a href="/">首页</a> &gt; <a class="red" href="#">企业注册</a></span> 
+    <span class="site_r fr">如果您已注册，请<a href="<{link app=b2c ctl=site_passport act=login}>" class="lan">登录</a></span> 
+    </div>
+</div>
+ <{/if}>

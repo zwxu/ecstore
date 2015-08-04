@@ -1,0 +1,5 @@
+.view{position:relative;}
+.viewed-top{background:url("viewed-top-bg.jpg") no-repeat;height:29px;line-height:29px;width:200px;padding-left:10px;}
+.viewed-cen{border-left:1px solid #ddd;border-right:1px solid #ddd;border-bottom:1px solid #ddd;width:208px;padding:10px 0;}
+.textright{position:absolute;right:10px;top:7px;}
+.GoodsBrowsed{border:1px solid #ddd;border-top:none;padding:10px 5px;}

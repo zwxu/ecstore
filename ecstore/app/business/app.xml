@@ -1,0 +1,22 @@
+<app version="1.0">
+  <name>商家系统</name>
+
+  <description>BBC 独立商家系统</description>
+
+  <author>
+      <name>BBC 开发团队</name>
+      <email></email>
+      <url></url>
+  </author>
+
+  <version>0.1</version>
+
+  <license>license</license>
+  <depends>
+    <app>desktop</app>
+    <app>content</app>
+    <app>ectools</app>
+    <app>b2c</app>
+  </depends>
+
+</app>

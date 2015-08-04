@@ -1,0 +1,37 @@
+
+<form action="index.php?app=desktop&ctl=filter&act=tab_save" method="post" id="tab_from" class="tableform">
+<div class="note">
+<h4><{t}>另存当前筛选条件<{/t}></h4>
+<{t}>为当前筛选条件命名，方便再次筛选.<{/t}>
+</div>
+    <div class="division">
+    <label> <{t}>名称：<{/t}>
+    <input type="text" name="filter_name" vtype="required" maxlength="7" />
+    </label>
+    </div>
+    <input type="hidden" name="filterquery" value="<{$filterquery}>"/>
+    <input type="hidden" name="model" value="<{$model}>"/>
+    <input type="hidden" name="act" value="<{$act}>"/>
+    <input type="hidden" name="ctl" value="<{$ctl}>"/>
+    <input type="hidden" name="app" value="<{$app}>"/>
+<{area inject=".mainFoot"}>
+<div class="table-action">
+   <{button label=$___desktop="保存"|t:'desktop' class="btn-primary" onclick="$('tab_from').fireEvent('submit',new Event(event))" }>
+</div>
+<{/area}>
+
+</form>
+
+<script>
+
+(function(){
+    $('tab_from').store('target',{onComplete:function(){
+        var finder = finderGroup['<{$env.post.finder_id}>'];    
+        finder.options.packet = true;
+        finder.loadPacket();
+        $('tab_from').getParent('.dialog').retrieve('instance').close();
+    }});
+
+})();
+
+</script>

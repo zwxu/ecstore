@@ -1,0 +1,83 @@
+<div class="member-main">
+    <div class="orderlist-warp">
+        <div class="title title2"><{t}>邮件订阅<{/t}></div>
+    </div>
+    <form action="<{link app=b2c ctl=site_member act=saveEmail}>" method="post">
+        <div class="return_box">
+            <div class="mall_seller_emall_h3">
+                <h3> 购物提醒邮件：</h3>
+            </div>
+            <div>
+                <div class="mall_seller_emall_div">
+                    <ul class="mall_seller_emall">
+                        <{if $call['orders-create']['b2c_messenger_email']}>
+                        <li>
+                          <span>
+                              <input type="checkbox" name="email[orders-create]" <{if $email['orders-create']}>checked="checked"<{/if}>>
+                              <label>下单成功提醒</label>
+                              <span style="clear:both:height:0px;line-height:0px;font-size:0px;"></span>
+                          </span>
+                        </li>
+                        <{/if}>
+                        <{if $call['orders-shipping']['b2c_messenger_email']}>
+                        <li>
+                          <span>
+                              <input type="checkbox" name="email[orders-shipping]" <{if $email['orders-shipping']}>checked="checked"<{/if}>>
+                              <label>订单发货提醒</label>
+                          </span>
+                        </li>
+                        <{/if}>
+                        <{if $call['orders-returned']['b2c_messenger_email']}>
+                        <li>
+                          <span>
+                              <input type="checkbox" name="email[orders-returned]" <{if $email['orders-returned']}>checked="checked"<{/if}>>
+                              <label>订单退货提醒</label>
+                          </span>
+                        </li>
+                        <{/if}>
+                        <{if $call['orders-payed']['b2c_messenger_email']}>
+                        <li>
+                          <span>
+                              <input type="checkbox" name="email[orders-payed]" <{if $email['orders-payed']}>checked="checked"<{/if}>>
+                              <label>订单付款成功提醒</label>
+                          </span>
+                        </li>
+                        <{/if}>
+                        <{if $call['orders-refund']['b2c_messenger_email']}>
+                        <li>
+                          <span>
+                              <input type="checkbox" name="email[orders-refund]" <{if $email['orders-refund']}>checked="checked"<{/if}>>
+                              <label>订单退款提醒</label>
+                          </span>
+                        </li>
+                        <{/if}>
+                        <{if $call['orders-cancel']['b2c_messenger_email']}>
+                        <li>
+                          <span>
+                              <input type="checkbox" name="email[orders-cancel]" <{if $email['orders-cancel']}>checked="checked"<{/if}>>
+                              <label>订单作废提醒</label>
+                          </span>
+                        </li>
+                        <{/if}>
+                        <{if $call['goods-notify']['b2c_messenger_email']}>
+                        <li>
+                          <span>
+                              <input type="checkbox" name="email[goods-notify]" <{if $email['goods-notify']}>checked="checked"<{/if}>>
+                              <label>商品到货通知</label>
+                          </span>
+                        </li>
+                        <{/if}>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="mall_seller_emall_but  pl150 m10">
+            <button class="btn" type="submit">
+              <span>
+                <span>确定</span>
+              </span>
+            </button>
+        </div>
+        
+    </form>
+</div>
